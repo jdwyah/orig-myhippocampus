@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.server.dao.TagDAO;
-import com.db4o.ObjectSet;
 import com.db4o.query.Query;
 
 public class TagDAOdb4oImpl extends Db4oDAO implements TagDAO {

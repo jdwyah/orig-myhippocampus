@@ -2,16 +2,8 @@ package com.aavu.server.dao.db4o;
 
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
-import org.db4ospring.support.Db4oDaoSupport;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import com.aavu.client.domain.Topic;
 import com.aavu.server.dao.TopicDAO;
-import com.db4o.Db4o;
-import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.query.Query;
 
