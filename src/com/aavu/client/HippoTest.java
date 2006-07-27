@@ -1,6 +1,7 @@
 package com.aavu.client;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.widget.browse.BrowseView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -32,6 +33,11 @@ public class HippoTest implements EntryPoint, TabListener  {
 
 	private TopicServiceAsync topicService;
 	private TagServiceAsync tagService;
+	
+	
+	private TagOrganizerView tagView;
+	private ComposeViewVal composeView;
+	private BrowseView browseView;
 	
 	private void initServices(){
 		topicService = (TopicServiceAsync) GWT.create(TopicService.class);
@@ -107,8 +113,13 @@ public class HippoTest implements EntryPoint, TabListener  {
 		//viewContainer.add(TagOrganizerView.init().getInstance(), "Manage Tags");
 
 
-		viewContainer.add(new ComposeViewVal(),"Edit Topic");
-		viewContainer.add(new TagOrganizerView(tagService), "Manage Tags");
+		tagView = new TagOrganizerView(tagService);
+		composeView = new ComposeViewVal();
+		browseView = new BrowseView(topicService,tagService);
+		
+		viewContainer.add(composeView,"Edit Topic");
+		viewContainer.add(tagView, "Manage Tags");
+		viewContainer.add(browseView, "Browse");
 
 		viewContainer.selectTab(0);
 	}
@@ -121,12 +132,15 @@ public class HippoTest implements EntryPoint, TabListener  {
 		return true;
 	}
 	public void onTabSelected(SourcesTabEvents sender, int tabIndex){
-		if (tabIndex == 0){
 
+		Widget w = viewContainer.getWidget(tabIndex);
+		
+		if(w == tagView){
+			((TagOrganizerView)viewContainer.getWidget(1)).populateTagList();	
 		}
-		else if (tabIndex == 1){
-			((TagOrganizerView)viewContainer.getWidget(1)).populateTagList();			   
-		}
+		
+		
+		
 	}
 
 	//**** End TabListener methods *******

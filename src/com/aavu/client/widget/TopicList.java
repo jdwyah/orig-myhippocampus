@@ -1,6 +1,7 @@
 package com.aavu.client.widget;
 
 import com.aavu.client.TopicServiceAsync;
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -16,27 +17,22 @@ public class TopicList extends Composite {
 
 	private VerticalPanel panel = new VerticalPanel();
 
-	private ComposeView composeView;
+	private TopicDetail topicDetail;
 	
-	public void setComposeView(ComposeView cv) {
-		this.composeView = cv;
-	}
 
 
-	public TopicList(TopicServiceAsync topicService){
-		this.topicService = topicService;
+	public TopicList(TopicServiceAsync topicService,TopicDetail topicDetail){
+		setTopicService(topicService);
+		setTopicDetail(topicDetail);
+		
 		load();
 		setWidget(panel);
 	}
 	
 
-	private void load() {
-		topicService.getAllTopics(0,0,new AsyncCallback() {
-			public void onFailure(Throwable caught) {
-				panel.clear();
-				panel.add(new Label("Error "+caught));	    	            
-			}
-
+	public void load() {
+		topicService.getAllTopics(0,0,new StdAsyncCallback() {
+			
 			public void onSuccess(Object result) {
 				panel.clear();
 				final Topic[] l = (Topic[]) result;
@@ -45,7 +41,7 @@ public class TopicList extends Composite {
 					TopicLabel h = new TopicLabel(l[i]);
 					h.addClickListener(new ClickListener() {					
 						public void onClick(Widget sender) { 
-							composeView.load(((TopicLabel)sender).getT());
+							topicDetail.load(((TopicLabel)sender).getT());
 						}});
 					panel.add(h);
 					
@@ -58,6 +54,9 @@ public class TopicList extends Composite {
 
 	public void setTopicService(TopicServiceAsync topicService) {
 		this.topicService = topicService;
+	}
+	public void setTopicDetail(TopicDetail topicDetail) {
+		this.topicDetail = topicDetail;
 	}
 
 }
