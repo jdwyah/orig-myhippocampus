@@ -10,10 +10,10 @@
 
 package com.aavu.client.widget.autocompletion;
 
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -23,13 +23,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class AutoCompleteTextBox extends TextBox
     implements KeyboardListener, ChangeListener, //ClickListener, 
-	       MatchesRequiring {
+	       MatchesRequiring, PopupListener {
 
     private static final int MAX_ITEMS = 10;
 
     protected PopupPanel choicesPopup = new PopupPanel(true);
     protected ListBox choices = new ListBox();
-    protected CompletionItems items = new SimpleAutoCompletionItems(new String[]{});
+    protected CompletionItems items = null;
     protected boolean popupAdded = false;
     protected boolean visible = false;
     protected String[] matches;
@@ -44,6 +44,7 @@ public class AutoCompleteTextBox extends TextBox
 	this.addKeyboardListener(this);
 	choices.addChangeListener(this);
 	//choices.addClickListener(this);
+	choicesPopup.addPopupListener(this);
 	this.setStyleName("AutoCompleteTextBoxVal");
        
 	choicesPopup.add(choices);
@@ -79,11 +80,19 @@ public class AutoCompleteTextBox extends TextBox
     public void onKeyDown(Widget arg0, char arg1, int arg2) {
     }
 
-    /**
-     * Not used at all
-     */
-    public void onKeyPress(Widget arg0, char arg1, int arg2) {
-    }
+  /**
+   * Not used at all
+   */
+  public void onKeyPress(Widget arg0, char arg1, int arg2) {
+  }
+  
+  /**
+   * Clear choices when popup is hidden
+   */
+  public void onPopupClosed(PopupPanel sender, boolean autoClosed){
+	  visible = false;
+	  choices.clear();
+  }
 
     /**
      * A key was released, start autocompletion
@@ -93,7 +102,7 @@ public class AutoCompleteTextBox extends TextBox
 	    {
 		int selectedIndex = choices.getSelectedIndex();
 		selectedIndex++;
-		if(selectedIndex > choices.getItemCount())
+		if(selectedIndex >= choices.getItemCount())
 		    {
 			selectedIndex = 0;
 		    }
@@ -161,15 +170,15 @@ public class AutoCompleteTextBox extends TextBox
 	    
 	    // if there is only one match and it is what is in the
 	    // text field anyways there is no need to show autocompletion
-	    if (matches.length == 1 && matches[0].compareTo(text) == 0) {
-		choicesPopup.hide();
-	    } else {
+	    //if (matches.length == 1 && matches[0].compareTo(text) == 0) {
+		//choicesPopup.hide();
+	    //} else {
+	    choices.setSelectedIndex(0);
  		if(matches.length == 1){
 		    //use a wrong count, so that the list gets rendered as 
 		    //listbox and not as dropdownbox
 		    choices.setVisibleItemCount(2);
-		}
-		//choices.setSelectedIndex(0);
+		}		
 		else{
 		    choices.setVisibleItemCount(matches.length > MAX_ITEMS?
 						MAX_ITEMS:
@@ -187,7 +196,6 @@ public class AutoCompleteTextBox extends TextBox
 					      + this.getOffsetHeight());
 		// choicesPopup.setWidth(this.getOffsetWidth() + "px");
 		choices.setWidth(this.getOffsetWidth() + "px");
-	    }
 
 	} else {
 	    visible = false;
@@ -211,7 +219,7 @@ public class AutoCompleteTextBox extends TextBox
    
     // add selected item to textbox
     protected void complete(){
-	if(choices.getItemCount() > 0){
+	if(choices.getItemCount() > 0 && choices.getSelectedIndex() != -1){
 	    this.setText(choices.getItemText(choices.getSelectedIndex()));
 	}
        

@@ -40,50 +40,50 @@ public class AutoCompleteTextBoxVal extends TextBox
     implements KeyboardListener, ClickListener, ChangeListener, PopupListener {
    
   protected PopupPanel choicesPopup = new PopupPanel(true);
-  protected ListBox choices = new ListBox();
-  protected boolean popupAdded = false;
-  protected boolean visible = false;
-  protected CompletionItems items = null;
-   
-  /**
-   * Default Constructor
-   *
-   */
-  public AutoCompleteTextBoxVal()
-  {
-    super();
-    this.addKeyboardListener(this);
-    choices.addClickListener(this);
+    protected ListBox choices = new ListBox();
+    protected boolean popupAdded = false;
+    protected boolean visible = false;
+    protected CompletionItems items = null;
+
+    /**
+     * Default Constructor
+     *
+     */
+    public AutoCompleteTextBoxVal()
+    {
+	super();
+	this.addKeyboardListener(this);
+	choices.addClickListener(this);
     choices.addChangeListener(this);
     choicesPopup.addPopupListener(this);
     this.setStyleName("AutoCompleteTextBoxVal");
        
-    choicesPopup.add(choices);
-    choicesPopup.addStyleName("AutoCompleteChoices");
+	choicesPopup.add(choices);
+	choicesPopup.addStyleName("AutoCompleteChoices");
        
-    choices.setStyleName("list");
-  }
+	choices.setStyleName("list");
+    }
 
-  /**
-   * Sets an "algorithm" returning completion items
-   * You can define your own way how the textbox retrieves autocompletion items
-   * by implementing the CompletionItems interface and setting the according object
-   * @see SimpleAutoCompletionItem
-   * @param items CompletionItem implementation
-   */
-  public void setCompletionItems(CompletionItems items)
-  {
-    this.items = items;
-  }
+    /**
+     * Sets an "algorithm" returning completion items
+     * You can define your own way how the textbox retrieves autocompletion items
+     * by implementing the CompletionItems interface and setting the according object
+     * @see SimpleAutoCompletionItem
+     * @param items CompletionItem implementation
+     */
+    public void setCompletionItems(CompletionItems items)
+    {
+	this.items = items;
+    }
    
-  /**
-   * Returns the used CompletionItems object
-   * @return CompletionItems implementation
-   */
-  public CompletionItems getCompletionItems()
-  {
-    return this.items;
-  }
+    /**
+     * Returns the used CompletionItems object
+     * @return CompletionItems implementation
+     */
+    public CompletionItems getCompletionItems()
+    {
+	return this.items;
+    }
    
   /**
    * Not used at all
@@ -101,7 +101,6 @@ public class AutoCompleteTextBoxVal extends TextBox
    * Clear choices when popup is hidden
    */
   public void onPopupClosed(PopupPanel sender, boolean autoClosed){
-	  System.out.println("in onPopupClosed()");
 	  visible = false;
 	  choices.clear();
   }

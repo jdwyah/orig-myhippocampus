@@ -29,7 +29,6 @@ public class HippoTest implements EntryPoint, TabListener  {
 	private TabPanel viewContainer = new TabPanel();
 	private HTML description = new HTML();
 	private TagBoard tagBoard;
-	private Topic curTopic;
 
 	private TopicServiceAsync topicService;
 	private TagServiceAsync tagService;
