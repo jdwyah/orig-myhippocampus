@@ -22,16 +22,20 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TopicDetail extends Composite implements ClickListener{
 	
-	private Label titleLabel = new Label("Title: ");
+	
+	private FlowPanel topicTitlePanel = new FlowPanel();
 	private TextBox titleBox = new TextBox();
+	private Label titleEcho = new Label();
+	private Label titleLabel = new Label("Title: ");
+	
 	private TextArea textArea = new TextArea();
 	
 	private Button cancelButton = new Button("Cancel");
-	private FlowPanel topicTitlePanel = new FlowPanel();
+	
 	
 	private Button editTextButton = new Button("Edit Text");
 	private Button saveButton = new Button("Save");
-	private HTML titleEcho = new HTML();
+	
 	private FlowPanel textPanel = new FlowPanel();
 	private FlowPanel buttonPanel = new FlowPanel();
 	
@@ -50,7 +54,7 @@ public class TopicDetail extends Composite implements ClickListener{
 	public TopicDetail(TopicServiceAsync topicServiceAsync){
 		this.topicServiceA = topicServiceAsync;
 		
-		panel.setSpacing(4);
+		panel.setSpacing(4);		
 		titleLabel.addStyleName("ta-compose-Label");
 		titleBox.setWidth("30em");
 		textArea.setCharacterWidth(50);
@@ -136,13 +140,17 @@ public class TopicDetail extends Composite implements ClickListener{
 		
 		textPanel.clear();
 		textPanel.add(new TextDisplay(textArea.getText()));		
-		titleEcho.setHTML(titleBox.getText());
+		titleEcho.setText(titleBox.getText());
 		
-		topicTitlePanel.remove(titleBox);
+		topicTitlePanel.clear();
+		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleEcho);
 		
-		panel.remove(textArea);
-		panel.remove(cancelButton);
+		panel.clear();
+		panel.add(topicTitlePanel);
+
+		//panel.remove(textArea);
+		//panel.remove(cancelButton);
 		
 		panel.add(textPanel);
 		panel.add(seeAlsoPanel);
@@ -152,11 +160,15 @@ public class TopicDetail extends Composite implements ClickListener{
 	
 	public void activateEditView() {
 		
-		topicTitlePanel.remove(titleEcho);
+		topicTitlePanel.clear();
+		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleBox);
 		
-		panel.remove(textPanel);
-		panel.remove(buttonPanel);
+		panel.clear();
+		panel.add(topicTitlePanel);
+
+//		panel.remove(textPanel);
+//		panel.remove(buttonPanel);
 		
 		panel.add(textArea);
 		panel.add(cancelButton);
