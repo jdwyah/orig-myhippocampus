@@ -7,6 +7,7 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.TopicServiceAsync;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -19,12 +20,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ComposeView extends Composite implements ClickListener{
+public class TopicDetail extends Composite implements ClickListener{
 	
 	private Label titleLabel = new Label("Title: ");
 	private TextBox titleBox = new TextBox();
 	private TextArea textArea = new TextArea();
-	private Button previewButton = new Button("Preview");
+	
+	private Button cancelButton = new Button("Cancel");
 	private FlowPanel topicTitlePanel = new FlowPanel();
 	
 	private Button editTextButton = new Button("Edit Text");
@@ -45,7 +47,9 @@ public class ComposeView extends Composite implements ClickListener{
 	
 	
 	
-	public ComposeView(){
+	public TopicDetail(TopicServiceAsync topicServiceAsync){
+		this.topicServiceA = topicServiceAsync;
+		
 		panel.setSpacing(4);
 		titleLabel.addStyleName("ta-compose-Label");
 		titleBox.setWidth("30em");
@@ -55,7 +59,7 @@ public class ComposeView extends Composite implements ClickListener{
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleBox);
 		
-		previewButton.addClickListener(this);
+		cancelButton.addClickListener(this);
 		editTextButton.addClickListener(this);
 		saveButton.addClickListener(this);
 		
@@ -63,7 +67,7 @@ public class ComposeView extends Composite implements ClickListener{
 		panel.setWidth("100%");
 		panel.add(topicTitlePanel);
 		panel.add(textArea);
-		panel.add(previewButton);
+		panel.add(cancelButton);
 		panel.setCellWidth(titleBox,"100%");
 		panel.setCellWidth(textArea, "100%");
 		
@@ -78,7 +82,7 @@ public class ComposeView extends Composite implements ClickListener{
 	public void load(Topic topic){
 		this.topic = topic;
 		setupTopic();
-		activateEditView();
+		activateMainView();
 
 		Effect.highlight(panel);
 	}
@@ -104,8 +108,8 @@ public class ComposeView extends Composite implements ClickListener{
 	}
 
 	public void onClick(Widget source){
-		if (source == previewButton){
-			activateLinkView();
+		if (source == cancelButton){
+			activateMainView();
 		}
 		else if (source == editTextButton){
 			activateEditView();
@@ -122,24 +126,27 @@ public class ComposeView extends Composite implements ClickListener{
 
 				public void onSuccess(Object result) {
 					serverR.setText("Saved");
+					activateMainView();
 				}
 			});	
 		}
 	}
 	
-	public void activateLinkView(){
+	public void activateMainView(){
 		
 		textPanel.clear();
-		textPanel.add(new HTML(textArea.getText()));		
+		textPanel.add(new TextDisplay(textArea.getText()));		
 		titleEcho.setHTML(titleBox.getText());
 		
 		topicTitlePanel.remove(titleBox);
 		topicTitlePanel.add(titleEcho);
 		
 		panel.remove(textArea);
-		panel.remove(previewButton);
+		panel.remove(cancelButton);
 		
 		panel.add(textPanel);
+		panel.add(seeAlsoPanel);
+		
 		panel.add(buttonPanel);
 	}
 	
@@ -152,8 +159,9 @@ public class ComposeView extends Composite implements ClickListener{
 		panel.remove(buttonPanel);
 		
 		panel.add(textArea);
-		panel.add(previewButton);
-		panel.add(seeAlsoPanel);
+		panel.add(cancelButton);
+		panel.add(saveButton);
+		
 	}
 
 	public void setTopicServiceA(TopicServiceAsync topicServiceA) {

@@ -19,11 +19,11 @@ public class TopicList extends Composite {
 
 	private VerticalPanel panel = new VerticalPanel();
 
-	private ComposeView topicDetail;
+	private TopicDetail topicDetail;
 	
 
 
-	public TopicList(TopicServiceAsync topicService,ComposeView topicDetail){
+	public TopicList(TopicServiceAsync topicService,TopicDetail topicDetail){
 		setTopicService(topicService);
 		setTopicDetail(topicDetail);
 		
@@ -57,7 +57,7 @@ public class TopicList extends Composite {
 	public void setTopicService(TopicServiceAsync topicService) {
 		this.topicService = topicService;
 	}
-	public void setTopicDetail(ComposeView topicDetail) {
+	public void setTopicDetail(TopicDetail topicDetail) {
 		this.topicDetail = topicDetail;
 	}
 
