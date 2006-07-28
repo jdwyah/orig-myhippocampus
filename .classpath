@@ -10,5 +10,6 @@
 	<classpathentry sourcepath="/M2_REPO" kind="var" path="M2_REPO/org/springframework/spring/2.0-rc1/spring-2.0-rc1.jar"/>
 	<classpathentry kind="lib" path="lib/db4o-spring-1.0-SNAPSHOT.jar"/>
 	<classpathentry sourcepath="C:/Documents and Settings/Jeff Dwyer/.m2/repository/org/springframework/spring/2.0-m5/spring-src.zip" kind="lib" path="lib/spring-2.0-rc1.jar"/>
+	<classpathentry sourcepath="lib/gwt-widgets-0.0.7.zip" kind="lib" path="lib/gwt-widgets-0.0.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

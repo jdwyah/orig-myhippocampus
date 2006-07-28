@@ -1,5 +1,7 @@
 package com.aavu.client.widget;
 
+import org.gwtwidgets.client.wrap.Effect;
+
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -18,13 +20,13 @@ public class TopicDetail extends Composite {
 	public void load(Topic t) {
 		panel.clear();
 
-		if(t == null){
+		if(t == null){		
 			panel.add(new HTML("None loaded"));
 		}else{
-
 			panel.add(new HTML(t.getTitle()));
-			panel.add(new HTML(t.getText()));
+			panel.add(new HTML(t.getText()));			
 		}
+		Effect.highlight(panel);
 	}
 
 }

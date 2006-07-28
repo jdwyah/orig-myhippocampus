@@ -44,15 +44,17 @@ public class BrowseView extends Composite {
 
 	private void load(){
 		topicList.load();
-		topicService.getAllTopics(0, MAX_PER_PAGE, new StdAsyncCallback(){
-			public void onSuccess(Object result) {
-				Topic[] topics = (Topic[]) result;
-				topicPanel.clear();
-				for(int i=0; i<topics.length; i++){
-					topicPanel.add(new TopicDetail(topics[i]));					
-				}
-			}
-		});
+		
+		
+//		topicService.getAllTopics(0, MAX_PER_PAGE, new StdAsyncCallback(){
+//			public void onSuccess(Object result) {
+//				Topic[] topics = (Topic[]) result;
+//				topicPanel.clear();
+//				for(int i=0; i<topics.length; i++){
+//					topicPanel.add(new TopicDetail(topics[i]));					
+//				}
+//			}
+//		});
 		
 		
 	}
