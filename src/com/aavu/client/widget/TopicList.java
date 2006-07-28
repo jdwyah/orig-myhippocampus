@@ -1,5 +1,7 @@
 package com.aavu.client.widget;
 
+import org.gwtwidgets.client.wrap.Effect;
+
 import com.aavu.client.TopicServiceAsync;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
@@ -17,11 +19,11 @@ public class TopicList extends Composite {
 
 	private VerticalPanel panel = new VerticalPanel();
 
-	private TopicDetail topicDetail;
+	private ComposeView topicDetail;
 	
 
 
-	public TopicList(TopicServiceAsync topicService,TopicDetail topicDetail){
+	public TopicList(TopicServiceAsync topicService,ComposeView topicDetail){
 		setTopicService(topicService);
 		setTopicDetail(topicDetail);
 		
@@ -55,7 +57,7 @@ public class TopicList extends Composite {
 	public void setTopicService(TopicServiceAsync topicService) {
 		this.topicService = topicService;
 	}
-	public void setTopicDetail(TopicDetail topicDetail) {
+	public void setTopicDetail(ComposeView topicDetail) {
 		this.topicDetail = topicDetail;
 	}
 

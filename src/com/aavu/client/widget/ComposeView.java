@@ -3,11 +3,14 @@ package com.aavu.client.widget;
 
 import java.util.Iterator;
 
+import org.gwtwidgets.client.wrap.Effect;
+
 import com.aavu.client.TopicServiceAsync;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
@@ -16,7 +19,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ComposeView implements ClickListener{
+public class ComposeView extends Composite implements ClickListener{
 	
 	private Label titleLabel = new Label("Title: ");
 	private TextBox titleBox = new TextBox();
@@ -69,21 +72,15 @@ public class ComposeView implements ClickListener{
 		buttonPanel.add(saveButton);
 		
 		panel.add(serverR);
-//		setWidget(panel);
-	}
-	
-//	public static ViewInfo init() {
-//	    return new ViewInfo("Compose View", "Compose new topic.") {
-//	      public View createInstance() {
-//	        return new ComposeView();
-//	      }
-//	    };
-//	  }
+		setWidget(panel);
+	}	
 	
 	public void load(Topic topic){
 		this.topic = topic;
 		setupTopic();
 		activateEditView();
+
+		Effect.highlight(panel);
 	}
 		
 	private void setupTopic() {

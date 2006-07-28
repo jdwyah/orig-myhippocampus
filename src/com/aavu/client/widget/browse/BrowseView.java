@@ -2,14 +2,10 @@ package com.aavu.client.widget.browse;
 
 import com.aavu.client.TagServiceAsync;
 import com.aavu.client.TopicServiceAsync;
-import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Topic;
-import com.aavu.client.widget.TopicDetail;
+import com.aavu.client.widget.ComposeView;
 import com.aavu.client.widget.TopicList;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class BrowseView extends Composite {
@@ -19,7 +15,7 @@ public class BrowseView extends Composite {
 	private TagServiceAsync tagService;
 
 	private TopicList topicList;
-	private TopicDetail topicDetail;
+	private ComposeView topicDetail;
 	
 	private VerticalPanel topicPanel;
 
@@ -30,7 +26,7 @@ public class BrowseView extends Composite {
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
-		topicDetail = new TopicDetail(null);
+		topicDetail = new ComposeView();
 		
 		topicList = new TopicList(topicService,topicDetail);
 		
