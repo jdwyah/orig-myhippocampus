@@ -13,4 +13,6 @@ public interface TopicService extends RemoteService {
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>
 
+	void save(Topic topic, String[] seeAlsos); 
+	
 }

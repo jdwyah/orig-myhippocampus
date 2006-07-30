@@ -1,5 +1,6 @@
 package com.aavu.server.dao.db4o;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
@@ -23,10 +24,15 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 		ObjectSet result = getDb().get(Topic.class);
 
 		List<Topic> res = result;
+		
+		
 //		for(Topic t : res){
 //			t.setId(getDb().ext().getID(t));
 //			System.out.println(getDb().ext().getID(t)+" "+t.getTitle());
+//			t.setSeeAlso(new ArrayList());
+//			getDb().set(t);
 //		}
+		
 		closeDB();
 		
 		return res;
@@ -45,6 +51,18 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 		
 		return rtn;
 		
+	}
+
+	public Topic getForName(String title) {
+		Query q = getDb().query();
+		q.constrain(Topic.class);
+		q.descend("title").constrain(title);
+		
+		List<Topic> rtn = q.execute();
+		
+		closeDB();
+		
+		return rtn.get(0);
 	}
 
 }

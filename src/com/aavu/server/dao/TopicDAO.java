@@ -12,4 +12,6 @@ public interface TopicDAO {
 
 	public abstract List<Topic> getTopicsStarting(String match);
 
+	public abstract Topic getForName(String string);
+
 }

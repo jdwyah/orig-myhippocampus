@@ -1,19 +1,20 @@
 package com.aavu.client.widget;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.TopicServiceAsync;
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.wiki.TextDisplay;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -40,7 +41,9 @@ public class TopicDetail extends Composite implements ClickListener{
 	private FlowPanel buttonPanel = new FlowPanel();
 	
 	private VerticalPanel seeAlsoPanel = new VerticalPanel();
-	
+		
+	private FlowPanel seeAlsoStatic = new FlowPanel();
+	private SeeAlsoComplete seeAlsoComplete;
 	
 	private Label serverR = new Label();
 	
@@ -98,17 +101,18 @@ public class TopicDetail extends Composite implements ClickListener{
 			textArea.setText(topic.getText());
 			
 			seeAlsoPanel.clear();
+			seeAlsoStatic.clear();
 			
+			System.out.println("setup "+topic.getSeeAlso());
 			if(topic.getSeeAlso() != null){
 				Iterator i = topic.getSeeAlso().iterator();
 				while (i.hasNext()) {
 					Topic also = (Topic) i.next();
-					seeAlsoPanel.add(new SeeAlsoComplete(also,topicServiceA));	
+					System.out.println("add static "+also.getTitle());
+					seeAlsoStatic.add(new TopicLink(also,this));					
 				}
 			}
-			
-			seeAlsoPanel.add(new SeeAlsoComplete(new Topic(),topicServiceA));
-			
+			seeAlsoComplete = new SeeAlsoComplete(topic.getSeeAlso(),topicServiceA);			
 		}
 	}
 
@@ -121,20 +125,28 @@ public class TopicDetail extends Composite implements ClickListener{
 		}
 		else if (source == saveButton){
 			
+			
+			
 			topic.setText(textArea.getText());
 			topic.setTitle(titleBox.getText());
 			
-			topicServiceA.save(topic,new AsyncCallback() {
-				public void onFailure(Throwable caught) {					
-					serverR.setText("Error "+caught);	    	            
-				}
+			String[] seeAlsos = seeAlsoComplete.getText().split(seeAlsoComplete.SEPARATOR);
+			
+			System.out.println("save");
+			for (int i = 0; i < seeAlsos.length; i++) {
+				String string = seeAlsos[i];
+				System.out.println("save array |"+string+"|");
+			}
+			
+			topicServiceA.save(topic,seeAlsos,new StdAsyncCallback() {				
 
-				public void onSuccess(Object result) {
-					serverR.setText("Saved");
-					activateMainView();
-					topicList.load();
-				}
-			});	
+						public void onSuccess(Object result) {
+							serverR.setText("Saved");
+							activateMainView();
+							topicList.load();
+						}
+					});	
+			
 		}
 	}
 	
@@ -147,14 +159,16 @@ public class TopicDetail extends Composite implements ClickListener{
 		topicTitlePanel.clear();
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleEcho);
+
+		seeAlsoPanel.clear();
+		seeAlsoPanel.add(seeAlsoStatic);
+		
 		
 		panel.clear();
 		panel.add(topicTitlePanel);
-
-		//panel.remove(textArea);
-		//panel.remove(cancelButton);
 		
 		panel.add(textPanel);
+		
 		panel.add(seeAlsoPanel);
 		
 		panel.add(buttonPanel);
@@ -166,13 +180,16 @@ public class TopicDetail extends Composite implements ClickListener{
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleBox);
 		
+		seeAlsoPanel.clear();
+		seeAlsoPanel.add(seeAlsoComplete);		
+		
 		panel.clear();
 		panel.add(topicTitlePanel);
 
-//		panel.remove(textPanel);
-//		panel.remove(buttonPanel);
-		
 		panel.add(textArea);
+		
+		panel.add(seeAlsoPanel);
+		
 		panel.add(cancelButton);
 		panel.add(saveButton);
 		
