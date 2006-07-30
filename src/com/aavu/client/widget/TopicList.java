@@ -20,33 +20,44 @@ public class TopicList extends Composite {
 	private VerticalPanel panel = new VerticalPanel();
 
 	private TopicDetail topicDetail;
-	
 
 
-	public TopicList(TopicServiceAsync topicService,TopicDetail topicDetail){
+
+	public TopicList(TopicServiceAsync topicService,TopicDetail topicDetailI){
 		setTopicService(topicService);
-		setTopicDetail(topicDetail);
-		
+		setTopicDetail(topicDetailI);
+
 		load();
-		setWidget(panel);
+		VerticalPanel mainPanel = new VerticalPanel();
+
+		Label addNew = new Label("Add new");
+		addNew.addClickListener(new ClickListener() {					
+			public void onClick(Widget sender) { 
+				topicDetail.load(new Topic());
+			}}); 
+		
+		mainPanel.add(addNew);
+
+		mainPanel.add(panel);
+		setWidget(mainPanel);
 	}
-	
+
 
 	public void load() {
 		topicService.getAllTopics(0,0,new StdAsyncCallback() {
-			
+
 			public void onSuccess(Object result) {
 				panel.clear();
 				final Topic[] l = (Topic[]) result;
 				for(int i=0; i<l.length; i++){
-					
+
 					TopicLabel h = new TopicLabel(l[i]);
 					h.addClickListener(new ClickListener() {					
 						public void onClick(Widget sender) { 
 							topicDetail.load(((TopicLabel)sender).getT());
 						}});
 					panel.add(h);
-					
+
 				}
 			}
 

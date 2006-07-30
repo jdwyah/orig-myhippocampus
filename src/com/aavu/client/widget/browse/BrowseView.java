@@ -26,9 +26,9 @@ public class BrowseView extends Composite {
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
-		topicDetail = new TopicDetail(topicService);
-		
+		topicDetail = new TopicDetail(topicService);		
 		topicList = new TopicList(topicService,topicDetail);
+		topicDetail.setTopicList(topicList);
 		
 		mainPanel.add(topicList);
 		mainPanel.add(topicDetail);

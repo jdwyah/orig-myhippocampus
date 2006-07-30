@@ -48,6 +48,7 @@ public class TopicDetail extends Composite implements ClickListener{
 	
 	public Topic topic;
 	private TopicServiceAsync topicServiceA;
+	private TopicList topicList;
 	
 	
 	
@@ -131,6 +132,7 @@ public class TopicDetail extends Composite implements ClickListener{
 				public void onSuccess(Object result) {
 					serverR.setText("Saved");
 					activateMainView();
+					topicList.load();
 				}
 			});	
 		}
@@ -178,6 +180,10 @@ public class TopicDetail extends Composite implements ClickListener{
 
 	public void setTopicServiceA(TopicServiceAsync topicServiceA) {
 		this.topicServiceA = topicServiceA;
+	}
+
+	public void setTopicList(TopicList topicList) {
+		this.topicList = topicList;
 	}
 	
 }
