@@ -17,5 +17,7 @@ public interface TagDAO extends RemoteService {
 	List<Tag> getAllTags();
 	
 	List<Tag> getTagsStarting(String match);
+
+	void save(Tag selectedTag);
 	
 }

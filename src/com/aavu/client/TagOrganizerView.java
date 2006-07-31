@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -115,6 +116,22 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		}
 		else if (source == saveButton){
 			selectedTag.setMetas(metas);
+			
+			System.out.println("Tag: " + selectedTag.getName());
+			System.out.println("metas: ");
+			for (Iterator iter = selectedTag.getMetas().iterator(); iter.hasNext();) {
+				Meta element = (Meta) iter.next();
+				System.out.println(element.getName());
+			}
+			
+			tagService.saveTag(selectedTag, new StdAsyncCallback(){
+
+				public void onSuccess(Object result) {
+					System.out.println("success in saving tag " + selectedTag.getName());
+					
+				}
+				
+			});
 		}
 	}
 
@@ -169,6 +186,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			}
 		});
 
+		metas.add(meta);
 		metaList.add(panel);
 
 	}

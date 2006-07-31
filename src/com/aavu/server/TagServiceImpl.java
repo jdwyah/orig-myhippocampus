@@ -61,4 +61,9 @@ public class TagServiceImpl extends RemoteServiceServlet implements TagService {
 		return rtn;				
 	}
 
+	public void saveTag(Tag selectedTag) {
+		tagDAO.save(selectedTag);
+		
+	}
+
 }

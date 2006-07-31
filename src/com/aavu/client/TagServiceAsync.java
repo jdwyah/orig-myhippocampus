@@ -13,4 +13,6 @@ public interface TagServiceAsync {
 	void getAllTags(AsyncCallback callback);
 
 	void match(String match, AsyncCallback call);
+
+	void saveTag(Tag selectedTag, AsyncCallback call);
 }
