@@ -1,8 +1,10 @@
 package com.aavu.client.domain;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -15,91 +17,129 @@ import com.google.gwt.user.client.ui.Widget;
 public class Meta  implements IsSerializable{
 
 
-    // Fields    
+	// Fields    
 
-     private long id;
-     /**
-      * The type.
-     */
-     private String name;
-     /**
-      * The type of the value
-     */
-     private String type;
-
-
-    // Constructors
+	private long id;
+	/**
+	 * The type.
+	 */
+	private String name;
+	/**
+	 * The type of the value
+	 */
+	private String type;
 
 
-   
-    // Property accessors
-
-    public long getId() {
-        return this.id;
-    }
-    
-    public void setId(long id) {
-        this.id = id;
-    }
-    /**       
-     *      * The type.
-     */
-
-    public String getName() {
-        return this.name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    /**       
-     *      * The type of the value
-     */
-
-    public String getType() {
-        return this.type;
-    }
-    
-    public void setType(String type) {
-        this.type = type;
-    }
-   
+	// Constructors
 
 
 
-   public boolean equals(Object other) {
-         if ( (this == other ) ) return true;
-		 if ( (other == null ) ) return false;
-		 if ( !(other instanceof Meta) ) return false;
-		 Meta castOther = ( Meta ) other; 
-         
-		 return ( (this.getName()==castOther.getName()) || ( this.getName()!=null && castOther.getName()!=null && this.getName().equals(castOther.getName()) ) )
- && ( (this.getType()==castOther.getType()) || ( this.getType()!=null && castOther.getType()!=null && this.getType().equals(castOther.getType()) ) );
-   }
-   
-   public int hashCode() {
-         int result = 17;
-         
-         
-         result = 37 * result + ( getName() == null ? 0 : this.getName().hashCode() );
-         result = 37 * result + ( getType() == null ? 0 : this.getType().hashCode() );
-         return result;
-   }
+	// Property accessors
 
-   public Widget getWidget() {
+	public long getId() {
+		return this.id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+	/**       
+	 *      * The type.
+	 */
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	/**       
+	 *      * The type of the value
+	 */
+
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public boolean equals(Object other) {
+		if ( (this == other ) ) return true;
+		if ( (other == null ) ) return false;
+		if ( !(other instanceof Meta) ) return false;
+		Meta castOther = ( Meta ) other; 
+
+		return ( (this.getName()==castOther.getName()) || ( this.getName()!=null && castOther.getName()!=null && this.getName().equals(castOther.getName()) ) )
+		&& ( (this.getType()==castOther.getType()) || ( this.getType()!=null && castOther.getType()!=null && this.getType().equals(castOther.getType()) ) );
+	}
+
+	public int hashCode() {
+		int result = 17;
+
+
+		result = 37 * result + ( getName() == null ? 0 : this.getName().hashCode() );
+		result = 37 * result + ( getType() == null ? 0 : this.getType().hashCode() );
+		return result;
+	}
+
+	public Widget getWidget(boolean editable) {
 		HorizontalPanel widget = new HorizontalPanel();
 		Label label = new Label(name);
-		
+
 		//Maybe make this meta auto complete later on
 		TextBox metaValue = new TextBox();
 		metaValue.setText(name);
-		
+
 		widget.add(label);
 		widget.add(metaValue);	
 		return widget;
-   }   
+	}
 
+	public Widget getEditorWidget(boolean editable) {
+		HorizontalPanel widget = new HorizontalPanel();
 
+		if (editable){
+			TextBox metaName = new TextBox();
+			metaName.setText(this.name);
+			metaName.addChangeListener(new ChangeListener(){
+				public void onChange(Widget sender){
+					name = ((TextBox)sender).getText();
+				}
+			});
+
+			ListBox metaType = new ListBox();
+			//TODO: get types from DB (type objects) and select current type
+			metaType.addItem("Text");
+			metaType.addItem("Date");
+			metaType.addItem("Rating");
+			metaType.addChangeListener(new ChangeListener(){
+				public void onChange(Widget sender){
+					ListBox typeBox = (ListBox)sender;
+					type = typeBox.getItemText(typeBox.getSelectedIndex());
+					System.out.println("changing " + name + " type to " + type);
+				}
+			});
+
+			widget.add(metaName);
+			widget.add(metaType);
+		}
+		else{
+			Label metaName = new Label(this.name);
+			metaName.setWidth("5em");
+			Label metaType = new Label(this.type);  //this.type.getName()
+			metaType.setWidth("5em");
+
+			widget.add(metaName);
+			widget.add(metaType);
+		}
+
+		//widget.add(editButton);
+
+		return widget;
+	}
 
 
 

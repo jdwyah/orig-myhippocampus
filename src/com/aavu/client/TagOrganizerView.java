@@ -1,6 +1,7 @@
 package com.aavu.client;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 	private ListBox tagList = new ListBox();
 
 	private Button newMetaButton = new Button("New field");
+	private Button saveButton = new Button("Save");
 	private Button deleteTagButton = new Button("Delete Tag");
 	private VerticalPanel tagListPanel = new VerticalPanel();
 	private VerticalPanel metaListPanel = new VerticalPanel();
@@ -31,6 +33,8 @@ public class TagOrganizerView extends Composite implements ClickListener{
 	private HorizontalPanel panel = new HorizontalPanel();
 
 	private TagServiceAsync tagService;
+	private List metas = new ArrayList();  //list of meta objects of current tag
+	private Tag selectedTag;
 
 	public void setTagService(TagServiceAsync tagService2) {
 		this.tagService = tagService2;
@@ -43,6 +47,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		panel.setSpacing(4);
 
 		newMetaButton.addClickListener(this);
+		saveButton.addClickListener(this);
 		deleteTagButton.addClickListener(this);
 
 		tagListPanel.add(tagListLabel);
@@ -51,18 +56,31 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 		tagList.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {
-				displayMetas(tagList.getItemText(tagList.getSelectedIndex()));
+				tagService.getTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
+					public void onFailure(Throwable caught) {
+						System.out.println("failed getting tag " + caught);
+					}
+
+					public void onSuccess(Object result) {
+						System.out.println("success getting tag " + ((Tag)result).getName());
+						selectedTag = (Tag) result;
+					}
+				});
+
+				displayMetas(selectedTag);
 			}
 		});
-		tagList.addClickListener(new ClickListener(){
+		/*tagList.addClickListener(new ClickListener(){
 			public void onClick(Widget arg0) {
 				System.out.println("in onClick");
-				displayMetas(tagList.getItemText(tagList.getSelectedIndex()));
+				displayMetas(selectedTag);
 			}			   
-		});
+		});*/
 
 		metaListPanel.add(deleteTagButton);
 		metaListPanel.add(metaList);
+		metaListPanel.add(newMetaButton);
+		metaListPanel.add(saveButton);
 
 		panel.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
 		panel.setWidth("100%");
@@ -82,7 +100,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			tagService.removeTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
 
 				public void onFailure(Throwable caught) {
-					System.out.println("fail: "+caught);
+					System.out.println("fail: "+ caught);
 				}
 
 				public void onSuccess(Object result) {
@@ -92,7 +110,11 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			populateTagList();
 		}
 		else if (source == newMetaButton){
-			//activateEditView();
+			Meta newMeta = new Meta();
+			showEditMetaWidget(newMeta.getEditorWidget(true), newMeta);
+		}
+		else if (source == saveButton){
+			selectedTag.setMetas(metas);
 		}
 	}
 
@@ -121,23 +143,34 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	}
 
-	private void displayMetas(String tagName){
-		metaList.clear();
+	private void displayMetas(Tag tag){
+		metaList.clear();			
+		metas = tag.getMetas();
+		if (metas != null) {
+			for (Iterator iter = metas.iterator(); iter.hasNext();) {
+				Meta element = (Meta) iter.next();
+				showEditMetaWidget(element.getEditorWidget(false), element);
+			}		
+		}
+	}
 
-		tagService.getTag(tagName, new AsyncCallback(){
+	//Add meta widget and a delete button to the meta list panel
+	private void showEditMetaWidget(Widget widget, final Meta meta){
+		final HorizontalPanel panel = new HorizontalPanel();
+		Button deleteButton = new Button("X");
 
-			public void onFailure(Throwable caught) {
-				System.out.println("fail");
+		panel.add(widget);
+		panel.add(deleteButton);
+
+		deleteButton.addClickListener(new ClickListener() {
+			public void onClick(Widget sender){
+				metas.remove(meta);
+				metaList.remove(panel);
 			}
+		});
 
-			public void onSuccess(Object result) {
-				Tag tag = (Tag) result;				
-				List metas = tag.getMetas();
-				for (Iterator iter = metas.iterator(); iter.hasNext();) {
-					Meta element = (Meta) iter.next();
-					metaList.add(element.getWidget());
-				}
-			}});		
+		metaList.add(panel);
+
 	}
 
 }

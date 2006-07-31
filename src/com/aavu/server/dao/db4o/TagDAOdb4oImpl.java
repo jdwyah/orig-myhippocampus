@@ -30,7 +30,7 @@ public class TagDAOdb4oImpl extends Db4oDAO implements TagDAO {
 		List<Tag> o = q.execute();
 
 		if(o.size() > 0){
-			rtn = (Tag) o;
+			rtn = (Tag) o.get(0);
 		}
 		
 		
@@ -39,7 +39,7 @@ public class TagDAOdb4oImpl extends Db4oDAO implements TagDAO {
 	}
 
 	public void removeTag(String itemText) {
-		
+		//TODO
 	}
 
 	public List<Tag> getTagsStarting(String match) {

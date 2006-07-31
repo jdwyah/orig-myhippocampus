@@ -26,12 +26,12 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 		List<Topic> res = result;
 		
 		
-//		for(Topic t : res){
-//			t.setId(getDb().ext().getID(t));
-//			System.out.println(getDb().ext().getID(t)+" "+t.getTitle());
-//			t.setSeeAlso(new ArrayList());
-//			getDb().set(t);
-//		}
+		for(Topic t : res){
+			t.setId(getDb().ext().getID(t));
+			System.out.println(getDb().ext().getID(t)+" "+t.getTitle());
+			t.setSeeAlso(new ArrayList());
+			getDb().set(t);
+		}
 		
 		closeDB();
 		

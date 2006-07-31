@@ -104,7 +104,7 @@ public class TagBoard extends Composite {
 
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			tagPanel.add(element.getWidget());
+			tagPanel.add(element.getWidget(true));
 		}
 
 	}
