@@ -18,7 +18,7 @@ public class Tag  implements IsSerializable{
 
     // Fields    
 
-     private int id;
+     private long id;
      /**
       * The user which created us
      */
@@ -42,6 +42,7 @@ public class Tag  implements IsSerializable{
 
     /** default constructor */
     public Tag() {
+    	metas = new ArrayList();
     }
 
     
@@ -62,12 +63,12 @@ public class Tag  implements IsSerializable{
 	}
 
 
-	public int getId() {
+	public long getId() {
         return this.id;
     }
     
-    public void setId(int id) {
-        this.id = id;
+    public void setId(long id2) {
+        this.id = id2;
     }
     /**       
      *      * The user which created us

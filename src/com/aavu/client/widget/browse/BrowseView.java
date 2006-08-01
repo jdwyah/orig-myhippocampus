@@ -2,11 +2,16 @@ package com.aavu.client.widget.browse;
 
 import com.aavu.client.TagServiceAsync;
 import com.aavu.client.TopicServiceAsync;
+import com.aavu.client.domain.Topic;
+import com.aavu.client.widget.TopicCompleter;
 import com.aavu.client.widget.TopicDetail;
 import com.aavu.client.widget.TopicList;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class BrowseView extends Composite {
 
@@ -26,11 +31,20 @@ public class BrowseView extends Composite {
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
+		VerticalPanel leftPanel = new VerticalPanel();
+		
+		
+		
 		topicDetail = new TopicDetail(topicService);		
 		topicList = new TopicList(topicService,topicDetail);
 		topicDetail.setTopicList(topicList);
 		
-		mainPanel.add(topicList);
+		
+		
+		leftPanel.add(new SearchP());
+		leftPanel.add(topicList);
+		
+		mainPanel.add(leftPanel);
 		mainPanel.add(topicDetail);
 
 		setWidget(mainPanel);		
@@ -63,4 +77,25 @@ public class BrowseView extends Composite {
 		this.topicService = topicService;
 	}
 
+	
+	private class SearchP extends Composite{
+		public SearchP(){
+			HorizontalPanel panel = new HorizontalPanel();
+			
+			final TopicCompleter completer = new TopicCompleter(topicService); 
+			
+			panel.add(completer);
+			Button addNew = new Button("Add");
+			addNew.addClickListener(new ClickListener(){
+
+				public void onClick(Widget sender) {
+					Topic t = new Topic();
+					t.setTitle(completer.getText());					
+					topicDetail.load(t);
+				}});
+			
+			panel.add(addNew);			
+			setWidget(panel);
+		}
+	}
 }

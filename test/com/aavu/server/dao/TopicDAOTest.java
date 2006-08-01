@@ -13,7 +13,7 @@ public class TopicDAOTest extends DAOTestCase {
 		super.setUp();
 		
 		tDAO = new TopicDAOdb4oImpl();
-		//tDAO.setDb(db);
+		//tDAO.setDb(db);	
 	}
 	
 
@@ -44,6 +44,10 @@ public class TopicDAOTest extends DAOTestCase {
 		System.out.println(result.size());
 		for(int x = 0; x < result.size(); x++)
 			System.out.println(result.get(x));
+	}
+	
+	public void testTester(){
+		tDAO.tester();
 	}
 
 

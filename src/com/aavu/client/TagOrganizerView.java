@@ -8,6 +8,8 @@ import java.util.List;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.service.local.TagLocalService;
+import com.aavu.client.widget.MetaChooser;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -16,6 +18,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,8 +37,10 @@ public class TagOrganizerView extends Composite implements ClickListener{
 	private HorizontalPanel panel = new HorizontalPanel();
 
 	private TagServiceAsync tagService;
-	private List metas = new ArrayList();  //list of meta objects of current tag
+	private List metaChoosers = new ArrayList();  //list of meta chooser objects of current tag
 	private Tag selectedTag;
+	private TagLocalService tagLocalService;
+	private TextBox tagName;
 
 	public void setTagService(TagServiceAsync tagService2) {
 		this.tagService = tagService2;
@@ -44,7 +49,9 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	public TagOrganizerView(TagServiceAsync tagService2){
 		setTagService(tagService2);
-
+		tagLocalService = new TagLocalService();
+		
+		
 		panel.setSpacing(4);
 
 		newMetaButton.addClickListener(this);
@@ -63,12 +70,17 @@ public class TagOrganizerView extends Composite implements ClickListener{
 					}
 
 					public void onSuccess(Object result) {
-						System.out.println("success getting tag " + ((Tag)result).getName());
+						
+						
 						selectedTag = (Tag) result;
+						System.out.println("success getting tag " + selectedTag.getName());
+						System.out.println("its metas " + selectedTag.getMetas());
+						if(selectedTag.getMetas() != null){
+							System.out.println("success getting tag " + selectedTag.getMetas().size());
+						}
+						displayMetas(selectedTag);
 					}
 				});
-
-				displayMetas(selectedTag);
 			}
 		});
 		/*tagList.addClickListener(new ClickListener(){
@@ -78,6 +90,13 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			}			   
 		});*/
 
+		tagName = new TextBox();		
+		
+		HorizontalPanel editTagNamePanel = new HorizontalPanel();		
+		editTagNamePanel.add(new Label("Name: "));
+		editTagNamePanel.add(tagName);
+		
+		metaListPanel.add(editTagNamePanel);
 		metaListPanel.add(deleteTagButton);
 		metaListPanel.add(metaList);
 		metaListPanel.add(newMetaButton);
@@ -111,14 +130,23 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			populateTagList();
 		}
 		else if (source == newMetaButton){
-			Meta newMeta = new Meta();
-			showEditMetaWidget(newMeta.getEditorWidget(true), newMeta);
+			MetaChooser newMeta = new MetaChooser(tagLocalService);
+			//Meta newMeta = new Meta();
+			showEditMetaWidget(new MetaChooser(tagLocalService));
 		}
 		else if (source == saveButton){
-			selectedTag.setMetas(metas);
+			
+			selectedTag.setName(tagName.getText());
+			
+			selectedTag.getMetas().clear();
+			for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {
+				MetaChooser mc = (MetaChooser) iter.next();
+				selectedTag.getMetas().add(mc.getMeta());
+			}
+			//selectedTag.setMetas(metaChoosers);
 			
 			System.out.println("Tag: " + selectedTag.getName());
-			System.out.println("metas: ");
+			System.out.println("metas: "+selectedTag.getMetas());
 			for (Iterator iter = selectedTag.getMetas().iterator(); iter.hasNext();) {
 				Meta element = (Meta) iter.next();
 				System.out.println(element.getName());
@@ -128,7 +156,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 				public void onSuccess(Object result) {
 					System.out.println("success in saving tag " + selectedTag.getName());
-					
+					populateTagList();
 				}
 				
 			});
@@ -161,32 +189,54 @@ public class TagOrganizerView extends Composite implements ClickListener{
 	}
 
 	private void displayMetas(Tag tag){
-		metaList.clear();			
-		metas = tag.getMetas();
-		if (metas != null) {
-			for (Iterator iter = metas.iterator(); iter.hasNext();) {
-				Meta element = (Meta) iter.next();
-				showEditMetaWidget(element.getEditorWidget(false), element);
-			}		
+		if(tag == null){
+			return;
 		}
+		tagName.setText(tag.getName());
+		
+		metaList.clear();			
+		metaChoosers.clear();
+		
+		if(tag.getMetas() != null){
+			for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
+				Meta element = (Meta) iter.next();
+				MetaChooser mc = new MetaChooser(tagLocalService);
+				mc.setMeta(element);								
+				showEditMetaWidget(mc);
+			}
+		}
+		
+		
+//		
+//		if (metaChoosers != null) {
+//			for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {
+//				MetaChooser element = (MetaChooser) iter.next();
+//				Meta m = element.getMeta();
+//				
+//				MetaChooser mc = new MetaChooser(tagLocalService);
+//
+//				mc.setMeta(element);
+//				showEditMetaWidget(mc);
+//			}		
+//		}
 	}
 
 	//Add meta widget and a delete button to the meta list panel
-	private void showEditMetaWidget(Widget widget, final Meta meta){
+	private void showEditMetaWidget(final MetaChooser chooser){
 		final HorizontalPanel panel = new HorizontalPanel();
 		Button deleteButton = new Button("X");
 
-		panel.add(widget);
+		panel.add(chooser);
 		panel.add(deleteButton);
 
 		deleteButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender){
-				metas.remove(meta);
+				metaChoosers.remove(chooser);
 				metaList.remove(panel);
 			}
 		});
 
-		metas.add(meta);
+		metaChoosers.add(chooser);
 		metaList.add(panel);
 
 	}

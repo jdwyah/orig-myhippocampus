@@ -30,13 +30,13 @@ public class TopicList extends Composite {
 		load();
 		VerticalPanel mainPanel = new VerticalPanel();
 
-		Label addNew = new Label("Add new");
-		addNew.addClickListener(new ClickListener() {					
-			public void onClick(Widget sender) { 
-				topicDetail.load(new Topic());
-			}}); 
-		
-		mainPanel.add(addNew);
+//		Label addNew = new Label("Add new");
+//		addNew.addClickListener(new ClickListener() {					
+//			public void onClick(Widget sender) { 
+//				topicDetail.load(new Topic());
+//			}}); 
+//		
+//		mainPanel.add(addNew);
 
 		mainPanel.add(panel);
 		setWidget(mainPanel);

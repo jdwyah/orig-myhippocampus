@@ -3,7 +3,7 @@ package com.aavu.client.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -24,12 +24,16 @@ public class Topic implements IsSerializable{
      */
      private String title;
      
-     private Tag tag;
+     /*
+      * @gwt.typeArgs <com.aavu.client.domain.Tag>
+      */
+     private List tags;
      
      /*
-      * @gwt.typeArgs <com.aavu.client.domain.MetaValue>
+      * @gwt.typeArgs <com.aavu.client.domain.Meta,com.aavu.client.MetaValue>
+      * 
       */
-     private Set metaValues = null;//new HashSet(0);
+     private Map metaValues = null;//new HashSet(0);
      
      /**
       * The text in hippoText format
@@ -37,7 +41,7 @@ public class Topic implements IsSerializable{
      private String text;
      
      /*
-      * @gwt.typeArgs <com.aavu.client.domain.TopicGWT>
+      * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
      protected List seeAlso = new ArrayList();
 
@@ -50,10 +54,10 @@ public class Topic implements IsSerializable{
 
     
     /** full constructor */
-    public Topic(User user, String title, Tag tag, Set metaValues, String text, List seeAlso) {
+    public Topic(User user, String title, List tags, Map metaValues, String text, List seeAlso) {
         this.user = user;
         this.title = title;
-        this.tag = tag;
+        this.tags = tags;
         this.metaValues = metaValues;
         this.text = text;
         this.seeAlso = seeAlso;
@@ -92,19 +96,19 @@ public class Topic implements IsSerializable{
         this.title = title;
     }
 
-    public Tag getTag() {
-        return this.tag;
+    public List getTags() {
+        return this.tags;
     }
     
-    public void setTag(Tag tag) {
-        this.tag = tag;
+    public void setTags(List tags) {
+        this.tags = tags;
     }
 
-    public Set getMetaValues() {
+    public Map getMetaValues() {
         return this.metaValues;
     }
     
-    public void setMetaValues(Set metaValues) {
+    public void setMetaValues(Map metaValues) {
         this.metaValues = metaValues;
     }
     /**       

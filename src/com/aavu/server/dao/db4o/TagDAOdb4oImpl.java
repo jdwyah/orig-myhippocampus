@@ -1,5 +1,6 @@
 package com.aavu.server.dao.db4o;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.aavu.client.domain.Meta;
@@ -11,12 +12,19 @@ import com.db4o.query.Query;
 public class TagDAOdb4oImpl extends Db4oDAO implements TagDAO {
 
 	public void addTag(Tag tag) {
-		getDb().set(tag);
-		closeDB();
+	
+		System.out.println("UNUSED OLD CODE!!!!");
+//		getDb().set(tag);
+//		closeDB();
 	}
 
 	public List<Tag> getAllTags() {
 		List<Tag> rtn = getDb().get(Tag.class);
+		
+		for(Tag tag : rtn){
+			tag.getMetas();
+		}
+		
 		closeDB();
 		return rtn;
 	}
@@ -56,20 +64,28 @@ public class TagDAOdb4oImpl extends Db4oDAO implements TagDAO {
 		return rtn;
 	}
 
-	public void save(Tag selectedTag) {
+	public void save(Tag tag) {
 	
-		System.out.println("Tag: " + selectedTag.getName());
+		System.out.println("Tag: " + tag.getName());
 		System.out.println("metas: ");
-		for (Object meta : selectedTag.getMetas()){
+		for (Object meta : tag.getMetas()){
 			Meta metaCast = (Meta)meta;
-			System.out.println(metaCast);
+			System.out.println(metaCast+" "+metaCast.getName()+" "+metaCast.getId());
 		}
 
 		Db4o.configure().objectClass("com.aavu.client.domain.Tag").cascadeOnUpdate(true);
 		Db4o.configure().objectClass("com.aavu.client.domain.Tag").updateDepth(1);
 		
-		getDb().ext().bind(selectedTag, selectedTag.getId());
-		getDb().set(selectedTag);
+		if(tag.getId() == 0){
+			getDb().set(tag);
+			long id = getDb().ext().getID(tag);
+			System.out.println("tag save was 0, now "+id);				
+			tag.setId(id);
+			getDb().set(tag);			
+		}else{
+			getDb().ext().bind(tag, tag.getId());
+			getDb().set(tag);
+		}
 		closeDB();
 		
 	}

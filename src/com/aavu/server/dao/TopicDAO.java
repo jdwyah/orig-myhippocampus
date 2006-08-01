@@ -14,4 +14,6 @@ public interface TopicDAO {
 
 	public abstract Topic getForName(String string);
 
+	public abstract void tester();
+
 }

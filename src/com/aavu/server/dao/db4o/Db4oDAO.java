@@ -5,7 +5,7 @@ import com.db4o.ObjectContainer;
 
 public class Db4oDAO  {
 	
-	private static final String FILENAME = "db4.yac";
+	private static final String FILENAME = "db4.yap";
 		
 	private static ObjectContainer db;
 

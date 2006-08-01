@@ -37,7 +37,7 @@ public class TopicServiceImpl extends RemoteServiceServlet implements TopicServi
 		for(int i=0;i<list.size();i++){				
 			rtn[i] = list.get(i);
 		}
-		
+
 		return rtn;
 	}
 
@@ -62,20 +62,29 @@ public class TopicServiceImpl extends RemoteServiceServlet implements TopicServi
 
 
 	public void save(Topic topic, String[] seeAlsos) {
-		
+
 		topic.getSeeAlso().clear();
-		
+
 		for (int i = 0; i < seeAlsos.length; i++) {
-		
+
+
 			String string = seeAlsos[i];
-			System.out.println("lookup |"+string+"|");
-			Topic also = topicDAO.getForName(string);
-			System.out.println("also "+also);
-			topic.getSeeAlso().add(also);	
+			if(!string.equals("")){
+
+
+				System.out.println("lookup |"+string+"|");
+				Topic also = topicDAO.getForName(string);
+
+				System.out.println("also "+also);
+
+				if(also != null){			
+					topic.getSeeAlso().add(also);
+				}
+			}
 		}
-		
+
 		save(topic);
-		
+
 	}
 
 }

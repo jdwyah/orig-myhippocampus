@@ -2,8 +2,8 @@ package com.aavu.server.dao;
 
 import java.util.List;
 
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface TagDAO extends RemoteService {
