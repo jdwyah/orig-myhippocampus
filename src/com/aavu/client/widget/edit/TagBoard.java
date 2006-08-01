@@ -22,7 +22,7 @@ public class TagBoard extends Composite {
 	private Button addTagButton = new Button("Add");
 	//private TextBox tagBox = new TextBox();
 	private TagAutoCompleteBox tagBox = null;
-	private ArrayList tags = new ArrayList();
+	private List tags = new ArrayList();
 
 	private TagServiceAsync tagService;
 
@@ -100,6 +100,14 @@ public class TagBoard extends Composite {
 		displayMetas(tag);
 	}
 
+	public void load(List list){
+		
+		for (Iterator iter = list.iterator(); iter.hasNext();) {
+			Tag tag = (Tag) iter.next();
+			addTag(tag);
+		}		
+	}
+	
 	private void displayMetas(Tag tag) {
 		List metas = tag.getMetas();
 
@@ -108,6 +116,10 @@ public class TagBoard extends Composite {
 			tagPanel.add(element.getWidget(true));
 		}
 
+	}
+
+	public List getTags() {
+		return tags;
 	}
 
 }

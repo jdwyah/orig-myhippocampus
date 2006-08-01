@@ -32,7 +32,7 @@ public class AddEditView extends Composite {
 		
 		
 		
-		topicDetail = new TopicDetail(topicService);		
+		topicDetail = new TopicDetail(topicService,tagService);		
 		topicList = new TopicList(topicService,topicDetail);
 		topicDetail.setTopicList(topicList);
 		

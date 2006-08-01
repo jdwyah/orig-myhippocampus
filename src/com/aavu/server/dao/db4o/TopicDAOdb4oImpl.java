@@ -105,7 +105,11 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 			//getDb().set(t);
 			
 		}
-
+		List<Topic> list2 = getDb().get(Topic.class);
+		for(Topic t : list2){
+//			t.setTags(new ArrayList());
+//			getDb().set(t);
+		}
 		closeDB();
 	}
 //	public void saveT(Tag tag) {

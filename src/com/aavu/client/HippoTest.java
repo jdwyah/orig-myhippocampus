@@ -7,6 +7,7 @@ import com.aavu.client.service.remote.TopicService;
 import com.aavu.client.service.remote.TopicServiceAsync;
 import com.aavu.client.widget.edit.AddEditView;
 import com.aavu.client.widget.edit.TagBoard;
+import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -33,7 +34,6 @@ public class HippoTest implements EntryPoint, TabListener  {
 	private DockPanel panel = new DockPanel();
 	private TabPanel viewContainer = new TabPanel();
 	private HTML description = new HTML();
-	private TagBoard tagBoard;
 
 	private TopicServiceAsync topicService;
 	private TagServiceAsync tagService;
@@ -62,9 +62,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 	public void onModuleLoad() {
 
 		initServices();		
-		tagBoard = new TagBoard(tagService);
-
-
+		
 		Label title = new Label("Add Article");
 		title.setStyleName("ta-Title");
 		HorizontalPanel titlePanel = new HorizontalPanel();
@@ -97,12 +95,10 @@ public class HippoTest implements EntryPoint, TabListener  {
 		description.setStyleName("ks-Info");
 
 		panel.add(top, DockPanel.NORTH);
-		panel.add(tagBoard, DockPanel.WEST);
+
 		panel.add(vp, DockPanel.CENTER);
 
-		panel.setCellVerticalAlignment(tagBoard, HasAlignment.ALIGN_TOP);
 		panel.setCellWidth(vp, "100%");
-
 
 		RootPanel.get().add(panel);
 
@@ -139,7 +135,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 		Widget w = viewContainer.getWidget(tabIndex);
 		
 		if(w == tagView){
-			((TagOrganizerView)viewContainer.getWidget(1)).populateTagList();	
+			((TagOrganizerView)w).populateTagList();	
 		}
 		
 		

@@ -1,4 +1,4 @@
-package com.aavu.client;
+package com.aavu.client.widget.tags;
 
 
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.TagServiceAsync;
-import com.aavu.client.widget.tags.MetaChooser;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -59,8 +58,10 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		saveButton.addClickListener(this);
 		deleteTagButton.addClickListener(this);
 
+		
+		
 		tagListPanel.add(tagListLabel);
-		tagListPanel.add(tagList);
+		tagListPanel.add(tagList);		
 		populateTagList();
 
 		tagList.addChangeListener(new ChangeListener(){
@@ -84,13 +85,21 @@ public class TagOrganizerView extends Composite implements ClickListener{
 				});
 			}
 		});
-		/*tagList.addClickListener(new ClickListener(){
-			public void onClick(Widget arg0) {
-				System.out.println("in onClick");
-				displayMetas(selectedTag);
-			}			   
-		});*/
+	
+		Button newTag = new Button("Add New Tag");
+		newTag.addClickListener(new ClickListener(){
 
+			public void onClick(Widget sender) {
+				Tag t = new Tag();
+				
+				//hmmm... this isn't all that pretty
+				selectedTag = t;
+				displayMetas(t);
+			}});
+		tagListPanel.add(newTag);
+
+		
+		
 		tagName = new TextBox();		
 		
 		HorizontalPanel editTagNamePanel = new HorizontalPanel();		

@@ -9,6 +9,7 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.remote.TagServiceAsync;
 import com.aavu.client.service.remote.TopicServiceAsync;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.Button;
@@ -32,8 +33,7 @@ public class TopicDetail extends Composite implements ClickListener{
 	private TextArea textArea = new TextArea();
 	
 	private Button cancelButton = new Button("Cancel");
-	
-	
+		
 	private Button editTextButton = new Button("Edit Text");
 	private Button saveButton = new Button("Save");
 	
@@ -53,10 +53,13 @@ public class TopicDetail extends Composite implements ClickListener{
 	private TopicServiceAsync topicServiceA;
 	private TopicList topicList;
 	
+	private TagBoard tagBoard;
 	
-	
-	public TopicDetail(TopicServiceAsync topicServiceAsync){
+	public TopicDetail(TopicServiceAsync topicServiceAsync, TagServiceAsync tagServiceAsync){
 		this.topicServiceA = topicServiceAsync;
+		
+		tagBoard = new TagBoard(tagServiceAsync);
+		
 		
 		panel.setSpacing(4);		
 		titleLabel.addStyleName("ta-compose-Label");
@@ -89,7 +92,7 @@ public class TopicDetail extends Composite implements ClickListener{
 	
 	public void load(Topic topic){
 		this.topic = topic;
-		setupTopic();
+		setupTopic();		
 		activateMainView();
 
 		Effect.highlight(panel);
@@ -112,7 +115,9 @@ public class TopicDetail extends Composite implements ClickListener{
 					seeAlsoStatic.add(new TopicLink(also,this));					
 				}
 			}
-			seeAlsoComplete = new SeeAlsoComplete(topic.getSeeAlso(),topicServiceA);			
+			seeAlsoComplete = new SeeAlsoComplete(topic.getSeeAlso(),topicServiceA);
+			
+			tagBoard.load(topic.getTags());
 		}
 	}
 
@@ -137,6 +142,8 @@ public class TopicDetail extends Composite implements ClickListener{
 				String string = seeAlsos[i];
 				System.out.println("save array |"+string+"|");
 			}
+			
+			topic.setTags(tagBoard.getTags());
 			
 			topicServiceA.save(topic,seeAlsos,new StdAsyncCallback() {				
 
@@ -166,6 +173,8 @@ public class TopicDetail extends Composite implements ClickListener{
 		
 		panel.clear();
 		panel.add(topicTitlePanel);
+
+		panel.add(tagBoard);
 		
 		panel.add(textPanel);
 		
@@ -185,6 +194,8 @@ public class TopicDetail extends Composite implements ClickListener{
 		
 		panel.clear();
 		panel.add(topicTitlePanel);
+		
+		panel.add(tagBoard);
 
 		panel.add(textArea);
 		

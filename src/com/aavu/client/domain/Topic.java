@@ -27,7 +27,7 @@ public class Topic implements IsSerializable{
      /*
       * @gwt.typeArgs <com.aavu.client.domain.Tag>
       */
-     private List tags;
+     private List tags = new ArrayList();
      
      /*
       * @gwt.typeArgs <com.aavu.client.domain.Meta,com.aavu.client.MetaValue>
