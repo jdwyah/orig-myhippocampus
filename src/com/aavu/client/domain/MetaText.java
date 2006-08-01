@@ -1,7 +1,7 @@
 package com.aavu.client.domain;
 
 import com.aavu.client.service.local.TagLocalService;
-import com.aavu.client.widget.MetaListBox;
+import com.aavu.client.widget.tags.MetaListBox;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;

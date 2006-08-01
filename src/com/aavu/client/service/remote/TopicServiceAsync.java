@@ -1,4 +1,4 @@
-package com.aavu.client;
+package com.aavu.client.service.remote;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;

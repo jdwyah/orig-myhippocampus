@@ -1,10 +1,11 @@
-package com.aavu.client.widget;
+package com.aavu.client.widget.edit;
 
 import java.util.Iterator;
 import java.util.List;
 
-import com.aavu.client.TopicServiceAsync;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.widget.AutoCompleteTextBoxMultipleCompletes;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
 
 

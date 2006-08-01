@@ -1,10 +1,10 @@
-package com.aavu.client.widget;
+package com.aavu.client.widget.edit;
 
 import org.gwtwidgets.client.wrap.Effect;
 
-import com.aavu.client.TopicServiceAsync;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.remote.TopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;

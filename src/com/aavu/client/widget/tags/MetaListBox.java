@@ -1,4 +1,4 @@
-package com.aavu.client.widget;
+package com.aavu.client.widget.tags;
 
 import java.util.Iterator;
 import java.util.List;

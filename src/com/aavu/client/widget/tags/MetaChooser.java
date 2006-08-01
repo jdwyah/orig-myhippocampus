@@ -1,4 +1,4 @@
-package com.aavu.client.widget;
+package com.aavu.client.widget.tags;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.service.local.TagLocalService;

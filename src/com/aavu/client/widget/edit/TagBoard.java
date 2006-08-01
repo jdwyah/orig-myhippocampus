@@ -1,4 +1,4 @@
-package com.aavu.client;
+package com.aavu.client.widget.edit;
 
 
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.service.remote.TagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;

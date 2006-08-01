@@ -1,6 +1,6 @@
-package com.aavu.client.widget;
+package com.aavu.client.widget.edit;
 
-import com.aavu.client.TopicServiceAsync;
+import com.aavu.client.service.remote.TopicServiceAsync;
 import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
 

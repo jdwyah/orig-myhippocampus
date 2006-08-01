@@ -1,6 +1,7 @@
-package com.aavu.client;
+package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.remote.TagServiceAsync;
 import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
 import com.aavu.client.widget.autocompletion.RemoteTAGAutoCompletionItems;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;

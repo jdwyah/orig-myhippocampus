@@ -1,11 +1,8 @@
-package com.aavu.client.widget.browse;
+package com.aavu.client.widget.edit;
 
-import com.aavu.client.TagServiceAsync;
-import com.aavu.client.TopicServiceAsync;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.widget.TopicCompleter;
-import com.aavu.client.widget.TopicDetail;
-import com.aavu.client.widget.TopicList;
+import com.aavu.client.service.remote.TagServiceAsync;
+import com.aavu.client.service.remote.TopicServiceAsync;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -13,7 +10,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class BrowseView extends Composite {
+public class AddEditView extends Composite {
 
 	private static final int MAX_PER_PAGE = 10;
 	private TopicServiceAsync topicService;
@@ -24,7 +21,7 @@ public class BrowseView extends Composite {
 	
 	private VerticalPanel topicPanel;
 
-	public BrowseView(TopicServiceAsync topicService, TagServiceAsync tagService) {
+	public AddEditView(TopicServiceAsync topicService, TagServiceAsync tagService) {
 		setTagService(tagService);
 		setTopicService(topicService);
 

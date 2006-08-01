@@ -1,4 +1,4 @@
-package com.aavu.client;
+package com.aavu.client.service.remote;
 
 import java.util.List;
 

@@ -10,7 +10,7 @@
 
 package com.aavu.client.widget.autocompletion;
 
-import com.aavu.client.TopicServiceAsync;
+import com.aavu.client.service.remote.TopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.core.client.GWT;

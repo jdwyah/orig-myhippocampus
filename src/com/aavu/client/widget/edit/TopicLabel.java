@@ -1,4 +1,4 @@
-package com.aavu.client.widget;
+package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.ui.Label;
