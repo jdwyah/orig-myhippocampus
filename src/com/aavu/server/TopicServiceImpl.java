@@ -2,8 +2,8 @@ package com.aavu.server;
 
 import java.util.List;
 
-import com.aavu.client.TopicService;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.remote.TopicService;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.db4o.TopicDAOdb4oImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;

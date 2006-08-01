@@ -3,9 +3,9 @@ package com.aavu.server;
 import java.util.Iterator;
 import java.util.List;
 
-import com.aavu.client.TagService;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.remote.TagService;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.db4o.TagDAOdb4oImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
