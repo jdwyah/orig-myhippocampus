@@ -79,7 +79,7 @@ public class AddEditView extends Composite {
 		public SearchP(){
 			HorizontalPanel panel = new HorizontalPanel();
 			
-			final TopicCompleter completer = new TopicCompleter(topicService); 
+			final TopicCompleter completer = new TopicCompleter(); 
 			
 			panel.add(completer);
 			Button addNew = new Button("Add");

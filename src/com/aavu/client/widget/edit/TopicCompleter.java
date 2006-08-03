@@ -9,7 +9,15 @@ public class TopicCompleter extends AutoCompleteTextBox {
 
 	private static final int LENGTH = 40;
 
-	public TopicCompleter(TopicServiceAsync topicService) {
+	private static TopicServiceAsync topicService;
+		
+	public static void setTopicService(TopicServiceAsync topicService) {
+		TopicCompleter.topicService = topicService;
+	}
+
+
+
+	public TopicCompleter() {
 		setCompletionItems(new RemoteTopicAutoCompletionItems(topicService));
 		
 		//doesn't seem to work for formatting.. what prop do I want?

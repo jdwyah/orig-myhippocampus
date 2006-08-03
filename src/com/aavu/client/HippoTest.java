@@ -7,6 +7,7 @@ import com.aavu.client.service.remote.TopicService;
 import com.aavu.client.service.remote.TopicServiceAsync;
 import com.aavu.client.widget.edit.AddEditView;
 import com.aavu.client.widget.edit.TagBoard;
+import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -52,6 +53,11 @@ public class HippoTest implements EntryPoint, TabListener  {
 		ServiceDefTarget endpointTAG = (ServiceDefTarget) tagService;
 		endpointTAG.setServiceEntryPoint("/tagService");
 		
+		
+		//static service setters.
+		//hopefully replace with Spring DI
+		//
+		TopicCompleter.setTopicService(topicService);
 		
 	}
 
