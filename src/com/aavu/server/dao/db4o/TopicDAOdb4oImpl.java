@@ -80,6 +80,11 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 		if(rtn != null & rtn.size() == 1){
 			return rtn.get(0);
 		}else{
+			System.out.println("multiple returns returning null");
+			for(Topic t : rtn){
+				System.out.println("t "+t.getTitle()+" "+t.getId());
+				System.out.println("t "+t.getText()+" ");
+			}
 			//PEND MED ambiguous what >1 would mean
 			return null;
 		}
