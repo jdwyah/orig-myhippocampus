@@ -1,7 +1,5 @@
 package com.aavu.client.service.remote;
 
-import java.util.List;
-
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.RemoteService;
 
@@ -14,5 +12,6 @@ public interface TopicService extends RemoteService {
 	String[] match(String match);//List<String>
 
 	void save(Topic topic, String[] seeAlsos); 
-	
+
+	Topic[] getBlogTopics(int start, int numberPerScreen);
 }

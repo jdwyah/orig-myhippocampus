@@ -15,6 +15,7 @@ public interface TopicServiceAsync {
 	void match(String match, AsyncCallback callback);	
 	
 	void save(Topic topic, String[] seeAlsos, AsyncCallback callback);
+	void getBlogTopics(int start, int numberPerScreen, AsyncCallback callback);
 	
 	
 }

@@ -16,4 +16,6 @@ public interface TopicDAO {
 
 	public abstract void tester();
 
+	public abstract List<Topic> getBlogTopics(int start, int numberPerScreen);
+
 }

@@ -1,9 +1,7 @@
 package com.aavu.client.widget.edit;
 
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.gwtwidgets.client.wrap.Effect;
 
@@ -11,6 +9,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.TagServiceAsync;
 import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.util.SimpleDateFormatGWT;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -54,6 +53,9 @@ public class TopicDetail extends Composite implements ClickListener{
 	private TopicList topicList;
 	
 	private TagBoard tagBoard;
+	
+	private static SimpleDateFormatGWT df; 
+	
 	
 	public TopicDetail(TopicServiceAsync topicServiceAsync, TagServiceAsync tagServiceAsync){
 		this.topicServiceA = topicServiceAsync;
@@ -166,6 +168,7 @@ public class TopicDetail extends Composite implements ClickListener{
 		topicTitlePanel.clear();
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleEcho);
+		topicTitlePanel.add(new Label(" Updated: "+formatDate(topic.getLastUpdated())));
 
 		seeAlsoPanel.clear();
 		seeAlsoPanel.add(seeAlsoStatic);
@@ -212,6 +215,17 @@ public class TopicDetail extends Composite implements ClickListener{
 
 	public void setTopicList(TopicList topicList) {
 		this.topicList = topicList;
+	}
+	
+	
+	public String formatDate(java.util.Date date){		
+		if(df == null){
+			df = new SimpleDateFormatGWT("yyyy-MM-dd HH:mm:ss");
+		}
+		if(date != null){
+			return df.format(date);
+		}
+		return null;
 	}
 	
 }

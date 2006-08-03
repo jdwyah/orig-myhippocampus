@@ -30,15 +30,7 @@ public class TopicServiceImpl extends RemoteServiceServlet implements TopicServi
 	 */
 	public Topic[] getAllTopics(int startIndex, int maxCount) {
 
-		List<Topic> list = topicDAO.getAllTopics();
-
-		Topic[] rtn = new Topic[list.size()];
-
-		for(int i=0;i<list.size();i++){				
-			rtn[i] = list.get(i);
-		}
-
-		return rtn;
+		return convertToArray(topicDAO.getAllTopics());
 	}
 
 	public void save(Topic topic) {
@@ -85,6 +77,25 @@ public class TopicServiceImpl extends RemoteServiceServlet implements TopicServi
 
 		save(topic);
 
+		
+	}
+
+
+	public Topic[] getBlogTopics(int start, int numberPerScreen) {
+		
+		return convertToArray(topicDAO.getBlogTopics(start,numberPerScreen));
+		
+	}
+	
+	private Topic[] convertToArray(List<Topic> list){
+
+		Topic[] rtn = new Topic[list.size()];
+
+		for(int i=0;i<list.size();i++){				
+			rtn[i] = list.get(i);
+		}
+
+		return rtn;
 	}
 
 }

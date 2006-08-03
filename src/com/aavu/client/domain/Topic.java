@@ -1,7 +1,8 @@
 package com.aavu.client.domain;
-// Generated Jul 18, 2006 12:44:47 PM by Hibernate Tools 3.1.0.beta4
+//Generated Jul 18, 2006 12:44:47 PM by Hibernate Tools 3.1.0.beta4
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,145 +15,158 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Topic implements IsSerializable{
 
-    // Fields    
+	// Fields    
 
-     private long id;
-     private User user;
-     
-     /**
-      * The title of this entry
-     */
-     private String title;
-     
-     /*
-      * @gwt.typeArgs <com.aavu.client.domain.Tag>
-      */
-     private List tags = new ArrayList();
-     
-     /*
-      * @gwt.typeArgs <com.aavu.client.domain.Meta,com.aavu.client.MetaValue>
-      * 
-      */
-     private Map metaValues = null;//new HashSet(0);
-     
-     /**
-      * The text in hippoText format
-     */
-     private String text;
-     
-     /*
-      * @gwt.typeArgs <com.aavu.client.domain.Topic>
-      */
-     protected List seeAlso = new ArrayList();
+	private long id;
+	private User user;
 
+	private Date lastUpdated;
 
-    // Constructors
+	/**
+	 * The title of this entry
+	 */
+	private String title;
 
-    /** default constructor */
-    public Topic() {
-    }
+	/*
+	 * @gwt.typeArgs <com.aavu.client.domain.Tag>
+	 */
+	private List tags = new ArrayList();
 
-    
-    /** full constructor */
-    public Topic(User user, String title, List tags, Map metaValues, String text, List seeAlso) {
-        this.user = user;
-        this.title = title;
-        this.tags = tags;
-        this.metaValues = metaValues;
-        this.text = text;
-        this.seeAlso = seeAlso;
-    }
-    
-    public String toString(){
-    	return title+" "+text;
-    }
-   
-    // Property accessors
+	/*
+	 * @gwt.typeArgs <com.aavu.client.domain.Meta,com.aavu.client.MetaValue>
+	 * 
+	 */
+	private Map metaValues = null;//new HashSet(0);
 
-    public long getId() {
-        return this.id;
-    }
-    
-    public void setId(long id) {
-        this.id = id;
-    }
+	/**
+	 * The text in hippoText format
+	 */
+	private String text;
 
-    public User getUser() {
-        return this.user;
-    }
-    
-    public void setUser(User user) {
-        this.user = user;
-    }
-    /**       
-     *      * The title of this entry
-     */
-
-    public String getTitle() {
-        return this.title;
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List getTags() {
-        return this.tags;
-    }
-    
-    public void setTags(List tags) {
-        this.tags = tags;
-    }
-
-    public Map getMetaValues() {
-        return this.metaValues;
-    }
-    
-    public void setMetaValues(Map metaValues) {
-        this.metaValues = metaValues;
-    }
-    /**       
-     *      * The text in hippoText format
-     */
-
-    public String getText() {
-        return this.text;
-    }
-    
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public List getSeeAlso() {
-        return this.seeAlso;
-    }
-    
-    public void setSeeAlso(List seeAlso) {
-        this.seeAlso = seeAlso;
-    }  
+	/*
+	 * @gwt.typeArgs <com.aavu.client.domain.Topic>
+	 */
+	protected List seeAlso = new ArrayList();
 
 
-   public boolean equals(Object other) {
-         if ( (this == other ) ) return true;
-		 if ( (other == null ) ) return false;
-		 if ( !(other instanceof Topic) ) return false;
-		 Topic castOther = ( Topic ) other; 
-         
-		 return ( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) );
-   }
-   
-   public int hashCode() {
-         int result = 17;
-         
-         
-         
-         result = 37 * result + ( getTitle() == null ? 0 : this.getTitle().hashCode() );
-         
-         
-         
-         
-         return result;
-   }
+	// Constructors
+
+	/** default constructor */
+	public Topic() {
+		lastUpdated = new Date();
+	}
+
+
+	/** full constructor */
+	public Topic(User user, String title, List tags, Map metaValues, String text, List seeAlso) {
+		this.user = user;
+		this.title = title;
+		this.tags = tags;
+		this.metaValues = metaValues;
+		this.text = text;
+		this.seeAlso = seeAlso;
+	}
+
+	public String toString(){
+		return title+" "+text;
+	}
+
+	// Property accessors
+
+	public long getId() {
+		return this.id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	/**       
+	 *      * The title of this entry
+	 */
+
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public List getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List tags) {
+		this.tags = tags;
+	}
+
+	public Map getMetaValues() {
+		return this.metaValues;
+	}
+
+	public void setMetaValues(Map metaValues) {
+		this.metaValues = metaValues;
+	}
+	/**       
+	 *      * The text in hippoText format
+	 */
+
+	public String getText() {
+		return this.text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public List getSeeAlso() {
+		return this.seeAlso;
+	}
+
+	public void setSeeAlso(List seeAlso) {
+		this.seeAlso = seeAlso;
+	}  
+
+
+	public boolean equals(Object other) {
+		if ( (this == other ) ) return true;
+		if ( (other == null ) ) return false;
+		if ( !(other instanceof Topic) ) return false;
+		Topic castOther = ( Topic ) other; 
+
+		return ( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) );
+	}
+
+	public int hashCode() {
+		int result = 17;
+
+
+
+		result = 37 * result + ( getTitle() == null ? 0 : this.getTitle().hashCode() );
+
+
+
+
+		return result;
+	}
+
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
 
 
 }
