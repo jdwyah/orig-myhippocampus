@@ -18,23 +18,20 @@ public class SeeAlsoComplete extends AutoCompleteTextBoxMultipleCompletes {
 
 		StringBuffer sb = new StringBuffer();
 
-		if(alsos == null){
-			return;
+		if(alsos != null){
+			for (Iterator iter = alsos.iterator(); iter.hasNext();) {
+				Topic topic = (Topic) iter.next();
+
+				sb.append(topic.getTitle());
+				sb.append(SEPARATOR);
+			}
+
+			setText(sb.toString());
+
+
+			//doesn't seem to work for formatting.. what prop do I want?
+			setMaxLength(LENGTH);
 		}
-
-		for (Iterator iter = alsos.iterator(); iter.hasNext();) {
-			Topic topic = (Topic) iter.next();
-
-			sb.append(topic.getTitle());
-			sb.append(SEPARATOR);
-		}
-
-		setText(sb.toString());
-		
-		
-		//doesn't seem to work for formatting.. what prop do I want?
-		setMaxLength(LENGTH);
-
 	}
 
 }
