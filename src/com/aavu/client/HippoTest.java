@@ -45,15 +45,26 @@ public class HippoTest implements EntryPoint, TabListener  {
 	private AddEditView addEditView;
 	private BrowseView browseView;
 	
+	private String msg = "";
+	
 	private void initServices(){
 		topicService = (TopicServiceAsync) GWT.create(TopicService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) topicService;
-		//endpoint.setServiceEntryPoint("http://localhost:8080/HippoTestW/service/TopicService");
-		endpoint.setServiceEntryPoint("/topicService");
+		//endpoint.setServiceEntryPoint("http://localhost:8080/HippoTestW/service/TopicService");		
+		
+		String pre = "";
+		if(GWT.isScript()){
+			pre = GWT.getModuleBaseURL();
+			pre = "http://localhost:8080/HippoTest";
+		}
+		
+		msg = pre+" "+GWT.isScript()+" "+(pre + "/topicService");
+		
+		endpoint.setServiceEntryPoint(pre + "/topicService");		
 		
 		tagService = (TagServiceAsync) GWT.create(TagService.class);
 		ServiceDefTarget endpointTAG = (ServiceDefTarget) tagService;
-		endpointTAG.setServiceEntryPoint("/tagService");
+		endpointTAG.setServiceEntryPoint(pre + "/tagService");
 		
 		
 		//static service setters.
@@ -71,7 +82,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 
 		initServices();		
 		
-		Label title = new Label("Add Article");
+		Label title = new Label("Add Article "+msg+" ||"+topicService.toString());
 		title.setStyleName("ta-Title");
 		HorizontalPanel titlePanel = new HorizontalPanel();
 		titlePanel.add(title);

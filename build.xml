@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!--
+	Run "ant -projecthelp" to view all the possible targets and descriptions.
+-->
+<project name="std_buildfile" basedir=".">
+	
+	<property file="build.properties" />
+	
+	
+		<path id="lib.include">
+			<fileset dir="${lib}">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+
+		<!-- all Third Party jars and tool jars this module needs to compile -->
+		<path id="lib.jars">
+			<path refid="lib.include" />
+			<fileset dir="${libexclude}">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+
+		<!-- must keep junit jars separate for ease of creating classpath in manifest -->
+		<path id="tool.and.lib">
+			<path refid="lib.jars" />
+			
+		</path>
+
+		<path id="gwt">
+			<fileset dir="tools/gwt">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+
+		<path id="classes.classpath">
+			<pathelement location="${build}" />
+		</path>	
+	
+	
+	
+	
+	
+	
+	<target name="compile" >
+		<mkdir dir="${build}" />
+
+		<pathconvert property="compile.classpath" pathsep=":">
+			<path refid="tool.and.lib" />
+		</pathconvert>
+
+		<echo message="Compiling files in ${javacode}" />
+		<echo message="Putting the class files in ${build}" />
+		<echo message="classpath=${compile.classpath}" />
+
+		<!-- Compile the java code from ${javacode} into ${build} -->
+		<javac srcdir="${javacode}" destdir="${build}" deprecation="yes" debug="on">
+			<classpath>
+				<path refid="tool.and.lib" />
+			</classpath>
+		</javac>
+
+		<property name="gwt.module" value="com.aavu.HippoTest"/>
+		
+		<!-- compile java to javascript here -->
+		<java failonerror="true" classname="com.google.gwt.dev.GWTCompiler" fork="true">
+			<classpath>
+				<pathelement path="${javacode}" />
+				<path refid="gwt" />
+			</classpath>
+			<arg value="-out" />
+			<arg value="output/gwt" />
+			<arg value="${gwt.module}" />
+		</java>
+
+		<!-- copy all misc. files over(config.jaas, etc.) from the ${javacode} directory-->
+		<!-- Will not copy over *.jpg, *.gif, *.html for here(those are for javadoc)-->
+		<copy todir="${build}">
+			<fileset dir="${javacode}">
+				<exclude name="**/*.java" />
+				<exclude name="**/*.htm" />
+				<exclude name="**/*.html" />
+				<exclude name="**/doc_*.jpg" />
+				<exclude name="**/doc_*.gif" />
+				<exclude name="**/*.bak" />
+				<exclude name="**/*~" />
+				<exclude name="**/vssver*.*" />
+				<exclude name="**/.nbattrs" />
+			</fileset>
+		</copy>
+
+		<!-- convert any asian languages from UTF-8 to ascii so they can be used-->
+		<native2ascii encoding="UTF-8" src="${javacode}" dest="${build}" includes="**/*.utf8-properties" ext=".properties" />
+
+		<!--check for rmi stubs so if there are we will do the next target-->
+		<fileset dir="${build}" id="rmi.fileset">
+			<include name="**/RMI*.class" />
+		</fileset>
+		<pathconvert pathsep="\r\n" property="have.rmi.files" refid="rmi.fileset" setonempty="false" />
+	</target>
+	
+	
+	<target name="copyForJar" depends="">
+			<echo message="webapp.enabled=${webapp.enabled}" />
+
+			<property name="run.war.target" value="true" />
+			
+			<!-- Also, copy over all needed jars from ${lib} to ${jardist} -->
+			<!--		<copy todir="${jardist}">
+						<fileset dir="${lib}" includes="**" />
+					</copy>
+	-->
+		</target>
+		<!-- 
+	***********************************************************************
+	              JAR TARGET
+	***********************************************************************
+	-->
+		<target name="jar" depends="copyForJar" description="Builds a jar file">
+			<!-- Create the distribution directory -->
+			<mkdir dir="${jardist}" />
+
+			<jar destfile="${lib}/gwt-deploy.jar">
+			          <zipfileset src="libexclude/gwt-user.jar">
+			             <exclude name="javax/**" />
+			             <exclude name="META-INF/**" />
+			             <exclude name="**/*.java" />
+			          </zipfileset>
+   	        </jar>
+			
+			<!-- Put all implementation classes from ${build} into the jar file -->
+			<jar jarfile="${jardist}/${jar.name}" basedir="${build}" />
+
+		</target>
+
+		<!-- 
+	***********************************************************************
+	              WAR TARGET
+	***********************************************************************
+	-->
+		<target name="war" depends="jar" if="run.war.target" description="Builds a war file">
+			<mkdir dir="${wardist}" />
+			<war destfile="${wardist}/${name}.war" webxml="${webroot}/WEB-INF/web.xml" >
+				<lib dir="${lib}">
+					<include name="**/*.jar" />
+				</lib>				
+				<classes dir="${classes}" />
+				<fileset dir="${webroot}" />
+				<fileset dir="${gwt}"/>
+			</war>
+		</target>
+</project>
