@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+
+<beans>
+
+
+	<bean id="container" class="org.db4ospring.ObjectContainerFactoryBean">
+		<property name="databaseFile" value="classpath:db4.yap"/>	
+	</bean>
+
+	<bean id="TopicDAO" class="com.aavu.server.dao.db4o.TopicDAOdb4oImpl">
+		<property name="db" ref="container"/>
+	</bean>
+	<bean id="TagDAO" class="com.aavu.server.dao.db4o.TagDAOdb4oImpl">
+		<property name="db" ref="container"/>
+	</bean>
+
+	<bean id="TopicService" class="com.aavu.server.TopicServiceImpl">
+		<property name="setByDI" value="I WAS SET" />
+		<property name="topicDAO" ref="TopicDAO"/>
+	</bean>
+	<bean id="TagService" class="com.aavu.server.TagServiceImpl">
+		<property name="tagDAO" ref="TagDAO"></property>
+	</bean>
+
+
+</beans>

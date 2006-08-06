@@ -55,7 +55,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 		String pre = "";
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();
-			pre = "http://localhost:8080/HippoTest";
+			pre = "http://localhost:8080/HippoTest/service/";
 		}
 		
 		msg = pre+" "+GWT.isScript()+" "+(pre + "/topicService");

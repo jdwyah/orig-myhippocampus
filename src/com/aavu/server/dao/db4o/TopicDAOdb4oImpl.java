@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.db4ospring.support.Db4oDaoSupport;
+
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -15,7 +17,6 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 
 
 	public void save(Topic t){
-
 
 		try{
 			if(t.getId() == 0){
@@ -38,11 +39,19 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 
 	public List<Topic> getAllTopics(){
 
-
+		System.out.println("ABOUT TO GET ALL TOPICS");
+		
 		ObjectSet result = getDb().get(Topic.class);
+		
+		System.out.println("FINISHED GET ALL TOPICS");
 
 		List<Topic> res = result;
 
+		System.out.println("res: "+res);
+		System.out.println("number of topics: "+res.size());
+		
+		ObjectSet r2 = getDb().get(Object.class);
+		System.out.println("number of objs "+r2.size());
 
 //		for(Topic t : res){
 //		t.setId(getDb().ext().getID(t));

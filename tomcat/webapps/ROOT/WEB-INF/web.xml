@@ -1,27 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<web-app>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/applicationContext.xml
+		</param-value>
+	</context-param>
+	
+
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>-1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+<!-- 		<url-pattern>/gwt.spring.GWTSpringClient/services/*</url-pattern>--> 
+	</servlet-mapping>
+
+<!-- 
     <servlet>
         <servlet-name>TopicService</servlet-name>
 		<servlet-class>com.aavu.server.TopicServiceImpl</servlet-class>
-    </servlet>
+    </servlet>-->
 
-    <servlet-mapping>
+<!-- <servlet-mapping>
          <servlet-name>TopicService</servlet-name>
          <url-pattern>/topicService</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
     
-   <servlet>
+<!--    <servlet>
         <servlet-name>TagService</servlet-name>
 		<servlet-class>com.aavu.server.TagServiceImpl</servlet-class>
-    </servlet>
+    </servlet>-->
 
-    <servlet-mapping>
+<!-- <servlet-mapping>
          <servlet-name>TagService</servlet-name>
          <url-pattern>/tagService</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
     
-
-
+    
+    
 </web-app>

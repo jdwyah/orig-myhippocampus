@@ -23,7 +23,7 @@ public class RemoteTopicAutoCompletionItems implements CompletionItems {
 		service = (TopicServiceAsync)
 		GWT.create(AutoCompletionService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) service;
-		endpoint.setServiceEntryPoint(entryEndPoint);
+		endpoint.setServiceEntryPoint(GWT.getModuleBaseURL() + entryEndPoint);
 	}
 	
 	public RemoteTopicAutoCompletionItems(TopicServiceAsync topicService) {

@@ -3,18 +3,21 @@ package com.aavu.server;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gwtwidgets.server.rpc.GWTSpringController;
+
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.TagService;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.db4o.TagDAOdb4oImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-public class TagServiceImpl extends RemoteServiceServlet implements TagService {
+public class TagServiceImpl extends GWTSpringController implements TagService {
 
 	private TagDAO tagDAO; 
 	
 	public TagServiceImpl(){
+		
+		org.apache.log4j.BasicConfigurator.configure();
 		
 		tagDAO = new TagDAOdb4oImpl();
 		setTagDAO(tagDAO);

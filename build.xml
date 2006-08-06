@@ -45,7 +45,7 @@
 	<target name="compile" >
 		<mkdir dir="${build}" />
 
-		<pathconvert property="compile.classpath" pathsep=":">
+		<pathconvert property="compile.classpath" pathsep=";">
 			<path refid="tool.and.lib" />
 		</pathconvert>
 
@@ -59,48 +59,28 @@
 				<path refid="tool.and.lib" />
 			</classpath>
 		</javac>
-
-		<property name="gwt.module" value="com.aavu.HippoTest"/>
+		
+		<pathconvert property="gwt.classpath" pathsep=";">
+				<path refid="gwt" />
+			</pathconvert>
+		<echo message="gwt classpath=${gwt.classpath}"/>
 		
 		<!-- compile java to javascript here -->
 		<java failonerror="true" classname="com.google.gwt.dev.GWTCompiler" fork="true">
 			<classpath>
 				<pathelement path="${javacode}" />
 				<path refid="gwt" />
+				<path refid="tool.and.lib" />
 			</classpath>
 			<arg value="-out" />
-			<arg value="output/gwt" />
+			<arg value="${gwt.out}" />
 			<arg value="${gwt.module}" />
-		</java>
+		</java>	
 
-		<!-- copy all misc. files over(config.jaas, etc.) from the ${javacode} directory-->
-		<!-- Will not copy over *.jpg, *.gif, *.html for here(those are for javadoc)-->
-		<copy todir="${build}">
-			<fileset dir="${javacode}">
-				<exclude name="**/*.java" />
-				<exclude name="**/*.htm" />
-				<exclude name="**/*.html" />
-				<exclude name="**/doc_*.jpg" />
-				<exclude name="**/doc_*.gif" />
-				<exclude name="**/*.bak" />
-				<exclude name="**/*~" />
-				<exclude name="**/vssver*.*" />
-				<exclude name="**/.nbattrs" />
-			</fileset>
-		</copy>
-
-		<!-- convert any asian languages from UTF-8 to ascii so they can be used-->
-		<native2ascii encoding="UTF-8" src="${javacode}" dest="${build}" includes="**/*.utf8-properties" ext=".properties" />
-
-		<!--check for rmi stubs so if there are we will do the next target-->
-		<fileset dir="${build}" id="rmi.fileset">
-			<include name="**/RMI*.class" />
-		</fileset>
-		<pathconvert pathsep="\r\n" property="have.rmi.files" refid="rmi.fileset" setonempty="false" />
 	</target>
 	
 	
-	<target name="copyForJar" depends="">
+	<target name="copyForJar" depends="compile">
 			<echo message="webapp.enabled=${webapp.enabled}" />
 
 			<property name="run.war.target" value="true" />
@@ -146,7 +126,7 @@
 				</lib>				
 				<classes dir="${classes}" />
 				<fileset dir="${webroot}" />
-				<fileset dir="${gwt}"/>
+				<fileset dir="${gwt.out}"/>
 			</war>
 		</target>
 </project>

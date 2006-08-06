@@ -11,7 +11,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class BrowseOptionPanel extends VerticalPanel {
 
 	private DockPanel mainView;
-
+	private Widget lastSelected;
+	
 	public BrowseOptionPanel(DockPanel mainView, TopicServiceAsync topicService) {
 		this.mainView = mainView;
 		
@@ -20,6 +21,7 @@ public class BrowseOptionPanel extends VerticalPanel {
 		
 		add(l);
 		add(l2);
+		
 	}
 	
 	private class Linker extends Composite{
@@ -34,9 +36,18 @@ public class BrowseOptionPanel extends VerticalPanel {
 			
 			lab.addClickListener(new ClickListener(){
 
+				
+
 				public void onClick(Widget sender) {
+					if(lastSelected != null){
+						lastSelected.removeStyleName("ks-SinkItem-selected");
+					}
+					sender.setStyleName("ks-List");
+					sender.addStyleName("ks-SinkItem-selected");
+					
 					mainView.clear();
 					mainView.add(view);
+					lastSelected = sender;
 				}});
 			
 			setWidget(lab);

@@ -26,8 +26,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.remoting.support.RemoteExporter;
 import org.springframework.util.Assert;
@@ -40,7 +40,7 @@ import com.google.gwt.user.client.rpc.SerializationStream;
 public class GwtInvokerServiceExporter extends RemoteExporter
         implements HttpRequestHandler, InitializingBean {
 
-    protected final Log logger = LogFactory.getLog(getClass());
+   // protected final Log logger = LogFactory.getLog(getClass());
 
     private static final String CHARSET_UTF8 = "UTF-8";
     private static final String CONTENT_TYPE_TEXT_PLAIN_UTF8 = "text/plain; charset=utf-8";
@@ -296,15 +296,15 @@ public class GwtInvokerServiceExporter extends RemoteExporter
      * client.
      */
     private void respondWithFailure(HttpServletResponse response, Throwable caught) {
-        logger.error("Exception while dispatching incoming RPC call", caught);
+        //logger.error("Exception while dispatching incoming RPC call", caught);
         try {
             response.setContentType("text/plain");
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             String msg = "The call failed on the server; see server log for details";
             response.getWriter().write(msg);
         } catch (IOException e) {
-            logger.error("sendError() failed while sending the previous failure to the client",
-                    caught);
+            //logger.error("sendError() failed while sending the previous failure to the client",
+            //        caught);
         }
     }
 
