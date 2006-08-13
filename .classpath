@@ -3,13 +3,31 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Downloads/gwt-windows-1.0.21/gwt-windows-1.0.21/gwt-user.jar"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry sourcepath="lib/db4o-5.2-src.zip" kind="lib" path="lib/db4o-5.2-java5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar"/>
 	<classpathentry sourcepath="/M2_REPO" kind="var" path="M2_REPO/org/springframework/spring/2.0-rc1/spring-2.0-rc1.jar"/>
 	<classpathentry kind="lib" path="lib/db4o-spring-1.0-SNAPSHOT.jar"/>
 	<classpathentry sourcepath="C:/Documents and Settings/Jeff Dwyer/.m2/repository/org/springframework/spring/2.0-m5/spring-src.zip" kind="lib" path="lib/spring-2.0-rc1.jar"/>
-	<classpathentry sourcepath="lib/gwt-widgets-0.0.7.zip" kind="lib" path="lib/gwt-widgets-0.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjrt-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/casclient-2.0.11.jar"/>
+	<classpathentry kind="lib" path="lib/commons-attributes-api-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/ehcache-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/hsqldb-1.7.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/jstl-1.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/standard-1.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/freemarker-2.3.6.jar"/>
+	<classpathentry kind="lib" path="lib/sitemesh-2.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/acegi-security-1.0.1.withSource.jar"/>
+	<classpathentry kind="lib" path="lib/gwt-widgets-0.1.0.jar"/>
+	<classpathentry kind="lib" path="tools/gwt/gwt-user-1.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

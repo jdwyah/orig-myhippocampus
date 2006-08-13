@@ -2,7 +2,7 @@
 <!--
 	Run "ant -projecthelp" to view all the possible targets and descriptions.
 -->
-<project name="std_buildfile" basedir=".">
+<project name="HippoTest" basedir=".">
 	
 	<property file="build.properties" />
 	
@@ -35,9 +35,7 @@
 
 		<path id="classes.classpath">
 			<pathelement location="${build}" />
-		</path>	
-	
-	
+		</path>		
 	
 	
 	
@@ -69,8 +67,8 @@
 		<java failonerror="true" classname="com.google.gwt.dev.GWTCompiler" fork="true">
 			<classpath>
 				<pathelement path="${javacode}" />
-				<path refid="gwt" />
 				<path refid="tool.and.lib" />
+				<path refid="gwt" />
 			</classpath>
 			<arg value="-out" />
 			<arg value="${gwt.out}" />
@@ -98,15 +96,7 @@
 	-->
 		<target name="jar" depends="copyForJar" description="Builds a jar file">
 			<!-- Create the distribution directory -->
-			<mkdir dir="${jardist}" />
-
-			<jar destfile="${lib}/gwt-deploy.jar">
-			          <zipfileset src="libexclude/gwt-user.jar">
-			             <exclude name="javax/**" />
-			             <exclude name="META-INF/**" />
-			             <exclude name="**/*.java" />
-			          </zipfileset>
-   	        </jar>
+			<mkdir dir="${jardist}" />		
 			
 			<!-- Put all implementation classes from ${build} into the jar file -->
 			<jar jarfile="${jardist}/${jar.name}" basedir="${build}" />
@@ -120,7 +110,8 @@
 	-->
 		<target name="war" depends="jar" if="run.war.target" description="Builds a war file">
 			<mkdir dir="${wardist}" />
-			<war destfile="${wardist}/${name}.war" webxml="${webroot}/WEB-INF/web.xml" >
+<!--			<war destfile="${wardist}/${name}.war" webxml="${webroot}/WEB-INF/web.xml" >-->
+			<war destfile="${wardist}/${name}.war" webxml="${specialWebIncludes}/web.xml" >				
 				<lib dir="${lib}">
 					<include name="**/*.jar" />
 				</lib>				
@@ -129,4 +120,62 @@
 				<fileset dir="${gwt.out}"/>
 			</war>
 		</target>
+	
+	
+	
+
+	<target name="tomcatTasks">
+		<fail unless="tomcat.home" message="PLEASE make sure you have a ${user.home}/ant.properties file with the property tomcat.home set" />
+		<fail unless="tomcat.username" message="PLEASE make sure you have a ${user.home}/ant.properties file with the property tomcat.username set" />
+		<fail unless="tomcat.password" message="PLEASE make sure you have a ${user.home}/ant.properties file with the property tomcat.password set" />
+		<fail unless="tomcat.url" message="PLEASE make sure you have a ${user.home}/ant.properties file with the property tomcat.url set" />
+
+		<taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask"/>
+		  <taskdef name="list"      classname="org.apache.catalina.ant.ListTask"/>
+		  <taskdef name="reload"    classname="org.apache.catalina.ant.ReloadTask"/>
+		  <taskdef name="resources" classname="org.apache.catalina.ant.ResourcesTask"/>
+		  <taskdef name="roles"     classname="org.apache.catalina.ant.RolesTask"/>
+		  <taskdef name="start"     classname="org.apache.catalina.ant.StartTask"/>
+		  <taskdef name="stop"      classname="org.apache.catalina.ant.StopTask"/>
+		  <taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask"/>
+		
+		<echo message="foo"></echo>
+		<property name="tomcat.manager.url" value="${tomcat.url}/manager" />
+		<path id="tomcat.classpath">
+			<fileset dir="${tomcat.home}/server/lib/">
+				<include name="catalina-ant.jar" />
+			</fileset>
+		</path>
+		<!--Just a convenient pathconvert to debug paths above by converting to string and printing -->
+		<pathconvert dirsep="/" pathsep=" " property="temp.tomcat" refid="tomcat.classpath" setonempty="true" />
+		<echo message="tomcat ant task jars=${temp.tomcat}" />
+
+<!--		<taskdef resource="org/apache/catalina/ant/antlib.xml" classpathref="tomcat.classpath" />-->
+	</target>
+
+	<target name="deploy" description="Install application in Tomcat" depends="tomcatTasks, war">
+		<deploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/${name}" war="${wardist}/${name}.war" />
+	</target>
+
+	<target name="undeploy" description="Remove application in Tomcat" depends="tomcatTasks">
+		<undeploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/${name}" />
+	</target>
+
+	<target name="redeploy" description="Reload application in Tomcat" depends="war, undeploy, deploy">
+	</target>
+
+	<target name="start" description="Start Tomcat application" depends="tomcatTasks">
+		<start url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/${name}" />
+	</target>
+
+	<target name="stop" description="Stop Tomcat application" depends="tomcatTasks">
+		<stop url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/${name}" />
+	</target>
+
+	<target name="tomcatInfo" description="List Tomcat applications" depends="tomcatTasks">
+		<list url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" />
+		<roles url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" />
+		<resources url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" />
+		<sessions url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/${name}" />
+	</target>
 </project>

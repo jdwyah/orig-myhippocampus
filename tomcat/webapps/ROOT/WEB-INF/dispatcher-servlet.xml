@@ -4,16 +4,57 @@
 
 <beans>
 
-        <bean id="urlMapping"
-                class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	<bean id="loginController" class="com.aavu.server.web.LoginController">
+		<property name="view" value="acegilogin" />
+	</bean>
 
-                <property name="mappings">
-                        <props>
-                                <prop key="/topicService">TopicService</prop>
-                                <prop key="/tagService">TagService</prop>
-                        </props>
-                </property>
+	<bean id="gwtForwardingController" class="com.aavu.server.web.LoginController">
+		<property name="view" value="HippoTest" />
+	</bean>
 
-        </bean>
 
-</beans> 
+	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="alwaysUseFullPath" value="true"/>
+		<property name="mappings" >
+			<props>
+				<prop key="/service/topicService">TopicService</prop>
+				<prop key="/service/tagService">TagService</prop>
+				<prop key="/service/userService">UserService</prop>
+				<prop key="/site/acegilogin.html">loginController</prop>
+				<prop key="/fooo">gwtForwardingController</prop>				
+			</props>
+		</property>
+
+	</bean>
+
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer" abstract="false"
+		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="templateLoaderPath">
+			<value>/</value>
+		</property>
+	</bean>
+	
+<!-- <bean id="internalViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="com.aavu.HippoTest/" />
+		<property name="suffix" value=".html" />
+	</bean>-->
+	
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" abstract="false"
+		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="requestContextAttribute">
+			<value>rc</value>
+		</property>
+		<property name="cache">
+			<value>true</value>
+		</property>
+		<property name="prefix">
+			<value>/WEB-INF/freemarker/</value>
+		</property>
+		<property name="suffix">
+			<value>.ftl</value>
+		</property>
+		<property name="exposeSpringMacroHelpers" value="true" />
+	</bean>
+
+</beans>
