@@ -40,7 +40,7 @@ public class BrowseBlogView extends Composite{
 		
 		load();
 
-		setWidget(mainPanel);
+		initWidget(mainPanel);
 	}
 
 

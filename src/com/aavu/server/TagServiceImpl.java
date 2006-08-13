@@ -9,7 +9,6 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.service.remote.TagService;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.db4o.TagDAOdb4oImpl;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class TagServiceImpl extends GWTSpringController implements TagService {
 
@@ -17,7 +16,7 @@ public class TagServiceImpl extends GWTSpringController implements TagService {
 	
 	public TagServiceImpl(){
 		
-		org.apache.log4j.BasicConfigurator.configure();
+		//org.apache.log4j.BasicConfigurator.configure();
 		
 		tagDAO = new TagDAOdb4oImpl();
 		setTagDAO(tagDAO);

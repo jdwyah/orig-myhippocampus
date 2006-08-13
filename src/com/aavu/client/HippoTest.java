@@ -1,13 +1,15 @@
 package com.aavu.client;
 
-import com.aavu.client.domain.Topic;
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.User;
 import com.aavu.client.service.remote.TagService;
 import com.aavu.client.service.remote.TagServiceAsync;
 import com.aavu.client.service.remote.TopicService;
 import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.UserService;
+import com.aavu.client.service.remote.UserServiceAsync;
 import com.aavu.client.widget.browse.BrowseView;
 import com.aavu.client.widget.edit.AddEditView;
-import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
@@ -17,7 +19,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -27,6 +28,7 @@ import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -39,13 +41,15 @@ public class HippoTest implements EntryPoint, TabListener  {
 
 	private TopicServiceAsync topicService;
 	private TagServiceAsync tagService;
-	
+	private UserServiceAsync userService;
 	
 	private TagOrganizerView tagView;
 	private AddEditView addEditView;
 	private BrowseView browseView;
 	
 	private String msg = "";
+	
+	private User user;
 	
 	private void initServices(){
 		topicService = (TopicServiceAsync) GWT.create(TopicService.class);
@@ -54,6 +58,9 @@ public class HippoTest implements EntryPoint, TabListener  {
 		
 		String pre = "";
 		if(GWT.isScript()){
+			pre = GWT.getModuleBaseURL();
+			pre = "http://localhost:8080/HippoTest/service/";
+		}else{
 			pre = GWT.getModuleBaseURL();
 			pre = "http://localhost:8080/HippoTest/service/";
 		}
@@ -67,11 +74,29 @@ public class HippoTest implements EntryPoint, TabListener  {
 		endpointTAG.setServiceEntryPoint(pre + "/tagService");
 		
 		
+		userService = (UserServiceAsync) GWT.create(UserService.class);
+		ServiceDefTarget endpointUser = (ServiceDefTarget) userService;
+		endpointUser.setServiceEntryPoint(pre + "/userService");
+		
+		
 		//static service setters.
 		//hopefully replace with Spring DI
 		//
 		TopicCompleter.setTopicService(topicService);
 		
+		
+		
+		userService.getCurrentUser(new StdAsyncCallback(){
+			public void onSuccess(Object result) {
+				user = (User) result;
+				System.out.println("found a user: "+user.getUsername());
+				loadGUI();
+			}			
+			
+			//on FAIL!
+			//this fails
+			
+		});
 	}
 
 
@@ -82,7 +107,18 @@ public class HippoTest implements EntryPoint, TabListener  {
 
 		initServices();		
 		
-		Label title = new Label("Add Article "+msg+" ||"+topicService.toString());
+		//loadGUI();
+	}
+
+
+
+	private void loadGUI() {
+
+		String username="none";
+		if(user != null){
+			username = user.getUsername();
+		}
+		Label title = new Label("Add Article "+msg+" ||"+topicService.toString()+" &-"+username);
 		title.setStyleName("ta-Title");
 		HorizontalPanel titlePanel = new HorizontalPanel();
 		titlePanel.add(title);
@@ -91,7 +127,8 @@ public class HippoTest implements EntryPoint, TabListener  {
 		DockPanel logoPanel = new DockPanel();
 		Image logo = new Image("images/HippoLogo.jpg");
 		//logo.setSize();
-		logoPanel.add(logo);
+		
+		logoPanel.add(logo,DockPanel.WEST);
 		logoPanel.setStyleName("ta-logo");
 
 		HorizontalPanel top = new HorizontalPanel();
@@ -141,9 +178,8 @@ public class HippoTest implements EntryPoint, TabListener  {
 		viewContainer.add(addEditView, "Add/Edit");
 		viewContainer.add(tagView, "Tags");
 
-		viewContainer.selectTab(0);
+		viewContainer.selectTab(0);	
 	}
-
 
 
 	//*******  TabListener methods  *******

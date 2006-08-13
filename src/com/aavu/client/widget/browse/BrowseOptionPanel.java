@@ -46,11 +46,11 @@ public class BrowseOptionPanel extends VerticalPanel {
 					sender.addStyleName("ks-SinkItem-selected");
 					
 					mainView.clear();
-					mainView.add(view);
+					mainView.add(view,DockPanel.CENTER);
 					lastSelected = sender;
 				}});
 			
-			setWidget(lab);
+			initWidget(lab);
 		}
 		
 	}

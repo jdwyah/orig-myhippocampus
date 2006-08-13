@@ -41,7 +41,7 @@ public class BrowseView extends Composite {
 		mainPanel.add(browseOptions);
 		mainPanel.add(mainView);
 
-		setWidget(mainPanel);		
+		initWidget(mainPanel);		
 
 		
 		//		load();

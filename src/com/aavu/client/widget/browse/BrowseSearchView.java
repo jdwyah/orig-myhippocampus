@@ -9,6 +9,6 @@ public class BrowseSearchView extends Composite {
 		
 		VerticalPanel mainPanel = new VerticalPanel();
 		
-		setWidget(mainPanel);
+		initWidget(mainPanel);
 	}
 }

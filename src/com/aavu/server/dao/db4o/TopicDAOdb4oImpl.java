@@ -13,44 +13,41 @@ import com.aavu.server.dao.TopicDAO;
 import com.db4o.ObjectSet;
 import com.db4o.query.Query;
 
-public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
-
+public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
+	
 
 	public void save(Topic t){
 
-		try{
-			if(t.getId() == 0){
-				getDb().set(t);
-				long id = getDb().ext().getID(t);
-				System.out.println("was 0, now "+id);				
-				t.setId(id);							
-			}else{
-				getDb().ext().bind(t, t.getId());			
-			}
 
-			getDb().delete(t.getLastUpdated());
-			t.setLastUpdated(new Date());
-			getDb().set(t);
-
-		}finally{
-			closeDB();
+		if(t.getId() == 0){
+			getDb4oTemplate().set(t);
+			long id = getDb4oTemplate().getID(t);
+			System.out.println("was 0, now "+id);				
+			t.setId(id);							
+		}else{
+			getDb4oTemplate().bind(t, t.getId());			
 		}
+
+		getDb4oTemplate().delete(t.getLastUpdated());
+		t.setLastUpdated(new Date());
+		getDb4oTemplate().set(t);
+
 	}
 
 	public List<Topic> getAllTopics(){
 
 		System.out.println("ABOUT TO GET ALL TOPICS");
 		
-		ObjectSet result = getDb().get(Topic.class);
+		ObjectSet result = getDb4oTemplate().get(Topic.class);
 		
 		System.out.println("FINISHED GET ALL TOPICS");
 
 		List<Topic> res = result;
 
-		System.out.println("res: "+res);
+		//System.out.println("res: "+res);
 		System.out.println("number of topics: "+res.size());
 		
-		ObjectSet r2 = getDb().get(Object.class);
+		ObjectSet r2 = getDb4oTemplate().get(Object.class);
 		System.out.println("number of objs "+r2.size());
 
 //		for(Topic t : res){
@@ -60,7 +57,6 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 //		getDb().set(t);
 //		}
 
-		closeDB();
 
 		return res;
 
@@ -68,26 +64,22 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 
 	public List<Topic>  getTopicsStarting(String match) {
 
-		Query q = getDb().query();
+		Query q = getDb4oTemplate().query();
 		q.constrain(Topic.class);
 		q.descend("title").constrain(match).startsWith(false);
 
-		List<Topic> rtn = q.execute();
-
-		closeDB();
+		List<Topic> rtn = q.execute();	
 
 		return rtn;
 
 	}
 
 	public Topic getForName(String title) {
-		Query q = getDb().query();
+		Query q = getDb4oTemplate().query();
 		q.constrain(Topic.class);
 		q.descend("title").constrain(title);
 
 		List<Topic> rtn = q.execute();
-
-		closeDB();
 
 		if(rtn != null & rtn.size() == 1){
 			return rtn.get(0);
@@ -104,19 +96,19 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 
 
 	public List<Topic> getBlogTopics(int start, int numberPerScreen) {
-		Query q = getDb().query();
+		Query q = getDb4oTemplate().query();
 		q.constrain(Topic.class);
 		q.descend("lastUpdated").orderDescending();
 
 		List<Topic> rtn = q.execute();
 
-		closeDB();
+		
 
 		return rtn;
 	}
 
 	public void tester() {
-		List<Tag> list = getDb().get(Tag.class);
+		List<Tag> list = getDb4oTemplate().get(Tag.class);
 		for(Tag t : list){
 			System.out.println("name: "+t.getName()+" "+t.getId());
 			System.out.println("meta: "+t.getMetas());
@@ -135,13 +127,13 @@ public class TopicDAOdb4oImpl extends Db4oDAO implements TopicDAO{
 			//getDb().set(t);
 
 		}
-		List<Topic> list2 = getDb().get(Topic.class);
+		List<Topic> list2 = getDb4oTemplate().get(Topic.class);
 		for(Topic t : list2){
 
 //			t.setLastUpdated(new Date());
 //			getDb().set(t);
 		}
-		closeDB();
+	
 	}
 //	public void saveT(Tag tag) {
 
