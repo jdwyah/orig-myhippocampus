@@ -55,6 +55,7 @@
 		<javac srcdir="${javacode}" destdir="${build}" deprecation="yes" debug="on">
 			<classpath>
 				<path refid="tool.and.lib" />
+				<path refid="gwt" />
 			</classpath>
 		</javac>
 		
