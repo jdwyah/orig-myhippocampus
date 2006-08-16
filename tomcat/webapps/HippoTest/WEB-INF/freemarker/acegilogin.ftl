@@ -6,15 +6,6 @@
   <body>
     <h1>Login FTL</h1>
 
-	<P>Valid users:
-	<P>
-	<P>username <b>marissa</b>, password <b>koala</b> (supervisor)
-	<P>username <b>dianne</b>, password <b>emu</b> (normal user)
-	<p>username <b>scott</b>, password <b>wombat</b> (normal user)
-	<p>username <b>peter</b>, password <b>opal</b> (user disabled)
-	<p>
-
- 
 	<#if login_error?has_content>
       <font color="red">
         Your login attempt was not successful, try again.<BR><BR>

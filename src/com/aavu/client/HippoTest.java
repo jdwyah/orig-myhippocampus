@@ -6,8 +6,8 @@ import com.aavu.client.service.remote.TagService;
 import com.aavu.client.service.remote.TagServiceAsync;
 import com.aavu.client.service.remote.TopicService;
 import com.aavu.client.service.remote.TopicServiceAsync;
-import com.aavu.client.service.remote.UserService;
-import com.aavu.client.service.remote.UserServiceAsync;
+import com.aavu.client.service.remote.GWTUserService;
+import com.aavu.client.service.remote.GWTUserServiceAsync;
 import com.aavu.client.widget.browse.BrowseView;
 import com.aavu.client.widget.edit.AddEditView;
 import com.aavu.client.widget.edit.TopicCompleter;
@@ -41,7 +41,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 
 	private TopicServiceAsync topicService;
 	private TagServiceAsync tagService;
-	private UserServiceAsync userService;
+	private GWTUserServiceAsync userService;
 	
 	private TagOrganizerView tagView;
 	private AddEditView addEditView;
@@ -74,7 +74,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 		endpointTAG.setServiceEntryPoint(pre + "/tagService");
 		
 		
-		userService = (UserServiceAsync) GWT.create(UserService.class);
+		userService = (GWTUserServiceAsync) GWT.create(GWTUserService.class);
 		ServiceDefTarget endpointUser = (ServiceDefTarget) userService;
 		endpointUser.setServiceEntryPoint(pre + "/userService");
 		

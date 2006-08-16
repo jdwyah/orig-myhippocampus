@@ -1,7 +1,6 @@
 package com.aavu.client.service.remote;
 
 import com.aavu.client.domain.Tag;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface TagService extends RemoteService {

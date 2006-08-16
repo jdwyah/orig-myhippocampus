@@ -1,6 +1,5 @@
 package com.aavu.client.service.remote;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

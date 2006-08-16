@@ -12,19 +12,36 @@
 		<property name="view" value="HippoTest" />
 	</bean>
 
+	<bean id="createUserValidator" class="com.aavu.server.web.domain.validation.CreateUserRequestValidator">
+		<property name="userService" ref="userService"></property>
+	</bean>
+
 	<bean id="createUserController" class="com.aavu.server.web.controllers.CreateUserController">
-		<property name="formView" value="createUser"/>
+		<property name="formView" value="createUser" />
+		<property name="successView" value="index" />
+		<property name="validator" ref="createUserValidator" />
+		<property name="userService" ref="userService" />
+	</bean>
+
+	<bean id="userManagerController" class="com.aavu.server.web.controllers.UserManagerController">
+		<property name="userService" ref="userService" />
+		<property name="viewUserList" value="secure/extreme/userList" />
+		<property name="methodNameResolver" ref="userManagerResolver"/>
+	</bean>
+	<bean id="userManagerResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName" value="action" />
 	</bean>
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="alwaysUseFullPath" value="true" />
 		<property name="mappings">
 			<props>
-				<prop key="/service/topicService">TopicService</prop>
-				<prop key="/service/tagService">TagService</prop>
-				<prop key="/service/userService">UserService</prop>
+				<prop key="/service/topicService">topicService</prop>
+				<prop key="/service/tagService">tagService</prop>
+				<prop key="/service/userService">userService</prop>
 				<prop key="/site/acegilogin.html">loginController</prop>
 				<prop key="/site/createUser.html">createUserController</prop>
+				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
 				<prop key="/fooo">gwtForwardingController</prop>
 			</props>
 		</property>
@@ -48,7 +65,7 @@
 		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
 		<property name="basename" value="messages" />
 	</bean>
-	
+
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" abstract="false"
 		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
 		<property name="requestContextAttribute">
