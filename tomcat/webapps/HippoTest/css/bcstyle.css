@@ -1,0 +1,1193 @@
+/***************************************************
+GLOBAL PAGE LAYOUT ELEMENTS
+***************************************************/
+
+body { margin-top: 14px; text-align: center; font-family: verdana, "Lucida Grande", verdana, arial; background-color: #fff; }
+
+/* Blue box at the top containing red Interstate text */
+#TopBox {
+	clear: left;
+	margin: 20px 0px 20px 0px;
+	padding: 0;
+	text-align: left;
+	background: url(images/back_ystripes.gif) #FFFFFF;
+	border: 1px solid #b0e0e6;
+	}
+
+/* Home of red Interstate text */
+#TopContent {
+	margin: 0px 0px 0px 0px;
+	padding: 20px 0px 20px 20px;
+	width: 441px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 441px; }
+	
+html>body #TopContent { width:441px; }
+
+/* Quote beside red Interstate text */
+#TopSidebar {
+	float: right;
+	margin: 20px 0px 20px 0px;
+	padding: 0px 20px 0px 20px;
+	border-left: 1px dotted #ccc;
+	font-size: 11px;
+	width: 200px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 200px; }
+	
+html>body #TopSidebar { width:200px; }
+
+/* Right side text */
+.Sidebar {
+	float: right;
+	margin: 0;
+	padding: 0px 20px;
+	border-left: 1px dotted #ccc;
+	width: 200px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 200px; }
+	
+html>body .Sidebar { width:200px; }
+
+/* Left side text */
+#Content {
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 20px 20px;
+	width: 441px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 441px; }
+	
+html>body #Content { width:441px; }
+
+
+/***************************************************
+NAVIGATION
+***************************************************/
+
+#Box {
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+/* Navigation */
+.Nav {
+	margin: 0px 0px 0px 25px;
+	padding: 0px 0px 0px 0px;
+	font-size: 10px;
+	text-align: right;
+	}
+
+/* Back to top */
+#Top {
+	margin: 10px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	text-align: right;
+	font-size: 9px; }
+	
+#YouCan {
+	margin: 10px 0 0 0;
+	padding: 0 20px;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+
+/***************************************************
+LINK STYLES
+***************************************************/
+
+a {
+	color: #369;
+	text-decoration: underline; }
+
+a:link { color: #369; }
+a:visited { color: #666; }
+a:hover { color: #fff; background-color:#000; }
+
+a.nav {
+	font-size:11px;
+	color: #000;
+	font-weight: normal;
+	text-decoration: underline; }
+
+a.nav:link { color: #000; }
+a.nav:visited { color: #000; }
+a.nav:hover { color: #fff; background-color:#000; }
+
+a.navOn {
+	font-size:11px;
+	color: #600;
+	font-weight: normal;
+	text-decoration: none; }
+
+a.navOn:link { color: #600; }
+a.navOn:visited { color: #600; }
+a.navOn:hover { color: #600; background-color:transparent; }
+
+a.mainnav {
+	font-size:11px;
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline; }
+
+a.mainnav:link { color: #000; }
+a.mainnav:visited { color: #000; }
+a.mainnav:hover { color: #fff; background-color:#000; }
+
+a.mainnavOn {
+	font-size:11px;
+	color: #600;
+	font-weight: bold;
+	text-decoration: none; }
+
+a.mainnavOn:link { color: #600; }
+a.mainnavOn:visited { color: #600; }
+a.mainnavOn:hover { color: #600; background-color:transparent; }
+
+
+/* Outer bounding box for all pages */
+#Container {
+	margin: 0px auto 0px auto;
+	padding: 0;
+	width: 726px;
+	text-align: left;
+}
+
+body.signup #Container {
+	width: 820px;
+}
+
+/***************************************************
+SIDEBAR
+***************************************************/
+
+div.Sidebar p {
+	font-size: 11px;
+	line-height: 14px;
+}
+
+div.Sidebar h1 {
+	font-size: 12px;
+	margin-bottom: 2px;
+	border-bottom: 1px solid #efefef;
+	padding: 0 0 2px 0;
+}
+
+div.Sidebar h2 {
+	font-size: 10px;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}
+
+/***************************************************
+TEXT
+***************************************************/
+
+h1 {
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0 0 2px 0;
+	padding: 0;
+}
+
+h2 {
+	font-size: #14px;
+	font-weight: bold;
+}
+
+p {
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 16px;
+	margin: 0 0 15px 0;
+	padding: 0;
+}
+	
+cite {
+	font-size: 10px;
+	color: #666;
+	margin-left: 10px;
+	font-weight: normal;
+}
+
+ol {
+	margin: 0px 0px 10px 8px;
+	padding: 0px 0px 20px 15px;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 17px; }
+	
+ul {
+	margin: 0px 0px 0px 0px;
+	padding: 5px 0px 20px 15px;
+}
+
+li {
+	font-size: 12px;
+	padding: 0 0 7px 0;
+	line-height: 15px;
+	font-weight: normal;
+	color: #000; }
+
+.highlight {
+	background-color: #ffc;
+}
+
+small {
+  font-size: 9px;
+}
+
+
+/***************************************************
+SPECIAL: SIGNUP
+***************************************************/
+
+#TopSidebar h2 {
+	font-size: 14px;
+	margin: 0 0 15px 0;
+	padding: 0;
+}
+
+div.ThirtyDaysAlert {
+	padding: 3px;
+	background-color: #EA5E00;
+	margin: -5px 0 15px 0;
+	font-size: 10px;
+	text-align: center;
+	color: #fff;
+}
+
+div.OtherPlans {
+	padding: 4px;
+	margin: 15px 0;
+	font-size: 10px;
+	text-align: center;
+	border: 1px solid #666;
+	color: #000;
+}
+
+/* 3-Column box with gray sides and open top */
+.ThreeOptions {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc; }
+
+/* Left side column */
+.ThreeColTextFixed {
+	float: none;
+	margin: 0;
+	padding: 0px 20px 0px 20px;
+	width:240px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 240px; }
+
+html>body .ThreeColTextFixed { width:200px; }
+
+/* Right side 2 columns */	
+.ThreeColTextFloat {
+	float: right;
+	margin: 0;
+	padding: 0px 20px 0px 20px;
+	border-left: 1px dotted #ccc;
+	width: 240px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 240px; }
+
+html>body .ThreeColTextFloat { width:200px; }
+
+.ThreeOptions h1 {
+	font-size: 14px;
+	margin: 10px 0 10px 0;
+	color: #390;
+}
+
+.ThreeOptions p {
+	margin: 0;
+}
+
+
+/***************************************************
+SPECIAL: HOME/OVERVIEW
+***************************************************/
+
+#BigMessage {
+	text-align: center;
+	margin: 31px 0 25px 0;
+}
+
+#BigMessageMS {
+	text-align: center;
+	margin: 31px 0 25px 0;
+	text-indent: -100em;
+	overflow: hidden;
+	background: url(images/headerbanner-msprojectold.gif);
+	background-repeat: no-repeat;
+	height: 125px;
+}
+
+.OverviewTopSidebar {
+	float: right;
+	width: 302px;
+	background: #fff;
+	padding: 0;
+	margin: 0;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 262px;
+	border: 0;
+}
+
+.OverviewTopSidebar h2 {
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 14px;
+	margin: 15px 0 3px 0;
+	padding: 0;
+}
+
+.OverviewTopSidebar h3 {
+	font-size: 10px;
+	font-weight: normal;
+	line-height: 10px;
+	margin: 7px 0 0 0;
+	padding: 0;
+}
+
+.OverviewTopSidebar h1 {
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 14px;
+	margin: 0;
+	padding: 0;
+}
+
+.OverviewTopSidebar p {
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 17px;
+	margin: 0 0 3px 0;
+	padding: 0;
+}
+
+.OverviewTopContent {
+	width: 430px;
+	margin: 0;
+	padding: 0;
+}
+
+.OverviewTopContent p {
+	font-size: 10px;
+	line-height: 13px;
+	margin: 5px 0 0 0;
+}
+
+.OverviewTopContent img.screenshot {
+	margin: 0;
+}
+
+.OverviewActionBox {
+	padding: 7px;
+	background-color: #ffc;
+	border: 1px solid #ccc;
+	text-align: center;
+}
+
+.OverviewSidebar {
+	float: left;
+	width: 242px;
+	background: #E0EFE0;
+	padding: 17px 20px 17px 20px;
+	margin: 0;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 202px;
+}
+
+.OverviewContent {
+	margin: 15px 20px 0 260px;
+}
+
+.OverviewContent h1, .OverviewSidebar h3 {
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 14px;
+	margin: 15px 0 3px 0;
+	padding: 0;
+}
+
+.OverviewSidebar h3 {
+	border-bottom: 1px solid #4E8909;
+	padding-bottom: 2px;
+}
+
+.OverviewSidebar h4 {
+	padding: 0;
+	margin: 0;
+	font-size: 9px;
+	line-height: 12px;
+	font-weight: bold;
+	border: 0;
+	color: #000;
+}
+
+.OverviewContent li {
+	padding: 0 0 3px 0;
+}
+
+.OverviewContent ul {
+	padding-bottom: 0;
+}
+
+.OverviewSidebar p {
+	font-size: 10px;
+	line-height: 13px;
+}
+
+.OverviewMiniNote {
+	padding: 4px;
+	font-size: 10px;
+	margin: 0 0 20px 0;
+	border: 1px solid #ccc;
+	text-align: center;
+	background: url(images/back_ystripes.gif) #FFFFFF;
+}
+
+
+/***************************************************
+SPECIAL: TOUR
+***************************************************/
+
+div.TourNav {
+	clear: left;
+	margin: 20px 0px 0px 0px;
+	padding: 10px;
+	font-size: 11px;
+	text-align: center;
+	background: url(images/back_ystripes.gif) #FFFFFF;
+	border: 1px solid #b0e0e6;
+}
+
+div.TourNav h1 {
+	padding: 0;
+	margin: 0 0 5px 0;
+	font-size: 14px;
+	color: #000;
+}
+
+div.TourNav p {
+	padding: 0;
+	font-size: 12px;
+	margin: 0;
+}
+
+div.TourNav ul, div.TourNav li {
+	display: inline;
+	font-size: 11px;
+	margin: 0;
+	padding: 0;
+	color: #339;
+	font-weight: normal;
+}
+
+div.TourNav li {
+	padding-right: 9px;
+}
+
+
+div.TourNav a:link#CurrentTour, div.TourNav a:visited#CurrentTour, div.TourNav a:hover#CurrentTour {
+	font-weight: bold;
+	font-size: 13px;
+	background: inherit;
+	color: #900;
+	text-decoration: none;
+}
+
+div.TourNav a#CurrentTour:hover {
+  background: none;
+}
+
+#TourShot {
+	margin: 20px 0 15px 0;
+	padding: 15px 0;
+	border: 1px solid #ccc;
+	background: #f0f0f0;
+	text-align: center;
+}
+
+/* Box with gray sides and open top */
+#TourDescriptionBox {
+	margin: 20px 0px 20px 0px;
+	padding: 0px 15px;
+	text-align: left;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+#TourScreenDescription {
+	width: 300px;
+	padding-right: 15px;
+	margin-right: 15px;
+	border-right: 1px dotted #ccc;
+}
+
+#TourScreenDescription p {
+	font-size: 11px;
+	line-height: 14px;
+}
+
+#TourScreenDescription h1 {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 15px;
+	margin: 0;
+	padding: 0;
+	color: #600;
+}
+
+#TourScreenDescription h2 {
+	font-size: 11px;
+	font-weight: normal;
+	line-height: 14px;
+	margin: 0 0 15px 0;
+	padding: 0;
+	font-style: italic;
+}
+
+#TourHighlights {
+	float: right;
+	width: 350px;
+}
+
+#TourHighlights h1 {
+	font-size: 16px;
+	color: #390;
+	margin: 0 0 15px 0;
+	padding: 0;
+}
+
+ol.highlights {
+	margin-top: 10px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+ol.highlights li {
+	color: #393;
+	font-weight: bold;
+}
+
+ol.highlights li span {
+	color: #000;
+	font-weight: normal;
+}
+
+/***************************************************
+SPECIAL: BUZZ
+***************************************************/
+
+div#Quotes {
+	margin-bottom: 20px;
+}
+
+div#Quotes p {
+	font-size: 12px;
+	line-height: 16px;
+	margin: 0 0 3px 0;
+	padding: 0;
+}
+
+div#Quotes h1 {
+	margin-top: 20px;
+	color: #390;
+}
+
+/***************************************************
+SPECIAL: TOP 10
+***************************************************/
+
+div#Quotes {
+	margin-bottom: 20px;
+}
+
+div#Quotes p {
+	font-size: 12px;
+	line-height: 16px;
+	margin: 0 0 3px 0;
+	padding: 0;
+}
+
+div#Top10 h1 {
+	margin-top: 20px;
+	color: #390;
+}
+
+/***************************************************
+SPECIAL: TRAINING
+***************************************************/
+
+div#Training {
+}
+
+div#Training h1 {
+	color: #600;
+	font-size: 16px;
+}
+
+div#Training h2 {
+	font-size: 12px;
+	margin: 20px 0 3px; 0;
+	color: #390;
+}
+
+div#Training p {
+	margin: 0;
+}
+
+div#Training img {
+	padding: 5px 5px 5px 0;
+}
+
+
+/***************************************************
+SPECIAL: CASE STUDIES
+***************************************************/
+
+.pullquote {
+	width: 175px;
+	font-family: georgia;
+	border-left: 1px solid #ccc;
+	padding: 5px 0 0 12px;
+	float: right;
+	font-size: 13px;
+	line-height: 20px;
+	font-weight: normal;
+	color: #93905B;
+	margin: 12px 0 12px 12px;
+}
+
+img.casephoto {
+	padding: 1px;
+	margin: 3px 10px 5px 0;
+	border: 1px solid #ccc;
+}
+
+img.casecolor {
+	margin: 2px 0 15px 0;
+}
+
+img.caselogo {
+	margin-bottom: 20px;
+}
+
+.Pullquote cite {
+	margin-right: 10px;
+	float: right;
+	font-size: 12px;
+	margin-bottom: 0;
+	padding: 0;
+}
+
+div#Caseqanda {
+	border-bottom: 1px dotted #ccc;
+	margin-bottom: 20px;
+}
+
+div#Caseqanda h1 {
+	color: #390;
+	margin-top: 0;
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 16px;
+}
+
+/***************************************************
+SPECIAL: MANIFESTO
+***************************************************/
+
+div#Manifesto h1 {
+	margin-top: 15px;
+	color: #390;
+}
+
+/***************************************************
+SPECIAL: EXAMPLES
+***************************************************/
+
+div#Examples {
+}
+
+div#Examples p {
+	font-size: 12px;
+	line-height: 16px;
+	margin: 0 0 3px 0;
+	padding: 0;
+}
+
+div#Examples li, div#Content li {
+	padding: 0;
+}
+
+div#Examples h1 {
+	margin-top: 0;
+	color: #390;
+}
+
+div.Case {
+	padding: 7px;
+	border: 1px solid #ccc;
+	margin: 0 0 12px 0;
+	background-color: #F9F8E4;
+}
+
+div.Case h1 {
+	font-size: 12px;
+	line-height: 13px;
+	border-bottom: none;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+div.Case h2 {
+	font-size: 11px;
+	line-height: 12px;
+	font-weight: normal;
+	border-bottom: none;
+	margin: 0 0 1px 0;
+	color: #535026;
+	padding: 0;
+}
+
+div.Case h3 {
+	font-size: 10px;
+	font-weight: normal;
+	font-style: italic;
+	border-bottom: none;
+	margin: 0 0 7px 0;
+	color: #93905B;
+	padding: 0;
+}
+
+div.Case p {
+	font-size: 10px;
+	line-height: 13px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+div.Case img {
+	padding: 1px;
+	margin: 0 4px 5px 0;
+	border: 1px solid #93905B;
+}
+
+
+/***************************************************
+FAQ BOX
+***************************************************/
+
+/* FAQ gray closed box */
+#FAQ {
+	margin: 20px 0px 0px 0px;
+	padding: 20px 20px 0 20px;
+	text-align: left;
+	border: 1px solid #ccc; }
+
+#FAQ h1 {
+	margin: 0px 0px 15px 0px;
+	padding: 0;
+	font-size: 16px;
+	font-weight: bold;
+	color: #600; }
+
+#FAQ h2 {
+	margin: 0px 0px 3px 0px;
+	padding: 0;
+	font-size: 12px;
+	font-weight: bold;
+	color: #600; }
+
+/* Text inside box */
+#FAQ p {
+	margin: 0 0 15px 0;
+	padding: 0;
+	width: 600px; }
+
+
+/***************************************************
+PRICE COMPARE CHART
+***************************************************/
+
+div.tableholder {
+  margin: 15px 0;
+  padding: 0px;
+  border: 10px solid #ccc;
+}
+
+div.tableholder p {
+  margin: 0 0 15px 0;
+}
+
+table.pricecompare {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+table.pricecompare th, table.pricecompare th.bc {
+	font-size: 11px;
+	font-weight: normal;
+	padding: 3px 5px 3px 5px;
+	text-align: center;
+	vertical-align: bottom;
+	border-bottom: 1px solid #999;
+	border-right: 1px solid #E3DFDF;
+	border-left: 1px solid #E3DFDF;
+}
+
+table.pricecompare th.bc {
+	font-size: 12px;
+}
+
+table.pricecompare th.details {
+	font-size: 11px;
+	color: #f00;
+	text-align: right;
+	padding-right: 3px;
+	font-weight: normal;
+	border-left: none;
+}
+
+table.pricecompare th.bc {
+	font-size: 12px;
+	font-weight: bold;
+  background: #ffc;
+}
+
+table.pricecompare td.item {
+	text-align: right;
+	vertical-align: top;
+	font-size: 11px;
+	border-right: 1px solid #ccc;
+	white-space: nowrap;
+}
+
+table.pricecompare td.permonth {
+  border-bottom: 1px solid #000;
+  background-color: #f5f5f5;
+  color: #999;
+  font-size: 10px;
+  padding: 2px;
+}
+
+table.pricecompare td {
+	border-bottom: 1px solid #E3DFDF;
+	padding: 3px;
+	font-size: 12px;
+	border-right: 1px solid #E3DFDF;
+	border-left: 1px solid #E3DFDF;
+	text-align: center;
+}
+
+table.pricecompare td.bc {
+	border-bottom: 1px solid #E3DFDF;
+	padding: 3px;
+	font-size: 14px;
+	font-weight: bold;
+	background-color: #ffc;
+	border-right: 1px solid #E3DFDF;
+	border-left: 1px solid #E3DFDF;
+	text-align: center;
+}
+
+table.pricecompare td.footer {
+  border: none;
+  text-align: right;
+  font-size: 9px;
+  color: #999;
+}
+
+/***************************************************
+SIGNUP CHART
+***************************************************/
+
+table.signup th img {
+	margin-top: 3px;
+	background-color: #fff;
+	border: none;
+}
+
+table.signup small {
+	color: #999;
+}
+
+table.signup th, table.signup th.personal {
+	font-size: 16px;
+	padding: 3px 7px 3px 7px;
+	text-align: center;
+	vertical-align: bottom;
+	border-bottom: 1px solid #999;
+	border-right: 1px solid #E3DFDF;
+	border-left: 1px solid #E3DFDF;
+}
+
+table.signup th.biz {
+	background-image: url(http://www.basecamphq.com/images/topbluefade.gif);
+	background-repeat: repeat-x;
+}
+
+table.signup th.personal {
+	font-size: 12px;
+}
+
+table.signup th.details {
+	font-size: 10px;
+	color: #666;
+	text-align: right;
+	font-weight: normal;
+}
+
+table.signup th.details strong {
+	color: #000;
+}
+
+table.signup th.personal span {
+	font-weight: normal;
+}
+
+table.signup td.select {
+	font-size: 10px;
+	font-weight: bold;
+	background-color: #ffc;
+}
+
+table.signup td.shaded {
+	background-color: #ffc;
+}
+
+table.signup td.projectnumber {
+	font-size: 14px;
+}
+
+table.signup td.bigend, table.signup th.bigend {
+	border-right: 2px solid #0c0;
+}
+
+table.signup td {
+	border-bottom: 1px solid #E3DFDF;
+	padding: 3px;
+	font-size: 9px;
+	border-right: 1px solid #E3DFDF;
+	border-left: 1px solid #E3DFDF;
+	text-align: center;
+}
+
+table.signup td.banner {
+	background-color: #333;
+	color: #fff;
+	font-size: 9px;
+	font-weight: bold;
+}
+
+table.signup td.plancatper, table.signup td.plancatbiz {
+	background-color: #fff;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+table.signup td.plancatbiz {
+	background-color: #cfc;
+	border-bottom: 1px solid #0c0;
+}
+
+table.signup td.item {
+	text-align: right;
+	vertical-align: top;
+	font-size: 11px;
+	border-right: 1px solid #ccc;
+	white-space: nowrap;
+}
+
+table.signup td.perfect {
+	text-align: center;
+	font-size: 9px;
+	vertical-align: top;
+}
+
+table.signup span.price {
+	font-size: 12px;
+	color: #f60;
+	letter-spacing: -0.5px;
+}
+
+
+/***************************************************
+GETTING STARTED BOX
+***************************************************/
+
+/* Getting Started yellow box */
+#MailingList {
+	margin: 15px 0px 0px 0px;
+	padding: 10px 10px 0 20px;
+	text-align: left;
+	border: 1px solid #390;
+	}
+	
+#MailingList h1 {
+	margin: 0 0 8px 0;
+	padding: 0;
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 15px;
+	color: #039;
+}
+
+#MailingList p {
+	width: 600px;
+	font-size: 11px;
+	line-height: 14px;
+}
+
+/***************************************************
+NEW TOUR
+***************************************************/
+
+div.tourchart {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 0 20px;
+}
+
+div.tourchart h1 {
+  font-size: 18px;
+}
+
+div.tourholder {
+  margin: 0 0 20px 0;
+  height: 122px;
+  border-bottom: 1px solid #efefef;
+}
+
+div.tourwholder {
+  margin: 0 0 25px 0;
+}
+
+div.tourwholder h1 {
+  font-size: 18px;
+}
+
+div.tourwholder p {
+  width: 75%;
+}
+
+div.tourwholder span, div.tourholder span {
+  font-size: 10px;
+  color: #999;
+}
+
+div.tourwholder img {
+  margin: 0 10px 0 0;
+}
+
+img.toursliver {
+  padding: 1px;
+  border: 1px solid #ccc;
+  margin: 0 15px 0 0;
+}
+
+div.tourholder h1 {
+  font-size: 16px;
+  color: #393;
+  margin: 0 0 1px 0;
+  padding: 0;
+}
+
+div.tourholder h2 {
+  font-size: 14px;
+  font-weight: normal;
+  color: #393;
+  margin: 0 0 3px 0;
+  padding: 0;
+}
+
+div.tourholder h3 {
+  font-size: 10px;
+  font-weight: normal;
+  color: #000;
+  margin: 0 0 5px 0;
+  padding: 0;
+}
+
+/***************************************************
+MISCELLANEOUS
+***************************************************/
+
+/* Remove traces of float */	
+.ClearAll {
+	clear: both;
+	font-size: 2px; }
+
+.SpacerClearRight { clear: right; font-size:1px; }
+.SpacerClearLeft { clear: left; font-size:14px; }
+
+.invisiclear {
+	font-size: 0px;
+	height: 0px;
+	clear: both;
+}
+
+/* Copyright notice at bottom */
+#Copyright {
+	margin: 25px 0px 0px 0px;
+	padding: 0;
+	text-align: left;
+	font-weight: normal;
+	font-size: 10px;
+}
+	
+.red {
+	color: red;
+}
+
+/*-------------------------------------------------
+TERMS
+-------------------------------------------------*/
+
+body.terms {
+  padding: 10px;
+  text-align: left;
+  width: 650px;
+}
+
+body.terms h1 {
+  font-size: 16px;
+  margin: 0 0 15px 0;
+}
+
+body.terms h2 {
+  font-size: 14px;
+  margin: 0;
+}
+
+body.terms p {
+  font-size: 11px;
+}
+
+body.terms li {
+  font-size: 11px;
+}
+
+body.terms ol {
+  margin-top: 5px;
+}
