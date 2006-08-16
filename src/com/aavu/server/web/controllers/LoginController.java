@@ -1,4 +1,4 @@
-package com.aavu.server.web;
+package com.aavu.server.web.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -4,24 +4,28 @@
 
 <beans>
 
-	<bean id="loginController" class="com.aavu.server.web.LoginController">
+	<bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
 		<property name="view" value="acegilogin" />
 	</bean>
 
-	<bean id="gwtForwardingController" class="com.aavu.server.web.LoginController">
+	<bean id="gwtForwardingController" class="com.aavu.server.web.controllers.LoginController">
 		<property name="view" value="HippoTest" />
 	</bean>
 
+	<bean id="createUserController" class="com.aavu.server.web.controllers.CreateUserController">
+		<property name="formView" value="createUser"/>
+	</bean>
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="alwaysUseFullPath" value="true"/>
-		<property name="mappings" >
+		<property name="alwaysUseFullPath" value="true" />
+		<property name="mappings">
 			<props>
 				<prop key="/service/topicService">TopicService</prop>
 				<prop key="/service/tagService">TagService</prop>
 				<prop key="/service/userService">UserService</prop>
 				<prop key="/site/acegilogin.html">loginController</prop>
-				<prop key="/fooo">gwtForwardingController</prop>				
+				<prop key="/site/createUser.html">createUserController</prop>
+				<prop key="/fooo">gwtForwardingController</prop>
 			</props>
 		</property>
 
@@ -33,12 +37,17 @@
 			<value>/</value>
 		</property>
 	</bean>
-	
-<!-- <bean id="internalViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+	<!-- <bean id="internalViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="com.aavu.HippoTest/" />
 		<property name="suffix" value=".html" />
-	</bean>-->
-	
+		</bean>-->
+
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" abstract="false"
+		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="basename" value="messages" />
+	</bean>
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" abstract="false"
 		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
