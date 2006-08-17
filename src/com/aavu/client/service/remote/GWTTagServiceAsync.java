@@ -3,8 +3,7 @@ package com.aavu.client.service.remote;
 import com.aavu.client.domain.Tag;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface TagServiceAsync {
-	void addTag(Tag tag, AsyncCallback callback);
+public interface GWTTagServiceAsync {
 
 	void getTag(String tagName, AsyncCallback callback);
 

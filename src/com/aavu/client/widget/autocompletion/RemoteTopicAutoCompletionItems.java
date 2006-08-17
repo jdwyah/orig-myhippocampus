@@ -10,23 +10,23 @@
 
 package com.aavu.client.widget.autocompletion;
 
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.core.client.GWT;
 
 public class RemoteTopicAutoCompletionItems implements CompletionItems {
 
-	private TopicServiceAsync service;
+	private GWTTopicServiceAsync service;
 
 	public RemoteTopicAutoCompletionItems (String entryEndPoint) {
-		service = (TopicServiceAsync)
+		service = (GWTTopicServiceAsync)
 		GWT.create(AutoCompletionService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) service;
 		endpoint.setServiceEntryPoint(GWT.getModuleBaseURL() + entryEndPoint);
 	}
 	
-	public RemoteTopicAutoCompletionItems(TopicServiceAsync topicService) {
+	public RemoteTopicAutoCompletionItems(GWTTopicServiceAsync topicService) {
 		this.service = topicService;
 	}
 	public void getCompletionItems(final String match, final

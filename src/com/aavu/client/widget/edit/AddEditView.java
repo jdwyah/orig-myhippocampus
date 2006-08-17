@@ -1,8 +1,8 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.service.remote.TagServiceAsync;
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTagServiceAsync;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -13,15 +13,15 @@ import com.google.gwt.user.client.ui.Widget;
 public class AddEditView extends Composite {
 
 	private static final int MAX_PER_PAGE = 10;
-	private TopicServiceAsync topicService;
-	private TagServiceAsync tagService;
+	private GWTTopicServiceAsync topicService;
+	private GWTTagServiceAsync tagService;
 
 	private TopicList topicList;
 	private TopicDetail topicDetail;
 	
 	private VerticalPanel topicPanel;
 
-	public AddEditView(TopicServiceAsync topicService, TagServiceAsync tagService) {
+	public AddEditView(GWTTopicServiceAsync topicService, GWTTagServiceAsync tagService) {
 		setTagService(tagService);
 		setTopicService(topicService);
 
@@ -67,10 +67,10 @@ public class AddEditView extends Composite {
 	}
 
 
-	public void setTagService(TagServiceAsync tagService) {
+	public void setTagService(GWTTagServiceAsync tagService) {
 		this.tagService = tagService;
 	}
-	public void setTopicService(TopicServiceAsync topicService) {
+	public void setTopicService(GWTTopicServiceAsync topicService) {
 		this.topicService = topicService;
 	}
 

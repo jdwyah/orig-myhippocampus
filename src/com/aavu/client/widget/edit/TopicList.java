@@ -4,7 +4,7 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TopicList extends Composite {
 
 
-	private TopicServiceAsync topicService;
+	private GWTTopicServiceAsync topicService;
 
 	private VerticalPanel panel = new VerticalPanel();
 
@@ -23,7 +23,7 @@ public class TopicList extends Composite {
 
 
 
-	public TopicList(TopicServiceAsync topicService,TopicDetail topicDetailI){
+	public TopicList(GWTTopicServiceAsync topicService,TopicDetail topicDetailI){
 		setTopicService(topicService);
 		setTopicDetail(topicDetailI);
 
@@ -49,6 +49,7 @@ public class TopicList extends Composite {
 			public void onSuccess(Object result) {
 				panel.clear();
 				final Topic[] l = (Topic[]) result;
+				System.out.println("TopicList success: "+l.length);
 				for(int i=0; i<l.length; i++){
 
 					TopicLabel h = new TopicLabel(l[i]);
@@ -65,7 +66,7 @@ public class TopicList extends Composite {
 	}
 
 
-	public void setTopicService(TopicServiceAsync topicService) {
+	public void setTopicService(GWTTopicServiceAsync topicService) {
 		this.topicService = topicService;
 	}
 	public void setTopicDetail(TopicDetail topicDetail) {

@@ -4,20 +4,19 @@ import java.util.List;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.server.domain.ServerSideUser;
 import com.google.gwt.user.client.rpc.RemoteService;
 
-public interface TagDAO extends RemoteService {
+public interface TagDAO {
 
-	void addTag(Tag tag);
+	Tag getTag(ServerSideUser user,String tagName);
 
-	Tag getTag(String tagName);
+	void removeTag(ServerSideUser user,String itemText);
 
-	void removeTag(String itemText);
-
-	List<Tag> getAllTags();
+	List<Tag> getAllTags(ServerSideUser user);
 	
-	List<Tag> getTagsStarting(String match);
+	List<Tag> getTagsStarting(ServerSideUser user,String match);
 
-	void save(Tag selectedTag);
+	void save(ServerSideUser user,Tag selectedTag);
 	
 }

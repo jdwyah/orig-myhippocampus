@@ -8,19 +8,14 @@ import org.db4ospring.support.Db4oDaoSupport;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.server.dao.TagDAO;
+import com.aavu.server.domain.ServerSideUser;
 import com.db4o.Db4o;
 import com.db4o.query.Query;
 
 public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
 
-	public void addTag(Tag tag) {
 	
-		System.out.println("UNUSED OLD CODE!!!!");
-//		getDb().set(tag);
-//		closeDB();
-	}
-
-	public List<Tag> getAllTags() {
+	public List<Tag> getAllTags(ServerSideUser user) {
 		List<Tag> rtn = getDb4oTemplate().get(Tag.class);
 		
 		for(Tag tag : rtn){
@@ -30,7 +25,7 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
 		return rtn;
 	}
 
-	public Tag getTag(String tagName) {
+	public Tag getTag(ServerSideUser user,String tagName) {
 
 		
 		
@@ -51,11 +46,11 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
 		return rtn;
 	}
 
-	public void removeTag(String itemText) {
+	public void removeTag(ServerSideUser user,String itemText) {
 		//TODO
 	}
 
-	public List<Tag> getTagsStarting(String match) {
+	public List<Tag> getTagsStarting(ServerSideUser user,String match) {
 		Query q = getDb4oTemplate().query();
 		q.constrain(Tag.class);
 		q.descend("name").constrain(match).startsWith(false);
@@ -66,7 +61,7 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
 		return rtn;
 	}
 
-	public void save(Tag tag) {
+	public void save(ServerSideUser user,Tag tag) {
 	
 		System.out.println("Tag: " + tag.getName());
 		System.out.println("metas: ");

@@ -10,24 +10,24 @@
 
 package com.aavu.client.widget.autocompletion;
 
-import com.aavu.client.service.remote.TagServiceAsync;
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTagServiceAsync;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.core.client.GWT;
 
 public class RemoteTAGAutoCompletionItems implements CompletionItems {
 
-	private TagServiceAsync service;
+	private GWTTagServiceAsync service;
 
 	public RemoteTAGAutoCompletionItems (String entryEndPoint) {
-		service = (TagServiceAsync)
+		service = (GWTTagServiceAsync)
 		GWT.create(AutoCompletionService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) service;
 		endpoint.setServiceEntryPoint(GWT.getModuleBaseURL() + entryEndPoint);
 	}
 	
-	public RemoteTAGAutoCompletionItems(TagServiceAsync service) {
+	public RemoteTAGAutoCompletionItems(GWTTagServiceAsync service) {
 		this.service = service;
 	}
 	public void getCompletionItems(final String match, final

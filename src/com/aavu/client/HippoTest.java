@@ -2,10 +2,10 @@ package com.aavu.client;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.User;
-import com.aavu.client.service.remote.TagService;
-import com.aavu.client.service.remote.TagServiceAsync;
-import com.aavu.client.service.remote.TopicService;
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTagService;
+import com.aavu.client.service.remote.GWTTagServiceAsync;
+import com.aavu.client.service.remote.GWTTopicService;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.service.remote.GWTUserService;
 import com.aavu.client.service.remote.GWTUserServiceAsync;
 import com.aavu.client.widget.browse.BrowseView;
@@ -39,8 +39,8 @@ public class HippoTest implements EntryPoint, TabListener  {
 	private TabPanel viewContainer = new TabPanel();
 	private HTML description = new HTML();
 
-	private TopicServiceAsync topicService;
-	private TagServiceAsync tagService;
+	private GWTTopicServiceAsync topicService;
+	private GWTTagServiceAsync tagService;
 	private GWTUserServiceAsync userService;
 	
 	private TagOrganizerView tagView;
@@ -52,7 +52,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 	private User user;
 	
 	private void initServices(){
-		topicService = (TopicServiceAsync) GWT.create(TopicService.class);
+		topicService = (GWTTopicServiceAsync) GWT.create(GWTTopicService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) topicService;
 		//endpoint.setServiceEntryPoint("http://localhost:8080/HippoTestW/service/TopicService");		
 		
@@ -69,7 +69,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 		
 		endpoint.setServiceEntryPoint(pre + "/topicService");		
 		
-		tagService = (TagServiceAsync) GWT.create(TagService.class);
+		tagService = (GWTTagServiceAsync) GWT.create(GWTTagService.class);
 		ServiceDefTarget endpointTAG = (ServiceDefTarget) tagService;
 		endpointTAG.setServiceEntryPoint(pre + "/tagService");
 		

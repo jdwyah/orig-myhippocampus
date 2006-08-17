@@ -29,6 +29,9 @@
         <li><a href="manifesto.html">Manifesto</a></li>
 		<#if user?exists>
 	        <li><a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/>My Page</a></li>
+			<#if user.supervisor>
+	            <li><a href="<@spring.url "/site/secure/extreme/userManager.html?action=list"/>"/>Admin</a></li>
+            </#if>
         <#else>
         	<li><a href="signup.html">Sign up</a></li>  
         </#if>

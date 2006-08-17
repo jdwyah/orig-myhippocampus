@@ -1,6 +1,6 @@
 package com.aavu.client.widget.browse;
 
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -13,7 +13,7 @@ public class BrowseOptionPanel extends VerticalPanel {
 	private DockPanel mainView;
 	private Widget lastSelected;
 	
-	public BrowseOptionPanel(DockPanel mainView, TopicServiceAsync topicService) {
+	public BrowseOptionPanel(DockPanel mainView, GWTTopicServiceAsync topicService) {
 		this.mainView = mainView;
 		
 		Linker l = new Linker("Blog",new BrowseBlogView(topicService));

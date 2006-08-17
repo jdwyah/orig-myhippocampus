@@ -37,8 +37,8 @@
 		<property name="alwaysUseFullPath" value="true" />
 		<property name="mappings">
 			<props>
-				<prop key="/service/topicService">topicService</prop>
-				<prop key="/service/tagService">tagService</prop>
+				<prop key="/service/topicService">GWTTopicService</prop>
+				<prop key="/service/tagService">GWTTagService</prop>
 				<prop key="/service/userService">GWTUserService</prop>
 				
 				<prop key="/site/acegilogin.html">loginController</prop>

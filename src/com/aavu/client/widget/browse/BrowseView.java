@@ -1,8 +1,8 @@
 package com.aavu.client.widget.browse;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.service.remote.TagServiceAsync;
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTagServiceAsync;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.edit.TopicDetail;
 import com.aavu.client.widget.edit.TopicList;
@@ -16,8 +16,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class BrowseView extends Composite {
 
-	private TopicServiceAsync topicService;
-	private TagServiceAsync tagService;
+	private GWTTopicServiceAsync topicService;
+	private GWTTagServiceAsync tagService;
 
 	
 	private BrowseOptionPanel browseOptions; 	
@@ -27,7 +27,7 @@ public class BrowseView extends Composite {
 	private TopicDetail topicDetail;	
 	private VerticalPanel topicPanel;
 
-	public BrowseView(TopicServiceAsync topicService, TagServiceAsync tagService) {
+	public BrowseView(GWTTopicServiceAsync topicService, GWTTagServiceAsync tagService) {
 		setTagService(tagService);
 		setTopicService(topicService);
 
@@ -68,10 +68,10 @@ public class BrowseView extends Composite {
 	}
 
 
-	public void setTagService(TagServiceAsync tagService) {
+	public void setTagService(GWTTagServiceAsync tagService) {
 		this.tagService = tagService;
 	}
-	public void setTopicService(TopicServiceAsync topicService) {
+	public void setTopicService(GWTTopicServiceAsync topicService) {
 		this.topicService = topicService;
 	}
 

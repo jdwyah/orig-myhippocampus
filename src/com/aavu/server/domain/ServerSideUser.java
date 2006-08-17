@@ -9,7 +9,6 @@ import com.aavu.client.domain.User;
 public class ServerSideUser extends User implements UserDetails{
 	
 	private static final Logger log = Logger.getLogger(ServerSideUser.class);
-	private boolean supervisor;
 	
 	public ServerSideUser(){
 		setEnabled(true);
@@ -17,7 +16,7 @@ public class ServerSideUser extends User implements UserDetails{
 
 	public GrantedAuthority[] getAuthorities() {
 		GrantedAuthority[] rtn = new GrantedAuthority[1];
-		if(supervisor){
+		if(isSupervisor()){
 			log.debug("adding supervisor permissions");		
 			rtn[0] = new MyAuthority("ROLE_SUPERVISOR");
 			return rtn;
@@ -38,12 +37,5 @@ public class ServerSideUser extends User implements UserDetails{
 		}		
 	}
 
-	public boolean isSupervisor() {
-		return supervisor;
-	}
-
-	public void setSupervisor(boolean supervisor) {
-		this.supervisor = supervisor;
-	}
 	
 }

@@ -37,8 +37,19 @@ public class UserServiceImpl implements UserService {
 			System.out.println("not a UserDetail, it's a "+obj.getClass().getName());
 			username = obj.toString();
 		}
-
-		return userDAO.loadUserByUsername(username);
+		
+		System.out.println("loadUserByUsername "+username);
+		if(username.equals("anonymousUser")){
+			System.out.println("hack switch to jdwyah");
+			username = "jdwyah";
+		}
+		try {
+			return userDAO.loadUserByUsername(username);	
+		} catch (UsernameNotFoundException e) {
+			log.warn(e);
+			throw e;
+		}
+		
 	}
 	
 	public void createUser(CreateUserRequestCommand comm) throws DuplicateUserException {

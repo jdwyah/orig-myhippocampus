@@ -1,36 +1,25 @@
-package com.aavu.server;
+package com.aavu.server.service.gwt;
 
 import java.util.List;
 
 import org.gwtwidgets.server.rpc.GWTSpringController;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.service.remote.TopicService;
-import com.aavu.server.dao.TopicDAO;
-import com.aavu.server.dao.db4o.TopicDAOdb4oImpl;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.aavu.client.service.remote.GWTTopicService;
+import com.aavu.server.service.TopicService;
 
 
-public class TopicServiceImpl extends GWTSpringController implements TopicService {
+public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopicService {
 
-	private TopicDAO topicDAO ;
+	private TopicService topicService ;
 
 	String setByDI = "UNSET";
 	
-	public TopicServiceImpl(){
-		System.out.println("Topic Service CTOR");
-
-		TopicDAOdb4oImpl tDAO = new TopicDAOdb4oImpl();
-		setTopicDAO(tDAO);
+	public void setTopicService(TopicService topicService) {
+		this.topicService = topicService;
 	}
 
 
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
-	}
-
-	
-	
 	public void setSetByDI(String setByDI) {
 		this.setByDI = setByDI;
 	}
@@ -43,21 +32,21 @@ public class TopicServiceImpl extends GWTSpringController implements TopicServic
 
 		System.out.println("get all topics SETBY "+setByDI);
 		
-		return convertToArray(topicDAO.getAllTopics());
+		return convertToArray(topicService.getAllTopics());
 	}
 
 	public void save(Topic topic) {
 
 		System.out.println("Save topics");
 		
-		topicDAO.save(topic);
+		topicService.save(topic);
 
 	}
 
 
 	public String[] match(String match) {
 		System.out.println("match");
-		List<Topic> list = (topicDAO.getTopicsStarting(match));
+		List<Topic> list = (topicService.getTopicsStarting(match));
 
 		String[] rtn = new String[list.size()];
 		int i=0;
@@ -81,7 +70,7 @@ public class TopicServiceImpl extends GWTSpringController implements TopicServic
 
 
 				System.out.println("lookup |"+string+"|");
-				Topic also = topicDAO.getForName(string);
+				Topic also = topicService.getForName(string);
 
 				System.out.println("also "+also);
 
@@ -99,7 +88,7 @@ public class TopicServiceImpl extends GWTSpringController implements TopicServic
 
 	public Topic[] getBlogTopics(int start, int numberPerScreen) {
 		System.out.println("get Blog topics");
-		return convertToArray(topicDAO.getBlogTopics(start,numberPerScreen));
+		return convertToArray(topicService.getBlogTopics(start,numberPerScreen));
 		
 	}
 	
@@ -108,7 +97,11 @@ public class TopicServiceImpl extends GWTSpringController implements TopicServic
 		Topic[] rtn = new Topic[list.size()];
 
 		for(int i=0;i<list.size();i++){				
-			rtn[i] = list.get(i);
+			Topic t = list.get(i);
+			
+			System.out.println("t "+i+" "+t.getUser());
+			t.setUser(null);
+			rtn[i] = t;
 		}
 
 		return rtn;

@@ -4,19 +4,21 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.db4ospring.support.Db4oDaoSupport;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.server.dao.TopicDAO;
-import com.db4o.ObjectSet;
+import com.aavu.server.domain.ServerSideUser;
+import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 
 public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
-	
+	private static final Logger log = Logger.getLogger(TopicDAOdb4oImpl.class);	
 
-	public void save(Topic t){
+	public void save(ServerSideUser user,Topic t){
 
 
 		if(t.getId() == 0){
@@ -34,35 +36,23 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 
 	}
 
-	public List<Topic> getAllTopics(){
+	public List<Topic> getAllTopics(final ServerSideUser user){
 
-		System.out.println("ABOUT TO GET ALL TOPICS");
+		log.debug("ABOUT TO GET ALL TOPICS");
+
+		List<Topic> rtn = getDb4oTemplate().query(new Predicate<Topic>() {
+			public boolean match(Topic topic) {				
+				return topic.getUser().equals(user);
+			}
+		});
 		
-		ObjectSet result = getDb4oTemplate().get(Topic.class);
+		log.debug("found "+rtn.size()+" topics");
 		
-		System.out.println("FINISHED GET ALL TOPICS");
-
-		List<Topic> res = result;
-
-		//System.out.println("res: "+res);
-		System.out.println("number of topics: "+res.size());
+		return rtn;
 		
-		ObjectSet r2 = getDb4oTemplate().get(Object.class);
-		System.out.println("number of objs "+r2.size());
-
-//		for(Topic t : res){
-//		t.setId(getDb().ext().getID(t));
-//		System.out.println(getDb().ext().getID(t)+" "+t.getTitle());
-//		t.setSeeAlso(new ArrayList());
-//		getDb().set(t);
-//		}
-
-
-		return res;
-
 	}
 
-	public List<Topic>  getTopicsStarting(String match) {
+	public List<Topic>  getTopicsStarting(ServerSideUser user,String match) {
 
 		Query q = getDb4oTemplate().query();
 		q.constrain(Topic.class);
@@ -74,7 +64,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 
 	}
 
-	public Topic getForName(String title) {
+	public Topic getForName(ServerSideUser user,String title) {
 		Query q = getDb4oTemplate().query();
 		q.constrain(Topic.class);
 		q.descend("title").constrain(title);
@@ -95,15 +85,12 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 	}
 
 
-	public List<Topic> getBlogTopics(int start, int numberPerScreen) {
+	public List<Topic> getBlogTopics(ServerSideUser user,int start, int numberPerScreen) {
 		Query q = getDb4oTemplate().query();
 		q.constrain(Topic.class);
 		q.descend("lastUpdated").orderDescending();
 
 		List<Topic> rtn = q.execute();
-
-		
-
 		return rtn;
 	}
 

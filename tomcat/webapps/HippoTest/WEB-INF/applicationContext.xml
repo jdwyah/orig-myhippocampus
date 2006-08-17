@@ -19,20 +19,30 @@
 		<property name="objectContainer" ref="container"/>
 	</bean>
 
-	<bean id="topicService" class="com.aavu.server.TopicServiceImpl">
+	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
 		<property name="setByDI" value="I WAS SET" />
-		<property name="topicDAO" ref="topicDAO"/>
+		<property name="topicService" ref="topicService"/>
 	</bean>
-	<bean id="tagService" class="com.aavu.server.TagServiceImpl">
-		<property name="tagDAO" ref="tagDAO"></property>
+	<bean id="GWTTagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl">
+		<property name="tagService" ref="tagService"/>
 	</bean>
 
 	<bean id="GWTUserService" class="com.aavu.server.service.gwt.GWTUserServiceImpl">
 		<property name="userService" ref="userService"/>
 	</bean>
+
 	
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"/>	
 	</bean>
+	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
+		<property name="topicDAO" ref="topicDAO"/>
+		<property name="userService" ref="userService"/>		
+	</bean>
+	<bean id="tagService" class="com.aavu.server.service.impl.TagServiceImpl">
+		<property name="tagDAO" ref="tagDAO"></property>
+		<property name="userService" ref="userService"/>		
+	</bean>
+	
 
 </beans>

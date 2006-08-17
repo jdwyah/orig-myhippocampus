@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.db4ospring.support.Db4oDaoSupport;
 import org.springframework.dao.DataAccessException;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 import com.db4o.ObjectSet;
@@ -32,6 +33,8 @@ public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsS
 //			save(u);
 //		}
 
+	
+		
 		List <ServerSideUser> users = getDb4oTemplate().query(new Predicate<ServerSideUser>() {
 			public boolean match(ServerSideUser user) {
 				return user.getUsername().equals(username);
@@ -44,6 +47,21 @@ public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsS
 			System.out.println("found "+users.size()+" users.");
 			throw new UsernameNotFoundException("Username not found.");
 		}else{
+			
+//			ServerSideUser user = (ServerSideUser) users.get(0);
+//			
+//			Query q1 = getDb4oTemplate().query();
+//			q1.constrain(Topic.class);
+//			ObjectSet s2 = q1.execute();
+//			System.out.println("total topics: "+s2.size());
+//			for(int i=0;i<s2.size();i++){
+//				Object o = s2.get(i);
+//				System.out.println("Setting user for "+o);
+//				Topic u = (Topic) o;				
+//				u.setUser(user);								
+//				getDb4oTemplate().set(u);								
+//			}
+			
 			return (ServerSideUser) users.get(0);
 		}
 

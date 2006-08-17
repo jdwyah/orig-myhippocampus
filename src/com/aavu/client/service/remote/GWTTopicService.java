@@ -4,7 +4,7 @@ import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 
-public interface TopicService extends RemoteService {
+public interface GWTTopicService extends RemoteService {
 
 	Topic[] getAllTopics(int startIndex, int maxCount);
 	void save(Topic topic);

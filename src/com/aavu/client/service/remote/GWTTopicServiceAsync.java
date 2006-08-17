@@ -3,7 +3,7 @@ package com.aavu.client.service.remote;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface TopicServiceAsync {
+public interface GWTTopicServiceAsync {
 
 	//remember, these MUST BE VOID! returns
 	//

@@ -33,6 +33,7 @@ public class User implements IsSerializable {
 	private boolean enabled;
 	private boolean credentialsNonExpired;
 	private String password;
+	private boolean supervisor;
 
 
 	// Constructors
@@ -76,6 +77,13 @@ public class User implements IsSerializable {
 		this.topics = topics;
 	}
 
+	public boolean isSupervisor() {
+		return supervisor;
+	}
+
+	public void setSupervisor(boolean supervisor) {
+		this.supervisor = supervisor;
+	}
 
 
 

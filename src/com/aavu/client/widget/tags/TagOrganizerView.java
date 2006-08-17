@@ -9,7 +9,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.service.local.TagLocalService;
-import com.aavu.client.service.remote.TagServiceAsync;
+import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -36,18 +36,18 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	private HorizontalPanel panel = new HorizontalPanel();
 
-	private TagServiceAsync tagService;
+	private GWTTagServiceAsync tagService;
 	private List metaChoosers = new ArrayList();  //list of meta chooser objects of current tag
 	private Tag selectedTag;
 	private TagLocalService tagLocalService;
 	private TextBox tagName;
 
-	public void setTagService(TagServiceAsync tagService2) {
+	public void setTagService(GWTTagServiceAsync tagService2) {
 		this.tagService = tagService2;
 	}
 
 
-	public TagOrganizerView(TagServiceAsync tagService2){
+	public TagOrganizerView(GWTTagServiceAsync tagService2){
 		setTagService(tagService2);
 		tagLocalService = new TagLocalService();
 		

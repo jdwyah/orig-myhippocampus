@@ -3,9 +3,7 @@ package com.aavu.client.service.remote;
 import com.aavu.client.domain.Tag;
 import com.google.gwt.user.client.rpc.RemoteService;
 
-public interface TagService extends RemoteService {
-
-	void addTag(Tag tag);
+public interface GWTTagService extends RemoteService {
 
 	Tag getTag(String tagName);
 
