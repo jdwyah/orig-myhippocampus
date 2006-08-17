@@ -97,9 +97,15 @@ public class Tag  implements IsSerializable{
         return this.metas;
     }
     
-    public void setMetas(List metas) {
-        this.metas = metas;
+    public void addMeta(Meta meta) {
+    	this.metas.add(meta);
+    	meta.setTag(this);
     }
+    
+    public void clearMetas() {
+    	metas.clear();
+    } 
+    
     /**       
      *      * The type.
      */
@@ -135,7 +141,7 @@ public class Tag  implements IsSerializable{
          
          result = 37 * result + ( getName() == null ? 0 : this.getName().hashCode() );
          return result;
-   }   
+   }  
 
 
 

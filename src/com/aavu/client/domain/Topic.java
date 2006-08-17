@@ -3,6 +3,8 @@ package com.aavu.client.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class Topic implements IsSerializable{
 	 * @gwt.typeArgs <com.aavu.client.domain.Meta,com.aavu.client.MetaValue>
 	 * 
 	 */
-	private Map metaValues = null;//new HashSet(0);
+	private Map metaValues = new HashMap();//null;//new HashSet(0);
 
 	/**
 	 * The text in hippoText format
@@ -65,6 +67,7 @@ public class Topic implements IsSerializable{
 		this.metaValues = metaValues;
 		this.text = text;
 		this.seeAlso = seeAlso;
+		lastUpdated = new Date();
 	}
 
 	public String toString(){
@@ -114,6 +117,15 @@ public class Topic implements IsSerializable{
 
 	public void setMetaValues(Map metaValues) {
 		this.metaValues = metaValues;
+	}
+	
+	/**
+	 * Updates value of MetaValue associated with the given Meta object
+	 * @param meta
+	 * @param value
+	 */
+	public void setMetaValue(Meta meta, MetaValue value){
+		
 	}
 	/**       
 	 *      * The text in hippoText format
@@ -166,6 +178,17 @@ public class Topic implements IsSerializable{
 
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
+	}
+
+
+	public void tag(Tag tag) {
+		tags.add(tag);
+		
+		for (Iterator iter = (tag.getMetas()).iterator(); iter.hasNext();) {
+			Meta meta = (Meta) iter.next();
+			metaValues.put(meta, meta.getDefaultValue());
+		}
+		
 	}
 
 

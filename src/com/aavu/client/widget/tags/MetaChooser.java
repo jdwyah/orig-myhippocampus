@@ -26,7 +26,7 @@ public class MetaChooser extends Composite {
 		mainP.add(metaName);
 		mainP.add(metaType);
 		
-		setWidget(mainP);		
+		initWidget(mainP);		
 	}
 
 	public void setMeta(Meta element) {

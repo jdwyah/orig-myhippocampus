@@ -1,33 +1,52 @@
 package com.aavu.client.domain;
 
-import com.aavu.client.service.local.TagLocalService;
-import com.aavu.client.widget.tags.MetaListBox;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaText extends Meta {
+public class MetaText extends MetaValue {
 
 	private static final String TYPE = "Text";
+	private String value;
+	private String transientValue; //as widget changes, only this updates
+	//private TextBox valueTextBox;  <-- not serializable
 
+	public MetaText(){
+		this("");
+	}
+	
+	public MetaText(String value){
+		this.value = value;
+	}
+	
+	public Widget getWidget() {
+		//HorizontalPanel widget = new HorizontalPanel();
+		//Label label = new Label(name);
 
-	public Widget getWidget(boolean editable) {
-		HorizontalPanel widget = new HorizontalPanel();
-		Label label = new Label(name);
+		//Make this auto complete
+		TextBox valueTextBox = new TextBox();
+		valueTextBox.setText(value);
+		//keep track of value as user changes it
+		valueTextBox.addChangeListener(new ChangeListener(){
+			public void onChange(Widget sender){
+				transientValue = ((TextBox)sender).getText();
+			}
+		});
 
-		//Maybe make this meta auto complete later on
-		TextBox metaValue = new TextBox();
-		metaValue.setText(name);
-
-		widget.add(label);
-		widget.add(metaValue);	
-		return widget;
+		//widget.add(label);
+		//widget.add(valueTextBox);	
+		return valueTextBox;
+	}
+	
+	/**
+	 * Saves text from textbox widget as current value
+	 */
+	public void save(){
+		this.value = this.transientValue;
 	}
 
-	public Widget getEditorWidget(boolean editable) {
+	/*public Widget getEditorWidget(boolean editable) {
 		HorizontalPanel widget = new HorizontalPanel();
 
 		if (editable){
@@ -44,19 +63,6 @@ public class MetaText extends Meta {
 			TagLocalService tls = new TagLocalService();
 			
 			metaType.addItems(tls.getAllMetaTypes());
-			
-			metaType.addChangeListener(new ChangeListener(){
-				public void onChange(Widget sender){
-					MetaListBox typeBox = (MetaListBox)sender;
-					
-					
-					//type = typeBox.getSelectedMeta();
-					
-					
-					
-					//System.out.println("changing " + name + " type to " + type);
-				}
-			});
 
 			widget.add(metaName);
 			widget.add(metaType);
@@ -74,11 +80,27 @@ public class MetaText extends Meta {
 		//widget.add(editButton);
 
 		return widget;
-	}
+	}*/
 
 	//@Override
 	public String getType() {		
 		return TYPE;
+	}
+
+	protected Object getValue() {
+		return value;
+	}
+
+	//@Override
+	public boolean equals(Object other) {
+		 {
+	         if ( (this == other ) ) return true;
+			 if ( (other == null ) ) return false;
+			 if ( !(other instanceof MetaText) ) return false;
+			 MetaText castOther = ( MetaText ) other; 
+	         
+			 return ( (this.value==castOther.value) || ( this.value!=null && castOther.value!=null && this.value.equals(castOther.value) ) );
+	   }
 	}
 
 
