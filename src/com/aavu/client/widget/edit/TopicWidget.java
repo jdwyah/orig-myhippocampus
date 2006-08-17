@@ -3,15 +3,13 @@ package com.aavu.client.widget.edit;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaValue;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.service.remote.TopicServiceAsync;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.util.SimpleDateFormatGWT;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.Composite;
@@ -31,7 +29,7 @@ public class TopicWidget extends Composite {
 	private VerticalPanel panel = new VerticalPanel();
 	
 	public Topic topic;
-	private TopicServiceAsync topicServiceA;
+	private GWTTopicServiceAsync topicServiceA;
 	private TopicList topicList;
 	
 	private static SimpleDateFormatGWT df; 
@@ -92,18 +90,15 @@ public class TopicWidget extends Composite {
 		return panel;
 	}
 	
-	private void displayMetas(Tag tag, VerticalPanel tagPanel) {
+	private void displayMetas(Tag tag,VerticalPanel tagPanel) {
 		List metas = tag.getMetas();
-		Map metaValues = topic.getMetaValues();
-		
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			MetaValue value = (MetaValue) metaValues.get(element);
-			tagPanel.add(value.getWidget());
+			tagPanel.add(element.getWidget(true));
 		}
 	}
 
-	public void setTopicServiceA(TopicServiceAsync topicServiceA) {
+	public void setTopicServiceA(GWTTopicServiceAsync topicServiceA) {
 		this.topicServiceA = topicServiceA;
 	}
 	
