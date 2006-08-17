@@ -4,12 +4,13 @@
 
 <beans>
 
-	<bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
-		<property name="view" value="acegilogin" />
+	<bean id="indexController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="index"/>
+		<property name="userService" ref="userService"/>
 	</bean>
 
-	<bean id="gwtForwardingController" class="com.aavu.server.web.controllers.LoginController">
-		<property name="view" value="HippoTest" />
+	<bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
+		<property name="view" value="acegilogin" />
 	</bean>
 
 	<bean id="createUserValidator" class="com.aavu.server.web.domain.validation.CreateUserRequestValidator">
@@ -38,11 +39,12 @@
 			<props>
 				<prop key="/service/topicService">topicService</prop>
 				<prop key="/service/tagService">tagService</prop>
-				<prop key="/service/userService">userService</prop>
+				<prop key="/service/userService">GWTUserService</prop>
+				
 				<prop key="/site/acegilogin.html">loginController</prop>
 				<prop key="/site/createUser.html">createUserController</prop>
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
-				<prop key="/fooo">gwtForwardingController</prop>
+				<prop key="/site/index.html">indexController</prop>
 			</props>
 		</property>
 

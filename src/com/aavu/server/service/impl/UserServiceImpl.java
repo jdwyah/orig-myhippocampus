@@ -5,9 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.User;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.exception.DuplicateUserException;
@@ -20,6 +23,24 @@ public class UserServiceImpl implements UserService {
 
 	private UserDAO userDAO;
 
+	public ServerSideUser getCurrentUser() {
+
+		System.out.println("getCurrentUser");
+		
+		Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+		if (obj instanceof UserDetails) {
+			System.out.println("instance of UserDetails");
+			username = ((UserDetails)obj).getUsername();			
+		} else {
+			System.out.println("not a UserDetail, it's a "+obj.getClass().getName());
+			username = obj.toString();
+		}
+
+		return userDAO.loadUserByUsername(username);
+	}
+	
 	public void createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
 		ServerSideUser user = new ServerSideUser();
 

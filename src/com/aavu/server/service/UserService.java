@@ -18,6 +18,8 @@ public interface UserService {
 
 	void toggleSupervisor(Integer id);
 
+	ServerSideUser getCurrentUser();
+	
 	void delete(Integer id);
 
 }

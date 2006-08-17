@@ -28,7 +28,7 @@
 	</bean>
 
 	<bean id="GWTUserService" class="com.aavu.server.service.gwt.GWTUserServiceImpl">
-		<property name="userDAO" ref="userDAO"/>
+		<property name="userService" ref="userService"/>
 	</bean>
 	
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
