@@ -2,14 +2,13 @@ package com.aavu.server.dao;
 
 import java.io.File;
 
-import junit.framework.TestCase;
-
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 
-public class DAOTestCase extends TestCase{
+import junit.framework.TestCase;
 
-	
+public class DAOTest extends TestCase {
+
 	private static final String FILENAME = "db2.yac";
 	
 	protected ObjectContainer db;

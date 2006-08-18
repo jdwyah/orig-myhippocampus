@@ -17,6 +17,12 @@
 	</bean>	
 	<bean id="userDAO" class="com.aavu.server.dao.db4o.UserDAOImpl">
 		<property name="objectContainer" ref="container"/>
+		<property name="initDAO" ref="initDAO"/>
+		<property name="init" value="false"/>
+	</bean>
+	<bean id="initDAO" class="com.aavu.server.dao.db4o.InitDAOImpl">
+		<property name="objectContainer" ref="container"/>
+		<property name="userService" ref="userService"/>
 	</bean>
 
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">

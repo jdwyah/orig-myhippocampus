@@ -39,9 +39,9 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		System.out.println("loadUserByUsername "+username);
-		if(username.equals("anonymousUser")){
-			System.out.println("hack switch to jdwyah");
-			username = "jdwyah";
+		if(username.equals("OFFanonymousUser")){
+			System.out.println("hack switch to test");
+			username = "test";
 		}
 		try {
 			return userDAO.loadUserByUsername(username);	
@@ -63,23 +63,8 @@ public class UserServiceImpl implements UserService {
 
 
 
-	private  void createUser(String username,String userpass) throws DuplicateUserException{
-
-		//hmm a bit odd having the logic catc in the 
-		//
-
-
-		log.debug("u: "+username+" p "+userpass);
-		log.debug("pp: "+hashPassword(userpass));
-
-		ServerSideUser user = new ServerSideUser();
-		user.setUsername(username);
-		user.setPassword(hashPassword(userpass));		
-
-		userDAO.save(user);
-
-
-
+	private void createUser(String username,String userpass) throws DuplicateUserException{
+		createUser(username,userpass,false);
 	}
 
 	private String hashPassword(String password) {
@@ -88,13 +73,22 @@ public class UserServiceImpl implements UserService {
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			md5.update(password.getBytes());
 			BigInteger hash = new BigInteger(1, md5.digest());
-			hashword = hash.toString(16);			
+			hashword = hash.toString(16);
+						
 		} catch (NoSuchAlgorithmException nsae) {
 
 		}
-		return hashword;
+		
+		return pad(hashword,32,'0');
 	}
-
+	
+	private String pad(String s, int length, char pad) {
+		StringBuffer buffer = new StringBuffer(s);
+		while (buffer.length() < length) {
+			buffer.insert(0, pad);
+		}
+		return buffer.toString();
+	}
 
 
 	/**
@@ -139,6 +133,22 @@ public class UserServiceImpl implements UserService {
 		ServerSideUser user = userDAO.getUserForId(id);
 		user.setSupervisor(!user.isSupervisor());
 		userDAO.save(user);
+	}
+
+	public void createUser(String username, String userpass, boolean superV) {
+
+		//hmm a bit odd having the logic catc in the 
+		//
+		log.debug("u: "+username+" p "+userpass);
+		log.debug("pp: "+hashPassword(userpass));
+		
+		ServerSideUser user = new ServerSideUser();
+		user.setUsername(username);
+		user.setPassword(hashPassword(userpass));		
+		user.setSupervisor(superV);
+		
+		userDAO.save(user);
+
 	}
 
 

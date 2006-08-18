@@ -1,7 +1,11 @@
 package com.aavu.server.dao.db4o;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,7 +22,7 @@ import com.db4o.query.Query;
 public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 	private static final Logger log = Logger.getLogger(TopicDAOdb4oImpl.class);	
 
-	public void save(ServerSideUser user,Topic t){
+	public void save(Topic t){
 
 
 		if(t.getId() == 0){
@@ -41,57 +45,95 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 		log.debug("ABOUT TO GET ALL TOPICS");
 
 		List<Topic> rtn = getDb4oTemplate().query(new Predicate<Topic>() {
-			public boolean match(Topic topic) {				
+			public boolean match(Topic topic) {
+				System.out.println("Match "+topic);
+				System.out.println("MatchID "+topic.getId());
+				System.out.println("User "+user);
+				System.out.println("TopicUser "+topic.getUser());
+				if(null == topic.getUser()){
+					log.debug("Null user for topic "+topic.getId()+" "+topic.getTitle());
+					log.debug("SETTING USER");
+					topic.setUser(user);
+					getDb4oTemplate().set(topic);
+					return false;
+				}
 				return topic.getUser().equals(user);
 			}
 		});
-		
+
 		log.debug("found "+rtn.size()+" topics");
-		
-		return rtn;
-		
-	}
-
-	public List<Topic>  getTopicsStarting(ServerSideUser user,String match) {
-
-		Query q = getDb4oTemplate().query();
-		q.constrain(Topic.class);
-		q.descend("title").constrain(match).startsWith(false);
-
-		List<Topic> rtn = q.execute();	
 
 		return rtn;
 
 	}
 
-	public Topic getForName(ServerSideUser user,String title) {
-		Query q = getDb4oTemplate().query();
-		q.constrain(Topic.class);
-		q.descend("title").constrain(title);
+	public List<Topic>  getTopicsStarting(final ServerSideUser user,final String match) {
 
-		List<Topic> rtn = q.execute();
-
-		if(rtn != null & rtn.size() == 1){
-			return rtn.get(0);
-		}else{
-			System.out.println("multiple returns returning null");
-			for(Topic t : rtn){
-				System.out.println("t "+t.getTitle()+" "+t.getId());
-				System.out.println("t "+t.getText()+" ");
+		List<Topic> rtn = getDb4oTemplate().query(new Predicate<Topic>() {
+			public boolean match(Topic topic) {			
+				if(null == topic.getUser()){
+					log.debug("Null user for topic "+topic.getId()+" "+topic.getTitle());
+					return false;
+				}
+				return topic.getUser().equals(user) && topic.getTitle().toLowerCase().startsWith(match.toLowerCase());
 			}
-			//PEND MED ambiguous what >1 would mean
-			return null;
-		}
+		});
+
+		log.debug("found "+rtn.size()+" topics");		
+		return rtn;
 	}
 
+	public Topic getForName(final ServerSideUser user,final String title) {
 
-	public List<Topic> getBlogTopics(ServerSideUser user,int start, int numberPerScreen) {
-		Query q = getDb4oTemplate().query();
-		q.constrain(Topic.class);
-		q.descend("lastUpdated").orderDescending();
+		Topic rtn = (Topic) Db4oUtil.getUniqueRes(getDb4oTemplate().query(new Predicate<Topic>() {
+			public boolean match(Topic topic) {			
+				if(null == topic.getUser()){
+					log.debug("Null user for topic "+topic.getId()+" "+topic.getTitle());
+					return false;
+				}
+				return topic.getUser().equals(user) && topic.getTitle().equals(title);
+			}
+		}));
 
-		List<Topic> rtn = q.execute();
-		return rtn;
+		log.debug("found "+rtn);		
+		return rtn;		
+	}
+
+	/**
+	 *
+	 * An interesting Db4o call. Native query, then sort. 
+	 * http://developer.db4o.com/forums/thread/14720.aspx
+	 * 
+	 */
+	public List<Topic> getBlogTopics(final ServerSideUser user,int start, int numberPerScreen) {
+
+		log.debug("get BLOG TOPICS");
+
+		//Get all topics
+		//
+		List<Topic> db4rtn = getDb4oTemplate().query(new Predicate<Topic>() {
+			public boolean match(Topic topic) {	
+				return topic.getUser().equals(user);
+			}
+		});
+
+		
+		//This is required because otherwise the list is implemented by ObjectSet, which when sorted, throws
+		//UnsupportedOperationException - if the specified list's list-iterator does not support the set operation.
+		//
+		List<Topic> rtn = new LinkedList<Topic>();
+		rtn.addAll(db4rtn);		
+
+		
+		//Then sort
+		//
+		Collections.sort(rtn,new Comparator<Topic>(){
+			public int compare(Topic o1, Topic o2) {
+				return o2.getLastUpdated().compareTo(o1.getLastUpdated());	
+			}});
+
+		log.debug("found "+rtn.size()+" topics");		
+		return rtn;		
 	}
 
 	public void tester() {
@@ -120,7 +162,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 //			t.setLastUpdated(new Date());
 //			getDb().set(t);
 		}
-	
+
 	}
 //	public void saveT(Tag tag) {
 

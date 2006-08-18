@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-
+<#import "/spring.ftl" as spring/>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
   <meta name="description" content="Personal HD" />
   <meta name="keywords" content="personal,knowledge,management" />
   <meta name="author" content="Jeff Dwyer / Original design: Gerhard Erbes - gw@actamail.com/" />
-  <link rel="stylesheet" type="text/css" href="./css/style.css" />
-  <link rel="stylesheet" type="text/css" href="./css/bcstyle.css" />
+  <link rel="stylesheet" type="text/css" href="<@spring.url "/css/style.css"/>" />
+  <link rel="stylesheet" type="text/css" href="<@spring.url "/css/bcstyle.css"/>" />
   <title>MyHippocampus - Signup</title>
 </head>
 
@@ -95,10 +95,28 @@
 
 
 
+	<#macro regError>
+		<font color="#FF0000"><@spring.showErrors"<br>"/></font>
+	</#macro>
 
 
+	<p>
+      <div class="middle-column-box-blue">
+        <div class="middle-column-box-title-white">
+        
+    <form action="<@spring.url "/site/signup.html"/>" method="POST">
+      <table>
+        <tr><td>User:</td><td><@spring.formInput "command.username"/><@regError/></td></tr>
+        <tr><td>Password:</td><td><@spring.formInput "command.password"/><@regError/></td></tr>
+        <tr><td>Password:</td><td><@spring.formInput "command.password2"/><@regError/></td></tr>
 
+        <tr><td colspan='2'><input name="submit" type="submit"></td></tr>
+        <tr><td colspan='2'><input name="reset" type="reset"></td></tr>
+      </table>
 
+    </form>
+	   </div>
+	  </div>
 
 
 	  <!-- FOOTER -->

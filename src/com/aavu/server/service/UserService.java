@@ -22,4 +22,6 @@ public interface UserService {
 	
 	void delete(Integer id);
 
+	void createUser(String user, String pass, boolean superV);
+
 }

@@ -9,6 +9,7 @@ import org.db4ospring.support.Db4oDaoSupport;
 import org.springframework.dao.DataAccessException;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.server.dao.InitDAO;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 import com.db4o.ObjectSet;
@@ -18,8 +19,25 @@ import com.db4o.query.Query;
 public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsService {
 	private static final Logger log = Logger.getLogger(UserDAOImpl.class);
 
+	private InitDAO initDAO;	
+	public void setInitDAO(InitDAO initDAO) {
+		this.initDAO = initDAO;
+	}
+	private boolean init;	
+	public void setInit(boolean init) {
+		this.init = init;
+	}
+
 	public ServerSideUser loadUserByUsername(final String username) throws UsernameNotFoundException, DataAccessException {
 
+		//Hack to run a 1-time initialization of the DB
+		//
+		if(init){			
+			initDAO.doInit();
+			init = false;
+		}
+		
+		
 //		Query q1 = getDb4oTemplate().query();
 //		q1.constrain(ServerSideUser.class);
 //		ObjectSet s2 = q1.execute();
@@ -41,11 +59,11 @@ public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsS
 			}
 		});
 
-		System.out.println("new query size "+users.size());
+		System.out.println("Found "+users.size()+" users for username "+username);
 
 		if(users.size() != 1){
-			System.out.println("found "+users.size()+" users.");
-			throw new UsernameNotFoundException("Username not found.");
+			System.out.println("UsernameNotFoundException "+users.size()+" users.");
+			throw new UsernameNotFoundException("Username not found or duplicate.");
 		}else{
 			
 //			ServerSideUser user = (ServerSideUser) users.get(0);
@@ -62,6 +80,7 @@ public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsS
 //				getDb4oTemplate().set(u);								
 //			}
 			
+			System.out.println("load user success "+users.get(0));
 			return (ServerSideUser) users.get(0);
 		}
 

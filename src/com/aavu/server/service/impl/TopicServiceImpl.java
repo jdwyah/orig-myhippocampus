@@ -37,7 +37,8 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 	public void save(Topic topic) {
-		topicDAO.save(userService.getCurrentUser(),topic);
+		topic.setUser(userService.getCurrentUser());
+		topicDAO.save(topic);
 	}
 
 }

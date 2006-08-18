@@ -7,7 +7,7 @@ import com.aavu.server.domain.ServerSideUser;
 
 public interface TopicDAO {
 
-	public abstract void save(ServerSideUser user,Topic t);
+	public abstract void save(Topic t);
 
 	public abstract List<Topic> getAllTopics(ServerSideUser user);
 

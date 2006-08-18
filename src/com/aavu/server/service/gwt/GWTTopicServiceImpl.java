@@ -99,8 +99,8 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		for(int i=0;i<list.size();i++){				
 			Topic t = list.get(i);
 			
-			System.out.println("t "+i+" "+t.getUser());
-			t.setUser(null);
+			System.out.println("t "+i+" "+t.getUser()+" "+t.getId());
+			//t.setUser(null);
 			rtn[i] = t;
 		}
 
