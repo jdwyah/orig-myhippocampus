@@ -2,7 +2,9 @@ package com.aavu.server.service.gwt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.gwtwidgets.server.rpc.GWTSpringController;
 
@@ -29,21 +31,43 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		this.setByDI = setByDI;
 	}
 
-
-	/*
-	 * @gwt.typeArgs <com.aavu.client.domain.TopicGWT>
-	 */
 	public Topic[] getAllTopics(int startIndex, int maxCount) {
 		try {
 
 
 			System.out.println("get all topics SETBY "+setByDI);
 
-			return convertToArray(topicService.getAllTopics());
+			Topic[] rtn = convertToArray(topicService.getAllTopics());
+			for (int i = 0; i < rtn.length; i++) {
+				Topic topic = rtn[i];
+				System.out.println("rtn");
+				ok(topic);
+				ok(topic.getLastUpdated());
+				ok(topic.getMetaValues());
+				
+				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
+					Meta element = (Meta) iter.next();
+					ok(element);
+					ok(topic.getMetaValues().get(element));
+				}
+				for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
+					Tag element = (Tag) iter.next();
+					ok(element.getMetas());					
+				}
+				ok(topic.getTags());
+				ok(topic.getUser());
+			}
+			return rtn;
+			//return convertToArray(topicService.getAllTopics());
 		} catch (Exception e) {
 			System.out.println("FAILURE: "+e);
 			e.printStackTrace();
 			return null;
+		}
+	}
+	private void ok(Object o){
+		if(o != null){
+			System.out.println("rtn class ok "+o.getClass());
 		}
 	}
 
@@ -118,28 +142,36 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		for(int i=0;i<list.size();i++){				
 			Topic t = list.get(i);
 
-			System.out.println("t "+t.getTags().getClass());
 			
-			ArrayList<Tag> nTags = new ArrayList<Tag>();
-			nTags.addAll(t.getTags());
-			t.setTags(nTags);
-			
-			System.out.println("t "+t.getTags().getClass());
-			
-			System.out.println("t "+t.getMetaValues().getClass());
-			
-			HashMap<Meta, MetaValue> nMap = new HashMap<Meta, MetaValue>();
-			nMap.putAll(t.getMetaValues());			
-			t.setMetaValues(nMap);
-			System.out.println("t "+t.getMetaValues().getClass());	
-			
-			
-			System.out.println("t "+i+" "+t.getId()+" "+t.getUser());
 			//t.setUser(null);
-			rtn[i] = t;
+			rtn[i] = convert(t);
 		}
 
 		return rtn;
 	}
 
+	public static Topic convert(Topic t){
+		System.out.println("t "+t.getTags().getClass());
+		
+		ArrayList<Tag> nTags = new ArrayList<Tag>();
+
+		for (Iterator iter = t.getTags().iterator(); iter.hasNext();) {
+			Tag tag = (Tag) iter.next();
+			GWTTagServiceImpl.convert(tag);
+		}
+		
+		nTags.addAll(t.getTags());
+		t.setTags(nTags);
+		
+		System.out.println("t "+t.getTags().getClass());		
+		System.out.println("t "+t.getMetaValues().getClass());
+		
+		HashMap<Meta, MetaValue> nMap = new HashMap<Meta, MetaValue>();
+		nMap.putAll(t.getMetaValues());			
+		t.setMetaValues(nMap);
+		System.out.println("t "+t.getMetaValues().getClass());	
+				
+		System.out.println("t "+t.getId()+" "+t.getUser());
+		return t;
+	}
 }

@@ -10,7 +10,7 @@
 			<generator class="native"></generator>
 		</id>
 
-		<many-to-one name="user" class="User" column="user_id">
+		<many-to-one name="user" class="User" column="user_id" lazy="false">
 			<meta attribute="use-in-equals">true</meta>
 			<meta attribute="field-description">The user which created us</meta>
 		</many-to-one>
@@ -20,7 +20,7 @@
 			<meta attribute="field-description">Shared?</meta>
 		</property>
 
-		<list name="metas" inverse="true">
+		<list name="metas" inverse="true" lazy="false">
 			<key column="tag_id" />
 			<list-index column="meta_list_index"/>
 			<one-to-many class="Meta" />

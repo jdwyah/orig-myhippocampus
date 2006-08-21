@@ -43,12 +43,20 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		List<User> list = getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username);
 		log.debug("list "+list);
 		log.debug("list "+list.size());
-		User u = list.get(0);
-		log.debug("user: "+u);
-		log.debug("u "+u.getUsername());
+		
+		if(list.size() != 1){
+			System.out.println("UsernameNotFoundException "+list.size()+" users.");
+			throw new UsernameNotFoundException("Username not found or duplicate.");
+		}else{			
+			log.debug("load user success "+list.get(0));
+			User u = (User) list.get(0);
+			log.debug("user: "+u);
+			log.debug("u "+u.getUsername());
+			return u;
+		}
+		
 	
-		log.debug("now for real");
-		return (User) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username));
+	//	return (User) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username));
 	}
 
 	public User getUserForId(Integer id) {
