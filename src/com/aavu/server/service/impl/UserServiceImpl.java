@@ -23,28 +23,28 @@ public class UserServiceImpl implements UserService {
 
 	private UserDAO userDAO;
 
-	public ServerSideUser getCurrentUser() {
+	public User getCurrentUser() {
 
-		System.out.println("getCurrentUser");
+		log.debug("getCurrentUser");
 		
 		Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
 		if (obj instanceof UserDetails) {
-			System.out.println("instance of UserDetails");
+			log.debug("instance of UserDetails");
 			username = ((UserDetails)obj).getUsername();			
 		} else {
-			System.out.println("not a UserDetail, it's a "+obj.getClass().getName());
+			log.debug("not a UserDetail, it's a "+obj.getClass().getName());
 			username = obj.toString();
 		}
 		
-		System.out.println("loadUserByUsername "+username);
-		if(username.equals("OFFanonymousUser")){
-			System.out.println("hack switch to test");
+		log.debug("loadUserByUsername "+username);
+		if(username.equals("anonymousUser")){
+			log.debug("hack switch to test");
 			username = "test";
 		}
 		try {
-			return userDAO.loadUserByUsername(username);	
+			return userDAO.getUserByUsername(username);	
 		} catch (UsernameNotFoundException e) {
 			log.warn(e);
 			throw e;
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public void createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
-		ServerSideUser user = new ServerSideUser();
+		User user = new User();
 
 
 		createUser(comm.getUsername(),comm.getPassword());
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 
-	public List<ServerSideUser> getAllUsers() {
+	public List<User> getAllUsers() {
 		return userDAO.getAllUsers();
 	}
 
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
 
 	public void toggleEnabled(Integer id) {				
-		ServerSideUser user = userDAO.getUserForId(id);
+		User user = userDAO.getUserForId(id);
 		user.setEnabled(!user.isEnabled());
 		userDAO.save(user);
 	}
@@ -123,14 +123,14 @@ public class UserServiceImpl implements UserService {
 
 
 	public void delete(Integer id) {
-		ServerSideUser user = userDAO.getUserForId(id);
+		User user = userDAO.getUserForId(id);
 		userDAO.delete(user);
 	}
 
 
 
 	public void toggleSupervisor(Integer id) {
-		ServerSideUser user = userDAO.getUserForId(id);
+		User user = userDAO.getUserForId(id);
 		user.setSupervisor(!user.isSupervisor());
 		userDAO.save(user);
 	}
@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
 		log.debug("u: "+username+" p "+userpass);
 		log.debug("pp: "+hashPassword(userpass));
 		
-		ServerSideUser user = new ServerSideUser();
+		User user = new User();
 		user.setUsername(username);
 		user.setPassword(hashPassword(userpass));		
 		user.setSupervisor(superV);

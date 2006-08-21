@@ -47,8 +47,14 @@ public class TagBoard extends Composite {
 
 		tagPanel.add(addTagPanel);*/
 
-		tagPanel.add(tagBox);
-		setWidget(tagPanel);
+		VerticalPanel mainPanel = new VerticalPanel();
+		
+		
+		mainPanel.add(tagBox);
+		mainPanel.add(tagPanel);
+		
+		
+		initWidget(mainPanel);		
 		setStyleName("ta-tagboard");
 	}
 
@@ -57,34 +63,17 @@ public class TagBoard extends Composite {
 		//for now just creates new (bland) Tag and adds it to list
 		//topic needs to get tagged when its saved
 
-
-		tagService.getTag(tagName, new AsyncCallback(){
+		//First, do a name lookup on this tag
+		//
+		tagService.getTagAddIfNew(tagName, new AsyncCallback(){
 
 			public void onFailure(Throwable caught) {
-				System.out.println("fail tagservice.getTag "+caught);	
+				System.out.println("fail tagservice.getTagAddIfNew "+caught);	
 			}
 
 			public void onSuccess(Object result) {
-				Tag tag = (Tag) result;
-				if (tag == null) {
-					System.out.println("tag == null");
-					tag = new Tag(tagName);				
-					System.out.println("new tag "+tag.getName());
-					
-					tagService.saveTag(tag, new AsyncCallback(){
-						public void onFailure(Throwable caught) {
-							System.out.println("fail adding");
-						}
-
-						public void onSuccess(Object result) {
-							System.out.println("added");
-						}});
-					System.out.println("addtag to board during async"+tag.getName());
-					addTag(tag);
-				}else{
-					System.out.println("addtag to board ELSE"+tag.getName());
-					addTag(tag);	  //add tag to tagBoard
-				}
+				Tag tag = (Tag) result;				
+				addTag(tag);
 			}});
 
 
@@ -101,6 +90,8 @@ public class TagBoard extends Composite {
 	}
 
 	public void load(List list){
+		
+		tagPanel.clear();
 		
 		for (Iterator iter = list.iterator(); iter.hasNext();) {
 			Tag tag = (Tag) iter.next();

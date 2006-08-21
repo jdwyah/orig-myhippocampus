@@ -13,7 +13,7 @@ public interface GWTTopicServiceAsync {
 	//void getTopicsStarting(String match, AsyncCallback callback);
 	void match(String match, AsyncCallback callback);	
 	
-	void save(Topic topic, String[] seeAlsos, AsyncCallback callback);
+	//void save(Topic topic, String[] seeAlsos, AsyncCallback callback);
 	void getBlogTopics(int start, int numberPerScreen, AsyncCallback callback);
 	
 	

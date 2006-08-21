@@ -5,12 +5,14 @@ import java.util.List;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.springframework.dao.DataAccessException;
 
+import com.aavu.client.domain.User;
 import com.aavu.server.domain.ServerSideUser;
 
 public interface UserDAO {	
 	ServerSideUser loadUserByUsername(final String username) throws UsernameNotFoundException, DataAccessException;
-	void save(ServerSideUser user);
-	List<ServerSideUser> getAllUsers();
-	ServerSideUser getUserForId(Integer id);
-	void delete(ServerSideUser user);
+	void save(User user);
+	List<User> getAllUsers();
+	User getUserForId(Integer id);
+	void delete(User user);
+	User getUserByUsername(String username);
 }

@@ -2,21 +2,19 @@ package com.aavu.server.dao;
 
 import java.util.List;
 
-import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
-import com.aavu.server.domain.ServerSideUser;
-import com.google.gwt.user.client.rpc.RemoteService;
+import com.aavu.client.domain.User;
 
 public interface TagDAO {
 
-	Tag getTag(ServerSideUser user,String tagName);
+	Tag getTag(User user,String tagName);
 
-	void removeTag(ServerSideUser user,String itemText);
+	void removeTag(User user,Tag selectedTag);
 
-	List<Tag> getAllTags(ServerSideUser user);
+	List<Tag> getAllTags(User user);
 	
-	List<Tag> getTagsStarting(ServerSideUser user,String match);
+	List<Tag> getTagsStarting(User user,String match);
 
-	void save(ServerSideUser user,Tag selectedTag);
+	void save(Tag selectedTag);
 	
 }

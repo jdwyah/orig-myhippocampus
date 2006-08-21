@@ -1,11 +1,14 @@
 package com.aavu.client.domain;
 
+import com.aavu.client.service.local.TagLocalService;
+import com.aavu.client.widget.tags.MetaListBox;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaText extends MetaValue {
+public class MetaText extends Meta {
 
 	private static final String TYPE = "Text";
 	private String value;
@@ -20,7 +23,7 @@ public class MetaText extends MetaValue {
 		this.value = value;
 	}
 	
-	public Widget getWidget() {
+	public Widget getWidget(boolean editable) {
 		//HorizontalPanel widget = new HorizontalPanel();
 		//Label label = new Label(name);
 
@@ -46,15 +49,15 @@ public class MetaText extends MetaValue {
 		this.value = this.transientValue;
 	}
 
-	/*public Widget getEditorWidget(boolean editable) {
+	public Widget getEditorWidget(boolean editable) {
 		HorizontalPanel widget = new HorizontalPanel();
 
 		if (editable){
 			TextBox metaName = new TextBox();
-			metaName.setText(this.name);
+			metaName.setText(this.getName());
 			metaName.addChangeListener(new ChangeListener(){
 				public void onChange(Widget sender){
-					name = ((TextBox)sender).getText();
+					setName(((TextBox)sender).getText());
 				}
 			});
 
@@ -68,7 +71,7 @@ public class MetaText extends MetaValue {
 			widget.add(metaType);
 		}
 		else{
-			Label metaName = new Label(this.name);
+			Label metaName = new Label(getName());
 			metaName.setWidth("5em");
 			Label metaType = new Label(TYPE);  //this.type.getName()
 			metaType.setWidth("5em");
@@ -80,7 +83,7 @@ public class MetaText extends MetaValue {
 		//widget.add(editButton);
 
 		return widget;
-	}*/
+	}
 
 	//@Override
 	public String getType() {		

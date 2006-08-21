@@ -1,6 +1,5 @@
 package com.aavu.server.dao.db4o;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -14,21 +13,72 @@ import org.db4ospring.support.Db4oDaoSupport;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.server.dao.TopicDAO;
-import com.aavu.server.domain.ServerSideUser;
 import com.db4o.query.Predicate;
-import com.db4o.query.Query;
 
 public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 	private static final Logger log = Logger.getLogger(TopicDAOdb4oImpl.class);	
 
+	public TopicDAOdb4oImpl(){
+		
+//		Db4o.configure().objectClass("com.aavu.client.domain.Topic").
+//		Db4o.configure().objectClass("com.aavu.client.domain.Tag").updateDepth(1);
+
+	}
+	
 	public void save(Topic t){
 
-
+		System.out.println("Topic Save "+t.getId()+" "+t.getTitle());
+		
+		//now save metas
+		//Not done using the cascade above because that won't do the binding correctly.
+		//could replace with deleting all, then re-adding...
+		//cascade w/ bind? Stateless is an unfortunate bedfellow
+		//
+		//could replace with objectOnNew callback, but GWT won't play
+		//
+		
+		for (Iterator iter = t.getTags().iterator(); iter.hasNext();) {
+			
+			Tag tag = (Tag) iter.next();
+			
+			System.out.println("tag save "+tag.getId()+" "+tag.getName());
+			
+			for (Iterator iterM = tag.getMetas().iterator(); iter.hasNext();) {
+				
+				Meta m = (Meta) iterM.next();
+				
+				System.out.println("meta save in tag save "+m.getId()+" "+m.getName());
+				
+				if(t.getId() == 0){
+					getDb4oTemplate().set(m);
+					long id = getDb4oTemplate().getID(m);
+					System.out.println("Meta save in tag save was 0, now "+id);				
+					m.setId(id);	
+				}else{
+					getDb4oTemplate().bind(m, m.getId());	
+				}
+				getDb4oTemplate().set(m);
+			}
+			
+			
+			if(t.getId() == 0){
+				getDb4oTemplate().set(tag);
+				long id = getDb4oTemplate().getID(tag);
+				System.out.println("Tag save in topic save was 0, now "+id);				
+				tag.setId(id);	
+			}else{
+				getDb4oTemplate().bind(tag, tag.getId());	
+			}
+			getDb4oTemplate().set(tag);
+		}
+		
+		
 		if(t.getId() == 0){
 			getDb4oTemplate().set(t);
 			long id = getDb4oTemplate().getID(t);
-			System.out.println("was 0, now "+id);				
+			System.out.println("Topic Save was 0, now "+id);				
 			t.setId(id);							
 		}else{
 			getDb4oTemplate().bind(t, t.getId());			
@@ -40,7 +90,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 
 	}
 
-	public List<Topic> getAllTopics(final ServerSideUser user){
+	public List<Topic> getAllTopics(final User user){
 
 		log.debug("ABOUT TO GET ALL TOPICS");
 
@@ -52,38 +102,44 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 				System.out.println("TopicUser "+topic.getUser());
 				if(null == topic.getUser()){
 					log.debug("Null user for topic "+topic.getId()+" "+topic.getTitle());
-					log.debug("SETTING USER");
-					topic.setUser(user);
-					getDb4oTemplate().set(topic);
+					//log.debug("SETTING USER to "+user);
+					//topic.setUser(user);
+					//getDb4oTemplate().set(topic);
 					return false;
 				}
-				return topic.getUser().equals(user);
+				return user.equals(topic.getUser());
 			}
 		});
 
-		log.debug("found "+rtn.size()+" topics");
+		log.debug("All Topic Search, found "+rtn.size()+" topics");
+		
+		for(Topic t : rtn){
+			log.debug("User: "+t.getId()+" "+t.getUser());
+		}
 
 		return rtn;
 
 	}
 
-	public List<Topic>  getTopicsStarting(final ServerSideUser user,final String match) {
+	public List<Topic>  getTopicsStarting(final User user,final String match) {
 
-		List<Topic> rtn = getDb4oTemplate().query(new Predicate<Topic>() {
-			public boolean match(Topic topic) {			
-				if(null == topic.getUser()){
-					log.debug("Null user for topic "+topic.getId()+" "+topic.getTitle());
-					return false;
-				}
-				return topic.getUser().equals(user) && topic.getTitle().toLowerCase().startsWith(match.toLowerCase());
-			}
-		});
+//		List<Topic> rtn = getDb4oTemplate().query(new Predicate<Topic>() {
+//			public boolean match(Topic topic) {			
+//				if(null == topic.getUser()){
+//					log.debug("Null user for topic "+topic.getId()+" "+topic.getTitle());
+//					return false;
+//				}
+//				return topic.getUser().equals(user) && topic.getTitle().toLowerCase().startsWith(match.toLowerCase());
+//			}
+//		});
 
+		List<Topic> rtn = new LinkedList<Topic>();
+		
 		log.debug("found "+rtn.size()+" topics");		
 		return rtn;
 	}
 
-	public Topic getForName(final ServerSideUser user,final String title) {
+	public Topic getForName(final User user,final String title) {
 
 		Topic rtn = (Topic) Db4oUtil.getUniqueRes(getDb4oTemplate().query(new Predicate<Topic>() {
 			public boolean match(Topic topic) {			
@@ -105,7 +161,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 	 * http://developer.db4o.com/forums/thread/14720.aspx
 	 * 
 	 */
-	public List<Topic> getBlogTopics(final ServerSideUser user,int start, int numberPerScreen) {
+	public List<Topic> getBlogTopics(final User user,int start, int numberPerScreen) {
 
 		log.debug("get BLOG TOPICS");
 
@@ -113,7 +169,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 		//
 		List<Topic> db4rtn = getDb4oTemplate().query(new Predicate<Topic>() {
 			public boolean match(Topic topic) {	
-				return topic.getUser().equals(user);
+				return user.equals(topic.getUser());
 			}
 		});
 
@@ -132,7 +188,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 				return o2.getLastUpdated().compareTo(o1.getLastUpdated());	
 			}});
 
-		log.debug("found "+rtn.size()+" topics");		
+		log.debug("Blog found "+rtn.size()+" topics");		
 		return rtn;		
 	}
 

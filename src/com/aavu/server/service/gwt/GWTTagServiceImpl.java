@@ -29,12 +29,12 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		return rtn; 
 	}
 
-	public Tag getTag(String tagName) {
-		return tagService.getTag(tagName);
+	public Tag getTagAddIfNew(String tagName) {
+		return tagService.getTagAddIfNew(tagName);
 	}
 
-	public void removeTag(String itemText) {
-		tagService.removeTag(itemText);
+	public void removeTag(Tag selectedTag) {
+		tagService.removeTag(selectedTag);
 	}
 
 	public String[] match(String match) {

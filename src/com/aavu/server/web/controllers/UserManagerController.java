@@ -1,6 +1,5 @@
 package com.aavu.server.web.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.aavu.client.domain.User;
 import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.UserService;
 
@@ -22,7 +22,7 @@ public class UserManagerController extends MultiActionController {
 		
 		
 		
-		List<ServerSideUser> users = userService.getAllUsers();		
+		List<User> users = userService.getAllUsers();		
 		return new ModelAndView(viewUserList,"users",users);
 	}
 
@@ -34,7 +34,7 @@ public class UserManagerController extends MultiActionController {
 		
 		userService.delete(id);
 		
-		List<ServerSideUser> users = userService.getAllUsers();		
+		List<User> users = userService.getAllUsers();		
 		return new ModelAndView(viewUserList,"users",users); 
 	}
 	public ModelAndView enable(HttpServletRequest request, HttpServletResponse response){
@@ -45,7 +45,7 @@ public class UserManagerController extends MultiActionController {
 		
 		userService.toggleEnabled(id);
 		
-		List<ServerSideUser> users = userService.getAllUsers();		
+		List<User> users = userService.getAllUsers();		
 		return new ModelAndView(viewUserList,"users",users); 
 	}
 	
@@ -56,7 +56,7 @@ public class UserManagerController extends MultiActionController {
 		
 		userService.toggleSupervisor(id);
 		
-		List<ServerSideUser> users = userService.getAllUsers();		
+		List<User> users = userService.getAllUsers();		
 		return new ModelAndView(viewUserList,"users",users); 
 	}
 

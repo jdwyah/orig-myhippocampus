@@ -37,6 +37,7 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 	public void save(Topic topic) {
+		System.out.println("Topic Save Setting User "+userService.getCurrentUser());
 		topic.setUser(userService.getCurrentUser());
 		topicDAO.save(topic);
 	}

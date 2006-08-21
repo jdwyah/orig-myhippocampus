@@ -5,9 +5,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface GWTTagService extends RemoteService {
 
-	Tag getTag(String tagName);
+	Tag getTagAddIfNew(String tagName);
 
-	void removeTag(String itemText);
+	void removeTag(Tag selectedTag);
 
 	Tag[] getAllTags();
 	

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+
+<beans>
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config.properties" />
+	</bean>
+
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+ 		<property name="driverClass" value="${jdbc.driverClass}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+
+	</bean>
+
+	<bean id="mySessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="mappingResources">
+			<list>
+				<value>com/aavu/client/domain/Topic.hbm.xml</value>
+				<value>com/aavu/client/domain/User.hbm.xml</value>
+				<value>com/aavu/client/domain/MetaValue.hbm.xml</value>
+				<value>com/aavu/client/domain/Meta.hbm.xml</value>				
+				<value>com/aavu/client/domain/Tag.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.cglib.use_reflection_optimizer">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+
+	<bean id="topicDAO" class="com.aavu.server.dao.hibernate.TopicDAOHibernateImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	
+	<bean id="tagDAO" class="com.aavu.server.dao.hibernate.TagDAOHibernateImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>	
+	<bean id="userDAO" class="com.aavu.server.dao.hibernate.UserDAOHibernateImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="initDAO" ref="initDAO"/>
+		<property name="init" value="false"/>
+	</bean>
+	<bean id="initDAO" class="com.aavu.server.dao.hibernate.InitDAOHibernateImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="userService" ref="userService"/>
+	</bean>
+	
+
+</beans>

@@ -14,6 +14,17 @@ public class Db4oUtil {
 		}
 		if(set.size() != 1){
 			log.warn("No unique result");
+			throw new RuntimeException("More than 1");
+		}
+		return set.get(0);
+	}
+	
+	public static Object getUniqueResOrNull(ObjectSet set) {
+		if(set == null || set.size() == 0){
+			return null;
+		}
+		if(set.size() != 1){
+			log.warn("No unique result");
 			throw new RuntimeException("Null");
 		}
 		return set.get(0);

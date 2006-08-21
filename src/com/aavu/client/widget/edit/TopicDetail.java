@@ -39,11 +39,6 @@ public class TopicDetail extends Composite implements ClickListener{
 	private FlowPanel textPanel = new FlowPanel();
 	private FlowPanel buttonPanel = new FlowPanel();
 	
-	private VerticalPanel seeAlsoPanel = new VerticalPanel();
-		
-	private FlowPanel seeAlsoStatic = new FlowPanel();
-	private SeeAlsoComplete seeAlsoComplete;
-	
 	private Label serverR = new Label();
 	
 	private VerticalPanel panel = new VerticalPanel();
@@ -104,21 +99,7 @@ public class TopicDetail extends Composite implements ClickListener{
 		if(topic != null){
 			titleBox.setText(topic.getTitle());
 			textArea.setText(topic.getText());
-			
-			seeAlsoPanel.clear();
-			seeAlsoStatic.clear();
-			
-			System.out.println("setup "+topic.getSeeAlso());
-			if(topic.getSeeAlso() != null){
-				Iterator i = topic.getSeeAlso().iterator();
-				while (i.hasNext()) {
-					Topic also = (Topic) i.next();
-					System.out.println("add static "+also.getTitle());
-					seeAlsoStatic.add(new TopicLink(also,this));					
-				}
-			}
-			seeAlsoComplete = new SeeAlsoComplete(topic.getSeeAlso(),topicServiceA);
-			
+						
 			tagBoard.load(topic.getTags());
 		}
 	}
@@ -137,17 +118,17 @@ public class TopicDetail extends Composite implements ClickListener{
 			topic.setText(textArea.getText());
 			topic.setTitle(titleBox.getText());
 			
-			String[] seeAlsos = seeAlsoComplete.getText().split(seeAlsoComplete.SEPARATOR);
-			
-			System.out.println("save");
-			for (int i = 0; i < seeAlsos.length; i++) {
-				String string = seeAlsos[i];
-				System.out.println("save array |"+string+"|");
-			}
+//			String[] seeAlsos = seeAlsoComplete.getText().split(seeAlsoComplete.SEPARATOR);
+//			
+//			System.out.println("save");
+//			for (int i = 0; i < seeAlsos.length; i++) {
+//				String string = seeAlsos[i];
+//				System.out.println("save array |"+string+"|");
+//			}
 			
 			topic.setTags(tagBoard.getTags());
 			
-			topicServiceA.save(topic,seeAlsos,new StdAsyncCallback() {				
+			topicServiceA.save(topic,new StdAsyncCallback("topicDetail save") {				
 
 						public void onSuccess(Object result) {
 							serverR.setText("Saved");
@@ -169,10 +150,7 @@ public class TopicDetail extends Composite implements ClickListener{
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleEcho);
 		topicTitlePanel.add(new Label(" Updated: "+formatDate(topic.getLastUpdated())));
-
-		seeAlsoPanel.clear();
-		seeAlsoPanel.add(seeAlsoStatic);
-		
+	
 		
 		panel.clear();
 		panel.add(topicTitlePanel);
@@ -180,9 +158,7 @@ public class TopicDetail extends Composite implements ClickListener{
 		panel.add(tagBoard);
 		
 		panel.add(textPanel);
-		
-		panel.add(seeAlsoPanel);
-		
+				
 		panel.add(buttonPanel);
 	}
 	
@@ -192,8 +168,6 @@ public class TopicDetail extends Composite implements ClickListener{
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleBox);
 		
-		seeAlsoPanel.clear();
-		seeAlsoPanel.add(seeAlsoComplete);		
 		
 		panel.clear();
 		panel.add(topicTitlePanel);
@@ -201,8 +175,6 @@ public class TopicDetail extends Composite implements ClickListener{
 		panel.add(tagBoard);
 
 		panel.add(textArea);
-		
-		panel.add(seeAlsoPanel);
 		
 		panel.add(cancelButton);
 		panel.add(saveButton);

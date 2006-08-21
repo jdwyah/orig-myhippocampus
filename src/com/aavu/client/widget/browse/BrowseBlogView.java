@@ -45,7 +45,7 @@ public class BrowseBlogView extends Composite{
 
 
 	private void load() {
-		topicService.getBlogTopics(start,numberPerScreen,new StdAsyncCallback(){
+		topicService.getBlogTopics(start,numberPerScreen,new StdAsyncCallback("BrowseBlog load"){
 			public void onSuccess(Object result) {
 
 				topics = (Topic[]) result;

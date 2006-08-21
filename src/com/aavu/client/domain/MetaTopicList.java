@@ -28,7 +28,7 @@ public class MetaTopicList extends Meta{
 	//@Override
 	public Widget getWidget(boolean editable) {
 		MetaTopicListWidget widget = new MetaTopicListWidget();
-		widget.setName(name);
+		widget.setName(getName());
 		return widget;
 	}
 	

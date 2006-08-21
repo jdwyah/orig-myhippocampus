@@ -11,7 +11,7 @@ public interface GWTTopicService extends RemoteService {
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>
 
-	void save(Topic topic, String[] seeAlsos); 
+	//void save(Topic topic, String[] seeAlsos); 
 
 	Topic[] getBlogTopics(int start, int numberPerScreen);
 }

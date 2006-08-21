@@ -66,7 +66,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 		tagList.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {
-				tagService.getTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
+				tagService.getTagAddIfNew(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
 					public void onFailure(Throwable caught) {
 						System.out.println("failed getting tag " + caught);
 					}
@@ -127,14 +127,12 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	public void onClick(Widget source){
 		if (source == deleteTagButton){			
-			tagService.removeTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
-
-				public void onFailure(Throwable caught) {
-					System.out.println("fail: "+ caught);
-				}
+			
+			tagService.removeTag(selectedTag, new StdAsyncCallback("tagService remove"){
+			//tagService.removeTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
 
 				public void onSuccess(Object result) {
-					System.out.println("success");
+					System.out.println("success deleting tag");
 				}});
 
 			populateTagList();
@@ -162,7 +160,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 				System.out.println(element.getName());
 			}
 			
-			tagService.saveTag(selectedTag, new StdAsyncCallback(){
+			tagService.saveTag(selectedTag, new StdAsyncCallback("tagService saveTag"){
 
 				public void onSuccess(Object result) {
 					System.out.println("success in saving tag " + selectedTag.getName());
@@ -175,11 +173,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	public void populateTagList(){
 
-		tagService.getAllTags(new AsyncCallback(){
-
-			public void onFailure(Throwable caught) {
-				System.out.println("fail "+caught);
-			}
+		tagService.getAllTags(new StdAsyncCallback("populateTagList"){
 
 			public void onSuccess(Object result) {
 				Tag[] tags = (Tag[]) result;

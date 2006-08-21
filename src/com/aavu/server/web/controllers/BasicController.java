@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
-import com.aavu.server.domain.ServerSideUser;
+import com.aavu.client.domain.User;
 import com.aavu.server.service.UserService;
 
 public class BasicController extends AbstractController {
@@ -29,7 +29,7 @@ public class BasicController extends AbstractController {
 			HttpServletResponse arg1) throws Exception {
 
 		
-		ServerSideUser su = null;
+		User su = null;
 		try{
 			su = userService.getCurrentUser();	
 			return new ModelAndView(getView(),"user",su);

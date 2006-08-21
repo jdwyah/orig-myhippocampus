@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.aavu.client.domain">
+
+	<class name="Tag" table="Tags">
+		<meta attribute="generated-class">com.aavu.client.domain.generated.AbstractTag</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<id name="id" type="long" column="tag_id">
+			<generator class="native"></generator>
+		</id>
+
+		<many-to-one name="user" class="User" column="user_id">
+			<meta attribute="use-in-equals">true</meta>
+			<meta attribute="field-description">The user which created us</meta>
+		</many-to-one>
+
+		<property name="publicVisible" type="boolean" column="public_visible">
+			<meta attribute="use-in-equals">true</meta>
+			<meta attribute="field-description">Shared?</meta>
+		</property>
+
+		<list name="metas" inverse="true">
+			<key column="tag_id" />
+			<list-index column="meta_list_index"/>
+			<one-to-many class="Meta" />
+		</list>
+
+<!--		<many-to-one name="metas" class="MetaMap" column="meta_map">-->
+<!--		</many-to-one>-->
+
+		<property name="name" type="string" column="name">
+			<meta attribute="field-description">The type.</meta>
+			<meta attribute="use-in-equals">true</meta>
+		</property>
+
+	</class>
+
+</hibernate-mapping>

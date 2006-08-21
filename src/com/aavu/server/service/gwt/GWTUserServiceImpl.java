@@ -13,13 +13,9 @@ public class GWTUserServiceImpl extends GWTSpringController implements GWTUserSe
 	
 	public User getCurrentUser() {
 		System.out.println("GWT get current user...");
-		ServerSideUser user = userService.getCurrentUser();
-		
-		User u = new User();
-		u.setUsername(user.getUsername());
-		u.setSupervisor(user.isSupervisor());
-		System.out.println("fin "+u);
-		return u;		
+		User user = userService.getCurrentUser();
+				
+		return user;		
 	}
 
 	public void setUserService(UserService userService) {

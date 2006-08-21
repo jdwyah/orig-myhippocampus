@@ -2,12 +2,15 @@ package com.aavu.server.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.aavu.client.domain.Tag;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.service.UserService;
 
 public class TagServiceImpl implements com.aavu.server.service.TagService {
-
+	private static final Logger log = Logger.getLogger(TagServiceImpl.class);
+	
 	private TagDAO tagDAO;
 	private UserService userService;
 
@@ -28,8 +31,24 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 
 
 
-	public Tag getTag(String tagName) {
-		return tagDAO.getTag(userService.getCurrentUser(),tagName);
+	public Tag getTagAddIfNew(String tagName) {
+		log.debug("tag: "+tagName);
+		
+		Tag rt = tagDAO.getTag(userService.getCurrentUser(),tagName);
+		if(null == rt){
+			log.debug("was null, creating ");
+			Tag t = new Tag();
+			t.setName(tagName);
+			t.setPublicVisible(false);
+			t.setUser(userService.getCurrentUser());
+			tagDAO.save(t);
+			
+			log.debug("created: "+t.getId());
+			return t;
+		}else{
+			log.debug("existed "+rt.getId());
+			return rt;
+		}
 	}
 
 
@@ -42,15 +61,20 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 
 
 
-	public void removeTag(String itemText) {
-		tagDAO.removeTag(userService.getCurrentUser(),itemText);
+	public void removeTag(Tag selectedTag) {
+		tagDAO.removeTag(userService.getCurrentUser(),selectedTag);
 	}
 
 
 
 
 	public void save(Tag selectedTag) {
-		tagDAO.save(userService.getCurrentUser(),selectedTag);
+		
+		log.debug("Servic tag.save() setting user");
+		
+		selectedTag.setUser(userService.getCurrentUser());
+		
+		tagDAO.save(selectedTag);
 	}
 
 

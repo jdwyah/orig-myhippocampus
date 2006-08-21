@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.aavu.client.domain">
+
+	<class name="MetaValue" table="MetaValues">
+		<meta attribute="generated-class">com.aavu.client.domain.generated.AbstractMetaValue</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<id name="id" type="long" column="metavalue_id">
+			<generator class="native"></generator>
+		</id>
+
+
+		<many-to-one name="topic" class="Topic" column="topic_id" /><!--
+		<many-to-one name="meta" class="Meta" column="meta_id"/>				
+
+--><!--		<property name="name" type="string" column="name">-->
+<!--			<meta attribute="field-description">The type.</meta>-->
+<!--			<meta attribute="use-in-equals">true</meta>-->
+<!--		</property>-->
+
+		<property name="value" type="string" column="value">
+			<meta attribute="field-description">The value in its string representation</meta>
+			<meta attribute="use-in-equals">true</meta>
+		</property>
+	</class>
+
+</hibernate-mapping>

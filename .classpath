@@ -28,6 +28,15 @@
 	<classpathentry kind="lib" path="lib/sitemesh-2.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/acegi-security-1.0.1.withSource.jar"/>
 	<classpathentry kind="lib" path="lib/gwt-widgets-0.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/c3p0-0.9.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-3.1.2.jar"/>
 	<classpathentry kind="lib" path="tools/gwt/gwt-user-1.1.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/springframework/spring-mock/2.0-m4/spring-mock-2.0-m4.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jta-1.0.1B.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-8.1-407.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-2.7.6rc1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

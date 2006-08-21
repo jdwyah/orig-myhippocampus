@@ -8,16 +8,14 @@ import org.apache.log4j.Logger;
 import org.db4ospring.support.Db4oDaoSupport;
 import org.springframework.dao.DataAccessException;
 
-import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.server.dao.InitDAO;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
-import com.db4o.ObjectSet;
 import com.db4o.query.Predicate;
-import com.db4o.query.Query;
 
-public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsService {
-	private static final Logger log = Logger.getLogger(UserDAOImpl.class);
+public class UserDAOdb4oImpl extends Db4oDaoSupport implements UserDAO, UserDetailsService {
+	private static final Logger log = Logger.getLogger(UserDAOdb4oImpl.class);
 
 	private InitDAO initDAO;	
 	public void setInitDAO(InitDAO initDAO) {
@@ -30,6 +28,68 @@ public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsS
 
 	public ServerSideUser loadUserByUsername(final String username) throws UsernameNotFoundException, DataAccessException {
 
+		List <User> users = getDb4oTemplate().query(new Predicate<User>() {
+			public boolean match(User user) {
+				return user.getUsername().equals(username);
+			}
+		});
+
+		log.debug("Found "+users.size()+" users for username "+username);
+
+		if(users.size() != 1){
+			System.out.println("UsernameNotFoundException "+users.size()+" users.");
+			throw new UsernameNotFoundException("Username not found or duplicate.");
+		}else{			
+			log.debug("load user success "+users.get(0));
+			User u = (User) users.get(0);
+			return new ServerSideUser(u);
+		}
+
+	}
+
+	public void save(User user) {
+
+		if(user.getId() == 0){
+			getDb4oTemplate().set(user);
+			long id = getDb4oTemplate().getID(user);
+			System.out.println("was 0, now "+id);				
+			user.setId(id);							
+		}else{
+			getDb4oTemplate().bind(user, user.getId());			
+		}
+		
+		getDb4oTemplate().set(user);	
+	}
+
+	public List<User> getAllUsers() {
+		return getDb4oTemplate().query(new Predicate<User>() {
+			public boolean match(User user) {
+				return true;
+			}
+		});
+	}
+
+	public User getUserForId(final Integer id) {
+		
+		return (User) Db4oUtil.getUniqueRes(getDb4oTemplate().query(new Predicate<User>() {
+			public boolean match(User user) {
+				return user.getId() == id;
+			}
+		}));
+	}
+
+	public void delete(User user) {
+		
+		if(user.getId() != 0){						
+			getDb4oTemplate().bind(user, user.getId());			
+		}else{
+			log.warn("tried to delete user ID 0 ");
+		}
+		
+		getDb4oTemplate().delete(user);	
+	}
+
+	public User getUserByUsername(final String username) {
 		//Hack to run a 1-time initialization of the DB
 		//
 		if(init){			
@@ -53,13 +113,13 @@ public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsS
 
 	
 		
-		List <ServerSideUser> users = getDb4oTemplate().query(new Predicate<ServerSideUser>() {
-			public boolean match(ServerSideUser user) {
+		List <User> users = getDb4oTemplate().query(new Predicate<User>() {
+			public boolean match(User user) {
 				return user.getUsername().equals(username);
 			}
 		});
 
-		System.out.println("Found "+users.size()+" users for username "+username);
+		log.debug("Found "+users.size()+" users for username "+username);
 
 		if(users.size() != 1){
 			System.out.println("UsernameNotFoundException "+users.size()+" users.");
@@ -80,51 +140,10 @@ public class UserDAOImpl extends Db4oDaoSupport implements UserDAO, UserDetailsS
 //				getDb4oTemplate().set(u);								
 //			}
 			
-			System.out.println("load user success "+users.get(0));
-			return (ServerSideUser) users.get(0);
+			log.debug("load user success "+users.get(0));
+			User u = (User) users.get(0);
+			return u;
 		}
-
-	}
-
-	public void save(ServerSideUser user) {
-		if(user.getId() == 0){
-			getDb4oTemplate().set(user);
-			long id = getDb4oTemplate().getID(user);
-			System.out.println("was 0, now "+id);				
-			user.setId(id);							
-		}else{
-			getDb4oTemplate().bind(user, user.getId());			
-		}
-		
-		getDb4oTemplate().set(user);	
-	}
-
-	public List<ServerSideUser> getAllUsers() {
-		return getDb4oTemplate().query(new Predicate<ServerSideUser>() {
-			public boolean match(ServerSideUser user) {
-				return true;
-			}
-		});
-	}
-
-	public ServerSideUser getUserForId(final Integer id) {
-		
-		return (ServerSideUser) Db4oUtil.getUniqueRes(getDb4oTemplate().query(new Predicate<ServerSideUser>() {
-			public boolean match(ServerSideUser user) {
-				return user.getId() == id;
-			}
-		}));
-	}
-
-	public void delete(ServerSideUser user) {
-		
-		if(user.getId() != 0){						
-			getDb4oTemplate().bind(user, user.getId());			
-		}else{
-			log.warn("tried to delete user ID 0 ");
-		}
-		
-		getDb4oTemplate().delete(user);	
 	}
 
 

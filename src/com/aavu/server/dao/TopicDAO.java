@@ -3,20 +3,20 @@ package com.aavu.server.dao;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.server.domain.ServerSideUser;
+import com.aavu.client.domain.User;
 
 public interface TopicDAO {
 
 	public abstract void save(Topic t);
 
-	public abstract List<Topic> getAllTopics(ServerSideUser user);
+	public abstract List<Topic> getAllTopics(User user);
 
-	public abstract List<Topic> getTopicsStarting(ServerSideUser user,String match);
+	public abstract List<Topic> getTopicsStarting(User user,String match);
 
-	public abstract Topic getForName(ServerSideUser user,String string);
+	public abstract Topic getForName(User user,String string);
 
 	public abstract void tester();
 
-	public abstract List<Topic> getBlogTopics(ServerSideUser user,int start, int numberPerScreen);
+	public abstract List<Topic> getBlogTopics(User user,int start, int numberPerScreen);
 
 }

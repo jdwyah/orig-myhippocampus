@@ -10,9 +10,9 @@ public interface TagService {
 
 	List<Tag> getTagsStarting(String match);
 
-	void removeTag(String itemText);
+	void removeTag(Tag selectedTag);
 
-	Tag getTag(String tagName);
+	Tag getTagAddIfNew(String tagName);
 
 	List<Tag> getAllTags();
 

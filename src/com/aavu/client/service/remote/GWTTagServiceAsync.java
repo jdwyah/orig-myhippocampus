@@ -5,9 +5,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface GWTTagServiceAsync {
 
-	void getTag(String tagName, AsyncCallback callback);
+	void getTagAddIfNew(String tagName, AsyncCallback callback);
 
-	void removeTag(String itemText, AsyncCallback callback);
+	void removeTag(Tag selectedTag, AsyncCallback callback);
 
 	void getAllTags(AsyncCallback callback);
 

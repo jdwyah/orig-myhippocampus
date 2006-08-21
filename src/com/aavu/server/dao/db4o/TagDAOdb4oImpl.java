@@ -1,90 +1,122 @@
 package com.aavu.server.dao.db4o;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.db4ospring.support.Db4oDaoSupport;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.User;
 import com.aavu.server.dao.TagDAO;
-import com.aavu.server.domain.ServerSideUser;
-import com.db4o.Db4o;
+import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 
 public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
+	private static final Logger log = Logger.getLogger(TagDAOdb4oImpl.class);
 
-	
-	public List<Tag> getAllTags(ServerSideUser user) {
+	public List<Tag> getAllTags(User user) {
 		List<Tag> rtn = getDb4oTemplate().get(Tag.class);
-		
+
 		for(Tag tag : rtn){
 			tag.getMetas();
 		}
-		
+
 		return rtn;
 	}
 
-	public Tag getTag(ServerSideUser user,String tagName) {
+	/**
+	 * Get Tag, or null
+	 * 
+	 */
+	public Tag getTag(final User user,final String tagName) {
 
-		
-		
-		Query q = getDb4oTemplate().query();
-		q.constrain(Tag.class);
-		q.descend("name").constrain(tagName);
-		
-		Tag rtn = null;
-		
-		List<Tag> o = q.execute();
+		Tag rtn = (Tag) Db4oUtil.getUniqueResOrNull(getDb4oTemplate().query(new Predicate<Tag>() {
+			public boolean match(Tag tag) {			
+				return 
+				tag.isPublicVisible() || 
+				(user.equals(tag.getUser())
+						&&
+						tag.getName().toLowerCase().startsWith(tagName.toLowerCase()));
 
-		if(o.size() > 0){
-			rtn = (Tag) o.get(0);
+			}
+		}));
+
+		return rtn;
+	}
+
+	public void removeTag(User user,Tag selectedTag) {
+
+		if(selectedTag.getId() == 0){
+			log.error("Deleting unsaved tag: "+selectedTag.getName());
+			throw new RuntimeException("Deleting ");
+		}else{
+			getDb4oTemplate().bind(selectedTag, selectedTag.getId());
+			getDb4oTemplate().delete(selectedTag);
 		}
-		
-		getDb4oTemplate().query();
-		
-		return rtn;
+
 	}
 
-	public void removeTag(ServerSideUser user,String itemText) {
-		//TODO
-	}
-
-	public List<Tag> getTagsStarting(ServerSideUser user,String match) {
+	public List<Tag> getTagsStarting(User user,String match) {
 		Query q = getDb4oTemplate().query();
 		q.constrain(Tag.class);
 		q.descend("name").constrain(match).startsWith(false);
-		
+
 		List<Tag> rtn = q.execute();
-		
-		
+
+
 		return rtn;
 	}
 
-	public void save(ServerSideUser user,Tag tag) {
-	
-		System.out.println("Tag: " + tag.getName());
+	public void save(Tag tag) {
+
+		System.out.println("SAVE Tag: " + tag.getId()+" "+tag.getName());
 		System.out.println("metas: ");
 		for (Object meta : tag.getMetas()){
 			Meta metaCast = (Meta)meta;
 			System.out.println(metaCast+" "+metaCast.getName()+" "+metaCast.getId());
 		}
 
-		Db4o.configure().objectClass("com.aavu.client.domain.Tag").cascadeOnUpdate(true);
-		Db4o.configure().objectClass("com.aavu.client.domain.Tag").updateDepth(1);
-		
-		if(tag.getId() == 0){
-			getDb4oTemplate().set(tag);
-			long id = getDb4oTemplate().getID(tag);
-			System.out.println("tag save was 0, now "+id);				
-			tag.setId(id);
-			getDb4oTemplate().set(tag);			
-		}else{
-			getDb4oTemplate().bind(tag, tag.getId());
-			getDb4oTemplate().set(tag);
+		//now save metas
+		//Not done using the cascade above because that won't do the binding correctly.
+		//could replace with deleting all, then re-adding...
+		//cascade w/ bind? Stateless is an unfortunate bedfellow
+		//
+		for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
+			Meta m = (Meta) iter.next();
+			if(m.getId() == 0){
+				getDb4oTemplate().set(m);
+				long id = getDb4oTemplate().getID(m);
+				System.out.println("meta save was 0, now "+id);				
+				m.setId(id);	
+			}else{
+				getDb4oTemplate().bind(m, m.getId());	
+			}
+			getDb4oTemplate().set(m);
 		}
 		
 		
+		//Db4o.configure().objectClass("com.aavu.client.domain.Tag").cascadeOnUpdate(true);
+		//Db4o.configure().objectClass("com.aavu.client.domain.Tag").updateDepth(1);
+
+		//log.debug("save tag: "+tag.getId()+" "+tag+" "+tag.getMetas());
+		if(tag.getId() == 0){
+
+			getDb4oTemplate().set(tag);
+
+			long id = getDb4oTemplate().getID(tag);
+			System.out.println("tag save was 0, now "+id);				
+			tag.setId(id);						
+		}else{		
+			getDb4oTemplate().bind(tag, tag.getId());			
+		}
+		getDb4oTemplate().set(tag);
+
+		
+	
+
+
 	}
 
 }

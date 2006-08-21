@@ -3,14 +3,14 @@ package com.aavu.server.dao;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.server.dao.db4o.TopicDAOdb4oImpl;
-import com.aavu.server.domain.ServerSideUser;
 
 public class TopicDAOImplTest extends DAOTest {
 
 	private TopicDAO tDAO;
 
-	private ServerSideUser user = new ServerSideUser();
+	private User user = new User();
 	
 	protected void setUp() throws Exception {
 		super.setUp();

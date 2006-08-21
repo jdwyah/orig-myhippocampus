@@ -44,7 +44,7 @@ public class TopicList extends Composite {
 
 
 	public void load() {
-		topicService.getAllTopics(0,0,new StdAsyncCallback() {
+		topicService.getAllTopics(0,0,new StdAsyncCallback("topiclist load") {
 
 			public void onSuccess(Object result) {
 				panel.clear();

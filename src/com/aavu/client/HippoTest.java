@@ -86,10 +86,12 @@ public class HippoTest implements EntryPoint, TabListener  {
 		
 		
 		
-		userService.getCurrentUser(new StdAsyncCallback(){
+		userService.getCurrentUser(new StdAsyncCallback("getCurrentUser"){
 			public void onSuccess(Object result) {
 				user = (User) result;
-				System.out.println("found a user: "+user.getUsername());
+
+				if(user != null)
+				System.out.println("found a user: "+user.getUsername());				
 				loadGUI();
 			}			
 			

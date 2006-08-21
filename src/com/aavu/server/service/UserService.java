@@ -2,6 +2,7 @@ package com.aavu.server.service;
 
 import java.util.List;
 
+import com.aavu.client.domain.User;
 import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.exception.DuplicateUserException;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
@@ -12,13 +13,13 @@ public interface UserService {
 
 	boolean isUnique(CreateUserRequestCommand comm);
 
-	List<ServerSideUser> getAllUsers();
+	List<User> getAllUsers();
 
 	void toggleEnabled(Integer id);
 
 	void toggleSupervisor(Integer id);
 
-	ServerSideUser getCurrentUser();
+	User getCurrentUser();
 	
 	void delete(Integer id);
 
