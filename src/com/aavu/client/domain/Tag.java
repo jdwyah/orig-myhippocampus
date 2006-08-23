@@ -23,7 +23,7 @@ public class Tag  extends AbstractTag implements IsSerializable{
 		rtn.append("metas: \n");
 		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			rtn.append(" meta: "+element.getName()+" "+element.getType()+"\n");
+			rtn.append(" meta: "+element.getId()+" "+element.getName()+" "+element.getType()+"\n");
 		}
 		
 		return rtn.toString();

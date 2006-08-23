@@ -149,15 +149,14 @@ public class TopicDetail extends Composite implements ClickListener{
 		topicTitlePanel.clear();
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(titleEcho);
-		topicTitlePanel.add(new Label(" Updated: "+formatDate(topic.getLastUpdated())));
+		topicTitlePanel.add(new Label("Updated: "+formatDate(topic.getLastUpdated())));
 	
 		
 		panel.clear();
-		panel.add(topicTitlePanel);
-
-		panel.add(tagBoard);
-		
-		panel.add(textPanel);
+//		panel.add(topicTitlePanel);
+//		panel.add(tagBoard);		
+//		panel.add(textPanel);
+		panel.add( new TopicWidget(topic));
 				
 		panel.add(buttonPanel);
 	}

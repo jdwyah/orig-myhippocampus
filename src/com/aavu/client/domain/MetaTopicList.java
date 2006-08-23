@@ -14,10 +14,10 @@ public class MetaTopicList extends Meta{
 	}
 	
 	//@Override
-	public Widget getEditorWidget(boolean editable) {
-		
-		System.out.println("UNUSED, right?");
-		return null;
+	public Widget getEditorWidget() {
+		MetaTopicListWidget widget = new MetaTopicListWidget();
+		widget.setName(getName());
+		return widget;		
 	}
 
 	//@Override
@@ -26,7 +26,7 @@ public class MetaTopicList extends Meta{
 	}
 
 	//@Override
-	public Widget getWidget(boolean editable) {
+	public Widget getWidget() {
 		MetaTopicListWidget widget = new MetaTopicListWidget();
 		widget.setName(getName());
 		return widget;

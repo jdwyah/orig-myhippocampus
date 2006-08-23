@@ -18,30 +18,27 @@ public class MetaText extends Meta {
 	public MetaText(){
 		this("");
 	}
-	
+
 	public MetaText(String value){
 		this.value = value;
 	}
-	
-	public Widget getWidget(boolean editable) {
-		//HorizontalPanel widget = new HorizontalPanel();
-		//Label label = new Label(name);
 
-		//Make this auto complete
-		TextBox valueTextBox = new TextBox();
-		valueTextBox.setText(value);
-		//keep track of value as user changes it
-		valueTextBox.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender){
-				transientValue = ((TextBox)sender).getText();
-			}
-		});
+	public Widget getWidget() {
+		HorizontalPanel widget = new HorizontalPanel();
 
-		//widget.add(label);
-		//widget.add(valueTextBox);	
-		return valueTextBox;
+		Label metaName = new Label(getName());
+
+		metaName.setWidth("5em");
+
+		Label metaType = new Label(TYPE);  
+		metaType.setWidth("5em");
+
+		widget.add(metaName);
+		widget.add(metaType);
+
+		return widget;
 	}
-	
+
 	/**
 	 * Saves text from textbox widget as current value
 	 */
@@ -49,38 +46,14 @@ public class MetaText extends Meta {
 		this.value = this.transientValue;
 	}
 
-	public Widget getEditorWidget(boolean editable) {
+	public Widget getEditorWidget() {
+		
 		HorizontalPanel widget = new HorizontalPanel();
 
-		if (editable){
-			TextBox metaName = new TextBox();
-			metaName.setText(this.getName());
-			metaName.addChangeListener(new ChangeListener(){
-				public void onChange(Widget sender){
-					setName(((TextBox)sender).getText());
-				}
-			});
-
-			MetaListBox metaType = new MetaListBox();
-			
-			TagLocalService tls = new TagLocalService();
-			
-			metaType.addItems(tls.getAllMetaTypes());
-
-			widget.add(metaName);
-			widget.add(metaType);
-		}
-		else{
-			Label metaName = new Label(getName());
-			metaName.setWidth("5em");
-			Label metaType = new Label(TYPE);  //this.type.getName()
-			metaType.setWidth("5em");
-
-			widget.add(metaName);
-			widget.add(metaType);
-		}
-
-		//widget.add(editButton);
+		TextBox textBox = new TextBox();
+		
+		widget.add(new Label(getName()));
+		widget.add(textBox);
 
 		return widget;
 	}
@@ -96,14 +69,14 @@ public class MetaText extends Meta {
 
 	//@Override
 	public boolean equals(Object other) {
-		 {
-	         if ( (this == other ) ) return true;
-			 if ( (other == null ) ) return false;
-			 if ( !(other instanceof MetaText) ) return false;
-			 MetaText castOther = ( MetaText ) other; 
-	         
-			 return ( (this.value==castOther.value) || ( this.value!=null && castOther.value!=null && this.value.equals(castOther.value) ) );
-	   }
+		{
+			if ( (this == other ) ) return true;
+			if ( (other == null ) ) return false;
+			if ( !(other instanceof MetaText) ) return false;
+			MetaText castOther = ( MetaText ) other; 
+
+			return ( (this.value==castOther.value) || ( this.value!=null && castOther.value!=null && this.value.equals(castOther.value) ) );
+		}
 	}
 
 

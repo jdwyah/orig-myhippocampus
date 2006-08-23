@@ -16,8 +16,8 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class Meta extends AbstractMeta implements IsSerializable{
 
      
-     public abstract Widget getEditorWidget(boolean editable); 
-     public abstract Widget getWidget(boolean editable);
+     public abstract Widget getEditorWidget(); 
+     public abstract Widget getWidget();
      public abstract String getType();
      
    

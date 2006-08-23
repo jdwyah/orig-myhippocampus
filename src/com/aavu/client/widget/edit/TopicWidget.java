@@ -49,7 +49,7 @@ public class TopicWidget extends Composite {
 
 		load(topic);
 		
-		setWidget(panel);
+		initWidget(panel);
 	}	
 	
 	public void load(Topic topic){
@@ -94,7 +94,7 @@ public class TopicWidget extends Composite {
 		List metas = tag.getMetas();
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			tagPanel.add(element.getWidget(true));
+			tagPanel.add(element.getWidget());
 		}
 	}
 

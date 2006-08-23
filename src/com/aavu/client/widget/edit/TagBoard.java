@@ -12,6 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -50,7 +51,10 @@ public class TagBoard extends Composite {
 		VerticalPanel mainPanel = new VerticalPanel();
 		
 		
-		mainPanel.add(tagBox);
+		HorizontalPanel tagBoxP = new HorizontalPanel();
+		tagBoxP.add(new Label("Add tag: "));
+		tagBoxP.add(tagBox);
+		mainPanel.add(tagBoxP);
 		mainPanel.add(tagPanel);
 		
 		
@@ -105,7 +109,7 @@ public class TagBoard extends Composite {
 
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			tagPanel.add(element.getWidget(true));
+			tagPanel.add(element.getEditorWidget());
 		}
 
 	}
