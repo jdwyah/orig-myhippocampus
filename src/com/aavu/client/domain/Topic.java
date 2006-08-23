@@ -4,6 +4,7 @@ package com.aavu.client.domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +18,47 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Topic extends AbstractTopic implements IsSerializable{
 
-	
+
 
 	public String toString(){
 		return getTitle()+" "+getText();
+	}
+
+	public Object toPrettyString() {
+		try{
+			StringBuffer tagsStr = new StringBuffer();
+			for (Iterator iter = getTags().iterator(); iter.hasNext();) {
+				Tag element = (Tag) iter.next();
+				tagsStr.append("Tag: ");
+				tagsStr.append(element.getId()+" "+element.getName());
+				tagsStr.append("\n");
+				for (Iterator iterator = element.getMetas().iterator(); iterator.hasNext();) {
+					Meta meta = (Meta) iterator.next();
+					tagsStr.append("Meta: "+meta.getId()+" "+meta.getName());
+					tagsStr.append("\n");
+				}
+			}
+
+			StringBuffer metaVStr = new StringBuffer();
+			metaVStr.append("Map:\n");
+			for (Iterator iter = getMetaValues().keySet().iterator(); iter.hasNext();) {
+				Meta meta = (Meta) iter.next();
+				MetaValue mv = (MetaValue) getMetaValues().get(meta);
+				if(mv != null){
+					metaVStr.append(meta.getId()+" "+meta.getName()+" -> "+mv.getId()+" "+mv.getValue()+"\n");
+				}else{
+					metaVStr.append(meta.getId()+" "+meta.getName()+" -> null\n");
+				}
+			}
+
+			return "ID "+getId()+" title "+getTitle()+"\n"+
+			" "+tagsStr+"\n"+
+			" "+metaVStr;
+		}catch(Exception e){
+			System.out.println(e);
+			e.printStackTrace();
+			return "Topic Pretty Errored";
+		}
 	}
 
 

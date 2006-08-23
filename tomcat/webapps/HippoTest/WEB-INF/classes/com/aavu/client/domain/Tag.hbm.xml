@@ -20,7 +20,7 @@
 			<meta attribute="field-description">Shared?</meta>
 		</property>
 
-		<list name="metas" inverse="true" lazy="false">
+		<list name="metas" lazy="false" cascade="all">		
 			<key column="tag_id" />
 			<list-index column="meta_list_index"/>
 			<one-to-many class="Meta" />

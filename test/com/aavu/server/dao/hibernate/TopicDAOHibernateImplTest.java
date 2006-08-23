@@ -2,15 +2,17 @@ package com.aavu.server.dao.hibernate;
 
 import java.util.List;
 
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
 
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	private TopicDAO topicDAO;
-
+	private TagDAO tagDAO;
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
@@ -70,7 +72,54 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 	public void testSave() {
-		fail("Not yet implemented");
+		String B = "Ssds45t";
+		String C = "ASR#35rf";
+		
+		User u = userDAO.getUserByUsername("vpech");
+
+				
+		Topic t = new Topic();
+		t.setText(B);
+		t.setTitle(C);
+		t.setUser(u);
+		
+		
+		
+		
+		Tag tag = new Tag();
+		tag.setName("testtagAAA");
+		
+		tagDAO.save(tag);
+		
+		t.getTags().add(tag);
+		
+		System.out.println("before: "+t.getId());
+		
+		topicDAO.save(t);
+		
+		System.out.println("after: "+t.getId());
+		
+		List<Topic> savedL = topicDAO.getAllTopics(u);
+		
+		System.out.println("A");
+		
+		assertEquals(1, savedL.size());
+		
+		System.out.println("B");
+		
+		Topic saved = savedL.get(0);
+		
+		System.out.println("C");
+		
+		System.out.println(saved.toPrettyString());
+		
+		//t.setTags(tags);
+		
+		
+	}
+
+	public void setTagDAO(TagDAO tagDAO) {
+		this.tagDAO = tagDAO;
 	}
 
 }

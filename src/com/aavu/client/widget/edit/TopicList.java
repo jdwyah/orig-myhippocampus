@@ -39,7 +39,7 @@ public class TopicList extends Composite {
 //		mainPanel.add(addNew);
 
 		mainPanel.add(panel);
-		setWidget(mainPanel);
+		initWidget(mainPanel);
 	}
 
 

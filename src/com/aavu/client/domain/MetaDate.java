@@ -21,7 +21,7 @@ public class MetaDate extends Meta {
 		return TYPE;
 	}
 
-	public Widget getWidget(boolean editable) {
+	public Widget getWidget() {
 		DatePicker datePicker = new SimpleDatePicker("mydate");
 	    
 	    // Set whether or not you want the weekends selectable
@@ -39,6 +39,19 @@ public class MetaDate extends Meta {
 		return datePicker;
 	}
 	
+	//@Override
+	public Widget getWidget(boolean editable) {
+
+		HorizontalPanel widget = new HorizontalPanel();
+		Label label = new Label(getName());
+
+		//Maybe make this meta auto complete later on
+		CalendarPanel calendar = new CalendarPanel();
+				
+		widget.add(label);
+		widget.add(calendar);	
+		return widget;
+	}
 
 	//@Override
 	public Widget getEditorWidget(boolean editable) {

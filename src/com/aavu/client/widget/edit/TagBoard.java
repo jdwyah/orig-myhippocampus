@@ -92,6 +92,7 @@ public class TagBoard extends Composite {
 	public void load(List list){
 		
 		tagPanel.clear();
+		tags.clear();
 		
 		for (Iterator iter = list.iterator(); iter.hasNext();) {
 			Tag tag = (Tag) iter.next();

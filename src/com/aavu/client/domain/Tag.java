@@ -1,6 +1,8 @@
 package com.aavu.client.domain;
 // Generated Jul 18, 2006 12:44:47 PM by Hibernate Tools 3.1.0.beta4
 
+import java.util.Iterator;
+
 import com.aavu.client.domain.generated.AbstractTag;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -12,6 +14,20 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 
 public class Tag  extends AbstractTag implements IsSerializable{
+
+	public String toPrettyString() {
+		StringBuffer rtn = new StringBuffer("Tag:\n");
+		
+		rtn.append("ID "+getId()+" name "+getName()+"\n");
+		
+		rtn.append("metas: \n");
+		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
+			Meta element = (Meta) iter.next();
+			rtn.append(" meta: "+element.getName()+" "+element.getType()+"\n");
+		}
+		
+		return rtn.toString();
+	}
 
 
 

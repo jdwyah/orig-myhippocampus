@@ -5,7 +5,6 @@
 <beans>
 
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
-		<property name="setByDI" value="I WAS SET" />
 		<property name="topicService" ref="topicService"/>
 	</bean>
 	<bean id="GWTTagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl">

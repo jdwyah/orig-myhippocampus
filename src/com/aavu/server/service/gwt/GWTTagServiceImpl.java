@@ -76,6 +76,9 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 
 	public void saveTag(Tag selectedTag) {
 		try{
+			log.debug("saving tag:");
+			log.debug(selectedTag.toPrettyString());
+			
 			tagService.save(selectedTag);
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);

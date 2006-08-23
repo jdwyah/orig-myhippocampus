@@ -26,10 +26,12 @@
 			<column name="lastUpdated" sql-type="timestamp" />
 		</property>
 
-		<list name="tags" lazy="false">
+		<list name="tags" lazy="false" table="Topics_tags">
 			<key column="topic_id" />
+			
 			<list-index column="tag_list_index"/>
-			<one-to-many class="com.aavu.client.domain.Tag" />
+			<many-to-many column="tag_id" class="com.aavu.client.domain.Tag" ></many-to-many>
+<!-- 			<one-to-many class="com.aavu.client.domain.Tag" />-->
 		</list>
 
 		
@@ -55,7 +57,8 @@
 			<many-to-many column="topic_to" class="Topic" fetch="join" />
 		</idbag>-->
 
-		<map name="metaValues" table="topicMetaValues" lazy="false">
+		<map name="metaValues" 
+        table="topicMetaValues" lazy="false">
 		    <key column="id" not-null="true"/>
 			<map-key-many-to-many column="meta_id" class="com.aavu.client.domain.Meta"/>
 		    <one-to-many class="com.aavu.client.domain.MetaValue"/>		    

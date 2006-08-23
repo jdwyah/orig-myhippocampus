@@ -32,7 +32,7 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 
 
 	public Tag getTagAddIfNew(String tagName) {
-		log.debug("tag: "+tagName);
+		log.debug("load tag named: "+tagName);
 		
 		Tag rt = tagDAO.getTag(userService.getCurrentUser(),tagName);
 		if(null == rt){
@@ -46,7 +46,8 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 			log.debug("created: "+t.getId());
 			return t;
 		}else{
-			log.debug("existed "+rt.getId());
+			log.debug("existed "+rt.getId()+"\n"+rt.toPrettyString());
+			
 			return rt;
 		}
 	}

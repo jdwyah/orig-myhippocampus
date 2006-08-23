@@ -1,0 +1,8 @@
+<decorators defaultdir="/decorators">
+    <decorator name="default" page="default.ftl">
+        <pattern>/*</pattern>
+    </decorator>
+    <excludes>
+     <pattern>/*encrypt*</pattern>
+    </excludes>
+</decorators>
