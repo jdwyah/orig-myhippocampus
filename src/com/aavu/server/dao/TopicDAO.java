@@ -2,13 +2,14 @@ package com.aavu.server.dao;
 
 import java.util.List;
 
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 
 public interface TopicDAO {
 
 	public abstract void save(Topic t);
-
+	
 	public abstract List<Topic> getAllTopics(User user);
 
 	public abstract List<Topic> getTopicsStarting(User user,String match);

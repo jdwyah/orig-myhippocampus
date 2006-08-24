@@ -23,7 +23,7 @@
 			<list>
 				<value>com/aavu/client/domain/Topic.hbm.xml</value>
 				<value>com/aavu/client/domain/User.hbm.xml</value>
-				<value>com/aavu/client/domain/MetaValue.hbm.xml</value>
+<!-- 				<value>com/aavu/client/domain/MetaValue.hbm.xml</value>-->
 				<value>com/aavu/client/domain/Meta.hbm.xml</value>				
 				<value>com/aavu/client/domain/Tag.hbm.xml</value>
 			</list>

@@ -2,11 +2,14 @@ package com.aavu.client.widget.edit;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -23,11 +26,14 @@ public class TagBoard extends Composite {
 	private Button addTagButton = new Button("Add");
 	//private TextBox tagBox = new TextBox();
 	private TagAutoCompleteBox tagBox = null;
-	private List tags = new ArrayList();
+	
+	
+//	private List tags = new ArrayList();
+//	private Map metaMap = new HashMap();
 
 	private GWTTagServiceAsync tagService;
-
-
+	private Topic cur_topic;
+	
 	public void setTagService(GWTTagServiceAsync tagService) {
 		this.tagService = tagService;
 	}
@@ -83,25 +89,45 @@ public class TagBoard extends Composite {
 
 	}
 
-	private void addTag(final Tag tag) {
-		String name = tag.getName();
-		Label tagLabel = new Label(name);
-		//Hyperlink link = new Hyperlink(name, name);
-		tagPanel.add(tagLabel);
-		tagLabel.setStyleName("ta-tagboard-TagLabel");
-		tags.add(tag);
-		displayMetas(tag);
-	}
-
-	public void load(List list){
+	
+	/**
+	 * load the topic into the GUI 
+	 * 
+	 * @param topic
+	 */
+	public void load(Topic topic){
 		
 		tagPanel.clear();
-		tags.clear();
 		
-		for (Iterator iter = list.iterator(); iter.hasNext();) {
+		cur_topic = topic;
+		
+//		tags.clear();
+//		
+//		metaMap.clear();
+//		
+		
+		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag tag = (Tag) iter.next();
-			addTag(tag);
+			showTag(tag);
 		}		
+	}
+	
+	private void showTag(final Tag tag){
+		String name = tag.getName();
+		Label tagLabel = new Label(name);
+		
+		//Hyperlink link = new Hyperlink(name, name);
+		tagPanel.add(tagLabel);
+		tagLabel.setStyleName("ta-tagboard-TagLabel");		
+		
+		displayMetas(tag);
+	}
+	
+	
+	private void addTag(final Tag tag) {
+		
+		cur_topic.getTags().add(tag);		
+		showTag(tag);
 	}
 	
 	private void displayMetas(Tag tag) {
@@ -109,13 +135,9 @@ public class TagBoard extends Composite {
 
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			tagPanel.add(element.getEditorWidget());
+			tagPanel.add(element.getEditorWidget(cur_topic.getMetaValueStrs()));
 		}
 
-	}
-
-	public List getTags() {
-		return tags;
-	}
+	}	
 
 }

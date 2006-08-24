@@ -1,5 +1,7 @@
 package com.aavu.client.domain;
 
+import java.util.Map;
+
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.widget.tags.MetaListBox;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -14,6 +16,7 @@ public class MetaText extends Meta {
 	private String value;
 	private String transientValue; //as widget changes, only this updates
 	//private TextBox valueTextBox;  <-- not serializable
+	private Map metaMap;
 
 	public MetaText(){
 		this("");
@@ -23,18 +26,24 @@ public class MetaText extends Meta {
 		this.value = value;
 	}
 
-	public Widget getWidget() {
+	public Widget getWidget(Map mmp) {
 		HorizontalPanel widget = new HorizontalPanel();
 
 		Label metaName = new Label(getName());
 
 		metaName.setWidth("5em");
 
-		Label metaType = new Label(TYPE);  
-		metaType.setWidth("5em");
+		
+		Label metaValue = new Label(null);  
+		Object mv = mmp.get(toMapIdx());
+		if(mv != null){
+			metaValue.setText(mv.toString());
+		}
+		
+		metaValue.setWidth("5em");
 
 		widget.add(metaName);
-		widget.add(metaType);
+		widget.add(metaValue);
 
 		return widget;
 	}
@@ -46,11 +55,25 @@ public class MetaText extends Meta {
 		this.value = this.transientValue;
 	}
 
-	public Widget getEditorWidget() {
+	public Widget getEditorWidget(Map mmp) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 
+		this.metaMap = mmp;
+		
+		
 		TextBox textBox = new TextBox();
+		
+		String mv = (String)mmp.get(this);
+		if(mv != null){
+			textBox.setText(mv);		    	
+		}
+		textBox.addChangeListener(new ChangeListener(){
+			public void onChange(Widget sender) {				
+				TextBox t = (TextBox) sender;
+				
+				metaMap.put(toMapIdx(), t.getText());
+			}});
 		
 		widget.add(new Label(getName()));
 		widget.add(textBox);

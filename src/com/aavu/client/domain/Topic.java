@@ -41,13 +41,13 @@ public class Topic extends AbstractTopic implements IsSerializable{
 
 			StringBuffer metaVStr = new StringBuffer();
 			metaVStr.append("Map:\n");
-			for (Iterator iter = getMetaValues().keySet().iterator(); iter.hasNext();) {
-				Meta meta = (Meta) iter.next();
-				MetaValue mv = (MetaValue) getMetaValues().get(meta);
+			for (Iterator iter = getMetaValueStrs().keySet().iterator(); iter.hasNext();) {
+				String metaStr = (String) iter.next();
+				String mv = (String) getMetaValueStrs().get(metaStr);
 				if(mv != null){
-					metaVStr.append(meta.getId()+" "+meta.getName()+" -> "+mv.getId()+" "+mv.getValue()+"\n");
+					metaVStr.append(metaStr+" -> "+mv+"\n");
 				}else{
-					metaVStr.append(meta.getId()+" "+meta.getName()+" -> null\n");
+					metaVStr.append(metaStr+" "+" -> null\n");
 				}
 			}
 

@@ -1,5 +1,5 @@
 package com.aavu.client.domain.generated;
-// Generated Aug 23, 2006 3:06:00 PM by Hibernate Tools 3.1.0.beta4
+// Generated Aug 24, 2006 9:19:32 AM by Hibernate Tools 3.1.0.beta4
 
 import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;

@@ -121,7 +121,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		//buttonPanel.add(editTextButton);
 		//buttonPanel.add(saveButton);
 
-		setWidget(panel);
+		initWidget(panel);
 	}
 
 

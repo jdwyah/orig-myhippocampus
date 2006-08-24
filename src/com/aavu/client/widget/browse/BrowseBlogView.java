@@ -114,7 +114,7 @@ public class BrowseBlogView extends Composite{
 			hp.add(leftB);
 			hp.add(rightB);
 
-			setWidget(hp);
+			initWidget(hp);
 		}
 	}
 

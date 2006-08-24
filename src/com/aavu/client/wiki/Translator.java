@@ -12,6 +12,10 @@ public class Translator {
 
 	public static String toHTML(String text) {
 
+		if(text == null){
+			text = "";
+		}
+		
 		String rtn = text.replaceAll("###(.*)###", "<h1>$1</h1>");
 		String rtn1 = rtn.replaceAll("##(.*)##", "<h2>$1</h2>");
 		String rtn2 = rtn1.replaceAll("#(.*)#", "<h3>$1</h3>");

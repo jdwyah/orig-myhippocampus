@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.gwtwidgets.server.rpc.GWTSpringController;
 
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaValue;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.GWTTopicService;
@@ -35,13 +34,27 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 				log.debug("rtn");
 				ok(topic);
 				ok(topic.getLastUpdated());
-				ok(topic.getMetaValues());
-				
-				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
-					Meta element = (Meta) iter.next();
-					ok(element);
-					ok(topic.getMetaValues().get(element));
-				}
+//				ok(topic.getMetaValues());
+//				
+//				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
+//					Meta element = (Meta) iter.next();
+//					log.debug("--------------------");
+//					ok(element);
+//					log.debug(element.getName());
+//					log.debug(element.getClass());
+//					topic.getMetaValues().put(element, topic.getMetaValues().get(element));					
+//					log.debug("--------------------");
+//					ok(topic.getMetaValues().get(element));
+//				}
+//				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
+//					Meta element = (Meta) iter.next();
+//					log.debug("-------2222---------");
+//					ok(element);
+//					log.debug(element.getName());
+//					log.debug(element.getClass());					
+//					log.debug("-------2222------");
+//					ok(topic.getMetaValues().get(element));
+//				}
 				for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 					Tag element = (Tag) iter.next();
 					if(element != null){
@@ -163,14 +176,30 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		t.setTags(nTags);
 		
 		log.debug("t "+t.getTags().getClass());		
-		log.debug("t "+t.getMetaValues().getClass());
+		log.debug("t "+t.getMetaValueStrs().getClass());
 		
-		HashMap<Meta, MetaValue> nMap = new HashMap<Meta, MetaValue>();
-		nMap.putAll(t.getMetaValues());			
-		t.setMetaValues(nMap);
-		log.debug("t "+t.getMetaValues().getClass());	
+		log.debug("loop metas");
+//		HashMap<Meta, MetaValue> nMap = new HashMap<Meta, MetaValue>();
+		
+		HashMap<String, String> nMap = new HashMap<String, String>();
+		
+		//nMap.putAll(t.getMetaValues());					
+		
+//		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
+//			Meta element = (Meta) iter.next();
+//			log.debug(element.getName());
+//			nMap.put(element, (String) t.getMetaValues().get(element));
+//		}
+		for (Iterator iter = t.getMetaValueStrs().keySet().iterator(); iter.hasNext();) {
+			String element = (String) iter.next();
+			log.debug(element);
+			nMap.put(element, (String) t.getMetaValueStrs().get(element));
+		}
+		
+		t.setMetaValueStrs(nMap);
+		log.debug("t "+t.getMetaValueStrs().getClass());	
 				
-		log.debug("t "+t.getId()+" "+t.getUser());
+		log.debug("Finally: t "+t.getId()+" "+t.getUser());
 		return t;
 	}
 }

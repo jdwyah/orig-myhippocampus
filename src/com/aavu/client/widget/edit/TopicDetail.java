@@ -100,7 +100,7 @@ public class TopicDetail extends Composite implements ClickListener{
 			titleBox.setText(topic.getTitle());
 			textArea.setText(topic.getText());
 						
-			tagBoard.load(topic.getTags());
+			tagBoard.load(topic);
 		}
 	}
 
@@ -126,7 +126,9 @@ public class TopicDetail extends Composite implements ClickListener{
 //				System.out.println("save array |"+string+"|");
 //			}
 			
-			topic.setTags(tagBoard.getTags());
+			//topic.setTags(tagBoard.getTags());
+			
+//			/topic.getMetaValues()
 			
 			topicServiceA.save(topic,new StdAsyncCallback("topicDetail save") {				
 

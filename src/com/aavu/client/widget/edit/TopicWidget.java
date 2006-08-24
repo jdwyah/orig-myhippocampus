@@ -3,6 +3,7 @@ package com.aavu.client.widget.edit;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.gwtwidgets.client.wrap.Effect;
 
@@ -85,16 +86,16 @@ public class TopicWidget extends Composite {
 		VerticalPanel panel = new VerticalPanel();	
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag element = (Tag) iter.next();
-			displayMetas(element,panel);
+			displayMetas(element,t.getMetaValueStrs(),panel);
 		}		
 		return panel;
 	}
 	
-	private void displayMetas(Tag tag,VerticalPanel tagPanel) {
+	private void displayMetas(Tag tag,Map mmap,VerticalPanel tagPanel) {
 		List metas = tag.getMetas();
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			tagPanel.add(element.getWidget());
+			tagPanel.add(element.getWidget(mmap));
 		}
 	}
 

@@ -1,5 +1,7 @@
 package com.aavu.client.domain;
 
+import java.util.Map;
+
 import com.aavu.client.domain.generated.AbstractMeta;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -16,11 +18,13 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class Meta extends AbstractMeta implements IsSerializable{
 
      
-     public abstract Widget getEditorWidget(); 
-     public abstract Widget getWidget();
+     public abstract Widget getEditorWidget(Map map); 
+     public abstract Widget getWidget(Map mmp);
      public abstract String getType();
      
    
-   
+   public String toMapIdx(){
+	   return getId()+"";
+   }
 
 }

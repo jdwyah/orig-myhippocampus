@@ -1,5 +1,5 @@
 package com.aavu.client.domain.generated;
-// Generated Aug 23, 2006 3:06:00 PM by Hibernate Tools 3.1.0.beta4
+// Generated Aug 24, 2006 9:19:32 AM by Hibernate Tools 3.1.0.beta4
 
 import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -39,9 +39,9 @@ public abstract class AbstractTopic  implements java.io.Serializable, IsSerializ
       */
      private List tags = new ArrayList();
      /**
-      * @gwt.typeArgs <com.aavu.client.domain.Meta, com.aavu.client.domain.MetaValue> 
+      * @gwt.typeArgs <java.lang.String, java.lang.String> 
       */
-     private transient Map metaValues = new HashMap(0);
+     private Map metaValueStrs = new HashMap(0);
 
 
     // Constructors
@@ -52,13 +52,13 @@ public abstract class AbstractTopic  implements java.io.Serializable, IsSerializ
 
     
     /** full constructor */
-    public AbstractTopic(User user, String title, String text, Date lastUpdated, List tags, Map metaValues) {
+    public AbstractTopic(User user, String title, String text, Date lastUpdated, List tags, Map metaValueStrs) {
         this.user = user;
         this.title = title;
         this.text = text;
         this.lastUpdated = lastUpdated;
         this.tags = tags;
-        this.metaValues = metaValues;
+        this.metaValueStrs = metaValueStrs;
     }
     
 
@@ -122,12 +122,12 @@ public abstract class AbstractTopic  implements java.io.Serializable, IsSerializ
         this.tags = tags;
     }
 
-    public Map getMetaValues() {
-        return this.metaValues;
+    public Map getMetaValueStrs() {
+        return this.metaValueStrs;
     }
     
-    public void setMetaValues(Map metaValues) {
-        this.metaValues = metaValues;
+    public void setMetaValueStrs(Map metaValueStrs) {
+        this.metaValueStrs = metaValueStrs;
     }
    
 

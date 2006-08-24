@@ -1,7 +1,10 @@
 package com.aavu.server.dao.hibernate;
 
+import java.util.Iterator;
 import java.util.List;
 
+import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -52,7 +55,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 		
-		System.out.println("META: "+saved.getMetaValues().getClass());
+		System.out.println("META: "+saved.getMetaValueStrs().getClass());
 		System.out.println("TAGS: "+saved.getTags().getClass());
 		
 		
@@ -113,6 +116,70 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		System.out.println(saved.toPrettyString());
 		
+		//t.setTags(tags);
+		
+		
+	}
+	
+	public void testSaveComplexMetas() {
+		String B = "Ssds45t";
+		String C = "ASR#35rf";
+		
+		User u = userDAO.getUserByUsername("test");
+
+				
+		Topic t = new Topic();
+		t.setText(B);
+		t.setTitle(C);
+		t.setUser(u);
+		
+		
+		
+		
+		Tag tag = new Tag();
+		tag.setName("testtagAAA");
+				
+		
+		MetaText mt = new MetaText();
+		mt.setName(B);
+		tag.getMetas().add(mt);
+		
+		
+		tagDAO.save(tag);
+		
+		
+		t.getMetaValueStrs().put("3", "C");
+		
+		
+		t.getTags().add(tag);
+		
+		System.out.println("before: "+t.getId());
+		
+		topicDAO.save(t);
+		
+		System.out.println("after: "+t.getId());
+		
+		List<Topic> savedL = topicDAO.getAllTopics(u);
+		
+		System.out.println("A");
+		
+		//assertEquals(1, savedL.size());
+		
+		System.out.println("B");
+		
+		
+		for(Topic saved : savedL){
+		//Topic saved = savedL.get(0);
+		
+		System.out.println("C");
+		
+		for (Iterator iter = saved.getMetaValueStrs().keySet().iterator(); iter.hasNext();) {
+			String element = (String) iter.next();
+			System.out.println("elem "+element.getClass()+" "+element);
+		}
+		
+		System.out.println(saved.toPrettyString());
+		}
 		//t.setTags(tags);
 		
 		

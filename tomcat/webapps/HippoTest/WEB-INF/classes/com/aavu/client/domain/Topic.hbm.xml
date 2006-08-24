@@ -57,14 +57,32 @@
 			<many-to-many column="topic_to" class="Topic" fetch="join" />
 		</idbag>-->
 
-		<map name="metaValues" 
+		<map name="metaValueStrs" 
+        table="topicMetaValues" lazy="false">
+		    <key column="id" not-null="true"/>
+			<map-key column="meta_type" type="string"/>			
+			<element type="string" column="value"/>			
+		</map>
+
+
+<!--<map name="metaValues" 
         table="topicMetaValues" lazy="false">
 		    <key column="id" not-null="true"/>
 			<map-key-many-to-many column="meta_id" class="com.aavu.client.domain.Meta"/>
-		    <one-to-many class="com.aavu.client.domain.MetaValue"/>		    
+			
+			
+		 The below works for mapping to MetaValue... if only we could figure
+		our what a MetaValue really is 
+		<one-to-many class="com.aavu.client.domain.MetaValue"/>
 		</map>
 
-<!-- 
+
+
+
+
+
+
+--><!-- 
 		<list name="seeAlso" table="SeeAlso" cascade="all" lazy="false">
 			<key column="topic_from" />		
 			<list-index column="id"/>
@@ -74,15 +92,6 @@
 	
 
 
-
-		<!--		<bag name="seeAlso" table="Topics">-->
-<!--			<key column="topic_id" />-->
-<!--			<many-to-many class="Topic" column="topic_id" />-->
-<!--		</bag>-->
-<!--		<set name="seeAlso" inverse="true">-->
-<!--			<key column="topic_id" />-->
-<!--			<one-to-many class="Topic" />-->
-<!--		</set>-->
 
 	</class>
 
