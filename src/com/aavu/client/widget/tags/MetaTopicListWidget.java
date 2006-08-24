@@ -3,6 +3,7 @@ package com.aavu.client.widget.tags;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -12,7 +13,13 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaTopicListWidget extends Composite {
+/**
+ * must use it's save listener if you want it to update the map
+ * 
+ * @author Jeff Dwyer
+ *
+ */
+public class MetaTopicListWidget extends Composite implements SaveListener {
 	private static final String ADD_IMAGE = "images/plus-sign.jpg";
 	private static final String MINUS_IMAGE = "images/minus-sign.jpg";
 
@@ -22,21 +29,21 @@ public class MetaTopicListWidget extends Composite {
 
 	/**
 	 * This widget has a topic autocomplete for each thing
+	 * @param list 
 	 *
 	 */
-	public MetaTopicListWidget(){
+	public MetaTopicListWidget(MetaTopicList list){
+		
 		HorizontalPanel widget = new HorizontalPanel();
 		label = new Label();
 
 		listP = new VerticalPanel();
 
-
-
 		listP.add(new CompleteRow(true));
 
 		widget.add(listP);
 
-		setWidget(widget);
+		initWidget(widget);
 	}
 
 
@@ -94,7 +101,7 @@ public class MetaTopicListWidget extends Composite {
 				completeRow.add(remove);
 			}
 
-			setWidget(completeRow);
+			initWidget(completeRow);
 		}
 	
 		public String getTopicName(){

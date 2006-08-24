@@ -102,6 +102,15 @@ a:visited {
 }
 
 .gwt-TabPanel {
+	clear: both;
+	margin: 0em 0em 1.5em 0em;
+	border-top: solid 0.1em rgb(175,175,175);
+	border-bottom: solid 0.1em rgb(175,175,175);
+	background-color: rgb(235,235,235);	
+	text-transform: uppercase;
+	line-height: 2.0em;
+	height: 2.0em;
+	color: rgb(50,50,50);
 }
 
 .gwt-TabPanelBottom {
@@ -109,38 +118,46 @@ a:visited {
 }
 
 .gwt-TabBar {
-  background-color: #C3D9FF;
-  font-size: smaller;
+	margin: 0em;
+	padding: 0em;
+	list-style: none;
+	font-weight: bold;
+	font-size: 1.0em;
+	
 }
 
 .gwt-TabBar .gwt-TabBarFirst {
-  height: 100%;
-  border-bottom: 1px solid #87B3FF;
-  padding-left: 3px;
+	display: block;
+	padding: 0em 1.0em 0em 1.0em;
+	border-right: solid 0.1em rgb(175,175,175);	
+	background-color: rgb(235,235,235);	
+	text-decoration: none;
+	color: rgb(50,50,50);
 }
 
 .gwt-TabBar .gwt-TabBarRest {
-  border-bottom: 1px solid #87B3FF;
-  padding-right: 3px;
+	display: block;
+	padding: 0em 1.0em 0em 1.0em;
+	border-right: solid 0.1em rgb(175,175,175);	
+	background-color: rgb(235,235,235);	
+	text-decoration: none;
+	color: rgb(50,50,50);
 }
 
 .gwt-TabBar .gwt-TabBarItem {
-  border-top: 1px solid #C3D9FF;
-  border-bottom: 1px solid #87B3FF;
-  padding: 2px;
-  cursor: pointer;
-  cursor: hand;
+	display: block;
+	padding: 0em 1.0em 0em 1.0em;
+	border-right: solid 0.1em rgb(175,175,175);	
+	background-color: rgb(235,235,235);	
+	text-decoration: none;
+	color: rgb(50,50,50);
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
-  font-weight: bold;
-  background-color: #E8EEF7;
-  border-top: 1px solid #87B3FF;
-  border-left: 1px solid #87B3FF;
-  border-right: 1px solid #87B3FF;
-  border-bottom: 1px solid #E8EEF7;
-  padding: 2px;
-  cursor: default;
+	padding: 0em 0.5em 0em 0.5em;
+	border-right: solid 0.1em rgb(175,175,175);		
+	background-color: rgb(220,220,220);
+	color: rgb(50,50,50);
 }
 
 .gwt-TextArea {

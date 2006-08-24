@@ -143,14 +143,14 @@ public class HippoTest implements EntryPoint, TabListener  {
 
 		viewContainer = new TabPanel();
 		viewContainer.addTabListener(this);
-		viewContainer.setStyleName("ks-Sink");
+		//viewContainer.setStyleName("ks-Sink");
 
 		VerticalPanel vp = new VerticalPanel();
 		vp.setWidth("100%");
 		vp.add(description);
 		vp.add(viewContainer);	    
 
-		description.setStyleName("ks-Info");
+		//description.setStyleName("ks-Info");
 
 		panel.add(top, DockPanel.NORTH);
 
@@ -176,8 +176,8 @@ public class HippoTest implements EntryPoint, TabListener  {
 		
 		browseView = new BrowseView(topicService,tagService);
 		
-		viewContainer.add(browseView, "Browse");		
-		viewContainer.add(addEditView, "Add/Edit");
+		viewContainer.add(addEditView, "Main");
+		viewContainer.add(browseView, "Browse");				
 		viewContainer.add(tagView, "Tags");
 
 		viewContainer.selectTab(0);	

@@ -19,11 +19,11 @@ public class TopicList extends Composite {
 
 	private VerticalPanel panel = new VerticalPanel();
 
-	private TopicDetail topicDetail;
+	private TopicViewAndEditWidget topicViewAndEditWidget;
 
 
 
-	public TopicList(GWTTopicServiceAsync topicService,TopicDetail topicDetailI){
+	public TopicList(GWTTopicServiceAsync topicService,TopicViewAndEditWidget topicDetailI){
 		setTopicService(topicService);
 		setTopicDetail(topicDetailI);
 
@@ -55,7 +55,7 @@ public class TopicList extends Composite {
 					TopicLabel h = new TopicLabel(l[i]);
 					h.addClickListener(new ClickListener() {					
 						public void onClick(Widget sender) { 
-							topicDetail.load(((TopicLabel)sender).getT());
+							topicViewAndEditWidget.load(((TopicLabel)sender).getT());
 						}});
 					panel.add(h);
 
@@ -69,8 +69,8 @@ public class TopicList extends Composite {
 	public void setTopicService(GWTTopicServiceAsync topicService) {
 		this.topicService = topicService;
 	}
-	public void setTopicDetail(TopicDetail topicDetail) {
-		this.topicDetail = topicDetail;
+	public void setTopicDetail(TopicViewAndEditWidget topicViewAndEditWidget) {
+		this.topicViewAndEditWidget = topicViewAndEditWidget;
 	}
 
 }

@@ -17,7 +17,7 @@ public class AddEditView extends Composite {
 	private GWTTagServiceAsync tagService;
 
 	private TopicList topicList;
-	private TopicDetail topicDetail;
+	private TopicViewAndEditWidget topicViewAndEditWidget;
 	
 	private VerticalPanel topicPanel;
 
@@ -32,9 +32,9 @@ public class AddEditView extends Composite {
 		
 		
 		
-		topicDetail = new TopicDetail(topicService,tagService);		
-		topicList = new TopicList(topicService,topicDetail);
-		topicDetail.setTopicList(topicList);
+		topicViewAndEditWidget = new TopicViewAndEditWidget(topicService,tagService);		
+		topicList = new TopicList(topicService,topicViewAndEditWidget);
+		topicViewAndEditWidget.setTopicList(topicList);
 		
 		
 		
@@ -42,9 +42,9 @@ public class AddEditView extends Composite {
 		leftPanel.add(topicList);
 		
 		mainPanel.add(leftPanel);
-		mainPanel.add(topicDetail);
+		mainPanel.add(topicViewAndEditWidget);
 
-		setWidget(mainPanel);		
+		initWidget(mainPanel);		
 		load();
 	}
 
@@ -88,11 +88,11 @@ public class AddEditView extends Composite {
 				public void onClick(Widget sender) {
 					Topic t = new Topic();
 					t.setTitle(completer.getText());					
-					topicDetail.load(t);
+					topicViewAndEditWidget.load(t);
 				}});
 			
 			panel.add(addNew);			
-			setWidget(panel);
+			initWidget(panel);
 		}
 	}
 }

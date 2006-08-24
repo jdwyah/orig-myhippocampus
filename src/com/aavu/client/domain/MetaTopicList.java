@@ -5,7 +5,7 @@ import java.util.Map;
 import com.aavu.client.widget.tags.MetaTopicListWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaTopicList extends Meta{
+public class MetaTopicList extends Meta {
 
 	private static final String TYPE = "Topic List";
 	
@@ -17,7 +17,7 @@ public class MetaTopicList extends Meta{
 	
 	//@Override
 	public Widget getEditorWidget(Map metaMap) {
-		MetaTopicListWidget widget = new MetaTopicListWidget();
+		MetaTopicListWidget widget = new MetaTopicListWidget(this);
 		widget.setName(getName());
 		return widget;		
 	}
@@ -29,7 +29,7 @@ public class MetaTopicList extends Meta{
 
 	//@Override
 	public Widget getWidget(Map mmp) {
-		MetaTopicListWidget widget = new MetaTopicListWidget();
+		MetaTopicListWidget widget = new MetaTopicListWidget(this);
 		widget.setName(getName());
 		return widget;
 	}

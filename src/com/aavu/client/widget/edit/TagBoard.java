@@ -1,11 +1,8 @@
 package com.aavu.client.widget.edit;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
@@ -135,7 +132,9 @@ public class TagBoard extends Composite {
 
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			tagPanel.add(element.getEditorWidget(cur_topic.getMetaValueStrs()));
+			Widget w = element.getEditorWidget(cur_topic.getMetaValueStrs());
+			
+			tagPanel.add(w);
 		}
 
 	}	

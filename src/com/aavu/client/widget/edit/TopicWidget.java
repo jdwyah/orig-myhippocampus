@@ -86,6 +86,7 @@ public class TopicWidget extends Composite {
 		VerticalPanel panel = new VerticalPanel();	
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag element = (Tag) iter.next();
+			panel.add(new Label(element.getName()));
 			displayMetas(element,t.getMetaValueStrs(),panel);
 		}		
 		return panel;

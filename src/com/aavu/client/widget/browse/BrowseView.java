@@ -4,7 +4,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.edit.TopicCompleter;
-import com.aavu.client.widget.edit.TopicDetail;
+import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.aavu.client.widget.edit.TopicList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -24,7 +24,7 @@ public class BrowseView extends Composite {
 	private DockPanel mainView;
 	
 	private TopicList topicList;
-	private TopicDetail topicDetail;	
+	private TopicViewAndEditWidget topicViewAndEditWidget;	
 	private VerticalPanel topicPanel;
 
 	public BrowseView(GWTTopicServiceAsync topicService, GWTTagServiceAsync tagService) {
@@ -89,7 +89,7 @@ public class BrowseView extends Composite {
 				public void onClick(Widget sender) {
 					Topic t = new Topic();
 					t.setTitle(completer.getText());					
-					topicDetail.load(t);
+					topicViewAndEditWidget.load(t);
 				}});
 			
 			panel.add(addNew);			

@@ -7,16 +7,16 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TopicLink extends Label {
 
-	private TopicDetail topicDetail;
+	private TopicViewAndEditWidget topicViewAndEditWidget;
 	private Topic topic;
-	public TopicLink(Topic _topic,TopicDetail _topicDetail){
-		this.topicDetail = _topicDetail;
+	public TopicLink(Topic _topic,TopicViewAndEditWidget _topicDetail){
+		this.topicViewAndEditWidget = _topicDetail;
 		this.topic = _topic;
 		
 		addClickListener(new ClickListener(){
 
 			public void onClick(Widget sender) {
-				topicDetail.load(topic);				
+				topicViewAndEditWidget.load(topic);				
 			}});
 		
 		setText(topic.getTitle());
