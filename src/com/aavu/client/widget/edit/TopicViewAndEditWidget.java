@@ -35,6 +35,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	
 	public TopicViewAndEditWidget(GWTTopicServiceAsync topicServiceAsync, GWTTagServiceAsync tagServiceAsync){
 		this.topicServiceA = topicServiceAsync;
+		this.tagServiceAsync = tagServiceAsync;
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		

@@ -64,7 +64,7 @@ public class MetaText extends Meta {
 		
 		TextBox textBox = new TextBox();
 		
-		String mv = (String)mmp.get(this);
+		String mv = (String)mmp.get(toMapIdx());
 		if(mv != null){
 			textBox.setText(mv);		    	
 		}

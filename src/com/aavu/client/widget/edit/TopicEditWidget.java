@@ -29,7 +29,7 @@ public class TopicEditWidget extends Composite implements ClickListener {
 		this.topic = topic;
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 		
-		saveButton.addClickListener(this);
+		saveButton.addClickListener(this);		
 		
 		tagBoard = new TagBoard(tagServiceAsync);
 		
@@ -42,6 +42,7 @@ public class TopicEditWidget extends Composite implements ClickListener {
 		
 		panel.add(tagBoard);		
 		
+		//textArea.set
 		
 		panel.add(textArea);
 	

@@ -20,12 +20,12 @@ public class RemoteTAGAutoCompletionItems implements CompletionItems {
 
 	private GWTTagServiceAsync service;
 
-	public RemoteTAGAutoCompletionItems (String entryEndPoint) {
-		service = (GWTTagServiceAsync)
-		GWT.create(AutoCompletionService.class);
-		ServiceDefTarget endpoint = (ServiceDefTarget) service;
-		endpoint.setServiceEntryPoint(GWT.getModuleBaseURL() + entryEndPoint);
-	}
+//	public RemoteTAGAutoCompletionItems (String entryEndPoint) {
+//		service = (GWTTagServiceAsync)
+//		GWT.create(AutoCompletionService.class);
+//		ServiceDefTarget endpoint = (ServiceDefTarget) service;
+//		endpoint.setServiceEntryPoint(GWT.getModuleBaseURL() + entryEndPoint);
+//	}
 	
 	public RemoteTAGAutoCompletionItems(GWTTagServiceAsync service) {
 		this.service = service;
