@@ -26,11 +26,11 @@ public class AutoCompleteTextArea extends TextArea
 
     protected PopupPanel choicesPopup = new PopupPanel(true);
     protected ListBox choices = new ListBox();
-    protected CompletionItems items = new SimpleAutoCompletionItems(new String[]{});
+    protected CompletionItems items = new SimpleAutoCompletionItems(new Completable[]{});
     protected boolean popupAdded = false;
     protected String typedText = "";
     protected boolean visible = false;
-    protected String[] matches;
+    protected Completable[] matches;
 
     protected int posy = -1;
 	
@@ -125,7 +125,7 @@ public class AutoCompleteTextArea extends TextArea
 	    }
 		
 	String text = this.getText();
-	matches = new String[]{};
+	matches = new Completable[]{};
 		
 	String[] words = text.split(" |\n|\r");
 	text = words[words.length - 1];
@@ -139,7 +139,7 @@ public class AutoCompleteTextArea extends TextArea
     }
 		    
 
-    public void setMatches(String[] matches) {
+    public void setMatches(Completable[] matches) {
 	this.matches = matches;
     }
 
@@ -150,12 +150,12 @@ public class AutoCompleteTextArea extends TextArea
 	    choices.clear();
 	    
 	    for(int i = 0; i < matches.length; i++) {
-		choices.addItem((String) matches[i]);
+		choices.addItem(matches[i].getCompleteStr());
 	    }
 	    
 	    // if there is only one match and it is what is in the
 	    // text field anyways there is no need to show autocompletion
-	    if(matches.length == 1 && matches[0].compareTo(text) == 0) {
+	    if(matches.length == 1 && matches[0].getCompleteStr().compareTo(text) == 0) {
 		choicesPopup.hide();
 	    } else {
 		if(matches.length == 1){

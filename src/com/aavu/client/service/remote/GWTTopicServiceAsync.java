@@ -15,6 +15,7 @@ public interface GWTTopicServiceAsync {
 	
 	//void save(Topic topic, String[] seeAlsos, AsyncCallback callback);
 	void getBlogTopics(int start, int numberPerScreen, AsyncCallback callback);
+	void getTopicForName(String topicName, AsyncCallback callback);
 	
 	
 }

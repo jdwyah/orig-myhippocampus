@@ -19,12 +19,6 @@ public class RemoteTopicAutoCompletionItems implements CompletionItems {
 
 	private GWTTopicServiceAsync service;
 
-	public RemoteTopicAutoCompletionItems (String entryEndPoint) {
-		service = (GWTTopicServiceAsync)
-		GWT.create(AutoCompletionService.class);
-		ServiceDefTarget endpoint = (ServiceDefTarget) service;
-		endpoint.setServiceEntryPoint(GWT.getModuleBaseURL() + entryEndPoint);
-	}
 	
 	public RemoteTopicAutoCompletionItems(GWTTopicServiceAsync topicService) {
 		this.service = topicService;
@@ -39,7 +33,7 @@ public class RemoteTopicAutoCompletionItems implements CompletionItems {
 			}
 
 			public void onSuccess(Object result) {
-				widget.setMatches( (String[]) result);
+				widget.setMatches( (Completable[]) result);
 				widget.onMatch( match );
 			}
 

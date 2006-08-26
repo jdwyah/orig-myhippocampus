@@ -13,25 +13,24 @@ package com.aavu.client.widget.autocompletion;
 import java.util.ArrayList;
 
 public class SimpleAutoCompletionItems implements CompletionItems {
-  private String[] completions;
+  private Completable[] completions;
 
-  public SimpleAutoCompletionItems(String[] items)
+  public SimpleAutoCompletionItems(Completable[] items)
   {
     completions = items;
   }
 
-  public void getCompletionItems(String match, MatchesRequiring
-widget) {
+  public void getCompletionItems(String match, MatchesRequiring widget) {
     ArrayList matches = new ArrayList();
     for (int i = 0; i < completions.length; i++) {
-      if (completions[i].toLowerCase().startsWith(match.toLowerCase())) {
+      if (completions[i].getCompleteStr().toLowerCase().startsWith(match.toLowerCase())) {
         matches.add(completions[i]);
       }
     }
-    String[] returnMatches = new String[matches.size()];
+    Completable[] returnMatches = new Completable[matches.size()];
     for(int i = 0; i < matches.size(); i++)
     {
-      returnMatches[i] = (String)matches.get(i);
+      returnMatches[i] = (Completable) matches.get(i);
     }
     widget.setMatches(returnMatches);
     widget.onMatch( match ); 

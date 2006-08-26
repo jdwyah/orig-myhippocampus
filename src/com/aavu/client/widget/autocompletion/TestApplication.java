@@ -34,20 +34,7 @@ public class TestApplication implements EntryPoint {
 	//					     new String[]{ "\u0101n\u0101pana", "anatta", "apple", "ape", "anything", "else"}));
 
 	SimpleAutoCompletionItems items = new SimpleAutoCompletionItems(
-			new String[]{
-					"a",
-					"aa",
-					"aaa",
-					"aaaa",
-					"ab",
-					"abc",
-					"abcd",
-					"b",
-					"bb",
-					"bbb",
-					"bbbb",
-					"bc",
-					"bcd"
+			new Completable[]{
 			});
 	
 	//RemoteTopicAutoCompletionItems items = new RemoteTopicAutoCompletionItems("/completion");

@@ -32,7 +32,7 @@ MatchesRequiring, PopupListener {
 	protected CompletionItems items = null;
 	protected boolean popupAdded = false;
 	protected boolean visible = false;
-	protected String[] matches;
+	protected Completable[] matches;
 
 	/**
 	 * Default Constructor
@@ -151,7 +151,7 @@ MatchesRequiring, PopupListener {
 	public void process(){
 
 		String text = this.getText();
-		matches = new String[] {};
+		matches = new Completable[] {};
 		if (text.length() > 0) {
 			items.getCompletionItems(text, this);
 		} else {
@@ -160,7 +160,7 @@ MatchesRequiring, PopupListener {
 
 	}
 
-	public void setMatches(String[] matches) {
+	public void setMatches(Completable[] matches) {
 		this.matches = matches;
 	}
 
@@ -170,7 +170,7 @@ MatchesRequiring, PopupListener {
 			choices.clear();
 
 			for (int i = 0; i < matches.length; i++) {
-				choices.addItem((String) matches[i]);
+				choices.addItem(matches[i].getCompleteStr());
 			}
 
 			// if there is only one match and it is what is in the

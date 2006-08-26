@@ -1,13 +1,17 @@
 package com.aavu.client.widget.edit;
 
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
+import com.aavu.client.widget.tags.SaveListener;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -30,6 +34,7 @@ public class TagBoard extends Composite {
 
 	private GWTTagServiceAsync tagService;
 	private Topic cur_topic;
+	private Set listeners = new HashSet();
 	
 	public void setTagService(GWTTagServiceAsync tagService) {
 		this.tagService = tagService;
@@ -45,24 +50,16 @@ public class TagBoard extends Composite {
 				tagTopic(tagBox.getText());
 			}
 		});
-		/*HorizontalPanel addTagPanel = new HorizontalPanel();
-		addTagPanel.add(tagBox);
-		addTagPanel.add(addTagButton);
-
-		tagPanel.add(addTagPanel);*/
 
 		VerticalPanel mainPanel = new VerticalPanel();
-		
-		
+				
 		HorizontalPanel tagBoxP = new HorizontalPanel();
 		tagBoxP.add(new Label("Add tag: "));
 		tagBoxP.add(tagBox);
 		mainPanel.add(tagBoxP);
 		mainPanel.add(tagPanel);
-		
-		
-		initWidget(mainPanel);		
-		setStyleName("ta-tagboard");
+				
+		initWidget(mainPanel);				
 	}
 
 	public void tagTopic(final String tagName){
@@ -98,6 +95,8 @@ public class TagBoard extends Composite {
 		
 		cur_topic = topic;
 		
+		listeners.clear();
+		
 //		tags.clear();
 //		
 //		metaMap.clear();
@@ -132,11 +131,27 @@ public class TagBoard extends Composite {
 
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			Widget w = element.getEditorWidget(cur_topic.getMetaValueStrs());
-			
-			tagPanel.add(w);
+			GWT.log("displayMetas", null);
+			if(element.needsSaveCallback()){
+				GWT.log("needs callback", null);
+				SaveListener w = (SaveListener) element.getEditorWidget(cur_topic.getMetaValueStrs());
+				tagPanel.add(w);
+				listeners.add(w);
+			}else{
+				Widget w = element.getEditorWidget(cur_topic.getMetaValueStrs());
+				tagPanel.add(w);
+			}
 		}
 
+	}
+
+	public void saveThingsNowEvent() {
+		GWT.log("savethingsnowevent",null);
+		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+			GWT.log("listener ",null);
+			SaveListener listener = (SaveListener) iter.next();
+			listener.saveNowEvent();			
+		}
 	}	
 
 }

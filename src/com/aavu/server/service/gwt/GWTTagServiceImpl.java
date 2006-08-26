@@ -58,15 +58,12 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		tagService.removeTag(selectedTag);
 	}
 
-	public String[] match(String match) {
+	public Tag[] match(String match) {
 		try{
 			List<Tag> list = tagService.getTagsStarting(match);
-			String[] rtn = new String[list.size()];
-			int i=0;
-			for(Tag t : list){
-				rtn[i++] = t.getName();
-			}		
-			return rtn;			
+						
+			return convertAllTags(list);
+			
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -90,6 +87,14 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		this.tagService = tagService;
 	}
 
+	public Tag[] convertAllTags(List<Tag> tags){
+		Tag[] rtn = new Tag[tags.size()];
+		for (int i = 0; i < rtn.length; i++) {
+			rtn[i] = convert(tags.get(i));
+		}
+		return rtn;
+	}
+	
 	public static Tag convert(Tag t){		
 		ArrayList<Meta> nMetas = new ArrayList<Meta>();
 		nMetas.addAll(t.getMetas());

@@ -2,8 +2,10 @@ package com.aavu.client.widget.tags;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.aavu.client.domain.MetaTopicList;
+import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -19,31 +21,41 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class MetaTopicListWidget extends Composite implements SaveListener {
+public class MetaTopicListWidget extends SaveListener {
 	private static final String ADD_IMAGE = "images/plus-sign.jpg";
 	private static final String MINUS_IMAGE = "images/minus-sign.jpg";
 
-	private Label label;
-
 	private VerticalPanel listP;
+	private MetaTopicList metaTopicList;
 
 	/**
 	 * This widget has a topic autocomplete for each thing
 	 * @param list 
+	 * @param mmp 
 	 *
 	 */
 	public MetaTopicListWidget(MetaTopicList list){
+
+		this.metaTopicList = list;
 		
 		HorizontalPanel widget = new HorizontalPanel();
-		label = new Label();
 
+		
 		listP = new VerticalPanel();
 
-		listP.add(new CompleteRow(true));
+		load(list);
 
 		widget.add(listP);
 
 		initWidget(widget);
+	}
+
+
+	private void load(MetaTopicList list) {
+		listP.add(new CompleteRow(true));
+		
+		list.getVals();
+		
 	}
 
 
@@ -59,10 +71,7 @@ public class MetaTopicListWidget extends Composite implements SaveListener {
 		}		
 		return rtn;		
 	}
-	
-	public void setName(String name) {
-		label.setText(name);
-	}
+		
 	
 	/**
 	 * One row in the list
@@ -92,7 +101,7 @@ public class MetaTopicListWidget extends Composite implements SaveListener {
 				}});
 
 
-			completeRow.add(label);
+			completeRow.add(new Label(metaTopicList.getName()));
 			completeRow.add(completer);
 			completeRow.add(addAnother);
 
@@ -104,9 +113,18 @@ public class MetaTopicListWidget extends Composite implements SaveListener {
 			initWidget(completeRow);
 		}
 	
+		public void setText(String text){
+			completer.setText(text);
+		}
+		
 		public String getTopicName(){
 			return completer.getText();
 		}
+	}
+
+	public void saveNowEvent() {
+		System.out.println("save now!");		
+		metaTopicList.setVals(getTopicNames());	
 	}
 
 }

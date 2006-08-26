@@ -1,7 +1,9 @@
 package com.aavu.client;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.domain.User;
+import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicService;
@@ -51,6 +53,9 @@ public class HippoTest implements EntryPoint, TabListener  {
 	
 	private User user;
 	
+	private HippoCache hippoCache;
+	
+	
 	private void initServices(){
 		topicService = (GWTTopicServiceAsync) GWT.create(GWTTopicService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) topicService;
@@ -79,10 +84,17 @@ public class HippoTest implements EntryPoint, TabListener  {
 		endpointUser.setServiceEntryPoint(pre + "/userService");
 		
 		
+		
+		hippoCache = new HippoCache(topicService,tagService,userService);
+		
+		
+		
 		//static service setters.
 		//hopefully replace with Spring DI
 		//
 		TopicCompleter.setTopicService(topicService);
+		MetaTopicList.setCache(hippoCache);
+		
 		
 		
 		

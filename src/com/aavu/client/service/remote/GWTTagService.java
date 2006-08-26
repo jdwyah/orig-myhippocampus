@@ -11,7 +11,7 @@ public interface GWTTagService extends RemoteService {
 
 	Tag[] getAllTags();
 	
-	String[] match(String match);//List<String>
+	Tag[] match(String match);//List<String>
 	
 	void saveTag(Tag selectedTag);
 	

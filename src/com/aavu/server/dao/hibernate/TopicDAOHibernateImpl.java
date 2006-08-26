@@ -71,8 +71,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public List<Topic> getTopicsStarting(User user, String match) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)		
 		.add(Expression.eq("user", user))
-		.add(Expression.ilike("title", match, MatchMode.ANYWHERE));
-		
+		.add(Expression.ilike("title", match, MatchMode.ANYWHERE))
+		.addOrder( Order.asc("title") )
+		.setFetchMode("user", FetchMode.JOIN);
+				
 		return getHibernateTemplate().findByCriteria(crit);
 	}
 

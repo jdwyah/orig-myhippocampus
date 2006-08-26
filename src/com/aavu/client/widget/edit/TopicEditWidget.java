@@ -67,6 +67,8 @@ public class TopicEditWidget extends Composite implements ClickListener {
 			
 			topic.setText(textArea.getText());
 			topic.setTitle(titleBox.getText());
+			
+			tagBoard.saveThingsNowEvent();
 					
 			topicViewAndEditWidget.save(topic);			
 		}

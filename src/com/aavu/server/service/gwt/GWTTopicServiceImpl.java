@@ -16,9 +16,9 @@ import com.aavu.server.service.TopicService;
 
 
 public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopicService {
-	
+
 	private static final Logger log = Logger.getLogger(GWTTopicServiceImpl.class);
-	
+
 	private TopicService topicService ;
 
 	public void setTopicService(TopicService topicService) {
@@ -35,25 +35,25 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 				ok(topic);
 				ok(topic.getLastUpdated());
 //				ok(topic.getMetaValues());
-//				
+
 //				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//					Meta element = (Meta) iter.next();
-//					log.debug("--------------------");
-//					ok(element);
-//					log.debug(element.getName());
-//					log.debug(element.getClass());
-//					topic.getMetaValues().put(element, topic.getMetaValues().get(element));					
-//					log.debug("--------------------");
-//					ok(topic.getMetaValues().get(element));
+//				Meta element = (Meta) iter.next();
+//				log.debug("--------------------");
+//				ok(element);
+//				log.debug(element.getName());
+//				log.debug(element.getClass());
+//				topic.getMetaValues().put(element, topic.getMetaValues().get(element));					
+//				log.debug("--------------------");
+//				ok(topic.getMetaValues().get(element));
 //				}
 //				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//					Meta element = (Meta) iter.next();
-//					log.debug("-------2222---------");
-//					ok(element);
-//					log.debug(element.getName());
-//					log.debug(element.getClass());					
-//					log.debug("-------2222------");
-//					ok(topic.getMetaValues().get(element));
+//				Meta element = (Meta) iter.next();
+//				log.debug("-------2222---------");
+//				ok(element);
+//				log.debug(element.getName());
+//				log.debug(element.getClass());					
+//				log.debug("-------2222------");
+//				ok(topic.getMetaValues().get(element));
 //				}
 				for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 					Tag element = (Tag) iter.next();
@@ -88,16 +88,17 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	}
 
 
-	public String[] match(String match) {
+	public Topic[] match(String match) {
 		log.debug("match");
-		List<Topic> list = (topicService.getTopicsStarting(match));
+		try {
+			List<Topic> list = (topicService.getTopicsStarting(match));
+			return convertToArray(list);
 
-		String[] rtn = new String[list.size()];
-		int i=0;
-		for(Topic t : list){
-			rtn[i++] = t.getTitle();
-		}		
-		return rtn;		
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 
@@ -150,7 +151,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		for(int i=0;i<list.size();i++){				
 			Topic t = list.get(i);
 
-			
+
 			//t.setUser(null);
 			rtn[i] = convert(t);
 		}
@@ -160,7 +161,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 	public static Topic convert(Topic t){
 		log.debug("Topic's tags: "+t.getId()+" "+t.getTitle()+" "+t.getTags().getClass());
-		
+
 		ArrayList<Tag> nTags = new ArrayList<Tag>();
 
 		for (Iterator iter = t.getTags().iterator(); iter.hasNext();) {
@@ -171,35 +172,47 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 				GWTTagServiceImpl.convert(tag);
 			}
 		}
-		
+
 		nTags.addAll(t.getTags());
 		t.setTags(nTags);
-		
+
 		log.debug("t "+t.getTags().getClass());		
 		log.debug("t "+t.getMetaValueStrs().getClass());
-		
+
 		log.debug("loop metas");
 //		HashMap<Meta, MetaValue> nMap = new HashMap<Meta, MetaValue>();
-		
+
 		HashMap<String, String> nMap = new HashMap<String, String>();
-		
+
 		//nMap.putAll(t.getMetaValues());					
-		
+
 //		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//			Meta element = (Meta) iter.next();
-//			log.debug(element.getName());
-//			nMap.put(element, (String) t.getMetaValues().get(element));
+//		Meta element = (Meta) iter.next();
+//		log.debug(element.getName());
+//		nMap.put(element, (String) t.getMetaValues().get(element));
 //		}
 		for (Iterator iter = t.getMetaValueStrs().keySet().iterator(); iter.hasNext();) {
 			String element = (String) iter.next();
 			log.debug(element);
 			nMap.put(element, (String) t.getMetaValueStrs().get(element));
 		}
-		
+
 		t.setMetaValueStrs(nMap);
 		log.debug("t "+t.getMetaValueStrs().getClass());	
-				
+
 		log.debug("Finally: t "+t.getId()+" "+t.getUser());
 		return t;
+	}
+
+	public Topic getTopicForName(String topicName) {
+		try {
+			
+			return convert(topicService.getForName(topicName));
+			
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

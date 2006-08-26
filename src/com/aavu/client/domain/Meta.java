@@ -22,9 +22,24 @@ public abstract class Meta extends AbstractMeta implements IsSerializable{
      public abstract Widget getWidget(Map mmp);
      public abstract String getType();
      
-   
+   /**
+    * return the Index into a topic's MetaValue map
+    * @return
+    */
    public String toMapIdx(){
 	   return getId()+"";
+   }
+   
+   /**
+    * Does our editor widget need a saveCallback?
+    * 
+    * This is done because I don't think we can user instanceof
+    * to determine this on the fly.
+    * 
+    * @return
+    */
+   public boolean needsSaveCallback() {
+	return false;
    }
 
 }
