@@ -1,6 +1,7 @@
 package com.aavu.server.service.gwt;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -175,6 +176,12 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 		nTags.addAll(t.getTags());
 		t.setTags(nTags);
+
+		//didn't need to convert the postgres one, but mysql is
+		//returning java.sql.timestamp, which, surprise surprise 
+		//is another thing that breaks GWT serialization.
+		//
+		t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
 
 		log.debug("t "+t.getTags().getClass());		
 		log.debug("t "+t.getMetaValueStrs().getClass());

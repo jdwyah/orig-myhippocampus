@@ -59,8 +59,8 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 	//	return (User) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username));
 	}
 
-	public User getUserForId(Integer id) {
-		log.debug("here user for id");
+	public User getUserForId(long id) {
+		log.debug("DAOhere user for id "+id);
 		return (User) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from User where id = :id", "id", id));
 	}
 

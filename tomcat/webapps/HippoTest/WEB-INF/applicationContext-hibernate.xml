@@ -4,7 +4,7 @@
 
 <beans>
 
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean id="propertyConfigurer" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:config.properties" />
 	</bean>
 
@@ -13,7 +13,7 @@
  		<property name="driverClass" value="${jdbc.driverClass}" />
 		<property name="jdbcUrl" value="${jdbc.url}" />
 		<property name="user" value="${jdbc.user}" />
-		<property name="password" value="${jdbc.password}" />
+		<property name="password" value="${HOST.jdbc.password}" />
 
 	</bean>
 
@@ -30,7 +30,7 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.dialect">${db.dialect}</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.cglib.use_reflection_optimizer">false</prop>
 			</props>

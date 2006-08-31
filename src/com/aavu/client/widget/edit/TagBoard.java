@@ -1,11 +1,15 @@
 package com.aavu.client.widget.edit;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.aavu.client.async.NestedStdAsyncCallback;
+import com.aavu.client.async.NestingCallbacks;
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -34,7 +38,7 @@ public class TagBoard extends Composite {
 
 	private GWTTagServiceAsync tagService;
 	private Topic cur_topic;
-	private Set listeners = new HashSet();
+	private List listeners = new ArrayList();
 	
 	public void setTagService(GWTTagServiceAsync tagService) {
 		this.tagService = tagService;
@@ -145,13 +149,50 @@ public class TagBoard extends Composite {
 
 	}
 
-	public void saveThingsNowEvent() {
+	public void saveThingsNowEvent(StdAsyncCallback callback) {
 		GWT.log("savethingsnowevent",null);
-		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-			GWT.log("listener ",null);
-			SaveListener listener = (SaveListener) iter.next();
-			listener.saveNowEvent();			
+		
+		
+		NestingCallbacks nest = new NestingCallbacks();
+	
+		nest.addToNest(new NestedStdAsyncCallback(callback));
+		
+		Iterator iter = listeners.iterator();		
+		
+
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			SaveListener listener = (SaveListener) iterator.next();		
+			
+			System.out.println("tagboard says addNestables");
+			
+			listener.addYourNestables(nest);			
+			
 		}
+		
+		
+//		
+//		if(iter.hasNext()){
+//			SaveListener listener = (SaveListener) iter.next();
+//			GWT.log("listener ",null);
+//			listener.saveNowEvent(iter,callback);
+//			nested.addCallback(new StdAsyncCallback(){
+//
+//				public void onSuccess(Object result) {
+//					// TODO Auto-generated method stub
+//					
+//				}});
+//		}
+//		//
+//		//if no listeners, just onSuccess now
+//		//
+//		else{
+//			callback.onSuccess(null);
+//		}
+		
+		
+		nest.doIt();
+		
+				
 	}	
 
 }

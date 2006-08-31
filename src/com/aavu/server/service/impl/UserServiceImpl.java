@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -71,12 +72,14 @@ public class UserServiceImpl implements UserService {
 		String hashword = null;
 		try {
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			md5.update(password.getBytes());
+			md5.update(password.getBytes("UTF-8"));
 			BigInteger hash = new BigInteger(1, md5.digest());
 			hashword = hash.toString(16);
 						
 		} catch (NoSuchAlgorithmException nsae) {
-
+			log.error(nsae);
+		} catch (UnsupportedEncodingException e) {
+			log.error(e);
 		}
 		
 		return pad(hashword,32,'0');
@@ -130,6 +133,7 @@ public class UserServiceImpl implements UserService {
 
 
 	public void toggleSupervisor(Integer id) {
+		System.out.println("ID "+id);
 		User user = userDAO.getUserForId(id);
 		user.setSupervisor(!user.isSupervisor());
 		userDAO.save(user);

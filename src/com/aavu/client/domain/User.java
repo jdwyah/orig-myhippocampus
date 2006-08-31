@@ -22,6 +22,10 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class User extends AbstractUser implements IsSerializable {
 
+	public User(){
+		setEnabled(true);
+		setSupervisor(false);		
+	}
 
 	public boolean isAccountNonExpired() {
 		return true;

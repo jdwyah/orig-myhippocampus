@@ -55,11 +55,60 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		assertEquals(A, saved.getUsername());
 		assertNotSame(0, saved.getId());
+		assertFalse(saved.isSupervisor());
+		assertTrue(saved.isEnabled());
+		assertTrue(saved.isAccountNonExpired());
+		
 		
 		List<User> listPost = userDAO.getAllUsers();
 		
 		assertEquals(listPost.size(), list.size() +1);
 		log.debug("User list size "+list.size());
+	}
+	
+	public void testEdit() {
+		String A = "dsafd";
+		String B = "sdfn&S*AS";
+		
+		User u = new User();
+		u.setUsername(A);
+		
+		List<User> list = userDAO.getAllUsers();
+				
+		userDAO.save(u);
+		
+		User saved = userDAO.getUserByUsername(A);
+		
+		assertEquals(A, saved.getUsername());
+		assertNotSame(0, saved.getId());
+		assertFalse(saved.isSupervisor());
+		assertTrue(saved.isEnabled());
+		assertTrue(saved.isAccountNonExpired());
+		
+		List<User> listPost = userDAO.getAllUsers();
+		
+		assertEquals(listPost.size(), list.size() +1);
+		log.debug("User list size "+list.size());
+		
+		
+		//now do some edits
+		//
+		saved.setUsername(B);
+		saved.setSupervisor(true);
+		
+		userDAO.save(saved);
+		User editted = userDAO.getUserByUsername(B);
+		
+		assertNotNull(editted);
+		assertEquals(B, editted.getUsername());
+		assertSame(saved.getId(), editted.getId());
+		assertTrue(saved.isSupervisor());
+		assertTrue(saved.isEnabled());
+		assertTrue(saved.isAccountNonExpired());
+		
+		
+		
+		
 	}
 
 }

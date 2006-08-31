@@ -5,14 +5,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.aavu.client.domain.User;
-import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.UserService;
 
 public class UserManagerController extends MultiActionController {
+	private static final Logger log = Logger.getLogger(UserManagerController.class);
 	
 	private UserService userService;
 	private String viewUserList;
@@ -53,6 +54,8 @@ public class UserManagerController extends MultiActionController {
 
 		String idStr = request.getParameter("user");		
 		Integer id = Integer.parseInt(idStr);
+
+		log.debug("supervisor change for id: "+id+" str:"+idStr);
 		
 		userService.toggleSupervisor(id);
 		

@@ -12,7 +12,7 @@ public interface UserDAO {
 	ServerSideUser loadUserByUsername(final String username) throws UsernameNotFoundException, DataAccessException;
 	void save(User user);
 	List<User> getAllUsers();
-	User getUserForId(Integer id);
+	User getUserForId(long id);
 	void delete(User user);
 	User getUserByUsername(String username);
 }

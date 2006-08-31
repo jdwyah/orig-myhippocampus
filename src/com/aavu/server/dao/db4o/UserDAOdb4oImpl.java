@@ -69,7 +69,7 @@ public class UserDAOdb4oImpl extends Db4oDaoSupport implements UserDAO, UserDeta
 		});
 	}
 
-	public User getUserForId(final Integer id) {
+	public User getUserForId(final long id) {
 		
 		return (User) Db4oUtil.getUniqueRes(getDb4oTemplate().query(new Predicate<User>() {
 			public boolean match(User user) {

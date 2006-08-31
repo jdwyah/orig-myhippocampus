@@ -5,29 +5,36 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.aavu.client.async.NestedStdAsyncCallback;
+import com.aavu.client.async.NestingCallbacks;
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.widget.tags.MetaTopicListWidget;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MetaTopicList extends Meta {
 
 	private static final String TYPE = "Topic List";
-		
+
 	/**
 	 * ick static cachce ref..
 	 * gwt threadLocal?
 	 * 
 	 */
 	private static HippoCache cache;
-		
-	
+
+
 	/**
 	 * transient, since this is just a ref to the currently referred to topic
 	 */
 	private transient Map metaMap;
-	
-	
+
+	/**
+	 * just a temp ref as well
+	 */
+	private transient List topicNames;
+
+
 	//@Override
 	public boolean needsSaveCallback() {
 		return true;
@@ -36,7 +43,7 @@ public class MetaTopicList extends Meta {
 	//@Override
 	public Widget getEditorWidget(Map metaMap) {
 		this.metaMap = metaMap;
-		
+
 		MetaTopicListWidget widget = new MetaTopicListWidget(this);		
 		return widget;		
 	}
@@ -54,9 +61,9 @@ public class MetaTopicList extends Meta {
 		return widget;
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * takes care of what is essentially serializing the list of topics
 	 * 
@@ -72,24 +79,72 @@ public class MetaTopicList extends Meta {
 	 * @param topicNames
 	 */
 	public void setVals(List topicNames) {
-		StringBuffer sb = new StringBuffer();
-		GWT.log("setVals ", null);
+		this.topicNames = topicNames;		
+	}
+
+	public void addYourNestables(NestingCallbacks nest) {
+
+		final StringBuffer sb = new StringBuffer();
+		
+		System.out.println("in meta topic list ");
+		
+		nest.addToNest(new NestedStdAsyncCallback(new StdAsyncCallback("FFF"){
+
+			public void onSuccess(Object result) {
+				System.out.println("DOING metaMap put");
+				metaMap.put(this, sb.toString());
+			}}));
+		
+		System.out.println("added metaMap put");
+		
+		
 		for (Iterator iter = topicNames.iterator(); iter.hasNext();) {
-			String topicName = (String) iter.next();
-			GWT.log("-"+topicName, null);
-			Topic topic = cache.getTopicForName(topicName);
+			final String topicName = (String) iter.next();
+
+			cache.addTopicLookupNested(nest,topicName,new StdAsyncCallback("DDD"){
+
+				public void onSuccess(Object result) {
+					
+					System.out.println("DOING TopicForName rtn "+result);
+					
+					Topic topic = (Topic) result;
+					if(topic != null){
+						
+						sb.append(topic.getId()+"");
+						sb.append(";");
+					}	
+				}});
+				
+				
+//			
+//			NestedStdAsyncCallback n = new NestedStdAsyncCallback(new StdAsyncCallback("NNN"){
+//
+//				public void onSuccess(Object result) {
+//					
+//					System.out.println("DOING topic parse");
+//					
+//					cache.getTopicForNameA(topicName, new StdAsyncCallback("DDD"){
+//
+//						public void onSuccess(Object result) {
+//							
+//							System.out.println("DOING TopicForName rtn "+result);
+//							
+//							Topic topic = (Topic) result;
+//							if(topic != null){
+//								
+//								sb.append(topic.getId()+"");
+//								sb.append(";");
+//							}	
+//						}});
+//				}});
+
+			System.out.println("ADDING Topic Parser");
 			
-			GWT.log("t:"+topic, null);
-			if(topic != null){
-				sb.append(topic.getId());
-				sb.append(";");
-			}else{
-				GWT.log("setVals, topic "+topicName+" not in cache", null);
-			}
+//			nest.addToNest(n);
 		}
 		
-		metaMap.put(this, sb.toString());
 	}
+
 
 	public static void setCache(HippoCache cache) {
 		MetaTopicList.cache = cache;
@@ -102,22 +157,24 @@ public class MetaTopicList extends Meta {
 	public List getVals() {
 		String s = (String) metaMap.get(this);
 		List rtn = new ArrayList();
-		
+
 		if(s != null){
 			String[] split = s.split(";");
 			for (int i = 0; i < split.length; i++) {
 				String string = split[i];
 				long l = Long.parseLong(string);			
-				Topic t = cache.getTopicById(l);
-				if(t != null){
-					rtn.add(t);
-				}else{
-					GWT.log("null topic for "+string,null);
-				}
+				
+				
+//				Topic t = cache.getTopicById(l);
+//				if(t != null){
+//					rtn.add(t);
+//				}else{
+//					GWT.log("null topic for "+string,null);
+//				}
 			}
 		}
 		return rtn;		
 	}
-	
+
 
 }

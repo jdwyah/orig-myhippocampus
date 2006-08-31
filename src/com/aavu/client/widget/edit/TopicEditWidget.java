@@ -3,6 +3,7 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -68,9 +69,13 @@ public class TopicEditWidget extends Composite implements ClickListener {
 			topic.setText(textArea.getText());
 			topic.setTitle(titleBox.getText());
 			
-			tagBoard.saveThingsNowEvent();
+			tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
+
+				public void onSuccess(Object result) {
+					topicViewAndEditWidget.save(topic);					
+				}});
 					
-			topicViewAndEditWidget.save(topic);			
+						
 		}
 	}
 }

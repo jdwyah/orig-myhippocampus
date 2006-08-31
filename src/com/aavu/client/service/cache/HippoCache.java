@@ -3,6 +3,9 @@ package com.aavu.client.service.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.aavu.client.async.NestedStdAsyncCallback;
+import com.aavu.client.async.NestingCallbacks;
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
@@ -50,14 +53,15 @@ public class HippoCache {
 
 
 	
-	
-	public Topic getTopicForName(String topicName) {
-		return (Topic) topicByName.get(topicName);		
-	}
-
-	public Topic getTopicById(long id) {	
-		return (Topic) topicByID.get(new Long(id));
-	}
+//	
+//	public Topic getTopicForName(String topicName) {
+//		return (Topic) topicByName.get(topicName);		
+//	}
+//
+//	public Topic getTopicById(long id) {	
+//		return (Topic) topicByID.get(new Long(id));
+//	}
+//	
 	
 	
 	/**
@@ -98,6 +102,29 @@ public class HippoCache {
 			callback.onSuccess(result);
 		}
 		
+	}
+
+
+
+
+	public void addTopicLookupNested(NestingCallbacks nest, final String topicName, final StdAsyncCallback callback) {
+		NestedStdAsyncCallback n = new NestedStdAsyncCallback(new StdAsyncCallback("cache one"){
+
+			public void onSuccess(Object result) {
+				
+				System.out.println("cache one");
+				
+				getTopicForNameA(topicName,callback);
+				
+			}});
+		nest.addToNest(n);
+		
+		
+//		nest.addToNest(new NestedStdAsyncCallback(new StdAsyncCallback("SDSD"){
+//
+//			public void onSuccess(Object result) {
+//					
+//			}});
 	}
 
 

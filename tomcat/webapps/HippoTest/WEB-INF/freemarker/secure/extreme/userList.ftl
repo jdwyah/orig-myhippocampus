@@ -20,15 +20,6 @@
     <th>Super</th>        
     <th></th>
     </tr>
-    <#macro isSuper user>
-	  	<#list user.authorities as auth>
-		  	<#assign a = auth.authority/>
-			<#if a == "ROLE_SUPERVISOR">Yes
-				<#return/>
-			</#if>			
-		</#list>
-		No
-    </#macro>
     
 	<#list users as user>
 		<tr>
@@ -38,7 +29,7 @@
 	    <td>${user.credentialsNonExpired?string}</td>
 	    <td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=enable&user=${user.id?c}"/>"/>${user.enabled?string}</a></td>
 		<td>${user.password}</td>					
-		<td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=supervisor&user=${user.id?c}"/>"/><@isSuper user/></a></td>
+		<td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=supervisor&user=${user.id?c}"/>"/>${user.supervisor?string}</a></td>
 		<td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=delete&user=${user.id?c}"/>"/>Delete</a></td>				
 		</tr>
 	</#list>

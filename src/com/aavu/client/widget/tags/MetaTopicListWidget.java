@@ -1,9 +1,13 @@
 package com.aavu.client.widget.tags;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.aavu.client.async.NestedStdAsyncCallback;
+import com.aavu.client.async.NestingCallbacks;
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.edit.TopicCompleter;
@@ -122,9 +126,32 @@ public class MetaTopicListWidget extends SaveListener {
 		}
 	}
 
-	public void saveNowEvent() {
-		System.out.println("save now!");		
-		metaTopicList.setVals(getTopicNames());	
+
+
+	//@Override
+	public void addYourNestables(NestingCallbacks nest) {
+
+		//
+		//we don't really have any logic to do here, we just want the 
+		//list to do its thing
+		//
+		
+		System.out.println("set vals to "+getTopicNames());
+	
+		metaTopicList.setVals(getTopicNames());
+		System.out.println("metawidget says add your nestables");
+		metaTopicList.addYourNestables(nest);
+		
+		
+//		callbacks.addToNest(new NestedStdAsyncCallback(new StdAsyncCallback("getNestable"){
+//
+//			public void onSuccess(Object result) {
+//				System.out.println("getNestable onSucessing");
+//				metaTopicList.setVals(getTopicNames());
+//			}}));
+
 	}
+
+
 
 }
