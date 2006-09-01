@@ -16,6 +16,8 @@ import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -55,6 +57,10 @@ public class HippoTest implements EntryPoint, TabListener  {
 	
 	
 	private void initServices(){
+		//if(9==9)
+		//throw new RuntimeException("sdfs");
+		
+		//Window.alert("1");
 		GWTTopicServiceAsync topicService;
 		GWTTagServiceAsync tagService;
 		GWTUserServiceAsync userService;
@@ -63,29 +69,33 @@ public class HippoTest implements EntryPoint, TabListener  {
 		ServiceDefTarget endpoint = (ServiceDefTarget) topicService;
 		//endpoint.setServiceEntryPoint("http://localhost:8080/HippoTestW/service/TopicService");		
 		
+		//Window.alert("2");
+		
 		String pre = "";
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
-			pre = "http://localhost/HippoTest/service/";
+			pre = "http://www.myhippocampus.com/HippoTest/service/";
 		}else{
 			pre = GWT.getModuleBaseURL();
 			pre = "http://localhost:8080/HippoTest/service/";
 		}
+		//Window.alert("3");
+		msg = pre+" "+GWT.isScript()+" "+(pre + "topicService");
 		
-		msg = pre+" "+GWT.isScript()+" "+(pre + "/topicService");
-		
-		endpoint.setServiceEntryPoint(pre + "/topicService");		
+		endpoint.setServiceEntryPoint(pre + "topicService");		
 		
 		tagService = (GWTTagServiceAsync) GWT.create(GWTTagService.class);
 		ServiceDefTarget endpointTAG = (ServiceDefTarget) tagService;
-		endpointTAG.setServiceEntryPoint(pre + "/tagService");
+		endpointTAG.setServiceEntryPoint(pre + "tagService");
 		
 		
 		userService = (GWTUserServiceAsync) GWT.create(GWTUserService.class);
 		ServiceDefTarget endpointUser = (ServiceDefTarget) userService;
-		endpointUser.setServiceEntryPoint(pre + "/userService");
+		endpointUser.setServiceEntryPoint(pre + "userService");
 		
-		
+		//Window.alert("4");
+
+		final String user_endpoint_debug = pre + "userService";
 		
 		hippoCache = new HippoCache(topicService,tagService,userService);
 		
@@ -98,21 +108,27 @@ public class HippoTest implements EntryPoint, TabListener  {
 		MetaTopicList.setCache(hippoCache);
 		
 		
-		
-		
-		userService.getCurrentUser(new StdAsyncCallback("getCurrentUser"){
+		//Window.alert("5");
+				
+		userService.getCurrentUser(new AsyncCallback(){
 			public void onSuccess(Object result) {
 				user = (User) result;
 
 				if(user != null)
 				System.out.println("found a user: "+user.getUsername());				
 				loadGUI();
+			}
+
+			public void onFailure(Throwable caught) {
+				if(GWT.isScript()){
+					Window.alert("GetCurrentUser failed! "+caught+" \nEP:"+user_endpoint_debug);
+				}
+				loadGUI();
 			}			
 			
-			//on FAIL!
-			//this fails
-			
 		});
+		
+		//Window.alert("6");
 	}
 
 
@@ -124,8 +140,16 @@ public class HippoTest implements EntryPoint, TabListener  {
 		try{
 			initServices();		
 		}catch(Exception e){
+			Window.alert("e: "+e);
 			System.out.println("Problem initting services! "+e);
-			loadGUI();
+			
+			VerticalPanel panel = new VerticalPanel();
+			
+			panel.add(new Label("Error"));
+			panel.add(new Label(e.getMessage()));
+			
+			RootPanel.get().add(panel);
+			
 		}
 		
 	}

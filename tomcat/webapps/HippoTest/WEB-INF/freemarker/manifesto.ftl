@@ -1,12 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<#import "/spring.ftl" as spring/>
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
   <meta name="description" content="Personal HD" />
   <meta name="keywords" content="personal,knowledge,management" />
   <meta name="author" content="Jeff Dwyer / Original design: Gerhard Erbes - gw@actamail.com/" />
-  <link rel="stylesheet" type="text/css" href="./css/style.css" />
+  <link rel="stylesheet" type="text/css" href="<@spring.url "/css/style.css"/>"/>
   <title>MyHippocampus - Manifesto</title>
 </head>
 
@@ -16,9 +17,9 @@
     <!-- HEADER -->
 	  <!-- Background -->
     <div id="header-section">
-		  <a href="#"><img id="header-background-left" src="./img/img_logo.jpg" alt=""/></a>
-      <img id="header-background-right" src="./img/img_header.jpg" alt=""/>
-		</div>
+		  <a href="#"><img id="header-background-left" src="<@spring.url "/img/img_logo.jpg"/>" alt=""/></a>
+          <img id="header-background-right" src="<@spring.url "/img/img_header.jpg"/>" alt=""/>
+	</div>
 
 	  <!-- Navigation -->
     <div id="header">
@@ -26,7 +27,14 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="tour.html">Tour</a></li>
         <li class="selected">Manifesto</li>
-        <li><a href="signup.html">Sign up</a></li>  
+        <#if user?exists>
+	        <li><a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/>My Page</a></li>
+			<#if user.supervisor>
+	            <li><a href="<@spring.url "/site/secure/extreme/userManager.html?action=list"/>"/>Admin</a></li>
+            </#if>
+        <#else>
+        	<li><a href="signup.html">Sign up</a></li>  
+        </#if> 
       </ul>
     </div>
 
@@ -42,11 +50,11 @@
 		  			<p>When you take a look at your life, you may find that the bits worth remembering are... worth remembering. You may also find that you're
 		  			forgetting them.
 		  			So this is an opportunity to remember things. 
-		  			Your analysis of Karl Marx for example. You really thought was spot on and insightful, but that the 
-		  			folks at wikipedia won't let you sneak in to the definition. 
+		  			Your analysis of Karl Marx for example. You really thought it was spot on and insightful, but that the 
+		  			folks at wikipedia won't let you sneak in to the definition. Damn tyrants ;)
 		  			Or perhaps the revelation you had that your friends father looks uncannily like
 		  			that pig farmer from Babe, James Cromwell. Important stuff like this is worth remembering. It will make you chuckle in the future.
-		  			So what if we can record these events, as a stick in the knowledge sand? </p>
+		  			So what if we can record these events, as a stick in the ever-moving mud-flats of knowledge? </p>
 		  			<p>Think of it as a little way to say 'I was here.' A body builder's mirror for what's going on in our brain. 
 		  			 It may not be all that important wether you've read 12 or 200 pieces of South African fiction,
 		  			 but what matters is that the number was not 0.</p>
@@ -60,14 +68,18 @@
 					<p>It is not about accumulation of factoids, although it is adept at this. Insight is the goal, but sometimes insight needs to
 					 emerge out of well organized clutter, since we never know what facets of our imagination or experience we will require
 					 to come to our next conclusion.</p>
+					 <p>So make sure to add enough clutter.</p>
+					 <p>5 points will be awarded for in depth reviews of foreign films.</p>
+					 <p>500 points will be awarded for each joke.</p>
+					 <p>5000 points will be awarded for late night blathering about the signifigance of the movie title "Snakes on a Plane"</p>
           <p class="subheading">Responsibility</p>
-					<p>MyHippocampus is powerful, and like all tools it needs to be used with some care, lest it become another foot soldier
+					<p>MyHippocampus is a powerful tool, and like all tools it needs to be used with some care, lest it become another foot soldier
 					 in the battle for a share of your conscious mind.</p>
 					<p>Above all, do not let this become another burden. Are you slogging away adding an entry for every piece of romantic poetry you've read?
 					Every bottle in you cellar? Every chemical in the periodic table? Forget it. Add what you want to read. The definition for 
 					"Watermelon Environmentalist" (green on the outside, but pink in the middle) is worth 10x the points.</p>
 					<p>MyHippocampus works very well as a blog, but think carefully about using it this way. Sharing with the outside world
-					 is interesting and somewhat thrilling, but do not become a slave to readership. Consider making it a diary first. 
+					 is interesting and somewhat thrilling, but consider making it a diary first first and foremost. 
 					 Then sharing insights you truly want to be public. Don't let us tell you what to do, but do consider the wisdom in being a bit selfish.</p>
           <p class="subheading">Selfishness</p>
           			<p>Being a little selfish in your protection of your intellectual life is certainly not the worst thing in the world.

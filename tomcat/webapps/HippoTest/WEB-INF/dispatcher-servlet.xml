@@ -8,6 +8,16 @@
 		<property name="view" value="index"/>
 		<property name="userService" ref="userService"/>
 	</bean>
+	<bean id="tourController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="tour"/>
+		<property name="userService" ref="userService"/>
+	</bean>
+	<bean id="manifestoController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="manifesto"/>
+		<property name="userService" ref="userService"/>
+	</bean>
+	
+	
 
 	<bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
 		<property name="view" value="acegilogin" />
@@ -45,6 +55,8 @@
 				<prop key="/site/signup.html">createUserController</prop>
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
 				<prop key="/site/index.html">indexController</prop>
+				<prop key="/site/tour.html">tourController</prop>
+				<prop key="/site/manifesto.html">manifestoController</prop>
 			</props>
 		</property>
 

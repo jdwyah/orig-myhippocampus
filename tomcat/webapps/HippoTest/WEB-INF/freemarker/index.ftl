@@ -18,8 +18,8 @@
 	  <!-- Background -->
     <div id="header-section">
 		  <a href="#"><img id="header-background-left" src="<@spring.url "/img/img_logo.jpg"/>" alt=""/></a>
-      <img id="header-background-right" src="<@spring.url "/img/img_header.jpg"/>" alt=""/>
-		</div>
+          <img id="header-background-right" src="<@spring.url "/img/img_header.jpg"/>" alt=""/>
+	</div>
 
 	  <!-- Navigation -->
     <div id="header">

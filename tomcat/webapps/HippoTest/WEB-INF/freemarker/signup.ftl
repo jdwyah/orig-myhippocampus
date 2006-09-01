@@ -17,9 +17,9 @@
     <!-- HEADER -->
 	  <!-- Background -->
     <div id="header-section">
-		  <a href="#"><img id="header-background-left" src="./img/img_logo.jpg" alt=""/></a>
-      <img id="header-background-right" src="./img/img_header.jpg" alt=""/>
-		</div>
+		  <a href="#"><img id="header-background-left" src="<@spring.url "/img/img_logo.jpg"/>" alt=""/></a>
+          <img id="header-background-right" src="<@spring.url "/img/img_header.jpg"/>" alt=""/>
+	</div>
 
 	  <!-- Navigation -->
     <div id="header">
@@ -61,23 +61,23 @@
 			</tr>
 			<tr>
 				<td class="item shaded"><strong>Email thoughts to yourself</strong><br /><small></small></td>
-				<td><img src="img/bluecheck-bullet-14.gif" alt="Yes" /></td>
-				<td><img src="img/bluecheck-bullet-14.gif" alt="Yes" /></td>
+				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
 				<td>&mdash;</td>
 			</tr>
 			<tr class="shaded">
 				<td class="item shaded"><strong>30-day free trial</strong><br /><small>(cancel within 30 days &amp; you won't be charged)</small></td>
 
-				<td><img src="img/bluecheck-bullet-14.gif" alt="Yes" /></td>
-				<td><img src="img/bluecheck-bullet-14.gif" alt="Yes" /></td>
+				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
 				<td>Free forever</td>
 			</tr>
 			<tr>
 
 				<td class="item"><strong>Use the Browser Plugins</strong></td>
-				<td><img src="img/bluecheck-bullet-14.gif" alt="Yes" /></td>
-				<td><img src="img/bluecheck-bullet-14.gif" alt="Yes" /></td>
-				<td><img src="img/bluecheck-bullet-14.gif" alt="Yes" /></td>
+				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
 			</tr>
 			<tr>
 				<td class="item">Usage may vary, but perfect for</td>
