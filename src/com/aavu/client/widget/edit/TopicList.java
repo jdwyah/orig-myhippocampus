@@ -1,30 +1,27 @@
 package com.aavu.client.widget.edit;
 
-import org.gwtwidgets.client.wrap.Effect;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicList extends Composite {
 
-
-	private GWTTopicServiceAsync topicService;
-
 	private VerticalPanel panel = new VerticalPanel();
 
 	private TopicViewAndEditWidget topicViewAndEditWidget;
 
+	private TopicCache topicCache;
 
 
-	public TopicList(GWTTopicServiceAsync topicService,TopicViewAndEditWidget topicDetailI){
-		setTopicService(topicService);
+
+	public TopicList(TopicCache topicCache,TopicViewAndEditWidget topicDetailI){
+		this.topicCache = topicCache;
+		
 		setTopicDetail(topicDetailI);
 
 		load();
@@ -44,7 +41,7 @@ public class TopicList extends Composite {
 
 
 	public void load() {
-		topicService.getAllTopics(0,0,new StdAsyncCallback("topiclist load") {
+		topicCache.getAllTopics(0,0,new StdAsyncCallback("topiclist load") {
 
 			public void onSuccess(Object result) {
 				panel.clear();
@@ -66,9 +63,6 @@ public class TopicList extends Composite {
 	}
 
 
-	public void setTopicService(GWTTopicServiceAsync topicService) {
-		this.topicService = topicService;
-	}
 	public void setTopicDetail(TopicViewAndEditWidget topicViewAndEditWidget) {
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 	}

@@ -10,15 +10,16 @@
 
 package com.aavu.client.widget.autocompletion;
 
+import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class RemoteTAGAutoCompletionItems implements CompletionItems {
 
-	private GWTTagServiceAsync service;
+	private TagCache service;
 	
-	public RemoteTAGAutoCompletionItems(GWTTagServiceAsync service) {
-		this.service = service;
+	public RemoteTAGAutoCompletionItems(TagCache cache) {
+		this.service = cache;
 	}
 	public void getCompletionItems(final String match, final
 			MatchesRequiring widget) {

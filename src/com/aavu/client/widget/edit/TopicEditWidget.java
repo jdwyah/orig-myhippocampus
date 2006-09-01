@@ -2,6 +2,7 @@ package com.aavu.client.widget.edit;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -26,13 +27,13 @@ public class TopicEditWidget extends Composite implements ClickListener {
 	private TopicViewAndEditWidget topicViewAndEditWidget;
 	
 	
-	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, GWTTagServiceAsync tagServiceAsync, Topic topic){
+	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, HippoCache hippoCache, Topic topic){
 		this.topic = topic;
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 		
 		saveButton.addClickListener(this);		
 		
-		tagBoard = new TagBoard(tagServiceAsync);
+		tagBoard = new TagBoard(hippoCache);
 		
 		setupTopic();
 		

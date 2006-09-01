@@ -1,6 +1,7 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.ui.Button;
@@ -13,27 +14,25 @@ import com.google.gwt.user.client.ui.Widget;
 public class AddEditView extends Composite {
 
 	private static final int MAX_PER_PAGE = 10;
-	private GWTTopicServiceAsync topicService;
-	private GWTTagServiceAsync tagService;
 
 	private TopicList topicList;
 	private TopicViewAndEditWidget topicViewAndEditWidget;
 	
 	private VerticalPanel topicPanel;
 
-	public AddEditView(GWTTopicServiceAsync topicService, GWTTagServiceAsync tagService) {
-		setTagService(tagService);
-		setTopicService(topicService);
+	private HippoCache hippoCache;
 
-
+	public AddEditView(HippoCache hippoCache) {
+		this.hippoCache = hippoCache;
+		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
 		VerticalPanel leftPanel = new VerticalPanel();
 		
 		
 		
-		topicViewAndEditWidget = new TopicViewAndEditWidget(topicService,tagService);		
-		topicList = new TopicList(topicService,topicViewAndEditWidget);
+		topicViewAndEditWidget = new TopicViewAndEditWidget(hippoCache);		
+		topicList = new TopicList(hippoCache.getTopicCache(),topicViewAndEditWidget);
 		topicViewAndEditWidget.setTopicList(topicList);
 		
 		
@@ -47,6 +46,7 @@ public class AddEditView extends Composite {
 		initWidget(mainPanel);		
 		load();
 	}
+
 
 
 	private void load(){
@@ -64,14 +64,6 @@ public class AddEditView extends Composite {
 //		});
 		
 		
-	}
-
-
-	public void setTagService(GWTTagServiceAsync tagService) {
-		this.tagService = tagService;
-	}
-	public void setTopicService(GWTTopicServiceAsync topicService) {
-		this.topicService = topicService;
 	}
 
 	

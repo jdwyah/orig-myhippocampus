@@ -5,6 +5,7 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.ui.Button;
@@ -28,14 +29,12 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	private VerticalPanel lp;
 	
 	public Topic topic;
-	private GWTTopicServiceAsync topicServiceA;
-	private GWTTagServiceAsync tagServiceAsync;
-	private TopicList topicList;	
+	private TopicList topicList;
+	private HippoCache hippoCache;	
 	
 	
-	public TopicViewAndEditWidget(GWTTopicServiceAsync topicServiceAsync, GWTTagServiceAsync tagServiceAsync){
-		this.topicServiceA = topicServiceAsync;
-		this.tagServiceAsync = tagServiceAsync;
+	public TopicViewAndEditWidget(HippoCache hippoCache) {
+		this.hippoCache = hippoCache;
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
@@ -53,10 +52,11 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		initWidget(mainPanel);
 	}	
 	
+	
 	public void load(Topic topic){
 		this.topic = topic;
 		topicWidget = new TopicWidget(topic);
-		topicEditWidget = new TopicEditWidget(this,tagServiceAsync,topic);
+		topicEditWidget = new TopicEditWidget(this,hippoCache,topic);
 		
 		activateMainView();
 
@@ -94,9 +94,6 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		lp.add(cancelButton);
 	}
 
-	public void setTopicServiceA(GWTTopicServiceAsync topicServiceA) {
-		this.topicServiceA = topicServiceA;
-	}
 
 	public void setTopicList(TopicList topicList) {
 		this.topicList = topicList;
@@ -108,10 +105,11 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		load(topic2);
 		
-		topicServiceA.save(topic2, new StdAsyncCallback("topicDetail save") {				
+		hippoCache.getTopicCache().save(topic2, new StdAsyncCallback("topicDetail save") {				
 			
 			public void onSuccess(Object result) {																	
 				topicList.load();
+				activateMainView();
 			}
 		});	
 

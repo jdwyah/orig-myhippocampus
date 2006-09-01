@@ -1,5 +1,6 @@
 package com.aavu.client.widget.edit;
 
+import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
@@ -9,9 +10,9 @@ public class TopicCompleter extends AutoCompleteTextBox {
 
 	private static final int LENGTH = 40;
 
-	private static GWTTopicServiceAsync topicService;
+	private static TopicCache topicService;
 		
-	public static void setTopicService(GWTTopicServiceAsync topicService) {
+	public static void setTopicService(TopicCache topicService) {
 		TopicCompleter.topicService = topicService;
 	}
 

@@ -3,17 +3,14 @@ package com.aavu.client.widget.tags;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import com.aavu.client.async.NestedStdAsyncCallback;
-import com.aavu.client.async.NestingCallbacks;
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopicList;
-import com.aavu.client.service.remote.GWTTopicServiceAsync;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -38,16 +35,15 @@ public class MetaTopicListWidget extends SaveListener {
 	 * @param mmp 
 	 *
 	 */
-	public MetaTopicListWidget(MetaTopicList list){
+	public MetaTopicListWidget(MetaTopicList list,boolean isEdit){
 
 		this.metaTopicList = list;
 		
 		HorizontalPanel widget = new HorizontalPanel();
-
 		
 		listP = new VerticalPanel();
 
-		load(list);
+		load(list,isEdit);
 
 		widget.add(listP);
 
@@ -55,10 +51,47 @@ public class MetaTopicListWidget extends SaveListener {
 	}
 
 
-	private void load(MetaTopicList list) {
-		listP.add(new CompleteRow(true));
+	/**
+	 * load the list of seealso topics that the topic list generates for us.
+	 * It does the hard work of doing the metaValue -> topic lookup
+	 * 
+	 * @param list
+	 * @param isEdit 
+	 */
+	private void load(MetaTopicList list, boolean isEdit) {
 		
-		list.getVals();
+		List l = list.getVals();
+		
+		System.out.println("load: "+l);
+		System.out.println("size "+l.size());
+		
+		if(l.isEmpty()){
+			if(isEdit){
+				listP.add(new CompleteRow(true));
+			}
+			else{
+				listP.add(new Label("None"));
+			}
+			return;
+		}
+		
+		boolean firstRow = true;
+		
+		for (Iterator iter = l.iterator(); iter.hasNext();) {
+			Topic s = (Topic) iter.next();
+			
+			
+			if(isEdit){
+				CompleteRow cr = new CompleteRow(firstRow);
+				cr.setText(s.getTitle());
+				listP.add(cr);
+			}
+			else{
+				listP.add(new Hyperlink(s.getTitle(),""));
+			}
+			
+			firstRow = false;	
+		}
 		
 	}
 
@@ -126,32 +159,9 @@ public class MetaTopicListWidget extends SaveListener {
 		}
 	}
 
-
-
-	//@Override
-	public void addYourNestables(NestingCallbacks nest) {
-
-		//
-		//we don't really have any logic to do here, we just want the 
-		//list to do its thing
-		//
-		
-		System.out.println("set vals to "+getTopicNames());
-	
-		metaTopicList.setVals(getTopicNames());
-		System.out.println("metawidget says add your nestables");
-		metaTopicList.addYourNestables(nest);
-		
-		
-//		callbacks.addToNest(new NestedStdAsyncCallback(new StdAsyncCallback("getNestable"){
-//
-//			public void onSuccess(Object result) {
-//				System.out.println("getNestable onSucessing");
-//				metaTopicList.setVals(getTopicNames());
-//			}}));
-
+	public void saveNowEvent() {
+		System.out.println("save now!");		
+		metaTopicList.setVals(getTopicNames());	
 	}
-
-
 
 }

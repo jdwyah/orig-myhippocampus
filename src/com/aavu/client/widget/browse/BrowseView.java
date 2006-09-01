@@ -1,6 +1,7 @@
 package com.aavu.client.widget.browse;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.edit.TopicCompleter;
@@ -16,9 +17,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class BrowseView extends Composite {
 
-	private GWTTopicServiceAsync topicService;
-	private GWTTagServiceAsync tagService;
-
 	
 	private BrowseOptionPanel browseOptions; 	
 	private DockPanel mainView;
@@ -26,13 +24,13 @@ public class BrowseView extends Composite {
 	private TopicList topicList;
 	private TopicViewAndEditWidget topicViewAndEditWidget;	
 	private VerticalPanel topicPanel;
+	private HippoCache hippoCache;
 
-	public BrowseView(GWTTopicServiceAsync topicService, GWTTagServiceAsync tagService) {
-		setTagService(tagService);
-		setTopicService(topicService);
-
+	public BrowseView(HippoCache hippoCache){
+		this.hippoCache = hippoCache;
+		
 		mainView = new DockPanel();
-		browseOptions = new BrowseOptionPanel(mainView,topicService);
+		browseOptions = new BrowseOptionPanel(mainView,hippoCache.getTopicCache());
 		
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
@@ -50,6 +48,7 @@ public class BrowseView extends Composite {
 	}
 
 
+
 	private void load(){
 //		topicList.load();
 		
@@ -65,14 +64,6 @@ public class BrowseView extends Composite {
 //		});
 		
 		
-	}
-
-
-	public void setTagService(GWTTagServiceAsync tagService) {
-		this.tagService = tagService;
-	}
-	public void setTopicService(GWTTopicServiceAsync topicService) {
-		this.topicService = topicService;
 	}
 
 	
@@ -93,7 +84,7 @@ public class BrowseView extends Composite {
 				}});
 			
 			panel.add(addNew);			
-			setWidget(panel);
+			initWidget(panel);
 		}
 	}
 }

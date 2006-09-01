@@ -41,9 +41,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 	private TabPanel viewContainer = new TabPanel();
 	private HTML description = new HTML();
 
-	private GWTTopicServiceAsync topicService;
-	private GWTTagServiceAsync tagService;
-	private GWTUserServiceAsync userService;
+	
 	
 	private TagOrganizerView tagView;
 	private AddEditView addEditView;
@@ -57,6 +55,10 @@ public class HippoTest implements EntryPoint, TabListener  {
 	
 	
 	private void initServices(){
+		GWTTopicServiceAsync topicService;
+		GWTTagServiceAsync tagService;
+		GWTUserServiceAsync userService;
+		
 		topicService = (GWTTopicServiceAsync) GWT.create(GWTTopicService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) topicService;
 		//endpoint.setServiceEntryPoint("http://localhost:8080/HippoTestW/service/TopicService");		
@@ -92,7 +94,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 		//static service setters.
 		//hopefully replace with Spring DI
 		//
-		TopicCompleter.setTopicService(topicService);
+		TopicCompleter.setTopicService(hippoCache.getTopicCache());
 		MetaTopicList.setCache(hippoCache);
 		
 		
@@ -132,7 +134,7 @@ public class HippoTest implements EntryPoint, TabListener  {
 		if(user != null){
 			username = user.getUsername();
 		}
-		Label title = new Label("Add Article "+msg+" ||"+topicService.toString()+" &-"+username);
+		Label title = new Label("Add Article "+msg+" ||"+" &-"+username);
 		title.setStyleName("ta-Title");
 		HorizontalPanel titlePanel = new HorizontalPanel();
 		titlePanel.add(title);
@@ -182,11 +184,11 @@ public class HippoTest implements EntryPoint, TabListener  {
 		//viewContainer.add(TagOrganizerView.init().getInstance(), "Manage Tags");
 
 
-		tagView = new TagOrganizerView(tagService);
+		tagView = new TagOrganizerView(hippoCache);
 
-		addEditView = new AddEditView(topicService,tagService);
+		addEditView = new AddEditView(hippoCache);
 		
-		browseView = new BrowseView(topicService,tagService);
+		browseView = new BrowseView(hippoCache);
 		
 		viewContainer.add(addEditView, "Main");
 		viewContainer.add(browseView, "Browse");				

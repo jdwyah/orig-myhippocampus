@@ -41,7 +41,7 @@ public abstract class AbstractTopic  implements java.io.Serializable,IsSerializa
      /**
       * @gwt.typeArgs <java.lang.String, java.lang.String> 
       */
-     private transient Map metaValueStrs = new HashMap(0);
+     private Map metaValueStrs = new HashMap(0);
 
 
     // Constructors

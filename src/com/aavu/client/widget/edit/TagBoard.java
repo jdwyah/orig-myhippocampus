@@ -13,6 +13,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.widget.tags.SaveListener;
 import com.google.gwt.core.client.GWT;
@@ -36,18 +37,15 @@ public class TagBoard extends Composite {
 //	private List tags = new ArrayList();
 //	private Map metaMap = new HashMap();
 
-	private GWTTagServiceAsync tagService;
 	private Topic cur_topic;
 	private List listeners = new ArrayList();
+	private HippoCache hippoCache;
 	
-	public void setTagService(GWTTagServiceAsync tagService) {
-		this.tagService = tagService;
-	}
 
-	public TagBoard(GWTTagServiceAsync tagService) {
-		setTagService(tagService);
+	public TagBoard(HippoCache hippoCache) {
+		this.hippoCache = hippoCache;
 
-		tagBox = new TagAutoCompleteBox(this,tagService);
+		tagBox = new TagAutoCompleteBox(this,hippoCache.getTagCache());
 
 		addTagButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
@@ -73,7 +71,7 @@ public class TagBoard extends Composite {
 
 		//First, do a name lookup on this tag
 		//
-		tagService.getTagAddIfNew(tagName, new AsyncCallback(){
+		hippoCache.getTagCache().getTagAddIfNew(tagName, new AsyncCallback(){
 
 			public void onFailure(Throwable caught) {
 				System.out.println("fail tagservice.getTagAddIfNew "+caught);	
@@ -151,48 +149,15 @@ public class TagBoard extends Composite {
 
 	public void saveThingsNowEvent(StdAsyncCallback callback) {
 		GWT.log("savethingsnowevent",null);
-		
-		
-		NestingCallbacks nest = new NestingCallbacks();
-	
-		nest.addToNest(new NestedStdAsyncCallback(callback));
-		
-		Iterator iter = listeners.iterator();		
-		
 
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			SaveListener listener = (SaveListener) iterator.next();		
 			
-			System.out.println("tagboard says addNestables");
-			
-			listener.addYourNestables(nest);			
+			listener.saveNowEvent();
 			
 		}
-		
-		
-//		
-//		if(iter.hasNext()){
-//			SaveListener listener = (SaveListener) iter.next();
-//			GWT.log("listener ",null);
-//			listener.saveNowEvent(iter,callback);
-//			nested.addCallback(new StdAsyncCallback(){
-//
-//				public void onSuccess(Object result) {
-//					// TODO Auto-generated method stub
-//					
-//				}});
-//		}
-//		//
-//		//if no listeners, just onSuccess now
-//		//
-//		else{
-//			callback.onSuccess(null);
-//		}
-		
-		
-		nest.doIt();
-		
-				
+		callback.onSuccess(null);
+							
 	}	
 
 }

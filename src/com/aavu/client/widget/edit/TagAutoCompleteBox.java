@@ -1,6 +1,7 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
 import com.aavu.client.widget.autocompletion.RemoteTAGAutoCompletionItems;
@@ -10,18 +11,11 @@ public class TagAutoCompleteBox extends AutoCompleteTextBox {
 
 	private TagBoard parentBoard;
 
-	private GWTTagServiceAsync tagService;
-
-	public TagAutoCompleteBox(TagBoard parentBoard,GWTTagServiceAsync tagService){
+	public TagAutoCompleteBox(TagBoard parentBoard,TagCache cache){
 		super();
 		this.parentBoard = parentBoard;
-		setTagServiceA(tagService);
 		
-		setCompletionItems(new RemoteTAGAutoCompletionItems(tagService));		
-	}
-
-	private void setTagServiceA(GWTTagServiceAsync tagService2) {
-		this.tagService = tagService2;		
+		setCompletionItems(new RemoteTAGAutoCompletionItems(cache));		
 	}
 
 	protected void complete() {

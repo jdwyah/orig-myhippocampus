@@ -8,6 +8,7 @@ import java.util.List;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -36,19 +37,20 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	private HorizontalPanel panel = new HorizontalPanel();
 
-	private GWTTagServiceAsync tagService;
+	private HippoCache hippoCache;
 	private List metaChoosers = new ArrayList();  //list of meta chooser objects of current tag
 	private Tag selectedTag;
 	private TagLocalService tagLocalService;
 	private TextBox tagName;
 
-	public void setTagService(GWTTagServiceAsync tagService2) {
-		this.tagService = tagService2;
+	
+	public void setHippoCache(HippoCache hippoCache) {
+		this.hippoCache = hippoCache;
 	}
 
 
-	public TagOrganizerView(GWTTagServiceAsync tagService2){
-		setTagService(tagService2);
+	public TagOrganizerView(HippoCache hCache){
+		setHippoCache(hCache);
 		tagLocalService = new TagLocalService();
 		
 		
@@ -66,7 +68,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 		tagList.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {
-				tagService.getTagAddIfNew(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
+				hippoCache.getTagCache().getTagAddIfNew(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
 					public void onFailure(Throwable caught) {
 						System.out.println("failed getting tag " + caught);
 					}
@@ -128,7 +130,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 	public void onClick(Widget source){
 		if (source == deleteTagButton){			
 			
-			tagService.removeTag(selectedTag, new StdAsyncCallback("tagService remove"){
+			hippoCache.getTagCache().removeTag(selectedTag, new StdAsyncCallback("tagService remove"){
 			//tagService.removeTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
 
 				public void onSuccess(Object result) {
@@ -160,7 +162,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 				System.out.println(element.getName());
 			}
 			
-			tagService.saveTag(selectedTag, new StdAsyncCallback("tagService saveTag"){
+			hippoCache.getTagCache().saveTag(selectedTag, new StdAsyncCallback("tagService saveTag"){
 
 				public void onSuccess(Object result) {
 					System.out.println("success in saving tag " + selectedTag.getName());
@@ -173,7 +175,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	public void populateTagList(){
 
-		tagService.getAllTags(new StdAsyncCallback("populateTagList"){
+		hippoCache.getTagCache().getAllTags(new StdAsyncCallback("populateTagList"){
 
 			public void onSuccess(Object result) {
 				Tag[] tags = (Tag[]) result;

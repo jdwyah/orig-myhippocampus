@@ -5,11 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.aavu.client.async.NestedStdAsyncCallback;
-import com.aavu.client.async.NestingCallbacks;
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.widget.tags.MetaTopicListWidget;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MetaTopicList extends Meta {
@@ -29,12 +27,6 @@ public class MetaTopicList extends Meta {
 	 */
 	private transient Map metaMap;
 
-	/**
-	 * just a temp ref as well
-	 */
-	private transient List topicNames;
-
-
 	//@Override
 	public boolean needsSaveCallback() {
 		return true;
@@ -44,7 +36,7 @@ public class MetaTopicList extends Meta {
 	public Widget getEditorWidget(Map metaMap) {
 		this.metaMap = metaMap;
 
-		MetaTopicListWidget widget = new MetaTopicListWidget(this);		
+		MetaTopicListWidget widget = new MetaTopicListWidget(this,true);		
 		return widget;		
 	}
 
@@ -57,7 +49,7 @@ public class MetaTopicList extends Meta {
 	public Widget getWidget(Map metaMap) {
 		this.metaMap = metaMap;
 		System.out.println("map "+metaMap);
-		MetaTopicListWidget widget = new MetaTopicListWidget(this);
+		MetaTopicListWidget widget = new MetaTopicListWidget(this,false);
 		return widget;
 	}
 
@@ -79,70 +71,27 @@ public class MetaTopicList extends Meta {
 	 * @param topicNames
 	 */
 	public void setVals(List topicNames) {
-		this.topicNames = topicNames;		
-	}
-
-	public void addYourNestables(NestingCallbacks nest) {
-
-		final StringBuffer sb = new StringBuffer();
 		
-		System.out.println("in meta topic list ");
+		StringBuffer sb = new StringBuffer();
 		
-		nest.addToNest(new NestedStdAsyncCallback(new StdAsyncCallback("FFF"){
-
-			public void onSuccess(Object result) {
-				System.out.println("DOING metaMap put");
-				metaMap.put(this, sb.toString());
-			}}));
-		
-		System.out.println("added metaMap put");
-		
+		System.out.println("in meta topic list "+topicNames);
 		
 		for (Iterator iter = topicNames.iterator(); iter.hasNext();) {
 			final String topicName = (String) iter.next();
 
-			cache.addTopicLookupNested(nest,topicName,new StdAsyncCallback("DDD"){
-
-				public void onSuccess(Object result) {
-					
-					System.out.println("DOING TopicForName rtn "+result);
-					
-					Topic topic = (Topic) result;
-					if(topic != null){
-						
-						sb.append(topic.getId()+"");
-						sb.append(";");
-					}	
-				}});
-				
-				
-//			
-//			NestedStdAsyncCallback n = new NestedStdAsyncCallback(new StdAsyncCallback("NNN"){
-//
-//				public void onSuccess(Object result) {
-//					
-//					System.out.println("DOING topic parse");
-//					
-//					cache.getTopicForNameA(topicName, new StdAsyncCallback("DDD"){
-//
-//						public void onSuccess(Object result) {
-//							
-//							System.out.println("DOING TopicForName rtn "+result);
-//							
-//							Topic topic = (Topic) result;
-//							if(topic != null){
-//								
-//								sb.append(topic.getId()+"");
-//								sb.append(";");
-//							}	
-//						}});
-//				}});
-
-			System.out.println("ADDING Topic Parser");
+			System.out.println("lookup "+topicName);
 			
-//			nest.addToNest(n);
+			Topic topic = cache.getTopicCache().getTopicForName(topicName);
+
+			if(topic != null){
+				sb.append(topic.getId()+"");
+				sb.append(";");
+			}
+			System.out.println("found: +"+topic);
+
 		}
-		
+		System.out.println("putting "+toMapIdx()+" | "+sb.toString());
+		metaMap.put(toMapIdx(), sb.toString());
 	}
 
 
@@ -151,26 +100,27 @@ public class MetaTopicList extends Meta {
 	}
 
 	/**
-	 * return list<string> from topic_id ; sep list
+	 * return list<topic> from topic_id ; sep list
 	 * 
 	 */
 	public List getVals() {
-		String s = (String) metaMap.get(this);
+		String s = (String) metaMap.get(toMapIdx());
 		List rtn = new ArrayList();
 
+		System.out.println("getVals "+s);
 		if(s != null){
 			String[] split = s.split(";");
 			for (int i = 0; i < split.length; i++) {
 				String string = split[i];
 				long l = Long.parseLong(string);			
 				
-				
-//				Topic t = cache.getTopicById(l);
-//				if(t != null){
-//					rtn.add(t);
-//				}else{
-//					GWT.log("null topic for "+string,null);
-//				}
+				System.out.println("lookup "+l);
+				Topic t = cache.getTopicCache().getTopicById(l);
+				if(t != null){
+					rtn.add(t);
+				}else{
+					GWT.log("null topic for "+string,null);
+				}
 			}
 		}
 		return rtn;		

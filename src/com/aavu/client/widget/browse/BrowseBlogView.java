@@ -2,6 +2,7 @@ package com.aavu.client.widget.browse;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.google.gwt.user.client.ui.Button;
@@ -13,9 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class BrowseBlogView extends Composite{
-
-	private GWTTopicServiceAsync topicService;
-
+	
 	private int start = 0;
 	private int numberPerScreen = 10;
 
@@ -25,10 +24,11 @@ public class BrowseBlogView extends Composite{
 	private Topic[] topics;
 
 	private int curStart;
+	private TopicCache topicCache;
 
-	public BrowseBlogView(GWTTopicServiceAsync topicService){
+	public BrowseBlogView(TopicCache cache){
 
-		this.topicService = topicService;
+		this.topicCache = cache;
 
 		topicPanel = new VerticalPanel();
 
@@ -45,7 +45,7 @@ public class BrowseBlogView extends Composite{
 
 
 	private void load() {
-		topicService.getBlogTopics(start,numberPerScreen,new StdAsyncCallback("BrowseBlog load"){
+		topicCache.getBlogTopics(start,numberPerScreen,new StdAsyncCallback("BrowseBlog load"){
 			public void onSuccess(Object result) {
 
 				topics = (Topic[]) result;
