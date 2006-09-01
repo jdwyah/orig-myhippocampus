@@ -18,6 +18,7 @@
 	
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"/>	
+		<property name="hackUserSwitch" value="${HOST.hack.user.switch}"></property>
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
 		<property name="topicDAO" ref="topicDAO"/>

@@ -65,8 +65,8 @@ public class HippoTest implements EntryPoint, TabListener  {
 		
 		String pre = "";
 		if(GWT.isScript()){
-			pre = GWT.getModuleBaseURL();
-			pre = "http://localhost:8080/HippoTest/service/";
+			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
+			pre = "http://localhost/HippoTest/service/";
 		}else{
 			pre = GWT.getModuleBaseURL();
 			pre = "http://localhost:8080/HippoTest/service/";
@@ -121,9 +121,13 @@ public class HippoTest implements EntryPoint, TabListener  {
 	 */
 	public void onModuleLoad() {
 
-		initServices();		
+		try{
+			initServices();		
+		}catch(Exception e){
+			System.out.println("Problem initting services! "+e);
+			loadGUI();
+		}
 		
-		//loadGUI();
 	}
 
 

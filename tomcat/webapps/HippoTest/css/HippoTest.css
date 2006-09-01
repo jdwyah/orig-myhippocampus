@@ -161,6 +161,8 @@ a:visited {
 }
 
 .gwt-TextArea {
+	height: 400px;
+	width: 300px;
 }
 
 .gwt-TextBox {
