@@ -33,6 +33,13 @@
 				<prop key="hibernate.dialect">${db.dialect}</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.cglib.use_reflection_optimizer">false</prop>
+				<!-- configuration pool via c3p0--> 
+				<prop key="c3p0.acquire_increment">1</prop> 
+				<prop key="c3p0.idle_test_period">100</prop> <!-- seconds --> 
+				<prop key="c3p0.max_size">100</prop> 
+				<prop key="c3p0.max_statements">0</prop> 
+				<prop key="c3p0.min_size">10</prop> 
+				<prop key="c3p0.timeout">100</prop> <!-- seconds --> 
 			</props>
 		</property>
 	</bean>

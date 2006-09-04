@@ -1,0 +1,21 @@
+.Tooltip{
+  border:1px solid #000000;
+  background-color: #FFFFCC;
+  color:#000000;
+  font-family:Arial;
+  font-size:12px;
+}
+
+.ImageButton{
+  margin:1px; 
+}
+
+.ImageButton-over{
+  border-width: 1px;
+  border-style: outset;
+}
+
+.ImageButton-pressed{
+  border-width: 1px;
+  border-style: inset;
+}

@@ -3,21 +3,25 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.cache.HippoCache;
-import com.aavu.client.service.remote.GWTTagServiceAsync;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicEditWidget extends Composite implements ClickListener {
 
 	private TextBox titleBox = new TextBox();
-	private TextArea textArea = new TextArea();
+	private SpecialTextbox textArea = new SpecialTextbox();
 	
 	private Button saveButton = new Button("Save");
 	
@@ -27,9 +31,11 @@ public class TopicEditWidget extends Composite implements ClickListener {
 	private TopicViewAndEditWidget topicViewAndEditWidget;
 	
 	
+	
 	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, HippoCache hippoCache, Topic topic){
 		this.topic = topic;
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
+		
 		
 		saveButton.addClickListener(this);		
 		
@@ -46,12 +52,20 @@ public class TopicEditWidget extends Composite implements ClickListener {
 		
 		//textArea.set
 		
+//		SpecialTextbox	ww = new SpecialTextbox();
+//		FocusPanel fp = new FocusPanel();
+//		fp.addKeyboardListener(ww);
+//		
+//		fp.add(ww);
+//		panel.add(fp);
+		
 		panel.add(textArea);
 	
 		panel.add(saveButton);
 	
 		initWidget(panel);
 	}
+	
 	
 	
 	private void setupTopic() {

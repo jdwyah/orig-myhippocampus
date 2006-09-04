@@ -15,7 +15,7 @@
 	<bean id="tagDAO" class="com.aavu.server.dao.db4o.TagDAOdb4oImpl">
 		<property name="objectContainer" ref="container"/>
 	</bean>	
-	<bean id="userDAO" class="com.aavu.server.dao.db4o.UserDAOImpl">
+	<bean id="userDAO" class="com.aavu.server.dao.db4o.UserDAOdb4oImpl">
 		<property name="objectContainer" ref="container"/>
 		<property name="initDAO" ref="initDAO"/>
 		<property name="init" value="true"/>
