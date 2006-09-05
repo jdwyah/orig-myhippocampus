@@ -39,8 +39,8 @@ public class Editor extends Composite/* implements HasHTML*/{
 	Element textElement;
 	VerticalPanel panel;
 	private HorizontalPanel toolbar = new HorizontalPanel();
-	private Hyperlink edit = new Hyperlink( "Edit", "Edit" );//TODO Browser Historie nicht berücksichtigen
 	private boolean inited = false;
+	private boolean loadedOk = false;
 
 
 	/**
@@ -79,13 +79,6 @@ public class Editor extends Composite/* implements HasHTML*/{
 		baseUrl = "richtext/skins/" + skin + "/";
 		setStylesheet(baseUrl);
 
-		edit.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				setEditable(true);
-			}
-		});
-		panel.add(edit);
-		panel.setCellHorizontalAlignment(edit, HasAlignment.ALIGN_RIGHT);
 
 		ListBox fontname = new ListBox();
 		fontname.addItem("Arial");
@@ -131,21 +124,11 @@ public class Editor extends Composite/* implements HasHTML*/{
 
 		addFormatImageButton("hr.gif", "Horizontal Rule", "InsertHorizontalRule");
 
-
-		Image close = new ImageButton(baseUrl + "close.gif", "Close");
-		close.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				setEditable(false);
-			}
-		});
-		toolbar.add(close);
-		toolbar.setCellHorizontalAlignment(close, HasAlignment.ALIGN_RIGHT);
-		toolbar.setCellWidth(close, "100%");
-
 		toolbar.setStyleName("Toolbar");
-		toolbar.setVisible(false);
+		toolbar.setVisible(true);
 		panel.add(toolbar);
 		panel.add(text);
+		
 	}
 
 
@@ -180,21 +163,24 @@ public class Editor extends Composite/* implements HasHTML*/{
 	/**
 	 * Create the IFrame that hold the editable text.
 	 */
-//	private void createFrame(){
 
-//	if(width!=null && height!=null){
-//	text.setWidth(width);
-//	text.setHeight(height);
-//	}
-//	}
 	private void initFrame(){
 
 
-//		System.out.println("111");
+		System.out.println("111");
 		if (isFrameLoaded(textElement)){
 			//if frame is loaded, then set it to editor
 			//setDesignMode(text.getElement(), true);
-//			System.out.println("2222");
+			System.out.println("2222");
+			
+			
+			
+			if(!loadedOk){
+				System.out.println("setEdit");
+				setEditable(true);
+			}
+			loadedOk  = true;
+			
 //			final RichTextArea rta = this;
 //			attachEventsToFrame(rta, editor.getElement(), isAuotoResizeHeight());
 ////			Window.alert("initFrame, will set html to " + this.html);		  		
@@ -206,7 +192,7 @@ public class Editor extends Composite/* implements HasHTML*/{
 //			onDisplayChanged();
 //			}
 		}else{
-//			System.out.println("151");
+			System.out.println("151");
 			text = new Frame();
 			text.setWidth(width);
 			text.setHeight(height);
@@ -291,9 +277,8 @@ public class Editor extends Composite/* implements HasHTML*/{
 	 * @param editable true means that is can be edit.
 	 */
 	public void setEditable(boolean editable){
+		System.out.println("set edit "+editable);
 		if(editable){
-			setEditable(textElement,editable);
-			setEditable(textElement,!editable);
 			setEditable(textElement,editable);
 		}else{
 			setEditable(textElement,editable);
@@ -304,31 +289,26 @@ public class Editor extends Composite/* implements HasHTML*/{
 			replaceNode(old, textElement);
 			setHTML(html);
 		}
-		toolbar.setVisible(editable);
-		edit.setVisible(!editable);
+		//toolbar.setVisible(editable);
+		//edit.setVisible(!editable);
 	}
 
 
 	native static void setEditable(Element element,boolean b)/*-{
-	    
-	    function set(doc){
-	    	doc.body.contentEditable = b;
-	    }
-	    
+	    	    
         var doc = element.contentWindow.document;        
+        
         element.contentWindow.focus();
-        doc.designMode = 'On';        
         
-        try{
-        	setTimeout(set(doc), 1000);        	
+        try {
+        setTimeout(function(){
+        	doc.designMode="On";
+        	doc.body.contentEditable = true;
+        	},1000);
         }catch(e){
-            try{
-        		setTimeout(set(doc), 1000);
-        	}catch(e){
-        	}
+        	alert("fail");
         }
-        //alert(doc);
-        
+                
     }-*/;
 
 

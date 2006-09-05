@@ -6,6 +6,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.UserDAO;
 
@@ -16,8 +17,9 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	private User u;	
 
 	private String A = "VBXCXSS";
-	private String B = "SDNSDF*(D";
-	private String B2 = "SDN_DFSD";
+	private String B = "XVNSDF*(D";
+	private String B2 = "XVN_DFSD";
+	private int publicTagNumber;
 	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
@@ -32,8 +34,10 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	protected void onSetUpInTransaction() throws Exception {
 	
 		super.onSetUpInTransaction();
-	
+		
 		u = userDAO.getUserByUsername("vpech");
+		
+		publicTagNumber = tagDAO.getPublicTags().size();
 		
 	}
 	
@@ -52,7 +56,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		tagDAO.save(t2);
 		
 		Tag t3 = new Tag();
-		t3.setName(B);
+		t3.setName(B2);
 		t3.setUser(u);
 		
 		tagDAO.save(t3);
@@ -63,7 +67,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		List<Tag> list = tagDAO.getAllTags(u);
 		
-		assertEquals(3, list.size());
+		assertEquals(3 + publicTagNumber, list.size());
 	}
 
 	public void testGetTag() {
@@ -76,21 +80,21 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		add3();
 		
-		List<Tag> l1 = tagDAO.getTagsStarting(u, "X");
+		List<Tag> l1 = tagDAO.getTagsStarting(u, "Z");
 		assertEquals(0, l1.size());
 		
-		l1 = tagDAO.getTagsStarting(u, "S");
+		l1 = tagDAO.getTagsStarting(u, "X");
 		assertEquals(2, l1.size());
 		
-		l1 = tagDAO.getTagsStarting(u, "SDN");
+		l1 = tagDAO.getTagsStarting(u, "XVN");
 		assertEquals(2, l1.size());
 		
-		l1 = tagDAO.getTagsStarting(u, "SDNS");
+		l1 = tagDAO.getTagsStarting(u, "XVNS");
 		assertEquals(1, l1.size());
 		
 	}
 
-	public void testRemoveTag() {
+	public void testRemoveTag() throws PermissionDeniedException {
 		
 		add3();
 		
@@ -100,7 +104,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		tagDAO.removeTag(u, t);
 		
 		List<Tag> list = tagDAO.getAllTags(u);		
-		assertEquals(2, list.size());
+		assertEquals(2+publicTagNumber, list.size());
 	}
 
 	public void testSave() {
@@ -124,10 +128,10 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		List<Tag> tagL = tagDAO.getAllTags(u);
 		
-		assertEquals(1, tagL.size());
+		assertEquals(1+publicTagNumber, tagL.size());
 		
-		Tag saved = tagL.get(0);
-		
+		Tag saved = tagDAO.getTag(u, B);
+				
 		assertEquals(1,saved.getMetas().size());
 		
 		Meta savedM = (Meta) saved.getMetas().get(0);

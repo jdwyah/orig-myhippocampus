@@ -119,4 +119,8 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
 
 	}
 
+	public List<Tag> getPublicTags() {
+		throw new RuntimeException("unimplemented");
+	}
+
 }

@@ -107,8 +107,8 @@
     <form action="<@spring.url "/site/signup.html"/>" method="POST">
       <table>
         <tr><td>User:</td><td><@spring.formInput "command.username"/><@regError/></td></tr>
-        <tr><td>Password:</td><td><@spring.formInput "command.password"/><@regError/></td></tr>
-        <tr><td>Password:</td><td><@spring.formInput "command.password2"/><@regError/></td></tr>
+        <tr><td>Password:</td><td><@spring.formPasswordInput "command.password"/><@regError/></td></tr>
+        <tr><td>Password:</td><td><@spring.formPasswordInput "command.password2"/><@regError/></td></tr>
 
         <tr><td colspan='2'><input name="submit" type="submit"></td></tr>
         <tr><td colspan='2'><input name="reset" type="reset"></td></tr>

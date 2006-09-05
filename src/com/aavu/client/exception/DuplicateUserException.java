@@ -1,4 +1,4 @@
-package com.aavu.server.exception;
+package com.aavu.client.exception;
 
 public class DuplicateUserException extends Exception {
 

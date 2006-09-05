@@ -78,7 +78,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return getHibernateTemplate().findByCriteria(crit);
 	}
 
-	public void save(Topic t) {
+	public Topic save(Topic t) {
 		System.out.println("a");
 //		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
 //			System.out.println("b");
@@ -89,8 +89,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //			getHibernateTemplate().saveOrUpdate(mv);
 //			System.out.println("d");
 //		}
-		
+				
 		getHibernateTemplate().saveOrUpdate(t);
+		return t;
 	}
 
 	public void tester() {

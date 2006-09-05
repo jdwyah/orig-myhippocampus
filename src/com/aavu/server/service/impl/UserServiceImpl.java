@@ -12,9 +12,9 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
-import com.aavu.server.exception.DuplicateUserException;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 

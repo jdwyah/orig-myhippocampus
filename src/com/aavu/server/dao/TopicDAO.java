@@ -8,7 +8,7 @@ import com.aavu.client.domain.User;
 
 public interface TopicDAO {
 
-	public abstract void save(Topic t);
+	public abstract Topic save(Topic t);
 	
 	public abstract List<Topic> getAllTopics(User user);
 

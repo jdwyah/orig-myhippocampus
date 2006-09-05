@@ -107,7 +107,12 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		hippoCache.getTopicCache().save(topic2, new StdAsyncCallback("topicDetail save") {				
 			
-			public void onSuccess(Object result) {																	
+			public void onSuccess(Object result) {		
+				
+				//this should prevent double saves
+				Topic saved = (Topic) result;
+				load(saved);
+				
 				topicList.load();
 				activateMainView();
 			}

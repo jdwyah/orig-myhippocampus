@@ -9,6 +9,7 @@ import org.gwtwidgets.server.rpc.GWTSpringController;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.server.service.TagService;
 
@@ -54,7 +55,7 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		}
 	}
 
-	public void removeTag(Tag selectedTag) {
+	public void removeTag(Tag selectedTag) throws PermissionDeniedException {
 		tagService.removeTag(selectedTag);
 	}
 

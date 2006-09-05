@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gwtwidgets.client.wrap.Effect;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.local.TagLocalService;
-import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -83,6 +85,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 							System.out.println("success getting tag " + selectedTag.getMetas().size());
 						}
 						displayMetas(selectedTag);
+						Effect.grow(metaListPanel);
 					}
 				});
 			}
@@ -97,6 +100,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 				//hmmm... this isn't all that pretty
 				selectedTag = t;
 				displayMetas(t);
+				Effect.grow(metaListPanel);
 			}});
 		tagListPanel.add(newTag);
 
@@ -123,20 +127,27 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		//buttonPanel.add(editTextButton);
 		//buttonPanel.add(saveButton);
 
+		metaListPanel.setVisible(false);
+		
 		initWidget(panel);
 	}
 
 
-	public void onClick(Widget source){
+	public void onClick(Widget source) {
 		if (source == deleteTagButton){			
 			
-			hippoCache.getTagCache().removeTag(selectedTag, new StdAsyncCallback("tagService remove"){
-			//tagService.removeTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
+			try {
+				hippoCache.getTagCache().removeTag(selectedTag, new StdAsyncCallback("tagService remove"){
+				//tagService.removeTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
 
-				public void onSuccess(Object result) {
-					System.out.println("success deleting tag");
-				}});
-
+					public void onSuccess(Object result) {
+						System.out.println("success deleting tag");
+					}});
+			} catch (PermissionDeniedException e) {
+				System.out.println("Tag removal failed!");
+			}
+			
+			Effect.dropOut(metaListPanel);
 			populateTagList();
 		}
 		else if (source == newMetaButton){
@@ -161,6 +172,8 @@ public class TagOrganizerView extends Composite implements ClickListener{
 				Meta element = (Meta) iter.next();
 				System.out.println(element.getName());
 			}
+			
+			Effect.dropOut(metaListPanel);
 			
 			hippoCache.getTagCache().saveTag(selectedTag, new StdAsyncCallback("tagService saveTag"){
 

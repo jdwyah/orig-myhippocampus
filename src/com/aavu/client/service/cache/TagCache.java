@@ -2,6 +2,7 @@ package com.aavu.client.service.cache;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,7 +21,7 @@ public class TagCache {
 		tagService.getTagAddIfNew(itemText, callback);
 	}
 
-	public void removeTag(Tag selectedTag, StdAsyncCallback callback) {
+	public void removeTag(Tag selectedTag, StdAsyncCallback callback) throws PermissionDeniedException {
 		tagService.removeTag(selectedTag, callback);		
 	}
 

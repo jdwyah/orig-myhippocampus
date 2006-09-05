@@ -79,13 +79,19 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}
 	}
 
-	public void save(Topic topic) {
+	public Topic save(Topic topic) {
 
-		log.debug("Save topics");
-		log.debug(topic.toPrettyString());
+		try {
+			log.debug("Save topics");
+			log.debug(topic.toPrettyString());
 
-		topicService.save(topic);
-
+			return convert(topicService.save(topic));
+			
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 

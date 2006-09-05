@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 public interface GWTTopicService extends RemoteService {
 
 	Topic[] getAllTopics(int startIndex, int maxCount);
-	void save(Topic topic);
+	Topic save(Topic topic);
 	//List getTopicsStarting(String match);//List<String>
 	Topic[] match(String match);//List<String>
 

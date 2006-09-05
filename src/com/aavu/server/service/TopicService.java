@@ -8,7 +8,7 @@ public interface TopicService {
 
 	List<Topic> getAllTopics();
 
-	void save(Topic topic);
+	Topic save(Topic topic);
 
 	List<Topic> getTopicsStarting(String match);
 

@@ -3,8 +3,8 @@ package com.aavu.server.service;
 import java.util.List;
 
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.server.domain.ServerSideUser;
-import com.aavu.server.exception.DuplicateUserException;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public interface UserService {

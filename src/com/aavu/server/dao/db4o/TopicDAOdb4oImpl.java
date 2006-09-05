@@ -27,7 +27,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 
 	}
 	
-	public void save(Topic t){
+	public Topic save(Topic t){
 
 		System.out.println("Topic Save "+t.getId()+" "+t.getTitle());
 		
@@ -88,6 +88,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 		t.setLastUpdated(new Date());
 		getDb4oTemplate().set(t);
 
+		return t;
 	}
 
 	public List<Topic> getAllTopics(final User user){

@@ -7,7 +7,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
-import com.aavu.server.exception.DuplicateUserException;
+import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 

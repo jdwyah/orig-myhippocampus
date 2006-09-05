@@ -19,7 +19,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Topic extends AbstractTopic implements Completable, IsSerializable{
 
-
+	public Topic(){
+		setLastUpdated(new Date());
+	}
 
 	public String toString(){
 		return getTitle()+" "+getText();

@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
@@ -36,10 +37,11 @@ public class TopicServiceImpl implements TopicService {
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 
-	public void save(Topic topic) {
+	public Topic save(Topic topic) {
 		System.out.println("Topic Save Setting User "+userService.getCurrentUser());
+		topic.setLastUpdated(new Date());
 		topic.setUser(userService.getCurrentUser());
-		topicDAO.save(topic);
+		return topicDAO.save(topic);
 	}
 
 }

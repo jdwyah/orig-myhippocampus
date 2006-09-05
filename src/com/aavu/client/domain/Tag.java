@@ -16,6 +16,10 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Tag  extends AbstractTag implements  Completable, IsSerializable{
 
+	public Tag(){
+		setPublicVisible(false);
+	}
+	
 	public String toPrettyString() {
 		StringBuffer rtn = new StringBuffer("Tag:\n");
 		
