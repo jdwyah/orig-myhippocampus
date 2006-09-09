@@ -33,13 +33,33 @@
 				<prop key="hibernate.dialect">${db.dialect}</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.cglib.use_reflection_optimizer">false</prop>
-				<!-- configuration pool via c3p0--> 
-				<prop key="c3p0.acquire_increment">1</prop> 
-				<prop key="c3p0.idle_test_period">100</prop> <!-- seconds --> 
-				<prop key="c3p0.max_size">100</prop> 
-				<prop key="c3p0.max_statements">0</prop> 
-				<prop key="c3p0.min_size">10</prop> 
-				<prop key="c3p0.timeout">100</prop> <!-- seconds --> 
+				
+				
+				<!-- configuration pool via c3p0-->
+				<!-- from http://forum.java.sun.com/thread.jspa?threadID=691105&tstart=0 -->				
+				<prop key="c3p0.min_size">10</prop>
+				<prop key="c3p0.max_size">100</prop>
+				<prop key="c3p0.timeout">10</prop>
+				<prop key="c3p0.acquireRetryAttempts">30</prop>
+
+				<prop key="c3p0.acquireIncrement">5</prop>
+
+				<prop key="c3p0.idleConnectionTestPeriod">300</prop>
+
+				<prop key="c3p0.initialPoolSize">20</prop>
+				<prop key="c3p0.maxPoolSize">100</prop>
+				<prop key="c3p0.maxIdleTime">300</prop>
+				<prop key="c3p0.maxStatements">50</prop>
+				<prop key="c3p0.minPoolSize">10</prop>
+
+				<!-- configuration pool via c3p0-->
+				<!-- from forums.hibernate -->
+<!--				<prop key="c3p0.acquire_increment">1</prop> -->
+<!--				<prop key="c3p0.idle_test_period">100</prop>  seconds  -->
+<!--				<prop key="c3p0.max_size">100</prop> -->
+<!--				<prop key="c3p0.max_statements">0</prop> -->
+<!--				<prop key="c3p0.min_size">10</prop> -->
+<!--				<prop key="c3p0.timeout">100</prop>  seconds  -->
 			</props>
 		</property>
 	</bean>
