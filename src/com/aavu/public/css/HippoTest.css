@@ -18,6 +18,69 @@ a:visited {
   color: darkblue;
 }
 
+.GuiTest-Sidebar {
+	background: #FFFFFF;
+	margin-left: 600px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+.GuiTest-Ocean {
+	background-image: url("../img/ocean.png");
+	background-repeat: repeat;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+	height: 600px;
+	width: 800px;
+	z-index: 0;
+}
+.GuiTest-Island {
+	position: absolute;	
+	background-image: url("../img/earth.png");
+	background-repeat: repeat;
+}
+.GuiTest-CompassRose {
+	position: absolute;	
+    top: 0px;
+    left: 0px;
+	z-index: 1;	
+}
+
+.PopWindow {
+	border: 1px solid black;
+}
+
+.PopBody {
+	background: #e6eaf6;
+}
+
+.Caption {
+	width: 100%;
+	height: 25px;
+	background: #e6eaf6;
+	cursor: move;
+}
+
+.Content {
+	width: auto;
+	height: 100%;
+	background: #ffffff;
+	border: 1px solid black;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+
+.close {
+	float: right;
+	margin-top: 2px;
+	margin-right: 2px;
+	cursor: pointer;
+}
+
+
 .gwt-BorderedPanel {
 }
 

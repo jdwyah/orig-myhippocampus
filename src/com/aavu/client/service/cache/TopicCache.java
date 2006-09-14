@@ -98,6 +98,7 @@ public class TopicCache {
 					
 			}else if(rtn == TOPIC_LIST){
 				Topic[] t = (Topic[]) result;
+			//	if(t.)
 				for (int i = 0; i < t.length; i++) {					
 					Topic topic = t[i];
 					System.out.println("list adding to cache "+topic.getTitle());

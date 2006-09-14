@@ -36,6 +36,7 @@ public class TopicEditWidget extends Composite implements ClickListener {
 		this.topic = topic;
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 		
+		System.out.println("topic edit widg "+topic);
 		
 		saveButton.addClickListener(this);		
 		
@@ -69,8 +70,9 @@ public class TopicEditWidget extends Composite implements ClickListener {
 	
 	
 	private void setupTopic() {
+		System.out.println("setupTopic");
 		if(topic != null){
-			titleBox.setText(topic.getTitle());
+			titleBox.setText(topic.getTitle());		
 			textArea.setText(topic.getText());
 						
 			tagBoard.load(topic);

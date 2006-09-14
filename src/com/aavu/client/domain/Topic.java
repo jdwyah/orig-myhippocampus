@@ -21,6 +21,10 @@ public class Topic extends AbstractTopic implements Completable, IsSerializable{
 
 	public Topic(){
 		setLastUpdated(new Date());
+		setTitle("");
+		
+		//important. helps activates edit area
+		setText("<BODY contentEditable=true></BODY>");		
 	}
 
 	public String toString(){

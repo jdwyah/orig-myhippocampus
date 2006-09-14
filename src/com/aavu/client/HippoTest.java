@@ -3,6 +3,7 @@ package com.aavu.client;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.domain.User;
+import com.aavu.client.gui.MainMap;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
@@ -37,7 +38,7 @@ import com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class HippoTest implements EntryPoint, TabListener  {
+public class HippoTest implements EntryPoint {
 
 	private DockPanel panel = new DockPanel();
 	private TabPanel viewContainer = new TabPanel();
@@ -163,94 +164,13 @@ public class HippoTest implements EntryPoint, TabListener  {
 			username = user.getUsername();
 		}
 		Label title = new Label("Add Article "+msg+" ||"+" &-"+username);
-		title.setStyleName("ta-Title");
-		HorizontalPanel titlePanel = new HorizontalPanel();
-		titlePanel.add(title);
-		titlePanel.setCellWidth(title, "100%");
 
-		DockPanel logoPanel = new DockPanel();
-		Image logo = new Image("images/HippoLogo.jpg");
-		//logo.setSize();
 		
-		logoPanel.add(logo,DockPanel.WEST);
-		logoPanel.setStyleName("ta-logo");
+		MainMap mainMap = new MainMap(hippoCache);
+		RootPanel.get().add(mainMap);
 
-		HorizontalPanel top = new HorizontalPanel();
-		top.add(logoPanel);
-		top.add(titlePanel);
-		top.setCellWidth(logoPanel,"20%");
-		top.setCellWidth(titlePanel,"80%");
-		top.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-		top.addStyleName("ta-TopPanel");
-
-		viewContainer = new TabPanel();
-		viewContainer.addTabListener(this);
-		//viewContainer.setStyleName("ks-Sink");
-
-		VerticalPanel vp = new VerticalPanel();
-		vp.setWidth("100%");
-		vp.add(description);
-		vp.add(viewContainer);	    
-
-		//description.setStyleName("ks-Info");
-
-		panel.add(top, DockPanel.NORTH);
-
-		panel.add(vp, DockPanel.CENTER);
-
-		panel.setCellWidth(vp, "100%");
-
-		RootPanel.get().add(panel);
-
-		// Show the initial screen.
-		/* String initToken = History.getToken();
-		 if (initToken.length() > 0)
-		 onHistoryChanged(initToken);
-		 else
-		 showInfo();*/
-		//viewContainer.add(ComposeView.init().getInstance(), "Edit Topic");
-		//viewContainer.add(TagOrganizerView.init().getInstance(), "Manage Tags");
-
-
-		tagView = new TagOrganizerView(hippoCache);
-
-		addEditView = new AddEditView(hippoCache);
-		
-		browseView = new BrowseView(hippoCache);
-		
-		viewContainer.add(addEditView, "Main");
-		viewContainer.add(browseView, "Browse");				
-		viewContainer.add(tagView, "Tags");
-
-		viewContainer.selectTab(0);	
+	
 	}
 
 
-	//*******  TabListener methods  *******
-
-	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex){
-		return true;
-	}
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex){
-
-		Widget w = viewContainer.getWidget(tabIndex);
-		
-		if(w == tagView){
-			((TagOrganizerView)w).populateTagList();	
-		}
-		
-		
-		
-	}
-
-	//**** End TabListener methods *******
-
-	private class EditListener implements ClickListener {
-		public void onClick(Widget source){
-			if (((Button)source).getText()=="Preview")
-			{
-				//show(FinalizeView.init(this));
-			}				  
-		}
-	}
 }
