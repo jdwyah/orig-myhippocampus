@@ -56,6 +56,9 @@ public class Editor extends Composite/* implements HasHTML*/{
 	/**
 	 * This method is called when the editor becomes attached to the browser's
 	 * document. In this method all elements are created with the current skin.
+	 * 
+	 * TODO if somebody edit->cancel->edit, we re-init everything. caused jscript error until we panel.clear(), but this should
+	 * really not have to happen. Maybe even make these static.
 	 */
 	protected void onLoad(){
 		super.onLoad();
@@ -126,6 +129,10 @@ public class Editor extends Composite/* implements HasHTML*/{
 
 		toolbar.setStyleName("Toolbar");
 		toolbar.setVisible(true);
+		
+		//
+		//
+		panel.clear();
 		panel.add(toolbar);
 		panel.add(text);
 		

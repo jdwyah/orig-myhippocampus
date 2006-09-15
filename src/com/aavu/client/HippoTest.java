@@ -1,6 +1,5 @@
 package com.aavu.client;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
@@ -20,20 +19,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
-import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -76,6 +67,8 @@ public class HippoTest implements EntryPoint {
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
 			pre = "http://www.myhippocampus.com/HippoTest/service/";
+			pre = "http://localhost:8080/HippoTest/service/";
+			
 		}else{
 			pre = GWT.getModuleBaseURL();
 			pre = "http://localhost:8080/HippoTest/service/";

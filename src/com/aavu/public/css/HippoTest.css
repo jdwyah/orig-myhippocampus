@@ -24,6 +24,23 @@ a:visited {
 	position: absolute;
 	top: 0px;
 	right: 0px;
+	width: 200px;
+	height: 500px;
+}
+
+.GuiTest-Dashboard {
+	background: #FFFFFF;
+	position: absolute;
+		
+	bottom: 0px;
+	left: 20%;		
+	width: 200px;
+	height: 40px;
+	
+	margin: 0 auto;   /* align for good browsers */
+	text-align: left; /* counter the body center */
+
+	border: 2px solid #000;
 }
 
 .GuiTest-Ocean {

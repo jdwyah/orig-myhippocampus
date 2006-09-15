@@ -18,13 +18,12 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicEditWidget extends Composite implements ClickListener {
+public class TopicEditWidget extends Composite {
 
 	private TextBox titleBox = new TextBox();
 	private SpecialTextbox textArea = new SpecialTextbox();
 	
-	private Button saveButton = new Button("Save");
-	
+
 	private TagBoard tagBoard;
 	
 	private Topic topic;
@@ -37,9 +36,7 @@ public class TopicEditWidget extends Composite implements ClickListener {
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 		
 		System.out.println("topic edit widg "+topic);
-		
-		saveButton.addClickListener(this);		
-		
+				
 		tagBoard = new TagBoard(hippoCache);
 		
 		setupTopic();
@@ -62,7 +59,6 @@ public class TopicEditWidget extends Composite implements ClickListener {
 		
 		panel.add(textArea);
 	
-		panel.add(saveButton);
 	
 		initWidget(panel);
 	}
@@ -80,19 +76,16 @@ public class TopicEditWidget extends Composite implements ClickListener {
 	}
 
 
-	public void onClick(Widget source) {
-		if (source == saveButton){
-			
-			topic.setText(textArea.getText());
-			topic.setTitle(titleBox.getText());
-			
-			tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
 
-				public void onSuccess(Object result) {
-					topicViewAndEditWidget.save(topic);					
-				}});
-					
-						
-		}
+	public void save() {
+		topic.setText(textArea.getText());
+		topic.setTitle(titleBox.getText());
+		
+		tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
+
+			public void onSuccess(Object result) {
+				topicViewAndEditWidget.save(topic);					
+			}});
 	}
+
 }

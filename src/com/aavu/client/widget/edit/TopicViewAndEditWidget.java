@@ -21,7 +21,8 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	
 	private Button editTextButton = new Button("Edit Text");
 	private Button cancelButton = new Button("Cancel");	
-		
+	private Button saveButton = new Button("Save");
+	
 	private TopicWidget topicWidget;
 	private TopicEditWidget topicEditWidget;
 
@@ -44,6 +45,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		cancelButton.addClickListener(this);
 		editTextButton.addClickListener(this);
+		saveButton.addClickListener(this);
 		
 		mainPanel.add(lp);
 		mainPanel.add(topicPanel);
@@ -72,6 +74,9 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		else if (source == editTextButton){
 			activateEditView();
 		}
+		else if (source == saveButton){
+			topicEditWidget.save();									
+		}
 		
 	}
 	
@@ -92,6 +97,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 				
 		lp.clear();
 		lp.add(cancelButton);
+		lp.add(saveButton);		
 	}
 
 

@@ -1,5 +1,6 @@
 package com.aavu.client.gui;
 
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.util.LorumIpsum;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;

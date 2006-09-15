@@ -21,7 +21,9 @@ public class FlashContainer extends SimplePanel {
 	"</object>";
 
 	public FlashContainer(){
-		initFunctions();
+		//initFunctions();
+		
+		
 //		/GWT.create(classLiteral);
 		
 		Element e = DOM.createDiv();		
