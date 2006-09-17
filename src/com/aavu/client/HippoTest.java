@@ -67,7 +67,7 @@ public class HippoTest implements EntryPoint {
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
 			pre = "http://www.myhippocampus.com/HippoTest/service/";
-			pre = "http://localhost:8080/HippoTest/service/";
+		//	pre = "http://localhost:8080/HippoTest/service/";
 			
 		}else{
 			pre = GWT.getModuleBaseURL();

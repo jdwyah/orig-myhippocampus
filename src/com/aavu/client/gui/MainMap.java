@@ -86,6 +86,36 @@ public class MainMap extends Composite {
 	}-*/;
 
 
+
+	//initLand(56, [{id:7,tag:"iO",size:1},{id:8,tag:"iT",size:4},{id:24,tag:"i3",size:8}], 6, 100); 
+	native void doIslands()/*-{
+	
+	var b = $wnd["ocean"];
+	
+	alert("b: "+b);
+ 
+    var s = "(56, [{id:7,tag:\"iO\",size:1},{id:8,tag:\"iT\",size:4},{id:24,tag:\"i3\",size:8}], 6, 100)";
+ 
+ 
+    var open = "<invoke name=\"initLand\" returntype=\"javascript\"><arguments>";
+ 	var s = "<int>56</int>";
+ 	var s1 = "<array><int>7</int><string>name</string><int>1</int></array>";
+ 	var s2 = "<int>6</int>";
+ 	var s3 = "<int>100</int>";
+ 	var close = "</arguments></invoke>";
+ 
+ 
+ 	alert(open+s+s1+s2+s3+close);
+ 
+ 	try{
+	b.CallFunction(open+s+s1+s2+s3+close);
+    }catch(e){
+     alert("fail "+e);
+    }
+		    	
+	}-*/;
+	
+	
 	public void newTopic() {
 		Topic blank = new Topic();
 		blank.setTitle("new");
@@ -94,6 +124,7 @@ public class MainMap extends Composite {
 
 
 	public void showTagBoard() {
+		doIslands();
 		TagEditorWindow tw = new TagEditorWindow(hippoCache);
 		tw.setPopupPosition(100,100);
 		tw.show();

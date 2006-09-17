@@ -10,14 +10,14 @@ public class FlashContainer extends SimplePanel {
 	private String flashStr = 
 			"<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" codebase=\"http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0\" width=\"100%\" height=\"100%\" id=\"ocean\" align=\"middle\">"+
 //	"<param name=\"allowScriptAccess\" value=\"sameDomain\" />"+
-	"<param name=\"movie\" value=\"ocean.swf\" />"+
+	"<param name=\"movie\" value=\"preOcean.swf\" />"+
 	"<param name=\"quality\" value=\"high\" />"+
 	"<param name=\"bgcolor\" value=\"#ffffff\" />"+
 	"<param name=\"allowScriptAccess\" value=\"always\" />"+
 	"<param name='wmode' value='transparent' />"+
 	"<param name=\"scale\" VALUE=\"\" />"+
 	"<param name=\"swLiveConnect\" VALUE=\"true\" />"+
-	"<embed src=\"ocean.swf\" swLiveConnect=\"true\" quality=\"high\" bgcolor=\"#ffffff\" allowScriptAccess='always' wmode='transparent' width=\"100%\" height=\"100%\" name=\"ocean\" scale=\"\" align=\"middle\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"+
+	"<embed src=\"preOcean.swf\" swLiveConnect=\"true\" quality=\"high\" bgcolor=\"#ffffff\" allowScriptAccess='always' wmode='transparent' width=\"100%\" height=\"100%\" name=\"ocean\" scale=\"\" align=\"middle\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"+
 	"</object>";
 
 	public FlashContainer(){

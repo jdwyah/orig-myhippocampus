@@ -12,6 +12,54 @@
 	    
 	</head>
 	<body> 
+	
+	<script language="Javascript">
+<!--
+// please keep these lines on when you copy the source
+// made by: Nicolas - http://www.javascript-page.com
+
+
+var setable = "unset";
+
+
+
+function bulinker(where) {
+top.location = where
+alert("sssssss");
+}
+
+
+function fff(vvv){
+alert("setable "+setable);
+//ocean_DoFSCommand("baaaaaaaaaaaar", "");
+}
+
+
+function ocean_DoFSCommand(command, args) {
+  alert("receive from flash");
+	
+	flashCommand(command,args);
+}
+
+function islandClicked(arg) {
+	alert("receivedURL from flash"+arg);
+}
+
+// Hook for Internet Explorer 
+if (navigator.appName && navigator.appName.indexOf("Microsoft") != -1 && 
+	  navigator.userAgent.indexOf("Windows") != -1 && navigator.userAgent.indexOf("Windows 3.1") == -1) {
+	document.write('<SCRIPT LANGUAGE=VBScript\> \n');
+	document.write('on error resume next \n');
+	document.write('Sub ocean_FSCommand(ByVal command, ByVal args)\n');
+	document.write('  call ocean_DoFSCommand(command, args)\n');
+	document.write('end sub\n');
+	document.write('</SCRIPT\> \n');
+}
+
+
+//-->
+</script>
+	
 		<!-- This script is the bootstrap stuff that simply must be there; it is sent down uncompressed -->
 		<script language='javascript' src='gwt.js'></script>
 
