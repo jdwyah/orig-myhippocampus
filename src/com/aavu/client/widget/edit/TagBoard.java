@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TagBoard extends Composite {
+public class TagBoard extends Composite implements CompleteListener {
 
 	private VerticalPanel tagPanel = new VerticalPanel();
 	private Button addTagButton = new Button("Add");
@@ -85,6 +85,9 @@ public class TagBoard extends Composite {
 
 	}
 
+	public void completed(String completeText) {
+		tagTopic(completeText);
+	}	
 	
 	/**
 	 * load the topic into the GUI 
@@ -158,6 +161,7 @@ public class TagBoard extends Composite {
 		}
 		callback.onSuccess(null);
 							
-	}	
+	}
+
 
 }

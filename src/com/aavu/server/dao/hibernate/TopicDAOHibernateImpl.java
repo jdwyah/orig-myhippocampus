@@ -12,6 +12,7 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TopicDAO;
@@ -97,6 +98,14 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public void tester() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public List<Topic> getTopicsWithTag(Tag tag) {		
+		return getHibernateTemplate().findByNamedParam(""+
+				"from Topic top "+
+				"left join fetch top.user "+
+				"where top.tags.id is :tag"
+				,"tag",tag.getId());		
 	}
 
 }

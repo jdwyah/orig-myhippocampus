@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -67,6 +68,11 @@ public class TopicCache {
 		topicService.match(match, call);		
 	}
 
+
+	public void getTopicsWithTag(Tag tag, StdAsyncCallback callback) {
+		topicService.getTopicsWithTag(tag,callback);
+	}
+	
 	
 	/**
 	 * a callback that wraps the real callback, but caches the returned topic
@@ -112,6 +118,8 @@ public class TopicCache {
 		}
 		
 	}
+
+
 
 
 

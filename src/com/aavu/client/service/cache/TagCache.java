@@ -36,4 +36,8 @@ public class TagCache {
 	public void match(String match, AsyncCallback call) {
 		tagService.match(match, call);
 	}
+
+	public void getTagForName(String completeText, AsyncCallback call) {
+		tagService.getTagForName(completeText, call);
+	}
 }

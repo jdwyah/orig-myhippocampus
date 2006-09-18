@@ -9,19 +9,26 @@ import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
 
 public class TagAutoCompleteBox extends AutoCompleteTextBox {
 
-	private TagBoard parentBoard;
+	private CompleteListener listener;
 
-	public TagAutoCompleteBox(TagBoard parentBoard,TagCache cache){
+	public TagAutoCompleteBox(TagCache cache){
+		this(null,cache);
+	}
+	public TagAutoCompleteBox(CompleteListener listener,TagCache cache){
 		super();
-		this.parentBoard = parentBoard;
-		
+		this.listener = listener;
+
 		setCompletionItems(new RemoteTAGAutoCompletionItems(cache));		
 	}
 
 	protected void complete() {
 		super.complete();
 		System.out.println("In TagAutoCompleteBox's complete()");
-		parentBoard.tagTopic(this.getText());
+		
+		if(listener != null){
+			listener.completed(this.getText());
+		}
+		
 		this.setText("");
 	}
 

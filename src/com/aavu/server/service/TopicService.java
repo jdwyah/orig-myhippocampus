@@ -2,6 +2,7 @@ package com.aavu.server.service;
 
 import java.util.List;
 
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 
 public interface TopicService {
@@ -15,5 +16,7 @@ public interface TopicService {
 	Topic getForName(String string);
 
 	List<Topic> getBlogTopics(int start, int numberPerScreen);
+
+	List<Topic> getTopicsWithTag(Tag tag);
 
 }

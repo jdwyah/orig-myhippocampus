@@ -3,6 +3,7 @@ package com.aavu.server.dao;
 import java.util.List;
 
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 
@@ -19,5 +20,7 @@ public interface TopicDAO {
 	public abstract void tester();
 
 	public abstract List<Topic> getBlogTopics(User user,int start, int numberPerScreen);
+
+	public abstract List<Topic> getTopicsWithTag(Tag tag);
 
 }

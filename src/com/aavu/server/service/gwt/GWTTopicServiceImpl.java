@@ -86,7 +86,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			log.debug(topic.toPrettyString());
 
 			return convert(topicService.save(topic));
-			
+
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -219,9 +219,21 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 	public Topic getTopicForName(String topicName) {
 		try {
-			
+
 			return convert(topicService.getForName(topicName));
-			
+
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Topic[] getTopicsWithTag(Tag tag) {
+		try {
+
+			return convertToArray(topicService.getTopicsWithTag(tag));
+
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();

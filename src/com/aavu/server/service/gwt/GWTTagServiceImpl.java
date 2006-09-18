@@ -83,6 +83,21 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 			e.printStackTrace();
 		}
 	}
+	
+
+	public Tag getTagForName(String completeText) {
+		try{
+			log.debug("getTagForName:");
+			log.debug(completeText);
+			
+			return convert(tagService.getTagForName(completeText));
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 
 	public void setTagService(TagService tagService) {
 		this.tagService = tagService;
@@ -102,5 +117,6 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		t.setMetas(nMetas);		
 		return t;
 	}
+
 
 }

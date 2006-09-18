@@ -123,4 +123,5 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
 		throw new RuntimeException("unimplemented");
 	}
 
+
 }

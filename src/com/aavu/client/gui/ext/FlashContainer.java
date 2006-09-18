@@ -21,72 +21,104 @@ public class FlashContainer extends SimplePanel {
 	"</object>";
 
 	public FlashContainer(){
-		//initFunctions();
-		
-		
-//		/GWT.create(classLiteral);
-		
+	
 		Element e = DOM.createDiv();		
 		DOM.setInnerHTML(e, flashStr );
 
 		setElement(e);
-		setStyleName("GuiTest-Ocean");
+		
 
 	}
 
-	native void initFunctions()/*-{
-	alert("init start");
-	var foo = '42';
+
+	native void pokeFlash()/*-{
 	
-	alert("setable"+$wnd.setable);
-	alert("setable"+$wnd.setable);
-	$wnd.setable = "i've set you";
-	alert("init fin");
+	var a = $doc["ocean"];
+	var b = $wnd["ocean"];
 	
-	function testmovie_DoFSCommand(command, args) { 
-   		alert("Here's the Flash message: " + args);  			
+	alert("b: "+b);
+ 
+ 	try{
+	b.CallFunction("<invoke name=\"moveSq\" returntype=\"javascript\">" + 
+    	 + "</invoke>");
+    }catch(e){
+     alert("fail "+e);
+    }
+	
+	//b.moveSq();
+	//alert("d");
+	//a.moveSq();
+	
+	//thisMovie("ocean").moveSq();
+	    	
+	    	
+	    	function thisMovie(movieName) {
+    	if (navigator.appName.indexOf("Microsoft") != -1) {
+        	return $wnd[movieName]
+    	}
+    	else {
+        	return $doc[movieName]
+    	}
 	}
-	alert("f1");
-	$wnd.flashCommand = function ocean_DoFSCommand(command, args){
-		alert("asdf");
-		alert("command"+command);
+	function thisThing() {
+    	if (navigator.appName.indexOf("Microsoft") != -1) {
+        	return window
+    	}
+    	else {
+        	return document
+    	}
 	}
-	alert("f2");
-//	function helloWorld = function(){ 
-//		alert("hellowWorldCalled");
-//		return "YESSSSSSS";
-//	}
-    
-}-*/;
-	
-//	
-//	native void initFlash()/*-{
-//	function callExternalInterface() {
-//    	thisMovie("ocean").moveSq();
-//	}
-//
-//	function thisMovie(movieName) {
-//    	if (navigator.appName.indexOf("Microsoft") != -1) {
-//        	return window[movieName]
-//    	}
-//    	else {
-//        	return document[movieName]
-//    	}
-//	}
-//
-//	}-*/;
-	
-	
-//	
-//	native void callFlash(String function,Object[] args)/*-{
-//
-//	var a = $wnd["ocean"];
-//
-//	a.CallFunction("<invoke name=\"moveSq\" returntype=\"javascript\">" + 
-//    	 + "</invoke>");
-//	    	
-//	}-*/;
+	    	
+	}-*/;
 
+	private String boolProp(String name,boolean val){
+		return "<property id='"+name+"'><bool>"+val+"</bool></property>";
+	}
+	private String numberProp(String name,long val){
+		return "<property id='"+name+"'><number>"+val+"</number></property>";
+	}
+	private String stringProp(String name,String val){
+		return "<property id='"+name+"'><string>"+val+"</string></property>";
+	}
+	private String islandObj(long id, String name,int size){
+		return "<object>"+numberProp("id",id)+stringProp("tag",name)+numberProp("size",size)+"</object>";
+	}
+ 
+	
+    protected String getCommand(){
+    	StringBuffer sb = new StringBuffer();
+    	sb.append("<invoke name=\"initLand\" returntype=\"javascript\"><arguments>");
+    	sb.append("<number>56</number>");
+    	sb.append("<array>");     	
+     	sb.append("<property id='0'>"+islandObj(7,"Music",2)+"</property>");
+     	sb.append("<property id='1'>"+islandObj(8,"Contacts",8)+"</property>");
+     	sb.append("<property id='2'>"+islandObj(24,"Books",10)+"</property>");
+     	sb.append("</array>");
+     	sb.append("<number>6</number>");
+     	sb.append("<number>100</number>");
+     	sb.append("</arguments></invoke>");    				
+		return sb.toString();
+	}
+	
 
+	//initLand(56, [{id:7,tag:"iO",size:1},{id:8,tag:"iT",size:4},{id:24,tag:"i3",size:8}], 6, 100); 
+	protected native void doIslands(String command)/*-{
+	
+	//$doc firefox
+	//$wnd IE
+	
+	var b = $wnd["ocean"];
+	
+	alert("b: "+b);
 
+ 	alert(command);
+ 
+ 		try{
+			b.CallFunction(command);
+    	}catch(e){
+     		alert("fail "+e);
+    	}		    	
+	}-*/;
+	
+	
 }

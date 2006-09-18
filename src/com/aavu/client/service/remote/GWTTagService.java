@@ -16,4 +16,5 @@ public interface GWTTagService extends RemoteService {
 	
 	void saveTag(Tag selectedTag);
 	
+	Tag getTagForName(String completeText);
 }

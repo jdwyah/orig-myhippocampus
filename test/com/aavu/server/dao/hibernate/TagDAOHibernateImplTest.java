@@ -2,6 +2,8 @@ package com.aavu.server.dao.hibernate;
 
 import java.util.List;
 
+import org.springframework.dao.support.DataAccessUtils;
+
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.Tag;
@@ -155,5 +157,5 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(2,savedNumber2.getMetas().size());
 		
 	}
-
+	
 }

@@ -43,6 +43,18 @@ a:visited {
 	border: 2px solid #000;
 }
 
+.GuiTest-TagSearch {
+	background: #FFFFFF;
+	position: absolute;
+		
+	bottom: 10%;
+	left: 0px;		
+	width: 60px;
+	height: 80px;
+	
+	border: 2px solid #000;
+}
+
 .GuiTest-Ocean {
 	background-image: url("../img/ocean.png");
 	background-repeat: repeat;

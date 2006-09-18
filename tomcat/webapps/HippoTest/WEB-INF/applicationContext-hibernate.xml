@@ -44,7 +44,7 @@
 
 				<prop key="c3p0.acquireIncrement">5</prop>
 
-				<prop key="c3p0.idleConnectionTestPeriod">300</prop>
+				<prop key="c3p0.idleConnectionTestPeriod">100</prop>
 
 				<prop key="c3p0.initialPoolSize">20</prop>
 				<prop key="c3p0.maxPoolSize">100</prop>

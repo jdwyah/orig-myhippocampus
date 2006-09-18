@@ -17,4 +17,6 @@ public interface TagService {
 
 	List<Tag> getAllTags();
 
+	Tag getTagForName(String completeText);
+
 }

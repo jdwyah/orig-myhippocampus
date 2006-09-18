@@ -83,6 +83,10 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 
 		tagDAO.save(selectedTag);
 	}
+	
+	public Tag getTagForName(String completeText) {
+		return tagDAO.getTag(userService.getCurrentUser(),completeText);
+	}
 
 
 }

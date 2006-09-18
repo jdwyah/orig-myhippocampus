@@ -3,6 +3,7 @@ package com.aavu.client;
 import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
+import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
@@ -46,6 +47,7 @@ public class HippoTest implements EntryPoint {
 	private User user;
 	
 	private HippoCache hippoCache;
+	private Manager manager;
 	
 	
 	private void initServices(){
@@ -93,7 +95,7 @@ public class HippoTest implements EntryPoint {
 		
 		hippoCache = new HippoCache(topicService,tagService,userService);
 		
-		
+		manager = new Manager(hippoCache);
 		
 		//static service setters.
 		//hopefully replace with Spring DI
@@ -159,7 +161,7 @@ public class HippoTest implements EntryPoint {
 		Label title = new Label("Add Article "+msg+" ||"+" &-"+username);
 
 		
-		MainMap mainMap = new MainMap(hippoCache);
+		MainMap mainMap = new MainMap(manager);
 		RootPanel.get().add(mainMap);
 
 	

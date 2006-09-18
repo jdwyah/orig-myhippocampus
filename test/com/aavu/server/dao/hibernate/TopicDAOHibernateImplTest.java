@@ -184,6 +184,54 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
+	
+	public void testGetTopicsWithTag(){
+		
+		String B = "Ssds45t";
+		String C = "ASR#35rf";
+		
+		User u = userDAO.getUserByUsername("test");
+				
+		Topic t = new Topic();
+		t.setText(B);
+		t.setTitle(C);
+		t.setUser(u);
+				
+		Topic t2 = new Topic();
+		t2.setText(C);
+		t2.setTitle(B);
+		t2.setUser(u);
+		
+		Tag tag = new Tag();
+		tag.setName("testtagAAA");					
+		
+		tagDAO.save(tag);
+		
+		t.getTags().add(tag);
+		
+		System.out.println("before: "+t.getId());
+		
+		topicDAO.save(t);
+		topicDAO.save(t2);
+		
+		System.out.println("after: "+t.getId());
+		
+		List<Topic> savedL = topicDAO.getTopicsWithTag(tag);
+		
+		System.out.println(savedL.get(0));
+		System.out.println("b: " +t.toPrettyString());
+		
+		System.out.println(((Topic)savedL.get(0)).toPrettyString());
+		
+		
+		assertEquals(1, savedL.size());
+		assertEquals(t, savedL.get(0));
+		
+		Topic b = savedL.get(0);
+		assertNotNull(b.getUser());
+		
+		System.out.println("A");
+	}
 
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;

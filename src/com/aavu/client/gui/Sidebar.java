@@ -9,6 +9,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.VertableTabPanel;
+import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
@@ -18,9 +19,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Sidebar extends SimplePanel {
-
-	private MainMap map;
-	private HippoCache hippoCache;
+	
+	private Manager manager;
 
 	private VertableTabPanel tabPanel;
 
@@ -30,12 +30,12 @@ public class Sidebar extends SimplePanel {
 	Map sidebarEntries = new GWTSortedMap();	
 
 
-	public Sidebar(MainMap _map, HippoCache hippoCache){
-		this.map = _map;
-		this.hippoCache = hippoCache;
+	public Sidebar(Manager manager){
+		
+		this.manager = manager;
 		tabPanel = new VertableTabPanel(VertableTabPanel.VERTICAL);
 
-		hippoCache.getTopicCache().getAllTopics(0, 0, new StdAsyncCallback("Sidebar"){
+		manager.getTopicCache().getAllTopics(0, 0, new StdAsyncCallback("Sidebar"){
 
 			public void onSuccess(Object result) {
 				Topic[] topics = (Topic[]) result;
@@ -140,7 +140,7 @@ public class Sidebar extends SimplePanel {
 					public void onClick(Widget sender) {
 						System.out.println("CLICKED");
 
-						map.bringUpChart(topic);
+						manager.bringUpChart(topic);
 					}});
 				vp.add(l);
 			}

@@ -3,6 +3,7 @@ package com.aavu.server.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
@@ -42,6 +43,9 @@ public class TopicServiceImpl implements TopicService {
 		topic.setLastUpdated(new Date());
 		topic.setUser(userService.getCurrentUser());
 		return topicDAO.save(topic);
+	}
+	public List<Topic> getTopicsWithTag(Tag tag) {
+		return topicDAO.getTopicsWithTag(tag);
 	}
 
 }
