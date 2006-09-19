@@ -33,9 +33,7 @@ public class AddEditView extends Composite {
 		
 		topicViewAndEditWidget = new TopicViewAndEditWidget(hippoCache);		
 		topicList = new TopicList(hippoCache.getTopicCache(),topicViewAndEditWidget);
-		topicViewAndEditWidget.setTopicList(topicList);
-		
-		
+				
 		
 		leftPanel.add(new SearchP());
 		leftPanel.add(topicList);

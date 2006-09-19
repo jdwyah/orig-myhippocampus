@@ -27,7 +27,6 @@ public class Manager {
 	}
 	private void initConstants() {
 		myConstants = (Consts) GWT.create(Consts.class);
-		Window.alert(myConstants.helloWorld());
 	}	
 
 	public void bringUpChart(Topic topic) {
@@ -69,7 +68,14 @@ public class Manager {
 		map.doIslands();
 	}
 
+	public void gotoTopic(String historyToken) {
+		hippoCache.getTopicCache().getTopicForNameA(historyToken, new StdAsyncCallback("GotoTopic"){
 
+			public void onSuccess(Object result) {
+				Topic t = (Topic) result;
+				bringUpChart(t);
+			}});		
+	}
 
 
 
@@ -82,4 +88,5 @@ public class Manager {
 	public TagCache getTagCache() {
 		return hippoCache.getTagCache();
 	}
+
 }

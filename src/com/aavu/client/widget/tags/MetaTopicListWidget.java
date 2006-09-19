@@ -86,8 +86,8 @@ public class MetaTopicListWidget extends SaveListener {
 				cr.setText(s.getTitle());
 				listP.add(cr);
 			}
-			else{
-				listP.add(new Hyperlink(s.getTitle(),""));
+			else{				
+				listP.add(new Hyperlink(s.getTitle(),s.getTitle()));
 			}
 			
 			firstRow = false;	

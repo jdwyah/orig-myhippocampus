@@ -30,7 +30,6 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	private VerticalPanel lp;
 	
 	public Topic topic;
-	private TopicList topicList;
 	private HippoCache hippoCache;	
 	
 	
@@ -99,12 +98,6 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		lp.add(cancelButton);
 		lp.add(saveButton);		
 	}
-
-
-	public void setTopicList(TopicList topicList) {
-		this.topicList = topicList;
-	}
-	
 	
 
 	public void save(Topic topic2) {
@@ -119,7 +112,6 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 				Topic saved = (Topic) result;
 				load(saved);
 				
-				topicList.load();
 				activateMainView();
 			}
 		});	

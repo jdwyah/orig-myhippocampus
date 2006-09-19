@@ -4,6 +4,10 @@
 package com.aavu.client.widget.RichText2;
 
 
+import org.gwtwidgets.client.util.Location;
+import org.gwtwidgets.client.util.WindowUtils;
+import org.gwtwidgets.client.wwrapper.WHyperlink;
+
 import com.aavu.client.widget.RichText.RichTextArea;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
@@ -29,7 +33,7 @@ import com.google.gwt.user.client.ui.*;
  * <!--webbot bot="Include" U-Include="../../../../../../_private/google-banner.html" TAG="BODY" -->
  * @author Volker Berlin
  */
-public class Editor extends Composite/* implements HasHTML*/{
+public class Editor extends Composite /* implements HasHTML*/{
 
 	private String width;
 	private String height;
@@ -124,7 +128,8 @@ public class Editor extends Composite/* implements HasHTML*/{
 		addFormatImageButton("list.gif", "Bullet List", "InsertUnorderedList");
 		addFormatImageButton("outdent.gif", "Outdent", "Outdent");        
 		addFormatImageButton("indent.gif", "Indent", "Indent");        
-
+		
+		addFormatImageButton("link.gif", "createlink", "CreateLink",new LinkClickListener());
 		addFormatImageButton("hr.gif", "Horizontal Rule", "InsertHorizontalRule");
 
 		toolbar.setStyleName("Toolbar");
@@ -202,8 +207,7 @@ public class Editor extends Composite/* implements HasHTML*/{
 			System.out.println("151");
 			text = new Frame();
 			text.setWidth(width);
-			text.setHeight(height);
-			
+			text.setHeight(height);			
 			textElement = text.getElement();
 			
 			Timer t = new Timer() {
@@ -222,17 +226,20 @@ public class Editor extends Composite/* implements HasHTML*/{
 	 * @param url The Imagename relative to the skin.
 	 * @param tooltip The tooltip of the button.
 	 * @param command The edit command
-	 */
+	 */	
 	private void addFormatImageButton(String url, String tooltip, final String command){
-		Image image = new ImageButton( baseUrl + url, tooltip);
-		image.addClickListener(new ClickListener(){
+		addFormatImageButton(url, tooltip, command,new ClickListener(){
 			public void onClick(Widget sender) {
 				format(textElement, command, null);
 			}
 		});
+		
+	}
+	private void addFormatImageButton(String url, String tooltip, final String command,ClickListener cl){
+		Image image = new ImageButton( baseUrl + url, tooltip);
+		image.addClickListener(cl);
 		toolbar.add(image);
 	}
-
 
 	/**
 	 * Get the current HTML text of the editor.
@@ -324,11 +331,10 @@ public class Editor extends Composite/* implements HasHTML*/{
     }-*/;
 
 
-	native static void format(Element editor, String command, Object option)/*-{
+	native static void format(Element editor, String command, String option)/*-{
         editor.contentWindow.focus();
         editor.contentWindow.document.execCommand(command, false, option);
-    }-*/;
-
+    }-*/;	
 
 	/**
 	 * Add the style sheet from the skin to the page. 
@@ -371,4 +377,25 @@ public class Editor extends Composite/* implements HasHTML*/{
     	return false;
     }
 }-*/;
+	
+	
+	
+	
+	
+	
+	private class LinkClickListener implements ClickListener {
+
+		
+		public void onClick(Widget sender) {		
+			
+			Hyperlink h;
+			String link = "#Cathedral";
+						
+			format(textElement, "CreateLink", link);		
+		}
+
+	}
+
+
+
 }

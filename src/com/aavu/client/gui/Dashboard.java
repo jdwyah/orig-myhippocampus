@@ -51,6 +51,8 @@ public class Dashboard extends SimplePanel {
 
 		mainPanel.add(addNewButton);
 		mainPanel.add(tagButton);
+		mainPanel.add(initIslands);
+		
 
 		add(mainPanel);
 		//sets

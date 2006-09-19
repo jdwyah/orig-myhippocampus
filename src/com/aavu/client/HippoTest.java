@@ -17,6 +17,8 @@ import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -30,7 +32,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class HippoTest implements EntryPoint {
+public class HippoTest implements EntryPoint, HistoryListener {
 
 	private DockPanel panel = new DockPanel();
 	private TabPanel viewContainer = new TabPanel();
@@ -135,6 +137,16 @@ public class HippoTest implements EntryPoint {
 
 		try{
 			initServices();		
+			
+			System.out.println("Module load");
+			
+			String initToken = History.getToken();
+		    if (initToken.length() > 0){
+		      onHistoryChanged(initToken); 
+		    }
+		    
+		    History.addHistoryListener(this);
+		    
 		}catch(Exception e){
 			Window.alert("e: "+e);
 			System.out.println("Problem initting services! "+e);
@@ -167,5 +179,12 @@ public class HippoTest implements EntryPoint {
 	
 	}
 
+	public void onHistoryChanged(String historyToken) {
+	    // This method is called whenever the application's history changes. Set
+	    // the label to reflect the current history token.
+		System.out.println("history changed to "+historyToken);
+		manager.gotoTopic(historyToken);	    
+	  }
+	
 
 }
