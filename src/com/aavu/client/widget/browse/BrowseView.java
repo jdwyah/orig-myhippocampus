@@ -2,11 +2,8 @@ package com.aavu.client.widget.browse;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.cache.HippoCache;
-import com.aavu.client.service.remote.GWTTagServiceAsync;
-import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.edit.TopicViewAndEditWidget;
-import com.aavu.client.widget.edit.TopicList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -21,7 +18,6 @@ public class BrowseView extends Composite {
 	private BrowseOptionPanel browseOptions; 	
 	private DockPanel mainView;
 	
-	private TopicList topicList;
 	private TopicViewAndEditWidget topicViewAndEditWidget;	
 	private VerticalPanel topicPanel;
 	private HippoCache hippoCache;

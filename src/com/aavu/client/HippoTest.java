@@ -12,7 +12,6 @@ import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.service.remote.GWTUserService;
 import com.aavu.client.service.remote.GWTUserServiceAsync;
 import com.aavu.client.widget.browse.BrowseView;
-import com.aavu.client.widget.edit.AddEditView;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
@@ -41,7 +40,6 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	
 	
 	private TagOrganizerView tagView;
-	private AddEditView addEditView;
 	private BrowseView browseView;
 	
 	private String msg = "";

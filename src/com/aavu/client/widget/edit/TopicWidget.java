@@ -36,7 +36,6 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 	public Topic topic;
 	private GWTTopicServiceAsync topicServiceA;
-	private TopicList topicList;
 
 	private static SimpleDateFormatGWT df; 
 

@@ -33,9 +33,15 @@ public class FlashContainer extends SimplePanel {
 
 	native void pokeFlash()/*-{
 	
-	var a = $doc["ocean"];
-	var b = $wnd["ocean"];
+	var b = $doc["ocean"];
 	
+	alert("bb"+b);
+	
+	if(doc.all){
+		alert("doc.all");
+		b = $wnd["ocean"];
+	}
+			
 	alert("b: "+b);
  
  	try{
@@ -107,8 +113,12 @@ public class FlashContainer extends SimplePanel {
 	//$doc firefox
 	//$wnd IE
 	
-	var b = $wnd["ocean"];
+	var b = $doc["ocean"];	
 	
+	if($doc.all){
+		b = $wnd["ocean"];
+	}
+			
 	alert("b: "+b);
 
  	alert(command);
