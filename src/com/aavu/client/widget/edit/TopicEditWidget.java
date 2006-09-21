@@ -4,6 +4,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.widget.RichText2.HippoEditor;
+import com.aavu.client.widget.RichText2.KeyCodeEventListener;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -21,9 +22,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TopicEditWidget extends Composite {
 
-	private TextBox titleBox = new TextBox();
-	private HippoEditor textArea = new HippoEditor();
 	
+	private TextBox titleBox = new TextBox();
+	private SpecialTextbox textArea = null;
 
 	private TagBoard tagBoard;
 	
@@ -37,7 +38,9 @@ public class TopicEditWidget extends Composite {
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 		
 		System.out.println("topic edit widg "+topic);
-				
+		
+		textArea = new SpecialTextbox();
+		
 		tagBoard = new TagBoard(hippoCache);
 		
 		setupTopic();
@@ -51,7 +54,10 @@ public class TopicEditWidget extends Composite {
 		
 		//textArea.set
 		
-//		SpecialTextbox	ww = new SpecialTextbox();
+		SpecialTextbox	ww = new SpecialTextbox();
+		
+		
+		
 //		FocusPanel fp = new FocusPanel();
 //		fp.addKeyboardListener(ww);
 //		
@@ -88,5 +94,6 @@ public class TopicEditWidget extends Composite {
 				topicViewAndEditWidget.save(topic);					
 			}});
 	}
+
 
 }

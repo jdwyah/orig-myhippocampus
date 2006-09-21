@@ -4,13 +4,23 @@
 package com.aavu.client.widget.RichText2;
 
 
-import org.gwtwidgets.client.util.Location;
-import org.gwtwidgets.client.util.WindowUtils;
-import org.gwtwidgets.client.wwrapper.WHyperlink;
-
-import com.aavu.client.widget.RichText.RichTextArea;
-import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Frame;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 
 /**
@@ -43,18 +53,19 @@ public class Editor extends Composite /* implements HasHTML*/{
 	private Element textElement;
 	private VerticalPanel panel;
 
-	protected EditorWidget editorW;
-
+	
 	private HorizontalPanel toolbar = new HorizontalPanel();
 	private boolean inited = false;
 	private boolean loadedOk = false;
+
+    private KeyCodeEventListener listener;
 
 
 	/**
 	 * Constructor of a Rich Text Editor
 	 */
 	public Editor(){
-		panel = new VerticalPanel();
+		panel = new VerticalPanel();			 
 		initWidget(panel);
 	}
 
@@ -165,6 +176,9 @@ public class Editor extends Composite /* implements HasHTML*/{
 	}
 
 
+	public void setFocus(boolean b) {
+		text.setFocus(b);
+	}
 
 	/**
 	 * Set the skin of the editor. If not set then the default skin is used.
@@ -196,7 +210,8 @@ public class Editor extends Composite /* implements HasHTML*/{
 				setEditable(true);
 
 				System.out.println("attach events to textElement");
-				attachEventsToFrame(textElement);
+				attachEventsToFrame(textElement);							
+				
 			}
 			loadedOk  = true;
 
@@ -220,9 +235,7 @@ public class Editor extends Composite /* implements HasHTML*/{
 			text.setWidth(width);
 			text.setHeight(height);			
 			textElement = text.getElement();			
-			editorW = new EditorWidget(textElement);
-			
-			
+
 			//run the second half of the initialization above
 			//
 			Timer t = new Timer() {
@@ -331,8 +344,39 @@ public class Editor extends Composite /* implements HasHTML*/{
 		//toolbar.setVisible(editable);
 		//edit.setVisible(!editable);
 	}
-
-
+	
+	/**
+	 * 
+	 * 
+	 * @param command
+	 * @param option
+	 */
+	protected void format(String command, String option){
+		
+		format(textElement,command,option);
+	}
+	
+	protected String expandSelection(){
+		System.out.println("expand");
+		return expandSelectionJS(textElement);		
+	}
+	
+	
+	native static String expandSelectionJS(Element element)/*-{
+		element.contentWindow.focus();
+		var doc = element.contentWindow.document;		  
+		var range = doc.selection.createRange();
+		var suc = range.expand("word");
+		alert(range.htmlText);
+	//	alert(range.text);
+		alert(suc+" "+range.text);
+		alert("doc.selection: "+doc.selection);
+		doc.selection.setSelectionRange(2, 4);
+		//doc.selection = range;
+		return range.text;
+		//doc.execCommand("CreateLink",false,"#cathedral");	
+    }-*/;
+	
 	native static void setEditable(Element element,boolean b)/*-{
 
         var doc = element.contentWindow.document;        
@@ -360,8 +404,7 @@ public class Editor extends Composite /* implements HasHTML*/{
 	native static void replaceNode(Element oldElement, Element newElement)/*-{
         oldElement.parentNode.replaceChild(newElement, oldElement);
     }-*/;
-
-
+	
 	native static void format(Element editor, String command, String option)/*-{
         editor.contentWindow.focus();
         editor.contentWindow.document.execCommand(command, false, option);
@@ -410,43 +453,95 @@ public class Editor extends Composite /* implements HasHTML*/{
     }
 }-*/;
 
+	public void keyEvent(JavaScriptObject o){
+		//	java.lang.Object;
+
+		String str = o+" "+(o instanceof Event);
+
+//		DOM.eventGetKeyCode((Event) o);
+
+		Window.alert(str);
+
+		System.out.println("o: "+o);
+		//System.out.println(o.getClass());
+		System.out.println(o instanceof Event);
+	}
+		
+	/**
+	 * called from javascript
+	 * 
+	 * pass to overridable linkEventCallback(i)
+	 * 
+	 * @param i
+	 */
+	private void keyEvent(int i){
+		if(listener != null){
+			listener.keyCodeEvent(i);
+		}
+	}
+	private void muppet(int i){
+	//	System.out.println("MUPPET");
+	//	System.out.println(expandSelection());
+	}
+
+	public void setKeyEventlistener(KeyCodeEventListener listener) {
+		this.listener = listener;	
+	}
+	
 	private native void attachEventsToFrame(Element elem)/*-{
     var d = elem.contentWindow.document;
 
-    var handleEvent = function(){
-    		alert("foo!");
-        };
+   	var callBackTarget = this;
+    var handleEvent = function(arg){    		
+//    	alert("handle");
+//    	alert("handle ctrl "+arg.ctrl);
+//		alert("ev code: "+arg.keyCode);
+//		alert("ev which: "+arg.which);			
+		var code = arg.which ? arg.which : arg.keyCode;															    	                															    	
+    	callBackTarget.@com.aavu.client.widget.RichText2.Editor::keyEvent(I)(code);
+    };
+    var muppet = function(arg){    		
+		var code = 1;															    	                															    	
+    	callBackTarget.@com.aavu.client.widget.RichText2.Editor::muppet(I)(code);
+    };
 
     var _eventPatch = function(editor_id) {
 		var win, e;
-		alert("1");
+
 		try {
 			// Try selected instance first
 
-			alert("win: "+win);
 
-			win = elem.contentWindow;
-			alert("win: "+win);
-
-			if (win && win.event) {
-				e = win.event;
-
-				if (!e.target)
-					e.target = e.srcElement;
-
-				handleEvent(e);
-				return;
-			}
+//
+//			win = elem.contentWindow;
+//			alert("win: "+win);
+//			alert("win.event: "+win.event);
+//			alert("oe: "+$wnd.event);
+//			if (win && win.event) {
+//				e = win.event;
+//
+//				alert("!e.tag "+!e.target);
+//				if (!e.target)
+//					e.target = e.srcElement;
+//				alert("e: "+e);
+//				alert("e src: "+e.srcElement);
+//				handleEvent(e);
+//				return;
+//			}
 
 
 			for (var i=0; i<$doc.frames.length; i++) {
 
+//				alert("i "+i);
  	                    if ($doc.frames[i].event) {
  	                                var event = $doc.frames[i].event;
-
+//				alert("ev: "+event);
  	                                if (!event.target)
  	                                        event.target = event.srcElement;
-
+//				alert("ev ctrl: "+event.ctrlKey);
+//				alert("ev code: "+event.keyCode);
+//				alert("ev which: "+event.which);
+				//alert("ev keycode: "+(evt.which ? evt.which : evt.keyCode));				
  	                                handleEvent(event);
  	                                return;
 						}
@@ -468,38 +563,39 @@ public class Editor extends Composite /* implements HasHTML*/{
 
 
 	if (document.all) {	
-		addEvent(d, "keypress", handleEvent);		
+		addEvent(d, "mouseup", muppet);
+		addEvent(d, "keypress", _eventPatch);		
 	} else {
+		addEvent(d, "mouseup", muppet);
 		addEvent(d, "keypress", handleEvent);
 	}
-
-
-
-
-
-//    if(document.all){
-//        d.attachEvent("onkeydown", f);
-//        d.attachEvent("onkeypress", f);
-//        d.attachEvent("onmousedown", f);
-//        d.attachEvent("onmouseup", f);
-//    }else{
-//        d.addEventListener("keydown", f, false);
-//        d.addEventListener("keypress", f, false);
-//        d.addEventListener("mousedown", f, false);
-//        d.addEventListener("mouseup", f, false);
-//    }
-
-
 }-*/;
 
-	public Object getSelectionRange(){
+	
+
+	public void setSelectionRange(JavaScriptObject range){
+		nativeSetSelectionRange(textElement, range);
+	}
+	private native void nativeSetSelectionRange(Element e, JavaScriptObject range) /*-{
+	    if(range == null){
+	        return;
+	    }
+	    if(document.all){
+	        range.select();
+	    }else{
+			var sel = e.contentWindow.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
+	    }
+	}-*/;
+	public JavaScriptObject getSelectionRange(){
 		return nativeGetSelectionRange(textElement);
 	}
 
-	private native Object nativeGetSelectionRange(Element e)/*-{
+	private native JavaScriptObject nativeGetSelectionRange(Element e)/*-{		
 		try{
-			if (document.all) {
-		        var sel = e.contentWindow.document.selection;
+			if (document.all) {			
+		        var sel = e.contentWindow.document.selection;		    
 				return sel.createRange();
 			} else {
 		        var sel = e.contentWindow.getSelection();
@@ -518,47 +614,6 @@ public class Editor extends Composite /* implements HasHTML*/{
 			alert("error occured while get the selection. Please contact with vendor.\n" + e.message);
 		}
 	}-*/;
-
-
-	private class EditorWW extends Widget{
-		public EditorWW(Element textElement) {
-			setElement(textElement);
-		}		
-	}
-
-	protected class EditorWidget extends FocusPanel {//implements SourcesKeyboardEvents {
-
-		//private KeyboardListenerCollection keyboardListeners;
-
-		public EditorWidget(Element textElement) {
-			super(new EditorWW(textElement));
-			System.out.println("made it");
-			//setElement(textElement);
-			//sinkEvents(Event.KEYEVENTS | Event.FOCUSEVENTS); 
-		}
-
-//		public void addKeyboardListener(KeyboardListener listener) {
-//		if (keyboardListeners == null)
-//		keyboardListeners = new KeyboardListenerCollection();
-//		keyboardListeners.add(listener);
-//		}
-
-//		public void removeKeyboardListener(KeyboardListener listener) {
-//		if (keyboardListeners != null)
-//		keyboardListeners.remove(listener);
-//		}	
-//		public void onBrowserEvent(Event event) {
-//		System.out.println("EditorWidget browser event "+event);
-//		switch (DOM.eventGetType(event)) {		    
-//		case Event.ONKEYDOWN:
-//		case Event.ONKEYUP:
-//		case Event.ONKEYPRESS:
-//		if (keyboardListeners != null)
-//		keyboardListeners.fireKeyboardEvent(this, event);
-//		break;
-//		}			
-//		}
-	}
-
+	
 
 }

@@ -24,7 +24,10 @@ public class PopupWindow extends ModablePopupPanel implements ClickListener{
     
     
     public PopupWindow(String text){
-    	super(true);
+    	this(text,false);
+    }
+    public PopupWindow(String text,boolean modal){
+    	super(modal);
     	addStyleName("PopWindow");
     	
     	mainPanel = new VerticalPanel();
