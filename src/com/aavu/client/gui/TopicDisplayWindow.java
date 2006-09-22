@@ -8,7 +8,6 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;

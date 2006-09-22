@@ -8,6 +8,7 @@ import org.db4ospring.support.Db4oDaoSupport;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TagDAO;
 import com.db4o.query.Predicate;
@@ -121,6 +122,11 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
 
 	public List<Tag> getPublicTags() {
 		throw new RuntimeException("unimplemented");
+	}
+
+	public List<TagStat> getTagStats(User user) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
