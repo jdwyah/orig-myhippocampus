@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 
 public interface TopicService {
 
 	List<Topic> getAllTopics();
+	
+	List<TopicIdentifier> getAllTopicIdentifiers();
 
 	Topic save(Topic topic);
 
@@ -17,6 +20,6 @@ public interface TopicService {
 
 	List<Topic> getBlogTopics(int start, int numberPerScreen);
 
-	List<Topic> getTopicsWithTag(Tag tag);
+	List<TopicIdentifier> getTopicIdsWithTag(Tag tag);
 
 }

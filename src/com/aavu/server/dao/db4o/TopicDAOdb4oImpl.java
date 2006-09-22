@@ -13,6 +13,7 @@ import org.db4ospring.support.Db4oDaoSupport;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TopicDAO;
 import com.db4o.query.Predicate;
@@ -223,7 +224,12 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 	}
 //	public void saveT(Tag tag) {
 
-	public List<Topic> getTopicsWithTag(Tag tag) {
+	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
 		// TODO Auto-generated method stub
 		return null;
 	}

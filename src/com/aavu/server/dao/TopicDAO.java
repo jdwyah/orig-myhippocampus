@@ -5,11 +5,14 @@ import java.util.List;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 
 public interface TopicDAO {
 
 	public abstract Topic save(Topic t);
+	
+	public abstract List<TopicIdentifier> getAllTopicIdentifiers(User user);
 	
 	public abstract List<Topic> getAllTopics(User user);
 
@@ -21,6 +24,6 @@ public interface TopicDAO {
 
 	public abstract List<Topic> getBlogTopics(User user,int start, int numberPerScreen);
 
-	public abstract List<Topic> getTopicsWithTag(Tag tag);
+	public abstract List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user);
 
 }

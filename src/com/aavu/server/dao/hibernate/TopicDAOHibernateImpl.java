@@ -1,6 +1,8 @@
 package com.aavu.server.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.FetchMode;
@@ -14,6 +16,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TopicDAO;
 
@@ -100,12 +103,46 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		
 	}
 
-	public List<Topic> getTopicsWithTag(Tag tag) {		
-		return getHibernateTemplate().findByNamedParam(""+
-				"from Topic top "+
-				"left join fetch top.user "+
-				"where top.tags.id is :tag"
-				,"tag",tag.getId());		
+	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {			
+		
+		Object[] params = {tag.getId(),user};				
+		List<Object[]> list = getHibernateTemplate().find(""+
+				"select title, id from Topic top "+
+				"where top.tags.id is ? "+
+				"and user is ? "
+				,params);
+				
+		
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+
+		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list){
+			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+		}
+		
+		return rtn;		 		
+	}
+
+	/**
+	 * TODO replace string concatenations! 
+	 */	
+	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
+		List<Object[]> list = getHibernateTemplate().findByNamedParam(""+
+				"select title, id from Topic top "+				
+				"where user is :user "+
+				"order by title asc "
+				,"user",user);
+		
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+
+		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list){
+			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+		}
+		
+		return rtn;
 	}
 
 }

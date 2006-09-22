@@ -3,8 +3,9 @@ package com.aavu.client.service;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.MainMap;
-import com.aavu.client.gui.TagContentsWindow;
+import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TagEditorWindow;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.service.cache.HippoCache;
@@ -13,6 +14,7 @@ import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.Consts;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Label;
 
 public class Manager {
 
@@ -29,12 +31,18 @@ public class Manager {
 		myConstants = (Consts) GWT.create(Consts.class);
 	}	
 
+	public void bringUpChart(TopicIdentifier ident) {
+		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback("BringUpChart"){
+			public void onSuccess(Object result) {
+				bringUpChart((Topic) result);				
+			}});
+				
+	}
 	public void bringUpChart(Topic topic) {
 		TopicWindow tw = new TopicWindow(hippoCache,topic);
 		tw.setPopupPosition(100,100);
 		tw.show();		
 	}
-
 
 	public void newTopic() {
 		Topic blank = new Topic();
@@ -56,10 +64,16 @@ public class Manager {
 		hippoCache.getTagCache().getTagForName(completeText,new StdAsyncCallback("Get Tag For Name"){
 
 			public void onSuccess(Object result) {
-				Tag tag = (Tag) result;
-				TagContentsWindow tcw = new TagContentsWindow(Manager.this,tag);
-				tcw.setPopupPosition(100,100);
-				tcw.show();
+				final Tag tag = (Tag) result;
+				getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback("Get Topics with Tag"){
+
+					public void onSuccess(Object result) {
+						TopicIdentifier[] topics = (TopicIdentifier[]) result;
+						
+						TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
+						tcw.setPopupPosition(100,100);
+						tcw.show();		
+					}});								
 			}});
 
 

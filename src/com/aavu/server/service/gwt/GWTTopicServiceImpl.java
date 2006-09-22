@@ -12,6 +12,7 @@ import org.gwtwidgets.server.rpc.GWTSpringController;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.TopicService;
 
@@ -165,6 +166,15 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 		return rtn;
 	}
+	private TopicIdentifier[] convertToArray(List<TopicIdentifier> list){
+
+		TopicIdentifier[] rtn = new TopicIdentifier[list.size()];
+		for(int i=0;i<list.size();i++){				
+			TopicIdentifier t = list.get(i);
+			rtn[i] = t;
+		}
+		return rtn;
+	}
 
 	public static Topic convert(Topic t){
 		log.debug("Topic's tags: "+t.getId()+" "+t.getTitle()+" "+t.getTags().getClass());
@@ -229,10 +239,14 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}
 	}
 
-	public Topic[] getTopicsWithTag(Tag tag) {
+	/**
+	 * this conversion is just list -> array
+	 * 
+	 */
+	public TopicIdentifier[] getTopicIdsWithTag(Tag tag) {
 		try {
 
-			return convertToArray(topicService.getTopicsWithTag(tag));
+			return convertToArray(topicService.getTopicIdsWithTag(tag));
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -240,4 +254,19 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			return null;
 		}
 	}
+
+	/**
+	 * this conversion is just list -> array
+	 * 
+	 */
+	public TopicIdentifier[] getAllTopicIdentifiers() {
+		try {
+			return convertToArray(topicService.getAllTopicIdentifiers());
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

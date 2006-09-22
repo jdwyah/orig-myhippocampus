@@ -7,6 +7,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
@@ -216,21 +217,45 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		System.out.println("after: "+t.getId());
 		
-		List<Topic> savedL = topicDAO.getTopicsWithTag(tag);
+		List<TopicIdentifier> savedL = topicDAO.getTopicIdsWithTag(tag,u);
 		
 		System.out.println(savedL.get(0));
 		System.out.println("b: " +t.toPrettyString());
 		
-		System.out.println(((Topic)savedL.get(0)).toPrettyString());
+		System.out.println(((TopicIdentifier)savedL.get(0)));
 		
 		
 		assertEquals(1, savedL.size());
-		assertEquals(t, savedL.get(0));
+				
+		TopicIdentifier b = savedL.get(0);
 		
-		Topic b = savedL.get(0);
-		assertNotNull(b.getUser());
+		assertEquals(b.getTopicID(),t.getId());
+		assertEquals(b.getTopicTitle(), t.getTitle());
 		
 		System.out.println("A");
+	}
+	public void testGetAllTopicIdentifiers(){
+		String B = "Ssds45t";
+		String C = "ASR#35rf";
+		
+		User u = userDAO.getUserByUsername("vpech");
+
+		Topic t = new Topic();
+		t.setText(B);
+		t.setTitle(C);
+		t.setUser(u);
+
+		topicDAO.save(t);
+
+		List<TopicIdentifier> list = topicDAO.getAllTopicIdentifiers(u);
+		
+		assertEquals(1,list.size());
+		
+		for(TopicIdentifier tident : list){
+			assertEquals(tident.getTopicTitle(),C);
+		}
+		
+		
 	}
 
 	public void setTagDAO(TagDAO tagDAO) {

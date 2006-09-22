@@ -1,11 +1,15 @@
 package com.aavu.client.service.cache;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -18,6 +22,7 @@ public class TopicCache {
 	private Map topicByID = new HashMap();
 	private GWTTopicServiceAsync topicService;
 	
+	private List topicIdentifiers = new ArrayList();
 	
 	public TopicCache(GWTTopicServiceAsync topicService) {
 		this.topicService = topicService;
@@ -33,6 +38,21 @@ public class TopicCache {
 		return (Topic) topicByID.get(new Long(id));
 	}
 	
+
+
+	public void getTopic(TopicIdentifier ident, StdAsyncCallback callback) {				
+		Topic t = (Topic) topicByID.get(new Long(ident.getTopicID()));		
+		if(t != null){
+			System.out.println("ti - hit "+ident.getTopicTitle());
+			callback.onSuccess(t);
+		}else{
+			System.out.println("ti - miss "+ident.getTopicTitle());
+			topicService.getTopicForName(ident.getTopicTitle(), new TopicNameCallBack(TOPIC,callback));			
+		}			
+	}
+
+
+
 	
 	public void getTopicForNameA(String topicName, AsyncCallback callback) {
 		
@@ -70,7 +90,7 @@ public class TopicCache {
 
 
 	public void getTopicsWithTag(Tag tag, StdAsyncCallback callback) {
-		topicService.getTopicsWithTag(tag,callback);
+		topicService.getTopicIdsWithTag(tag,callback);
 	}
 	
 	
@@ -118,8 +138,6 @@ public class TopicCache {
 		}
 		
 	}
-
-
 
 
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
@@ -44,8 +45,11 @@ public class TopicServiceImpl implements TopicService {
 		topic.setUser(userService.getCurrentUser());
 		return topicDAO.save(topic);
 	}
-	public List<Topic> getTopicsWithTag(Tag tag) {
-		return topicDAO.getTopicsWithTag(tag);
+	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag) {
+		return topicDAO.getTopicIdsWithTag(tag,userService.getCurrentUser());
+	}
+	public List<TopicIdentifier> getAllTopicIdentifiers() {
+		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
 	}
 
 }
