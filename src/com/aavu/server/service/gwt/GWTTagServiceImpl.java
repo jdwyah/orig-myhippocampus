@@ -129,9 +129,8 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		nMetas.addAll(t.getMetas());
 		t.setMetas(nMetas);
 		
-		HashSet<Topic> newTopics = new HashSet<Topic>();
-		newTopics.addAll(t.getTopics());
-		t.setTopics(newTopics);
+		//null out the topic set, otherwise we'd need to convert->recurse->infinitum
+		t.setTopics(null);
 		
 		return t;
 	}

@@ -26,7 +26,7 @@
 			<one-to-many class="Meta" />
 		</list>
 
-		<set name="topics" inverse="true" table="Topics_tags" lazy="false">
+		<set name="topics" inverse="true" table="Topics_tags">
         	<key column="tag_id"/>
 	        <many-to-many column="topic_id"
     	        class="com.aavu.client.domain.Topic"/>
