@@ -17,4 +17,6 @@ public interface GWTTagServiceAsync {
 	void saveTag(Tag selectedTag, AsyncCallback call);
 
 	void getTagForName(String completeText, AsyncCallback call);
+
+	//void getTagStats(AsyncCallback callback);
 }

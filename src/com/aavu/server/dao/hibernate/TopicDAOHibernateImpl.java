@@ -65,8 +65,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
 		.add(Expression.eq("user", user))
-		.add(Expression.eq("title", string));
-				
+		.add(Expression.eq("title", string))
+		.setFetchMode("user", FetchMode.JOIN);
+		
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 		
 		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title = :title", "user", user);

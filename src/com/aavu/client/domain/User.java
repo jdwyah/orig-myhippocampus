@@ -39,4 +39,8 @@ public class User extends AbstractUser implements IsSerializable {
 		return true;
 	}
 
+	public int getWorldSize() {
+		return 100;
+	}
+
 }

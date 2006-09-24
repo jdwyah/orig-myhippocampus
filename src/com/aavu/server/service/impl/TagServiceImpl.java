@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TagStat;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.service.UserService;
@@ -86,6 +87,9 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 	
 	public Tag getTagForName(String completeText) {
 		return tagDAO.getTag(userService.getCurrentUser(),completeText);
+	}
+	public List<TagStat> getTagStats() {
+		return tagDAO.getTagStats(userService.getCurrentUser());
 	}
 
 

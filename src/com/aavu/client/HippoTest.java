@@ -95,8 +95,9 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		hippoCache = new HippoCache(topicService,tagService,userService);
 		
-		manager = new Manager(hippoCache);
+
 		
+				
 		//static service setters.
 		//hopefully replace with Spring DI
 		//
@@ -109,7 +110,9 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		userService.getCurrentUser(new AsyncCallback(){
 			public void onSuccess(Object result) {
 				user = (User) result;
-
+				
+				manager = new Manager(hippoCache,user);				
+				
 				if(user != null)
 				System.out.println("found a user: "+user.getUsername());				
 				loadGUI();
@@ -119,6 +122,8 @@ public class HippoTest implements EntryPoint, HistoryListener {
 				if(GWT.isScript()){
 					Window.alert("GetCurrentUser failed! "+caught+" \nEP:"+user_endpoint_debug);
 				}
+				manager = new Manager(hippoCache,null);
+					
 				loadGUI();
 			}			
 			

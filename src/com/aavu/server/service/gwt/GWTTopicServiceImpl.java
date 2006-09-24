@@ -30,6 +30,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	public Topic[] getAllTopics(int startIndex, int maxCount) {
 		try {
 
+			
 			Topic[] rtn = convertToArray(topicService.getAllTopics());
 			for (int i = 0; i < rtn.length; i++) {
 				Topic topic = rtn[i];
@@ -176,9 +177,26 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		return rtn;
 	}
 
+	/**
+	 * Convert a topic to GWT serializable form. 
+	 * 
+	 * This means;
+	 * 1) Change org.hibernate.collection.PersistentList to java.util.ArrayList
+	 *    -because GWT can't handle 
+	 * 2) Initialize an "proxy" objects. We can't have any lazy references! Even if we won't
+	 *    peek on the client. We can't transfer these it seems. 
+	 * 
+	 * @param t
+	 * @return
+	 */
 	public static Topic convert(Topic t){
 		log.debug("Topic's tags: "+t.getId()+" "+t.getTitle()+" "+t.getTags().getClass());
 
+//		if(9==9){
+//			Converter c = new Converter();
+//			return (Topic) c.convert(t);
+//		}
+		
 		ArrayList<Tag> nTags = new ArrayList<Tag>();
 
 		for (Iterator iter = t.getTags().iterator(); iter.hasNext();) {

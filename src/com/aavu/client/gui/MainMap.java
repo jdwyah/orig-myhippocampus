@@ -25,7 +25,7 @@ public class MainMap extends Composite {
 		sideBar = new Sidebar(manager);
 		tagSearch = new TagSearch(manager);
 		
-		ocean = new Ocean();
+		ocean = new Ocean(manager);
 		
 		mainP.add(new CompassRose());
 		mainP.add(ocean);

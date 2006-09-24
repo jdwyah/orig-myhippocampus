@@ -3,6 +3,7 @@ package com.aavu.server.dao.hibernate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
@@ -11,14 +12,12 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
-import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
-import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
 
 public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
-
+	private static final Logger log = Logger.getLogger(TagDAOHibernateImpl.class);
+	
 	public List<Tag> getAllTags(User user) {
 		return getHibernateTemplate().findByNamedParam("from Tag where user = :user OR publicVisible = true", "user", user);
 	}
@@ -58,12 +57,8 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 
 	public List<TagStat> getTagStats(User user) {
 						
-//		List<Object[]> list = getHibernateTemplate().find(""+
-//				"select tag.id, tag.name, count(tag.topics) from Tag tag "+
-//				"where user is ? "
-//				,user);
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select tag.id, tag.topics.size from Tag tag "+
+				"select tag.id, tag.name, tag.topics.size from Tag tag "+
 				//"left join topics "+
 				"where user is ? "
 				,user);
@@ -73,16 +68,13 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
 		for (Object[] o : list){
-			System.out.println("o "+o);
-			for (int i = 0; i < o.length; i++) {
-				Object object = o[i];
-				System.out.println(object);
+			if(log.isDebugEnabled()){
+				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]);				
 			}
-			rtn.add(new TagStat((Long)o[0],(Integer)o[1]));			
+			rtn.add(new TagStat((Long)o[0],(String)o[1],(Integer)o[2]));			
 		}
 		
-		return rtn;		 		
-		
+		return rtn;		 				
 	}
 
 }

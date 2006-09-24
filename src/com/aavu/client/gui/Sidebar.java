@@ -8,6 +8,7 @@ import java.util.Map;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.VertableTabPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
@@ -35,10 +36,10 @@ public class Sidebar extends SimplePanel {
 		this.manager = manager;
 		tabPanel = new VertableTabPanel(VertableTabPanel.VERTICAL);
 
-		manager.getTopicCache().getAllTopics(0, 0, new StdAsyncCallback("Sidebar"){
+		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback("Sidebar"){
 
 			public void onSuccess(Object result) {
-				Topic[] topics = (Topic[]) result;
+				List topics = (List) result;
 				alphabetizeTopics(topics);
 			}
 		});
@@ -50,16 +51,18 @@ public class Sidebar extends SimplePanel {
 	}
 
 
-	protected void alphabetizeTopics(Topic[] topics) {
+	protected void alphabetizeTopics(List topics) {
 		//<String,Topic>
 		Map allEntries = new GWTSortedMap();			
 
+		System.out.println("topics! "+topics.size());
+		
 		//sort topics by title
 		//
-		for (int i = 0; i < topics.length; i++) {
-			Topic topic = topics[i];
-			allEntries.put(topic.getTitle(), topic);
-		}
+		for (Iterator ident = topics.iterator(); ident.hasNext();) {
+			TopicIdentifier topicIdent = (TopicIdentifier) ident.next();
+			allEntries.put(topicIdent.getTopicTitle(), topicIdent);
+		}		
 
 		char lastLetter = 'A';
 		char firstLetterThisList = 'A';
@@ -76,9 +79,9 @@ public class Sidebar extends SimplePanel {
 
 			String key = (String) iter.next();
 
-			Topic cur = (Topic) allEntries.get(key);
+			TopicIdentifier cur = (TopicIdentifier) allEntries.get(key);
 
-			curLetter = cur.getTitle().charAt(0);
+			curLetter = cur.getTopicTitle().charAt(0);
 
 			if(curLetter != lastLetter){
 
@@ -132,9 +135,9 @@ public class Sidebar extends SimplePanel {
 			VerticalPanel vp = new VerticalPanel();
 
 			for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
-				final Topic topic = (Topic) iterator.next();
+				final TopicIdentifier topic = (TopicIdentifier) iterator.next();
 
-				Label l = new Label(topic.getTitle());
+				Label l = new Label(topic.getTopicTitle());
 				l.addClickListener(new ClickListener(){
 
 					public void onClick(Widget sender) {

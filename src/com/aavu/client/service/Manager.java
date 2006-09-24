@@ -4,6 +4,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TagEditorWindow;
@@ -21,10 +22,12 @@ public class Manager {
 	private HippoCache hippoCache;
 	public Consts myConstants;
 	private MainMap map;
+	private User user;
 
 
-	public Manager(HippoCache hippoCache){
+	public Manager(HippoCache hippoCache, User user){
 		this.hippoCache = hippoCache;
+		this.user = user;
 		initConstants();
 	}
 	private void initConstants() {
@@ -101,6 +104,9 @@ public class Manager {
 	}
 	public TagCache getTagCache() {
 		return hippoCache.getTagCache();
+	}
+	public User getUser() {
+		return user;
 	}
 
 }

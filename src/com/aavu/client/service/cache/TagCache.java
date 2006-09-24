@@ -40,4 +40,11 @@ public class TagCache {
 	public void getTagForName(String completeText, AsyncCallback call) {
 		tagService.getTagForName(completeText, call);
 	}
+
+
+
+
+	public void getTagStats(AsyncCallback callback) {		
+	//	tagService.getTagStats(callback);
+	}
 }

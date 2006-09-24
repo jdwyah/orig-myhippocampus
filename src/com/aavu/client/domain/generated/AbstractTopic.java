@@ -37,7 +37,7 @@ public abstract class AbstractTopic  implements java.io.Serializable, IsSerializ
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Tag> 
       */
-     private List tags = new ArrayList(0);
+     private List tags = new ArrayList();
      /**
       * @gwt.typeArgs <java.lang.String, java.lang.String> 
       */

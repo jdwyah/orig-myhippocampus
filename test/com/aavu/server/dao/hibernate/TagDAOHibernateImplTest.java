@@ -1,39 +1,48 @@
 package com.aavu.server.dao.hibernate;
 
-import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.dao.support.DataAccessUtils;
+import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
+import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
 
 public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
+	private static final Logger log = Logger.getLogger(TagDAOHibernateImplTest.class);
 
 	private TagDAO tagDAO;
 	private UserDAO userDAO;
+	private TopicDAO topicDAO;
+	
 	private User u;	
 
 	private String A = "VBXCXSS";
 	private String B = "XVNSDF*(D";
 	private String B2 = "XVN_DFSD";
+	private String C = "41234HSAD@##";
+	
 	private int publicTagNumber;
 
+	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+	public void setTopicDAO(TopicDAO topicDAO) {
+		this.topicDAO = topicDAO;
+	}
 
-
-
+	
 	@Override
 	protected void onSetUpInTransaction() throws Exception {
 
@@ -45,7 +54,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
-	private void add3(){
+	private Tag[] add3(){
 
 		Tag t1 = new Tag();
 		t1.setName(A);
@@ -64,6 +73,8 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t3.setUser(u);
 
 		tagDAO.save(t3);
+		
+		return new Tag[] {t1,t2,t3};
 	}
 
 	public void testGetAllTags() {
@@ -161,15 +172,66 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 	public void testTagStat(){
-		add3();
+		Tag[] three = add3();
 
+		//test
+		//tag stats shoudl all be 0
+		//
 		List<TagStat> stats = tagDAO.getTagStats(u);
-
 		for (TagStat ts : stats){
-			assertEquals(0,ts.getNumberOfTopics().intValue());
-			System.out.println("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
+			assertEquals(0,ts.getNumberOfTopics());
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
 		}		
 		
+		Topic t = new Topic();
+		t.setText(B);
+		t.setTitle(C);
+		t.setUser(u);
+				
+		t.getTags().add(three[0]);				
+		topicDAO.save(t);
+		
+		//test
+		//tag 0 should have one topic
+		//
+		stats = tagDAO.getTagStats(u);
+		for (TagStat ts : stats){
+			if(ts.getTagId() == three[0].getId()){
+				assertEquals(1,ts.getNumberOfTopics());
+			}else{
+				assertEquals(0,ts.getNumberOfTopics());
+			}
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
+		}		
+		
+		//Add a new topic with tags 0 & 1
+		//
+		Topic t2 = new Topic();
+		t2.setText(C);
+		t2.setTitle(B2);
+		t2.setUser(u);				
+		t2.getTags().add(three[1]);				
+		t2.getTags().add(three[0]);
+		topicDAO.save(t2);
+		
+		//add tag 2 to topic 1
+		t.getTags().add(three[2]);
+		topicDAO.save(t);
+		
+		//test 
+		//
+		stats = tagDAO.getTagStats(u);
+		for (TagStat ts : stats){
+			if(ts.getTagId() == three[0].getId()){
+				assertEquals(2,ts.getNumberOfTopics());
+			}else if(ts.getTagId() == three[1].getId()){			
+				assertEquals(1,ts.getNumberOfTopics());
+			}
+			else if(ts.getTagId() == three[2].getId()){			
+				assertEquals(1,ts.getNumberOfTopics());
+			}
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
+		}		
 		
 		
 	}
