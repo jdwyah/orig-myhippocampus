@@ -45,6 +45,6 @@ public class TagCache {
 
 
 	public void getTagStats(AsyncCallback callback) {		
-	//	tagService.getTagStats(callback);
+		tagService.getTagStats(callback);
 	}
 }

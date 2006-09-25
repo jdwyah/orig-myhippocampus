@@ -17,9 +17,9 @@ import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.server.service.TagService;
 
 public class GWTTagServiceImpl extends GWTSpringController implements GWTTagService {
-	
+
 	private static final Logger log = Logger.getLogger(GWTTagServiceImpl.class);
-	
+
 	private TagService tagService;	
 
 	public Tag[] getAllTags() {
@@ -39,7 +39,7 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 			}
 
 			log.debug("returning "+rtn);
-			
+
 			return rtn;
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -65,9 +65,9 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 	public Tag[] match(String match) {
 		try{
 			List<Tag> list = tagService.getTagsStarting(match);
-						
+
 			return convertAllTags(list);
-			
+
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -79,20 +79,20 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		try{
 			log.debug("saving tag:");
 			log.debug(selectedTag.toPrettyString());
-			
+
 			tagService.save(selectedTag);
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
 		}
 	}
-	
+
 
 	public Tag getTagForName(String completeText) {
 		try{
 			log.debug("getTagForName:");
 			log.debug(completeText);
-			
+
 			return convert(tagService.getTagForName(completeText));
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -100,7 +100,7 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 			return null;
 		}
 	}
-	
+
 
 	public void setTagService(TagService tagService) {
 		this.tagService = tagService;
@@ -113,7 +113,7 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		}
 		return rtn;
 	}
-	
+
 	/**
 	 * Get ready for GWT Serialization.
 	 * Static so it can also be called by topics.
@@ -128,17 +128,23 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		ArrayList<Meta> nMetas = new ArrayList<Meta>();
 		nMetas.addAll(t.getMetas());
 		t.setMetas(nMetas);
-		
+
 		//null out the topic set, otherwise we'd need to convert->recurse->infinitum
 		t.setTopics(null);
-		
+
 		return t;
 	}
 
 	public TagStat[] getTagStats() {
-		List<TagStat> stats = tagService.getTagStats();
-		TagStat[] rtn = new TagStat[stats.size()];
-		return stats.toArray(rtn);
+		try{
+			List<TagStat> stats = tagService.getTagStats();
+			TagStat[] rtn = new TagStat[stats.size()];
+			return stats.toArray(rtn);
+		}catch(Exception e){
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

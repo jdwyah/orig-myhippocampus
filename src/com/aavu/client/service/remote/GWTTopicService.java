@@ -3,6 +3,7 @@ package com.aavu.client.service.remote;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 
@@ -16,6 +17,7 @@ public interface GWTTopicService extends RemoteService {
 	Topic[] match(String match);//List<String>
 
 	//void save(Topic topic, String[] seeAlsos); 
+	Topic getTopicByID(long topicID);
 	Topic getTopicForName(String topicName);
 	Topic[] getBlogTopics(int start, int numberPerScreen);
 	TopicIdentifier[] getTopicIdsWithTag(Tag tag);

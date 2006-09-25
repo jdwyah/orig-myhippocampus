@@ -55,13 +55,12 @@ public class HippoEditor extends Editor {
 	/**
 	 * make a link
 	 * 
-	 * @param link
+	 * @param topicID
 	 */
-	public void makeLink(String link) {
-		System.out.println("make link to "+link);	
-		//expandSelection();		
+	public void makeLink(long topicID) {
+		System.out.println("make link to "+topicID);	
 		
-		format("CreateLink", "#"+link);
+		format("CreateLink", "#"+topicID);
 	}
 
 

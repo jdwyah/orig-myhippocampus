@@ -2,7 +2,7 @@ package com.aavu.client.domain;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TopicIdentifier implements IsSerializable {
+public class TopicIdentifier implements IsSerializable, Comparable {
 
 	private long topicID;
 	private String topicTitle;
@@ -30,5 +30,19 @@ public class TopicIdentifier implements IsSerializable {
 	
 	public String toString(){
 		return getTopicID()+" "+getTopicTitle();
+	}
+
+	/**
+	 * no compartToIgnoreCase in GWT String impl
+	 */
+	public int compareTo(Object o) {
+		if (o instanceof TopicIdentifier) {
+			TopicIdentifier other = (TopicIdentifier) o;
+			return getTopicTitle().toLowerCase().compareTo(other.getTopicTitle().toLowerCase());
+		}if (o instanceof String) {						
+			return getTopicTitle().toLowerCase().compareTo(((String) o).toLowerCase() );
+		}else{
+			throw new UnsupportedOperationException();
+		}		
 	}
 }

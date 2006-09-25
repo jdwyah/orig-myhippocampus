@@ -52,7 +52,19 @@ public class TopicCache {
 	}
 
 
+	public void getTopicByIdA(long topicID, AsyncCallback callback) {
 
+		Topic t = (Topic) topicByID.get(new Long(topicID));
+
+		if(t != null){
+			System.out.println("hit "+topicID);
+			callback.onSuccess(t);
+		}else{
+			System.out.println("miss "+topicID);
+			topicService.getTopicByID(topicID, new TopicNameCallBack(TOPIC,callback));			
+		}			
+
+	}
 
 	public void getTopicForNameA(String topicName, AsyncCallback callback) {
 
@@ -108,7 +120,7 @@ public class TopicCache {
 		topicService.getBlogTopics(start, numberPerScreen, callback);		
 	}
 
-	public void save(Topic topic2, StdAsyncCallback callback) {
+	public void save(Topic topic2, AsyncCallback callback) {
 		System.out.println("client saving "+topic2.toPrettyString());
 
 		topicService.save(topic2, callback);
@@ -173,6 +185,40 @@ public class TopicCache {
 
 	public int getNumberOfTopics() {
 		return topicIdentifiers.size();
+	}
+
+
+	/**
+	 * returns a topicID to callback
+	 *  
+	 * @param linkTo
+	 * @param callback
+	 */
+	public void getTopicIdForNameOrCreateNew(String linkTo, final StdAsyncCallback callback) {
+
+		//TODO replace with lookup in topicIdentifiers, since we don't really need a topic
+		//obj here, just a TopicIdentifier
+		//
+		
+		TopicIdentifier found = CacheUtils.searchTopics(topicIdentifiers,linkTo);
+				
+		if(found != null){
+			callback.onSuccess(new Long(found.getTopicID()));			
+		}
+		else{
+			System.out.println("Create New! ");
+			Topic toSave = new Topic();
+			toSave.setTitle(linkTo);
+			save(toSave, new AsyncCallback(){
+				public void onSuccess(Object result) {
+					Topic saved = (Topic) result;
+					callback.onSuccess(new Long(saved.getId()));
+				}
+				public void onFailure(Throwable caught) {
+					callback.onFailure(caught);
+				}});
+		}
+		
 	}
 
 

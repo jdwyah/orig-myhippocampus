@@ -19,5 +19,5 @@ public interface GWTTagService extends RemoteService {
 	
 	Tag getTagForName(String completeText);
 	
-	//TagStat[] getTagStats();
+	TagStat[] getTagStats();
 }

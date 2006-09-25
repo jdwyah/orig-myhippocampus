@@ -39,7 +39,7 @@ public class TopicEditWidget extends Composite {
 		
 		System.out.println("topic edit widg "+topic);
 		
-		textArea = new SpecialTextbox();
+		textArea = new SpecialTextbox(hippoCache.getTopicCache());
 		
 		tagBoard = new TagBoard(hippoCache);
 		
@@ -54,7 +54,7 @@ public class TopicEditWidget extends Composite {
 		
 		//textArea.set
 		
-		SpecialTextbox	ww = new SpecialTextbox();
+		//SpecialTextbox	ww = new SpecialTextbox();
 		
 		
 		

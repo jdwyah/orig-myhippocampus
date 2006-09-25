@@ -1,5 +1,10 @@
 package com.aavu.client.widget.edit;
 
+import org.gwtwidgets.client.wrap.Effect;
+
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.RichText2.HippoEditor;
 import com.aavu.client.widget.RichText2.KeyCodeEventListener;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -14,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class SpecialTextbox extends Composite implements KeyCodeEventListener, ClickListener {
 	
-	private static final int KEY_PIPE = 124;
+	private static final int KEY_PIPE = 28;//124; \92?  |124. ctrl \ 28?
 	
 	private HippoEditor textArea;
 	private PopupPanel completePopup;
@@ -26,13 +31,16 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 	private JavaScriptObject range;
 
+	private TopicCache topicCache;
+
 
 	//private List 
 
 
-	public SpecialTextbox(){
+	public SpecialTextbox(TopicCache topicC){
 		super();
-
+		this.topicCache = topicC;
+		
 		textArea = new HippoEditor(this);
 		textArea.setKeyEventlistener(this);
 		
@@ -83,20 +91,39 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		
 	}
 
+	/**
+	 * The "link" button in the popup was clicked
+	 * 
+	 * Go ahead and make the link.
+	 */
 	private void link(){
 
 		String linkTo = completer.getText();
 
-		textArea.setSelectionRange(range);
-		textArea.makeLink(linkTo);
+		topicCache.getTopicIdForNameOrCreateNew(linkTo, new StdAsyncCallback("getTopicIdForNameOrCreateNew"){
+
+			public void onSuccess(Object result) {
+				Long ident = (Long) result;
+				
+				textArea.setSelectionRange(range);
+				
+				textArea.makeLink(ident.longValue());
+				
+				//must "hide()" too, because it's modal.
+				Effect.dropOut(completePopup);							
+				completePopup.hide();
+				
+				textArea.setFocus(true);		
+			}});
 		
-		//Effect.dropOut(completePopup);
 		
-		completePopup.hide();
-		
-		textArea.setFocus(true);
 	}
 
+	/**
+	 * this is the listener that we pass to HippoEditor so that it knows what to 
+	 * do when the "Link" Button is clicked.
+	 * 
+	 */
 	public void onClick(Widget sender) {
 		openLinkDialog();
 	}
@@ -107,7 +134,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	private void openLinkDialog() {
 		System.out.println("LINK");
 
-		range = textArea.getSelectionRange();
+		range = textArea.expandSelection();//getSelectionRange();
 		
 		completePopup.show();			
 //		completePopup.setVisible(true);				

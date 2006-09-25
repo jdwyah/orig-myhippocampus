@@ -26,4 +26,6 @@ public interface TopicDAO {
 
 	public abstract List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user);
 
+	public abstract Topic getForID(User currentUser, long topicID);
+
 }

@@ -13,12 +13,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -356,24 +354,25 @@ public class Editor extends Composite /* implements HasHTML*/{
 		format(textElement,command,option);
 	}
 	
-	protected String expandSelection(){
+	public JavaScriptObject expandSelection(){
 		System.out.println("expand");
-		return expandSelectionJS(textElement);		
+		expandSelectionJS(textElement);
+		return getSelectionRange();
 	}
 	
 	
-	native static String expandSelectionJS(Element element)/*-{
+	native static void expandSelectionJS(Element element)/*-{
 		element.contentWindow.focus();
 		var doc = element.contentWindow.document;		  
 		var range = doc.selection.createRange();
 		var suc = range.expand("word");
-		alert(range.htmlText);
+	//	alert(range.htmlText);
 	//	alert(range.text);
-		alert(suc+" "+range.text);
-		alert("doc.selection: "+doc.selection);
-		doc.selection.setSelectionRange(2, 4);
+//		alert(suc+" "+range.text);
+	//	alert("doc.selection: "+doc.selection);
+	//	doc.selection.setSelectionRange(2, 4);
 		//doc.selection = range;
-		return range.text;
+	//	return range.text;
 		//doc.execCommand("CreateLink",false,"#cathedral");	
     }-*/;
 	
@@ -494,11 +493,15 @@ public class Editor extends Composite /* implements HasHTML*/{
    	var callBackTarget = this;
     var handleEvent = function(arg){    		
 //    	alert("handle");
-//    	alert("handle ctrl "+arg.ctrl);
+//		alert("handle ctrl "+arg.ctrlKey);
 //		alert("ev code: "+arg.keyCode);
-//		alert("ev which: "+arg.which);			
-		var code = arg.which ? arg.which : arg.keyCode;															    	                															    	
-    	callBackTarget.@com.aavu.client.widget.RichText2.Editor::keyEvent(I)(code);
+//		alert("ev which: "+arg.which);	 				
+		var code = arg.which ? arg.which : arg.keyCode;
+//		alert("ev code: "+code);		
+		
+		if(arg.ctrlKey){											    	                															    	
+    		callBackTarget.@com.aavu.client.widget.RichText2.Editor::keyEvent(I)(code);    		
+    	}
     };
     var muppet = function(arg){    		
 		var code = 1;															    	                															    	

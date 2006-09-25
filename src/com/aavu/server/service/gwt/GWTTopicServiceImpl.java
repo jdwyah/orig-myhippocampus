@@ -287,4 +287,16 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}
 	}
 
+	public Topic getTopicByID(long topicID) {
+		try {
+
+			return convert(topicService.getForID(topicID));
+
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

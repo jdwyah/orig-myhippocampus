@@ -22,10 +22,16 @@ public class Ocean extends FlashContainer {
 	 *
 	 */
 	public void initIslands(){
+		System.out.println("Init Islands");
 		manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){
 			public void onSuccess(Object result) {
 				TagStat[] tagStats = (TagStat[]) result;
-				runCommand(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));				
+				
+				System.out.println("TagStat Result "+tagStats);
+				
+				runCommand(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
+				
+				System.out.println("command run ");
 			}});		
 	}
 	

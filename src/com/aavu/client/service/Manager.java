@@ -39,7 +39,7 @@ public class Manager {
 			public void onSuccess(Object result) {
 				bringUpChart((Topic) result);				
 			}});
-				
+
 	}
 	public void bringUpChart(Topic topic) {
 		TopicWindow tw = new TopicWindow(hippoCache,topic);
@@ -72,7 +72,7 @@ public class Manager {
 
 					public void onSuccess(Object result) {
 						TopicIdentifier[] topics = (TopicIdentifier[]) result;
-						
+
 						TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
 						tcw.setPopupPosition(100,100);
 						tcw.show();		
@@ -85,13 +85,34 @@ public class Manager {
 		map.doIslands();
 	}
 
+	/**
+	 * we can goto a topic linked by either Name, or ID.
+	 * Parse the history token, ie HippoTest.html#453 or HippoTest.html#MyTopicName
+	 * 
+	 * @param historyToken
+	 */
 	public void gotoTopic(String historyToken) {
-		hippoCache.getTopicCache().getTopicForNameA(historyToken, new StdAsyncCallback("GotoTopic"){
 
-			public void onSuccess(Object result) {
-				Topic t = (Topic) result;
-				bringUpChart(t);
-			}});		
+		long l = -1;
+		try{
+			l = Long.parseLong(historyToken);
+		}catch(NumberFormatException e){
+
+		}
+		if(l == -1){
+
+			hippoCache.getTopicCache().getTopicForNameA(historyToken, new StdAsyncCallback("GotoTopicStr"){
+				public void onSuccess(Object result) {
+					Topic t = (Topic) result;
+					bringUpChart(t);
+				}});
+		}else{
+			hippoCache.getTopicCache().getTopicByIdA(l,new StdAsyncCallback("GotoTopicID"){
+				public void onSuccess(Object result) {
+					Topic t = (Topic) result;
+					bringUpChart(t);
+				}});
+		}
 	}
 
 

@@ -234,6 +234,11 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 		return null;
 	}
 
+	public Topic getForID(User currentUser, long topicID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //	System.out.println("Tag: " + tag.getName());
 //	System.out.println("metas: ");
 //	for (Object meta : tag.getMetas()){

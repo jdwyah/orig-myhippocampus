@@ -22,4 +22,6 @@ public interface TopicService {
 
 	List<TopicIdentifier> getTopicIdsWithTag(Tag tag);
 
+	Topic getForID(long topicID);
+
 }
