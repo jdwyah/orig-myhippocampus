@@ -33,6 +33,7 @@ public class MainMap extends Composite {
 		mainP.add(new Dashboard(manager));
 		mainP.add(tagSearch);
 		
+		mainP.addStyleName("");
 		initWidget(mainP);
 	}
 	

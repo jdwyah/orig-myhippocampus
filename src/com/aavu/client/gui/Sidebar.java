@@ -47,7 +47,8 @@ public class Sidebar extends SimplePanel {
 
 		add(tabPanel);
 		//sets
-		setStyleName("GuiTest-Sidebar");
+		addStyleName("H-AbsolutePanel");
+		addStyleName("H-Sidebar");				
 	}
 
 

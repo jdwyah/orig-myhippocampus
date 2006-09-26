@@ -21,7 +21,9 @@ public class TagSearch extends SimplePanel implements CompleteListener {
 		mainPanel.add(tagAuto);
 		
 		add(mainPanel);		
-		setStyleName("GuiTest-TagSearch");
+		addStyleName("H-AbsolutePanel");
+		addStyleName("H-TagSearch");
+				
 	}
 
 	public void completed(String completeText) {

@@ -18,19 +18,26 @@ a:visited {
   color: darkblue;
 }
 
-.GuiTest-Sidebar {
-	background: #FFFFFF;
-	margin-left: 600px;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	width: 200px;
-	height: 500px;
+.H-Popup {
+	
 }
 
-.GuiTest-Dashboard {
-	background: #FFFFFF;
-	position: absolute;
+.H-AbsolutePanel {
+	background: #FF0000;
+	position: absolute;	
+	border: 2px solid #000;
+}
+
+
+
+.H-Sidebar {	
+	background: transparent;
+	margin-left: 600px;
+	top: 0px;
+	right: 0px;
+}
+
+.H-Dashboard {
 		
 	bottom: 0px;
 	left: 20%;		
@@ -43,21 +50,27 @@ a:visited {
 	border: 2px solid #000;
 }
 
-.GuiTest-TagSearch {
-	background: #FFFFFF;
-	position: absolute;
+.H-TagSearch {
 		
-	bottom: 10%;
+	bottom: 18%;
 	left: 0px;		
 	width: 60px;
 	height: 80px;
 	
-	border: 2px solid #000;
+
 }
 
-.GuiTest-Ocean {
-	background-image: url("../img/ocean.png");
-	background-repeat: repeat;
+.H-CompassRose {
+	background: transparent;
+	border: none;
+    top: 0px;
+    left: 0px;
+	z-index: 1;	
+}
+
+.H-Ocean {
+	background-image: url("../img/lg_1.gif");
+	background-repeat: no-repeat;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -65,16 +78,12 @@ a:visited {
 	width: 100%;
 	z-index: 0;
 }
+
+
 .GuiTest-Island {
 	position: absolute;	
 	background-image: url("../img/earth.png");
 	background-repeat: repeat;
-}
-.GuiTest-CompassRose {
-	position: absolute;	
-    top: 0px;
-    left: 0px;
-	z-index: 1;	
 }
 
 .PopWindow {
@@ -113,7 +122,11 @@ a:visited {
 .gwt-BorderedPanel {
 }
 
-.gwt-Button {
+.gwt-Button {	 
+    background-color: #3366CC;
+    color: white;
+    font-weight: bold;
+    border: 1px solid #AACCFF; 
 }
 
 .gwt-Canvas {

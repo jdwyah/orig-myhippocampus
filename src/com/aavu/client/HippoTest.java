@@ -33,10 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class HippoTest implements EntryPoint, HistoryListener {
 
-	private DockPanel panel = new DockPanel();
-	private TabPanel viewContainer = new TabPanel();
-	private HTML description = new HTML();
-
+	
 	
 	
 	private TagOrganizerView tagView;

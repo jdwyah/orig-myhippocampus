@@ -11,10 +11,10 @@ public class Ocean extends FlashContainer {
 	private Manager manager;
 
 	public Ocean(Manager manager){
-		super("preOcean.swf","ocean");
+		super("__preOcean.swf","ocean");
 		this.manager = manager;
 		
-		setStyleName("GuiTest-Ocean");		
+		setStyleName("H-Ocean");		
 	}
 	
 	/**

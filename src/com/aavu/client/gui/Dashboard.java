@@ -56,7 +56,8 @@ public class Dashboard extends SimplePanel {
 
 		add(mainPanel);
 		//sets
-		setStyleName("GuiTest-Dashboard");
+		addStyleName("H-AbsolutePanel");
+		addStyleName("H-Dashboard");		
 	}
 
 
