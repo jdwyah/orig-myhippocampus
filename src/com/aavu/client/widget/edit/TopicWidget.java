@@ -135,6 +135,10 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	 * the URL bar
 	 */
 	public void onClick(Widget sender) {
+		
+		String href = WindowUtils.getLocation().getHref();
+		System.out.println("href_before: "+href);
+		
 		Timer t = new Timer(){
 			public void run(){
 				checkInASec();
@@ -149,6 +153,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	 */
 	private void checkInASec() {		
 		String href = WindowUtils.getLocation().getHref();
+		System.out.println("href: "+href);
 		int i = href.indexOf("#");
 		if(i != -1){
 			String token = href.substring(i+1);

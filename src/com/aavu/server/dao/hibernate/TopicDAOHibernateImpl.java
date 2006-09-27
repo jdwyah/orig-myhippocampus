@@ -1,8 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.FetchMode;
@@ -10,10 +8,13 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
@@ -59,6 +60,25 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return getHibernateTemplate().findByCriteria(crit);
 
 		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user order by lastUpdated", "user", user);
+	}
+
+
+	/**
+	 * remember, MetaDate objects only exist for one Tag ie a Book's ReadDate is not a 
+	 * play's ReadDate.  We search on Tag, because we could be timeline-ing a Tag:
+	 * RomanceBook extends Book, with Book's ReadDate
+	 * 
+	 */
+	public List<Topic> getTimeline(User user,Tag tag, MetaDate metaDate) {
+
+		String[] names = {"tag","dateID"};
+		Object[] vals = {tag.getId(),metaDate.getId()};
+
+		return getHibernateTemplate().findByNamedParam("from Topic top "+
+				"join fetch top.metaValueStrs as metav where "+
+				"top.tags.id is :tag "+ 
+				"and :dateID in indices(top.metaValueStrs) ",names,vals);
+
 	}
 
 	public Topic getForName(User user, String string) {
@@ -116,7 +136,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
 
-		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//TODO Genericize: http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
 		for (Object[] o : list){
 			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
@@ -126,14 +146,26 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	}
 
 	/**
+	 * Utility to set the projection properties for TopicIdentifier
+	 * @return
+	 */
+	private Projection getTopicIdentifier(){
+		return Projections.projectionList()
+		.add(Property.forName("title"))
+		.add(Property.forName("id"));
+	}
+
+	/**
 	 * TODO replace string concatenations! 
 	 */	
 	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
-		List<Object[]> list = getHibernateTemplate().findByNamedParam(""+
-				"select title, id from Topic top "+				
-				"where user is :user "+
-				"order by title asc "
-				,"user",user);
+
+		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
+		.add(Expression.eq("user", user))
+		.addOrder( Order.asc("title") )
+		.setProjection(getTopicIdentifier());
+
+		List<Object[]> list = getHibernateTemplate().findByCriteria(crit);
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
 

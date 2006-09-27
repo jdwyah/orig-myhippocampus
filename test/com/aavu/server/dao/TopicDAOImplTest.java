@@ -15,7 +15,7 @@ public class TopicDAOImplTest extends DAOTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		tDAO = new TopicDAOdb4oImpl();
+		tDAO = (TopicDAO) new TopicDAOdb4oImpl();
 		//tDAO.setDb(db);	
 		
 		user.setUsername("test");

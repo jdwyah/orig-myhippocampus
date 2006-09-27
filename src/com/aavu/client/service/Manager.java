@@ -19,11 +19,14 @@ import com.google.gwt.user.client.ui.Label;
 
 public class Manager {
 
+	private static final int DEF_Y = 200;
+	private static final int DEF_X = 200;
 	private HippoCache hippoCache;
 	public Consts myConstants;
 	private MainMap map;
 	private User user;
 
+	
 
 	public Manager(HippoCache hippoCache, User user){
 		this.hippoCache = hippoCache;
@@ -43,7 +46,7 @@ public class Manager {
 	}
 	public void bringUpChart(Topic topic) {
 		TopicWindow tw = new TopicWindow(hippoCache,topic);
-		tw.setPopupPosition(100,100);
+		tw.setPopupPosition(DEF_X,DEF_Y);
 		tw.show();		
 	}
 
@@ -57,7 +60,7 @@ public class Manager {
 	public void showTagBoard() {
 
 		TagEditorWindow tw = new TagEditorWindow(hippoCache);
-		tw.setPopupPosition(100,100);
+		tw.setPopupPosition(DEF_X,DEF_Y);
 		tw.show();
 	}
 
@@ -74,7 +77,7 @@ public class Manager {
 						TopicIdentifier[] topics = (TopicIdentifier[]) result;
 
 						TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
-						tcw.setPopupPosition(100,100);
+						tcw.setPopupPosition(DEF_X,DEF_Y);
 						tcw.show();		
 					}});								
 			}});

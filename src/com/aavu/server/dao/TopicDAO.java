@@ -2,7 +2,7 @@ package com.aavu.server.dao;
 
 import java.util.List;
 
-import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
@@ -10,22 +10,23 @@ import com.aavu.client.domain.User;
 
 public interface TopicDAO {
 
-	public abstract Topic save(Topic t);
-	
-	public abstract List<TopicIdentifier> getAllTopicIdentifiers(User user);
-	
-	public abstract List<Topic> getAllTopics(User user);
+	Topic save(Topic t);
 
-	public abstract List<Topic> getTopicsStarting(User user,String match);
+	List<TopicIdentifier> getAllTopicIdentifiers(User user);
 
-	public abstract Topic getForName(User user,String string);
+	List<Topic> getAllTopics(User user);
 
-	public abstract void tester();
+	List<Topic> getTopicsStarting(User user,String match);
 
-	public abstract List<Topic> getBlogTopics(User user,int start, int numberPerScreen);
+	Topic getForName(User user,String string);
 
-	public abstract List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user);
+	void tester();
 
-	public abstract Topic getForID(User currentUser, long topicID);
+	List<Topic> getBlogTopics(User user,int start, int numberPerScreen);
 
+	List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user);
+
+	Topic getForID(User currentUser, long topicID);
+
+	List<Topic> getTimeline(User user,Tag tag, MetaDate metaDate);
 }

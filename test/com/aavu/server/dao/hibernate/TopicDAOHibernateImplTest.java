@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -258,6 +259,25 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 
+	public void testGetTopicsForQuery(){
+		
+		User u = userDAO.getUserByUsername("jdwyah");		
+		MetaDate md = new MetaDate();
+		md.setId(9);
+		
+		Tag tag = new Tag();
+		tag.setId(3);
+		
+		List<Topic> list = topicDAO.getTimeline(u,tag,md);
+				
+		for (Topic topic : list) {
+			System.out.println("topic "+topic.toPrettyString());
+		}
+		
+		System.out.println("list "+list.size());
+	}
+	
+	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}

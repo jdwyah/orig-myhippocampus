@@ -1,6 +1,5 @@
 package com.aavu.client.service.cache;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.domain.TopicIdentifier;
@@ -11,11 +10,6 @@ public class CacheUtils {
 		int index = indexedBinarySearch(topicIdentifiers, linkTo);
 		
 		System.out.println("index! "+index);
-	
-		for (Iterator iter = topicIdentifiers.iterator(); iter.hasNext();) {
-			TopicIdentifier ident = (TopicIdentifier) iter.next();
-			System.out.println("ident "+ident.getTopicTitle()+" "+ident.getTopicID());
-		}
 		
 		if(index < 0){
 			return null;

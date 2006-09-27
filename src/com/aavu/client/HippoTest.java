@@ -33,8 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class HippoTest implements EntryPoint, HistoryListener {
 
-	
-	
+	private static final String EMPTY = "";
 	
 	private TagOrganizerView tagView;
 	private BrowseView browseView;
@@ -183,7 +182,10 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	    // This method is called whenever the application's history changes. Set
 	    // the label to reflect the current history token.
 		System.out.println("history changed to "+historyToken);
-		manager.gotoTopic(historyToken);	    
+		if(historyToken != EMPTY){
+			manager.gotoTopic(historyToken);		
+			History.newItem(EMPTY);
+		}
 	  }
 	
 

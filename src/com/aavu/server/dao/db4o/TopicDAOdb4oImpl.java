@@ -18,7 +18,7 @@ import com.aavu.client.domain.User;
 import com.aavu.server.dao.TopicDAO;
 import com.db4o.query.Predicate;
 
-public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
+public class TopicDAOdb4oImpl extends Db4oDaoSupport{// implements TopicDAO{
 	private static final Logger log = Logger.getLogger(TopicDAOdb4oImpl.class);	
 
 	public TopicDAOdb4oImpl(){
@@ -224,20 +224,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport implements TopicDAO{
 	}
 //	public void saveT(Tag tag) {
 
-	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Topic getForID(User currentUser, long topicID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 //	System.out.println("Tag: " + tag.getName());
 //	System.out.println("metas: ");
