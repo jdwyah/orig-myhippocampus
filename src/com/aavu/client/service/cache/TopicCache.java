@@ -131,7 +131,11 @@ public class TopicCache {
 		topicService.match(match, call);		
 	}
 
-
+	/**
+	 * callback for List<TopicIdentifier>
+	 * @param tag
+	 * @param callback
+	 */
 	public void getTopicsWithTag(Tag tag, StdAsyncCallback callback) {
 		topicService.getTopicIdsWithTag(tag,callback);
 	}

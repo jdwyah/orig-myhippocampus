@@ -1,7 +1,12 @@
 package com.aavu.client.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
@@ -9,6 +14,7 @@ import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TagEditorWindow;
 import com.aavu.client.gui.TopicWindow;
+import com.aavu.client.gui.timeline.TimeLine;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
@@ -22,7 +28,7 @@ public class Manager {
 	private static final int DEF_Y = 200;
 	private static final int DEF_X = 200;
 	private HippoCache hippoCache;
-	public Consts myConstants;
+	public static Consts myConstants;
 	private MainMap map;
 	private User user;
 
@@ -64,6 +70,20 @@ public class Manager {
 		tw.show();
 	}
 
+	public void showTimeline() {
+		List timeLinesObjs = new ArrayList();
+		for(int i=0;i<10;i++){
+			Date d = new Date(2005,i,22);
+			Date e = null;
+			if(i % 2 == 0){
+				e = new Date(2006,i,22);
+			}
+			timeLinesObjs.add(new TimeLineObj(null,d,e));
+		}
+		TimeLine tl = new TimeLine(this,timeLinesObjs);
+		tl.setPopupPosition(DEF_X,DEF_Y);
+		tl.show();
+	}
 
 	public void showTopicsForTag(String completeText) {
 
@@ -132,5 +152,6 @@ public class Manager {
 	public User getUser() {
 		return user;
 	}
+
 
 }

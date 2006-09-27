@@ -16,8 +16,11 @@ import com.google.gwt.user.client.ui.Widget;
 public class MetaDate extends Meta {
 
 	private static final String TYPE = "Date";
+	private static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
+	
 	private Map metaMap;
 
+	
 	//@Override
 	public String getType() {
 		return TYPE;
@@ -31,8 +34,7 @@ public class MetaDate extends Meta {
 		widget.add(label);
 		Object mv = mmp.get(toMapIdx());
 		if(mv != null){
-			SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
-			
+						
 			widget.add(new Label(" "+df.format(new Date(Long.parseLong(mv.toString())))));	
 		}
 		else{

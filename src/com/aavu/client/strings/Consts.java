@@ -6,7 +6,9 @@ public interface Consts extends Constants {
 	
 	String helloWorld();
 	String yourTags();
-	String tagContentsTitle();	
+	String tagContentsTitle();
+	String endDuration();
+	String startDuration();	
 	
 	
 }

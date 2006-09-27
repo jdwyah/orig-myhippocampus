@@ -79,6 +79,12 @@ a:visited {
 	z-index: 0;
 }
 
+.H-LineOfTime {
+	background: #FF0000;
+	padding: 3px;
+	position: relative;
+	height: 5px;
+}
 
 .GuiTest-Island {
 	position: absolute;	

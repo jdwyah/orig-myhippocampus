@@ -48,10 +48,19 @@ public class Dashboard extends SimplePanel {
 				manager.doIslands();
 			}});
 
+		Button timeLine = new Button("TimeLine");
+		timeLine.addClickListener(new ClickListener(){
 
+			public void onClick(Widget sender) {
+				manager.showTimeline();
+			}});
+
+		
 		mainPanel.add(addNewButton);
 		mainPanel.add(tagButton);
 		mainPanel.add(initIslands);
+		mainPanel.add(timeLine);
+		
 		
 
 		add(mainPanel);

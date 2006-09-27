@@ -82,7 +82,7 @@ public class Sidebar extends SimplePanel {
 
 			TopicIdentifier cur = (TopicIdentifier) allEntries.get(key);
 
-			curLetter = cur.getTopicTitle().charAt(0);
+			curLetter = cur.getTopicTitle().toUpperCase().charAt(0);
 
 			if(curLetter != lastLetter){
 
