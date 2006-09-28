@@ -14,7 +14,8 @@ import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TagEditorWindow;
 import com.aavu.client.gui.TopicWindow;
-import com.aavu.client.gui.timeline.TimeLine;
+import com.aavu.client.gui.timeline.HippoTimeLine;
+import com.aavu.client.gui.timeline.OldTimeLine;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
@@ -71,18 +72,24 @@ public class Manager {
 	}
 
 	public void showTimeline() {
-		List timeLinesObjs = new ArrayList();
-		for(int i=0;i<10;i++){
-			Date d = new Date(2005,i,22);
-			Date e = null;
-			if(i % 2 == 0){
-				e = new Date(2006,i,22);
-			}
-			timeLinesObjs.add(new TimeLineObj(null,d,e));
-		}
-		TimeLine tl = new TimeLine(this,timeLinesObjs);
-		tl.setPopupPosition(DEF_X,DEF_Y);
-		tl.show();
+//		List timeLinesObjs = new ArrayList();
+//		for(int i=0;i<10;i++){
+//			Date d = new Date(2005,i,22);
+//			Date e = null;
+//			if(i % 2 == 0){
+//				e = new Date(2006,i,22);
+//			}
+//			timeLinesObjs.add(new TimeLineObj(null,d,e));
+//		}
+//		OldTimeLine tl = new OldTimeLine(this,timeLinesObjs);
+//		tl.setPopupPosition(DEF_X,DEF_Y);
+//		tl.show();
+//		
+		
+		HippoTimeLine hippoTime = new HippoTimeLine(this,null);		
+		hippoTime.setPopupPosition(DEF_X,DEF_Y);
+		hippoTime.show();
+		
 	}
 
 	public void showTopicsForTag(String completeText) {

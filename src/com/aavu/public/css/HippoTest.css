@@ -86,6 +86,12 @@ a:visited {
 	height: 5px;
 }
 
+.H-TimeLine {
+	height: 150px;
+	width: 300px;
+	border: 1px solid #aaa
+}
+
 .GuiTest-Island {
 	position: absolute;	
 	background-image: url("../img/earth.png");

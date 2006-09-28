@@ -11,7 +11,7 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class TimeLine extends PopupWindow {
+public class OldTimeLine extends PopupWindow {
 
 	private static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
 	
@@ -27,7 +27,7 @@ public class TimeLine extends PopupWindow {
 	 * List <TimeLineObj>
 	 * @param timeLinesObjs
 	 */
-	public TimeLine(Manager manager,List timeLinesObjs){
+	public OldTimeLine(Manager manager,List timeLinesObjs){
 		super(manager.myConstants.helloWorld());
 		
 		VerticalPanel times = new VerticalPanel();
