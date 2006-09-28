@@ -6,7 +6,7 @@
 	<inherits name='org.gwtwidgets.WidgetLibrary'/>
 
     <inherits name="com.google.gwt.i18n.I18N"/>
-
+	<inherits name="com.google.gwt.json.JSON"/> 
 
 	<!-- Specify the app entry point class.                   -->
 	<entry-point class='com.aavu.client.HippoTest'/>

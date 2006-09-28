@@ -8,7 +8,8 @@ public interface Consts extends Constants {
 	String yourTags();
 	String tagContentsTitle();
 	String endDuration();
-	String startDuration();	
+	String startDuration();
+	String timeline();	
 	
 	
 }
