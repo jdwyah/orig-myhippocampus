@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.server.dao.TopicDAO;
@@ -53,6 +54,9 @@ public class TopicServiceImpl implements TopicService {
 	}
 	public Topic getForID(long topicID) {
 		return topicDAO.getForID(userService.getCurrentUser(),topicID);
+	}
+	public List<TimeLineObj> getTimelineObjs() {
+		return topicDAO.getTimeline(userService.getCurrentUser());
 	}
 
 }

@@ -7,6 +7,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
@@ -261,17 +262,17 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testGetTopicsForQuery(){
 		
-		User u = userDAO.getUserByUsername("jdwyah");		
+		User u = userDAO.getUserByUsername("test");		
 		MetaDate md = new MetaDate();
 		md.setId(9);
 		
 		Tag tag = new Tag();
 		tag.setId(3);
 		
-		List<Topic> list = topicDAO.getTimeline(u,tag,md);
+		List<TimeLineObj> list = topicDAO.getTimeline(u);
 				
-		for (Topic topic : list) {
-			System.out.println("topic "+topic.toPrettyString());
+		for (TimeLineObj timeLine : list) {
+			System.out.println("timelineObj "+timeLine);
 		}
 		
 		System.out.println("list "+list.size());

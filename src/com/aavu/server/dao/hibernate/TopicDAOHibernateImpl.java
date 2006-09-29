@@ -1,8 +1,10 @@
 package com.aavu.server.dao.hibernate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
@@ -14,15 +16,16 @@ import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TopicDAO;
 
 public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicDAO{
-
+	private static final Logger log = Logger.getLogger(TopicDAOHibernateImpl.class);
 
 	public List<Topic> getAllTopics(User user) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
@@ -69,15 +72,87 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * RomanceBook extends Book, with Book's ReadDate
 	 * 
 	 */
-	public List<Topic> getTimeline(User user,Tag tag, MetaDate metaDate) {
+	public List<TimeLineObj> getTimeline(User user) {
 
-		String[] names = {"tag","dateID"};
-		Object[] vals = {tag.getId(),metaDate.getId()};
+		log.debug("user: "+user);
+		
+		//
+		//#1 select all Meta's that are displayable on a Timeline
+		//
+		List<Meta> usersMetaDates = getHibernateTemplate().findByNamedParam("from Meta meta where "+
+				"meta.class = com.aavu.client.domain.MetaDate "+
+				"and (meta.tag.user = :user OR "+ 
+				"meta.tag.publicVisible = true)",
+				"user",user);		
 
-		return getHibernateTemplate().findByNamedParam("from Topic top "+
-				"join fetch top.metaValueStrs as metav where "+
-				"top.tags.id is :tag "+ 
-				"and :dateID in indices(top.metaValueStrs) ",names,vals);
+		log.debug("1");
+		
+		StringBuffer sb = new StringBuffer("where ");
+		boolean first = true;
+		for (Meta meta2 : usersMetaDates) {			
+			if(!first){
+				sb.append("or ");							
+			}
+			sb.append(meta2.getId());
+			sb.append(" in indices(top.metaValueStrs) ");
+			
+			first = false;
+		}
+		
+		log.debug("2");
+		log.debug("SB "+sb.toString());
+	
+		//
+		//#2 Get all the Topics with Meta's as described in #1
+		//
+		List<Topic> alltopics = getHibernateTemplate().findByNamedParam("from Topic top "+
+				sb.toString()+
+				"and user = :user ","user",user);
+				
+		log.debug("2.0: "+alltopics.size());
+		//
+		//#3 Create and return 
+		//
+		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
+		for (Topic topic : alltopics) {
+			log.debug("2.1: "+topic);
+			for(Meta m : usersMetaDates){
+				
+				log.debug("2.2: "+topic.getMetaValueStrs());
+				
+				if(topic.getMetaValueStrs().containsKey(m.getId()+"")){
+
+					log.debug("2.3: ");
+					String dateStr = (String) topic.getMetaValueStrs().get(m.getId()+"");
+					Date start = new Date(Long.parseLong(dateStr));
+					log.debug("2.4: "+start);
+					TopicIdentifier ti = topic.getIdentifier(); 												
+					TimeLineObj to = new TimeLineObj(ti,start,null);												
+					rtn.add(to);					
+					log.debug("2.5: ");
+				}
+			}				
+		}
+		log.debug("3 "+rtn.size());
+				
+		for (TimeLineObj obj : rtn) {
+			log.debug("TIMELINE ");
+			log.debug(obj);
+		}
+		
+		
+		return rtn;
+		
+//		return getHibernateTemplate().findByNamedParam("from Tag tag where (user = :user OR publicVisible = true) "+
+//				"AND tag.", "user", user);
+				
+//		String[] names = {"tag","dateID"};
+//		Object[] vals = {tag.getId(),metaDate.getId()};
+
+//		return getHibernateTemplate().findByNamedParam("from Topic top "+
+//				"join fetch top.metaValueStrs as metav where "+
+//				"top.tags.id is :tag "+ 
+//				"and :dateID in indices(top.metaValueStrs) ",names,vals);
 
 	}
 
@@ -154,6 +229,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Property.forName("title"))
 		.add(Property.forName("id"));
 	}
+	
 
 	/**
 	 * TODO replace string concatenations! 

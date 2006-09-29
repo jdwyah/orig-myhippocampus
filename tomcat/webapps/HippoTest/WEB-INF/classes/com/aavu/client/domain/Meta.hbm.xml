@@ -22,7 +22,8 @@
 			<meta attribute="use-in-equals">true</meta>
 		</property>
 
-		
+		<many-to-one name="tag" class="com.aavu.client.domain.Tag" column="tag_id">
+		</many-to-one>		
 		
 		<subclass name="MetaDate" discriminator-value="date">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractMetaDate</meta>

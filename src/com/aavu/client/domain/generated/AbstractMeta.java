@@ -1,7 +1,7 @@
 package com.aavu.client.domain.generated;
 
+import com.aavu.client.domain.Tag;
 import com.google.gwt.user.client.rpc.IsSerializable;
-// Generated Sep 22, 2006 10:58:05 AM by Hibernate Tools 3.1.0.beta4
 
 
 
@@ -24,6 +24,7 @@ public abstract class AbstractMeta  implements java.io.Serializable, IsSerializa
      */
      private String type;
 
+     private Tag tag;
 
     // Constructors
 
@@ -75,7 +76,17 @@ public abstract class AbstractMeta  implements java.io.Serializable, IsSerializa
 
 
 
-   public boolean equals(Object other) {
+   public Tag getTag() {
+		return tag;
+	}
+
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+
+
+public boolean equals(Object other) {
          if ( (this == other ) ) return true;
 		 if ( (other == null ) ) return false;
 		 if ( !(other instanceof AbstractMeta) ) return false;

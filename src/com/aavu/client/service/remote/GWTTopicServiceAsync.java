@@ -24,7 +24,8 @@ public interface GWTTopicServiceAsync {
 	void getBlogTopics(int start, int numberPerScreen, AsyncCallback callback);
 	void getTopicForName(String topicName, AsyncCallback callback);
 	void getTopicIdsWithTag(Tag tag, AsyncCallback callback);
-	void getTopicByID(long topicID, AsyncCallback back);	
+	void getTopicByID(long topicID, AsyncCallback back);
+	void getTimelineObjs(AsyncCallback callback);	
 
 }
 

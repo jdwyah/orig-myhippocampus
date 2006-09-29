@@ -85,6 +85,13 @@ a:visited {
 	position: relative;
 	height: 5px;
 }
+.H-TagClowd {
+	width: 100px;
+}
+.H-TagClowd .gwt-Label{
+	display: inline;
+	padding: 5px;	
+}
 
 .H-TimeLine {
 	height: 300px;

@@ -18,9 +18,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,20 +28,23 @@ import com.google.gwt.user.client.ui.Widget;
 public class TagOrganizerView extends Composite implements ClickListener{
 
 	private Label tagListLabel = new Label("Tags: ");
-	private ListBox tagList = new ListBox();
+	private FlowPanel tagClowd = new FlowPanel();
 
 	private Button newMetaButton = new Button("New field");
 	private Button saveButton = new Button("Save");
 	private Button deleteTagButton = new Button("Delete Tag");
-	private VerticalPanel tagListPanel = new VerticalPanel();
+	private VerticalPanel tagClowdPanel = new VerticalPanel();
 	private VerticalPanel metaListPanel = new VerticalPanel();
 	private VerticalPanel metaList = new VerticalPanel();
 
-	private HorizontalPanel panel = new HorizontalPanel();
+	private VerticalPanel mainPanel = new VerticalPanel();
 
 	private HippoCache hippoCache;
 	private List metaChoosers = new ArrayList();  //list of meta chooser objects of current tag
+	
 	private Tag selectedTag;
+	private TagLabel selectedTagLabel;
+	
 	private TagLocalService tagLocalService;
 	private TextBox tagName;
 
@@ -56,7 +59,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		tagLocalService = new TagLocalService();
 		
 		
-		panel.setSpacing(4);
+		mainPanel.setSpacing(4);
 
 		newMetaButton.addClickListener(this);
 		saveButton.addClickListener(this);
@@ -64,32 +67,12 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 		
 		
-		tagListPanel.add(tagListLabel);
-		tagListPanel.add(tagList);		
+		tagClowdPanel.add(tagListLabel);
+		tagClowdPanel.add(tagClowd);		
+
+		tagClowd.setStyleName("H-TagClowd");
+		
 		populateTagList();
-
-		tagList.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender) {
-				hippoCache.getTagCache().getTagAddIfNew(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
-					public void onFailure(Throwable caught) {
-						System.out.println("failed getting tag " + caught);
-					}
-
-					public void onSuccess(Object result) {
-						
-						
-						selectedTag = (Tag) result;
-						System.out.println("success getting tag " + selectedTag.getName());
-						System.out.println("its metas " + selectedTag.getMetas());
-						if(selectedTag.getMetas() != null){
-							System.out.println("success getting tag " + selectedTag.getMetas().size());
-						}
-						displayMetas(selectedTag);
-						Effect.grow(metaListPanel);
-					}
-				});
-			}
-		});
 	
 		Button newTag = new Button("Add New Tag");
 		newTag.addClickListener(new ClickListener(){
@@ -102,8 +85,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 				displayMetas(t);
 				Effect.grow(metaListPanel);
 			}});
-		tagListPanel.add(newTag);
-
+		tagClowdPanel.add(newTag);
 		
 		
 		tagName = new TextBox();		
@@ -118,10 +100,10 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		metaListPanel.add(newMetaButton);
 		metaListPanel.add(saveButton);
 
-		panel.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
-		panel.setWidth("100%");
-		panel.add(tagListPanel);
-		panel.add(metaListPanel);
+		mainPanel.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
+		mainPanel.setWidth("100%");
+		mainPanel.add(tagClowdPanel);
+		mainPanel.add(metaListPanel);
 
 		//controls
 		//buttonPanel.add(editTextButton);
@@ -129,7 +111,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 		metaListPanel.setVisible(false);
 		
-		initWidget(panel);
+		initWidget(mainPanel);
 	}
 
 
@@ -192,13 +174,12 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 			public void onSuccess(Object result) {
 				Tag[] tags = (Tag[]) result;
-				tagList.clear();
+				tagClowd.clear();
 
 				if(tags != null){
 					for (int i=0; i<tags.length; i++) {
-						tagList.addItem(((Tag)tags[i]).getName());
-					}
-					tagList.setVisibleItemCount(tags.length + 1);
+						tagClowd.add(new TagLabel((Tag)tags[i]));					
+					}					
 				}else{
 					System.out.println("no tags found!");
 				}
@@ -260,4 +241,51 @@ public class TagOrganizerView extends Composite implements ClickListener{
 
 	}
 
+	private class TagLabel extends Label implements ClickListener{
+		private Tag tag;
+
+		public TagLabel(Tag tag){
+			super(tag.getName());
+			this.tag = tag;
+			addClickListener(this);
+			
+		}
+
+		public Tag getTag(){
+			return tag;
+		}
+		
+		public void setSelected(boolean b){
+			if(b){
+				setStyleName("");	
+			}else{
+				setStyleName("");
+			}
+		}
+		
+		/*
+		 * TODO  odd call to tagcache, should just be in the cache..  
+		 * 
+		 * 
+		 * (non-Javadoc)
+		 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+		 */
+		public void onClick(Widget sender) {			
+			
+			if(selectedTagLabel != null){
+				selectedTagLabel.setSelected(false);
+			}
+			
+			selectedTag = tag;
+			selectedTagLabel = this;
+			
+			setSelected(true);
+			
+			if(tag.getMetas() != null){				
+				displayMetas(tag);
+				Effect.grow(metaListPanel);
+			}			
+		}
+	}
+	
 }

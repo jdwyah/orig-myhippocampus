@@ -11,6 +11,7 @@ import org.gwtwidgets.server.rpc.GWTSpringController;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.remote.GWTTopicService;
@@ -176,6 +177,16 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}
 		return rtn;
 	}
+	private TimeLineObj[] convertToArray(List<TimeLineObj> list){
+
+		TimeLineObj[] rtn = new TimeLineObj[list.size()];
+		for(int i=0;i<list.size();i++){				
+			TimeLineObj t = list.get(i);
+			rtn[i] = t;
+		}
+		return rtn;
+	}
+	
 
 	/**
 	 * Convert a topic to GWT serializable form. 
@@ -292,6 +303,17 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 			return convert(topicService.getForID(topicID));
 
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List getTimelineObjs() {
+		try {
+			return topicService.getTimelineObjs();
+			
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();

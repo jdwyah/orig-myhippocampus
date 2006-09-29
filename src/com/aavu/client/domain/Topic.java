@@ -72,5 +72,9 @@ public class Topic extends AbstractTopic implements Completable, IsSerializable{
 		return getTitle();
 	}
 
+	public TopicIdentifier getIdentifier() {
+		return new TopicIdentifier(getId(),getTitle());
+	}
+
 
 }

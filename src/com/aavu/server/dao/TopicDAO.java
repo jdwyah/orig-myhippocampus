@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
@@ -28,5 +29,6 @@ public interface TopicDAO {
 
 	Topic getForID(User currentUser, long topicID);
 
-	List<Topic> getTimeline(User user,Tag tag, MetaDate metaDate);
+	List<TimeLineObj> getTimeline(User user);
+	
 }

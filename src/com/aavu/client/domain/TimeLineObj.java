@@ -2,17 +2,29 @@ package com.aavu.client.domain;
 
 import java.util.Date;
 
-public class TimeLineObj {
+import org.gwtwidgets.client.util.SimpleDateFormat;
+
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class TimeLineObj implements IsSerializable {
 	
 	private TopicIdentifier topic;
 	private Date start;
 	private Date end;
 		
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	public TimeLineObj(){}
+	
 	public TimeLineObj(TopicIdentifier topic, Date start, Date end) {
-		super();
+		System.out.println("in ctor");
 		this.topic = topic;
 		this.start = start;
 		this.end = end;
+		System.out.println("finised ctor");
 	}
 	
 	public Date getEnd() {
@@ -34,5 +46,30 @@ public class TimeLineObj {
 		this.topic = topic;
 	}
 	
+	public String toString(){
+		return topic.getTopicTitle()+" "+getStart()+" "+getEnd();
+	}
+
 	
+	/*
+	 * 		{
+	 *		'dateTimeFormat': 'iso8601',
+	 *		'events' : [
+	 *		        {'start': '1924',
+	 *		        'title': 'Barfusserkirche',
+	 *		        'description': 'by Lyonel Feininger, American/German Painter, 1871-1956',
+	 *		        'image': 'http://images.allposters.com/images/AWI/NR096_b.jpg',
+	 *		        'link': 'http://www.allposters.com/-sp/Barfusserkirche-1924-Posters_i1116895_.htm'
+	 *		        },
+	 *
+	 */
+	public JSONValue getJSONObj() {
+		JSONObject jo = new JSONObject();
+
+		jo.put("start", new JSONString(sdf.format(getStart())));
+		jo.put("title", new JSONString("Title "+topic.getTopicTitle()));
+		jo.put("description", new JSONString("blah blah"));
+
+		return jo;
+	}
 }

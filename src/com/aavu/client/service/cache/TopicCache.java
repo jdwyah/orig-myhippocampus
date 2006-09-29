@@ -227,4 +227,10 @@ public class TopicCache {
 
 
 
+	public void getTimelineObjs(AsyncCallback callback) {
+		topicService.getTimelineObjs(callback);
+	}
+
+
+
 }
