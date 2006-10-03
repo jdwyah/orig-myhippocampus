@@ -36,10 +36,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("vpech");
+		User u = userDAO.getUserByUsername("test");
 
 		Topic t = new Topic();
-		t.setText(B);
+		t.setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
@@ -51,14 +51,14 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		Topic saved = list.get(0);
 		
-		assertEquals(B, saved.getText());
+		assertEquals(B, saved.getData());
 		assertEquals(C, saved.getTitle());
 		
 		assertEquals(u, saved.getUser());
 		
 		
 		
-		System.out.println("META: "+saved.getMetaValueStrs().getClass());
+		System.out.println("META: "+saved.getMetaValues().getClass());
 		System.out.println("TAGS: "+saved.getTags().getClass());
 		
 		
@@ -81,11 +81,11 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("vpech");
+		User u = userDAO.getUserByUsername("test");
 
 				
 		Topic t = new Topic();
-		t.setText(B);
+		t.setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 		
@@ -132,7 +132,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 				
 		Topic t = new Topic();
-		t.setText(B);
+		t.setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 		
@@ -144,14 +144,14 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 				
 		
 		MetaText mt = new MetaText();
-		mt.setName(B);
+		mt.setTitle(B);
 		tag.getMetas().add(mt);
 		
 		
 		tagDAO.save(tag);
 		
 		
-		t.getMetaValueStrs().put("3", "C");
+		t.getMetaValues().put("3", "C");
 		
 		
 		t.getTags().add(tag);
@@ -176,7 +176,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		System.out.println("C");
 		
-		for (Iterator iter = saved.getMetaValueStrs().keySet().iterator(); iter.hasNext();) {
+		for (Iterator iter = saved.getMetaValues().keySet().iterator(); iter.hasNext();) {
 			String element = (String) iter.next();
 			System.out.println("elem "+element.getClass()+" "+element);
 		}
@@ -196,12 +196,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		User u = userDAO.getUserByUsername("test");
 				
 		Topic t = new Topic();
-		t.setText(B);
+		t.setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 				
 		Topic t2 = new Topic();
-		t2.setText(C);
+		t2.setData(C);
 		t2.setTitle(B);
 		t2.setUser(u);
 		
@@ -240,10 +240,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("vpech");
+		User u = userDAO.getUserByUsername("test");
 
 		Topic t = new Topic();
-		t.setText(B);
+		t.setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
@@ -260,7 +260,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 
-	public void testGetTopicsForQuery(){
+	public void testGetTimeline(){
 		
 		User u = userDAO.getUserByUsername("test");		
 		MetaDate md = new MetaDate();

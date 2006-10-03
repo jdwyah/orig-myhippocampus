@@ -139,7 +139,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		}
 		else if (source == saveButton){
 			
-			selectedTag.setName(tagName.getText());
+			selectedTag.setTitle(tagName.getText());
 			
 			selectedTag.getMetas().clear();
 			for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {

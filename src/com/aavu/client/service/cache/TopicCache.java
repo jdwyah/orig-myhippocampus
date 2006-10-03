@@ -1,7 +1,6 @@
 package com.aavu.client.service.cache;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,10 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
+import com.aavu.client.util.JSONReader;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TopicCache {
@@ -96,7 +99,7 @@ public class TopicCache {
 					System.out.println("rec "+topicIdents.length);
 					topicIdentifiers = new ArrayList();
 					for (int i = 0; i < topicIdents.length; i++) {
-						System.out.println("adding! "+i);
+						System.out.println("adding! "+i+" id:"+topicIdents[i].getTopicID()+" "+topicIdents[i].getTopicTitle());
 						topicIdentifiers.add(topicIdents[i]);						
 					}					
 					callback.onSuccess(topicIdentifiers);
@@ -164,8 +167,14 @@ public class TopicCache {
 		public void onSuccess(Object result) {
 
 			if(rtn == TOPIC){
+				
+				System.out.println("res "+result);
+				
 				Topic t = (Topic) result;
-				System.out.println("single adding to cache "+t.getTitle());
+				
+				System.out.println("rec "+t);
+				System.out.println("rec: "+t.toPrettyString());
+				System.out.println("single adding to cache title:"+t.getTitle());
 				topicByName.put(t.getTitle(), t);
 				topicByID.put(new Long(t.getId()), t);
 

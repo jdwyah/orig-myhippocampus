@@ -76,7 +76,7 @@ public class TopicEditWidget extends Composite {
 		System.out.println("setupTopic");
 		if(topic != null){
 			titleBox.setText(topic.getTitle());		
-			textArea.setText(topic.getText());
+			textArea.setText(topic.getData());
 						
 			tagBoard.load(topic);
 		}
@@ -85,7 +85,7 @@ public class TopicEditWidget extends Composite {
 
 
 	public void save() {
-		topic.setText(textArea.getText());
+		topic.setData(textArea.getText());
 		topic.setTitle(titleBox.getText());
 		
 		tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){

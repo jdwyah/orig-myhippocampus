@@ -69,8 +69,8 @@ a:visited {
 }
 
 .H-Ocean {
-	background-image: url("../img/lg_1.gif");
-	background-repeat: no-repeat;
+	/*background-image: url("../img/lg_1.gif");
+	background-repeat: no-repeat;*/
     position: absolute;
     top: 0px;
     left: 0px;

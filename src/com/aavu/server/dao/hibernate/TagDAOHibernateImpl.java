@@ -12,6 +12,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TagDAO;
 
@@ -19,7 +20,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	private static final Logger log = Logger.getLogger(TagDAOHibernateImpl.class);
 	
 	public List<Tag> getAllTags(User user) {
-		return getHibernateTemplate().findByNamedParam("from Tag where user = :user OR publicVisible = true", "user", user);
+		return getHibernateTemplate().findByNamedParam("from Tag where user = :user OR public_visible = true", "user", user);
 	}
 
 	/**
@@ -27,7 +28,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	 */
 	public Tag getTag(User user, String tagName) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)
-		.add(Expression.and(Expression.eq("name", tagName),
+		.add(Expression.and(Expression.eq("title", tagName),
 				Expression.or(
 				Expression.eq("user", user),Expression.eq("publicVisible", true))));
 				
@@ -36,7 +37,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 
 	public List<Tag> getTagsStarting(User user, String match) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)		
-		.add(Expression.and(Expression.ilike("name", match, MatchMode.START),
+		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),
 				Expression.or(
 				Expression.eq("user", user),Expression.eq("publicVisible", true))));
 		
@@ -47,7 +48,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		getHibernateTemplate().delete(selectedTag);		
 	}
 
-	public void save(Tag selectedTag) {
+	public void save(Tag selectedTag) {		
 		getHibernateTemplate().saveOrUpdate(selectedTag);
 	}
 
@@ -58,9 +59,9 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	public List<TagStat> getTagStats(User user) {
 						
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select tag.id, tag.name, tag.topics.size from Tag tag "+
+				"select tag.id, tag.title, tag.children.size from Tag tag "+
 				//"left join topics "+
-				"where user is ? "
+				"where  user is ? or publicVisible = true"
 				,user);
 		
 		List<TagStat> rtn = new ArrayList<TagStat>(list.size());

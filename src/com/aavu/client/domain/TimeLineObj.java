@@ -20,11 +20,9 @@ public class TimeLineObj implements IsSerializable {
 	public TimeLineObj(){}
 	
 	public TimeLineObj(TopicIdentifier topic, Date start, Date end) {
-		System.out.println("in ctor");
 		this.topic = topic;
 		this.start = start;
 		this.end = end;
-		System.out.println("finised ctor");
 	}
 	
 	public Date getEnd() {
@@ -67,7 +65,7 @@ public class TimeLineObj implements IsSerializable {
 		JSONObject jo = new JSONObject();
 
 		jo.put("start", new JSONString(sdf.format(getStart())));
-		jo.put("title", new JSONString("Title "+topic.getTopicTitle()));
+		jo.put("title", new JSONString(topic.getTopicTitle()));
 		jo.put("description", new JSONString("blah blah"));
 
 		return jo;

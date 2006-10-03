@@ -30,7 +30,7 @@ public class TopicDAOImplTest extends DAOTest {
 		
 		
 		Topic t = new Topic();
-		t.setText("this is the text");
+		t.setData("this is the text");
 		t.setTitle("this is the title");
 		tDAO.save(t);
 
@@ -38,7 +38,7 @@ public class TopicDAOImplTest extends DAOTest {
 		assertEquals(1,rtn.size());
 
 		t = new Topic();
-		t.setText("this is the text #2");
+		t.setData("this is the text #2");
 		t.setTitle("this is the title #2");
 		tDAO.save(t);
 

@@ -73,19 +73,29 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * 
 	 */
 	public List<TimeLineObj> getTimeline(User user) {
-
-		log.debug("user: "+user);
-		
 		//
 		//#1 select all Meta's that are displayable on a Timeline
 		//
-		List<Meta> usersMetaDates = getHibernateTemplate().findByNamedParam("from Meta meta where "+
-				"meta.class = com.aavu.client.domain.MetaDate "+
-				"and (meta.tag.user = :user OR "+ 
-				"meta.tag.publicVisible = true)",
-				"user",user);		
+//		List<Meta> usersMetaDates = getHibernateTemplate().findByNamedParam("from Topic meta where "+
+//				"meta.class = com.aavu.client.domain.MetaDate "+
+//				"and (meta.parents.user = :user OR "+ 
+//				"meta.parents.publicVisible = true)",
+//				"user",user);		
 
-		log.debug("1");
+//		List<Meta> usersMetaDates = getHibernateTemplate().find("from Topic meta where "+
+//				"meta.class = com.aavu.client.domain.MetaDate "+
+//				"and meta.parents.user.id > 0");
+//				"and (meta.parents.user = :user OR "+ 
+//				"meta.parents.publicVisible = true)",
+//				"user",user);		
+
+		
+		List<Meta> usersMetaDates = getHibernateTemplate().find("from Topic topic where "+
+				"5 in elements (topic.children.parents.user.id) ");
+				//"and meta.parents.user.id > 0");
+//				"and (meta.parents.user = :user OR "+ 
+//				"meta.parents.publicVisible = true)",
+//				"user",user);		
 		
 		StringBuffer sb = new StringBuffer("where ");
 		boolean first = true;
@@ -94,13 +104,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				sb.append("or ");							
 			}
 			sb.append(meta2.getId());
-			sb.append(" in indices(top.metaValueStrs) ");
+			sb.append(" in indices(top.metaValues) ");
 			
 			first = false;
 		}
 		
-		log.debug("2");
-		log.debug("SB "+sb.toString());
+		log.debug("Metas Query "+sb.toString());
 	
 		//
 		//#2 Get all the Topics with Meta's as described in #1
@@ -109,37 +118,29 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				sb.toString()+
 				"and user = :user ","user",user);
 				
-		log.debug("2.0: "+alltopics.size());
+
 		//
 		//#3 Create and return 
 		//
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 		for (Topic topic : alltopics) {
-			log.debug("2.1: "+topic);
-			for(Meta m : usersMetaDates){
-				
-				log.debug("2.2: "+topic.getMetaValueStrs());
-				
-				if(topic.getMetaValueStrs().containsKey(m.getId()+"")){
-
-					log.debug("2.3: ");
-					String dateStr = (String) topic.getMetaValueStrs().get(m.getId()+"");
+			for(Meta m : usersMetaDates){				
+				if(topic.getMetaValues().containsKey(m.getId()+"")){
+					String dateStr = (String) topic.getMetaValues().get(m.getId()+"");
 					Date start = new Date(Long.parseLong(dateStr));
-					log.debug("2.4: "+start);
 					TopicIdentifier ti = topic.getIdentifier(); 												
 					TimeLineObj to = new TimeLineObj(ti,start,null);												
 					rtn.add(to);					
-					log.debug("2.5: ");
 				}
 			}				
 		}
-		log.debug("3 "+rtn.size());
-				
-		for (TimeLineObj obj : rtn) {
-			log.debug("TIMELINE ");
-			log.debug(obj);
-		}
-		
+
+		if(log.isDebugEnabled())
+			for (TimeLineObj obj : rtn) {
+				log.debug("TIMELINE ");
+				log.debug(obj);
+			}
+
 		
 		return rtn;
 		
@@ -161,7 +162,13 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
 		.add(Expression.eq("user", user))
 		.add(Expression.eq("title", string))
-		.setFetchMode("user", FetchMode.JOIN);
+		.setFetchMode("user", FetchMode.JOIN)
+		.setFetchMode("metaValues", FetchMode.JOIN)
+		.setFetchMode("parents", FetchMode.JOIN)
+		//.setFetchMode("children", FetchMode.JOIN)
+		.setFetchMode("metas", FetchMode.JOIN)
+		.setFetchMode("occurrences", FetchMode.JOIN)
+		.setFetchMode("associations", FetchMode.JOIN);
 
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 
@@ -204,7 +211,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		Object[] params = {tag.getId(),user};				
 		List<Object[]> list = getHibernateTemplate().find(""+
 				"select title, id from Topic top "+
-				"where top.tags.id is ? "+
+				"where top.parents.id is ? "+
 				"and user is ? "
 				,params);
 

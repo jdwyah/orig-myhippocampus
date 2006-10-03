@@ -127,23 +127,23 @@ public class TagBoard extends Composite implements CompleteListener {
 	
 	private void addTag(final Tag tag) {
 		
-		cur_topic.getTags().add(tag);		
+		cur_topic.tagTopic(tag);		
 		showTag(tag);
 	}
 	
 	private void displayMetas(Tag tag) {
-		List metas = tag.getMetas();
+		Set metas = tag.getMetas();
 
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
 			GWT.log("displayMetas", null);
 			if(element.needsSaveCallback()){
 				GWT.log("needs callback", null);
-				SaveListener w = (SaveListener) element.getEditorWidget(cur_topic.getMetaValueStrs());
+				SaveListener w = (SaveListener) element.getEditorWidget(cur_topic.getMetaValues());
 				tagPanel.add(w);
 				listeners.add(w);
 			}else{
-				Widget w = element.getEditorWidget(cur_topic.getMetaValueStrs());
+				Widget w = element.getEditorWidget(cur_topic.getMetaValues());
 				tagPanel.add(w);
 			}
 		}

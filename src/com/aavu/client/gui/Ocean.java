@@ -11,7 +11,7 @@ public class Ocean extends FlashContainer {
 	private Manager manager;
 
 	public Ocean(Manager manager){
-		super("__preOcean.swf","ocean");
+		super("islands.swf","ocean");
 		this.manager = manager;
 		
 		setStyleName("H-Ocean");		
@@ -45,13 +45,19 @@ public class Ocean extends FlashContainer {
 		sb.append("<invoke name=\"initLand\" returntype=\"javascript\"><arguments>");
 		sb.append(number(user.getId()));		
 		sb.append("<array>");     	
+		
+		int listCount = 0;
 		for (int i = 0; i < tagStats.length; i++) {
 			TagStat stat = tagStats[i];
-			sb.append("<property id='");
-			sb.append(i);
-			sb.append("'>");
-			sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics()));
-			sb.append("</property>");			
+			
+			if(stat.getNumberOfTopics() > 0){
+				sb.append("<property id='");
+				sb.append(listCount);
+				sb.append("'>");
+				sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics()));
+				sb.append("</property>");
+				listCount++;
+			}
 		}
 //		sb.append("<property id='0'>"+islandObj(7,"Music",2)+"</property>");
 //		sb.append("<property id='1'>"+islandObj(8,"Contacts",8)+"</property>");

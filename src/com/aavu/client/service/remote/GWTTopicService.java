@@ -20,7 +20,10 @@ public interface GWTTopicService extends RemoteService {
 
 	//void save(Topic topic, String[] seeAlsos); 
 	Topic getTopicByID(long topicID);
+	
+	//JSON string screw gwt serialization
 	Topic getTopicForName(String topicName);
+	
 	Topic[] getBlogTopics(int start, int numberPerScreen);
 	TopicIdentifier[] getTopicIdsWithTag(Tag tag);
 	//List<TimeLineObj>

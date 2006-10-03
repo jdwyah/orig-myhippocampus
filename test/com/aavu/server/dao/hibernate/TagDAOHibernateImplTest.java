@@ -48,7 +48,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		super.onSetUpInTransaction();
 
-		u = userDAO.getUserByUsername("vpech");
+		u = userDAO.getUserByUsername("test");
 
 		publicTagNumber = tagDAO.getPublicTags().size();
 
@@ -131,7 +131,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setUser(u);
 
 		Meta meta = new MetaText();
-		meta.setName(name);
+		meta.setTitle(name);
 
 		t2.getMetas().add(meta);
 
@@ -149,7 +149,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		assertEquals(1,saved.getMetas().size());
 
-		Meta savedM = (Meta) saved.getMetas().get(0);
+		Meta savedM = (Meta) saved.getMetas().iterator().next();
 
 		assertEquals(name, savedM.getName());
 
@@ -158,7 +158,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		//now add another meta
 		//
 		Meta meta2 = new MetaText();
-		meta2.setName(name2);
+		meta2.setTitle(name2);
 
 		saved.getMetas().add(meta2);
 
@@ -184,11 +184,11 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		}		
 		
 		Topic t = new Topic();
-		t.setText(B);
+		t.setData(B);
 		t.setTitle(C);
 		t.setUser(u);
-				
-		t.getTags().add(three[0]);				
+		t.tagTopic(three[0]);
+					
 		topicDAO.save(t);
 		
 		//test
@@ -207,15 +207,15 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		//Add a new topic with tags 0 & 1
 		//
 		Topic t2 = new Topic();
-		t2.setText(C);
+		t2.setData(C);
 		t2.setTitle(B2);
 		t2.setUser(u);				
-		t2.getTags().add(three[1]);				
-		t2.getTags().add(three[0]);
+		t2.tagTopic(three[1]);				
+		t2.tagTopic(three[0]);
 		topicDAO.save(t2);
 		
 		//add tag 2 to topic 1
-		t.getTags().add(three[2]);
+		t.tagTopic(three[2]);
 		topicDAO.save(t);
 		
 		//test 

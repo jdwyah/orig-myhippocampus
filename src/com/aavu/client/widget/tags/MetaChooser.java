@@ -36,7 +36,7 @@ public class MetaChooser extends Composite {
 
 	public Meta getMeta() {
 		Meta meta = metaType.getSelectedMeta();
-		meta.setName(metaName.getText());
+		meta.setTitle(metaName.getText());
 		return meta;
 	}
 	

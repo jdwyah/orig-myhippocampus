@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.aavu.client.domain">
+
+	<class name="Topic" table="Topics" discriminator-value="Topic">
+		<meta attribute="generated-class">com.aavu.client.domain.generated.AbstractTopic</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<id name="id" type="long" column="topic_id" unsaved-value="0">
+			<generator class="native"></generator>
+		</id>
+
+		<discriminator column="discriminator" type="string"></discriminator>
+
+		<many-to-one name="user" class="User" column="user_id" />
+
+		<property name="title" type="string" column="title">
+			<meta attribute="use-in-equals">true</meta>
+			<meta attribute="field-description">The title of this entry</meta>
+		</property>
+
+		<property name="data" type="string" column="data">
+			<meta attribute="use-in-equals">true</meta>
+			<meta attribute="field-description">The optional data element</meta>
+		</property>
+
+		<property name="lastUpdated" type="java.util.Date">
+			<meta attribute="field-description">Last updated</meta>
+			<column name="dateUpdated" sql-type="timestamp" />
+		</property>
+
+		<property name="created" type="java.util.Date">
+			<meta attribute="field-description">Created date</meta>
+			<column name="dateCreated" sql-type="timestamp" />
+		</property>
+
+		<property name="publicVisible" type="boolean" column="public_visible">
+			<meta attribute="use-in-equals">true</meta>
+			<meta attribute="field-description">Shared?</meta>
+		</property>
+
+
+ 
+		<map name="metaValues" table="topic_meta_values">
+			<key column="topic_meta_value_id"></key>
+
+			<map-key-many-to-many class="Topic" column="topic_id"></map-key-many-to-many>
+			<many-to-many column="metaValue" class="Topic"></many-to-many>
+						
+	    </map>
+
+ 		<set name="children" table="parentchildtable">
+			<key column="from_id" />
+			<many-to-many column="topic_id" class="Topic" />
+		</set>
+		<set name="parents" table="parentchildtable">
+			<key column="from_id" />
+			<many-to-many column="topic_id" class="Topic" />
+		</set>
+
+		<set name="metas" table="topic_meta">
+			<key column="meta_id" />
+			<many-to-many column="topic_id" class="Topic" />
+		</set>
+		
+		<set name="occurences" table="occurences">
+			<key column="occurrence_id"></key>
+			<many-to-many column="topic_id" class="Topic" />
+		</set>
+
+		<set name="associations" table="associations">
+			<key column="association_id"></key>			
+			<many-to-many column="topic_id" class="Topic" />
+		</set>
+
+
+		<subclass name="Tag" discriminator-value="tag">
+			<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+		</subclass>
+		<subclass name="Meta" discriminator-value="meta">
+			<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+		
+			<subclass name="MetaDate" discriminator-value="metadate">
+				<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+			</subclass>
+			<subclass name="MetaText" discriminator-value="metatext">
+				<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+			</subclass>
+			<subclass name="MetaTopicList" discriminator-value="metatopiclist">
+				<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+			</subclass>
+		</subclass>
+	</class>
+	
+	
+	
+<!-- 
+	<class name="Occurrence" table="Occurrence">
+		<meta attribute="generated-class">com.aavu.client.domain.generated.AbstractOccurrence</meta>
+		<meta attribute="scope-class">public abstract</meta>
+		<id name="id" type="long" column="occurrence_id">
+			<generator class="native"></generator>
+		</id>
+		<property name="isLink" type="boolean" column="isLink">
+			<meta attribute="use-in-equals">true</meta>
+		</property>
+		<property name="value" type="string" column="value">
+			<meta attribute="use-in-equals">true</meta>
+		</property>
+	</class>-->
+
+<!-- 
+	<class name="Link" table="Link" abstract="true">
+		<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractLink</meta>
+		<meta attribute="scope-class" inherit="false">public abstract</meta>
+
+		<id name="id" type="long" column="link_id" unsaved-value="0">
+			<generator class="native"></generator>
+		</id>
+
+		<discriminator column="discriminator" type="string" />
+
+		<many-to-one name="from" class="NewTopic" column="from_id" />
+		<many-to-one name="to" class="NewTopic" column="to_id" />
+
+		<subclass name="MetaLink" discriminator-value="meta">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractMetaLink</meta>
+		</subclass>
+
+		<subclass name="MetaValueLink" discriminator-value="metavalue">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractMetaValueLink</meta>
+		</subclass>
+	</class>-->
+
+</hibernate-mapping>

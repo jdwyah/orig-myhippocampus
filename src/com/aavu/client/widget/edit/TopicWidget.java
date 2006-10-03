@@ -2,8 +2,8 @@ package com.aavu.client.widget.edit;
 
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.gwtwidgets.client.util.WindowUtils;
 import org.gwtwidgets.client.wrap.Effect;
@@ -17,7 +17,6 @@ import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -76,7 +75,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	public void setup(){
 
 		textPanel.clear();
-		textPanel.add(new TextDisplay(topic.getText()));		
+		textPanel.add(new TextDisplay(topic.getData()));		
 
 		topicTitlePanel.clear();
 		topicTitlePanel.add(titleLabel);
@@ -99,13 +98,13 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag element = (Tag) iter.next();
 			panel.add(new Label(element.getName()));
-			displayMetas(element,t.getMetaValueStrs(),panel);
+			displayMetas(element,t.getMetaValues(),panel);
 		}		
 		return panel;
 	}
 
 	private void displayMetas(Tag tag,Map mmap,VerticalPanel tagPanel) {
-		List metas = tag.getMetas();
+		Set metas = tag.getMetas();
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
 			tagPanel.add(element.getWidget(mmap));
