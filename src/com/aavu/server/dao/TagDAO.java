@@ -15,7 +15,7 @@ public interface TagDAO {
 
 	List<Tag> getAllTags(User user);
 	
-	List<Tag> getTagsStarting(User user,String match);
+	List<String> getTagsStarting(User user,String match);
 
 	void save(Tag selectedTag);
 

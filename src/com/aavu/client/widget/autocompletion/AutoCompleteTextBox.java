@@ -163,7 +163,22 @@ MatchesRequiring, PopupListener {
 	public void setMatches(Completable[] matches) {
 		this.matches = matches;
 	}
-
+	 public void setMatches(String[] matches) {
+	    	Completable[] cr = new CompleteLunacy[matches.length];
+	    	for (int i = 0; i < matches.length; i++) {			
+				cr[i] = new CompleteLunacy(matches[i]);
+			}
+	    	this.matches = cr;
+	    }
+	    private class CompleteLunacy implements Completable{
+			private String string;
+			public CompleteLunacy(String string) {
+				this.string = string;
+			}
+			public String getCompleteStr() {
+				return string;	
+			}    	
+	    }
 	// use for Asynchronous Match
 	public void onMatch(String text) {
 		if (matches.length > 0) {

@@ -57,7 +57,7 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 
 
 
-	public List<Tag> getTagsStarting(String match) {
+	public List<String> getTagsStarting(String match) {
 		return tagDAO.getTagsStarting(userService.getCurrentUser(),match);
 	}
 

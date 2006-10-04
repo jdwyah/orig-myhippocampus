@@ -95,7 +95,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		add3();
 
-		List<Tag> l1 = tagDAO.getTagsStarting(u, "Z");
+		List<String> l1 = tagDAO.getTagsStarting(u, "Z");
 		assertEquals(0, l1.size());
 
 		l1 = tagDAO.getTagsStarting(u, "X");

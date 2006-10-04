@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Topic extends AbstractTopic  implements Completable, IsSerializable{
 
+	
 	public Topic(){
 		setLastUpdated(new Date());
 		setCreated(new Date());
@@ -50,7 +51,13 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	public void tagTopic(Topic tag){
 
-		tag.getInstances().add(this);
+		
+//		System.out.println("tagging with "+tag.getTitle());
+//		System.out.println("alread tagged "+tag.getInstances());
+//		System.out.println("alread tagged "+tag.getInstances().size());
+		
+		
+		tag.getInstances().add(this);		
 		getTypes().add(tag);
 		
 		

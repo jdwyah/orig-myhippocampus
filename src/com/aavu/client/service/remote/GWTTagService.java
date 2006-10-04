@@ -13,7 +13,7 @@ public interface GWTTagService extends RemoteService {
 
 	Tag[] getAllTags();
 	
-	Tag[] match(String match);//List<String>
+	String[] match(String match);//List<String>
 	
 	void saveTag(Tag selectedTag);
 	

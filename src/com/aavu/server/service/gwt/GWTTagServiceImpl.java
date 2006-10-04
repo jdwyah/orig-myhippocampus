@@ -14,6 +14,7 @@ import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagService;
+import com.aavu.client.widget.autocompletion.Completable;
 import com.aavu.server.service.TagService;
 
 public class GWTTagServiceImpl extends GWTSpringController implements GWTTagService {
@@ -62,11 +63,17 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		tagService.removeTag(selectedTag);
 	}
 
-	public Tag[] match(String match) {
+	public String[] match(String match) {
 		try{
-			List<Tag> list = tagService.getTagsStarting(match);
-
-			return convertAllTags(list);
+			String[] list = new String[]{};
+			list = tagService.getTagsStarting(match).toArray(list);
+			
+			System.out.println("list "+list.length);
+			for (int i = 0; i < list.length; i++) {
+				String s = list[i];
+				System.out.println("s "+s);
+			}
+			return list;
 
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);

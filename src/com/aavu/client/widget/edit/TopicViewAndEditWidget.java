@@ -5,13 +5,11 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
-import com.aavu.client.service.remote.GWTTagServiceAsync;
-import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,11 +28,11 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	private VerticalPanel lp;
 	
 	public Topic topic;
-	private HippoCache hippoCache;	
+	private Manager manager;	
 	
 	
-	public TopicViewAndEditWidget(HippoCache hippoCache) {
-		this.hippoCache = hippoCache;
+	public TopicViewAndEditWidget(Manager manager) {
+		this.manager = manager;
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
@@ -57,7 +55,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	public void load(Topic topic){
 		this.topic = topic;
 		topicWidget = new TopicWidget(topic);
-		topicEditWidget = new TopicEditWidget(this,hippoCache,topic);
+		topicEditWidget = new TopicEditWidget(this,manager,topic);
 		
 		activateMainView();
 
@@ -104,7 +102,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		load(topic2);
 		
-		hippoCache.getTopicCache().save(topic2, new StdAsyncCallback("topicDetail save") {				
+		manager.getTopicCache().save(topic2, new StdAsyncCallback("topicDetail save") {				
 			
 			public void onSuccess(Object result) {		
 				

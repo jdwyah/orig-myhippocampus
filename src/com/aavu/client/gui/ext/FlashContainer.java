@@ -104,9 +104,9 @@ public class FlashContainer extends SimplePanel {
 		b = $wnd[name];
 	}
 
-	alert("b: "+b);
+	//alert("b: "+b);
 
- 	alert(command);
+ 	//alert(command);
 
  		try{
 			b.CallFunction(command);

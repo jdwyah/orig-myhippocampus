@@ -31,7 +31,7 @@ public class RemoteTAGAutoCompletionItems implements CompletionItems {
 			}
 
 			public void onSuccess(Object result) {
-				widget.setMatches( (Completable[]) result);
+				widget.setMatches( (String[]) result);
 				widget.onMatch( match );
 			}
 

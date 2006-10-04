@@ -8,6 +8,9 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -54,18 +57,12 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 	}
 
-	public List<Tag> getTagsStarting(User user, String match) {
+	public List<String> getTagsStarting(User user, String match) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)		
 		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),
 				Expression.or(
 				Expression.eq("user", user),Expression.eq("publicVisible", true))))
-		.setFetchMode("user", FetchMode.JOIN)
-		.setFetchMode("metaValues", FetchMode.JOIN)
-		.setFetchMode("types", FetchMode.JOIN)
-		.setFetchMode("instances", FetchMode.JOIN)
-		.setFetchMode("metas", FetchMode.JOIN)
-		.setFetchMode("occurrences", FetchMode.JOIN)
-		.setFetchMode("associations", FetchMode.JOIN);
+		.setProjection(Property.forName("title"));				
 		
 		return getHibernateTemplate().findByCriteria(crit);
 	}

@@ -11,7 +11,7 @@ public interface TagService {
 
 	void save(Tag selectedTag);
 
-	List<Tag> getTagsStarting(String match);
+	List<String> getTagsStarting(String match);
 
 	void removeTag(Tag selectedTag) throws PermissionDeniedException;
 

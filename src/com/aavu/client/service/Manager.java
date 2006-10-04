@@ -52,7 +52,7 @@ public class Manager {
 
 	}
 	public void bringUpChart(Topic topic) {
-		TopicWindow tw = new TopicWindow(hippoCache,topic);
+		TopicWindow tw = new TopicWindow(this,topic);
 		tw.setPopupPosition(DEF_X,DEF_Y);
 		tw.show();		
 	}
@@ -158,6 +158,9 @@ public class Manager {
 	}
 	public User getUser() {
 		return user;
+	}
+	public void growIsland(Tag tag) {
+		map.growIsland(tag);
 	}
 
 

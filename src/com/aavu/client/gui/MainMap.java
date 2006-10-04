@@ -1,5 +1,6 @@
 package com.aavu.client.gui;
 
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.gui.ext.MultiDivPanel;
@@ -39,5 +40,9 @@ public class MainMap extends Composite {
 	
 	public void doIslands(){
 		ocean.initIslands();
+	}
+
+	public void growIsland(Tag tag) {
+		ocean.growIsland(tag);
 	}
 }

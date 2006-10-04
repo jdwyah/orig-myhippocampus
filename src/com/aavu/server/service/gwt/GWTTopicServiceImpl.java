@@ -241,7 +241,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			
 			//metavalues
 			t.setTypes(converter(t.getTypes(),true));
-			t.setInstances(new HashSet());
+			t.setInstances(converter(t.getInstances(),true));
 			t.setMetas(converter(t.getMetas(),true));
 			t.setOccurences(new HashSet());
 			t.setAssociations(new HashSet());

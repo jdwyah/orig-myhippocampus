@@ -2,19 +2,16 @@ package com.aavu.client.widget.edit;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.aavu.client.async.NestedStdAsyncCallback;
-import com.aavu.client.async.NestingCallbacks;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.service.cache.HippoCache;
-import com.aavu.client.service.remote.GWTTagServiceAsync;
+import com.aavu.client.service.Manager;
+import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.widget.tags.SaveListener;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -39,13 +36,15 @@ public class TagBoard extends Composite implements CompleteListener {
 
 	private Topic cur_topic;
 	private List listeners = new ArrayList();
-	private HippoCache hippoCache;
+	private TagCache tagCache;
+	private Manager manager;
 	
 
-	public TagBoard(HippoCache hippoCache) {
-		this.hippoCache = hippoCache;
+	public TagBoard(Manager manager) {
+		this.manager = manager;
+		this.tagCache = manager.getTagCache();
 
-		tagBox = new TagAutoCompleteBox(this,hippoCache.getTagCache());
+		tagBox = new TagAutoCompleteBox(this,tagCache);
 
 		addTagButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
@@ -71,7 +70,7 @@ public class TagBoard extends Composite implements CompleteListener {
 
 		//First, do a name lookup on this tag
 		//
-		hippoCache.getTagCache().getTagAddIfNew(tagName, new AsyncCallback(){
+		tagCache.getTagAddIfNew(tagName, new AsyncCallback(){
 
 			public void onFailure(Throwable caught) {
 				System.out.println("fail tagservice.getTagAddIfNew "+caught);	
@@ -80,6 +79,7 @@ public class TagBoard extends Composite implements CompleteListener {
 			public void onSuccess(Object result) {
 				Tag tag = (Tag) result;				
 				addTag(tag);
+				manager.growIsland(tag);
 			}});
 
 
@@ -129,6 +129,7 @@ public class TagBoard extends Composite implements CompleteListener {
 		
 		cur_topic.tagTopic(tag);		
 		showTag(tag);
+		
 	}
 	
 	private void displayMetas(Tag tag) {

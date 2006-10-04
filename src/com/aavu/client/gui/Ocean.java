@@ -1,6 +1,7 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.ext.FlashContainer;
@@ -67,5 +68,14 @@ public class Ocean extends FlashContainer {
 		sb.append(number(user.getWorldSize()));
 		sb.append("</arguments></invoke>");    				
 		return sb.toString();
+	}
+
+	public void growIsland(Tag tag) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<invoke name=\"grow\" returntype=\"javascript\"><arguments>");
+		sb.append(number(tag.getId()));				
+		sb.append("</arguments></invoke>");    				
+		
+		runCommand(sb.toString());		
 	}
 }

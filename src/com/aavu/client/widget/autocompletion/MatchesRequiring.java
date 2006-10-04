@@ -16,4 +16,6 @@ public interface MatchesRequiring {
 
         public void setMatches(Completable[] matches);
 
+		public void setMatches(String[] strings);
+
 }

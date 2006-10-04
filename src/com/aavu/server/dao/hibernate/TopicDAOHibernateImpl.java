@@ -2,6 +2,7 @@ package com.aavu.server.dao.hibernate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -200,6 +201,17 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //		Topic t = getHibernateTemplate().get(Topic.class, t);
 		
 		getHibernateTemplate().saveOrUpdate(t);
+		
+		for (Iterator iter = t.getTypes().iterator(); iter.hasNext();) {
+			Topic type = (Topic) iter.next();
+			log.debug("saving its type");
+			getHibernateTemplate().saveOrUpdate(type);
+//			
+//			//PEND REPEATED CODE! BAD!
+//			Topic savedType = (Topic) getHibernateTemplate().get(Topic.class, type.getId());
+//			savedType.getInstances().add(t);
+			log.debug("done");
+		}
 		return t;		
 	}
 

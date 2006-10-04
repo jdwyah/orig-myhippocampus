@@ -14,7 +14,7 @@ import com.aavu.server.dao.TagDAO;
 import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 
-public class TagDAOdb4oImpl extends Db4oDaoSupport implements TagDAO {
+public class TagDAOdb4oImpl extends Db4oDaoSupport {
 	private static final Logger log = Logger.getLogger(TagDAOdb4oImpl.class);
 
 	public List<Tag> getAllTags(User user) {
