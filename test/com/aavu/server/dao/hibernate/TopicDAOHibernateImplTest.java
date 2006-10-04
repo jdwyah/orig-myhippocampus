@@ -36,7 +36,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("test");
+		User u = userDAO.getUserByUsername("junit");
 
 		Topic t = new Topic();
 		t.setData(B);
@@ -81,7 +81,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("test");
+		User u = userDAO.getUserByUsername("junit");
 
 				
 		Topic t = new Topic();
@@ -128,7 +128,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("test");
+		User u = userDAO.getUserByUsername("junit");
 
 				
 		Topic t = new Topic();
@@ -193,7 +193,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("test");
+		User u = userDAO.getUserByUsername("junit");
 				
 		Topic t = new Topic();
 		t.setData(B);
@@ -240,7 +240,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		String B = "Ssds45t";
 		String C = "ASR#35rf";
 		
-		User u = userDAO.getUserByUsername("test");
+		User u = userDAO.getUserByUsername("junit");
 
 		Topic t = new Topic();
 		t.setData(B);
@@ -262,7 +262,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testGetTimeline(){
 		
-		User u = userDAO.getUserByUsername("test");		
+		User u = userDAO.getUserByUsername("junit");		
 		MetaDate md = new MetaDate();
 		md.setId(9);
 		

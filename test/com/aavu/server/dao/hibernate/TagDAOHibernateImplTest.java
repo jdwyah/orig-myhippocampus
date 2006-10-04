@@ -48,7 +48,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		super.onSetUpInTransaction();
 
-		u = userDAO.getUserByUsername("test");
+		u = userDAO.getUserByUsername("junit");
 
 		publicTagNumber = tagDAO.getPublicTags().size();
 

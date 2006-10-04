@@ -1,5 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.server.dao.NewTopicDAO;
 import com.aavu.server.dao.TagDAO;
@@ -90,7 +91,7 @@ public class NewTopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		Topic dateRead = new Topic();
 		dateRead.setTitle("Date read");		
-		dateRead.addParent(DATE_TYPE);
+		//dateRead.addParent(DATE_TYPE);
 		
 		
 		//AUTHOR
@@ -142,7 +143,13 @@ public class NewTopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		System.out.println("----------------");
 	}
 	
-	
+	public void test2(){
+		
+		Tag bookTag = new Tag();
+		
+		
+		
+	}
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}

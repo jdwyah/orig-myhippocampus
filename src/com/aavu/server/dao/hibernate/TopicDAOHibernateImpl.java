@@ -164,12 +164,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.eq("title", string))
 		.setFetchMode("user", FetchMode.JOIN)
 		.setFetchMode("metaValues", FetchMode.JOIN)
-		.setFetchMode("parents", FetchMode.JOIN)
-		//.setFetchMode("children", FetchMode.JOIN)
+		.setFetchMode("instances", FetchMode.JOIN)
+		.setFetchMode("types", FetchMode.JOIN)
 		.setFetchMode("metas", FetchMode.JOIN)
 		.setFetchMode("occurrences", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN);
-
+		
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 
 		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title = :title", "user", user);
@@ -197,8 +197,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //		System.out.println("d");
 //		}
 
+//		Topic t = getHibernateTemplate().get(Topic.class, t);
+		
 		getHibernateTemplate().saveOrUpdate(t);
-		return t;
+		return t;		
 	}
 
 	public void tester() {
@@ -211,7 +213,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		Object[] params = {tag.getId(),user};				
 		List<Object[]> list = getHibernateTemplate().find(""+
 				"select title, id from Topic top "+
-				"where top.parents.id is ? "+
+				"where top.types.id is ? "+
 				"and user is ? "
 				,params);
 

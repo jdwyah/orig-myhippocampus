@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
@@ -20,7 +21,18 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	private static final Logger log = Logger.getLogger(TagDAOHibernateImpl.class);
 	
 	public List<Tag> getAllTags(User user) {
-		return getHibernateTemplate().findByNamedParam("from Tag where user = :user OR public_visible = true", "user", user);
+		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)
+		.add(Expression.or(
+				Expression.eq("user", user),Expression.eq("publicVisible", true)))
+		.setFetchMode("user", FetchMode.JOIN)
+		.setFetchMode("metaValues", FetchMode.JOIN)
+		.setFetchMode("types", FetchMode.JOIN)
+		.setFetchMode("instances", FetchMode.JOIN)
+		.setFetchMode("metas", FetchMode.JOIN)
+		.setFetchMode("occurrences", FetchMode.JOIN)
+		.setFetchMode("associations", FetchMode.JOIN);
+				
+		return getHibernateTemplate().findByCriteria(crit);	
 	}
 
 	/**
@@ -30,7 +42,14 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)
 		.add(Expression.and(Expression.eq("title", tagName),
 				Expression.or(
-				Expression.eq("user", user),Expression.eq("publicVisible", true))));
+				Expression.eq("user", user),Expression.eq("publicVisible", true))))
+		.setFetchMode("user", FetchMode.JOIN)
+		.setFetchMode("metaValues", FetchMode.JOIN)
+		.setFetchMode("types", FetchMode.JOIN)
+		.setFetchMode("instances", FetchMode.JOIN)
+		.setFetchMode("metas", FetchMode.JOIN)
+		.setFetchMode("occurrences", FetchMode.JOIN)
+		.setFetchMode("associations", FetchMode.JOIN);
 				
 		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 	}
@@ -39,7 +58,14 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)		
 		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),
 				Expression.or(
-				Expression.eq("user", user),Expression.eq("publicVisible", true))));
+				Expression.eq("user", user),Expression.eq("publicVisible", true))))
+		.setFetchMode("user", FetchMode.JOIN)
+		.setFetchMode("metaValues", FetchMode.JOIN)
+		.setFetchMode("types", FetchMode.JOIN)
+		.setFetchMode("instances", FetchMode.JOIN)
+		.setFetchMode("metas", FetchMode.JOIN)
+		.setFetchMode("occurrences", FetchMode.JOIN)
+		.setFetchMode("associations", FetchMode.JOIN);
 		
 		return getHibernateTemplate().findByCriteria(crit);
 	}
@@ -52,6 +78,9 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		getHibernateTemplate().saveOrUpdate(selectedTag);
 	}
 
+	/**
+	 * testing only
+	 */
 	public List<Tag> getPublicTags() {
 		return getHibernateTemplate().find("from Tag where publicVisible = true");
 	}
@@ -59,13 +88,15 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	public List<TagStat> getTagStats(User user) {
 						
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select tag.id, tag.title, tag.children.size from Tag tag "+
+				"select tag.id, tag.title, tag.instances.size from Tag tag "+
 				//"left join topics "+
 				"where  user is ? or publicVisible = true"
 				,user);
 		
 		List<TagStat> rtn = new ArrayList<TagStat>(list.size());
 
+		log.debug("tagstats size "+list.size());
+		
 		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
 		for (Object[] o : list){

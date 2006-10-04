@@ -3,7 +3,7 @@
 <hibernate-mapping package="com.aavu.client.domain">
 
 	<class name="Topic" table="Topics" discriminator-value="Topic">
-		<meta attribute="generated-class">com.aavu.client.domain.generated.AbstractTopic</meta>
+		<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractTopic</meta>
 		<meta attribute="scope-class">public abstract</meta>
 
 		<id name="id" type="long" column="topic_id" unsaved-value="0">
@@ -49,11 +49,11 @@
 						
 	    </map>
 
- 		<set name="children" table="parentchildtable">
+ 		<set name="instances" table="instancetable">
 			<key column="from_id" />
 			<many-to-many column="topic_id" class="Topic" />
 		</set>
-		<set name="parents" table="parentchildtable">
+		<set name="types" table="typetable">
 			<key column="from_id" />
 			<many-to-many column="topic_id" class="Topic" />
 		</set>
@@ -70,25 +70,48 @@
 
 		<set name="associations" table="associations">
 			<key column="association_id"></key>			
-			<many-to-many column="topic_id" class="Topic" />
+			<many-to-many column="topic_id" class="Association" />
 		</set>
 
-
+		<!-- meaningless from DB perspective. only usefull for differentiation -->
 		<subclass name="Tag" discriminator-value="tag">
-			<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractTag</meta>
 		</subclass>
+
+		<!-- also meaningless from DB -->
 		<subclass name="Meta" discriminator-value="meta">
-			<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 		
 			<subclass name="MetaDate" discriminator-value="metadate">
-				<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
 			<subclass name="MetaText" discriminator-value="metatext">
-				<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
 			<subclass name="MetaTopicList" discriminator-value="metatopiclist">
-				<meta attribute="generated-class" inherit="true">com.aavu.client.domain.generated.AbstractTag</meta>
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
+		</subclass>
+		
+		<!-- a real class has members -->
+		<subclass name="Association" discriminator-value="association">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractAssociation</meta>
+
+			<!-- what about doing just binary associations with two many-to-man? -->			
+			<map name="members" table="member_topics">
+				<key column="member_topics_id"></key>
+				<map-key-many-to-many column="role_topic" class="Topic" ></map-key-many-to-many>
+				<many-to-many column="implementing_topic" class="Topic"></many-to-many>						
+	    	</map>
+
+			<subclass name="ParentChild" discriminator-value="parentChild">
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractParentChild</meta>
+			</subclass>
+
+			<subclass name="SeeAlso" discriminator-value="seealso">
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractSeeAlso</meta>
+			</subclass>
+
 		</subclass>
 	</class>
 	

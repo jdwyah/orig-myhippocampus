@@ -124,16 +124,8 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 	 * @param t
 	 * @return
 	 */
-	public static Tag convert(Tag t){		
-		HashSet<Meta> nMetas = new HashSet<Meta>();
-		nMetas.addAll(t.getMetas());
-		t.setMetas(nMetas);
-
-		//TODO HIGH
-		//null out the topic set, otherwise we'd need to convert->recurse->infinitum
-		//t.setTopics(null);
-
-		return t;
+	public static Tag convert(Tag t){	
+		return (Tag) GWTTopicServiceImpl.convert(t);
 	}
 
 	public TagStat[] getTagStats() {

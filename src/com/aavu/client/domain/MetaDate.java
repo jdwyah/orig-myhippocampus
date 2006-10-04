@@ -1,5 +1,6 @@
 package com.aavu.client.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
@@ -8,12 +9,13 @@ import org.gwtwidgets.client.util.SimpleDateFormat;
 import com.aavu.client.widget.datepicker.DateFormatter;
 import com.aavu.client.widget.datepicker.DatePicker;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaDate extends Meta {
+public class MetaDate extends Meta implements IsSerializable,Serializable {
 
 	private static final String TYPE = "Date";
 	private static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
