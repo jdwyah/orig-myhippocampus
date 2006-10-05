@@ -73,6 +73,8 @@
 			</classpath>
 			<arg value="-out" />
 			<arg value="${gwt.out}" />
+<!--		<arg value="-style"/> 
+			<arg value="pretty"/>-->
 			<arg value="${gwt.module}" />
 		</java>	
 
