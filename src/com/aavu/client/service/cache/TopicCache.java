@@ -2,6 +2,7 @@ package com.aavu.client.service.cache;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,12 +10,14 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.util.JSONReader;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FiresFormEvents;
 
 public class TopicCache {
 
@@ -26,6 +29,9 @@ public class TopicCache {
 	private GWTTopicServiceAsync topicService;
 
 	private List topicIdentifiers = new ArrayList();
+	
+	private List saveListeners = new ArrayList();
+	
 
 	public TopicCache(GWTTopicServiceAsync topicService) {
 		this.topicService = topicService;
@@ -111,24 +117,38 @@ public class TopicCache {
 	}
 
 
-	/**
-	 * @deprecated
-	 * 
-	 */
-	public void getAllTopics(int i, int j, StdAsyncCallback callback) {		
-		topicService.getAllTopics(i, j, new TopicNameCallBack(TOPIC_LIST,callback));		
-	}
-
-	public void getBlogTopics(int start, int numberPerScreen, StdAsyncCallback callback) {
-		topicService.getBlogTopics(start, numberPerScreen, callback);		
-	}
+	
 
 	public void save(Topic topic2, AsyncCallback callback) {
 		System.out.println("client saving "+topic2.toPrettyString());
 
-		topicService.save(topic2, callback);
+		topicService.save(topic2, new SaveCallback(callback));
+		
+		
+		
 	}
+	private class SaveCallback implements AsyncCallback {
+		private AsyncCallback callback;
+		public SaveCallback(AsyncCallback callback) {
+			this.callback = callback;			
+		}
+		public void onFailure(Throwable caught) {
+			callback.onFailure(caught);
+		}
+		public void onSuccess(Object result) {
+			Topic res = (Topic) result;
+			
+			//TODO bogus, need to check
+			topicIdentifiers.add(res.getIdentifier());
+			
+			for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
+				TopicSaveListener listener = (TopicSaveListener) iter.next();
+				listener.topicSaved((Topic) result);
+			}			
+			callback.onSuccess(result);
+		}
 
+	}
 
 	public void match(String match, AsyncCallback call) {
 		topicService.match(match, call);		
@@ -240,6 +260,8 @@ public class TopicCache {
 		topicService.getTimelineObjs(callback);
 	}
 
-
+	public void addSaveListener(TopicSaveListener l){
+		saveListeners.add(l);
+	}
 
 }

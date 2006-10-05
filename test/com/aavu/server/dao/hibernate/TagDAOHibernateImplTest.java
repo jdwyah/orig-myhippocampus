@@ -1,11 +1,13 @@
 package com.aavu.server.dao.hibernate;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaText;
+import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
@@ -60,19 +62,19 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t1.setName(A);
 		t1.setUser(u);
 
-		tagDAO.save(t1);
+		topicDAO.save(t1);
 
 		Tag t2 = new Tag();
 		t2.setName(B);
 		t2.setUser(u);
 
-		tagDAO.save(t2);
+		topicDAO.save(t2);
 
 		Tag t3 = new Tag();
 		t3.setName(B2);
 		t3.setUser(u);
 
-		tagDAO.save(t3);
+		topicDAO.save(t3);
 		
 		return new Tag[] {t1,t2,t3};
 	}
@@ -83,8 +85,64 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		List<Tag> list = tagDAO.getAllTags(u);
 
 		assertEquals(3 + publicTagNumber, list.size());
+		
+				
 	}
 
+	/**
+	 * TODO MED
+	 * test doesn't really test anything it works w/ or w/o the fix
+	 * attempting to prove that:
+	 * .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+	 * really does something. It does (otherwise, I get dupes from 
+	 * getAllTags() in live use, but I can't replicate in this test.
+	 */
+	public void testGetAllTagsNoDupes() {
+		Tag[] tags = add3();
+
+		Topic t1 = new Topic();
+		t1.setUser(u);
+		t1.tagTopic(tags[0]);		
+		topicDAO.save(t1);
+		
+		topicDAO.save(t1);
+		
+		
+		List<Tag> list = tagDAO.getAllTags(u);
+		assertEquals(3 + publicTagNumber, list.size());
+		
+		Tag savedTag = tagDAO.getTag(u, A);
+		
+		Topic t2 = new Topic();
+		t2.setUser(u);
+		t2.tagTopic(savedTag);		
+		topicDAO.save(t2);
+		
+		Topic t3 = new Topic();
+		t3.setUser(u);
+		t3.tagTopic(tags[1]);		
+		topicDAO.save(t2);
+		
+		Topic t4 = new Topic();
+		t4.setUser(u);
+		t4.tagTopic(tags[1]);		
+		topicDAO.save(t2);
+		
+		Topic t5 = new Topic();
+		t5.setUser(u);
+		t5.tagTopic(savedTag);		
+		topicDAO.save(t2);
+		
+		list = tagDAO.getAllTags(u);
+		assertEquals(3 + publicTagNumber, list.size());
+		for (Iterator iter = list.iterator(); iter.hasNext();) {
+			Tag tag = (Tag) iter.next();
+			System.out.println("r_tag "+tag.getId()+" "+tag.getTitle());
+		}
+		
+		
+	}
+	
 	public void testGetTag() {
 		add3();
 		Tag t = tagDAO.getTag(u, A);
@@ -130,14 +188,14 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setName(B);
 		t2.setUser(u);
 
-		Meta meta = new MetaText();
+		Meta meta = new MetaTopic();
 		meta.setTitle(name);
 
 		t2.getMetas().add(meta);
 
 
 		System.out.println("before: "+t2.getId());
-		tagDAO.save(t2);
+		topicDAO.save(t2);
 
 		System.out.println("after: "+t2.getId());
 
@@ -157,12 +215,12 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		//now add another meta
 		//
-		Meta meta2 = new MetaText();
+		Meta meta2 = new MetaTopic();
 		meta2.setTitle(name2);
 
 		saved.getMetas().add(meta2);
 
-		tagDAO.save(saved);
+		topicDAO.save(saved);
 
 		tagL = tagDAO.getAllTags(u);
 

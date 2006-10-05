@@ -32,7 +32,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	private FlowPanel textPanel = new FlowPanel();
 
 	private VerticalPanel panel = new VerticalPanel();
-
+	
 	public Topic topic;
 	private GWTTopicServiceAsync topicServiceA;
 
@@ -98,16 +98,18 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag element = (Tag) iter.next();
 			panel.add(new Label(element.getName()));
-			displayMetas(element,t.getMetaValues(),panel);
+			displayMetas(element,t,panel);
 		}		
 		return panel;
 	}
 
-	private void displayMetas(Tag tag,Map mmap,VerticalPanel tagPanel) {
+	private void displayMetas(Tag tag,Topic top,VerticalPanel tagPanel) {
+		System.out.println("display metas: "+tag.getTitle());
+		System.out.println("metas: "+tag.getMetas().size());
 		Set metas = tag.getMetas();
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
-			tagPanel.add(element.getWidget(mmap));
+			tagPanel.add(element.getWidget(top));
 		}
 	}
 

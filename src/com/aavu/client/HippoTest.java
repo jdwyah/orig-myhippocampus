@@ -98,7 +98,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		//hopefully replace with Spring DI
 		//
 		TopicCompleter.setTopicService(hippoCache.getTopicCache());
-		MetaTopicList.setCache(hippoCache);
+		//MetaTopicList.setCache(hippoCache);
 		
 		
 		//Window.alert("5");
@@ -175,7 +175,9 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		MainMap mainMap = new MainMap(manager);
 		RootPanel.get().add(mainMap);
 
-	
+		
+		mainMap.doIslands();
+		
 	}
 
 	public void onHistoryChanged(String historyToken) {

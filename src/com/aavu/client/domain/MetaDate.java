@@ -20,7 +20,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	private static final String TYPE = "Date";
 	private static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
 	
-	private Map metaMap;
+	private Topic topic;
 
 	
 	//@Override
@@ -28,16 +28,16 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 		return TYPE;
 	}
 
-	public Widget getWidget(Map mmp) {
+	public Widget getWidget(Topic topic) {
 
 		HorizontalPanel widget = new HorizontalPanel();
 		Label label = new Label(getName());
 		
 		widget.add(label);
-		Object mv = mmp.get(toMapIdx());
+		Topic mv = (Topic) topic.getMetaValues().get(this);
 		if(mv != null){
 						
-			widget.add(new Label(" "+df.format(new Date(Long.parseLong(mv.toString())))));	
+			widget.add(new Label(" "+df.format(new Date(Long.parseLong(mv.getData())))));	
 		}
 		else{
 			widget.add(new Label(""));
@@ -48,8 +48,8 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	}
 	
 	//@Override
-	public Widget getEditorWidget(Map mmp) {
-		this.metaMap = mmp;
+	public Widget getEditorWidget(final Topic topic) {
+		this.topic = topic;
 		
 		HorizontalPanel widget = new HorizontalPanel();
 		
@@ -62,15 +62,15 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	    // Set the Date Format
 	    datePicker.setDateFormat(DateFormatter.DATE_FORMAT_DDMONYYYY);
 	    
-	    String mv = (String)mmp.get(toMapIdx());	    
+	    Topic mv = (Topic) topic.getMetaValues().get(this);
 	    
 	    if(mv != null){
-	    	long longDate = Long.parseLong(mv);
+	    	long longDate = Long.parseLong(mv.getData());
 	    	Date date = new Date(longDate);
 	    	datePicker.setCurrentDate(date);
 	    	
 	    	SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy");						
-	    	datePicker.setText(df.format(new Date(Long.parseLong(mv.toString()))));
+	    	datePicker.setText(df.format(date));
 	    }
 	    	    
 	    datePicker.addChangeListener(new ChangeListener(){
@@ -79,7 +79,10 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 				//MetaValue mv = new MetaValue();
 				//mv.setValue(""+dp.getSelectedDate().getTime());
 				String val = dp.getSelectedDate().getTime()+"";
-				metaMap.put(toMapIdx(), val);
+				
+				Topic newTopicValue = new Topic();
+				newTopicValue.setData(val);
+				topic.addMetaValue(MetaDate.this, newTopicValue);				
 			}	    	
 	    });
 	    

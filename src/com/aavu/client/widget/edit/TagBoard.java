@@ -140,11 +140,11 @@ public class TagBoard extends Composite implements CompleteListener {
 			GWT.log("displayMetas", null);
 			if(element.needsSaveCallback()){
 				GWT.log("needs callback", null);
-				SaveListener w = (SaveListener) element.getEditorWidget(cur_topic.getMetaValues());
+				SaveListener w = (SaveListener) element.getEditorWidget(cur_topic);
 				tagPanel.add(w);
 				listeners.add(w);
 			}else{
-				Widget w = element.getEditorWidget(cur_topic.getMetaValues());
+				Widget w = element.getEditorWidget(cur_topic);
 				tagPanel.add(w);
 			}
 		}

@@ -354,7 +354,7 @@ public class Editor extends Composite /* implements HasHTML*/{
 		format(textElement,command,option);
 	}
 	
-	public JavaScriptObject expandSelection(){
+	public JavaScriptObject getExpandedSelection(){
 		System.out.println("expand");
 		expandSelectionJS(textElement);
 		return getSelectionRange();
@@ -368,12 +368,12 @@ public class Editor extends Composite /* implements HasHTML*/{
 		var suc = range.expand("word");
 	//	alert(range.htmlText);
 	//	alert(range.text);
-//		alert(suc+" "+range.text);
+    //	alert(suc+" "+range.text);
 	//	alert("doc.selection: "+doc.selection);
 	//	doc.selection.setSelectionRange(2, 4);
-		//doc.selection = range;
+	//  doc.selection = range;
 	//	return range.text;
-		//doc.execCommand("CreateLink",false,"#cathedral");	
+	//  doc.execCommand("CreateLink",false,"#cathedral");	
     }-*/;
 	
 	native static void setEditable(Element element,boolean b)/*-{
@@ -594,7 +594,34 @@ public class Editor extends Composite /* implements HasHTML*/{
 	public JavaScriptObject getSelectionRange(){
 		return nativeGetSelectionRange(textElement);
 	}
-
+	
+	
+	//http://www.quirksmode.org/js/selected.html#
+	private native JavaScriptObject nativeGetSelection()/*-{
+	function getSel()
+	{
+		var txt = '';
+		var foundIn = '';
+		if (window.getSelection)
+		{
+			txt = window.getSelection();
+			foundIn = 'window.getSelection()';
+		}
+		else if (document.getSelection)
+		{
+			txt = document.getSelection();
+			foundIn = 'document.getSelection()';
+		}
+		else if (document.selection)
+		{
+			txt = document.selection.createRange().text;
+			foundIn = 'document.selection.createRange()';
+		}
+		else return;
+		document.forms[0].selectedtext.value = 'Found in: ' + foundIn + '\n' + txt;
+	}
+		}-*/;
+	
 	private native JavaScriptObject nativeGetSelectionRange(Element e)/*-{		
 		try{
 			if (document.all) {			

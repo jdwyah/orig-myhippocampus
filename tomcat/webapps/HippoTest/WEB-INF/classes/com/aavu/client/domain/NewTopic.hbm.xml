@@ -85,12 +85,9 @@
 			<subclass name="MetaDate" discriminator-value="metadate">
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
-			<subclass name="MetaText" discriminator-value="metatext">
+			<subclass name="MetaTopic" discriminator-value="metatext">
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
-			</subclass>
-			<subclass name="MetaTopicList" discriminator-value="metatopiclist">
-				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
-			</subclass>
+			</subclass>			
 		</subclass>
 		
 		<!-- a real class has members -->

@@ -11,20 +11,18 @@ import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface GWTTopicService extends RemoteService {
 
-	Topic[] getAllTopics(int startIndex, int maxCount);
+
 	TopicIdentifier[] getAllTopicIdentifiers();
 	
 	Topic save(Topic topic);
 	//List getTopicsStarting(String match);//List<String>
-	Topic[] match(String match);//List<String>
+	String[] match(String match);//List<String>
 
 	//void save(Topic topic, String[] seeAlsos); 
 	Topic getTopicByID(long topicID);
 	
-	//JSON string screw gwt serialization
 	Topic getTopicForName(String topicName);
-	
-	Topic[] getBlogTopics(int start, int numberPerScreen);
+		
 	TopicIdentifier[] getTopicIdsWithTag(Tag tag);
 	//List<TimeLineObj>
 	List getTimelineObjs();

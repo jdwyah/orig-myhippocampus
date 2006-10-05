@@ -13,6 +13,7 @@ import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TagEditorWindow;
+import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.gui.timeline.OldTimeLine;
@@ -24,7 +25,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 
-public class Manager {
+public class Manager implements TopicSaveListener {
 
 	private static final int DEF_Y = 200;
 	private static final int DEF_X = 200;
@@ -39,6 +40,7 @@ public class Manager {
 		this.hippoCache = hippoCache;
 		this.user = user;
 		initConstants();
+		hippoCache.getTopicCache().addSaveListener(this);
 	}
 	private void initConstants() {
 		myConstants = (Consts) GWT.create(Consts.class);
@@ -161,6 +163,12 @@ public class Manager {
 	}
 	public void growIsland(Tag tag) {
 		map.growIsland(tag);
+	}
+	/**
+	 * TODO don't load the entire darn list/use the cache etc
+	 */
+	public void topicSaved(Topic t) {
+		map.updateSidebar();
 	}
 
 

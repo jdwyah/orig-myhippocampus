@@ -34,7 +34,7 @@ public class RemoteTopicAutoCompletionItems implements CompletionItems {
 			}
 
 			public void onSuccess(Object result) {
-				widget.setMatches( (Completable[]) result);
+				widget.setMatches( (String[]) result);
 				widget.onMatch( match );
 			}
 

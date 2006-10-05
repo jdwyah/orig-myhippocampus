@@ -45,15 +45,15 @@ public class BrowseBlogView extends Composite{
 
 
 	private void load() {
-		topicCache.getBlogTopics(start,numberPerScreen,new StdAsyncCallback("BrowseBlog load"){
-			public void onSuccess(Object result) {
-
-				topics = (Topic[]) result;
-				
-				System.out.println("finished blog load: "+topics.length);
-				draw();
-			}
-		});
+//		topicCache.getBlogTopics(start,numberPerScreen,new StdAsyncCallback("BrowseBlog load"){
+//			public void onSuccess(Object result) {
+//
+//				topics = (Topic[]) result;
+//				
+//				System.out.println("finished blog load: "+topics.length);
+//				draw();
+//			}
+//		});
 	}
 
 

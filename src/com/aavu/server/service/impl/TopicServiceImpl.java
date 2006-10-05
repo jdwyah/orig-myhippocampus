@@ -22,21 +22,13 @@ public class TopicServiceImpl implements TopicService {
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
-
 	
-	public List<Topic> getAllTopics() {
-		return topicDAO.getAllTopics(userService.getCurrentUser());
-	}
-
-	public List<Topic> getBlogTopics(int start, int numberPerScreen) {
-		return topicDAO.getBlogTopics(userService.getCurrentUser(),start, numberPerScreen);
-	}
 
 	public Topic getForName(String string) {
 		return topicDAO.getForName(userService.getCurrentUser(),string);
 	}
 
-	public List<Topic> getTopicsStarting(String match) {
+	public List<String> getTopicsStarting(String match) {
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 

@@ -67,12 +67,7 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		try{
 			String[] list = new String[]{};
 			list = tagService.getTagsStarting(match).toArray(list);
-			
-			System.out.println("list "+list.length);
-			for (int i = 0; i < list.length; i++) {
-				String s = list[i];
-				System.out.println("s "+s);
-			}
+						
 			return list;
 
 		}  catch (Exception e) {
@@ -86,8 +81,9 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		try{
 			log.debug("saving tag:");
 			log.debug(selectedTag.toPrettyString());
-
+			
 			tagService.save(selectedTag);
+			log.debug("saved tag: "+selectedTag);
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();

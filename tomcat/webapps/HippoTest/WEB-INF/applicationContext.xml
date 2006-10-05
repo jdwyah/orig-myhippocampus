@@ -26,6 +26,7 @@
 	</bean>
 	<bean id="tagService" class="com.aavu.server.service.impl.TagServiceImpl">
 		<property name="tagDAO" ref="tagDAO"></property>
+		<property name="topicDAO" ref="topicDAO"></property>
 		<property name="userService" ref="userService"/>		
 	</bean>
 	

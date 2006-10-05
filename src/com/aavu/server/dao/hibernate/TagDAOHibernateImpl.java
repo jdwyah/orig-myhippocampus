@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -25,6 +24,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	
 	public List<Tag> getAllTags(User user) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)
+		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
 		.add(Expression.or(
 				Expression.eq("user", user),Expression.eq("publicVisible", true)))
 		.setFetchMode("user", FetchMode.JOIN)
@@ -69,10 +69,6 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 
 	public void removeTag(User user, Tag selectedTag){		
 		getHibernateTemplate().delete(selectedTag);		
-	}
-
-	public void save(Tag selectedTag) {		
-		getHibernateTemplate().saveOrUpdate(selectedTag);
 	}
 
 	/**

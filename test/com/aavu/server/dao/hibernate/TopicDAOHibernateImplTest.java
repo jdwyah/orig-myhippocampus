@@ -3,9 +3,10 @@ package com.aavu.server.dao.hibernate;
 import java.util.Iterator;
 import java.util.List;
 
-import com.aavu.client.domain.Meta;
+import org.apache.log4j.Logger;
+
 import com.aavu.client.domain.MetaDate;
-import com.aavu.client.domain.MetaText;
+import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -16,58 +17,38 @@ import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
 
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
+	private static final Logger log = Logger.getLogger(TopicDAOHibernateImplTest.class);
 
+	private static final String B = "Ssds45t";
+	private static final String C = "ASR#35rf";
+	private static final String D = "234234123";
+	
 	private TopicDAO topicDAO;
 	private TagDAO tagDAO;
+	private UserDAO userDAO;
+	
+	private User u;
+	
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
-	
-	private UserDAO userDAO;
-
-
 
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+	
+	
 
-	public void testGetAllTopics() {
-		
-		String B = "Ssds45t";
-		String C = "ASR#35rf";
-		
-		User u = userDAO.getUserByUsername("junit");
 
-		Topic t = new Topic();
-		t.setData(B);
-		t.setTitle(C);
-		t.setUser(u);
+	@Override
+	protected void onSetUpInTransaction() throws Exception {		
+		super.onSetUpInTransaction();
 
-		topicDAO.save(t);
+		
+		u = userDAO.getUserByUsername("junit");
 
-		List<Topic> list = topicDAO.getAllTopics(u);
-		
-		assertEquals(1,list.size());
-		
-		Topic saved = list.get(0);
-		
-		assertEquals(B, saved.getData());
-		assertEquals(C, saved.getTitle());
-		
-		assertEquals(u, saved.getUser());
-		
-		
-		
-		System.out.println("META: "+saved.getMetaValues().getClass());
-		System.out.println("TAGS: "+saved.getTags().getClass());
-		
-		
-		
 	}
 
-	public void testGetBlogTopics() {
-		fail("Not yet implemented");
-	}
 
 	public void testGetForName() {
 		fail("Not yet implemented");
@@ -78,26 +59,18 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 	public void testSave() {
-		String B = "Ssds45t";
-		String C = "ASR#35rf";
-		
-		User u = userDAO.getUserByUsername("junit");
-
-				
+	
 		Topic t = new Topic();
 		t.setData(B);
 		t.setTitle(C);
 		t.setUser(u);
-		
-		
-		
-		
+				
 		Tag tag = new Tag();
-		tag.setName("testtagAAA");
+		tag.setName(D);
 		
-		tagDAO.save(tag);
+		topicDAO.save(tag);
 		
-		t.getTags().add(tag);
+		t.tagTopic(tag);
 		
 		System.out.println("before: "+t.getId());
 		
@@ -105,95 +78,110 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		System.out.println("after: "+t.getId());
 		
-		List<Topic> savedL = topicDAO.getAllTopics(u);
+		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+				
+		assertEquals(1, savedL.size());		
 		
-		System.out.println("A");
+		TopicIdentifier saved = savedL.get(0);
 		
-		assertEquals(1, savedL.size());
+		Topic savedTopic = topicDAO.getForID(u, saved.getTopicID());
 		
-		System.out.println("B");
+		assertEquals(C, savedTopic.getTitle());
+		assertEquals(B, savedTopic.getData());
+		assertEquals(u, savedTopic.getUser());
 		
-		Topic saved = savedL.get(0);
+		assertEquals(1, savedTopic.getTypes().size());
 		
-		System.out.println("C");
+		Topic savedTag = (Topic) savedTopic.getTypes().iterator().next();
 		
-		System.out.println(saved.toPrettyString());
+		assertEquals(D,	savedTag.getTitle());
 		
-		//t.setTags(tags);
+		//Tag's user will not be initialized
+		assertEquals(null, savedTag.getUser());
 		
 		
 	}
 	
 	public void testSaveComplexMetas() {
-		String B = "Ssds45t";
-		String C = "ASR#35rf";
+						
+		Topic patriotGames = new Topic();
+		patriotGames.setData(B);
+		patriotGames.setTitle(C);
+		patriotGames.setUser(u);
+				
+		Tag book = new Tag();
+		book.setName(D);
+						
+		MetaTopic author = new MetaTopic();
+		author.setTitle(B);
+		book.addMeta(author);
+				
+		topicDAO.save(book);
 		
-		User u = userDAO.getUserByUsername("junit");
+		Topic tomClancy = new Topic();
+		tomClancy.setTitle(C);
+		
+		
+		patriotGames.tagTopic(book);
+		patriotGames.addMetaValue(author, tomClancy);
+				
+		System.out.println("before: "+patriotGames.getId());
+		
+		topicDAO.save(patriotGames);
+		
+		System.out.println("after: "+patriotGames.getId());
+		
+		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+				
+		//only 1 because the user isn't set on book or author. 
+		//hmm.. good and bad.. 
+		assertEquals(1, savedL.size());
+		
+		
+		assertNotSame(0,patriotGames.getId());		
+		Topic savedPatriotGames = topicDAO.getForID(u, patriotGames.getId());
+		assertNotNull(savedPatriotGames);
+		
+		assertEquals(1, savedPatriotGames.getTypes().size());		
+		Topic savedBookTag = (Topic) savedPatriotGames.getTypes().iterator().next();
+		assertEquals(D, savedBookTag.getTitle());
+		assertEquals(1, savedBookTag.getMetas().size());
+				
+		assertEquals(1, savedPatriotGames.getMetaValues().size());
+		assertEquals(0, savedPatriotGames.getMetas().size());
+		
+		
+			
+		Topic savedTomClancy = (Topic) savedPatriotGames.getMetaValues().get(author);
+		assertNotNull(savedTomClancy);
+		
+					
+		assertEquals(C,savedTomClancy.getTitle());
+		
+	
+		//assertEquals(savedBookTag., false)
+		
+		
+		for(TopicIdentifier saved : savedL){
+			//Topic saved = savedL.get(0);
 
-				
-		Topic t = new Topic();
-		t.setData(B);
-		t.setTitle(C);
-		t.setUser(u);
-		
-		
-		
-		
-		Tag tag = new Tag();
-		tag.setName("testtagAAA");
-				
-		
-		MetaText mt = new MetaText();
-		mt.setTitle(B);
-		tag.getMetas().add(mt);
-		
-		
-		tagDAO.save(tag);
-		
-		
-		t.getMetaValues().put("3", "C");
-		
-		
-		t.getTags().add(tag);
-		
-		System.out.println("before: "+t.getId());
-		
-		topicDAO.save(t);
-		
-		System.out.println("after: "+t.getId());
-		
-		List<Topic> savedL = topicDAO.getAllTopics(u);
-		
-		System.out.println("A");
-		
-		//assertEquals(1, savedL.size());
-		
-		System.out.println("B");
-		
-		
-		for(Topic saved : savedL){
-		//Topic saved = savedL.get(0);
-		
-		System.out.println("C");
-		
-		for (Iterator iter = saved.getMetaValues().keySet().iterator(); iter.hasNext();) {
-			String element = (String) iter.next();
-			System.out.println("elem "+element.getClass()+" "+element);
-		}
-		
-		System.out.println(saved.toPrettyString());
+			System.out.println("C");
+			Topic top = topicDAO.getForID(u, saved.getTopicID());
+
+			for (Iterator iter = top.getMetaValues().keySet().iterator(); iter.hasNext();) {
+				Topic element = (Topic) iter.next();
+				System.out.println("elem "+element.getClass()+" "+element);
+			}
+
+			System.out.println(top.toPrettyString());
 		}
 		//t.setTags(tags);
-		
+
 		
 	}
 	
 	public void testGetTopicsWithTag(){
 		
-		String B = "Ssds45t";
-		String C = "ASR#35rf";
-		
-		User u = userDAO.getUserByUsername("junit");
 				
 		Topic t = new Topic();
 		t.setData(B);
@@ -208,7 +196,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Tag tag = new Tag();
 		tag.setName("testtagAAA");					
 		
-		tagDAO.save(tag);
+		topicDAO.save(tag);
 		
 		t.getTags().add(tag);
 		
@@ -236,12 +224,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		System.out.println("A");
 	}
-	public void testGetAllTopicIdentifiers(){
-		String B = "Ssds45t";
-		String C = "ASR#35rf";
+	public void testGetAllTopicIdentifiers(){	
 		
-		User u = userDAO.getUserByUsername("junit");
-
 		Topic t = new Topic();
 		t.setData(B);
 		t.setTitle(C);
@@ -262,7 +246,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testGetTimeline(){
 		
-		User u = userDAO.getUserByUsername("junit");		
 		MetaDate md = new MetaDate();
 		md.setId(9);
 		

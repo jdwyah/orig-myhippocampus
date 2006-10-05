@@ -31,59 +31,6 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		this.topicService = topicService;
 	}
 
-	public Topic[] getAllTopics(int startIndex, int maxCount) {
-		try {
-
-			
-			Topic[] rtn = convertToArray(topicService.getAllTopics());
-			for (int i = 0; i < rtn.length; i++) {
-				Topic topic = rtn[i];
-				log.debug("rtn");
-				ok(topic);
-				ok(topic.getLastUpdated());
-//				ok(topic.getMetaValues());
-
-//				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//				Meta element = (Meta) iter.next();
-//				log.debug("--------------------");
-//				ok(element);
-//				log.debug(element.getName());
-//				log.debug(element.getClass());
-//				topic.getMetaValues().put(element, topic.getMetaValues().get(element));					
-//				log.debug("--------------------");
-//				ok(topic.getMetaValues().get(element));
-//				}
-//				for (Iterator iter = topic.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//				Meta element = (Meta) iter.next();
-//				log.debug("-------2222---------");
-//				ok(element);
-//				log.debug(element.getName());
-//				log.debug(element.getClass());					
-//				log.debug("-------2222------");
-//				ok(topic.getMetaValues().get(element));
-//				}
-				for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
-					Tag element = (Tag) iter.next();
-					if(element != null){
-						ok(element.getMetas());
-					}
-				}
-				ok(topic.getTags());
-				ok(topic.getUser());
-			}
-			return rtn;
-			//return convertToArray(topicService.getAllTopics());
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private void ok(Object o){
-		if(o != null){
-			log.debug("rtn class ok "+o.getClass());
-		}
-	}
 
 	public Topic save(Topic topic) {
 
@@ -101,11 +48,14 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	}
 
 
-	public Topic[] match(String match) {
+	public String[] match(String match) {
 		log.debug("match");
 		try {
-			List<Topic> list = (topicService.getTopicsStarting(match));
-			return convertToArray(list);
+			
+			String[] list = new String[]{};
+			list = topicService.getTopicsStarting(match).toArray(list);
+			
+			return list;
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -115,45 +65,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	}
 
 
-//	public void save(Topic topic, String[] seeAlsos) {
-//	log.debug("Save topics w seealso");
 
-//	topic.getSeeAlso().clear();
-
-//	for (int i = 0; i < seeAlsos.length; i++) {
-
-
-//	String string = seeAlsos[i];
-//	if(!string.equals("")){
-
-
-//	log.debug("lookup |"+string+"|");
-//	Topic also = topicService.getForName(string);
-
-//	log.debug("also "+also);
-
-//	if(also != null){			
-//	topic.getSeeAlso().add(also);
-//	}
-//	}
-//	}
-
-//	save(topic);
-
-
-//	}
-
-
-	public Topic[] getBlogTopics(int start, int numberPerScreen) {
-		try{
-			log.debug("get Blog topics");
-			return convertToArray(topicService.getBlogTopics(start,numberPerScreen));
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	private Topic[] convertToArray(List<Topic> list){
 
@@ -204,11 +116,11 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	 * @return
 	 */
 	public static Topic convert(Topic t){
-		return convert(t,false);
+		return convert(t,0);
 	}
-	public static Topic convert(Topic t,boolean nullTheSets){
-		log.debug("CONVERT Topic null?"+nullTheSets);
-		log.debug("Topic's tags: "+t.getId()+" "+t.getTitle()+" "+t.getTypes().getClass());
+	public static Topic convert(Topic t,int level){
+		log.debug("CONVERT Topic level"+level);
+		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypes().getClass());
 			
 		//didn't need to convert the postgres one, but mysql is
 		//returning java.sql.timestamp, which, surprise surprise 
@@ -220,7 +132,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		log.debug("t "+t.getTypes().getClass());		
 		log.debug("t "+t.getMetaValues().getClass());
 	
-		if(nullTheSets){
+		if(level >= 1){
 			t.setMetaValues(new HashMap());
 			t.setTypes(new HashSet());			
 			t.setInstances(new HashSet());			
@@ -240,70 +152,57 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			log.debug("starting convert sets");
 			
 			//metavalues
-			t.setTypes(converter(t.getTypes(),true));
-			t.setInstances(converter(t.getInstances(),true));
-			t.setMetas(converter(t.getMetas(),true));
-			t.setOccurences(new HashSet());
-			t.setAssociations(new HashSet());
+			t.setTypes(converter(t.getTypes(),level));
+			t.setInstances(converter(t.getInstances(),level));
+			t.setMetas(converter(t.getMetas(),level));
+			t.setOccurences(converter(t.getMetas(),level));
+			t.setAssociations(converter(t.getMetas(),level));
 			
 			log.debug("t "+t.getMetaValues().getClass());	
 		}
 		log.debug("Finally: t "+t.getId()+" "+t.getUser());
 		return t;
 	}
-
-	public static Set converter(Set in){
-		return converter(in,false);
-	}
-	public static Set converter(Set in,boolean nullIt){		
+	
+	public static Set converter(Set in,int level){		
 		HashSet<Topic> rtn = new HashSet<Topic>();
-		log.debug("converter "+in+" "+rtn+" "+nullIt);
+		log.debug("converter "+in+" "+rtn+" "+level);
 		for (Iterator iter = in.iterator(); iter.hasNext();) {
 			Topic top = (Topic) iter.next();
 			log.debug("converter on "+top);
-			convert(top,nullIt);
+			convert(top,level+1);
 			log.debug("converted "+top);
-			/*if(nullIt){
-				top.setMetaValues(null);
-				top.setParents(null);
-				top.setChildren(null);
-				top.setMetas(null);
-				top.setOccurences(null);
-				top.setAssociations(null);
-				
-			}else{
-				
-				top.setMetaValues(converter(top.getMetaValues(),true));
-				top.setParents(converter(top.getParents(),true));
-				top.setChildren(converter(top.getChildren(),true));
-				top.setMetas(converter(top.getMetas(),true));
-				top.setOccurences(converter(top.getOccurences(),true));
-				top.setAssociations(converter(top.getAssociations(),true));
-			}*/
+			
 			rtn.add(top);
 		}
 		
 		return rtn;		
 	}
 	
-	private Map converter(Map metaValues) {
-		return converter(metaValues,false);
-	}
-	private static Map converter(Map metaValues, boolean b) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	private Map converter(Map metaValues) {
+//		return converter(metaValues,false);
+//	}
+//	private static Map converter(Map metaValues, boolean b) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	public Topic getTopicForName(String topicName) {
 		try {
 			Topic t = topicService.getForName(topicName);
-			log.debug("orig "+t.getId()+" "+t.getTitle());
 			
-			//just json the Abstract topic parts
-			Topic converted = convert(t);
-			log.debug("conv: "+t.getId()+" tit "+t.getTitle());
-	
-			return converted;
+			if(t != null){
+				log.debug("orig "+t.getId()+" "+t.getTitle());
+
+				//just json the Abstract topic parts
+				Topic converted = convert(t);
+				log.debug("conv: "+t.getId()+" tit "+t.getTitle());
+				return converted;
+			}else{
+				log.debug("NULL");
+			}
+			
+			return t;
 			
 			//return convert(topicService.getForName(topicName));
 

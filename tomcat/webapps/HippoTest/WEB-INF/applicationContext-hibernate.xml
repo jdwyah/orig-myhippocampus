@@ -21,11 +21,8 @@
 		<property name="dataSource" ref="dataSource"/>
 		<property name="mappingResources">
 			<list>
-				<value>com/aavu/client/domain/Topic.hbm.xml</value>
 				<value>com/aavu/client/domain/User.hbm.xml</value>
-<!-- 				<value>com/aavu/client/domain/MetaValue.hbm.xml</value>-->
-				<value>com/aavu/client/domain/Meta.hbm.xml</value>				
-				<value>com/aavu/client/domain/Tag.hbm.xml</value>
+				<value>com/aavu/client/domain/NewTopic.hbm.xml</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -51,6 +48,11 @@
 				<prop key="c3p0.maxIdleTime">300</prop>
 				<prop key="c3p0.maxStatements">50</prop>
 				<prop key="c3p0.minPoolSize">10</prop>
+
+				<prop key="c3p0.preferredTestQuery">SELECT 1</prop>			
+				
+				<!-- WARN SLOW -->
+				<prop key="c3p0.testConnectionOnCheckout">true</prop>
 
 				<!-- configuration pool via c3p0-->
 				<!-- from forums.hibernate -->
@@ -83,6 +85,9 @@
 	<bean id="initDAO" class="com.aavu.server.dao.hibernate.InitDAOHibernateImpl">
 		<property name="sessionFactory" ref="mySessionFactory" />
 		<property name="userService" ref="userService"/>
+	</bean>
+	<bean id="newTopicDAO" class="com.aavu.server.dao.hibernate.NewTopicDAOHibernateImpl">
+			<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>
 	
 

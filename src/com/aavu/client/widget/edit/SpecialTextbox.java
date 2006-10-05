@@ -154,7 +154,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	private void openLinkDialog() {
 		System.out.println("LINK");
 
-		range = textArea.expandSelection();//getSelectionRange();
+		range = textArea.getExpandedSelection();//getSelectionRange();
 
 		completePopup.show();			
 		completePopup.setVisible(true);				

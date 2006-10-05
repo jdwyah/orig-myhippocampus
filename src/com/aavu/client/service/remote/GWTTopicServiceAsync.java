@@ -10,20 +10,19 @@ public interface GWTTopicServiceAsync {
 	//
 
 
-	/**
-	 * @deprecated this method is deprecated
-	 */
-	void getAllTopics(int startIndex, int maxCount, AsyncCallback callback);
+
 	void getAllTopicIdentifiers(AsyncCallback callback);
 
 	void save(Topic topic, AsyncCallback callback);
 	//void getTopicsStarting(String match, AsyncCallback callback);
 	void match(String match, AsyncCallback callback);	
 
-	//void save(Topic topic, String[] seeAlsos, AsyncCallback callback);
-	void getBlogTopics(int start, int numberPerScreen, AsyncCallback callback);
 	void getTopicForName(String topicName, AsyncCallback callback);
 	void getTopicIdsWithTag(Tag tag, AsyncCallback callback);
+	
+	/*
+	 * @Deprecated
+	 */
 	void getTopicByID(long topicID, AsyncCallback back);
 	void getTimelineObjs(AsyncCallback callback);	
 

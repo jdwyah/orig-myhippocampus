@@ -10,23 +10,23 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaText extends Meta {
+public class MetaTopic extends Meta {
 
 	private static final String TYPE = "Text";
 	private String value;
 	private String transientValue; //as widget changes, only this updates
-	//private TextBox valueTextBox;  <-- not serializable
-	private Map metaMap;
+	
+	private transient Topic topic;
 
-	public MetaText(){
+	public MetaTopic(){
 		this("");
 	}
 
-	public MetaText(String value){
+	public MetaTopic(String value){
 		this.value = value;
 	}
 
-	public Widget getWidget(Map mmp) {
+	public Widget getWidget(Topic topic) {
 		HorizontalPanel widget = new HorizontalPanel();
 
 		Label metaName = new Label(getName());
@@ -35,9 +35,9 @@ public class MetaText extends Meta {
 
 		
 		Label metaValue = new Label(null);  
-		Object mv = mmp.get(toMapIdx());
+		Topic mv = (Topic) topic.getMetaValues().get(this);
 		if(mv != null){
-			metaValue.setText(mv.toString());
+			metaValue.setText(mv.getTitle());
 		}
 		
 		metaValue.setWidth("5em");
@@ -55,24 +55,28 @@ public class MetaText extends Meta {
 		this.value = this.transientValue;
 	}
 
-	public Widget getEditorWidget(Map mmp) {
+	public Widget getEditorWidget(final Topic topic) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 
-		this.metaMap = mmp;
+		this.topic = topic;
 		
 		
 		TextBox textBox = new TextBox();
 		
-		String mv = (String)mmp.get(toMapIdx());
+		Topic mv = (Topic) topic.getMetaValues().get(this);
+		
 		if(mv != null){
-			textBox.setText(mv);		    	
+			textBox.setText(mv.getTitle());		    	
 		}
 		textBox.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {				
 				TextBox t = (TextBox) sender;
 				
-				metaMap.put(toMapIdx(), t.getText());
+				Topic theNewTopic = new Topic();
+				theNewTopic.setTitle(t.getText());				
+				
+				topic.addMetaValue(MetaTopic.this, theNewTopic);
 			}});
 		
 		widget.add(new Label(getName()));
@@ -95,8 +99,8 @@ public class MetaText extends Meta {
 		{
 			if ( (this == other ) ) return true;
 			if ( (other == null ) ) return false;
-			if ( !(other instanceof MetaText) ) return false;
-			MetaText castOther = ( MetaText ) other; 
+			if ( !(other instanceof MetaTopic) ) return false;
+			MetaTopic castOther = ( MetaTopic ) other; 
 
 			return ( (this.value==castOther.value) || ( this.value!=null && castOther.value!=null && this.value.equals(castOther.value) ) );
 		}

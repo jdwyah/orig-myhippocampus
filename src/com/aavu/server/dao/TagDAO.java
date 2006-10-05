@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
-import com.aavu.client.exception.PermissionDeniedException;
 
 public interface TagDAO {
 
@@ -16,8 +16,6 @@ public interface TagDAO {
 	List<Tag> getAllTags(User user);
 	
 	List<String> getTagsStarting(User user,String match);
-
-	void save(Tag selectedTag);
 
 	List<Tag> getPublicTags();
 	

@@ -20,6 +20,11 @@ public class Tag extends Topic implements  Completable, IsSerializable, Serializ
 		setPublicVisible(false);
 	}	
 
+	public Tag(User u, String d) {		
+		super(u,d);
+		setPublicVisible(false);
+	}
+
 	public String getName(){
 		return getTitle();
 	}

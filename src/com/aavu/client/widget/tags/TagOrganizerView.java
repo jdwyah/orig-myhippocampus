@@ -149,7 +149,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			//selectedTag.setMetas(metaChoosers);
 			
 			System.out.println("Tag: " + selectedTag.getName());
-			System.out.println("metas: "+selectedTag.getMetas());
+			System.out.println("metas: "+selectedTag.getMetas().size());
 			for (Iterator iter = selectedTag.getMetas().iterator(); iter.hasNext();) {
 				Meta element = (Meta) iter.next();
 				System.out.println(element.getName());

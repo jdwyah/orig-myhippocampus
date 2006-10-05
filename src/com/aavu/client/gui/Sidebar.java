@@ -36,6 +36,15 @@ public class Sidebar extends SimplePanel {
 		this.manager = manager;
 		tabPanel = new VertableTabPanel(VertableTabPanel.VERTICAL);
 
+		load();
+		
+		add(tabPanel);
+		//sets
+		addStyleName("H-AbsolutePanel");
+		addStyleName("H-Sidebar");				
+	}
+
+	public void load(){
 		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback("Sidebar"){
 
 			public void onSuccess(Object result) {
@@ -43,14 +52,7 @@ public class Sidebar extends SimplePanel {
 				alphabetizeTopics(topics);
 			}
 		});
-
-
-		add(tabPanel);
-		//sets
-		addStyleName("H-AbsolutePanel");
-		addStyleName("H-Sidebar");				
 	}
-
 
 	protected void alphabetizeTopics(List topics) {
 		//<String,Topic>
@@ -128,6 +130,7 @@ public class Sidebar extends SimplePanel {
 
 
 	private void addAsLabels(Map sidebarEntries) {
+		tabPanel.clear();
 		for (Iterator iter = sidebarEntries.keySet().iterator(); iter.hasNext();) {
 			String key = (String) iter.next();
 
@@ -148,7 +151,7 @@ public class Sidebar extends SimplePanel {
 					}});
 				vp.add(l);
 			}
-
+						
 			tabPanel.add(vp,key);
 
 		}

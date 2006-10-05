@@ -9,17 +9,13 @@ import com.aavu.client.domain.TopicIdentifier;
 
 public interface TopicService {
 
-	List<Topic> getAllTopics();
-	
 	List<TopicIdentifier> getAllTopicIdentifiers();
 
 	Topic save(Topic topic);
 
-	List<Topic> getTopicsStarting(String match);
+	List<String> getTopicsStarting(String match);
 
 	Topic getForName(String string);
-
-	List<Topic> getBlogTopics(int start, int numberPerScreen);
 
 	List<TopicIdentifier> getTopicIdsWithTag(Tag tag);
 

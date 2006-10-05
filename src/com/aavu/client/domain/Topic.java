@@ -36,6 +36,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		super(user, title, data, lastUpdated, created, publicVisible, metaValues, children, parents, metas, occurences, associations);
 	}
 
+	public Topic(User u, String title) {
+		setUser(u);
+		setTitle(title);
+	}
+
 	public void addMetaValue(Topic meta, Topic metaValue) {
 
 		
@@ -155,10 +160,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			StringBuffer metaVStr = new StringBuffer();
 			metaVStr.append(indent+"Map:\n"+indent);
 			for (Iterator iter = getMetaValues().keySet().iterator(); iter.hasNext();) {
-				String metaStr = (String) iter.next();
-				String mv = (String) getMetaValues().get(metaStr);
+				Topic metaStr = (Topic) iter.next();
+				Topic mv = (Topic) getMetaValues().get(metaStr);
 				if(mv != null){
-					metaVStr.append(metaStr+" -> "+mv+"\n"+indent);
+					metaVStr.append(metaStr+" "+metaStr.getId()+" -> "+mv+" "+mv.getId()+"\n"+indent);
 				}else{
 					metaVStr.append(metaStr+" "+" -> null\n"+indent);
 				}
