@@ -132,11 +132,25 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		log.debug("t "+t.getTypes().getClass());		
 		log.debug("t "+t.getMetaValues().getClass());
 	
-		if(level >= 1){
+		//
+		//new-ing it is essentially nulling it out, since we can't pass
+		//lazy stuff
+		//
+		//L2 new it out
+		//L1 new everything expect metas we need this for topic's->tag's->metas
+		//
+		if(level >= 2){
 			t.setMetaValues(new HashMap());
 			t.setTypes(new HashSet());			
 			t.setInstances(new HashSet());			
 			t.setMetas(new HashSet());			
+			t.setOccurences(new HashSet());			
+			t.setAssociations(new HashSet());
+		}else if(level == 1){
+			t.setMetaValues(new HashMap());
+			t.setTypes(new HashSet());			
+			t.setInstances(new HashSet());			
+			t.setMetas(converter(t.getMetas(),level));			
 			t.setOccurences(new HashSet());			
 			t.setAssociations(new HashSet());
 		}else{

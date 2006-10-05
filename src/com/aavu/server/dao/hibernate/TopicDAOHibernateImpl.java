@@ -130,6 +130,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.setFetchMode("metaValues", FetchMode.JOIN)
 		.setFetchMode("instances", FetchMode.JOIN)
 		.setFetchMode("types", FetchMode.JOIN)
+		.setFetchMode("types.metas", FetchMode.JOIN)
 		.setFetchMode("metas", FetchMode.JOIN)
 		.setFetchMode("occurrences", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN);
