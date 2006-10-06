@@ -138,7 +138,7 @@ public class TopicCache {
 		public void onSuccess(Object result) {
 			Topic res = (Topic) result;
 			
-			//TODO bogus, need to check
+			//TODO bogus, need to check!!
 			topicIdentifiers.add(res.getIdentifier());
 			
 			for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {

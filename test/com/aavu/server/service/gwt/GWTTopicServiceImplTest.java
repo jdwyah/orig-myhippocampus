@@ -117,6 +117,11 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		assertEquals(B, author.getTitle());
 		
 		
+		Topic tomC = (Topic) huntForRedOctober.getMetaValues().get(author);
+		assertEquals(E, tomC.getTitle());
+		
+		
+		
 		
 	}
 

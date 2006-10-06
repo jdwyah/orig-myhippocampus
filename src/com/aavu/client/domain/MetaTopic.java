@@ -3,6 +3,8 @@ package com.aavu.client.domain;
 import java.util.Map;
 
 import com.aavu.client.service.local.TagLocalService;
+import com.aavu.client.widget.edit.MetaTopicWidget;
+import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.MetaListBox;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -16,8 +18,7 @@ public class MetaTopic extends Meta {
 	private String value;
 	private String transientValue; //as widget changes, only this updates
 	
-	private transient Topic topic;
-
+	
 	public MetaTopic(){
 		this("");
 	}
@@ -57,34 +58,16 @@ public class MetaTopic extends Meta {
 
 	public Widget getEditorWidget(final Topic topic) {
 		
-		HorizontalPanel widget = new HorizontalPanel();
-
-		this.topic = topic;
 		
-		
-		TextBox textBox = new TextBox();
-		
-		Topic mv = (Topic) topic.getMetaValues().get(this);
-		
-		if(mv != null){
-			textBox.setText(mv.getTitle());		    	
-		}
-		textBox.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender) {				
-				TextBox t = (TextBox) sender;
-				
-				Topic theNewTopic = new Topic();
-				theNewTopic.setTitle(t.getText());				
-				
-				topic.addMetaValue(MetaTopic.this, theNewTopic);
-			}});
-		
-		widget.add(new Label(getName()));
-		widget.add(textBox);
-
-		return widget;
+		MetaTopicWidget mtw = new MetaTopicWidget(this,topic);
+	
+		return mtw;
 	}
 
+	public boolean needsSaveCallback() {
+		return true;
+	}
+	
 	//@Override
 	public String getType() {		
 		return TYPE;

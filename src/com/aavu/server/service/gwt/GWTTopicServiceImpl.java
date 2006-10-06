@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.gwtwidgets.server.rpc.GWTSpringController;
-import org.hibernate.collection.PersistentSet;
+import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
@@ -18,7 +18,6 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.TopicService;
-import com.aavu.server.util.BeanPrint;
 
 
 public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopicService {
@@ -119,7 +118,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		return convert(t,0);
 	}
 	public static Topic convert(Topic t,int level){
-		log.debug("CONVERT Topic level"+level);
+		log.debug("CONVERT Topic "+t+" level: "+level);
 		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypes().getClass());
 			
 		//didn't need to convert the postgres one, but mysql is
@@ -156,10 +155,17 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}else{
 			log.debug("loop meta values");
 			HashMap<Topic, Topic> convertedMap = new HashMap<Topic, Topic>();		
-			for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
-				Topic element = (Topic) iter.next();
-				log.debug(element);
-				convertedMap.put(element, (Topic) t.getMetaValues().get(element));
+			for (Iterator iter = t.getMetaValues().entrySet().iterator(); iter.hasNext();) {
+				//
+				//interestingly, looping over keys, then doing a map.get(key) returns us a null value.
+				//something broken in our .equals()? or do I not understand Maps?
+				//
+				Entry e = (Entry) iter.next();
+				Topic element = (Topic) e.getKey();
+				Topic value = (Topic) e.getValue();
+				
+				log.debug("map "+element+"->"+value);
+				convertedMap.put(convert(element,Integer.MAX_VALUE), convert(value,Integer.MAX_VALUE));
 			}
 			t.setMetaValues(convertedMap);
 
@@ -180,16 +186,19 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	
 	public static Set converter(Set in,int level){		
 		HashSet<Topic> rtn = new HashSet<Topic>();
-		log.debug("converter "+in+" "+rtn+" "+level);
-		for (Iterator iter = in.iterator(); iter.hasNext();) {
-			Topic top = (Topic) iter.next();
-			log.debug("converter on "+top);
-			convert(top,level+1);
-			log.debug("converted "+top);
-			
-			rtn.add(top);
+		try{
+			log.debug("converter "+in+" "+rtn+" "+level);
+			for (Iterator iter = in.iterator(); iter.hasNext();) {
+				Topic top = (Topic) iter.next();
+				log.debug("converter on "+top);
+				convert(top,level+1);
+				log.debug("converted "+top);
+
+				rtn.add(top);
+			}
+		}catch(LazyInitializationException ex){
+			log.debug("caught lazy @ level "+level);
 		}
-		
 		return rtn;		
 	}
 	

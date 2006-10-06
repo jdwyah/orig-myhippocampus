@@ -190,6 +190,18 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}
 			log.debug("done");
 		}
+		
+		System.out.println("METAValues "+t.getMetaValues().entrySet().size());
+		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
+			Topic metaValue = (Topic) t.getMetaValues().get(iter.next());
+			log.debug("saving its metavalue element ? "+metaValue.getTitle());		
+			if(metaValue.getId() == 0){			
+				log.debug("was unsaved. save"+metaValue.getTitle());
+				getHibernateTemplate().saveOrUpdate(metaValue);
+			}
+			log.debug("done");
+		}
+		
 		System.out.println("and finally Save me "+t.getTitle());
 		//and save me
 		//
