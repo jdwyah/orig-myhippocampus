@@ -1,6 +1,7 @@
 package com.aavu.client.domain;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -11,7 +12,7 @@ import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Topic extends AbstractTopic  implements Completable, IsSerializable{
@@ -61,9 +62,24 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 //		System.out.println("alread tagged "+tag.getInstances());
 //		System.out.println("alread tagged "+tag.getInstances().size());
 		
+//		Window.alert("FOO ");
+//		Window.alert("f: "+tag.getInstances()+" ");
+//		for (Iterator iter = tag.getInstances().iterator(); iter.hasNext();) {
+//			Topic element = (Topic) iter.next();
+//			Window.alert("Tag's instances: "+element.toPrettyString());
+//		}
+//		Window.alert("this: "+toPrettyString());
+//		
+		tag.getInstances().add(this);
+		//Window.alert("FOO2");
+//		Window.alert("f: "+getTypes());
 		
-		tag.getInstances().add(this);		
+//		Window.alert("tag "+tag);
+//		Window.alert("pretty "+tag.toPrettyString());
+		
+		
 		getTypes().add(tag);
+//		Window.alert("FOO3");
 		
 		
 	}

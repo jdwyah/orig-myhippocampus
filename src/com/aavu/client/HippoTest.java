@@ -16,6 +16,8 @@ import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
@@ -65,7 +67,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
 			pre = "http://www.myhippocampus.com/HippoTest/service/";
-		//	pre = "http://localhost:8080/HippoTest/service/";
+			pre = "http://localhost:8080/HippoTest/service/";
 			
 		}else{
 			pre = GWT.getModuleBaseURL();
@@ -177,7 +179,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 
 		
 		mainMap.doIslands();
-		
+				
 	}
 
 	public void onHistoryChanged(String historyToken) {

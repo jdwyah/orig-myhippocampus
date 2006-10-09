@@ -49,7 +49,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 
 		u = userService.getCurrentUser();
 		
-		//initDBTables();
+		initDBTables();
 	}
 
 
@@ -121,6 +121,16 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		assertEquals(E, tomC.getTitle());
 		
 		
+		//Interesting to note:
+		//Didn't Automatically Load a types->instances
+		assertEquals(0, book.getInstances().size());
+		
+		//but it is really in there
+		Topic book2 = topicService.getTopicForName(D);
+		assertEquals(1, book2.getInstances().size());
+		
+		//and another check
+		assertEquals(1,topicService.getTopicIdsWithTag(book).length);
 		
 		
 	}

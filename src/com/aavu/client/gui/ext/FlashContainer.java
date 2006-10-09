@@ -41,7 +41,8 @@ public class FlashContainer extends SimplePanel {
 		DOM.setInnerHTML(e, getFlashStr() );
 
 		setElement(e);
-
+		
+		initFunctions();
 	}
 
 	/**
@@ -104,16 +105,60 @@ public class FlashContainer extends SimplePanel {
 		b = $wnd[name];
 	}
 
-	//alert("b: "+b);
+	alert("b: "+b);
 
- 	//alert(command);
-
+ 	alert(command);
+ 	
+ 	
+		try{
+			alert("b.length "+b.length);
+    	}catch(e){
+     		alert("fail "+e);
+    	}		
+    	try{
+			alert("b.call1 "+b.Call);
+    	}catch(e){
+     		alert("fail "+e);
+    	}  
+    	try{
+			alert("b.call "+b.CallFunction);
+    	}catch(e){
+     		alert("fail "+e);
+    	}
  		try{
+ 			alert("doit");
 			b.CallFunction(command);
     	}catch(e){
      		alert("fail "+e);
     	}		    	
 	}-*/;
 
-
+	public void callback(String command, int arg){		
+		System.out.println("flash message 1"+command+" "+arg);
+		callbackOverride(command, arg);
+	}
+	
+	/**
+	 * override this one for flash events
+	 * 
+	 * @param command
+	 * @param arg
+	 */
+	protected void callbackOverride(String command, int arg){
+	}
+	
+	/**
+	 * link the FlashCommand
+	 *
+	 */
+	native void initFunctions()/*-{
+	
+	var callBackTarget = this;
+	$wnd.flashCommand = function(command,args){    				
+		//alert("s "+(typeof command));
+		//alert("s "+(typeof args));											    	                															    
+    	callBackTarget.@com.aavu.client.gui.ext.FlashContainer::callback(Ljava/lang/String;I)(command,args);
+    };
+	
+	}-*/;
 }

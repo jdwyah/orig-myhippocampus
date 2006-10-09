@@ -14,7 +14,7 @@ public class MainMap extends Composite {
 
 	private Sidebar sideBar;	
 	private Manager manager;
-	private TagSearch tagSearch;	
+	//private TagSearch tagSearch;	
 	private Ocean ocean;
 	
 	public MainMap(Manager manager){
@@ -24,7 +24,9 @@ public class MainMap extends Composite {
 		MultiDivPanel mainP = new MultiDivPanel();	
 
 		sideBar = new Sidebar(manager);
-		tagSearch = new TagSearch(manager);
+		
+		//TODO cleanout remove TagSearch class, css deadwood
+		//tagSearch = new TagSearch(manager);
 		
 		ocean = new Ocean(manager);
 		
@@ -32,7 +34,7 @@ public class MainMap extends Composite {
 		mainP.add(ocean);
 		mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
-		mainP.add(tagSearch);
+		//mainP.add(tagSearch);
 		
 		mainP.addStyleName("");
 		initWidget(mainP);

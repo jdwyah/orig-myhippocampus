@@ -29,12 +29,31 @@ public class Ocean extends FlashContainer {
 				TagStat[] tagStats = (TagStat[]) result;
 				
 				System.out.println("TagStat Result "+tagStats);
+				boolean doIt = false;
+				for (int i = 0; i < tagStats.length; i++) {
+					TagStat stat = tagStats[i];
+					if(stat.getNumberOfTopics() > 0){
+						doIt = true;
+					}
+				}
+				if(doIt){
+					runCommand(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
+					System.out.println("command run ");
+				}else{
+					System.out.println("no islands to draw");
+				}
 				
-				runCommand(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
-				
-				System.out.println("command run ");
 			}});		
 	}
+	
+	protected void callbackOverride(String command, int arg){
+		if(command.equals("islandClicked")){
+			manager.showTopicsForTag(arg);
+		}
+		
+	}
+	
+	
 	
 	protected String islandObj(long id, String name,int size){
 		return "<object>"+numberProp("id",id)+stringProp("tag",name)+numberProp("size",size)+"</object>";

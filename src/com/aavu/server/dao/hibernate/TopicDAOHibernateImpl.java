@@ -169,16 +169,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		//Bit of a chicken & egg thing here with TransientReferences..
 		//
 		
-		System.out.println("TYPES "+t.getTypes().size());
-		for (Iterator iter = t.getTypes().iterator(); iter.hasNext();) {
-			Topic type = (Topic) iter.next();
-			log.debug("saving its ? "+type.getTitle());
-			if(type.getId() == 0){			
-				log.debug("was unsaved. save"+type.getTitle());
-				getHibernateTemplate().saveOrUpdate(type);
-			}
-			log.debug("done");
-		}
+		
 
 		System.out.println("METAS "+t.getMetas().size());
 		for (Iterator iter = t.getMetas().iterator(); iter.hasNext();) {
@@ -202,10 +193,31 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			log.debug("done");
 		}
 		
-		System.out.println("and finally Save me "+t.getTitle());
+		System.out.println("and middle Save me "+t.getTitle());
 		//and save me
 		//
 		getHibernateTemplate().saveOrUpdate(t);		
+		
+		
+		
+		System.out.println("now TYPES "+t.getTypes().size());
+		for (Iterator iter = t.getTypes().iterator(); iter.hasNext();) {
+			Topic type = (Topic) iter.next();
+			log.debug("saving its ? "+type.getTitle());
+
+			//this let's us save a topic and make it's tag save too. 
+			//needs to happen AFTER the save of the topic, or it will 
+			//have a reference to the non-persisted topic.
+			//
+			//NOTE: having this after means, that all of a topic's tags
+			//must be saved before this method is called or we'll get the 
+			//reverse problem. This is different than metas which can be unsaved
+			//and then will be saved above if new.
+			//
+			log.debug("save "+type.getTitle()+" "+type.getId());
+			getHibernateTemplate().saveOrUpdate(type);
+			log.debug("done");
+		}
 		
 		return t;		
 	}

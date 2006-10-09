@@ -43,27 +43,27 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic,com.aavu.client.domain.Topic>
       */
-     private Map metaValues = new HashMap(0);
+     private Map metaValues = new HashMap();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
-     private Set instances = new HashSet(0);
+     private Set instances = new HashSet();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
-     private Set types = new HashSet(0);
+     private Set types = new HashSet();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
-     private Set metas = new HashSet(0);
+     private Set metas = new HashSet();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
-     private Set occurences = new HashSet(0);
+     private Set occurences = new HashSet();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
-     private Set associations = new HashSet(0);
+     private Set associations = new HashSet();
 
      // Constructors
 

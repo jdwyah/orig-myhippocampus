@@ -14,6 +14,7 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.widget.tags.SaveListener;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -121,21 +122,22 @@ public class TagBoard extends Composite implements CompleteListener {
 		tagPanel.add(tagLabel);
 		tagLabel.setStyleName("ta-tagboard-TagLabel");		
 		
-		displayMetas(tag);
+		displayMetas(tag);		
 	}
 	
 	
 	private void addTag(final Tag tag) {
-		
-		cur_topic.tagTopic(tag);		
+
+		cur_topic.tagTopic(tag);
+
 		showTag(tag);
 		
 	}
 	
 	private void displayMetas(Tag tag) {
 		Set metas = tag.getMetas();
-
-		for (Iterator iter = metas.iterator(); iter.hasNext();) {
+		
+		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
 			Meta element = (Meta) iter.next();
 			GWT.log("displayMetas", null);
 			if(element.needsSaveCallback()){
@@ -147,6 +149,7 @@ public class TagBoard extends Composite implements CompleteListener {
 				Widget w = element.getEditorWidget(cur_topic);
 				tagPanel.add(w);
 			}
+		
 		}
 
 	}

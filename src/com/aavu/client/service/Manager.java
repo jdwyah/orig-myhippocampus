@@ -94,25 +94,34 @@ public class Manager implements TopicSaveListener {
 		
 	}
 
+	/*
+	 * TODO this works, but relies on us loading tags by ID on server side
+	 * Perhaps getTopicsWithTag should take just the ID?
+	 */
+	public void showTopicsForTag(int arg) {
+		Tag t = new Tag();
+		t.setId(arg);
+		showTopicsForTag(t);
+	}
 	public void showTopicsForTag(String completeText) {
-
 		hippoCache.getTagCache().getTagForName(completeText,new StdAsyncCallback("Get Tag For Name"){
-
 			public void onSuccess(Object result) {
 				final Tag tag = (Tag) result;
-				getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback("Get Topics with Tag"){
-
-					public void onSuccess(Object result) {
-						TopicIdentifier[] topics = (TopicIdentifier[]) result;
-
-						TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
-						tcw.setPopupPosition(DEF_X,DEF_Y);
-						tcw.show();		
-					}});								
+				showTopicsForTag(tag);	
 			}});
-
-
 	}
+	public void showTopicsForTag(final Tag tag) {
+		getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback("Get Topics with Tag"){
+			public void onSuccess(Object result) {
+				TopicIdentifier[] topics = (TopicIdentifier[]) result;
+
+				TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
+				tcw.setPopupPosition(DEF_X,DEF_Y);
+				tcw.show();		
+			}});				
+	}
+	
+	
 	public void doIslands() {
 		map.doIslands();
 	}
@@ -170,6 +179,7 @@ public class Manager implements TopicSaveListener {
 	public void topicSaved(Topic t) {
 		map.updateSidebar();
 	}
+	
 
 
 }

@@ -20,20 +20,24 @@
 // please keep these lines on when you copy the source
 
 var setable = "unset";
+var flashCommand = fff;
 
-function fff(vvv){
-alert("setable "+setable);
-//ocean_DoFSCommand("baaaaaaaaaaaar", "");
+function fff(vvv,sss){
+	alert("fff");
+	alert("setable "+setable);
+	//ocean_DoFSCommand("baaaaaaaaaaaar", "");
 }
 
 
 function ocean_DoFSCommand(command, args) {
-  alert("receive from flash fsCommand");	
+    alert("receive from flash fsCommand");	
 	flashCommand(command,args);
 }
 
 function islandClicked(arg) {
-	alert("receivedURL from flash"+arg);
+	//alert("receivedURLs from flash"+arg);
+	//alert(flashCommand);
+	flashCommand("islandClicked",arg);
 }
 
 //-->
