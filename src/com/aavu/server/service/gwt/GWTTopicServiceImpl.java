@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.gwtwidgets.server.rpc.GWTSpringController;
 import org.hibernate.LazyInitializationException;
 
+import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -115,9 +116,12 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	 * @return
 	 */
 	public static Topic convert(Topic t){
-		return convert(t,0);
+		return convert(t,0);	
 	}
 	public static Topic convert(Topic t,int level){
+		return convert(t,level,false);
+	}
+	public static Topic convert(Topic t,int level,boolean hasMembers){	
 		log.debug("CONVERT Topic "+t+" level: "+level);
 		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypes().getClass());
 			
@@ -152,6 +156,26 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setMetas(converter(t.getMetas(),level));			
 			t.setOccurences(new HashSet());			
 			t.setAssociations(new HashSet());
+			
+			//convert associations
+			if(hasMembers){
+				Association ass = (Association) t;			
+				HashMap<String, Topic> convertedMap = new HashMap<String, Topic>();		
+				for (Iterator iter = t.getMetaValues().entrySet().iterator(); iter.hasNext();) {
+					//
+					//interestingly, looping over keys, then doing a map.get(key) returns us a null value.
+					//something broken in our .equals()? or do I not understand Maps?
+					//
+					Entry e = (Entry) iter.next();
+					String element = (String) e.getKey();
+					Topic value = (Topic) e.getValue();
+
+					log.debug("map "+element+"->"+value);
+					convertedMap.put(element, convert(value,Integer.MAX_VALUE));
+				}
+				t.setMetaValues(convertedMap);
+			}
+			
 		}else{
 			log.debug("loop meta values");
 			HashMap<Topic, Topic> convertedMap = new HashMap<Topic, Topic>();		
@@ -175,8 +199,8 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setTypes(converter(t.getTypes(),level));
 			t.setInstances(converter(t.getInstances(),level));
 			t.setMetas(converter(t.getMetas(),level));
-			t.setOccurences(converter(t.getMetas(),level));
-			t.setAssociations(converter(t.getMetas(),level));
+			t.setOccurences(converter(t.getOccurences(),level));
+			t.setAssociations(converter(t.getAssociations(),level,true));
 			
 			log.debug("t "+t.getMetaValues().getClass());	
 		}
@@ -184,14 +208,17 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		return t;
 	}
 	
-	public static Set converter(Set in,int level){		
+	public static Set converter(Set in,int level){
+		return converter(in, level,false);
+	}
+	public static Set converter(Set in,int level,boolean hasMembers){		
 		HashSet<Topic> rtn = new HashSet<Topic>();
 		try{
 			log.debug("converter "+in+" "+rtn+" "+level);
 			for (Iterator iter = in.iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
 				log.debug("converter on "+top);
-				convert(top,level+1);
+				convert(top,level+1,hasMembers);
 				log.debug("converted "+top);
 
 				rtn.add(top);

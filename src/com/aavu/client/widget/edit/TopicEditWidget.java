@@ -3,8 +3,8 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
+import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -19,7 +19,7 @@ public class TopicEditWidget extends Composite {
 	private Topic topic;
 	private TopicViewAndEditWidget topicViewAndEditWidget;
 	
-	
+	private SeeAlsoBoard seeAlsoBoard;
 	
 	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, Manager manager, Topic topic){
 		this.topic = topic;
@@ -30,27 +30,19 @@ public class TopicEditWidget extends Composite {
 		textArea = new SpecialTextbox(manager.getTopicCache());
 		
 		tagBoard = new TagBoard(manager);
+		seeAlsoBoard = new SeeAlsoBoard(manager);
 		
 		setupTopic();
 		
 		VerticalPanel panel = new VerticalPanel();
 		
-		panel.add(new Label("Title"));
+		panel.add(new HeaderLabel(Manager.myConstants.title()));
 		panel.add(titleBox);
 		
 		panel.add(tagBoard);		
+		panel.add(seeAlsoBoard);
 		
-		//textArea.set
-		
-		//SpecialTextbox	ww = new SpecialTextbox();
-		
-		
-		
-//		FocusPanel fp = new FocusPanel();
-//		fp.addKeyboardListener(ww);
-//		
-//		fp.add(ww);
-//		panel.add(fp);
+			
 		
 		panel.add(textArea);
 	
@@ -67,6 +59,7 @@ public class TopicEditWidget extends Composite {
 			textArea.setText(topic.getData());
 						
 			tagBoard.load(topic);
+			seeAlsoBoard.load(topic);
 		}
 	}
 
@@ -81,6 +74,7 @@ public class TopicEditWidget extends Composite {
 			public void onSuccess(Object result) {
 				topicViewAndEditWidget.save(topic);					
 			}});
+		
 	}
 
 

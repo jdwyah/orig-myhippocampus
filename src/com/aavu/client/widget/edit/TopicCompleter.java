@@ -6,7 +6,7 @@ import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
 
 
-public class TopicCompleter extends AutoCompleteTextBox {
+public class TopicCompleter extends AutoCompleteTextBoxWithCompleteCallback {
 
 	private static final int LENGTH = 40;
 

@@ -12,6 +12,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
+import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.tags.SaveListener;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -56,7 +57,7 @@ public class TagBoard extends Composite implements CompleteListener {
 		VerticalPanel mainPanel = new VerticalPanel();
 				
 		HorizontalPanel tagBoxP = new HorizontalPanel();
-		tagBoxP.add(new Label("Add tag: "));
+		tagBoxP.add(new HeaderLabel(Manager.myConstants.addTag()));
 		tagBoxP.add(tagBox);
 		mainPanel.add(tagBoxP);
 		mainPanel.add(tagPanel);

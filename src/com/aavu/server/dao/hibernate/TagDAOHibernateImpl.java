@@ -23,19 +23,11 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	private static final Logger log = Logger.getLogger(TagDAOHibernateImpl.class);
 	
 	public List<Tag> getAllTags(User user) {
-		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)
+		DetachedCriteria crit  = TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
 		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
 		.add(Expression.or(
-				Expression.eq("user", user),Expression.eq("publicVisible", true)))
-		.setFetchMode("user", FetchMode.JOIN)
-		.setFetchMode("metaValues", FetchMode.JOIN)
-		.setFetchMode("types", FetchMode.JOIN)
-		.setFetchMode("types.metas", FetchMode.JOIN)
-		.setFetchMode("instances", FetchMode.JOIN)
-		.setFetchMode("metas", FetchMode.JOIN)
-		.setFetchMode("occurrences", FetchMode.JOIN)
-		.setFetchMode("associations", FetchMode.JOIN);
-				
+				Expression.eq("user", user),Expression.eq("publicVisible", true))));
+		
 		return getHibernateTemplate().findByCriteria(crit);	
 	}
 
@@ -43,19 +35,11 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	 * 
 	 */
 	public Tag getTag(User user, String tagName) {
-		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)
+		DetachedCriteria crit  =  TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
 		.add(Expression.and(Expression.eq("title", tagName),
 				Expression.or(
-				Expression.eq("user", user),Expression.eq("publicVisible", true))))
-		.setFetchMode("user", FetchMode.JOIN)
-		.setFetchMode("metaValues", FetchMode.JOIN)
-		.setFetchMode("types", FetchMode.JOIN)
-		.setFetchMode("types.metas", FetchMode.JOIN)
-		.setFetchMode("instances", FetchMode.JOIN)
-		.setFetchMode("metas", FetchMode.JOIN)
-		.setFetchMode("occurrences", FetchMode.JOIN)
-		.setFetchMode("associations", FetchMode.JOIN);
-				
+				Expression.eq("user", user),Expression.eq("publicVisible", true)))));
+		
 		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 	}
 

@@ -227,7 +227,7 @@ public class TopicCache {
 	 * @param linkTo
 	 * @param callback
 	 */
-	public void getTopicIdForNameOrCreateNew(String linkTo, final StdAsyncCallback callback) {
+	public void getTopicIdentForNameOrCreateNew(String linkTo, final StdAsyncCallback callback) {
 
 		//TODO replace with lookup in topicIdentifiers, since we don't really need a topic
 		//obj here, just a TopicIdentifier
@@ -236,7 +236,7 @@ public class TopicCache {
 		TopicIdentifier found = CacheUtils.searchTopics(topicIdentifiers,linkTo);
 				
 		if(found != null){
-			callback.onSuccess(new Long(found.getTopicID()));			
+			callback.onSuccess(found);			
 		}
 		else{
 			System.out.println("Create New! ");
@@ -245,7 +245,7 @@ public class TopicCache {
 			save(toSave, new AsyncCallback(){
 				public void onSuccess(Object result) {
 					Topic saved = (Topic) result;
-					callback.onSuccess(new Long(saved.getId()));
+					callback.onSuccess(saved.getIdentifier());
 				}
 				public void onFailure(Throwable caught) {
 					callback.onFailure(caught);

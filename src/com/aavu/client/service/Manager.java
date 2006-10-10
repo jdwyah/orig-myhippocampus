@@ -140,6 +140,7 @@ public class Manager implements TopicSaveListener {
 		}catch(NumberFormatException e){
 
 		}
+		System.out.println("|"+historyToken+"|"+l);
 		if(l == -1){
 
 			hippoCache.getTopicCache().getTopicForNameA(historyToken, new StdAsyncCallback("GotoTopicStr"){

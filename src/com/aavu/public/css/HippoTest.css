@@ -92,7 +92,15 @@ a:visited {
 	display: inline;
 	padding: 5px;	
 }
-
+.H-TopicLink {
+	font-family: cursive;
+	color: blue;
+}
+.H-HeaderLabel {
+	font-family: cursive;
+	color: black;
+	font-size: small;
+}
 .H-TimeLine {
 	height: 300px;
 	width: 500px;

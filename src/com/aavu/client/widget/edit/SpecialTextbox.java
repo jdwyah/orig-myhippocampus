@@ -3,6 +3,7 @@ package com.aavu.client.widget.edit;
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.ModablePopupPanel;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.RichText2.HippoEditor;
@@ -115,14 +116,14 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 		String linkTo = completer.getText();
 
-		topicCache.getTopicIdForNameOrCreateNew(linkTo, new StdAsyncCallback("getTopicIdForNameOrCreateNew"){
+		topicCache.getTopicIdentForNameOrCreateNew(linkTo, new StdAsyncCallback("getTopicIdForNameOrCreateNew"){
 
 			public void onSuccess(Object result) {
-				Long ident = (Long) result;
-
+				TopicIdentifier topic = (TopicIdentifier) result;
+				
 				textArea.setSelectionRange(range);
 
-				textArea.makeLink(ident.longValue());
+				textArea.makeLink(topic.getTopicID());
 
 				hideLinker();
 

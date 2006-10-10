@@ -9,7 +9,10 @@ public interface Consts extends Constants {
 	String tagContentsTitle();
 	String endDuration();
 	String startDuration();
-	String timeline();	
+	String timeline();
+	String seeAlsos();
+	String title();
+	String addTag();	
 	
 	
 }

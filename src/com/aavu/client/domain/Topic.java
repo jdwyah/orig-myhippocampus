@@ -14,19 +14,20 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.user.client.ui.ComplexPanel;
 
 public class Topic extends AbstractTopic  implements Completable, IsSerializable{
 
-	
+
 	public Topic(){
 		setLastUpdated(new Date());
 		setCreated(new Date());
 		setTitle("");
-		
+
 		//important. helps activates edit area
 		setData("<BODY contentEditable=true></BODY>");		
 	}
-	
+
 	public Topic(JSONObject value) {
 		setId((long) ((JSONNumber)value.get("id")).getValue());
 		setTitle(((JSONString)value.get("title")).stringValue());
@@ -42,9 +43,19 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(title);
 	}
 
+	/**
+	 * basically a temporary wrapper for a TopicIdentifier to masquerade as a real Topic
+	 * 
+	 * Used by SeeAlso
+	 */
+	public Topic(TopicIdentifier topicIdent) {
+		setId(topicIdent.getTopicID());
+		setTitle(topicIdent.getTopicTitle());		
+	}
+
 	public void addMetaValue(Topic meta, Topic metaValue) {
 
-		
+
 		metaValue.getTypes().add(meta);
 		meta.getInstances().add(metaValue);
 
@@ -57,35 +68,35 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	public void tagTopic(Topic tag){
 
-		
+
 //		System.out.println("tagging with "+tag.getTitle());
 //		System.out.println("alread tagged "+tag.getInstances());
 //		System.out.println("alread tagged "+tag.getInstances().size());
-		
+
 //		Window.alert("FOO ");
 //		Window.alert("f: "+tag.getInstances()+" ");
 //		for (Iterator iter = tag.getInstances().iterator(); iter.hasNext();) {
-//			Topic element = (Topic) iter.next();
-//			Window.alert("Tag's instances: "+element.toPrettyString());
+//		Topic element = (Topic) iter.next();
+//		Window.alert("Tag's instances: "+element.toPrettyString());
 //		}
 //		Window.alert("this: "+toPrettyString());
-//		
+
 		tag.getInstances().add(this);
 		//Window.alert("FOO2");
 //		Window.alert("f: "+getTypes());
-		
+
 //		Window.alert("tag "+tag);
 //		Window.alert("pretty "+tag.toPrettyString());
-		
-		
+
+
 		getTypes().add(tag);
 //		Window.alert("FOO3");
-		
-		
+
+
 	}
 
 
-	
+
 	public void getMetaList(){
 		getMetaList(this);
 	}	
@@ -95,7 +106,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 //		System.out.println("gl"+orig+"size "+orig.getMetaValues());
 //		System.out.println("gl"+orig+"size "+orig.getParents());
 
-		
+
 		for (Iterator iter = this.getTypes().iterator(); iter.hasNext();) {
 			Topic parent = (Topic) iter.next();			
 			parent.getMetaList(orig);			
@@ -195,5 +206,45 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		}
 	}
 
+	/**
+	 * Associations Contract will update our associations set in the DAO/Service layer.
+	 * Don't need to take care of that here.
+	 *
+	 * Will return the SeeAlso association or Null if none.
+	 * 
+	 * WARN: for the time being don't let a Topic have multiple SeeAlso's!
+	 * (this would only be usefull if a Topic had one SeeAlso in one scope and 
+	 * a different SeeAlso in another)
+	 * 
+	 */
+	public SeeAlso getSeeAlsos() {
+		Set rtn = new HashSet();
+		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
+			Association element = (Association) iter.next();
+			if (element instanceof SeeAlso) {
+				
+				SeeAlso seeAlso = (SeeAlso) element;
+				return seeAlso;
+			}
+		}
+		return null;
+	}
 
+	public String compare(Object other) {
+		StringBuffer sb = new StringBuffer();
+		if ( (this == other ) ) sb.append("true obj id");
+		if ( (other == null ) ) sb.append("false other null");
+		if ( !(other instanceof AbstractTopic) ) sb.append("false other diff type");
+		AbstractTopic castOther = ( AbstractTopic ) other; 
+		if(sb.length() > 0){
+			return sb.toString();
+		}
+		sb.append("Compare:\n");
+		sb.append(this.getId()+" id "+castOther.getId()+"\n");
+		sb.append(this.getTitle()+" title "+castOther.getTitle()+"\n");
+		sb.append(this.getData()+" data "+castOther.getData()+"\n");
+		sb.append(this.getUser()+" user "+castOther.getUser()+"\n");
+		sb.append(this.isPublicVisible()+" public "+castOther.isPublicVisible()+"\n");
+		return sb.toString();
+	}
 }

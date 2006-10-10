@@ -12,6 +12,7 @@ import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.VertableTabPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
+import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -141,15 +142,16 @@ public class Sidebar extends SimplePanel {
 			for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
 				final TopicIdentifier topic = (TopicIdentifier) iterator.next();
 
-				Label l = new Label(topic.getTopicTitle());
-				l.addClickListener(new ClickListener(){
-
-					public void onClick(Widget sender) {
-						System.out.println("CLICKED");
-
-						manager.bringUpChart(topic);
-					}});
-				vp.add(l);
+//				Label l = new Label(topic.getTopicTitle());
+//				l.addClickListener(new ClickListener(){
+//
+//					public void onClick(Widget sender) {
+//						System.out.println("CLICKED");
+//
+//						manager.bringUpChart(topic);
+//					}});
+				
+				vp.add(new TopicLink(topic));
 			}
 						
 			tabPanel.add(vp,key);

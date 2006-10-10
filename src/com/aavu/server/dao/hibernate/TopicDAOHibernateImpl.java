@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
@@ -17,6 +18,7 @@ import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
@@ -28,6 +30,18 @@ import com.aavu.server.dao.TopicDAO;
 public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicDAO{
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImpl.class);
 
+	public static DetachedCriteria loadEmAll(DetachedCriteria crit){
+		return crit.setFetchMode("user", FetchMode.JOIN)
+		.setFetchMode("metaValues", FetchMode.JOIN)
+		.setFetchMode("instances", FetchMode.JOIN)
+		.setFetchMode("types", FetchMode.JOIN)
+		.setFetchMode("types.metas", FetchMode.JOIN)
+		.setFetchMode("metas", FetchMode.JOIN)
+		.setFetchMode("occurrences", FetchMode.JOIN)
+		.setFetchMode("associations", FetchMode.JOIN)
+		.setFetchMode("associations.members", FetchMode.JOIN);					
+	}
+	
 	/**
 	 * remember, MetaDate objects only exist for one Tag ie a Book's ReadDate is not a 
 	 * play's ReadDate.  We search on Tag, because we could be timeline-ing a Tag:
@@ -123,17 +137,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		log.debug("user "+user.getUsername()+" string "+string);
 		
-		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
+		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
 		.add(Expression.eq("user", user))
-		.add(Expression.eq("title", string))
-		.setFetchMode("user", FetchMode.JOIN)
-		.setFetchMode("metaValues", FetchMode.JOIN)
-		.setFetchMode("instances", FetchMode.JOIN)
-		.setFetchMode("types", FetchMode.JOIN)
-		.setFetchMode("types.metas", FetchMode.JOIN)
-		.setFetchMode("metas", FetchMode.JOIN)
-		.setFetchMode("occurrences", FetchMode.JOIN)
-		.setFetchMode("associations", FetchMode.JOIN);
+		.add(Expression.eq("title", string)));
+		
 		
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 
@@ -152,17 +159,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public Topic save(Topic t) {
 		System.out.println("SAVE "+t.getTitle());
-//		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//		System.out.println("b");
-//		Meta element = (Meta) iter.next();
-//		getHibernateTemplate().saveOrUpdate(element);
-//		System.out.println("c");
-//		MetaValue mv = (MetaValue) t.getMetaValues().get(element);
-//		getHibernateTemplate().saveOrUpdate(mv);
-//		System.out.println("d");
-//		}
 
-//		Topic t = getHibernateTemplate().get(Topic.class, t);
+		
 		
 		
 		//
@@ -218,6 +216,26 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			getHibernateTemplate().saveOrUpdate(type);
 			log.debug("done");
 		}
+		
+		System.out.println("now set Associations if it's a see also: ");
+		if (t instanceof Association) {			
+			Association assoc = (Association) t;
+			System.out.println("ASSOC ");
+			//
+			//key's aren't topic anymore. just "TO" "FROM" etc
+			//
+			for (Iterator iter = assoc.getMembers().values().iterator(); iter.hasNext();) {
+				Topic e = (Topic) iter.next();
+				System.out.println("e "+e);
+				System.out.println("id "+e.getId());
+				Topic realEntry = (Topic) getHibernateTemplate().get(Topic.class, e.getId());
+				System.out.println("real "+realEntry);
+				realEntry.getAssociations().add(assoc);				
+				getHibernateTemplate().saveOrUpdate(realEntry);				
+			}
+			
+		}
+		
 		
 		return t;		
 	}
@@ -282,11 +300,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return rtn;
 	}
 
-	public Topic getForID(User currentUser, long topicID) {					
-		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
-		.add(Expression.eq("user", currentUser))
-		.add(Expression.eq("id", topicID))
-		.setFetchMode("user", FetchMode.JOIN);			
+	public Topic getForID(User user, long topicID) {
+		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
+		.add(Expression.eq("user", user))
+		.add(Expression.eq("id", topicID)));
+					
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));			
 	}
 
