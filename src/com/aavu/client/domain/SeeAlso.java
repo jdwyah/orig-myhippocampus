@@ -7,6 +7,12 @@ public class SeeAlso extends Association {
 	public SeeAlso(){}
 	
 		
+	public SeeAlso(User user) {
+		setUser(user);
+		setTitle("seealso");
+	}
+
+
 	public void add(TopicIdentifier top){
 		getMembers().put((getMembers().keySet().size()+1)+"", new Topic(top));
 	}

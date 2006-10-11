@@ -37,7 +37,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.setFetchMode("types", FetchMode.JOIN)
 		.setFetchMode("types.metas", FetchMode.JOIN)
 		.setFetchMode("metas", FetchMode.JOIN)
-		.setFetchMode("occurrences", FetchMode.JOIN)
+		.setFetchMode("occurences", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN)
 		.setFetchMode("associations.members", FetchMode.JOIN);					
 	}
@@ -66,16 +66,20 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //				"user",user);		
 
 		
-		List<Meta> usersMetaDates = getHibernateTemplate().find("from Topic topic where "+
-				"5 in elements (topic.children.parents.user.id) ");
+//		List<Meta> usersMetaDates = getHibernateTemplate().find("from Topic topic where "+
+//				"5 in elements (topic.children.parents.user.id) ");
 				//"and meta.parents.user.id > 0");
 //				"and (meta.parents.user = :user OR "+ 
 //				"meta.parents.publicVisible = true)",
 //				"user",user);		
 		
+		List<Meta> dates = getHibernateTemplate().find("from MetaDate md where "+
+		"");
+		
+		
 		StringBuffer sb = new StringBuffer("where ");
 		boolean first = true;
-		for (Meta meta2 : usersMetaDates) {			
+		for (Meta meta2 : dates) {			
 			if(!first){
 				sb.append("or ");							
 			}
@@ -94,13 +98,20 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				sb.toString()+
 				"and user = :user ","user",user);
 				
-
+		
+		
+		//"and meta.parents.user.id > 0");
+//		"and (meta.parents.user = :user OR "+ 
+//		"meta.parents.publicVisible = true)",
+//		"user",user);		
+		
+		
 		//
 		//#3 Create and return 
 		//
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 		for (Topic topic : alltopics) {
-			for(Meta m : usersMetaDates){				
+			for(Meta m : dates){				
 				if(topic.getMetaValues().containsKey(m.getId()+"")){
 					String dateStr = (String) topic.getMetaValues().get(m.getId()+"");
 					Date start = new Date(Long.parseLong(dateStr));
@@ -157,6 +168,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return getHibernateTemplate().findByCriteria(crit);
 	}
 
+	
+	
 	public Topic save(Topic t) {
 		System.out.println("SAVE "+t.getTitle());
 
@@ -191,6 +204,13 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			log.debug("done");
 		}
 		
+		System.out.println("now set Associations if it's a see also: ");
+		for (Iterator iter = t.getAssociations().iterator(); iter.hasNext();) {			
+			Association assoc = (Association) iter.next();
+			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
+			getHibernateTemplate().saveOrUpdate(assoc);
+		}
+		
 		System.out.println("and middle Save me "+t.getTitle());
 		//and save me
 		//
@@ -217,32 +237,70 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			log.debug("done");
 		}
 		
-		System.out.println("now set Associations if it's a see also: ");
-		if (t instanceof Association) {			
-			Association assoc = (Association) t;
-			System.out.println("ASSOC ");
-			//
-			//key's aren't topic anymore. just "TO" "FROM" etc
-			//
-			for (Iterator iter = assoc.getMembers().values().iterator(); iter.hasNext();) {
-				Topic e = (Topic) iter.next();
-				System.out.println("e "+e);
-				System.out.println("id "+e.getId());
-				Topic realEntry = (Topic) getHibernateTemplate().get(Topic.class, e.getId());
-				System.out.println("real "+realEntry);
-				realEntry.getAssociations().add(assoc);				
-				getHibernateTemplate().saveOrUpdate(realEntry);				
-			}
-			
-		}
 		
+		
+//		if (t instanceof Association) {			
+//			Association assoc = (Association) t;
+//			System.out.println("ASSOC ");
+//			//
+//			//key's aren't topic anymore. just "TO" "FROM" etc
+//			//
+//			for (Iterator iter = assoc.getMembers().values().iterator(); iter.hasNext();) {
+//				Topic e = (Topic) iter.next();
+//				System.out.println("e "+e);
+//				System.out.println("id "+e.getId());
+//				Topic realEntry = (Topic) getHibernateTemplate().get(Topic.class, e.getId());
+//				System.out.println("real "+realEntry);
+//				realEntry.getAssociations().add(assoc);				
+//				getHibernateTemplate().saveOrUpdate(realEntry);				
+//			}
+//			
+//			getHibernateTemplate().saveOrUpdate(assoc);
+//		}
 		
 		return t;		
 	}
 
-	public void tester() {
-		// TODO Auto-generated method stub
-
+	public List<TopicIdentifier> getLinksTo(Topic topic,User user) {
+		Object[] params = {topic.getId(),user};
+		System.out.println("----------------------------");
+		System.out.println("------------"+topic+"-------");
+		List<Object[]> list = getHibernateTemplate().find(""+
+				"select title, id from Topic top "+		
+				//"join top.associations "+
+				"where ? in elements(top.associations.members) "+
+				"and user is ? "
+				,params);
+//		
+//		List<Object[]> list = getHibernateTemplate().find(""+
+//				"select id from Association ass "+		
+//				"where ? in elements(members) "+
+//				"and user is ? "
+//				,params);
+//	
+		
+//		List<Object[]> ass = getHibernateTemplate().find(""+
+//				"select title, id from Association ass "+		
+//				"where ? in elements(members) "+
+//				"and user is ? "
+//				,params);
+		
+//		List<Association> l2 = getHibernateTemplate().find(""+
+//				"from Association ass "+		
+//				"where ? in elements(members) "+
+//				"and user is ? "
+//				,params);
+//		
+//		System.out.println("---------L2 "+l2.size());
+//		for (Association association : l2) {
+//			System.out.println("ass "+association+" ass "+association.getId());
+//		}
+		
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+		for (Object[] o : list){
+			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+		}
+		return rtn;		
 	}
 
 	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {			
@@ -306,6 +364,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.eq("id", topicID)));
 					
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));			
+	}
+
+	public void tester() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

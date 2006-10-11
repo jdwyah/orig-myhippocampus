@@ -9,16 +9,21 @@ import org.gwtwidgets.client.util.WindowUtils;
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.SeeAlso;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.service.Manager;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.util.SimpleDateFormatGWT;
+import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.TopicLink;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -88,9 +93,24 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 
 		panel.add(doTags(topic));
-
+		panel.add(doSeeAlsos(topic));
 		panel.add(textPanel);
 
+	}
+
+	private Widget doSeeAlsos(Topic topic2) {
+		HorizontalPanel horizP = new HorizontalPanel();
+		
+		horizP.add(new HeaderLabel(Manager.myConstants.seeAlsos()));
+		
+		SeeAlso see = topic2.getSeeAlso();
+		
+		for (Iterator iter = see.getAll().iterator(); iter.hasNext();) {
+			Topic top = (Topic) iter.next();
+			horizP.add(new TopicLink(top));	
+		}
+		
+		return horizP;		
 	}
 
 	private Widget doTags(Topic t){

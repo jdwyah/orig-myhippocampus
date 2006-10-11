@@ -256,35 +256,17 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		feinman = topicDAO.save(feinman);
 		
+		stringTheory.addSeeAlso(feinman.getIdentifier());
 		
-		SeeAlso see = new SeeAlso();
-		see.add(stringTheory.getIdentifier());
-		see.add(feinman.getIdentifier());
+		stringTheory = topicDAO.save(stringTheory);
 		
-		
-		Topic savedST = topicDAO.save(see);
+		Topic savedST = stringTheory.getSeeAlso();
 				
 		SeeAlso savedSee = (SeeAlso) savedST;
 		
-		assertTrue(savedSee.getMembers().values().contains(stringTheory));
+
 		assertTrue(savedSee.getMembers().values().contains(feinman));
-		
-//		System.out.println(savedSee.getFrom().compare(stringTheory));
-//		
-//		System.out.println(savedSee.getTo().compare(feinman));
-//		
-		
-		//TODO
-		//data is not equal. why? because we didn't load it right? that's ok, right?
-		//why is title loaded?
-//		assertEquals(savedSee.getFrom().getTitle(),stringTheory.getTitle());		
-//		assertEquals(savedSee.getTo().getTitle(),feinman.getTitle());		
-//		assertEquals(savedSee.getFrom().getId(),stringTheory.getId());		
-//		assertEquals(savedSee.getTo().getId(),feinman.getId());
-//		
-		
-		// Associations Contract will update our associations set in the DAO/Service layer.
-		// Don't need to take care of that here.  
+
 		//
 		//oy, what are we going to do with the cache? I guess just null out cache 
 		//entries for see alsos on their way through to be saved. 
@@ -294,8 +276,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 		System.out.println("get id "+stringTheory.getId());
-		
-		
+				
 		Topic savedStringT = topicDAO.getForID(u, stringTheory.getId());
 				
 		assertNotNull(savedStringT);
@@ -310,8 +291,66 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//check that the associations were created.
 		//
 		assertEquals(1, savedStringT.getAssociations().size());
-		assertEquals(1, savedFN.getAssociations().size());
+		assertEquals(0, savedFN.getAssociations().size());
 		
+		
+		List<TopicIdentifier> linksTo = topicDAO.getLinksTo(savedFN, u);
+		
+		assertNotNull(linksTo);
+		assertEquals(1, linksTo.size());
+		
+		TopicIdentifier linkTo = linksTo.iterator().next();
+		assertEquals(B, linkTo.getTopicTitle());
+		
+		
+		
+		//
+		//now add a see also and save
+		//
+		Topic bullcrap = new Topic(u,D);		
+		bullcrap = topicDAO.save(bullcrap);		
+		stringTheory.addSeeAlso(bullcrap.getIdentifier());		
+		topicDAO.save(stringTheory);
+		
+		
+		
+		savedStringT = topicDAO.getForID(u, stringTheory.getId());		
+		assertNotNull(savedStringT);
+		
+		savedFN = topicDAO.getForID(u, feinman.getId());
+		assertNotNull(savedFN);
+		
+		Topic savedBull = topicDAO.getForID(u, bullcrap.getId());
+		assertNotNull(savedBull); 
+		
+		//
+		//check that the associations were created. There should only be 
+		//1 see also for savedStringT, but it shoudl have 2 members.
+		//
+		assertEquals(1, savedStringT.getAssociations().size());
+		assertEquals(0, savedFN.getAssociations().size());
+		assertEquals(0, savedBull.getAssociations().size());
+		
+		SeeAlso secondSeeAlsoSave = savedStringT.getSeeAlso();
+		assertEquals(2, secondSeeAlsoSave.getAll().size());
+		
+		//
+		//now a link to Bull
+		//
+		List<TopicIdentifier> toBull = topicDAO.getLinksTo(savedBull, u);
+		assertEquals(1, toBull.size());
+		
+		linkTo = toBull.iterator().next();
+		assertEquals(B, linkTo.getTopicTitle());
+		
+		//
+		//still linked to Feinman
+		//
+		List<TopicIdentifier> toFein = topicDAO.getLinksTo(savedFN, u);
+		assertEquals(1, toFein.size());
+		
+		linkTo = toFein.iterator().next();
+		assertEquals(B, linkTo.getTopicTitle());
 		
 	}
 	

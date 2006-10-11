@@ -19,6 +19,8 @@ public interface TopicDAO {
 
 	Topic getForName(User user,String string);
 
+	List<TopicIdentifier> getLinksTo(Topic topic,User user);
+	
 	void tester();
 
 	List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user);

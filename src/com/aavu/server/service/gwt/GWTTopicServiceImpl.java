@@ -122,15 +122,10 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		return convert(t,level,false);
 	}
 	public static Topic convert(Topic t,int level,boolean hasMembers){	
-		log.debug("CONVERT Topic "+t+" level: "+level);
+		log.debug("CONVERT Topic "+t+" level: "+level+"  members "+hasMembers);
 		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypes().getClass());
 			
-		//didn't need to convert the postgres one, but mysql is
-		//returning java.sql.timestamp, which, surprise surprise 
-		//is another thing that breaks GWT serialization.
-		//
-		t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
-		t.setCreated(new Date(t.getCreated().getTime()));
+	
 		
 		log.debug("t "+t.getTypes().getClass());		
 		log.debug("t "+t.getMetaValues().getClass());
@@ -142,7 +137,10 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		//L2 new it out
 		//L1 new everything expect metas we need this for topic's->tag's->metas
 		//
-		if(level >= 2){
+		if(level >= 2){			
+			t.setLastUpdated(null);
+			t.setCreated(null);
+			
 			t.setMetaValues(new HashMap());
 			t.setTypes(new HashSet());			
 			t.setInstances(new HashSet());			
@@ -150,6 +148,13 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setOccurences(new HashSet());			
 			t.setAssociations(new HashSet());
 		}else if(level == 1){
+			//didn't need to convert the postgres one, but mysql is
+			//returning java.sql.timestamp, which, surprise surprise 
+			//is another thing that breaks GWT serialization.
+			//
+			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+			t.setCreated(new Date(t.getCreated().getTime()));
+			
 			t.setMetaValues(new HashMap());
 			t.setTypes(new HashSet());			
 			t.setInstances(new HashSet());			
@@ -157,11 +162,12 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setOccurences(new HashSet());			
 			t.setAssociations(new HashSet());
 			
+			log.debug("has Members "+hasMembers);
 			//convert associations
 			if(hasMembers){
 				Association ass = (Association) t;			
 				HashMap<String, Topic> convertedMap = new HashMap<String, Topic>();		
-				for (Iterator iter = t.getMetaValues().entrySet().iterator(); iter.hasNext();) {
+				for (Iterator iter = ass.getMembers().entrySet().iterator(); iter.hasNext();) {
 					//
 					//interestingly, looping over keys, then doing a map.get(key) returns us a null value.
 					//something broken in our .equals()? or do I not understand Maps?
@@ -173,10 +179,17 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 					log.debug("map "+element+"->"+value);
 					convertedMap.put(element, convert(value,Integer.MAX_VALUE));
 				}
-				t.setMetaValues(convertedMap);
+				ass.setMembers(convertedMap);				
 			}
 			
 		}else{
+			//didn't need to convert the postgres one, but mysql is
+			//returning java.sql.timestamp, which, surprise surprise 
+			//is another thing that breaks GWT serialization.
+			//
+			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+			t.setCreated(new Date(t.getCreated().getTime()));
+			
 			log.debug("loop meta values");
 			HashMap<Topic, Topic> convertedMap = new HashMap<Topic, Topic>();		
 			for (Iterator iter = t.getMetaValues().entrySet().iterator(); iter.hasNext();) {
@@ -214,7 +227,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	public static Set converter(Set in,int level,boolean hasMembers){		
 		HashSet<Topic> rtn = new HashSet<Topic>();
 		try{
-			log.debug("converter "+in+" "+rtn+" "+level);
+			log.debug("converter "+in+" "+rtn+" level: "+level);
 			for (Iterator iter = in.iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
 				log.debug("converter on "+top);

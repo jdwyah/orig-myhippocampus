@@ -210,15 +210,14 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * Associations Contract will update our associations set in the DAO/Service layer.
 	 * Don't need to take care of that here.
 	 *
-	 * Will return the SeeAlso association or Null if none.
+	 * Will return the SeeAlso association or Create a new one if necessary.
 	 * 
 	 * WARN: for the time being don't let a Topic have multiple SeeAlso's!
 	 * (this would only be usefull if a Topic had one SeeAlso in one scope and 
 	 * a different SeeAlso in another)
 	 * 
 	 */
-	public SeeAlso getSeeAlsos() {
-		Set rtn = new HashSet();
+	public SeeAlso getSeeAlso() {
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association element = (Association) iter.next();
 			if (element instanceof SeeAlso) {
@@ -227,7 +226,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 				return seeAlso;
 			}
 		}
-		return null;
+		return new SeeAlso(getUser());		
 	}
 
 	public String compare(Object other) {
@@ -246,5 +245,12 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		sb.append(this.getUser()+" user "+castOther.getUser()+"\n");
 		sb.append(this.isPublicVisible()+" public "+castOther.isPublicVisible()+"\n");
 		return sb.toString();
+	}
+
+	public void addSeeAlso(TopicIdentifier identifier) {
+		SeeAlso cur = getSeeAlso();
+		
+		cur.add(identifier);
+		getAssociations().add(cur);
 	}
 }

@@ -95,6 +95,7 @@ a:visited {
 .H-TopicLink {
 	font-family: cursive;
 	color: blue;
+	padding: 3px;
 }
 .H-HeaderLabel {
 	font-family: cursive;

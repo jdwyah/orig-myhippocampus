@@ -1,5 +1,5 @@
 package com.aavu.client.domain.generated;
-// Generated Oct 4, 2006 12:24:05 PM by Hibernate Tools 3.1.0.beta5
+// Generated Oct 11, 2006 11:01:55 AM by Hibernate Tools 3.1.0.beta5
 
 
 import com.aavu.client.domain.User;
@@ -17,7 +17,7 @@ public abstract class AbstractAssociation extends com.aavu.client.domain.Topic i
 
     // Fields    
 
-     private Map members = new HashMap(0);
+     private Map members = new HashMap();
 
      // Constructors
 

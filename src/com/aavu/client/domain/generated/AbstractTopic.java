@@ -1,5 +1,5 @@
 package com.aavu.client.domain.generated;
-// Generated Oct 4, 2006 12:24:05 PM by Hibernate Tools 3.1.0.beta5
+// Generated Oct 11, 2006 11:01:55 AM by Hibernate Tools 3.1.0.beta5
 
 
 import com.aavu.client.domain.User;
@@ -205,6 +205,7 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
          
 		 return ( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )
  && ( (this.getData()==castOther.getData()) || ( this.getData()!=null && castOther.getData()!=null && this.getData().equals(castOther.getData()) ) )
+ && ( (this.getCreated()==castOther.getCreated()) || ( this.getCreated()!=null && castOther.getCreated()!=null && this.getCreated().equals(castOther.getCreated()) ) )
  && (this.isPublicVisible()==castOther.isPublicVisible());
    }
    
@@ -216,7 +217,7 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
          result = 37 * result + ( getTitle() == null ? 0 : this.getTitle().hashCode() );
          result = 37 * result + ( getData() == null ? 0 : this.getData().hashCode() );
          
-         
+         result = 37 * result + ( getCreated() == null ? 0 : this.getCreated().hashCode() );
          result = 37 * result + (this.isPublicVisible()?1:0);
          
          

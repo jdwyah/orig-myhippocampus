@@ -49,7 +49,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		myTopic = topic;
 		
 		
-		SeeAlso assoc = myTopic.getSeeAlsos();
+		SeeAlso assoc = myTopic.getSeeAlso();
 		if(assoc == null){
 			System.out.println("no see alsos");
 		}else{
@@ -64,16 +64,8 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 			public void onSuccess(Object result) {
 				TopicIdentifier to = (TopicIdentifier) result;
 				
-//				myTopic.addSeeAlso(o);
-				
-				SeeAlso seeAlso = myTopic.getSeeAlsos();
-				if(myTopic.getSeeAlsos() == null){
-					seeAlso = new SeeAlso();
-					seeAlso.add(myTopic.getIdentifier());
-				}
-				
-				seeAlso.add(to);
-				
+				myTopic.addSeeAlso(to);
+
 				alsos.add(to);
 					
 			}});
@@ -95,7 +87,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		}
 		
 		public void load(SeeAlso seeAlso){
-			for (Iterator iter = seeAlso.getMembers().values().iterator(); iter.hasNext();) {
+			for (Iterator iter = seeAlso.getAll().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
 				horizP.add(new TopicLink(top));
 			}
