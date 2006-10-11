@@ -1,5 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -8,7 +9,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -16,10 +20,12 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -49,6 +55,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * 
 	 */
 	public List<TimeLineObj> getTimeline(User user) {
+		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
+		
 		//
 		//#1 select all Meta's that are displayable on a Timeline
 		//
@@ -73,9 +81,74 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //				"meta.parents.publicVisible = true)",
 //				"user",user);		
 		
-		List<Meta> dates = getHibernateTemplate().find("from MetaDate md where "+
+		List<Meta> ddd = getHibernateTemplate().find("from MetaDate md "+
 		"");
 		
+		for (Meta meta : ddd) {
+			System.out.println("Date: "+meta+" "+meta.getId());
+		}
+
+//		List<Object[]> ttt = getHibernateTemplate().find("select  (select indices(top.metaValues) from Topic) from Topic top where "+
+//		//"top.metaValues.metaValue.class = com.aavu.client.domain.MetaDate");
+//		//"indices(top.metaValues).class = com.aavu.client.domain.MetaDate");
+//		//"104 in indices(top.metaValues)");
+//	//	"com.aavu.client.domain.MetaDate = (select indices(top.metaValues) from Topic).class");
+//		"id > 0");
+		
+		Topic example = new Topic();
+		
+		List<Object> ll= (List<Object>) getHibernateTemplate().execute(new HibernateCallback(){
+			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+				
+				return sess.createSQLQuery("select top.topic_id, top.title, meta.data from topic_meta_values "+
+						"join topics meta on topic_meta_values.topic_id = meta.topic_id "+
+						"join topics top on topic_meta_values.topic_id = top.topic_id "+
+						"where meta.discriminator = 'metadate'")				
+			    .list();
+				
+			}});
+		
+		for (Object topic : ll) {
+			System.out.println("TTT "+topic);
+			Object[] oq = (Object[]) topic;
+			for (int i = 0; i < oq.length; i++) {
+				Object object = oq[i];
+				System.out.println(object);
+			}
+		}
+		
+		
+		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)				
+				.add(Example.create(example));
+		
+		List<Topic> llll = getHibernateTemplate().findByCriteria(crit);
+				
+		System.out.println("lll  "+llll.size());
+				
+		for (Topic topic : llll) {
+			System.out.println("TTT "+topic);
+		}
+		
+		List<Object[]> ttt = getHibernateTemplate().find("select top.id, top.title, mv.title from "+
+				"Topic top "+
+				"join top.metaValues as mv "+// as where date.id in (top.metaValues) "+
+				" where "+		
+				//" mv.title > 6 and "+
+				//	"com.aavu.client.domain.MetaDate = (select indices(top.metaValues) from Topic).class");
+				"top.id > 0");
+		if(ttt.size() == 0){
+			return rtn;
+		}
+		for (Object[] oa : ttt) {
+			for (int i = 0; i < oa.length; i++) {
+				Object object = oa[i];
+				System.out.println(" "+i+" "+object);
+			}
+		}
+		System.out.println("jere");
+		//System.out.println("topic w/ a date "+ttt.get(0)+" "+ttt.get(0).getId());
+	
+		List<Meta> dates = new ArrayList<Meta>();
 		
 		StringBuffer sb = new StringBuffer("where ");
 		boolean first = true;
@@ -109,7 +182,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		//
 		//#3 Create and return 
 		//
-		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
+		
 		for (Topic topic : alltopics) {
 			for(Meta m : dates){				
 				if(topic.getMetaValues().containsKey(m.getId()+"")){
