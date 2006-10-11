@@ -48,8 +48,7 @@ public class MetaTopicWidget extends SaveListener {
 		
 		Topic completed = completer.getTopicCompletedOrNullForNew();
 		if(completed == null){
-			completed = new Topic();
-			completed.setTitle(completer.getText());
+			completed = new Topic(topic.getUser(),completer.getText());			
 		}		
 		
 		topic.addMetaValue(meta, completed);

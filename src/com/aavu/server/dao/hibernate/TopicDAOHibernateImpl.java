@@ -1,5 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,164 +58,37 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public List<TimeLineObj> getTimeline(User user) {
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 		
-		//
-		//#1 select all Meta's that are displayable on a Timeline
-		//
-//		List<Meta> usersMetaDates = getHibernateTemplate().findByNamedParam("from Topic meta where "+
-//				"meta.class = com.aavu.client.domain.MetaDate "+
-//				"and (meta.parents.user = :user OR "+ 
-//				"meta.parents.publicVisible = true)",
-//				"user",user);		
-
-//		List<Meta> usersMetaDates = getHibernateTemplate().find("from Topic meta where "+
-//				"meta.class = com.aavu.client.domain.MetaDate "+
-//				"and meta.parents.user.id > 0");
-//				"and (meta.parents.user = :user OR "+ 
-//				"meta.parents.publicVisible = true)",
-//				"user",user);		
-
-		
-//		List<Meta> usersMetaDates = getHibernateTemplate().find("from Topic topic where "+
-//				"5 in elements (topic.children.parents.user.id) ");
-				//"and meta.parents.user.id > 0");
-//				"and (meta.parents.user = :user OR "+ 
-//				"meta.parents.publicVisible = true)",
-//				"user",user);		
-		
-		List<Meta> ddd = getHibernateTemplate().find("from MetaDate md "+
-		"");
-		
-		for (Meta meta : ddd) {
-			System.out.println("Date: "+meta+" "+meta.getId());
-		}
-
-//		List<Object[]> ttt = getHibernateTemplate().find("select  (select indices(top.metaValues) from Topic) from Topic top where "+
-//		//"top.metaValues.metaValue.class = com.aavu.client.domain.MetaDate");
-//		//"indices(top.metaValues).class = com.aavu.client.domain.MetaDate");
-//		//"104 in indices(top.metaValues)");
-//	//	"com.aavu.client.domain.MetaDate = (select indices(top.metaValues) from Topic).class");
-//		"id > 0");
-		
-		Topic example = new Topic();
-		
 		List<Object> ll= (List<Object>) getHibernateTemplate().execute(new HibernateCallback(){
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 				
-				return sess.createSQLQuery("select top.topic_id, top.title, meta.data from topic_meta_values "+
+				return sess.createSQLQuery("select top.topic_id, top.title, metavalue.data from topic_meta_values "+
 						"join topics meta on topic_meta_values.topic_id = meta.topic_id "+
-						"join topics top on topic_meta_values.topic_id = top.topic_id "+
+						"join topics top on topic_meta_values.topic_meta_value_id = top.topic_id "+
+						"join topics metavalue on topic_meta_values.metaValue = metavalue.topic_id "+
 						"where meta.discriminator = 'metadate'")				
 			    .list();
 				
 			}});
 		
 		for (Object topic : ll) {
-			System.out.println("TTT "+topic);
-			Object[] oq = (Object[]) topic;
-			for (int i = 0; i < oq.length; i++) {
-				Object object = oq[i];
-				System.out.println(object);
-			}
-		}
-		
-		
-		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)				
-				.add(Example.create(example));
-		
-		List<Topic> llll = getHibernateTemplate().findByCriteria(crit);
-				
-		System.out.println("lll  "+llll.size());
-				
-		for (Topic topic : llll) {
-			System.out.println("TTT "+topic);
-		}
-		
-		List<Object[]> ttt = getHibernateTemplate().find("select top.id, top.title, mv.title from "+
-				"Topic top "+
-				"join top.metaValues as mv "+// as where date.id in (top.metaValues) "+
-				" where "+		
-				//" mv.title > 6 and "+
-				//	"com.aavu.client.domain.MetaDate = (select indices(top.metaValues) from Topic).class");
-				"top.id > 0");
-		if(ttt.size() == 0){
-			return rtn;
-		}
-		for (Object[] oa : ttt) {
+			Object[] oa = (Object[]) topic;
 			for (int i = 0; i < oa.length; i++) {
 				Object object = oa[i];
-				System.out.println(" "+i+" "+object);
+				System.out.println(" "+i+" "+object+" "+object.getClass());
 			}
-		}
-		System.out.println("jere");
-		//System.out.println("topic w/ a date "+ttt.get(0)+" "+ttt.get(0).getId());
-	
-		List<Meta> dates = new ArrayList<Meta>();
-		
-		StringBuffer sb = new StringBuffer("where ");
-		boolean first = true;
-		for (Meta meta2 : dates) {			
-			if(!first){
-				sb.append("or ");							
-			}
-			sb.append(meta2.getId());
-			sb.append(" in indices(top.metaValues) ");
+			BigInteger topic_id = (BigInteger) oa[0];
+			String dateStr = (String) oa[2];
+			Date date = new Date(Long.parseLong(dateStr));			
 			
-			first = false;
+			rtn.add(new TimeLineObj(new TopicIdentifier(topic_id.longValue(),(String)oa[1]),date,null));						
 		}
-		
-		log.debug("Metas Query "+sb.toString());
-	
-		//
-		//#2 Get all the Topics with Meta's as described in #1
-		//
-		List<Topic> alltopics = getHibernateTemplate().findByNamedParam("from Topic top "+
-				sb.toString()+
-				"and user = :user ","user",user);
-				
-		
-		
-		//"and meta.parents.user.id > 0");
-//		"and (meta.parents.user = :user OR "+ 
-//		"meta.parents.publicVisible = true)",
-//		"user",user);		
-		
-		
-		//
-		//#3 Create and return 
-		//
-		
-		for (Topic topic : alltopics) {
-			for(Meta m : dates){				
-				if(topic.getMetaValues().containsKey(m.getId()+"")){
-					String dateStr = (String) topic.getMetaValues().get(m.getId()+"");
-					Date start = new Date(Long.parseLong(dateStr));
-					TopicIdentifier ti = topic.getIdentifier(); 												
-					TimeLineObj to = new TimeLineObj(ti,start,null);												
-					rtn.add(to);					
-				}
-			}				
-		}
-
 		if(log.isDebugEnabled())
 			for (TimeLineObj obj : rtn) {
 				log.debug("TIMELINE ");
 				log.debug(obj);
 			}
-
 		
-		return rtn;
-		
-//		return getHibernateTemplate().findByNamedParam("from Tag tag where (user = :user OR publicVisible = true) "+
-//				"AND tag.", "user", user);
-				
-//		String[] names = {"tag","dateID"};
-//		Object[] vals = {tag.getId(),metaDate.getId()};
-
-//		return getHibernateTemplate().findByNamedParam("from Topic top "+
-//				"join fetch top.metaValueStrs as metav where "+
-//				"top.tags.id is :tag "+ 
-//				"and :dateID in indices(top.metaValueStrs) ",names,vals);
-
+		return rtn;	
 	}
 
 	public Topic getForName(User user, String string) {

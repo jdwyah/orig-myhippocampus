@@ -57,7 +57,8 @@ public class Sidebar extends SimplePanel {
 
 	protected void alphabetizeTopics(List topics) {
 		//<String,Topic>
-		Map allEntries = new GWTSortedMap();			
+		Map allEntries = new GWTSortedMap();		
+		sidebarEntries.clear();
 
 		System.out.println("topics! "+topics.size());
 		

@@ -190,7 +190,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
 			t.setCreated(new Date(t.getCreated().getTime()));
 			
-			log.debug("loop meta values");
+			log.debug("loop meta values #"+t.getMetaValues().size());
 			HashMap<Topic, Topic> convertedMap = new HashMap<Topic, Topic>();		
 			for (Iterator iter = t.getMetaValues().entrySet().iterator(); iter.hasNext();) {
 				//
@@ -201,7 +201,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 				Topic element = (Topic) e.getKey();
 				Topic value = (Topic) e.getValue();
 				
-				log.debug("map "+element+"->"+value);
+				log.debug("map "+element+"->"+value+".");
 				convertedMap.put(convert(element,Integer.MAX_VALUE), convert(value,Integer.MAX_VALUE));
 			}
 			t.setMetaValues(convertedMap);

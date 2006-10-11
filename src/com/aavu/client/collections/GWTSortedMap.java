@@ -2,6 +2,7 @@ package com.aavu.client.collections;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +16,13 @@ public class GWTSortedMap implements Map {
 
 	public Set keySet() {
 		if(dirty){
-			Collections.sort(keys.getList());			
+			Collections.sort(keys.getList(),new Comparator(){
+
+				public int compare(Object o1, Object o2) {
+					String o = (String)o1;
+					String oo = (String) o2;
+					return o.toLowerCase().compareTo(o.toLowerCase());
+				}});			
 		}
 		return keys;
 	}

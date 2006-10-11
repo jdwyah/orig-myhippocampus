@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class MetaTopic extends Meta {
 
-	private static final String TYPE = "Text";
+	private static final String TYPE = "Topic";
 	private String value;
 	private String transientValue; //as widget changes, only this updates
 	

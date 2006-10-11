@@ -80,7 +80,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 				//mv.setValue(""+dp.getSelectedDate().getTime());
 				String val = dp.getSelectedDate().getTime()+"";
 				
-				Topic newTopicValue = new Topic();
+				Topic newTopicValue = new Topic(getUser(),df.format(dp.getSelectedDate()));
 				newTopicValue.setData(val);
 				topic.addMetaValue(MetaDate.this, newTopicValue);				
 			}	    	
