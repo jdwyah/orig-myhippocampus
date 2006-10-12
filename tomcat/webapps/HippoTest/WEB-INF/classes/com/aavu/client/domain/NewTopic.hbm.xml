@@ -40,15 +40,18 @@
 			<meta attribute="field-description">Shared?</meta>
 		</property>
 
-
- 
+		<set name="scopes" table="topic_scopes">
+			<key column="topic_id" />
+			<many-to-many column="scope_id" class="Topic" />
+		</set>
+ <!-- 
 		<map name="metaValues" table="topic_meta_values">
 			<key column="topic_meta_value_id"></key>
 
-			<map-key-many-to-many column="topic_id" class="Topic"></map-key-many-to-many>
-			<many-to-many column="metaValue" class="Topic"></many-to-many>
+			<map-key-many-to-many column="meta_id" class="Topic"></map-key-many-to-many>
+			<many-to-many column="metaValue_id" class="Topic"></many-to-many>
 						
-	    </map>
+	    </map>-->
 
  		<set name="instances" table="instancetable">
 			<key column="from_id" />
@@ -58,11 +61,11 @@
 			<key column="from_id" />
 			<many-to-many column="topic_id" class="Topic" />
 		</set>
-
+<!-- 
 		<set name="metas" table="topic_meta">
 			<key column="meta_id" />
 			<many-to-many column="topic_id" class="Topic" />
-		</set>
+		</set>-->
 		
 		<set name="occurences" table="occurences">
 			<key column="occurrence_id"></key>
@@ -97,14 +100,18 @@
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractAssociation</meta>
 
 			<!-- what about doing just binary associations with two many-to-man? -->			
-			<map name="members" table="member_topics">
+	<!-- 		<map name="members" table="member_topics">
 				<key column="member_topics_id"></key>
-				<map-key column="role" type="string"></map-key>
+				 <map-key column="role" type="string"></map-key>-->
 				<!-- the map-key-many-to-many was cool, but tough to image a use case. -->
 				<!-- it was either "PARENT" "CHILD" or for a seealso set, we'll use "1" "2" "3" and won't even look at em -->
 				<!-- <map-key-many-to-many column="role_topic" class="Topic" ></map-key-many-to-many>-->
-				<many-to-many column="implementing_topic" class="Topic"></many-to-many>						
-	    	</map>
+<!-- 				<many-to-many column="implementing_topic" class="Topic"></many-to-many>						
+	    	</map>-->
+	      	<set name="members" table="member_topics">
+				<key column="member_topics_id"></key>			
+				<many-to-many column="member_id" class="Topic" />
+  			</set>
 
 			<subclass name="ParentChild" discriminator-value="parentChild">
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractParentChild</meta>

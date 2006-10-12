@@ -144,7 +144,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			selectedTag.getMetas().clear();
 			for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {
 				MetaChooser mc = (MetaChooser) iter.next();
-				selectedTag.getMetas().add(mc.getMeta());
+				selectedTag.addMeta(mc.getMeta());
 			}
 			//selectedTag.setMetas(metaChoosers);
 			

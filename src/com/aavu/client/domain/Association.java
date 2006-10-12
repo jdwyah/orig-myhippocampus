@@ -11,6 +11,11 @@ public class Association extends AbstractAssociation implements Serializable,IsS
 		
 	}
 
+	public Association(Meta meta) {
+		getTypes().add(meta);
+		setUser(meta.getUser());
+	}
+
 	
 
 }

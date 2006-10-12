@@ -71,7 +71,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 			author.setTitle(B);
 			author.setUser(u);
 			
-			Topic savedAuthor = topicDAO.save(author);
+			Meta savedAuthor = (Meta) topicDAO.save(author);
 			
 			book.addMeta(savedAuthor);
 
@@ -109,6 +109,13 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 		assertEquals(D, book.getTitle());
 		
+		System.out.println("----------------------------");
+//		Topic sb = topicService.getTopicByID(book.getId());
+//		
+//		assertEquals(1, sb.getMetas().size());
+		
+		System.out.println(huntForRedOctober.toPrettyString());
+		
 		//this is the test to make work
 		assertEquals(1, book.getMetas().size());
 		
@@ -117,7 +124,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		assertEquals(B, author.getTitle());
 		
 		
-		Topic tomC = (Topic) huntForRedOctober.getMetaValues().get(author);
+		Topic tomC = (Topic) huntForRedOctober.getSingleMetaValueFor(author);
 		assertEquals(E, tomC.getTitle());
 		
 		

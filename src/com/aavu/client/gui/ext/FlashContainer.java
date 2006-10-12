@@ -90,6 +90,7 @@ public class FlashContainer extends SimplePanel {
 	}
 
 	protected void runCommand(String command){
+		System.out.println("cmm:"+command);
 		runCommand(name, command);
 	}
 

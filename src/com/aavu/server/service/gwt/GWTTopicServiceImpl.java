@@ -119,16 +119,15 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		return convert(t,0);	
 	}
 	public static Topic convert(Topic t,int level){
-		return convert(t,level,false);
+		return convert(t,level,false,false);
 	}
-	public static Topic convert(Topic t,int level,boolean hasMembers){	
+	public static Topic convert(Topic t,int level,boolean hasMembers,boolean typesWithAssociations){	
 		log.debug("CONVERT Topic "+t+" level: "+level+"  members "+hasMembers);
 		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypes().getClass());
 			
 	
 		
-		log.debug("t "+t.getTypes().getClass());		
-		log.debug("t "+t.getMetaValues().getClass());
+		log.debug("t "+t.getTypes().getClass());				
 	
 		//
 		//new-ing it is essentially nulling it out, since we can't pass
@@ -141,12 +140,29 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setLastUpdated(null);
 			t.setCreated(null);
 			
-			t.setMetaValues(new HashMap());
-			t.setTypes(new HashSet());			
-			t.setInstances(new HashSet());			
-			t.setMetas(new HashSet());			
+			t.setScopes(new HashSet());			
+			t.setInstances(new HashSet());						
 			t.setOccurences(new HashSet());			
 			t.setAssociations(new HashSet());
+			
+			if(hasMembers){		
+				log.debug("LEVEL 2 HAS MEMBERS");
+				
+				Association ass = (Association) t;
+				
+				log.debug("types ");
+				log.debug("size "+ass.getTypes().size());
+				ass.setTypes(converter(ass.getTypes(), level));
+				
+				log.debug("members ");
+				log.debug("size "+ass.getMembers().size());
+				ass.setMembers(converter(ass.getMembers(), level));				
+			}else{
+				//is this necessary?
+				//
+				t.setTypes(new HashSet());				
+			}
+			
 		}else if(level == 1){
 			//didn't need to convert the postgres one, but mysql is
 			//returning java.sql.timestamp, which, surprise surprise 
@@ -155,31 +171,31 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
 			t.setCreated(new Date(t.getCreated().getTime()));
 			
-			t.setMetaValues(new HashMap());
-			t.setTypes(new HashSet());			
-			t.setInstances(new HashSet());			
-			t.setMetas(converter(t.getMetas(),level));			
-			t.setOccurences(new HashSet());			
-			t.setAssociations(new HashSet());
+			
+			t.setScopes(new HashSet());						
+			t.setInstances(new HashSet());						
+			t.setOccurences(new HashSet());						
 			
 			log.debug("has Members "+hasMembers);
+			
+			if(typesWithAssociations){
+				log.debug("LEVEL 1 typesWithAssociations");
+				t.setAssociations(converter(t.getAssociations(), level,true));				
+			}else{
+				t.setAssociations(new HashSet());
+			}
+			
 			//convert associations
-			if(hasMembers){
-				Association ass = (Association) t;			
-				HashMap<String, Topic> convertedMap = new HashMap<String, Topic>();		
-				for (Iterator iter = ass.getMembers().entrySet().iterator(); iter.hasNext();) {
-					//
-					//interestingly, looping over keys, then doing a map.get(key) returns us a null value.
-					//something broken in our .equals()? or do I not understand Maps?
-					//
-					Entry e = (Entry) iter.next();
-					String element = (String) e.getKey();
-					Topic value = (Topic) e.getValue();
-
-					log.debug("map "+element+"->"+value);
-					convertedMap.put(element, convert(value,Integer.MAX_VALUE));
-				}
-				ass.setMembers(convertedMap);				
+			if(hasMembers){				
+				Association ass = (Association) t;
+				
+				log.debug("types ");
+				t.setTypes(converter(t.getTypes(), level));
+				
+				log.debug("members ");
+				ass.setMembers(converter(ass.getMembers(), level));				
+			}else{
+				t.setTypes(new HashSet());
 			}
 			
 		}else{
@@ -190,48 +206,42 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
 			t.setCreated(new Date(t.getCreated().getTime()));
 			
-			log.debug("loop meta values #"+t.getMetaValues().size());
-			HashMap<Topic, Topic> convertedMap = new HashMap<Topic, Topic>();		
-			for (Iterator iter = t.getMetaValues().entrySet().iterator(); iter.hasNext();) {
-				//
-				//interestingly, looping over keys, then doing a map.get(key) returns us a null value.
-				//something broken in our .equals()? or do I not understand Maps?
-				//
-				Entry e = (Entry) iter.next();
-				Topic element = (Topic) e.getKey();
-				Topic value = (Topic) e.getValue();
-				
-				log.debug("map "+element+"->"+value+".");
-				convertedMap.put(convert(element,Integer.MAX_VALUE), convert(value,Integer.MAX_VALUE));
-			}
-			t.setMetaValues(convertedMap);
-
 			log.debug("starting convert sets");
+			log.debug("SIZE: "+t.getTypes().size());
+			t.setScopes(new HashSet());
+			t.setTypes(converter(t.getTypes(),level,false,true));
 			
-			//metavalues
-			t.setTypes(converter(t.getTypes(),level));
+			log.debug("starting convert sets-instances");
 			t.setInstances(converter(t.getInstances(),level));
-			t.setMetas(converter(t.getMetas(),level));
-			t.setOccurences(converter(t.getOccurences(),level));
-			t.setAssociations(converter(t.getAssociations(),level,true));
 			
-			log.debug("t "+t.getMetaValues().getClass());	
+			log.debug("starting convert sets-occurrences");
+			t.setOccurences(converter(t.getOccurences(),level));
+			
+			log.debug("starting convert sets-assocations");
+			t.setAssociations(converter(t.getAssociations(),level,true));
+				
 		}
 		log.debug("Finally: t "+t.getId()+" "+t.getUser());
+		
+		log.debug("Scan turned up persistent: "+Converter.scan(t));
+		
 		return t;
 	}
 	
 	public static Set converter(Set in,int level){
 		return converter(in, level,false);
 	}
-	public static Set converter(Set in,int level,boolean hasMembers){		
+	public static Set converter(Set in,int level,boolean hasMembers){
+		return converter(in,level,hasMembers,false);
+	}
+	public static Set converter(Set in,int level,boolean hasMembers,boolean typesWithAssociations){
 		HashSet<Topic> rtn = new HashSet<Topic>();
 		try{
 			log.debug("converter "+in+" "+rtn+" level: "+level);
 			for (Iterator iter = in.iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
 				log.debug("converter on "+top);
-				convert(top,level+1,hasMembers);
+				convert(top,level+1,hasMembers,typesWithAssociations);
 				log.debug("converted "+top);
 
 				rtn.add(top);

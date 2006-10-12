@@ -191,7 +191,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		Meta meta = new MetaTopic();
 		meta.setTitle(name);
 
-		t2.getMetas().add(meta);
+		t2.addMeta(meta);
 
 
 		System.out.println("before: "+t2.getId());
@@ -218,7 +218,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		Meta meta2 = new MetaTopic();
 		meta2.setTitle(name2);
 
-		saved.getMetas().add(meta2);
+		saved.addMeta(meta2);
 
 		topicDAO.save(saved);
 

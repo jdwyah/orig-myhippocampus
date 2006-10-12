@@ -34,8 +34,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(((JSONString)value.get("data")).stringValue());
 	}
 
-	public Topic(User user, String title, String data, Date lastUpdated, Date created, boolean publicVisible, Map metaValues, Set children, Set parents, Set metas, Set occurences, Set associations) {
-		super(user, title, data, lastUpdated, created, publicVisible, metaValues, children, parents, metas, occurences, associations);
+	public Topic(User user, String title, String data, Date lastUpdated, Date created, boolean publicVisible, Set children, Set parents, Set metas, Set occurences, Set associations) {
+		super(user, title, data, lastUpdated, created, publicVisible, children, parents, metas, occurences, associations);
 	}
 
 	public Topic(User u, String title) {
@@ -55,12 +55,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	public void addMetaValue(Topic meta, Topic metaValue) {
 
-
+		Association assoc = new Association();
+		assoc.getTypes().add(meta);
+		assoc.getMembers().add(metaValue);
+		
+		
+		
 		metaValue.getTypes().add(meta);
 		meta.getInstances().add(metaValue);
-
-		getMetaValues().put(meta, metaValue);
-
+		
+		getAssociations().add(assoc);
+		
 		//System.out.println(topic+"size "+topic.getMetaValues());
 	}
 
@@ -97,52 +102,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 
 
-	public void getMetaList(){
-		getMetaList(this);
-	}	
-	private void getMetaList(Topic orig){
-
-
-//		System.out.println("gl"+orig+"size "+orig.getMetaValues());
-//		System.out.println("gl"+orig+"size "+orig.getParents());
-
-
-		for (Iterator iter = this.getTypes().iterator(); iter.hasNext();) {
-			Topic parent = (Topic) iter.next();			
-			parent.getMetaList(orig);			
-		}
-
-		for (Iterator iter = this.getMetas().iterator(); iter.hasNext();) {
-			Topic key = (Topic) iter.next();
-
-
-			//System.out.println("size "+orig.getMetaValues());
-
-			for (Iterator iterator = orig.getMetaValues().keySet().iterator(); iterator.hasNext();) {
-				Topic metavaluekey = (Topic) iterator.next();
-				//System.out.println("meta value key "+metavaluekey);
-			}
-
-
-
-			Topic value = (Topic) orig.getMetaValues().get(key);
-
-			System.out.println("key "+key+" val "+value);
-
-		}
-
-	}
-
 	public String toString(){
 		return getTitle();	
 	}
 
-	public void addMeta(Topic dateRead) {
-		getMetas().add(dateRead);
-	}
-
-	public void addParent(Topic parent) {
-		//getParents().add(parent);		
+	/**
+	 * Create an Association of type Meta
+	 * @param meta
+	 */
+	public void addMeta(Meta meta) {		
+		Association a = new Association(meta);		
+		getAssociations().add(a);		
 	}
 
 	public String getCompleteStr() {		
@@ -167,8 +137,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return toPrettyString("");
 	}
 	public String toPrettyString(String indent) {
-		try{
-			StringBuffer tagsStr = new StringBuffer();
+		
+		StringBuffer tagsStr = new StringBuffer();
+		StringBuffer metaVStr = new StringBuffer();
+		
+		try{			
 			for (Iterator iter = getTags().iterator(); iter.hasNext();) {
 				Tag element = (Tag) iter.next();
 				tagsStr.append(indent+"Tag: ");
@@ -183,27 +156,42 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 				tagsStr.append(element.toPrettyString("     "));
 				tagsStr.append("\n"+indent+"     -----End----");
 			}
-
-			StringBuffer metaVStr = new StringBuffer();
-			metaVStr.append(indent+"Map:\n"+indent);
-			for (Iterator iter = getMetaValues().keySet().iterator(); iter.hasNext();) {
-				Topic metaStr = (Topic) iter.next();
-				Topic mv = (Topic) getMetaValues().get(metaStr);
-				if(mv != null){
-					metaVStr.append(metaStr+" "+metaStr.getId()+" -> "+mv+" "+mv.getId()+"\n"+indent);
-				}else{
-					metaVStr.append(metaStr+" "+" -> null\n"+indent);
-				}
-			}
-
-			return "\nID "+getId()+" title "+getTitle()+"\n"+indent+
-			" "+tagsStr+"\n"+indent+
-			" "+metaVStr+"\n"+indent+"User:"+((getUser() == null)? "null" : getUser().getId()+"");
 		}catch(Exception e){
-			System.out.println(e);
-			e.printStackTrace();
-			return "Topic Pretty Errored";
+//			System.out.println(e);
+//			e.printStackTrace();
+			tagsStr.append(indent+"Topic Pretty Tags Errored");
 		}
+		try{
+			
+			metaVStr.append(indent+"Associations:\n"+indent);
+			for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
+				Association assoc = (Association) iter.next();
+				
+				metaVStr.append("ASS: "+assoc.getTitle()+" "+assoc.getId()+"\n"+indent);
+				metaVStr.append("Types:\n"+indent);
+				for (Iterator iterator = assoc.getTypes().iterator(); iterator
+						.hasNext();) {
+					Topic type = (Topic) iterator.next();
+					metaVStr.append("T: "+type.getTitle()+" "+type.getId()+"\n"+indent);
+				}
+				metaVStr.append("Members:\n"+indent);
+				for (Iterator iterator = assoc.getMembers().iterator(); iterator
+						.hasNext();) {
+					Topic member = (Topic) iterator.next();
+					metaVStr.append("M: "+member.getTitle()+" "+member.getId()+"\n"+indent);
+				}
+								
+			}
+		}catch(Exception e){
+//			System.out.println(e);
+//			e.printStackTrace();
+			metaVStr.append(indent+"Topic Pretty Association Errored");
+		}
+
+		return "\nID "+getId()+" title "+getTitle()+"\n"+indent+
+		" "+tagsStr+"\n"+indent+
+		" "+metaVStr+"\n"+indent+"User:"+((getUser() == null)? "null" : getUser().getId()+"");
+
 	}
 
 	/**
@@ -227,6 +215,51 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			}
 		}
 		return new SeeAlso(getUser());		
+	}
+	/**
+	 * NOTE: calling getMetas().add() won't do anything. Use addMeta()
+	 * 
+	 * This was returning MetaValue associations as well, until we added members.size() == 0 
+	 * is this an ok fix?
+	 * 
+	 * @return
+	 */
+	public Set getMetas() {
+		Set metas = new HashSet();
+		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
+			Association association = (Association) iter.next();
+			
+			for (Iterator iterator = association.getTypes().iterator(); iterator.hasNext();) {
+				Topic possibleMeta = (Topic) iterator.next();
+				if (possibleMeta instanceof Meta
+						&& association.getMembers().size() == 0) {					
+					metas.add(possibleMeta);				
+				}	
+			}			
+		}
+		return metas;		
+	}
+	public Set getMetaValuesFor(Meta meta){		
+		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
+			Association association = (Association) iter.next();
+			
+			for (Iterator iterator = association.getTypes().iterator(); iterator.hasNext();) {
+				Topic possibleMeta = (Topic) iterator.next();
+				if (possibleMeta == meta) {	
+					return association.getMembers();									
+				}	
+			}			
+		}
+		return new HashSet();
+	}
+	/**
+	 * Convenience method for when you know there's only one member.
+	 * 
+	 * @param meta
+	 * @return
+	 */
+	public Topic getSingleMetaValueFor(Meta meta){		
+		return (Topic) getMetaValuesFor(meta).iterator().next();		
 	}
 
 	public String compare(Object other) {

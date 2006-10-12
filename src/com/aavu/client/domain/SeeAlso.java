@@ -18,11 +18,12 @@ public class SeeAlso extends Association {
 	public SeeAlso(User user) {
 		setUser(user);
 		setTitle("seealso");
+		getTypes().add(new Topic(user,"SeeAlso"));
 	}
 
 
 	public void add(TopicIdentifier top){
-		getMembers().put((getMembers().keySet().size()+1)+"", new Topic(top));
+		getMembers().add(new Topic(top));		
 	}
 		
 	/**
@@ -32,7 +33,7 @@ public class SeeAlso extends Association {
 	 * @return
 	 */
 	public Collection getAll(){
-		return getMembers().values();
+		return getMembers();
 	}
 	
 }

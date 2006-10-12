@@ -20,9 +20,15 @@ import com.aavu.server.dao.UserDAO;
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImplTest.class);
 
-	private static final String B = "Ssds45t";
-	private static final String C = "ASR#35rf";
-	private static final String D = "234234123";
+//	private static final String B = "Ssds45t";
+//	private static final String C = "ASR#35rf";
+//	private static final String D = "234234123";
+//	private static final String E = "^#*(DNS03";
+	
+	private static final String B = "Author";
+	private static final String C = "PatriotGames";
+	private static final String D = "Book";
+	private static final String E = "TomClancy";
 	
 	private TopicDAO topicDAO;
 	private TagDAO tagDAO;
@@ -120,7 +126,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		topicDAO.save(book);
 		
 		Topic tomClancy = new Topic();
-		tomClancy.setTitle(C);
+		tomClancy.setTitle(E);
 		
 		
 		patriotGames.tagTopic(book);
@@ -131,6 +137,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		topicDAO.save(patriotGames);
 		
 		System.out.println("after: "+patriotGames.getId());
+		
+		System.out.println(patriotGames.toPrettyString());
 		
 		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 				
@@ -148,16 +156,16 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(D, savedBookTag.getTitle());
 		assertEquals(1, savedBookTag.getMetas().size());
 				
-		assertEquals(1, savedPatriotGames.getMetaValues().size());
+		assertEquals(1, savedPatriotGames.getMetaValuesFor(author).size());
 		assertEquals(0, savedPatriotGames.getMetas().size());
 		
 		
 			
-		Topic savedTomClancy = (Topic) savedPatriotGames.getMetaValues().get(author);
+		Topic savedTomClancy = (Topic) savedPatriotGames.getSingleMetaValueFor(author);
 		assertNotNull(savedTomClancy);
 		
 					
-		assertEquals(C,savedTomClancy.getTitle());
+		assertEquals(E,savedTomClancy.getTitle());
 		
 	
 		//assertEquals(savedBookTag., false)
@@ -169,7 +177,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			System.out.println("C");
 			Topic top = topicDAO.getForID(u, saved.getTopicID());
 
-			for (Iterator iter = top.getMetaValues().keySet().iterator(); iter.hasNext();) {
+			for (Iterator iter = top.getMetaValuesFor(author).iterator(); iter.hasNext();) {
 				Topic element = (Topic) iter.next();
 				System.out.println("elem "+element.getClass()+" "+element);
 			}
@@ -258,23 +266,27 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		stringTheory.addSeeAlso(feinman.getIdentifier());
 		
+		System.out.println("_________________");
+		
+		System.out.println(stringTheory.toPrettyString());
+		
 		stringTheory = topicDAO.save(stringTheory);
+		
+		System.out.println("++++++++++++++++++");
 		
 		Topic savedST = stringTheory.getSeeAlso();
 				
 		SeeAlso savedSee = (SeeAlso) savedST;
 		
 
-		assertTrue(savedSee.getMembers().values().contains(feinman));
+		assertTrue(savedSee.getMembers().contains(feinman));
 
 		//
 		//oy, what are we going to do with the cache? I guess just null out cache 
 		//entries for see alsos on their way through to be saved. 
 		//bunch of error prone stuff going on with these multi-directional associations
 		//that need to be updated on both sides, eh?
-		//
-		
-		
+		//		
 		System.out.println("get id "+stringTheory.getId());
 				
 		Topic savedStringT = topicDAO.getForID(u, stringTheory.getId());
@@ -293,6 +305,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(1, savedStringT.getAssociations().size());
 		assertEquals(0, savedFN.getAssociations().size());
 		
+		System.out.println("get links to "+savedFN.toPrettyString());
 		
 		List<TopicIdentifier> linksTo = topicDAO.getLinksTo(savedFN, u);
 		

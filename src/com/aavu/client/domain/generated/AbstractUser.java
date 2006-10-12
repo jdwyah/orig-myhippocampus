@@ -1,7 +1,7 @@
 package com.aavu.client.domain.generated;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-// Generated Oct 11, 2006 11:01:55 AM by Hibernate Tools 3.1.0.beta5
+// Generated Oct 12, 2006 10:13:39 AM by Hibernate Tools 3.1.0.beta5
 
 
 

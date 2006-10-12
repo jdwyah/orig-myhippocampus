@@ -38,15 +38,16 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImpl.class);
 
 	public static DetachedCriteria loadEmAll(DetachedCriteria crit){
-		return crit.setFetchMode("user", FetchMode.JOIN)
-		.setFetchMode("metaValues", FetchMode.JOIN)
+		return crit.setFetchMode("user", FetchMode.JOIN)		
 		.setFetchMode("instances", FetchMode.JOIN)
 		.setFetchMode("types", FetchMode.JOIN)
-		.setFetchMode("types.metas", FetchMode.JOIN)
-		.setFetchMode("metas", FetchMode.JOIN)
+		.setFetchMode("types.associations", FetchMode.JOIN)
+		.setFetchMode("types.associations.types", FetchMode.JOIN)
+		.setFetchMode("types.associations.members", FetchMode.JOIN)
 		.setFetchMode("occurences", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN)
-		.setFetchMode("associations.members", FetchMode.JOIN);					
+		.setFetchMode("associations.members", FetchMode.JOIN)	
+		.setFetchMode("associations.types", FetchMode.JOIN);
 	}
 	
 	/**
@@ -129,33 +130,38 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		
 		
 
-		System.out.println("METAS "+t.getMetas().size());
-		for (Iterator iter = t.getMetas().iterator(); iter.hasNext();) {
-			Meta meta = (Meta) iter.next();
-			log.debug("saving its metas ? "+meta.getTitle());		
-			if(meta.getId() == 0){			
-				log.debug("was unsaved. save"+meta.getTitle());
-				getHibernateTemplate().saveOrUpdate(meta);
-			}
-			log.debug("done");
-		}
-		
-		System.out.println("METAValues "+t.getMetaValues().entrySet().size());
-		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
-			Topic metaValue = (Topic) t.getMetaValues().get(iter.next());
-			log.debug("saving its metavalue element ? "+metaValue.getTitle());		
-			if(metaValue.getId() == 0){			
-				log.debug("was unsaved. save"+metaValue.getTitle());
-				getHibernateTemplate().saveOrUpdate(metaValue);
-			}
-			log.debug("done");
-		}
+//		System.out.println("METAS "+t.getMetas().size());
+//		for (Iterator iter = t.getMetas().iterator(); iter.hasNext();) {
+//			Meta meta = (Meta) iter.next();
+//			log.debug("saving its metas ? "+meta.getTitle());		
+//			if(meta.getId() == 0){			
+//				log.debug("was unsaved. save"+meta.getTitle());
+//				getHibernateTemplate().saveOrUpdate(meta);
+//			}
+//			log.debug("done");
+//		}
+//		
+//		System.out.println("METAValues "+t.getMetaValues().entrySet().size());
+//		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
+//			Topic metaValue = (Topic) t.getMetaValues().get(iter.next());
+//			log.debug("saving its metavalue element ? "+metaValue.getTitle());		
+//			if(metaValue.getId() == 0){			
+//				log.debug("was unsaved. save"+metaValue.getTitle());
+//				getHibernateTemplate().saveOrUpdate(metaValue);
+//			}
+//			log.debug("done");
+//		}
 		
 		System.out.println("now set Associations if it's a see also: ");
 		for (Iterator iter = t.getAssociations().iterator(); iter.hasNext();) {			
 			Association assoc = (Association) iter.next();
 			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
-			getHibernateTemplate().saveOrUpdate(assoc);
+			
+			for (Iterator iterator = assoc.getTypes().iterator(); iterator.hasNext();) {
+				Topic type = (Topic) iterator.next();
+				getHibernateTemplate().saveOrUpdate(type);
+			}
+			getHibernateTemplate().saveOrUpdate(assoc);			
 		}
 		
 		System.out.println("and middle Save me "+t.getTitle());
@@ -204,7 +210,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //			
 //			getHibernateTemplate().saveOrUpdate(assoc);
 //		}
-		
 		return t;		
 	}
 

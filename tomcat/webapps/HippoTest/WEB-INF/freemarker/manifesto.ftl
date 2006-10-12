@@ -63,7 +63,7 @@
 		  			 Might it change the world? Does it matter?</p>
 		  			<p>This is not intended as a repository of reviews or a public facing blog, so much as an inner monologue stenographer.</p>
           <p class="subheading">MyHippocampus</p>      
-			       	<p>MyHippocampus is a personal intellecutal tool.</p>
+			       	<p>MyHippocampus is a personal intellectual tool.</p>
 			       	<p>We hope it will help capture your insight into the world around you. Your insight into your world.</p>
 					<p>It is not about accumulation of factoids, although it is adept at this. Insight is the goal, but sometimes insight needs to
 					 emerge out of well organized clutter, since we never know what facets of our imagination or experience we will require
@@ -79,7 +79,7 @@
 					Every bottle in you cellar? Every chemical in the periodic table? Forget it. Add what you want to read. The definition for 
 					"Watermelon Environmentalist" (green on the outside, but pink in the middle) is worth 10x the points.</p>
 					<p>MyHippocampus works very well as a blog, but think carefully about using it this way. Sharing with the outside world
-					 is interesting and somewhat thrilling, but consider making it a diary first first and foremost. 
+					 is interesting and somewhat thrilling, but consider making it a diary first and foremost. 
 					 Then sharing insights you truly want to be public. Don't let us tell you what to do, but do consider the wisdom in being a bit selfish.</p>
           <p class="subheading">Selfishness</p>
           			<p>Being a little selfish in your protection of your intellectual life is certainly not the worst thing in the world.

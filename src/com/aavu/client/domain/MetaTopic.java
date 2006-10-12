@@ -36,7 +36,7 @@ public class MetaTopic extends Meta {
 
 		
 		Label metaValue = new Label(null);  
-		Topic mv = (Topic) topic.getMetaValues().get(this);
+		Topic mv = (Topic) topic.getSingleMetaValueFor(this);
 		if(mv != null){
 			metaValue.setText(mv.getTitle());
 		}

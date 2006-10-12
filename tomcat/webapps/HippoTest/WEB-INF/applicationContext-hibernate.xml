@@ -86,9 +86,7 @@
 		<property name="sessionFactory" ref="mySessionFactory" />
 		<property name="userService" ref="userService"/>
 	</bean>
-	<bean id="newTopicDAO" class="com.aavu.server.dao.hibernate.NewTopicDAOHibernateImpl">
-			<property name="sessionFactory" ref="mySessionFactory" />
-	</bean>
+	
 	
 
 </beans>

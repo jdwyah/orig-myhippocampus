@@ -27,7 +27,7 @@ public class MetaTopicWidget extends SaveListener {
 						
 		completer = new TopicCompleter();
 		
-		Topic mv = (Topic) topic.getMetaValues().get(meta);
+		Topic mv = (Topic) topic.getSingleMetaValueFor(meta);
 			
 		if(mv != null){
 			completer.setText(mv.getTitle());		    	

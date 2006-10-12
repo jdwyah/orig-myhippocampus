@@ -1,14 +1,12 @@
 package com.aavu.client.domain.generated;
-// Generated Oct 11, 2006 11:01:55 AM by Hibernate Tools 3.1.0.beta5
+// Generated Oct 12, 2006 10:13:39 AM by Hibernate Tools 3.1.0.beta5
 
 
 import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -41,9 +39,9 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
      */
      private boolean publicVisible;
      /**
-      * @gwt.typeArgs <com.aavu.client.domain.Topic,com.aavu.client.domain.Topic>
+      * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
-     private Map metaValues = new HashMap();
+     private Set scopes = new HashSet();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
@@ -52,10 +50,6 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
      private Set types = new HashSet();
-     /**
-      * @gwt.typeArgs <com.aavu.client.domain.Topic>
-      */
-     private Set metas = new HashSet();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
@@ -72,17 +66,16 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
     }
 
     /** full constructor */
-    public AbstractTopic(User user, String title, String data, Date lastUpdated, Date created, boolean publicVisible, Map metaValues, Set instances, Set types, Set metas, Set occurences, Set associations) {
+    public AbstractTopic(User user, String title, String data, Date lastUpdated, Date created, boolean publicVisible, Set scopes, Set instances, Set types, Set occurences, Set associations) {
        this.user = user;
        this.title = title;
        this.data = data;
        this.lastUpdated = lastUpdated;
        this.created = created;
        this.publicVisible = publicVisible;
-       this.metaValues = metaValues;
+       this.scopes = scopes;
        this.instances = instances;
        this.types = types;
-       this.metas = metas;
        this.occurences = occurences;
        this.associations = associations;
     }
@@ -153,12 +146,12 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
     public void setPublicVisible(boolean publicVisible) {
         this.publicVisible = publicVisible;
     }
-    public Map getMetaValues() {
-        return this.metaValues;
+    public Set getScopes() {
+        return this.scopes;
     }
     
-    public void setMetaValues(Map metaValues) {
-        this.metaValues = metaValues;
+    public void setScopes(Set scopes) {
+        this.scopes = scopes;
     }
     public Set getInstances() {
         return this.instances;
@@ -173,13 +166,6 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
     
     public void setTypes(Set types) {
         this.types = types;
-    }
-    public Set getMetas() {
-        return this.metas;
-    }
-    
-    public void setMetas(Set metas) {
-        this.metas = metas;
     }
     public Set getOccurences() {
         return this.occurences;
@@ -219,7 +205,6 @@ public abstract class AbstractTopic  implements IsSerializable,java.io.Serializa
          
          result = 37 * result + ( getCreated() == null ? 0 : this.getCreated().hashCode() );
          result = 37 * result + (this.isPublicVisible()?1:0);
-         
          
          
          

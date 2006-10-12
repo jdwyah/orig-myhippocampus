@@ -1,6 +1,7 @@
 package com.aavu.server.service.gwt;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,12 +11,86 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.generated.AbstractTopic;
+
 public class Converter {
 	private static final Logger log = Logger.getLogger(Converter.class);
 
 	private Object originalCaller;
 	private Object valueForCaller;
 
+	public static boolean scan(AbstractTopic object){
+		
+		Class  objectClass = object.getClass();
+		while(!objectClass.getSuperclass().getName().contains("Object")){
+			objectClass = objectClass.getSuperclass();
+		}
+		
+		
+		Method[] methods=objectClass.getDeclaredMethods();
+		
+		
+		String className = object.getClass().getName();
+		if(className.contains("Persistent")){
+			return true;
+		}
+		System.out.println("classname "+className);
+		
+		boolean b = false;
+	
+		
+		for (Method method : methods) {
+			
+			//System.out.println("method "+method.getName());
+			
+			if(!method.getName().startsWith("get"))
+				continue;
+
+			//get return type of a method
+			Class methodReturnType=method.getReturnType();
+	
+			
+			//System.out.println("method "+methodReturnType);
+			//System.out.println("param length"+method.getGenericParameterTypes().length);
+			if(methodReturnType == java.util.Set.class
+					&&
+					method.getGenericParameterTypes().length == 0){
+				
+				
+				log.debug("Examine method "+method.getName());
+			
+				//System.out.println("implement "+methodReturnType+"   "+implementsCollection(methodReturnType));			
+								
+				Collection<AbstractTopic> sourceCollection = null;
+				try {
+					sourceCollection = (Collection)method.invoke(object,null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+
+				//System.out.println("rtn: "+sourceCollection);
+				//System.out.println(sourceCollection.getClass());
+				
+				if(sourceCollection.getClass().toString().contains("Persist")){
+					log.error("RETURNING A HIBERNATE CLASS!!!!!!!!!!");
+					b = true;
+				}
+				
+				for (AbstractTopic topic : sourceCollection) {
+					log.debug("INSIDE!!!!!!!!!!!!!!!!!!!!!! ");
+					if(scan(topic)){
+						log.warn("Field: "+method.getName()+" was Hibernate.");
+						b = true;
+					}	
+				}
+				
+			}
+		}
+		
+		return b;
+		
+	}
+	
 	public Object convert(Object object){
 
 		Class  objectClass = object.getClass();
@@ -161,7 +236,7 @@ public class Converter {
 		return new Date(date.getTime());
 	}
 
-	private boolean implementsCollection(Class objectClass){
+	private static boolean implementsCollection(Class objectClass){
 		if(objectClass==Collection.class)
 			return true;
 

@@ -34,7 +34,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 		Label label = new Label(getName());
 		
 		widget.add(label);
-		Topic mv = (Topic) topic.getMetaValues().get(this);
+		Topic mv = (Topic) topic.getSingleMetaValueFor(this);
 		if(mv != null){
 						
 			widget.add(new Label(" "+df.format(new Date(Long.parseLong(mv.getData())))));	
@@ -62,7 +62,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	    // Set the Date Format
 	    datePicker.setDateFormat(DateFormatter.DATE_FORMAT_DDMONYYYY);
 	    
-	    Topic mv = (Topic) topic.getMetaValues().get(this);
+	    Topic mv = (Topic) topic.getSingleMetaValueFor(this);
 	    
 	    if(mv != null){
 	    	long longDate = Long.parseLong(mv.getData());

@@ -62,7 +62,8 @@ public class Ocean extends FlashContainer {
 
 	protected String getCommand(User user,TagStat[] tagStats,int totalNumberOfTopics){
 		StringBuffer sb = new StringBuffer();
-		sb.append("<invoke name=\"initLand\" returntype=\"javascript\"><arguments>");
+		//sb.append("<invoke name=\"initLand\" returntype=\"javascript\"><arguments>");
+		sb.append("<invoke name='initLand' returntype='javascript'><arguments>");
 		sb.append(number(user.getId()));		
 		sb.append("<array>");     	
 		
