@@ -140,29 +140,27 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 		StringBuffer tagsStr = new StringBuffer();
 		StringBuffer metaVStr = new StringBuffer();
+		StringBuffer instanceStr = new StringBuffer();
 		
 		try{			
-			for (Iterator iter = getTags().iterator(); iter.hasNext();) {
-				Tag element = (Tag) iter.next();
-				tagsStr.append(indent+"Tag: ");
-				tagsStr.append(element.getId()+" "+element.getName());
+			tagsStr.append(indent+"Types: \n"+indent);
+			for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
+				Topic element = (Topic) iter.next();				
+				tagsStr.append(element.getId()+" "+element.getTitle());
 				tagsStr.append("\n");
 				for (Iterator iterator = element.getMetas().iterator(); iterator.hasNext();) {
 					Meta meta = (Meta) iterator.next();
 					tagsStr.append(indent+"Meta: "+meta.getId()+" "+meta.getName());
 					tagsStr.append("\n");
 				}
-				tagsStr.append(indent+"     -----Tag-----");
+				tagsStr.append(indent+"     -----Type-----");
 				tagsStr.append(element.toPrettyString("     "));
 				tagsStr.append("\n"+indent+"     -----End----");
 			}
 		}catch(Exception e){
-//			System.out.println(e);
-//			e.printStackTrace();
-			tagsStr.append(indent+"Topic Pretty Tags Errored");
+			tagsStr.append(indent+"Topic Pretty Types Errored");
 		}
-		try{
-			
+		try{			
 			metaVStr.append(indent+"Associations:\n"+indent);
 			for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 				Association assoc = (Association) iter.next();
@@ -183,14 +181,24 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 								
 			}
 		}catch(Exception e){
-//			System.out.println(e);
-//			e.printStackTrace();
 			metaVStr.append(indent+"Topic Pretty Association Errored");
 		}
-
+		
+		try{			
+			instanceStr.append(indent+"Instances:\n"+indent);
+			for (Iterator iter = getInstances().iterator(); iter.hasNext();) {
+				Topic instance = (Topic) iter.next();
+				
+				instanceStr.append("Instance: "+instance.getTitle()+" "+instance.getId()+"\n"+indent);							
+			}
+		}catch(Exception e){
+			instanceStr.append(indent+"Topic Pretty Instances Errored");
+		}
 		return "\nID "+getId()+" title "+getTitle()+"\n"+indent+
 		" "+tagsStr+"\n"+indent+
-		" "+metaVStr+"\n"+indent+"User:"+((getUser() == null)? "null" : getUser().getId()+"");
+		" "+metaVStr+"\n"+indent+
+		" "+instanceStr+"\n"+indent+
+		"User:"+((getUser() == null)? "null" : getUser().getId()+"");
 
 	}
 
@@ -258,8 +266,12 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * @param meta
 	 * @return
 	 */
-	public Topic getSingleMetaValueFor(Meta meta){		
-		return (Topic) getMetaValuesFor(meta).iterator().next();		
+	public Topic getSingleMetaValueFor(Meta meta){
+		Set s =  getMetaValuesFor(meta);
+		if(s.size() > 0)
+			return (Topic)s.iterator().next();
+		else
+			return null;
 	}
 
 	public String compare(Object other) {

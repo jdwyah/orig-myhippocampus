@@ -9,13 +9,12 @@ public class AutoCompleteTextBoxWithCompleteCallback extends AutoCompleteTextBox
 
 	protected void complete() {
 		super.complete();
-		System.out.println("In TagAutoCompleteBox's complete()");
+		System.out.println("In AutoCompleteBox's complete()");
 		
 		if(listener != null){
 			listener.completed(this.getText());
 		}
-		
-		this.setText("");
+			
 	}
 	
 	public void addListener(CompleteListener listener) {

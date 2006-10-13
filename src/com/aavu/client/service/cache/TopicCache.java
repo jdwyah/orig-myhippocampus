@@ -138,6 +138,10 @@ public class TopicCache {
 		public void onSuccess(Object result) {
 			Topic res = (Topic) result;
 			
+			if(res == null){
+				callback.onFailure(new Throwable("Save Returned Null"));
+			}
+			
 			//TODO bogus, need to check!!
 			topicIdentifiers.add(res.getIdentifier());
 			

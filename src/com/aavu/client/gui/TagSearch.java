@@ -10,12 +10,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class TagSearch extends SimplePanel implements CompleteListener {
 
 	private Manager manager;
-
+	private TagAutoCompleteBox tagAuto;
+	
 	public TagSearch(Manager manager){
 		this.manager = manager;
 		VerticalPanel mainPanel = new VerticalPanel();
 				
-		TagAutoCompleteBox tagAuto = new TagAutoCompleteBox(this,manager.getTagCache());
+		tagAuto = new TagAutoCompleteBox(this,manager.getTagCache());
 		
 		mainPanel.add(new Label(manager.myConstants.yourTags()));
 		mainPanel.add(tagAuto);
@@ -26,7 +27,11 @@ public class TagSearch extends SimplePanel implements CompleteListener {
 				
 	}
 
+	/**
+	 * 
+	 */
 	public void completed(String completeText) {
 		manager.showTopicsForTag(completeText);
+		tagAuto.setText("");
 	}
 }

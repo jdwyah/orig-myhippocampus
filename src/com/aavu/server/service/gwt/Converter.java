@@ -34,7 +34,7 @@ public class Converter {
 		if(className.contains("Persistent")){
 			return true;
 		}
-		System.out.println("classname "+className);
+		log.debug("classname "+className);
 		
 		boolean b = false;
 	

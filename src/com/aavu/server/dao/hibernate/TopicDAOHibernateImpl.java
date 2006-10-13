@@ -27,6 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -59,17 +60,25 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public List<TimeLineObj> getTimeline(User user) {
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 		
-		List<Object> ll= (List<Object>) getHibernateTemplate().execute(new HibernateCallback(){
-			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
-				
-				return sess.createSQLQuery("select top.topic_id, top.title, metavalue.data from topic_meta_values "+
-						"join topics meta on topic_meta_values.topic_id = meta.topic_id "+
-						"join topics top on topic_meta_values.topic_meta_value_id = top.topic_id "+
-						"join topics metavalue on topic_meta_values.metaValue = metavalue.topic_id "+
-						"where meta.discriminator = 'metadate'")				
-			    .list();
-				
-			}});
+//		List<Object> ll= null;
+//		(List<Object>) getHibernateTemplate().execute(new HibernateCallback(){
+//			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+//				
+//				return sess.createSQLQuery("select top.topic_id, top.title, metavalue.data from topic_meta_values "+
+//						"join topics meta on topic_meta_values.topic_id = meta.topic_id "+
+//						"join topics top on topic_meta_values.topic_meta_value_id = top.topic_id "+
+//						"join topics metavalue on topic_meta_values.metaValue = metavalue.topic_id "+
+//						"where meta.discriminator = 'metadate'")				
+//			    .list();
+//				
+//			}});
+		
+		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.data from Topic top "+
+				"join top.associations  ass "+
+				"join ass.types  type "+
+				"join ass.members metaValue "+
+				 "where type.class = MetaDate");
+		
 		
 		for (Object topic : ll) {
 			Object[] oa = (Object[]) topic;
@@ -152,10 +161,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //			log.debug("done");
 //		}
 		
-		System.out.println("now set Associations if it's a see also: ");
+		System.out.println("now set Associations : ");
 		for (Iterator iter = t.getAssociations().iterator(); iter.hasNext();) {			
 			Association assoc = (Association) iter.next();
 			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
+			System.out.println("assocDetail "+assoc.getTitle()+" "+assoc.getId());
 			
 			for (Iterator iterator = assoc.getTypes().iterator(); iterator.hasNext();) {
 				Topic type = (Topic) iterator.next();

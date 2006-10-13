@@ -1,5 +1,6 @@
 package com.aavu.client.widget.edit;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
@@ -26,13 +27,15 @@ public class TopicCompleter extends AutoCompleteTextBoxWithCompleteCallback {
 
 	}
 	
+
 	/**
-	 * Just look in the local cache to see if our string matches
+	 * Convenience method to use our TopicService.
 	 * 
-	 * @return
+	 * @param completeText
+	 * @param callback
 	 */
-	public Topic getTopicCompletedOrNullForNew(){
-		return topicService.getTopicForName(getText());		
+	public void getTopicIdentForNameOrCreateNew(String completeText, StdAsyncCallback callback) {
+		topicService.getTopicIdentForNameOrCreateNew(completeText, callback);
 	}
 
 	

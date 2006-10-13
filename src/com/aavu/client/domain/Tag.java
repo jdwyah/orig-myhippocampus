@@ -33,21 +33,6 @@ public class Tag extends Topic implements  Completable, IsSerializable, Serializ
 		setTitle(name);
 	}
 
-	
-	public String toPrettyString() {
-		StringBuffer rtn = new StringBuffer("Tag:\n");
-		
-		rtn.append("ID "+getId()+" name "+getName()+"\n");
-		
-		rtn.append("metas: \n");
-		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
-			Meta element = (Meta) iter.next();
-			rtn.append(" meta: "+element.getId()+" "+element.getName()+" "+element.getType()+"\n");
-		}
-		
-		return rtn.toString();
-	}
-
 	public String getCompleteStr() {
 		return getName();
 	}
