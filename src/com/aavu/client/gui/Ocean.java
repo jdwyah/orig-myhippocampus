@@ -6,6 +6,9 @@ import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
 
 public class Ocean extends FlashContainer {
 
@@ -23,27 +26,25 @@ public class Ocean extends FlashContainer {
 	 *
 	 */
 	public void initIslands(){
-		System.out.println("Init Islands");
-		manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){
-			public void onSuccess(Object result) {
-				TagStat[] tagStats = (TagStat[]) result;
-				
-				System.out.println("TagStat Result "+tagStats);
-				boolean doIt = false;
-				for (int i = 0; i < tagStats.length; i++) {
-					TagStat stat = tagStats[i];
-					if(stat.getNumberOfTopics() > 0){
-						doIt = true;
-					}
-				}
-				if(doIt){
-					runCommand(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
-					System.out.println("command run ");
-				}else{
-					System.out.println("no islands to draw");
-				}
-				
-			}});		
+		System.out.println("Init Islands");		
+		Timer t = new Timer() {
+			public void run() {
+				DeferredCommand.add(new Command(){
+					public void execute() {
+						manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){
+							public void onSuccess(Object result) {
+								TagStat[] tagStats = (TagStat[]) result;
+
+								System.out.println("TagStat Result "+tagStats);
+
+								runCommand(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
+
+							}});
+					}});				
+			}
+		};
+		t.schedule(2000); 
+			
 	}
 	
 	protected void callbackOverride(String command, int arg){
