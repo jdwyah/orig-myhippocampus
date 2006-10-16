@@ -14,15 +14,32 @@ public class GWTSortedMap implements Map {
 
 	private boolean dirty = false;
 
+	private Comparator compare = null;
+	
+	/**
+	 * use default comparator
+	 *
+	 */
+	public GWTSortedMap(){
+		
+	}
+	/**
+	 * specify key comparator 
+	 * 
+	 * @param comp
+	 */
+	public GWTSortedMap(Comparator comp){
+		this.compare = comp;
+	}
+	
 	public Set keySet() {
 		if(dirty){
-			Collections.sort(keys.getList(),new Comparator(){
-
-				public int compare(Object o1, Object o2) {
-					String o = (String)o1;
-					String oo = (String) o2;
-					return o.toLowerCase().compareTo(o.toLowerCase());
-				}});			
+			System.out.println("SORT ");
+			if(compare == null){
+				Collections.sort(keys.getList());
+			}else{
+				Collections.sort(keys.getList(),compare);
+			}
 		}
 		return keys;
 	}

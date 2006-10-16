@@ -94,43 +94,29 @@ public class FlashContainer extends SimplePanel {
 		runCommand(name, command);
 	}
 
+	private native void runCommandOld(String name,String command)/*-{
+	
+		$wnd.callTheFlash(name,command);		
+		
+	}-*/;
+	
 	//initLand(56, [{id:7,tag:"iO",size:1},{id:8,tag:"iT",size:4},{id:24,tag:"i3",size:8}], 6, 100); 
 	private native void runCommand(String name,String command)/*-{
 
-	//$doc firefox
-	//$wnd IE
+		//$doc firefox
+		//$wnd IE
 
-	var b = $doc[name];	
+		var b = $doc[name];	
 
-	if($doc.all){
-		b = $wnd[name];
-	}
+		if($doc.all){
+			b = $wnd[name];
+		}
 
-	alert("b: "+b);
-
- 	alert(command);
- 	
- 	
-		try{
-			alert("b.length "+b.length);
-    	}catch(e){
-     		alert("fail "+e);
-    	}		
-    	try{
-			alert("b.call1 "+b.Call);
-    	}catch(e){
-     		alert("fail "+e);
-    	}  
-    	try{
-			alert("b.call "+b.CallFunction);
-    	}catch(e){
-     		alert("fail "+e);
-    	}
+    	
  		try{
- 			alert("doit");
 			b.CallFunction(command);
     	}catch(e){
-     		alert("fail "+e);
+    		alert("fail "+e);
     	}		    	
 	}-*/;
 

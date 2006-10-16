@@ -17,12 +17,19 @@ package com.aavu.client.gui.ext;
 
 import java.util.Iterator;
 
+import org.gwtwidgets.client.wrap.Effect;
+import org.gwtwidgets.client.wrap.EffectOption;
+
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabListenerCollection;
@@ -69,6 +76,8 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 	private VertableTabBar vertableTabBar;
 	private TabListenerCollection tabListeners;
 
+	private SimplePanel deckWrapper = new SimplePanel();
+	
 	/**
 	 * Creates an empty tab panel.
 	 */
@@ -86,8 +95,10 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 
 		vertableTabBar = new VertableTabBar(alignment);
 		
+		deckWrapper.add(deck);
+		
 		panel.add(vertableTabBar);
-		panel.add(deck);
+		panel.add(deckWrapper);
 
 		vertableTabBar.setWidth("100%");
 
@@ -175,6 +186,7 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 	public void insert(Widget widget, String tabText, boolean asHTML,
 			int beforeIndex) {
 
+		children.insert(widget, beforeIndex);
 		vertableTabBar.insertTab(tabText, asHTML, beforeIndex);
 		deck.insert(widget, beforeIndex);
 	}
@@ -202,7 +214,7 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 		return true;
 	}
 
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
+	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {		
 		deck.showWidget(tabIndex);
 		if (tabListeners != null)
 			tabListeners.fireTabSelected(this, tabIndex);
@@ -240,5 +252,31 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 	 */
 	public void selectTab(int index) {
 		vertableTabBar.selectTab(index);
+	}
+//	 private native static void appear (Element element, JavaScriptObject opts) /*-{
+//     $wnd._nativeExtensions = false;
+//     new $wnd.Effect.Appear(element, opts);
+// 	}-*/;
+	
+	public void showDeck() {			
+		//System.out.println("SHOW: "+getDeckPanel().isVisible()+" "+getDeckPanel().getElement().toString().substring(0, 300));		
+	
+		//appear(getDeckPanel(),)
+		
+		//Effect.appear(deckWrapper);
+		//getDeckPanel().showWidget(de)getVisibleWidget()
+		
+		deckWrapper.setVisible(true);
+		
+		//getDeckPanel().setVisible(true);
+		//System.out.println("AFTER: "+getDeckPanel().isVisible()+" "+getDeckPanel().getElement().toString().substring(0, 300));
+	}
+	public void hideDeck() {
+		//System.out.println("HIDE: "+getDeckPanel().isVisible()+" "+getDeckPanel().getElement().toString().substring(0, 300));
+		//Effect.squish(deckWrapper);	
+		
+		deckWrapper.setVisible(false);
+		//getDeckPanel().setVisible(false);
+		//System.out.println("AFTER: "+getDeckPanel().isVisible()+" "+getDeckPanel().getElement().toString().substring(0, 300));
 	}
 }

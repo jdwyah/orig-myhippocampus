@@ -45,6 +45,7 @@ public class MetaTopicWidget extends SaveListener implements CompleteListener {
 
 	//@Override
 	/**
+	 * NOTE not used! replaced w/ completed
 	 * do a local lookup for Topic, if not found, create a new one.
 	 */
 	public void saveNowEvent() {
@@ -59,6 +60,12 @@ public class MetaTopicWidget extends SaveListener implements CompleteListener {
 	}
 	
 
+	/**
+	 * replaces the saveNowEvent
+	 * 
+	 * TODO Probably a race condition if they meta value-> then hit save before this returns.
+	 * 
+	 */
 	public void completed(final String completeText) {
 		System.out.println("COMPLETED LISTENER!");
 		completer.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback("SeeAlsoComplete"){

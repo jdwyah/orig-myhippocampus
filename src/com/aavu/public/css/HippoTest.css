@@ -1,21 +1,21 @@
 body {
-  background-color: #ECF1EF;
-  color: black;
-  font-family: Arial, sans-serif;
-  font-size: smaller;
-  margin: 20px 20px 20px 20px;
+	background-color: #ECF1EF;
+	color: black;
+	font-family: Arial, sans-serif;
+	font-size: smaller;
+	margin: 20px 20px 20px 20px;
 }
 
 code {
-  font-size: small;
+	font-size: small;
 }
 
 a {
-  color: darkblue;
+	color: darkblue;
 }
 
 a:visited {
-  color: darkblue;
+	color: darkblue;
 }
 
 .H-Popup {
@@ -24,13 +24,11 @@ a:visited {
 
 .H-AbsolutePanel {
 	background: #FF0000;
-	position: absolute;	
+	position: absolute;
 	border: 2px solid #000;
 }
 
-
-
-.H-Sidebar {	
+.H-Sidebar {
 	background: transparent;
 	margin-left: 600px;
 	top: 0px;
@@ -38,42 +36,35 @@ a:visited {
 }
 
 .H-Dashboard {
-		
 	bottom: 0px;
-	left: 20%;		
+	left: 20%;
 	width: 200px;
 	height: 40px;
-	
-	margin: 0 auto;   /* align for good browsers */
+	margin: 0 auto; /* align for good browsers */
 	text-align: left; /* counter the body center */
-
 	border: 2px solid #000;
 }
 
 .H-TagSearch {
-		
 	bottom: 18%;
-	left: 0px;		
+	left: 0px;
 	width: 60px;
 	height: 80px;
-	
-
 }
 
 .H-CompassRose {
 	background: transparent;
 	border: none;
-    top: 0px;
-    left: 0px;
-	z-index: 1;	
+	top: 0px;
+	left: 0px;
+	z-index: 1;
 }
 
-.H-Ocean {
-	/*background-image: url("../img/lg_1.gif");
+.H-Ocean { /*background-image: url("../img/lg_1.gif");
 	background-repeat: no-repeat;*/
-    position: absolute;
-    top: 0px;
-    left: 0px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	height: 100%;
 	width: 100%;
 	z-index: 0;
@@ -85,23 +76,44 @@ a:visited {
 	position: relative;
 	height: 5px;
 }
+
 .H-TagClowd {
 	width: 100px;
 }
-.H-TagClowd .gwt-Label{
+
+.H-TagClowd .gwt-Label {
 	display: inline;
-	padding: 5px;	
+	padding: 5px;
 }
+
 .H-TopicLink {
 	font-family: cursive;
 	color: blue;
 	padding: 3px;
 }
+
+.H-SideBarKey {
+	color: black;
+	font-family: fantasy;
+}
+
+.H-SideBarKeyNoElements {
+	color: gray;
+	font-family: monospace;
+}
+
+.tooltip .gwt-HTML {
+	border: 1px solid black;
+	padding: 2px 3px 3px 3px;
+	background-color: #ffffcc; /*Pale Weak Yellow*/
+}
+
 .H-HeaderLabel {
 	font-family: cursive;
 	color: black;
 	font-size: small;
 }
+
 .H-TimeLine {
 	height: 300px;
 	width: 500px;
@@ -109,7 +121,7 @@ a:visited {
 }
 
 .GuiTest-Island {
-	position: absolute;	
+	position: absolute;
 	background-image: url("../img/earth.png");
 	background-repeat: repeat;
 }
@@ -146,107 +158,114 @@ a:visited {
 	cursor: pointer;
 }
 
-
 .gwt-BorderedPanel {
+	
 }
 
-.gwt-Button {	 
-    background-color: #3366CC;
-    color: white;
-    font-weight: bold;
-    border: 1px solid #AACCFF; 
+.gwt-Button {
+	background-color: #3366CC;
+	color: white;
+	font-weight: bold;
+	border: 1px solid #AACCFF;
 }
 
 .gwt-Canvas {
+	
 }
 
 .gwt-CheckBox {
-  font-size: smaller;
+	font-size: smaller;
 }
 
 .gwt-DialogBox {
-  sborder: 8px solid #C3D9FF;
-  border: 2px outset;
-  background-color: white;
+	sborder: 8px solid #C3D9FF;
+	border: 2px outset;
+	background-color: white;
 }
 
 .gwt-DialogBox .Caption {
-  background-color: #C3D9FF;
-  padding: 3px;
-  margin: 2px;
-  font-weight: bold;
-  cursor: default;
+	background-color: #C3D9FF;
+	padding: 3px;
+	margin: 2px;
+	font-weight: bold;
+	cursor: default;
 }
 
 .gwt-FileUpload {
+	
 }
 
 .gwt-Frame {
+	
 }
 
 .gwt-HorizontalSplitter .Bar {
-  width: 8px;
-  background-color: #C3D9FF;
+	width: 8px;
+	background-color: #C3D9FF;
 }
 
 .gwt-VerticalSplitter .Bar {
-  height: 8px;
-  background-color: #C3D9FF;
+	height: 8px;
+	background-color: #C3D9FF;
 }
 
 .gwt-HTML {
-  font-size: smaller;
+	font-size: smaller;
 }
 
 .gwt-Hyperlink {
+	
 }
 
 .gwt-Image {
+	
 }
 
 .gwt-Label {
-  font-size: smaller;
+	font-size: smaller;
 }
 
 .gwt-ListBox {
+	
 }
 
 .gwt-MenuBar {
-  background-color: #C3D9FF;
-  border: 1px solid #87B3FF;
-  cursor: default;
+	background-color: #C3D9FF;
+	border: 1px solid #87B3FF;
+	cursor: default;
 }
 
 .gwt-MenuBar .gwt-MenuItem {
-  padding: 1px 4px 1px 4px;
-  font-size: smaller;
-  cursor: default;
+	padding: 1px 4px 1px 4px;
+	font-size: smaller;
+	cursor: default;
 }
 
 .gwt-MenuBar .gwt-MenuItem-selected {
-  background-color: #E8EEF7;
+	background-color: #E8EEF7;
 }
 
 .gwt-PasswordTextBox {
+	
 }
 
 .gwt-RadioButton {
-  font-size: smaller;
+	font-size: smaller;
 }
 
 .gwt-TabPanel {
 	clear: both;
 	margin: 0em 0em 1.5em 0em;
-	border-top: solid 0.1em rgb(175,175,175);
-	border-bottom: solid 0.1em rgb(175,175,175);
-	background-color: rgb(235,235,235);	
+	border-top: solid 0.1em rgb(175, 175, 175);
+	border-bottom: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(235, 235, 235);
 	line-height: 2.0em;
 	height: 2.0em;
-	color: rgb(50,50,50);
+	color: rgb(50, 50, 50);
 }
 
 .gwt-TabPanelBottom {
-  border-left: 1px solid #87B3FF;
+	border-left: 1px solid #87B3FF;
 }
 
 .gwt-TabBar {
@@ -254,42 +273,42 @@ a:visited {
 	padding: 0em;
 	list-style: none;
 	font-weight: bold;
-	font-size: 1.0em;
-	text-transform: uppercase;	
+	font-size: 1em;
+	text-transform: uppercase;
 }
 
 .gwt-TabBar .gwt-TabBarFirst {
 	display: block;
 	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175,175,175);	
-	background-color: rgb(235,235,235);	
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(235, 235, 235);
 	text-decoration: none;
-	color: rgb(50,50,50);
+	color: rgb(50, 50, 50);
 }
 
 .gwt-TabBar .gwt-TabBarRest {
 	display: block;
 	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175,175,175);	
-	background-color: rgb(235,235,235);	
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(235, 235, 235);
 	text-decoration: none;
-	color: rgb(50,50,50);
+	color: rgb(50, 50, 50);
 }
 
 .gwt-TabBar .gwt-TabBarItem {
 	display: block;
 	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175,175,175);	
-	background-color: rgb(235,235,235);	
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(235, 235, 235);
 	text-decoration: none;
-	color: rgb(50,50,50);
+	color: rgb(50, 50, 50);
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
 	padding: 0em 0.5em 0em 0.5em;
-	border-right: solid 0.1em rgb(175,175,175);		
-	background-color: rgb(220,220,220);
-	color: rgb(50,50,50);
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(220, 220, 220);
+	color: rgb(50, 50, 50);
 }
 
 .gwt-TextArea {
@@ -298,127 +317,128 @@ a:visited {
 }
 
 .gwt-TextBox {
+	
 }
 
 .gwt-Tree {
+	
 }
 
 .gwt-Tree .gwt-TreeItem {
-  font-size: smaller;
+	font-size: smaller;
 }
 
 .gwt-Tree .gwt-TreeItem-selected {
-  background-color: #C3D9FF;
+	background-color: #C3D9FF;
 }
 
 .gwt-StackPanel {
+	
 }
 
 .gwt-StackPanel .gwt-StackPanelItem {
-  background-color: #C3D9FF;
-  cursor: pointer;
-  cursor: hand;
+	background-color: #C3D9FF;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-StackPanel .gwt-StackPanelItem-selected {
+	
 }
 
 /* -------------------------------------------------------------------------- */
 .ks-Sink {
-  border: 8px solid #C3D9FF;
-  background-color: #E8EEF7;
-  width: 100%;
-  height: 24em;
+	border: 8px solid #C3D9FF;
+	background-color: #E8EEF7;
+	width: 100%;
+	height: 24em;
 }
 
 .ks-Info {
-  background-color: #C3D9FF;
-  padding: 10px 10px 2px 10px;
-  font-size: smaller;
+	background-color: #C3D9FF;
+	padding: 10px 10px 2px 10px;
+	font-size: smaller;
 }
 
 .ks-List {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  font-size: smaller;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	font-size: smaller;
 }
 
 .ks-List .ks-SinkItem {
-  width: 100%;
-  padding: 0.3em;
-  padding-right: 16px;
-  cursor: pointer;
-  cursor: hand;
+	width: 100%;
+	padding: 0.3em;
+	padding-right: 16px;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .ks-List .ks-SinkItem-selected {
-  background-color: #C3D9FF;
+	background-color: #C3D9FF;
 }
 
 .ks-images-Image {
-  margin: 8px;
+	margin: 8px;
 }
 
 .ks-images-Button {
-  margin: 8px;
-  cursor: pointer;
-  cursor: hand;
+	margin: 8px;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .ks-layouts {
-  margin: 8px;
+	margin: 8px;
 }
 
 .ks-layouts-Label {
-  background-color: #C3D9FF;
-  font-weight: bold;
-  margin-top: 1em;
-  padding: 2px 0px 2px 0px;
-  width: 100%;
+	background-color: #C3D9FF;
+	font-weight: bold;
+	margin-top: 1em;
+	padding: 2px 0px 2px 0px;
+	width: 100%;
 }
 
 .ks-layouts-Scroller {
-  height: 128px;
-  border: 2px solid #C3D9FF;
-  padding: 8px;
-  margin: 8px;
+	height: 128px;
+	border: 2px solid #C3D9FF;
+	padding: 8px;
+	margin: 8px;
 }
 
 .ks-popups-Popup {
-  background-color: white;
-  border: 1px solid #87B3FF;
-  padding: 4px;
+	background-color: white;
+	border: 1px solid #87B3FF;
+	padding: 4px;
 }
 
 .infoProse {
-  margin: 8px;
+	margin: 8px;
 }
 
 .ta-TopPanel {
-  margin-bottom: 1em
+	margin-bottom: 1em
 }
 
 .ta-tagboard {
-margin-right: 1em;
+	margin-right: 1em;
 }
 
 .ta-tagboard-TagLabel {
-background-color: white;
-margin-top: 1em;
+	background-color: white;
+	margin-top: 1em;
 }
-
 
 .ta-Title {
-font-weight: bold
-font-size: larger
-font-color: blue
-text-align: center
+	font-weight: bold font-size :   larger font-color :   blue text-align :
+		  center
 }
 
-.ta-match-found{
-background-color: green
+.ta-match-found {
+	background-color: green
 }
 
-.ta-match-partial{
-background-color: yellow
+.ta-match-partial {
+	background-color: yellow
 }
