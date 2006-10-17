@@ -5,23 +5,24 @@
 <beans>
 
 	<bean id="indexController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="index"/>
-		<property name="userService" ref="userService"/>
+		<property name="view" value="index" />
+		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="tourController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="tour"/>
-		<property name="userService" ref="userService"/>
+		<property name="view" value="tour" />
+		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="manifestoController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="manifesto"/>
-		<property name="userService" ref="userService"/>
+		<property name="view" value="manifesto" />
+		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="addLinkController" class="com.aavu.server.web.controllers.AddLinkController">
-		<property name="formView" value="secure/addLink"/>
-		<property name="successView" value="index"/>
-		<property name="userService" ref="userService"/>
+		<property name="formView" value="secure/addLink" />
+		<property name="successView" value="index" />
+		<property name="userService" ref="userService" />
+		<property name="topicService" ref="topicService" />
 	</bean>
-	
+
 
 	<bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
 		<property name="view" value="acegilogin" />
@@ -41,11 +42,25 @@
 	<bean id="userManagerController" class="com.aavu.server.web.controllers.UserManagerController">
 		<property name="userService" ref="userService" />
 		<property name="viewUserList" value="secure/extreme/userList" />
-		<property name="methodNameResolver" ref="userManagerResolver"/>
+		<property name="methodNameResolver" ref="userManagerResolver" />
 	</bean>
 	<bean id="userManagerResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
 		<property name="paramName" value="action" />
 	</bean>
+
+	<bean id="ajaxController" class="com.aavu.server.web.controllers.AjaxController">
+		<property name="topicService" ref="topicService" />
+		<property name="methodNameResolver" ref="ajaxControllerResolver" />
+	</bean>
+	<bean id="ajaxControllerResolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+		<property name="alwaysUseFullPath" value="true"/>
+		<property name="mappings">
+			<props>
+				<prop key="/site/secure/getTopics.html">topicSearch</prop>
+			</props>
+		</property>
+	</bean>
+
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="alwaysUseFullPath" value="true" />
@@ -54,11 +69,15 @@
 				<prop key="/service/topicService">GWTTopicService</prop>
 				<prop key="/service/tagService">GWTTagService</prop>
 				<prop key="/service/userService">GWTUserService</prop>
-				
+
 				<prop key="/site/acegilogin.html">loginController</prop>
 				<prop key="/site/signup.html">createUserController</prop>
+
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
+
 				<prop key="/site/secure/addLink.html">addLinkController</prop>
+				<prop key="/site/secure/getTopics.html">ajaxController</prop>
+
 				<prop key="/site/index.html">indexController</prop>
 				<prop key="/site/tour.html">tourController</prop>
 				<prop key="/site/manifesto.html">manifestoController</prop>

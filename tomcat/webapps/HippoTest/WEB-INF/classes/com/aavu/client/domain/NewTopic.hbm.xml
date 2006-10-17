@@ -81,7 +81,12 @@
 		<subclass name="Tag" discriminator-value="tag">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractTag</meta>
 		</subclass>
-
+		
+		<!-- meaningless from DB perspective. only usefull for differentiation -->
+		<subclass name="Occurrence" discriminator-value="occurrence">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
+		</subclass>
+		
 		<!-- also meaningless from DB -->
 		<subclass name="Meta" discriminator-value="meta">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>

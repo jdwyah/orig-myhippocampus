@@ -1,18 +1,20 @@
 package com.aavu.server.web.controllers;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
+import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.AddLinkCommand;
 
@@ -21,6 +23,7 @@ public class AddLinkController extends SimpleFormController {
 
 	
 	private UserService userService;	
+	private TopicService topicService;
 
 	public AddLinkController(){
 		setCommandClass(AddLinkCommand.class);				
@@ -41,10 +44,30 @@ public class AddLinkController extends SimpleFormController {
 
 
 	@Override
-	protected void doSubmitAction(Object command) throws Exception {
-		// TODO Auto-generated method stub
-		super.doSubmitAction(command);
-		log.warn("Unimplemented Form submit");
+	protected void doSubmitAction(Object command) throws Exception {		
+		log.debug("command: "+command);
+		AddLinkCommand addLink = (AddLinkCommand) command;
+		
+		Occurrence occ = new Occurrence(userService.getCurrentUser(),addLink.getUrl(),addLink.getNotes());
+		
+		occ = (Occurrence) topicService.save(occ);
+		
+		String[] tags = addLink.getTags().split(";");
+		
+		log.debug("tags: "+Arrays.toString(tags));
+		for (String string : tags) {			
+			log.debug("str: "+string);			
+			Topic t = topicService.getForName(string);			
+			if(null == t){
+				log.debug("was null, creating as Tag ");
+				t = new Tag();
+				t.setTitle(string);				
+				t.setUser(userService.getCurrentUser());							
+			}			
+			t.getOccurences().add(occ);
+			topicService.save(t);	
+		}
+		
 	}
 
 
@@ -66,6 +89,11 @@ public class AddLinkController extends SimpleFormController {
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+
+	public void setTopicService(TopicService topicService) {
+		this.topicService = topicService;
 	}
 
 }

@@ -36,7 +36,7 @@
         <#else>
         	<li><a href="signup.html">Sign up</a></li>  
         </#if>
-        <li><a href="signup.html">Sign up</a></li>  
+
       </ul>
     </div>
 

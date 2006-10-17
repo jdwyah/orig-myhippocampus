@@ -173,8 +173,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}
 			getHibernateTemplate().saveOrUpdate(assoc);			
 		}
+	
 		
-		System.out.println("and middle Save me "+t.getTitle());
+		System.out.println("and middle Save me "+t.getTitle()+" type: "+t.getClass());
 		//and save me
 		//
 		getHibernateTemplate().saveOrUpdate(t);		

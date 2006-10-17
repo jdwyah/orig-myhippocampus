@@ -16,6 +16,7 @@
 		<property name="password" value="${HOST.jdbc.password}" />
 
 	</bean>
+	
 
 	<bean id="mySessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
@@ -34,25 +35,30 @@
 				
 				<!-- configuration pool via c3p0-->
 				<!-- from http://forum.java.sun.com/thread.jspa?threadID=691105&tstart=0 -->				
-				<prop key="c3p0.min_size">10</prop>
-				<prop key="c3p0.max_size">100</prop>
-				<prop key="c3p0.timeout">10</prop>
-				<prop key="c3p0.acquireRetryAttempts">30</prop>
+<!-- try hibernate.c3p0 -->
 
-				<prop key="c3p0.acquireIncrement">5</prop>
+ 			
+				<prop key="hibernate.c3p0.min_size">10</prop>
+				<prop key="hibernate.c3p0.max_size">100</prop>
+				<prop key="hibernate.c3p0.timeout">10</prop>
+				<prop key="hibernate.c3p0.acquireRetryAttempts">30</prop>
 
-				<prop key="c3p0.idleConnectionTestPeriod">100</prop>
+				<prop key="hibernate.c3p0.acquireIncrement">5</prop>
 
-				<prop key="c3p0.initialPoolSize">20</prop>
-				<prop key="c3p0.maxPoolSize">100</prop>
-				<prop key="c3p0.maxIdleTime">300</prop>
-				<prop key="c3p0.maxStatements">50</prop>
-				<prop key="c3p0.minPoolSize">10</prop>
+				<prop key="hibernate.c3p0.idleConnectionTestPeriod">100</prop>
 
-				<prop key="c3p0.preferredTestQuery">SELECT 1</prop>			
+				<prop key="hibernate.c3p0.initialPoolSize">20</prop>
+				<prop key="hibernate.c3p0.maxPoolSize">100</prop>
+				<prop key="hibernate.c3p0.maxIdleTime">300</prop>
+				<prop key="hibernate.c3p0.maxStatements">50</prop>
+				<prop key="hibernate.c3p0.minPoolSize">10</prop>
+
+				<prop key="hibernate.c3p0.preferredTestQuery">SELECT 1</prop>			
 				
-				<!-- WARN SLOW -->
-				<prop key="c3p0.testConnectionOnCheckout">true</prop>
+				
+				<prop key="hibernate.c3p0.testConnectionOnCheckout">true</prop>
+
+
 
 				<!-- configuration pool via c3p0-->
 				<!-- from forums.hibernate -->
