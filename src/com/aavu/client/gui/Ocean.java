@@ -95,8 +95,14 @@ public class Ocean extends FlashContainer {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<invoke name=\"grow\" returntype=\"javascript\"><arguments>");
 		sb.append(number(tag.getId()));				
-		sb.append("</arguments></invoke>");    				
+		sb.append("</arguments></invoke>");    						
+		runCommand(sb.toString());
 		
+		sb = new StringBuffer();
+		sb.append("<invoke name=\"rename\" returntype=\"javascript\"><arguments>");
+		sb.append(number(tag.getId()));				
+		sb.append(string(tag.getName()));
+		sb.append("</arguments></invoke>");    						
 		runCommand(sb.toString());		
 	}
 }

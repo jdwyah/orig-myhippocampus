@@ -143,13 +143,13 @@ public class Manager implements TopicSaveListener {
 		System.out.println("|"+historyToken+"|"+l);
 		if(l == -1){
 
-			hippoCache.getTopicCache().getTopicForNameA(historyToken, new StdAsyncCallback("GotoTopicStr"){
+			hippoCache.getTopicCache().getTopicForNameA(historyToken, new StdAsyncCallback("GotoTopicStr "+l){
 				public void onSuccess(Object result) {
 					Topic t = (Topic) result;
 					bringUpChart(t);
 				}});
 		}else{
-			hippoCache.getTopicCache().getTopicByIdA(l,new StdAsyncCallback("GotoTopicID"){
+			hippoCache.getTopicCache().getTopicByIdA(l,new StdAsyncCallback("GotoTopicID "+l){
 				public void onSuccess(Object result) {
 					Topic t = (Topic) result;
 					bringUpChart(t);

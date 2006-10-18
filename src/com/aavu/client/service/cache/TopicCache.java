@@ -143,7 +143,11 @@ public class TopicCache {
 			}
 			
 			//TODO bogus, need to check!!
+			topicIdentifiers.remove(res.getIdentifier());
 			topicIdentifiers.add(res.getIdentifier());
+			
+			//topicByName.put(res.getTitle(), res);
+			//topicByID.put(res.getId(), res);
 			
 			for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
 				TopicSaveListener listener = (TopicSaveListener) iter.next();
@@ -199,8 +203,8 @@ public class TopicCache {
 				System.out.println("rec "+t);
 				System.out.println("rec: "+t.toPrettyString());
 				System.out.println("single adding to cache title:"+t.getTitle());
-				topicByName.put(t.getTitle(), t);
-				topicByID.put(new Long(t.getId()), t);
+				//topicByName.put(t.getTitle(), t);
+				//topicByID.put(new Long(t.getId()), t);
 
 			}else if(rtn == TOPIC_LIST){
 				Topic[] t = (Topic[]) result;
@@ -208,8 +212,8 @@ public class TopicCache {
 				for (int i = 0; i < t.length; i++) {					
 					Topic topic = t[i];
 					System.out.println("list adding to cache "+topic.getTitle());
-					topicByName.put(topic.getTitle(), topic);
-					topicByID.put(new Long(topic.getId()), topic);
+					//topicByName.put(topic.getTitle(), topic);
+					//topicByID.put(new Long(topic.getId()), topic);
 				}				
 			}
 

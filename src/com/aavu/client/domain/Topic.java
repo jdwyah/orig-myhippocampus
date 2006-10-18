@@ -56,10 +56,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	public void addMetaValue(Topic meta, Topic metaValue) {
 
 		Association assoc = new Association();
+		assoc.setTitle(getTitle()+" to "+metaValue.getTitle());
+		
 		assoc.getTypes().add(meta);
 		assoc.getMembers().add(metaValue);
-		
-		
+				
 		
 		metaValue.getTypes().add(meta);
 		meta.getInstances().add(metaValue);
@@ -111,7 +112,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * @param meta
 	 */
 	public void addMeta(Meta meta) {		
-		Association a = new Association(meta);		
+		Association a = new Association(this,meta);		
 		getAssociations().add(a);		
 	}
 
@@ -213,16 +214,20 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * a different SeeAlso in another)
 	 * 
 	 */
-	public SeeAlso getSeeAlso() {
+	public Association getSeeAlsoAssociation() {
+		
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-			Association element = (Association) iter.next();
-			if (element instanceof SeeAlso) {
-				
-				SeeAlso seeAlso = (SeeAlso) element;
-				return seeAlso;
+			Association association = (Association) iter.next();
+			for (Iterator iterator = association.getTypes().iterator(); iterator.hasNext();) {
+				Topic possibleSee = (Topic) iterator.next();
+				if (possibleSee instanceof MetaSeeAlso){
+					System.out.println("return existing assoc");
+					return association;
+				}				
 			}
-		}
-		return new SeeAlso(getUser());		
+		}		
+		System.out.println("create new assoc");
+		return new Association(this,new MetaSeeAlso());				
 	}
 	/**
 	 * NOTE: calling getMetas().add() won't do anything. Use addMeta()
@@ -293,9 +298,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	public void addSeeAlso(TopicIdentifier identifier) {
-		SeeAlso cur = getSeeAlso();
+		Association cur = getSeeAlsoAssociation();
 		
-		cur.add(identifier);
+		cur.getMembers().add(new Topic(identifier));
+		
 		getAssociations().add(cur);
 	}
+	
 }

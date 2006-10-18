@@ -66,12 +66,12 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		String pre = "";
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
-			pre = "http://www.myhippocampus.com/HippoTest/service/";
-			pre = "http://localhost:8080/HippoTest/service/";
+			pre = "http://www.myhippocampus.com/service/";
+			//pre = "http://localhost:8080/service/";
 			
 		}else{
 			pre = GWT.getModuleBaseURL();
-			pre = "http://localhost:8080/HippoTest/service/";
+			pre = "http://localhost:8080/service/";
 		}
 		//Window.alert("3");
 		msg = pre+" "+GWT.isScript()+" "+(pre + "topicService");

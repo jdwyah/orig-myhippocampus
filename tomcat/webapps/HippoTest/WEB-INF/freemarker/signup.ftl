@@ -47,9 +47,9 @@
 
 			<tr>
 				<th class="details" style="border-left: none;"><strong>Select a plan &rarr;</strong><br />Signup takes just 1 minute</th>
-				<th class="personal">Outrageous<br /><span class="price">$10/month</span><br /><a href="outrageous"><img width="68" height="21" src="img/signupbutton.gif" alt="sign-up" /></a></th>
-				<th class="personal">Personal<br /><span class="price">$5/month</span><br /><a href="Personal"><img width="68" height="21" src="img/signupbutton.gif" alt="sign-up" /></a></th>
-				<th class="personal">Free<br /><span class="price">Free</span><br /><a href="Free"><img width="68" height="21" src="img/signupbutton.gif" alt="sign-up" /></a></th>
+				<th class="personal">Outrageous<br /><span class="price">$10/month</span><br /><a href="outrageous"><img width="68" height="21" src="<@spring.url "/img/signupbutton.gif"/>" alt="sign-up" /></a></th>
+				<th class="personal">Personal<br /><span class="price">$5/month</span><br /><a href="Personal"><img width="68" height="21" src="<@spring.url "/img/signupbutton.gif"/>" alt="sign-up" /></a></th>
+				<th class="personal">Free<br /><span class="price">Free</span><br /><a href="Free"><img width="68" height="21" src="<@spring.url "/img/signupbutton.gif"/>" alt="sign-up" /></a></th>
 			</tr>
 			<tr>
 				<td class="item shaded"><strong>Total number of topics</strong></td>
@@ -61,23 +61,23 @@
 			</tr>
 			<tr>
 				<td class="item shaded"><strong>Email thoughts to yourself</strong><br /><small></small></td>
-				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
-				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "/img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "/img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
 				<td>&mdash;</td>
 			</tr>
 			<tr class="shaded">
 				<td class="item shaded"><strong>30-day free trial</strong><br /><small>(cancel within 30 days &amp; you won't be charged)</small></td>
 
-				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
-				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "/img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "/img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
 				<td>Free forever</td>
 			</tr>
 			<tr>
 
 				<td class="item"><strong>Use the Browser Plugins</strong></td>
-				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
-				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
-				<td><img src="<@spring.url "img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "/img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "/img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
+				<td><img src="<@spring.url "/img/bluecheck-bullet-14.gif"/>" alt="Yes" /></td>
 			</tr>
 			<tr>
 				<td class="item">Usage may vary, but perfect for</td>

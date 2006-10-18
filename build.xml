@@ -73,8 +73,8 @@
 			</classpath>
 			<arg value="-out" />
 			<arg value="${gwt.out}" />
-<!--		<arg value="-style"/> 
-			<arg value="pretty"/>-->
+			<arg value="-style"/> 
+			<arg value="pretty"/>
 			<arg value="${gwt.module}" />
 		</java>	
 
@@ -118,7 +118,9 @@
 				<lib dir="${lib}">
 					<include name="**/*.jar" />
 				</lib>				
+				
 				<classes dir="${classes}" />
+				<!-- <manifest context.xml??-->
 				<fileset dir="${webroot}" />
 				<fileset dir="${gwt.out}"/>
 			</war>

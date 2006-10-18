@@ -27,6 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
@@ -169,7 +170,20 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			
 			for (Iterator iterator = assoc.getTypes().iterator(); iterator.hasNext();) {
 				Topic type = (Topic) iterator.next();
-				getHibernateTemplate().saveOrUpdate(type);
+				assoc.setUser(t.getUser());
+				//Why singleton?
+				//See description and Test Code in TopicDAOHibernateImplTest.testToMakeSureWeDontCreateTooManyObjects()
+				if(type instanceof MetaSeeAlso){
+					MetaSeeAlso singleton = (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
+					if(singleton == null){
+						getHibernateTemplate().saveOrUpdate(type);
+					}else{
+						assoc.getTypes().remove(type);
+						assoc.getTypes().add(singleton);
+					}
+				}else{
+					getHibernateTemplate().saveOrUpdate(type);
+				}
 			}
 			getHibernateTemplate().saveOrUpdate(assoc);			
 		}
@@ -332,6 +346,18 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public void tester() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	/**
+	 * TESTING ONLY
+	 * Should not be exposed to Service layer.
+	 * 
+	 * for when you really want the whole DB
+	 * 
+	 */
+	public List<Topic> getAllTopics() {
+		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class));
+		return getHibernateTemplate().findByCriteria(crit);
 	}
 
 }

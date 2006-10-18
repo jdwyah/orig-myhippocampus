@@ -12,7 +12,8 @@ public interface Consts extends Constants {
 	String timeline();
 	String seeAlsos();
 	String title();
-	String addTag();	
+	String addTag();
+	String occurrences();	
 	
 	
 }

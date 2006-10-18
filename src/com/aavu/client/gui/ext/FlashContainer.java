@@ -88,6 +88,9 @@ public class FlashContainer extends SimplePanel {
 	protected String number(long val){
 		return "<number>"+val+"</number>";
 	}
+	protected String string(String val){
+		return "<string>"+val+"</string>";
+	}
 
 	protected void runCommand(String command){
 		System.out.println("cmm:"+command);

@@ -3,7 +3,8 @@ package com.aavu.client.widget.edit;
 import java.util.Iterator;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.SeeAlso;
+import com.aavu.client.domain.Association;
+import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.Manager;
@@ -47,9 +48,8 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 
 	public void load(Topic topic) {
 		myTopic = topic;
-		
-		
-		SeeAlso assoc = myTopic.getSeeAlso();
+				
+		Association assoc = myTopic.getSeeAlsoAssociation();
 		if(assoc == null){
 			System.out.println("no see alsos");
 		}else{
@@ -86,8 +86,8 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 			initWidget(horizP);
 		}
 		
-		public void load(SeeAlso seeAlso){
-			for (Iterator iter = seeAlso.getAll().iterator(); iter.hasNext();) {
+		public void load(Association seeAlsoAssoc){
+			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
 				horizP.add(new TopicLink(top));
 			}

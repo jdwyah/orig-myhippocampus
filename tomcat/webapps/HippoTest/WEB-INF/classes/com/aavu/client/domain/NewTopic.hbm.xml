@@ -98,6 +98,10 @@
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
 
+			<subclass name="MetaSeeAlso" discriminator-value="seealso">
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
+			</subclass>
+
 		</subclass>
 		
 		<!-- a real class has members -->
@@ -122,9 +126,7 @@
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractParentChild</meta>
 			</subclass>
 
-			<subclass name="SeeAlso" discriminator-value="seealso">
-				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractSeeAlso</meta>
-			</subclass>
+		
 
 		</subclass>
 	</class>

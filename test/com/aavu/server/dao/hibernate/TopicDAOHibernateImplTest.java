@@ -5,9 +5,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.Association;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaTopic;
-import com.aavu.client.domain.SeeAlso;
+import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -29,6 +30,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	private static final String C = "PatriotGames";
 	private static final String D = "Book";
 	private static final String E = "TomClancy";
+	private static final String F = "Recommender";
+	private static final String G = "AnotherBook";
+	private static final String H = "AnotherRecommender";
 	
 	private TopicDAO topicDAO;
 	private TagDAO tagDAO;
@@ -57,13 +61,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 
-	public void testGetForName() {
-		fail("Not yet implemented");
-	}
-
-	public void testGetTopicsStarting() {
-		fail("Not yet implemented");
-	}
 
 	public void testSave() {
 	
@@ -116,18 +113,18 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 				
-		Tag book = new Tag();
-		book.setName(D);
+		Tag book = new Tag(u,D);		
 						
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
+		author.setUser(u);
 		book.addMeta(author);
 				
 		topicDAO.save(book);
 		
 		Topic tomClancy = new Topic();
 		tomClancy.setTitle(E);
-		
+		topicDAO.save(tomClancy);
 		
 		patriotGames.tagTopic(book);
 		patriotGames.addMetaValue(author, tomClancy);
@@ -142,9 +139,11 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 				
-		//only 1 because the user isn't set on book or author. 
-		//hmm.. good and bad.. 
-		assertEquals(1, savedL.size());
+		List<Topic> allTopics = topicDAO.getAllTopics();		
+		
+		//Book, Author, PatGames, PatGames->Author, Book->Author
+		//assertEquals(5,allTopics.size());		
+		assertEquals(5, savedL.size());
 		
 		
 		assertNotSame(0,patriotGames.getId());		
@@ -274,9 +273,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		System.out.println("++++++++++++++++++");
 		
-		Topic savedST = stringTheory.getSeeAlso();
+		Topic savedST = stringTheory.getSeeAlsoAssociation();
 				
-		SeeAlso savedSee = (SeeAlso) savedST;
+		Association savedSee = (Association) savedST;
 		
 
 		assertTrue(savedSee.getMembers().contains(feinman));
@@ -344,8 +343,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(0, savedFN.getAssociations().size());
 		assertEquals(0, savedBull.getAssociations().size());
 		
-		SeeAlso secondSeeAlsoSave = savedStringT.getSeeAlso();
-		assertEquals(2, secondSeeAlsoSave.getAll().size());
+		Association secondSeeAlsoSave = savedStringT.getSeeAlsoAssociation();
+		assertEquals(2, secondSeeAlsoSave.getMembers().size());
 		
 		//
 		//now a link to Bull
@@ -365,9 +364,111 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		linkTo = toFein.iterator().next();
 		assertEquals(B, linkTo.getTopicTitle());
 		
+		
+		
+	}
+
+	/**
+	 * Main test here is to make sure that the Singleton creating code for SeeAlsos
+	 * works. This code is in TopicDaoHibernateImpl.save()   It allows us to just say
+	 * "new MetaSeeAlso()" but not end up with multiple DB instances of this object
+	 * that should really be a singleton of some sort. An alternative solution would 
+	 * be some kind of "getAllSingletonTopics()" service that can be called on GWT 
+	 * startup. It's basically a bootstrapping problem. We'll run into this again 
+	 * when we want to creat a global 'Book', 'Movie', or 'Author'... those might
+	 * be different though because they're already being loaded remotely. SeeAlsos 
+	 * code need to do this itself.   
+	 * Another alternative could be a topicService.addSeeAlso() call, but this starts 
+	 * really taking things out of the Domain. Good and bad aspects to that I suppose.
+	 * 
+	 * Only functions properly with clean DB bc it uses getAllTopics to sweep for accidental
+	 * null user topics.
+	 */
+	public void testToMakeSureWeDontCreateTooManyObjects(){
+		
+		Topic patriotGames = new Topic(u,C);
+		patriotGames.setData(B);
+				
+		Tag book = new Tag(u,D);
+						
+		MetaTopic author = new MetaTopic();
+		author.setTitle(B);
+		author.setUser(u);
+		
+		book.addMeta(author);
+				
+		topicDAO.save(book);
+		
+		Topic tomClancy = new Topic(u,E);
+		topicDAO.save(tomClancy);
+		
+		patriotGames.tagTopic(book);
+		patriotGames.addMetaValue(author, tomClancy);
+		
+		System.out.println("before: "+patriotGames.getId());
+		
+		topicDAO.save(patriotGames);
+		
+		Topic savedPat = topicDAO.getForName(u, C);
+		assertEquals(1, savedPat.getAssociations().size());
+		assertNotNull(savedPat.getMetaValuesFor(author));
+		Topic savedClancy = (Topic) savedPat.getSingleMetaValueFor(author);
+		
+		//System.out.println(savedPat.toPrettyString());		
+		//System.out.println(savedClancy.toPrettyString());
+				
+		List<Topic> allTopics = topicDAO.getAllTopics();		
+		//should be six. PatGames, Book, Author, Book->Author, TomClancy, PatGames->TomClancy 
+		assertEquals(6,allTopics.size());
+		
+		Topic recommender = new Topic(u,F);
+		recommender = topicDAO.save(recommender);
+		
+		savedPat.addSeeAlso(recommender.getIdentifier());		
+		Topic savedPat2 = topicDAO.save(savedPat);
+		
+		allTopics = topicDAO.getAllTopics();
+		for (Topic topic : allTopics) {
+			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
+		}
+		//should be nine. 6 from before plus:  Recommender, Patriot->Recommender, and SeeAlso, 
+		assertEquals(9,allTopics.size());
+		
+		
+		Topic anotherBook = new Topic(u,G);
+		topicDAO.save(anotherBook);
+		
+		savedPat2.addSeeAlso(anotherBook.getIdentifier());
+		
+		Topic savedPat3 = topicDAO.save(savedPat2);
+		
+		assertEquals(2,savedPat3.getSeeAlsoAssociation().getMembers().size());
+		
+		allTopics = topicDAO.getAllTopics();
+		for (Topic topic : allTopics) {
+			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass()+" user "+topic.getUser());
+		}
+		//should be just 10. 9 from before plus: Another 
+		assertEquals(10,allTopics.size());
+		
+		
+		Topic anotherRecommender = new Topic(u,H);
+		topicDAO.save(anotherRecommender);
+		
+		anotherRecommender.addSeeAlso(savedPat3.getIdentifier());
+		topicDAO.save(anotherRecommender);
+		
+		
+		allTopics = topicDAO.getAllTopics();
+		for (Topic topic : allTopics) {
+			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass()+" user "+topic.getUser());
+		}
+		//should be just 12. 10 from before plus: AnotherRecommender & AnotherRecomender's Association 
+		assertEquals(12,allTopics.size());
 	}
 	
-
+	
+	
 	public void testGetTimeline(){
 		
 		MetaDate md = new MetaDate();
