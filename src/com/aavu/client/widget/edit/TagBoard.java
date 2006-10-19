@@ -2,6 +2,7 @@ package com.aavu.client.widget.edit;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,7 @@ public class TagBoard extends Composite implements CompleteListener {
 	private TagCache tagCache;
 	private Manager manager;
 	
+	private Set tagsToSave = new HashSet(); 
 
 	public TagBoard(Manager manager) {
 		this.manager = manager;
@@ -126,13 +128,23 @@ public class TagBoard extends Composite implements CompleteListener {
 		displayMetas(tag);		
 	}
 	
-	
+	/**
+	 * Typically we don't touch a topics tags on save. only if they've been 
+	 * updated. This is because unless they've been updated, they won't be full
+	 * fledged objects (due to the fact that we didn't JOIN and 
+	 * serialize topic.types.instances... etc
+	 * 
+	 * If we're tagging though, it's a full obj and we need to save it.
+	 * 
+	 * @param tag
+	 */
 	private void addTag(final Tag tag) {
 
 		cur_topic.tagTopic(tag);
 
 		showTag(tag);
 		
+		tagsToSave.add(tag);
 	}
 	
 	private void displayMetas(Tag tag) {
@@ -164,7 +176,7 @@ public class TagBoard extends Composite implements CompleteListener {
 			listener.saveNowEvent();
 			
 		}
-		callback.onSuccess(null);
+		callback.onSuccess(tagsToSave);
 							
 	}
 

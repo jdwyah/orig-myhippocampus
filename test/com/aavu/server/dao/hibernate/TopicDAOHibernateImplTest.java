@@ -386,6 +386,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	 */
 	public void testToMakeSureWeDontCreateTooManyObjects(){
 		
+		topicDAO.deleteAllTables();
+		
 		Topic patriotGames = new Topic(u,C);
 		patriotGames.setData(B);
 				
@@ -467,7 +469,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(12,allTopics.size());
 	}
 	
-	
+
 	
 	public void testGetTimeline(){
 		

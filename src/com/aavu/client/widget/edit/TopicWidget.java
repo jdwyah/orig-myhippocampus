@@ -136,7 +136,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	}
 
 	private void displayMetas(Tag tag,Topic top,VerticalPanel tagPanel) {
-		System.out.println("display metas: "+tag.getTitle());
+		System.out.println("TopicWidg display metas: "+tag.getTitle());
 		System.out.println("metas: "+tag.getMetas().size());
 		Set metas = tag.getMetas();
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {

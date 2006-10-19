@@ -176,9 +176,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		MainMap mainMap = new MainMap(manager);
 		RootPanel.get().add(mainMap);
-
 		
-		mainMap.doIslands();
 				
 	}
 

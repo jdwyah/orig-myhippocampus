@@ -41,12 +41,12 @@ public class Dashboard extends SimplePanel {
 				manager.newTopic();
 			}});
 
-		Button initIslands = new Button("Init Islands");
-		initIslands.addClickListener(new ClickListener(){
-
-			public void onClick(Widget sender) {
-				manager.doIslands();
-			}});
+//		Button initIslands = new Button("Init Islands");
+//		initIslands.addClickListener(new ClickListener(){
+//
+//			public void onClick(Widget sender) {
+//				manager.doIslands();
+//			}});
 
 		Button timeLine = new Button("TimeLine");
 		timeLine.addClickListener(new ClickListener(){
@@ -58,7 +58,7 @@ public class Dashboard extends SimplePanel {
 		
 		mainPanel.add(addNewButton);
 		mainPanel.add(tagButton);
-		mainPanel.add(initIslands);
+		//mainPanel.add(initIslands);
 		mainPanel.add(timeLine);
 		
 		

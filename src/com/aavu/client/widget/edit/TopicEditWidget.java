@@ -1,5 +1,7 @@
 package com.aavu.client.widget.edit;
 
+import java.util.Set;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
@@ -72,7 +74,8 @@ public class TopicEditWidget extends Composite {
 		tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
 
 			public void onSuccess(Object result) {
-				topicViewAndEditWidget.save(topic);					
+				Set otherTopicsToSave = (Set) result;
+				topicViewAndEditWidget.save(topic,otherTopicsToSave);					
 			}});
 		
 	}

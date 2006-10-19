@@ -14,7 +14,7 @@
 		<property name="jdbcUrl" value="${jdbc.url}" />
 		<property name="user" value="${jdbc.user}" />
 		<property name="password" value="${HOST.jdbc.password}" />
-
+		<property name="testConnectionOnCheckout" value="true"/>
 	</bean>
 	
 
@@ -28,6 +28,17 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
+			
+<!--                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                <prop key="hibernate.query.substitutions">true 'T', false 'F'</prop>
+                <prop key="hibernate.show_sql">@@hibernate.show_sql@@</prop>
+                <prop key="hibernate.c3p0.minPoolSize">5</prop>
+                <prop key="hibernate.c3p0.maxPoolSize">20</prop>
+                <prop key="hibernate.c3p0.timeout">600</prop>
+                <prop key="hibernate.c3p0.max_statement">50</prop>
+                <prop key="hibernate.c3p0.testConnectionOnCheckout">false</prop>-->
+			
 				<prop key="hibernate.dialect">${db.dialect}</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.cglib.use_reflection_optimizer">false</prop>

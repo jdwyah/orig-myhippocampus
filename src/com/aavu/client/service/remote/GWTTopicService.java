@@ -15,6 +15,8 @@ public interface GWTTopicService extends RemoteService {
 	TopicIdentifier[] getAllTopicIdentifiers();
 	
 	Topic save(Topic topic);
+	Topic[] save(Topic[] l);
+	
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>
 
@@ -26,4 +28,6 @@ public interface GWTTopicService extends RemoteService {
 	TopicIdentifier[] getTopicIdsWithTag(Tag tag);
 	//List<TimeLineObj>
 	List getTimelineObjs();
+
+	
 }

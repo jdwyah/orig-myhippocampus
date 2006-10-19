@@ -1,5 +1,7 @@
 package com.aavu.server.service.gwt;
 
+import java.util.HashSet;
+
 import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Meta;
@@ -55,49 +57,52 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 
 	private void initDBTables(){
 		
-		Topic huntForRedOctober = topicService.getTopicForName(C);
-
-		if(huntForRedOctober == null){
+		topicDAO.deleteAllTables();
 			
-			log.debug("INITING");
-
-			Topic patriotGames = new Topic(u,C);
-			patriotGames.setData(B);
-			
-			Tag book = new Tag(u,D);
-			
-
-			MetaTopic author = new MetaTopic();
-			author.setTitle(B);
-			author.setUser(u);
-			
-			Meta savedAuthor = (Meta) topicDAO.save(author);
-			
-			book.addMeta(savedAuthor);
-
-			Topic savedBook = topicDAO.save(book);
-
-			Topic tomClancy = new Topic(u,E);
-			
-			Topic savedTomClancy = topicDAO.save(tomClancy);
-
-//			/Topic savedAuthor = (Topic) savedBook.getMetas().iterator().next();
-			
-			patriotGames.tagTopic(savedBook);
-			patriotGames.addMetaValue(savedAuthor, savedTomClancy);
-
-			System.out.println("before: "+patriotGames.getId());
-
-			System.out.println(patriotGames.toPrettyString());
-			
-			topicDAO.save(patriotGames);
-		}	else{
-			log.debug("NO INIT");
-		}
+		
 	}
 
+	private void doSomeInit(){
+
+		log.debug("INITING");
+
+		Topic patriotGames = new Topic(u,C);
+		patriotGames.setData(B);
+		
+		Tag book = new Tag(u,D);
+		
+
+		MetaTopic author = new MetaTopic();
+		author.setTitle(B);
+		author.setUser(u);
+		
+		Meta savedAuthor = (Meta) topicDAO.save(author);
+		
+		book.addMeta(savedAuthor);
+
+		Topic savedBook = topicDAO.save(book);
+
+		Topic tomClancy = new Topic(u,E);
+		
+		Topic savedTomClancy = topicDAO.save(tomClancy);
+
+//		/Topic savedAuthor = (Topic) savedBook.getMetas().iterator().next();
+		
+		patriotGames.tagTopic(savedBook);
+		patriotGames.addMetaValue(savedAuthor, savedTomClancy);
+
+		System.out.println("before: "+patriotGames.getId());
+
+		System.out.println(patriotGames.toPrettyString());
+		
+		Topic[] l = new Topic[]{patriotGames,savedBook};
+				
+		topicService.save(l);
+	}
 
 	public void testGetATopic() {
+
+		doSomeInit();
 		
 		Topic huntForRedOctober = topicService.getTopicForName(C);
 		
@@ -141,5 +146,65 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 		
 	}
+	public void testDisappearingTagInstances(){
+		
+		Topic patriotGames = new Topic(u,C);
+		patriotGames.setData(B);
+				
+		Tag book = new Tag(u,D);
+						
+		MetaTopic author = new MetaTopic();
+		author.setTitle(B);
+		author.setUser(u);
+		
+		book.addMeta(author);
+				
+		book = (Tag) topicDAO.save(book);
+		
+		Topic tomClancy = new Topic(u,E);
+		topicDAO.save(tomClancy);
+		
+		System.out.println("book: "+book);
+		System.out.println("book "+book.getInstances());
+		
+		patriotGames.tagTopic(book);
+		patriotGames.addMetaValue(author, tomClancy);
+		
+		System.out.println("before: "+patriotGames.getId());
+		
+		topicDAO.save(patriotGames);
+		topicDAO.save(book);
+		
+		
+		Topic savePatriot = topicService.getTopicForName(C);
+		Topic savedBook = (Topic) savePatriot.getTags().iterator().next();
 
+		
+		System.out.println("before clear "+book.getInstances().size());
+		
+		//replicate the GWT converting NULL;
+		savedBook.setInstances(new HashSet());
+		
+		Topic b = (Topic) savePatriot.getTags().iterator().next();
+		assertEquals(0, b.getInstances().size());
+		
+		Topic save2 = topicDAO.save(savePatriot);
+		
+		Topic savedBook3 = topicDAO.save(savedBook);
+		
+		System.out.println("book "+book.getId()+" i.sz "+book.getInstances().size()+" "+" sb "+savedBook.getId()+" ");
+		
+		//this is 0. We aren't going to load these.
+		Topic sb = (Topic) save2.getTags().iterator().next();
+		assertEquals(0, sb.getInstances().size());
+		
+		//this is the important one
+		assertEquals(1, savedBook3.getInstances().size());
+	
+		Topic reloadedBook = topicService.getTopicForName(D);
+		assertEquals(1, reloadedBook.getInstances().size());
+		
+		
+	}
+	
 }

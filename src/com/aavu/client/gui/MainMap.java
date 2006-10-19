@@ -39,10 +39,7 @@ public class MainMap extends Composite {
 		mainP.addStyleName("");
 		initWidget(mainP);
 	}
-	
-	public void doIslands(){
-		ocean.initIslands();
-	}
+		
 
 	public void growIsland(Tag tag) {
 		ocean.growIsland(tag);

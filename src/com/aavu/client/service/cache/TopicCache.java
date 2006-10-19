@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
@@ -12,12 +13,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
-import com.aavu.client.util.JSONReader;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FiresFormEvents;
 
 public class TopicCache {
 
@@ -118,14 +114,33 @@ public class TopicCache {
 
 
 	
-
-	public void save(Topic topic2, AsyncCallback callback) {
-		System.out.println("client saving "+topic2.toPrettyString());
-
-		topicService.save(topic2, new SaveCallback(callback));
+	public void save(Topic topic, AsyncCallback callback) {
+		save(topic,null,callback);
+	}
+	public void save(Topic topic, Set otherTopicsToSave, AsyncCallback callback) {
+		System.out.println("client saving "+topic.toPrettyString());
 		
+		if(otherTopicsToSave == null){
+			Topic[] listToSave = new Topic[1];
+			listToSave[0] = topic;			
+			System.out.println("saving single "+listToSave.length);
+			topicService.save(listToSave, new SaveCallback(callback));
+		}else{
+			Topic[] listToSave = new Topic[otherTopicsToSave.size() + 1];
+			listToSave[0] = topic;
+			
+			Iterator iter = otherTopicsToSave.iterator();
+			for(int i = 1;i < listToSave.length; i++){			
+				listToSave[i] = (Topic) iter.next();
+			}
+			System.out.println("Saving list ");
+			for(int i = 0;i < listToSave.length; i++){			
+				System.out.println("i:"+i+" "+listToSave[i]);
+			}
+			topicService.save(listToSave, new SaveCallback(callback));	
+		}
 		
-		
+				
 	}
 	private class SaveCallback implements AsyncCallback {
 		private AsyncCallback callback;
@@ -136,23 +151,35 @@ public class TopicCache {
 			callback.onFailure(caught);
 		}
 		public void onSuccess(Object result) {
-			Topic res = (Topic) result;
+			Topic[] resA = (Topic[]) result;
 			
-			if(res == null){
+			if(resA == null){
 				callback.onFailure(new Throwable("Save Returned Null"));
 			}
 			
-			//TODO bogus, need to check!!
-			topicIdentifiers.remove(res.getIdentifier());
-			topicIdentifiers.add(res.getIdentifier());
+			System.out.println("result length "+resA.length);
 			
-			//topicByName.put(res.getTitle(), res);
-			//topicByID.put(res.getId(), res);
-			
-			for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
-				TopicSaveListener listener = (TopicSaveListener) iter.next();
-				listener.topicSaved((Topic) result);
-			}			
+			for (int i = 0; i < resA.length; i++) {
+				Topic res = resA[i];
+
+				System.out.println("res "+res);
+				
+				if(res == null){
+					continue;
+				}
+				//TODO bogus, need to check!!
+				topicIdentifiers.remove(res.getIdentifier());
+				topicIdentifiers.add(res.getIdentifier());
+				
+				//topicByName.put(res.getTitle(), res);
+				//topicByID.put(res.getId(), res);
+				
+				for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
+					TopicSaveListener listener = (TopicSaveListener) iter.next();
+					listener.topicSaved(res);
+				}			
+								
+			}
 			callback.onSuccess(result);
 		}
 
@@ -252,8 +279,8 @@ public class TopicCache {
 			toSave.setTitle(linkTo);
 			save(toSave, new AsyncCallback(){
 				public void onSuccess(Object result) {
-					Topic saved = (Topic) result;
-					callback.onSuccess(saved.getIdentifier());
+					Topic[] saved = (Topic[]) result;
+					callback.onSuccess(saved[0].getIdentifier());
 				}
 				public void onFailure(Throwable caught) {
 					callback.onFailure(caught);

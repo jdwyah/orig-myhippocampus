@@ -30,5 +30,7 @@ public interface TopicDAO {
 	List<TimeLineObj> getTimeline(User user);
 
 	List<Topic> getAllTopics();
-	
+
+	void deleteAllTables();
+
 }

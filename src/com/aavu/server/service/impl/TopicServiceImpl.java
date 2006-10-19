@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,13 @@ public class TopicServiceImpl implements TopicService {
 	}
 	public List<TimeLineObj> getTimelineObjs() {
 		return topicDAO.getTimeline(userService.getCurrentUser());
+	}
+	public List<Topic> save(Topic[] topics) {
+		List<Topic> rtn = new ArrayList<Topic>();
+		for (Topic topic : topics) {
+			rtn.add(topicDAO.save(topic));
+		}
+		return rtn;
 	}
 
 }

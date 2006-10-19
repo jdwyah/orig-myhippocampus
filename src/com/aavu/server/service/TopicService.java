@@ -23,4 +23,6 @@ public interface TopicService {
 
 	List<TimeLineObj> getTimelineObjs();
 
+	List<Topic> save(Topic[] topics);
+
 }

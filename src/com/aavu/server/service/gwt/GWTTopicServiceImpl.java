@@ -1,12 +1,11 @@
 package com.aavu.server.service.gwt;
 
+import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.gwtwidgets.server.rpc.GWTSpringController;
@@ -137,6 +136,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		//L1 new everything expect metas we need this for topic's->tag's->metas
 		//
 		if(level >= 2){			
+			System.out.println("setting nul_____________________________________________");
 			t.setLastUpdated(null);
 			t.setCreated(null);
 			
@@ -337,6 +337,19 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+
+	public Topic[] save(Topic[] topics) {
+		List<Topic> list = topicService.save(topics);
+		Topic[] rtn = new Topic[list.size()];
+		int i = 0;
+		for (Topic topic : list) {
+			log.debug("Converting "+topic.getId());
+			rtn[i++] = convert(topic);
+		}
+		log.debug("Save[] rtn "+Arrays.toString(rtn));
+		return rtn;		
 	}
 
 }

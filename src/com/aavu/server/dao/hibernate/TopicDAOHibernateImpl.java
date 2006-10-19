@@ -1,7 +1,9 @@
 package com.aavu.server.dao.hibernate;
 
 import java.math.BigInteger;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -194,26 +196,34 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		//
 		getHibernateTemplate().saveOrUpdate(t);		
 		
+		//call saveList() instead
 		
-		
-		System.out.println("now TYPES "+t.getTypes().size());
-		for (Iterator iter = t.getTypes().iterator(); iter.hasNext();) {
-			Topic type = (Topic) iter.next();
-			log.debug("saving its ? "+type.getTitle());
-
-			//this let's us save a topic and make it's tag save too. 
-			//needs to happen AFTER the save of the topic, or it will 
-			//have a reference to the non-persisted topic.
-			//
-			//NOTE: having this after means, that all of a topic's tags
-			//must be saved before this method is called or we'll get the 
-			//reverse problem. This is different than metas which can be unsaved
-			//and then will be saved above if new.
-			//
-			log.debug("save "+type.getTitle()+" "+type.getId());
-			getHibernateTemplate().saveOrUpdate(type);
-			log.debug("done");
-		}
+//		System.out.println("now TYPES "+t.getTypes().size());
+//		for (Iterator iter = t.getTypes().iterator(); iter.hasNext();) {
+//			Topic type = (Topic) iter.next();
+//			log.debug("saving it's ? "+type.getTitle());
+//
+//			//this let's us save a topic and make it's tag save too. 
+//			//needs to happen AFTER the save of the topic, or it will 
+//			//have a reference to the non-persisted topic.
+//			//
+//			//NOTE: having this after means, that all of a topic's tags
+//			//must be saved before this method is called or we'll get the 
+//			//reverse problem. This is different than metas which can be unsaved
+//			//and then will be saved above if new.
+//			//
+//			log.debug("save "+type.getTitle()+" "+type.getId());
+//			
+//			Topic prev = (Topic) getHibernateTemplate().get(Topic.class, type.getId());
+//			if(prev != null){
+//				//log.debug("prev "+prev+" instance size "+prev.getInstances().size());
+//				prev.getInstances().addAll(type.getInstances());
+//			}else{
+//				log.debug("no prev ");
+//				getHibernateTemplate().saveOrUpdate(type);
+//			}
+//			log.debug("done");
+//		}
 		
 		
 		
@@ -355,9 +365,39 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * for when you really want the whole DB
 	 * 
 	 */
-	public List<Topic> getAllTopics() {
+	public List<Topic> getAllTopics() {		
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class));
 		return getHibernateTemplate().findByCriteria(crit);
 	}
+	/**
+	 * TESTING ONLY
+	 * Should not be exposed to Service layer.
+	 * 
+	 * for when you really want the whole DB
+	 * 
+	 */
+	public void deleteAllTables() {
+
+		getHibernateTemplate().execute(new HibernateCallback(){
+
+			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+
+				Connection conn = sess.connection();
+				Statement statement = conn.createStatement();
+				
+				boolean res = statement.execute("DELETE FROM topic_scopes");
+				res = statement.execute("DELETE FROM associations");
+				res = statement.execute("DELETE FROM instancetable");
+				res = statement.execute("DELETE FROM member_topics");
+				res = statement.execute("DELETE FROM occurences");
+				res = statement.execute("DELETE FROM typetable");
+				res = statement.execute("DELETE FROM topics");				
+				return res;
+				
+			}});
+
+	}
+
+	
 
 }

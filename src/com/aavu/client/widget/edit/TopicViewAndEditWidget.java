@@ -1,6 +1,8 @@
 package com.aavu.client.widget.edit;
 
 
+import java.util.Set;
+
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -98,17 +100,17 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	}
 	
 
-	public void save(Topic topic2) {
+	public void save(Topic topic2, Set otherTopicsToSave) {
 		
 		load(topic2);
 		
-		manager.getTopicCache().save(topic2, new StdAsyncCallback("topicDetail save") {				
+		manager.getTopicCache().save(topic2, otherTopicsToSave, new StdAsyncCallback("topicDetail save") {				
 			
 			public void onSuccess(Object result) {		
 				
 				//this should prevent double saves
-				Topic saved = (Topic) result;
-				load(saved);
+				Topic[] saved = (Topic[]) result;
+				load(saved[0]);
 				
 				activateMainView();
 			}

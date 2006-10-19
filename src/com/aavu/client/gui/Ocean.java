@@ -9,6 +9,7 @@ import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Ocean extends FlashContainer {
 
@@ -21,11 +22,16 @@ public class Ocean extends FlashContainer {
 		setStyleName("H-Ocean");		
 	}
 	
+	//@Override
+	protected void onLoad() {
+		initIslands();
+	}
+
 	/**
 	 * Will init after async "getTagStats()" call
 	 *
 	 */
-	public void initIslands(){
+	private void initIslands(){
 		System.out.println("Init Islands");		
 		Timer t = new Timer() {
 			public void run() {

@@ -121,10 +121,7 @@ public class Manager implements TopicSaveListener {
 			}});				
 	}
 	
-	
-	public void doIslands() {
-		map.doIslands();
-	}
+		
 
 	/**
 	 * we can goto a topic linked by either Name, or ID.

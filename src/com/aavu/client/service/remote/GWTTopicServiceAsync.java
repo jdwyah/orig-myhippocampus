@@ -1,5 +1,7 @@
 package com.aavu.client.service.remote;
 
+import java.util.List;
+
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -14,6 +16,9 @@ public interface GWTTopicServiceAsync {
 	void getAllTopicIdentifiers(AsyncCallback callback);
 
 	void save(Topic topic, AsyncCallback callback);
+
+	void save(Topic[] topics, AsyncCallback callback);
+	
 	//void getTopicsStarting(String match, AsyncCallback callback);
 	void match(String match, AsyncCallback callback);	
 

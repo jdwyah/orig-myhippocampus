@@ -159,11 +159,11 @@
 	</target>
 
 	<target name="deploy" description="Install application in Tomcat" depends="tomcatTasks, war">
-		<deploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/${name}" war="${wardist}/${name}.war" />
+		<deploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/" war="${wardist}/${name}.war" />
 	</target>
 
 	<target name="undeploy" description="Remove application in Tomcat" depends="tomcatTasks">
-		<undeploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/${name}" />
+		<undeploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}" path="/" />
 	</target>
 
 	<target name="redeploy" description="Reload application in Tomcat" depends="war, undeploy, deploy">

@@ -6,6 +6,18 @@ body {
 	margin: 20px 20px 20px 20px;
 }
 
+div.definition {
+	width: 350px;
+	position: absolute;
+	top: 45%;
+	left: 45%;
+	background: #fff;
+	font-size: large;
+	font-style: italic;
+	
+}
+
+
 code {
 	font-size: small;
 }
@@ -431,8 +443,9 @@ a:visited {
 }
 
 .ta-Title {
-	font-weight: bold font-size :   larger font-color :   blue text-align :
-		  center
+	font-weight: bold font-size :     larger font-color :     blue
+		text-align : 
+		   center
 }
 
 .ta-match-found {
