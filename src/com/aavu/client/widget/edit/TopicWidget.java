@@ -129,7 +129,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		VerticalPanel panel = new VerticalPanel();	
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag element = (Tag) iter.next();
-			panel.add(new Label(element.getName()));
+			panel.add(new TopicLink(element));
 			displayMetas(element,t,panel);
 		}		
 		return panel;

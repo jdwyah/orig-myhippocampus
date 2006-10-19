@@ -3,7 +3,8 @@ package com.aavu.client.domain;
 import java.util.Map;
 
 import com.aavu.client.service.local.TagLocalService;
-import com.aavu.client.widget.edit.MetaTopicWidget;
+import com.aavu.client.widget.TopicLink;
+import com.aavu.client.widget.edit.MetaTopicEditWidget;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.MetaListBox;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -32,19 +33,11 @@ public class MetaTopic extends Meta {
 
 		Label metaName = new Label(getName());
 
-		metaName.setWidth("5em");
-
-		
-		Label metaValue = new Label(null);  
+		widget.add(metaName);
 		Topic mv = (Topic) topic.getSingleMetaValueFor(this);
 		if(mv != null){
-			metaValue.setText(mv.getTitle());
+			widget.add(new TopicLink(mv));
 		}
-		
-		metaValue.setWidth("5em");
-
-		widget.add(metaName);
-		widget.add(metaValue);
 
 		return widget;
 	}
@@ -59,7 +52,7 @@ public class MetaTopic extends Meta {
 	public Widget getEditorWidget(final Topic topic) {
 		
 		
-		MetaTopicWidget mtw = new MetaTopicWidget(this,topic);
+		MetaTopicEditWidget mtw = new MetaTopicEditWidget(this,topic);
 	
 		return mtw;
 	}

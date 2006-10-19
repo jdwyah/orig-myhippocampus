@@ -14,13 +14,13 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaTopicWidget extends SaveListener implements CompleteListener {
+public class MetaTopicEditWidget extends SaveListener implements CompleteListener {
 
 	private Topic topic;
 	private MetaTopic meta;
 	private TopicCompleter completer; 
 
-	public MetaTopicWidget(final MetaTopic meta, final Topic topic) {
+	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 

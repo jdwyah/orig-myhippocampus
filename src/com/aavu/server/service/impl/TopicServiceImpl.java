@@ -54,7 +54,7 @@ public class TopicServiceImpl implements TopicService {
 	public List<Topic> save(Topic[] topics) {
 		List<Topic> rtn = new ArrayList<Topic>();
 		for (Topic topic : topics) {
-			save(topic);
+			rtn.add(save(topic));
 		}
 		return rtn;
 	}

@@ -50,6 +50,8 @@
           <p class="subheading">#2 Read the manifesto</p>
 
           <p class="subheading">#3 Signup for a free account!</p>
+
+          <p class="subheading">#4 Install the Firefox plugin! (<A HREF="<@spring.url "/resources/myhippo.xpi"/>">click here</A>)</p>
       </div>
 		</div>
 
