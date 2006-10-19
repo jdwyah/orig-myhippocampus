@@ -323,15 +323,23 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	
 
 	/**
-	 * TODO replace string concatenations! 
+	 * TODO replace hardcoded class discriminators with .class
 	 */	
 	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
 
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
 		.add(Expression.eq("user", user))
+		.add(Expression.ne("class", "association"))
+		.add(Expression.ne("class", "seealso"))
+		.add(Expression.ne("class", "metadate"))
 		.addOrder( Order.asc("title") )
 		.setProjection(getTopicIdentifier());
 
+//		List<Topic> l = getHibernateTemplate().findByCriteria(crit);
+//		for (Topic topic : l) {
+//			System.out.println("topic "+topic+"  class "+topic.getClass());
+//		}
+		
 		List<Object[]> list = getHibernateTemplate().findByCriteria(crit);
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());

@@ -139,11 +139,13 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 				
-		List<Topic> allTopics = topicDAO.getAllTopics();		
-		
+		//NOTE: getAllTopics doesn't take a User right now. That functionality was only used here.
+		//List<Topic> allTopics = topicDAO.getAllTopics();				
 		//Book, Author, PatGames, PatGames->Author, Book->Author
 		//assertEquals(5,allTopics.size());		
-		assertEquals(5, savedL.size());
+		//assertEquals(5, allTopics.size());
+		
+		assertEquals(3, savedL.size());
 		
 		
 		assertNotSame(0,patriotGames.getId());		
@@ -249,6 +251,23 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			assertEquals(tident.getTopicTitle(),C);
 		}
 		
+		Topic t2 = new Topic(u,D);
+		t2.addSeeAlso(t.getIdentifier());
+		topicDAO.save(t2);
+		
+		
+		list = topicDAO.getAllTopicIdentifiers(u);
+		
+		for(TopicIdentifier tident : list){
+			System.out.println("tident "+tident);
+		}
+		//not 3, even though there's and association
+		assertEquals(2,list.size());
+		
+			
+		assertEquals(list.get(0).getTopicTitle(),D);
+		assertEquals(list.get(1).getTopicTitle(),C);
+
 		
 	}
 	
