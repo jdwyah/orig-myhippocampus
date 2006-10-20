@@ -13,6 +13,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
+import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.tags.SaveListener;
 import com.google.gwt.core.client.GWT;
@@ -23,13 +24,15 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TagBoard extends Composite implements CompleteListener {
 
 	private VerticalPanel tagPanel = new VerticalPanel();
-	private Button addTagButton = new Button("Add");
+	
 	//private TextBox tagBox = new TextBox();
 	private TagAutoCompleteBox tagBox = null;
 	
@@ -50,9 +53,10 @@ public class TagBoard extends Composite implements CompleteListener {
 
 		tagBox = new TagAutoCompleteBox(this,tagCache);
 
+		EnterInfoButton addTagButton = new EnterInfoButton();		
 		addTagButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
-				tagTopic(tagBox.getText());
+				completed(tagBox.getText());
 			}
 		});
 
@@ -61,6 +65,8 @@ public class TagBoard extends Composite implements CompleteListener {
 		HorizontalPanel tagBoxP = new HorizontalPanel();
 		tagBoxP.add(new HeaderLabel(Manager.myConstants.addTag()));
 		tagBoxP.add(tagBox);
+		tagBoxP.add(addTagButton);
+		
 		mainPanel.add(tagBoxP);
 		mainPanel.add(tagPanel);
 				
@@ -91,6 +97,7 @@ public class TagBoard extends Composite implements CompleteListener {
 
 	public void completed(String completeText) {
 		tagTopic(completeText);
+		tagBox.setText("");
 	}	
 	
 	/**
@@ -119,11 +126,10 @@ public class TagBoard extends Composite implements CompleteListener {
 	
 	private void showTag(final Tag tag){
 		String name = tag.getName();
-		Label tagLabel = new Label(name);
 		
-		//Hyperlink link = new Hyperlink(name, name);
-		tagPanel.add(tagLabel);
-		tagLabel.setStyleName("ta-tagboard-TagLabel");		
+		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag);
+				
+		tagPanel.add(tagLabel);	
 		
 		displayMetas(tag);		
 	}

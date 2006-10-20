@@ -56,7 +56,12 @@ a:visited {
 	text-align: left; /* counter the body center */
 	border: 2px solid #000;
 }
-
+.H-EnterInfoButton {
+	background-image: url("../img/bluecheck-bullet-14.gif");
+	background-repeat: no-repeat;
+	height: 20px;
+	width: 20px;
+}
 .H-TagSearch {
 	bottom: 18%;
 	left: 0px;
@@ -427,31 +432,4 @@ a:visited {
 
 .infoProse {
 	margin: 8px;
-}
-
-.ta-TopPanel {
-	margin-bottom: 1em
-}
-
-.ta-tagboard {
-	margin-right: 1em;
-}
-
-.ta-tagboard-TagLabel {
-	background-color: white;
-	margin-top: 1em;
-}
-
-.ta-Title {
-	font-weight: bold font-size :     larger font-color :     blue
-		text-align : 
-		   center
-}
-
-.ta-match-found {
-	background-color: green
-}
-
-.ta-match-partial {
-	background-color: yellow
 }

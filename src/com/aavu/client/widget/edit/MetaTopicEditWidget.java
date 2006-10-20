@@ -1,17 +1,15 @@
 package com.aavu.client.widget.edit;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.service.Manager;
+import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.tags.SaveListener;
-import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MetaTopicEditWidget extends SaveListener implements CompleteListener {
@@ -19,7 +17,9 @@ public class MetaTopicEditWidget extends SaveListener implements CompleteListene
 	private Topic topic;
 	private MetaTopic meta;
 	private TopicCompleter completer; 
-
+	private ActionableTopicLabel topicDisplayLink;
+	private EnterInfoButton enterB;
+	
 	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
@@ -30,19 +30,46 @@ public class MetaTopicEditWidget extends SaveListener implements CompleteListene
 		completer = new TopicCompleter();
 		completer.addListener(this);
 		
-		Topic mv = (Topic) topic.getSingleMetaValueFor(meta);
-			
-		if(mv != null){
-			completer.setText(mv.getTitle());		    	
-		}
 	
+		enterB = new EnterInfoButton();
+		enterB.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				completed(completer.getText());	
+			}});
 		
+		topicDisplayLink = new ActionableTopicLabel(Manager.myConstants.editMe(),new ClickListener(){
+			public void onClick(Widget sender) {
+				setToEditMode();
+			}});
+						
 		widget.add(new Label(meta.getName()));
 		widget.add(completer);
-
+		widget.add(topicDisplayLink);
+		widget.add(enterB);
+		
+		Topic mv = (Topic) topic.getSingleMetaValueFor(meta);		
+		if(mv != null){
+			completer.setText(mv.getTitle());	
+			setToShowMode(mv.getIdentifier());
+		}
+		
 		initWidget(widget);
 	}
 
+	private void setToEditMode(){
+		completer.setVisible(true);
+		topicDisplayLink.setVisible(false);
+		enterB.setVisible(true);		
+	}
+	private void setToShowMode(TopicIdentifier to){
+
+		topicDisplayLink.setTopicIdent(to);
+
+		topicDisplayLink.setVisible(true);				
+		completer.setVisible(false);
+		enterB.setVisible(false);	
+	}
+	
 	//@Override
 	/**
 	 * NOTE not used! replaced w/ completed
@@ -76,8 +103,8 @@ public class MetaTopicEditWidget extends SaveListener implements CompleteListene
 				
 				topic.addMetaValue(meta, new Topic(to));
 				
-				completer.setText(completeText);
-
+				setToShowMode(to);
+				
 			}});
 	}
 }

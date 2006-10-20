@@ -1,5 +1,6 @@
 package com.aavu.client.strings;
 
+import com.aavu.client.domain.Topic;
 import com.google.gwt.i18n.client.Constants;
 
 public interface Consts extends Constants {	
@@ -13,7 +14,9 @@ public interface Consts extends Constants {
 	String seeAlsos();
 	String title();
 	String addTag();
-	String occurrences();	
+	String occurrences();
+	String deleteMe();
+	String editMe();	
 	
 	
 }

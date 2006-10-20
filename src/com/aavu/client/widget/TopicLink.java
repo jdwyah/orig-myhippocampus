@@ -9,10 +9,19 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicLink extends Composite {
+public class TopicLink extends Composite implements ClickListener {
 
 	private static final int DEFAULT_MAX_STRING = 40;
-
+	private Label l;
+	private long id; 
+	
+	/**
+	 * dummyLink
+	 *
+	 */
+	public TopicLink(){
+		this("",0);
+	}
 	public TopicLink(final Topic to) {
 		this(to.getTitle(),to.getId());
 	}
@@ -27,24 +36,30 @@ public class TopicLink extends Composite {
 		this(topic.getTopicTitle(),topic.getTopicID(),maxStringLength);
 	}
 
-	private TopicLink(String title, final long id, int maxStringLength){
+	private TopicLink(String title, long id, int maxStringLength){
 
-		Label l = null;
+		l = null;
 		if(title.length() > maxStringLength){
 			l = new Label(title.substring(0, maxStringLength-3)+"...");
 			l.addMouseListener(new TooltipListener(0,0,title));
 		}else{
 			l = new Label(title);
 		}
-		l.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				History.newItem(id+"");
-			}});
+		this.id = id;
+		l.addClickListener(this);
 
 
 		l.setStyleName("H-TopicLink");
 
 		initWidget(l);
 	}
+	public void load(TopicIdentifier to) {
+		l.setText(to.getTopicTitle());		
+		id = to.getTopicID();
+	}
+	public void onClick(Widget sender) {		
+		History.newItem(id+"");		
+	}
+	
 
 }
