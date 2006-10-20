@@ -19,9 +19,10 @@
 			<meta attribute="field-description">The title of this entry</meta>
 		</property>
 
-		<property name="data" type="string" column="data">
+		<property name="data" type="string">
 			<meta attribute="use-in-equals">true</meta>
 			<meta attribute="field-description">The optional data element</meta>
+			<column name="data" sql-type="text"></column>
 		</property>
 
 		<property name="lastUpdated" type="java.util.Date">

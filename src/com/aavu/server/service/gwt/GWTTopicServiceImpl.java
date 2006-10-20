@@ -50,10 +50,10 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	public String[] match(String match) {
 		log.debug("match");
 		try {
-			
+
 			String[] list = new String[]{};
 			list = topicService.getTopicsStarting(match).toArray(list);
-			
+
 			return list;
 
 		} catch (Exception e) {
@@ -100,7 +100,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}
 		return rtn;
 	}
-	
+
 
 	/**
 	 * Convert a topic to GWT serializable form. 
@@ -123,11 +123,11 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	public static Topic convert(Topic t,int level,boolean hasMembers,boolean typesWithAssociations){	
 		log.debug("CONVERT Topic "+t+" level: "+level+"  members "+hasMembers);
 		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypes().getClass());
-			
-	
-		
+
+
+
 		log.debug("t "+t.getTypes().getClass());				
-	
+
 		//
 		//new-ing it is essentially nulling it out, since we can't pass
 		//lazy stuff
@@ -135,25 +135,28 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		//L2 new it out
 		//L1 new everything expect metas we need this for topic's->tag's->metas
 		//
-		if(level >= 2){			
+		if(level >= 2){	
+			if(null == t){
+				return t;
+			}
 			System.out.println("setting nul_____________________________________________");
 			t.setLastUpdated(null);
 			t.setCreated(null);
-			
+
 			t.setScopes(new HashSet());			
 			t.setInstances(new HashSet());						
 			t.setOccurences(new HashSet());			
 			t.setAssociations(new HashSet());
-			
+
 			if(hasMembers){		
 				log.debug("LEVEL 2 HAS MEMBERS");
-				
+
 				Association ass = (Association) t;
-				
+
 				log.debug("types ");
 				log.debug("size "+ass.getTypes().size());
 				ass.setTypes(converter(ass.getTypes(), level));
-				
+
 				log.debug("members ");
 				log.debug("size "+ass.getMembers().size());
 				ass.setMembers(converter(ass.getMembers(), level));				
@@ -162,42 +165,54 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 				//
 				t.setTypes(new HashSet());				
 			}
-			
+
 		}else if(level == 1){
+			if(null == t){
+				return t;
+			}
+			log.debug("l1 "+t);
+			log.debug("last: "+t.getLastUpdated());
+			log.debug("created: "+t.getCreated());
+			
 			//didn't need to convert the postgres one, but mysql is
 			//returning java.sql.timestamp, which, surprise surprise 
 			//is another thing that breaks GWT serialization.
 			//
-			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
-			t.setCreated(new Date(t.getCreated().getTime()));
-			
-			
+			//hmm, I think these get nulled in Level 2 set -> client,
+			//then we error when the client passes this back. blech.
+			//
+			if(t.getLastUpdated() != null && t.getCreated() != null){
+				t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+				t.setCreated(new Date(t.getCreated().getTime()));
+			}
+
+
 			t.setScopes(new HashSet());						
 			t.setInstances(new HashSet());						
 			t.setOccurences(new HashSet());						
-			
+
 			log.debug("has Members "+hasMembers);
-			
+
 			if(typesWithAssociations){
 				log.debug("LEVEL 1 typesWithAssociations");
 				t.setAssociations(converter(t.getAssociations(), level,true));				
 			}else{
 				t.setAssociations(new HashSet());
 			}
-			
+
 			//convert associations
 			if(hasMembers){				
 				Association ass = (Association) t;
-				
+
 				log.debug("types ");
 				t.setTypes(converter(t.getTypes(), level));
-				
+
 				log.debug("members ");
 				ass.setMembers(converter(ass.getMembers(), level));				
 			}else{
 				t.setTypes(new HashSet());
 			}
-			
+
 		}else{
 			//didn't need to convert the postgres one, but mysql is
 			//returning java.sql.timestamp, which, surprise surprise 
@@ -205,29 +220,29 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			//
 			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
 			t.setCreated(new Date(t.getCreated().getTime()));
-			
+
 			log.debug("starting convert sets");
 			log.debug("SIZE: "+t.getTypes().size());
 			t.setScopes(new HashSet());
 			t.setTypes(converter(t.getTypes(),level,false,true));
-			
+
 			log.debug("starting convert sets-instances");
 			t.setInstances(converter(t.getInstances(),level));
-			
+
 			log.debug("starting convert sets-occurrences");
 			t.setOccurences(converter(t.getOccurences(),level));
-			
+
 			log.debug("starting convert sets-assocations");
 			t.setAssociations(converter(t.getAssociations(),level,true));
-				
+
 		}
 		log.debug("Finally: t "+t.getId()+" "+t.getUser());
-		
+
 		log.debug("Scan turned up persistent: "+Converter.scan(t));
-		
+
 		return t;
 	}
-	
+
 	public static Set converter(Set in,int level){
 		return converter(in, level,false);
 	}
@@ -251,19 +266,19 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}
 		return rtn;		
 	}
-	
+
 //	private Map converter(Map metaValues) {
-//		return converter(metaValues,false);
+//	return converter(metaValues,false);
 //	}
 //	private static Map converter(Map metaValues, boolean b) {
-//		// TODO Auto-generated method stub
-//		return null;
+//	// TODO Auto-generated method stub
+//	return null;
 //	}
 
 	public Topic getTopicForName(String topicName) {
 		try {
 			Topic t = topicService.getForName(topicName);
-			
+
 			if(t != null){
 				log.debug("orig "+t.getId()+" "+t.getTitle());
 
@@ -274,9 +289,9 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			}else{
 				log.debug("NULL");
 			}
-			
+
 			return t;
-			
+
 			//return convert(topicService.getForName(topicName));
 
 		} catch (Exception e) {
@@ -331,7 +346,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	public List getTimelineObjs() {
 		try {
 			return topicService.getTimelineObjs();
-			
+
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -341,15 +356,21 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 
 	public Topic[] save(Topic[] topics) {
-		List<Topic> list = topicService.save(topics);
-		Topic[] rtn = new Topic[list.size()];
-		int i = 0;
-		for (Topic topic : list) {
-			log.debug("Converting "+topic.getId());
-			rtn[i++] = convert(topic);
+		try {
+			List<Topic> list = topicService.save(topics);
+			Topic[] rtn = new Topic[list.size()];
+			int i = 0;
+			for (Topic topic : list) {
+				log.debug("Converting "+topic.getId());
+				rtn[i++] = convert(topic);
+			}
+			log.debug("Save[] rtn "+Arrays.toString(rtn));
+			return rtn;
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
 		}
-		log.debug("Save[] rtn "+Arrays.toString(rtn));
-		return rtn;		
 	}
 
 }

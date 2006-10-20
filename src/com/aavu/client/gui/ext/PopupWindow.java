@@ -19,7 +19,7 @@ public class PopupWindow extends ModablePopupPanel implements ClickListener{
 
     private DragListener dragListener = new DragListener();
     private FocusPanel caption = new FocusPanel();
-    private Label captionText = new Label();    
+    private Label captionText;    
     private VerticalPanel mainPanel;
     
     
@@ -34,8 +34,9 @@ public class PopupWindow extends ModablePopupPanel implements ClickListener{
     	
     	HorizontalPanel titleBar = new HorizontalPanel();
     	
+    	captionText = new Label(text);
     	caption.addMouseListener(dragListener);
-    	caption.add(new Label(text));
+    	caption.add(captionText);
     	caption.setStyleName("Caption");
     	
     	titleBar.add(caption);

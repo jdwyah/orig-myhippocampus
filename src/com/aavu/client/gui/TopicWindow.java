@@ -10,7 +10,7 @@ public class TopicWindow extends PopupWindow {
 	public TopicWindow(Manager manager,Topic t) {
 		super(t.getTitle());
 
-		TopicViewAndEditWidget widg = new TopicViewAndEditWidget(manager);
+		TopicViewAndEditWidget widg = new TopicViewAndEditWidget(this,manager);
 		widg.load(t);
 		
 		setContentPanel(widg);

@@ -7,6 +7,7 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
 import com.google.gwt.user.client.ui.Button;
@@ -30,11 +31,13 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	private VerticalPanel lp;
 	
 	public Topic topic;
-	private Manager manager;	
+	private Manager manager;
+	private TopicWindow window;	
 	
 	
-	public TopicViewAndEditWidget(Manager manager) {
+	public TopicViewAndEditWidget(TopicWindow window, Manager manager) {
 		this.manager = manager;
+		this.window = window;
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
@@ -60,7 +63,9 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		topicEditWidget = new TopicEditWidget(this,manager,topic);
 		
 		activateMainView();
-
+		System.out.println("############################## "+topic.getTitle());
+		window.setText(topic.getTitle());
+		
 		Effect.highlight(topicPanel);
 	}
 		
@@ -102,12 +107,14 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 
 	public void save(Topic topic2, Set otherTopicsToSave) {
 		
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!");
+		//TODO is this good or bad? a bit early.. 
 		load(topic2);
 		
 		manager.getTopicCache().save(topic2, otherTopicsToSave, new StdAsyncCallback("topicDetail save") {				
 			
 			public void onSuccess(Object result) {		
-				
+				System.out.println("????????????????????");
 				//this should prevent double saves
 				Topic[] saved = (Topic[]) result;
 				load(saved[0]);
