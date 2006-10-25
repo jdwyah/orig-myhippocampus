@@ -62,12 +62,13 @@
 		<param-value>/WEB-INF/applicationContext-hibernate.xml, /WEB-INF/applicationContext.xml,  /WEB-INF/applicationContext-acegi-security.xml</param-value>
 	</context-param>
 
+<!-- screws things up??? weird.
 	<welcome-file-list>
 	    <welcome-file>site/index.html</welcome-file>    
 	    <welcome-file>/site/index.html</welcome-file>    
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-   
+   -->
 
 	<!-- 
 		<servlet>
