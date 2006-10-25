@@ -6,6 +6,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 
@@ -14,8 +15,8 @@ public interface GWTTopicService extends RemoteService {
 
 	TopicIdentifier[] getAllTopicIdentifiers();
 	
-	Topic save(Topic topic);
-	Topic[] save(Topic[] l);
+	Topic save(Topic topic) throws HippoException;
+	Topic[] save(Topic[] l) throws HippoException;
 	
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>

@@ -16,6 +16,7 @@ public class MainMap extends Composite {
 	private Manager manager;
 	//private TagSearch tagSearch;	
 	private Ocean ocean;
+	private StatusPanel statusPanel;
 	
 	public MainMap(Manager manager){
 		this.manager = manager;
@@ -30,10 +31,15 @@ public class MainMap extends Composite {
 		
 		ocean = new Ocean(manager);
 		
+		statusPanel = new StatusPanel();
+		
+		
 		mainP.add(new CompassRose());
 		mainP.add(ocean);
 		mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
+		mainP.add(statusPanel);
+		
 		//mainP.add(tagSearch);
 		
 		mainP.addStyleName("");
@@ -47,5 +53,11 @@ public class MainMap extends Composite {
 
 	public void updateSidebar() {
 		sideBar.load();
+	}
+	//TODO shouldn't need null checks, but we do.
+	public void updateStatusWindow(int id, String string, StatusCode statusCode) {
+		if(statusPanel != null){
+			statusPanel.update(id,string,statusCode);
+		}
 	}
 }

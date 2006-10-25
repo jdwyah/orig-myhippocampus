@@ -8,6 +8,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
@@ -33,7 +34,7 @@ public class TopicServiceImpl implements TopicService {
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 
-	public Topic save(Topic topic) {
+	public Topic save(Topic topic) throws HippoBusinessException {
 		System.out.println("Topic Save Setting User "+userService.getCurrentUser());
 		topic.setLastUpdated(new Date());
 		topic.setUser(userService.getCurrentUser());
@@ -51,7 +52,7 @@ public class TopicServiceImpl implements TopicService {
 	public List<TimeLineObj> getTimelineObjs() {
 		return topicDAO.getTimeline(userService.getCurrentUser());
 	}
-	public List<Topic> save(Topic[] topics) {
+	public List<Topic> save(Topic[] topics) throws HippoBusinessException {
 		List<Topic> rtn = new ArrayList<Topic>();
 		for (Topic topic : topics) {
 			rtn.add(save(topic));

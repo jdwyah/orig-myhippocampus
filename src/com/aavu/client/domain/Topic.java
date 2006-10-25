@@ -1,10 +1,8 @@
 package com.aavu.client.domain;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import com.aavu.client.domain.generated.AbstractTopic;
@@ -12,9 +10,7 @@ import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.user.client.ui.ComplexPanel;
 
 public class Topic extends AbstractTopic  implements Completable, IsSerializable{
 
@@ -53,23 +49,57 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(topicIdent.getTopicTitle());		
 	}
 
-	public void addMetaValue(Topic meta, Topic metaValue) {
+	public void addMetaValue(Meta meta, Topic metaValue) {
 
-		Association assoc = new Association();
+		System.out.println("Topic.addMetaValue: "+metaValue);
+		
+//		Topic cur_val = getSingleMetaValueFor(meta);
+//		if(cur_val != null){
+//			
+//		}		
+		
+		Association assoc = getAssociationForMetaOrNull(meta);
+		if(assoc == null){
+			System.out.println("addMetaValue: create new assoc");
+			assoc = new Association();
+			
+			
+			
+		}else{
+			Topic cur_val = (Topic) assoc.getMembers().iterator().next();
+			System.out.println("cur_v "+cur_val);			
+			
+			if(cur_val.equals(metaValue)){
+				System.out.println("Were Equal, Moving on.");
+				return;
+			}else{
+				System.out.println("cur "+cur_val.getIdentifier());
+				System.out.println("new "+metaValue.getIdentifier());
+			}
+		}
+		
 		assoc.setTitle(getTitle()+" to "+metaValue.getTitle());
 		
+		//redundant if we've already created
 		assoc.getTypes().add(meta);
-		assoc.getMembers().add(metaValue);
-				
 		
+		assoc.getMembers().clear();
+		assoc.getMembers().add(metaValue);
+						
 		metaValue.getTypes().add(meta);
 		meta.getInstances().add(metaValue);
 		
+		//redundant if we've already created
 		getAssociations().add(assoc);
 		
 		//System.out.println(topic+"size "+topic.getMetaValues());
 	}
+	
+	
 
+	public void setMetaValue(Meta meta, Topic metaValue){
+		getMetaValuesFor(meta).add(metaValue);
+	}
 
 
 	public void tagTopic(Topic tag){
@@ -226,7 +256,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 				}				
 			}
 		}		
-		System.out.println("create new assoc");
+		System.out.println("getSeeAlsoAssociation: create new assoc");
 		return new Association(this,new MetaSeeAlso());				
 	}
 	/**
@@ -252,18 +282,27 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		}
 		return metas;		
 	}
-	public Set getMetaValuesFor(Meta meta){		
+	private Association getAssociationForMetaOrNull(Meta meta) {
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			
 			for (Iterator iterator = association.getTypes().iterator(); iterator.hasNext();) {
-				Topic possibleMeta = (Topic) iterator.next();
-				if (possibleMeta == meta) {	
-					return association.getMembers();									
+				Topic possible = (Topic) iterator.next();
+				if (possible == meta) {	
+					return association;									
 				}	
 			}			
 		}
-		return new HashSet();
+		return null;
+	}
+	
+	public Set getMetaValuesFor(Meta meta){		
+		Association assoc = getAssociationForMetaOrNull(meta);
+		if(assoc != null){
+			return assoc.getMembers();
+		}else{
+			return new HashSet();	
+		}		
 	}
 	/**
 	 * Convenience method for when you know there's only one member.

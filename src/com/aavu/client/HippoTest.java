@@ -1,5 +1,7 @@
 package com.aavu.client;
 
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
@@ -35,7 +37,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class HippoTest implements EntryPoint, HistoryListener {
 
-	private static final String EMPTY = "";
+	public static final String EMPTY = "-1";
 	
 	private TagOrganizerView tagView;
 	private BrowseView browseView;
@@ -66,8 +68,9 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		String pre = "";
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
-			pre = "http://www.myhippocampus.com/service/";
-			//pre = "http://localhost:8080/service/";
+			//pre = "http://www.myhippocampus.com/service/";
+			       
+			pre = "http://localhost:8080/service/";
 			
 		}else{
 			pre = GWT.getModuleBaseURL();
@@ -100,7 +103,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		//hopefully replace with Spring DI
 		//
 		TopicCompleter.setTopicService(hippoCache.getTopicCache());
-		//MetaTopicList.setCache(hippoCache);
+		MetaDate.setTopicService(hippoCache.getTopicCache());
 		
 		
 		//Window.alert("5");
@@ -110,6 +113,10 @@ public class HippoTest implements EntryPoint, HistoryListener {
 				user = (User) result;
 				
 				manager = new Manager(hippoCache,user);				
+				
+				//static setters again
+				//
+				StdAsyncCallback.setManager(manager);
 				
 				if(user != null)
 				System.out.println("found a user: "+user.getUsername());				
@@ -121,7 +128,10 @@ public class HippoTest implements EntryPoint, HistoryListener {
 					Window.alert("GetCurrentUser failed! "+caught+" \nEP:"+user_endpoint_debug);
 				}
 				manager = new Manager(hippoCache,null);
-					
+		
+				
+				
+				
 				loadGUI();
 			}			
 			
@@ -185,7 +195,10 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	    // the label to reflect the current history token.
 		System.out.println("history changed to "+historyToken);
 		if(historyToken != EMPTY){
-			manager.gotoTopic(historyToken);		
+			manager.gotoTopic(historyToken);
+			
+			//huh... seems to be fine in IE, but FF fires a reload and the request fails.
+			//change to "-1"
 			History.newItem(EMPTY);
 		}
 	  }

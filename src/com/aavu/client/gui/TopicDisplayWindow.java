@@ -49,6 +49,7 @@ public class TopicDisplayWindow extends PopupWindow {
 				  public void onMouseEnter(Widget sender) {
 					  manager.getTopicCache().getTopic(ident, new StdAsyncCallback("Preview"){
 						public void onSuccess(Object result) {
+							super.onSuccess(result);
 							previewWindow.clear();
 							previewWindow.add(new TopicWidget((Topic)result));
 						}});

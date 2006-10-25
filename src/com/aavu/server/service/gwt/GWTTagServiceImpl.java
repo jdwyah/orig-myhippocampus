@@ -12,6 +12,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.client.widget.autocompletion.Completable;
@@ -49,9 +50,11 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		}
 	}
 
-	public Tag getTagAddIfNew(String tagName) {
+	public Tag getTagAddIfNew(String tagName) throws HippoException {
 		try{
 			return convert(tagService.getTagAddIfNew(tagName));
+		}  catch (HippoException ex) {
+			throw ex;
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -77,13 +80,16 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 		}
 	}
 
-	public void saveTag(Tag selectedTag) {
+	public void saveTag(Tag selectedTag) throws HippoException {
 		try{
 			log.debug("saving tag:");
 			log.debug(selectedTag.toPrettyString());
 			
 			tagService.save(selectedTag);
 			log.debug("saved tag: "+selectedTag);
+			
+		}  catch (HippoException ex) {
+			throw ex;
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();

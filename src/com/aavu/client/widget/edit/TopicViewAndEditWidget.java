@@ -114,6 +114,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		manager.getTopicCache().save(topic2, otherTopicsToSave, new StdAsyncCallback("topicDetail save") {				
 			
 			public void onSuccess(Object result) {		
+				super.onSuccess(result);
 				System.out.println("????????????????????");
 				//this should prevent double saves
 				Topic[] saved = (Topic[]) result;

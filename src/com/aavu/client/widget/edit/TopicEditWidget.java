@@ -74,6 +74,7 @@ public class TopicEditWidget extends Composite {
 		tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
 
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				Set otherTopicsToSave = (Set) result;
 				topicViewAndEditWidget.save(topic,otherTopicsToSave);					
 			}});

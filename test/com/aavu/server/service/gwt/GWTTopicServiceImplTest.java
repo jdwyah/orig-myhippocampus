@@ -9,6 +9,8 @@ import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
@@ -62,7 +64,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 	}
 
-	private void doSomeInit(){
+	private void doSomeInit() throws HippoException{
 
 		log.debug("INITING");
 
@@ -100,7 +102,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		topicService.save(l);
 	}
 
-	public void testGetATopic() {
+	public void testGetATopic() throws HippoException {
 
 		doSomeInit();
 		
@@ -146,7 +148,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 		
 	}
-	public void testDisappearingTagInstances(){
+	public void testDisappearingTagInstances() throws HippoBusinessException{
 		
 		Topic patriotGames = new Topic(u,C);
 		patriotGames.setData(B);

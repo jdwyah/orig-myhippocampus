@@ -8,10 +8,11 @@ import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.HippoBusinessException;
 
 public interface TopicDAO {
 
-	Topic save(Topic t);
+	Topic save(Topic t) throws HippoBusinessException;
 
 	List<TopicIdentifier> getAllTopicIdentifiers(User user);
 

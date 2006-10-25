@@ -36,6 +36,7 @@ import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 
 public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicDAO{
@@ -130,11 +131,17 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	
 	
-	public Topic save(Topic t) {
+	public Topic save(Topic t) throws HippoBusinessException {
 		System.out.println("SAVE "+t.getTitle());
 
-		
-		
+		if(t.getTitle().equals("")){
+			throw new HippoBusinessException("Empty Title");
+		}		
+		Object[] args = {t.getTitle(),t.getUser()};
+		Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
+		if(sameNamed != null && sameNamed.getId() != t.getId()){
+			throw new HippoBusinessException("Duplicate Name");
+		}
 		
 		//
 		//Bit of a chicken & egg thing here with TransientReferences..

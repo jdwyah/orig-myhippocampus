@@ -123,6 +123,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 				//tagService.removeTag(tagList.getItemText(tagList.getSelectedIndex()), new AsyncCallback(){
 
 					public void onSuccess(Object result) {
+						super.onSuccess(result);
 						System.out.println("success deleting tag");
 					}});
 			} catch (PermissionDeniedException e) {
@@ -160,6 +161,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 			hippoCache.getTagCache().saveTag(selectedTag, new StdAsyncCallback("tagService saveTag"){
 
 				public void onSuccess(Object result) {
+					super.onSuccess(result);
 					System.out.println("success in saving tag " + selectedTag.getName());
 					populateTagList();
 				}
@@ -173,6 +175,7 @@ public class TagOrganizerView extends Composite implements ClickListener{
 		hippoCache.getTagCache().getAllTags(new StdAsyncCallback("populateTagList"){
 
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				Tag[] tags = (Tag[]) result;
 				tagClowd.clear();
 

@@ -1,8 +1,13 @@
 package com.aavu.client.gui.ext;
 
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.TagStat;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class FlashContainer extends SimplePanel {
@@ -92,11 +97,41 @@ public class FlashContainer extends SimplePanel {
 		return "<string>"+val+"</string>";
 	}
 
-	protected void runCommand(String command){
+	private void runCommand(String command){
 		System.out.println("cmm:"+command);
 		runCommand(name, command);
 	}
-
+	
+	/**
+	 * Tough to know when the Flash will load, and if we call methods on an unloaded Flash, FF crashes spectacularly.
+	 * 
+	 * Flash will now call flashReady() in HippoTest.html, which sets $wnd.flashReadyVar, which we check here.
+	 * 
+	 * TODO a little inefficient to create a new timer everytime. Just calling isloaded w/o Timer can cause
+	 * flashReadyVar to return undefined though..
+	 * 
+	 * @param command
+	 */
+	protected void runCommandDeferred(final String command){
+		
+		Timer t = new Timer() {
+			public void run() {
+				if(isLoaded()){
+					GWT.log("loaded, run Command", null);					
+					runCommand(command);
+				}else{
+					GWT.log("not loaded, check in 1", null);
+					schedule(1000);
+				}
+			}
+		};
+		t.schedule(100); 
+	}
+	
+	private native boolean isLoaded()/*-{		
+		return $wnd.flashReadyVar;	
+	}-*/;
+	
 	private native void runCommandOld(String name,String command)/*-{
 	
 		$wnd.callTheFlash(name,command);		

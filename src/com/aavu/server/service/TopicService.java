@@ -6,12 +6,13 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.exception.HippoBusinessException;
 
 public interface TopicService {
 
 	List<TopicIdentifier> getAllTopicIdentifiers();
 
-	Topic save(Topic topic);
+	Topic save(Topic topic) throws HippoBusinessException;
 
 	List<String> getTopicsStarting(String match);
 
@@ -23,6 +24,6 @@ public interface TopicService {
 
 	List<TimeLineObj> getTimelineObjs();
 
-	List<Topic> save(Topic[] topics);
+	List<Topic> save(Topic[] topics) throws HippoBusinessException;
 
 }

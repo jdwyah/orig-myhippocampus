@@ -12,6 +12,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
@@ -56,7 +57,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
-	private Tag[] add3(){
+	private Tag[] add3() throws HippoBusinessException{
 
 		Tag t1 = new Tag();
 		t1.setName(A);
@@ -79,7 +80,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		return new Tag[] {t1,t2,t3};
 	}
 
-	public void testGetAllTags() {
+	public void testGetAllTags() throws HippoBusinessException {
 		add3();
 
 		List<Tag> list = tagDAO.getAllTags(u);
@@ -96,8 +97,9 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	 * .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
 	 * really does something. It does (otherwise, I get dupes from 
 	 * getAllTags() in live use, but I can't replicate in this test.
+	 * @throws HippoBusinessException 
 	 */
-	public void testGetAllTagsNoDupes() {
+	public void testGetAllTagsNoDupes() throws HippoBusinessException {
 		Tag[] tags = add3();
 
 		Topic t1 = new Topic();
@@ -143,13 +145,13 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 	
-	public void testGetTag() {
+	public void testGetTag() throws HippoBusinessException {
 		add3();
 		Tag t = tagDAO.getTag(u, A);
 		assertEquals(A,t.getName());
 	}
 
-	public void testGetTagsStarting() {
+	public void testGetTagsStarting() throws HippoBusinessException {
 
 		add3();
 
@@ -167,7 +169,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
-	public void testRemoveTag() throws PermissionDeniedException {
+	public void testRemoveTag() throws PermissionDeniedException, HippoBusinessException {
 
 		add3();
 
@@ -180,7 +182,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(2+publicTagNumber, list.size());
 	}
 
-	public void testSave() {
+	public void testSave() throws HippoBusinessException {
 		String name = "metaname";
 		String name2 = "mname2";
 
@@ -229,7 +231,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
-	public void testTagStat(){
+	public void testTagStat() throws HippoBusinessException{
 		Tag[] three = add3();
 
 		//test

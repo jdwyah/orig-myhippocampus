@@ -32,25 +32,19 @@ public class Ocean extends FlashContainer {
 	 *
 	 */
 	private void initIslands(){
-		System.out.println("Init Islands");		
-		Timer t = new Timer() {
-			public void run() {
-				DeferredCommand.add(new Command(){
-					public void execute() {
-						manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){
-							public void onSuccess(Object result) {
-								TagStat[] tagStats = (TagStat[]) result;
+		System.out.println("Init Islands...");		
+				
+		manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				TagStat[] tagStats = (TagStat[]) result;
 
-								System.out.println("TagStat Result "+tagStats);
+				System.out.println("TagStat Result "+tagStats);
 
-								runCommand(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
+				runCommandDeferred(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
 
-							}});
-					}});				
-			}
-		};
-		t.schedule(2000); 
-			
+			}});
+		
 	}
 	
 	protected void callbackOverride(String command, int arg){
@@ -102,13 +96,13 @@ public class Ocean extends FlashContainer {
 		sb.append("<invoke name=\"grow\" returntype=\"javascript\"><arguments>");
 		sb.append(number(tag.getId()));				
 		sb.append("</arguments></invoke>");    						
-		runCommand(sb.toString());
+		runCommandDeferred(sb.toString());
 		
 		sb = new StringBuffer();
 		sb.append("<invoke name=\"rename\" returntype=\"javascript\"><arguments>");
 		sb.append(number(tag.getId()));				
 		sb.append(string(tag.getName()));
 		sb.append("</arguments></invoke>");    						
-		runCommand(sb.toString());		
+		runCommandDeferred(sb.toString());		
 	}
 }

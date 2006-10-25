@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
@@ -40,7 +41,7 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 	}
 
 
-	public Tag getTagAddIfNew(String tagName) {
+	public Tag getTagAddIfNew(String tagName) throws HippoBusinessException {
 		log.debug("load tag named: "+tagName);
 
 		Tag rt = tagDAO.getTag(userService.getCurrentUser(),tagName);
@@ -84,9 +85,10 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 
 	/**
 	 * TODO who sets possibly unsaved meta Users? Client?
+	 * @throws HippoBusinessException 
 	 *  
 	 */
-	public void save(Tag selectedTag) {
+	public void save(Tag selectedTag) throws HippoBusinessException {
 
 		log.debug("Servic tag.save() setting user");
 

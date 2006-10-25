@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.test.AssertThrows;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.MetaDate;
@@ -14,6 +15,7 @@ import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
@@ -62,7 +64,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 
 
-	public void testSave() {
+	public void testSave() throws HippoBusinessException {
 	
 		Topic t = new Topic();
 		t.setData(B);
@@ -106,7 +108,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 	
-	public void testSaveComplexMetas() {
+	public void testSaveComplexMetas() throws HippoBusinessException {
 						
 		Topic patriotGames = new Topic();
 		patriotGames.setData(B);
@@ -190,7 +192,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 	
-	public void testGetTopicsWithTag(){
+	public void testGetTopicsWithTag() throws HippoBusinessException{
 		
 				
 		Topic t = new Topic();
@@ -234,7 +236,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		System.out.println("A");
 	}
-	public void testGetAllTopicIdentifiers(){	
+	public void testGetAllTopicIdentifiers() throws HippoBusinessException{	
 		
 		Topic t = new Topic();
 		t.setData(B);
@@ -271,7 +273,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 	
-	public void testSaveSeeAlsos(){
+	public void testSaveSeeAlsos() throws HippoBusinessException{
 		
 		Topic stringTheory = new Topic(u,B);
 		
@@ -402,8 +404,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	 * 
 	 * Only functions properly with clean DB bc it uses getAllTopics to sweep for accidental
 	 * null user topics.
+	 * @throws HippoBusinessException 
 	 */
-	public void testToMakeSureWeDontCreateTooManyObjects(){
+	public void testToMakeSureWeDontCreateTooManyObjects() throws HippoBusinessException{
 		
 		topicDAO.deleteAllTables();
 		
@@ -505,6 +508,31 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		}
 		
 		System.out.println("list "+list.size());
+	}
+	/**
+	 * Test duplicate entry and "" title checks.
+	 * 
+	 * @throws HippoBusinessException
+	 */
+	public void testSaveChecks() throws HippoBusinessException {
+		
+		final Topic t = new Topic(u,"");
+
+		new AssertThrows(HippoBusinessException.class) {
+			public void test() throws HippoBusinessException {
+				topicDAO.save(t);
+			}
+		}.runTest();
+		
+		final Topic t2 = new Topic(u,C);
+		final Topic t3 = new Topic(u,C);
+		topicDAO.save(t2);
+		
+		new AssertThrows(HippoBusinessException.class) {
+			public void test() throws HippoBusinessException {
+				topicDAO.save(t3);
+			}
+		}.runTest();
 	}
 	
 	

@@ -16,6 +16,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.TopicService;
 
@@ -31,14 +32,15 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	}
 
 
-	public Topic save(Topic topic) {
+	public Topic save(Topic topic) throws HippoException {
 
 		try {
 			log.debug("Save topics");
 			log.debug(topic.toPrettyString());
 
 			return convert(topicService.save(topic));
-
+		}  catch (HippoException ex) {
+			throw ex;
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -355,7 +357,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	}
 
 
-	public Topic[] save(Topic[] topics) {
+	public Topic[] save(Topic[] topics) throws HippoException {
 		try {
 			List<Topic> list = topicService.save(topics);
 			Topic[] rtn = new Topic[list.size()];
@@ -366,6 +368,8 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			}
 			log.debug("Save[] rtn "+Arrays.toString(rtn));
 			return rtn;
+		}  catch (HippoException ex) {
+			throw ex;
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();

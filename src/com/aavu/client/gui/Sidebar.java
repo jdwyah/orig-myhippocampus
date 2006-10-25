@@ -58,6 +58,7 @@ public class Sidebar extends FocusPanel implements MouseListener {
 		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback("Sidebar"){
 
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				List topics = (List) result;
 				alphabetizeTopics(topics);
 			}

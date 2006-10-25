@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
@@ -11,6 +12,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
+import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TagEditorWindow;
 import com.aavu.client.gui.TopicSaveListener;
@@ -49,6 +51,7 @@ public class Manager implements TopicSaveListener {
 	public void bringUpChart(TopicIdentifier ident) {
 		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback("BringUpChart"){
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				bringUpChart((Topic) result);				
 			}});
 
@@ -106,6 +109,7 @@ public class Manager implements TopicSaveListener {
 	public void showTopicsForTag(String completeText) {
 		hippoCache.getTagCache().getTagForName(completeText,new StdAsyncCallback("Get Tag For Name"){
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				final Tag tag = (Tag) result;
 				showTopicsForTag(tag);	
 			}});
@@ -113,6 +117,7 @@ public class Manager implements TopicSaveListener {
 	public void showTopicsForTag(final Tag tag) {
 		getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback("Get Topics with Tag"){
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				TopicIdentifier[] topics = (TopicIdentifier[]) result;
 
 				TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
@@ -131,23 +136,24 @@ public class Manager implements TopicSaveListener {
 	 */
 	public void gotoTopic(String historyToken) {
 
-		long l = -1;
+		long l = -2;//Will be -2 if we're loading by name
 		try{
 			l = Long.parseLong(historyToken);
 		}catch(NumberFormatException e){
 
 		}
 		System.out.println("|"+historyToken+"|"+l);
-		if(l == -1){
-
+		if(l == -2){
 			hippoCache.getTopicCache().getTopicForNameA(historyToken, new StdAsyncCallback("GotoTopicStr "+l){
 				public void onSuccess(Object result) {
+					super.onSuccess(result);
 					Topic t = (Topic) result;
 					bringUpChart(t);
 				}});
-		}else{
+		}else if(l != -1){// == HippoTest.EMPTY
 			hippoCache.getTopicCache().getTopicByIdA(l,new StdAsyncCallback("GotoTopicID "+l){
 				public void onSuccess(Object result) {
+					super.onSuccess(result);
 					Topic t = (Topic) result;
 					bringUpChart(t);
 				}});
@@ -176,6 +182,9 @@ public class Manager implements TopicSaveListener {
 	 */
 	public void topicSaved(Topic t) {
 		map.updateSidebar();
+	}
+	public void updateStatus(int i, String call, StatusCode send) {
+		map.updateStatusWindow(i, call, send);
 	}
 	
 

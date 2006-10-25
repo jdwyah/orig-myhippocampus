@@ -20,6 +20,7 @@
 // please keep these lines on when you copy the source
 
 var setable = "unset";
+var	flashReadyVar = false;
 var flashCommand = fff;
 
 function fff(vvv,sss){
@@ -38,6 +39,9 @@ function islandClicked(arg) {
 	//alert("receivedURLs from flash"+arg);
 	//alert(flashCommand);
 	flashCommand("islandClicked",arg);
+}
+function flashReady() {
+	flashReadyVar = true;
 }
 
 //-->

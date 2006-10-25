@@ -49,13 +49,44 @@ a:visited {
 
 .H-Dashboard {
 	bottom: 0px;
-	left: 20%;
+	left: 30%;
 	width: 200px;
 	height: 40px;
 	margin: 0 auto; /* align for good browsers */
 	text-align: left; /* counter the body center */
 	border: 2px solid #000;
 }
+.H-StatusPanel {
+	top: 0px;
+	left: 60%;
+	width: 200px;
+	height: 40px;
+	background-color: transparent;
+	margin: 0 auto; /* align for good browsers */
+	text-align: left; /* counter the body center */
+	border: 2px solid #000;
+
+}
+
+.H-StatusLabels {
+	filter:alpha(opacity=40);
+	-moz-opacity:.40;
+	opacity:.40;
+	-khtml-opacity:.4;
+}	
+	
+.H-StatusLabels .H-Send {
+	background: yellow;	
+}
+.H-StatusLabels .H-Fail {
+	background: red;	
+}
+.H-StatusLabels .H-Success {
+	background-color: green;	
+}
+
+
+
 .H-EnterInfoButton {
 	background-image: url("../img/bluecheck-bullet-14.gif");
 	background-repeat: no-repeat;

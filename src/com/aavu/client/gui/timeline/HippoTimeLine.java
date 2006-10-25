@@ -38,6 +38,7 @@ public class HippoTimeLine extends PopupWindow {
 		topicCache.getTimelineObjs(new StdAsyncCallback("GetTimelineObjs"){
 
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				List timelines = (List) result;
 				
 				JSONObject jo = new JSONObject();
