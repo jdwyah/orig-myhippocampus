@@ -46,8 +46,13 @@ public class StatusPanel extends SimplePanel {
 				Effect.fade(sl);
 			}
 		}
+		//FAIL
 		else { 
-			((StatusLabel)map.get(new Integer(id))).setCode(statusCode);			
+			StatusLabel sl = (StatusLabel) map.get(new Integer(id));
+			if(sl != null){
+				sl.setText(string);
+				sl.setCode(statusCode);
+			}
 		}
 	}
 

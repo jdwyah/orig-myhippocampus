@@ -21,6 +21,33 @@ body {
 	margin: 0em auto;
 }
 
+
+.splash-title {
+	font-size: 60pt;
+	line-height: 65pt;	
+}
+.splash-word {
+	font-size: 40pt;
+	line-height: 22pt;	
+	position: relative;
+	left: 20px;		
+}
+.splash-definition {
+	font-size: 20pt;
+	line-height: 20pt;
+	position: relative;
+	left: 40px;		
+}
+.hid {
+	color: rgb(90,90,90);
+	text-decoration: none;	
+
+}
+.hid a:hover{
+	color: rgb(90,90,90);
+	text-decoration: none;	
+}
+
 /**************/
 /*   HEADER   */
 /**************/

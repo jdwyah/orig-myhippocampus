@@ -1,5 +1,6 @@
 package com.aavu.client.gui.ext.timeline;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -27,22 +28,22 @@ public class SimileTimeline extends SimplePanel {
 
 	
 	public void load(JSONObject jo) {
-		nativeLoad(name,jo.toString());				
+		nativeLoad(name,jo.toString(),GWT.getModuleBaseURL());				
 	}	
 	
 	
-	private native void nativeLoad(String name,String jsonString)/*-{
+	private native void nativeLoad(String name,String jsonString,String baseURL)/*-{
 	var jsonData = eval('(' + jsonString + ')')
 	 //alert("wnd"+$wnd);
 	 //alert($wnd.Timeline);
 	 //alert("doc"+$doc);
 	 //alert("doc"+$doc.Timeline);	 
 	 var Timeline = $wnd.Timeline;	 
-//	 alert("timeline: "+Timeline);
+	 //alert("timeline: "+Timeline);
 
-alert("json "+jsonData);
-alert("json.events "+jsonData.events);
-alert("json.date "+jsonData.dateTimeFormat);
+	//alert("json "+jsonData);
+	//alert("json.events "+jsonData.events);
+	//alert("json.date "+jsonData.dateTimeFormat);
  	 var eventSource = new Timeline.DefaultEventSource();
 
 	 var bandInfos = [
@@ -65,7 +66,7 @@ alert("json.date "+jsonData.dateTimeFormat);
 		  bandInfos[1].syncWith = 0;
 		  bandInfos[1].highlight = true;
 		  tl = Timeline.create($doc.getElementById(name), bandInfos);		  
-		  eventSource.loadJSON(jsonData, "http://");
+		  eventSource.loadJSON(jsonData, baseURL);
 		  
 	}-*/;
 	

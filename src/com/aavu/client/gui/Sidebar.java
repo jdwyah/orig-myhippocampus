@@ -26,6 +26,8 @@ public class Sidebar extends FocusPanel implements MouseListener {
 	private static final String KEYS = "<span class=\"H-SideBarKey\">";
 	private static final String KEYS_NOELEM = "<span class=\"H-SideBarKey H-SideBarKeyNoElements\">";
 	private static final String KEYEND = "</span>";
+
+	private static final String OTHER = "#'s";
 	
 	/**
 	 * case insensitve comparator for topic names
@@ -76,6 +78,8 @@ public class Sidebar extends FocusPanel implements MouseListener {
 			Map thisLetter = new GWTSortedMap(caseInsensitive);			
 			allEntries.put(lett+"", thisLetter);
 		}
+		Map othersMap = new GWTSortedMap();
+		allEntries.put(OTHER, othersMap);
 		
 		TopicIdentifier topicIdent = null;		
 		for (Iterator ident = topics.iterator(); ident.hasNext();) {
@@ -84,7 +88,10 @@ public class Sidebar extends FocusPanel implements MouseListener {
 			
 			char firstLetter = topicIdent.getTopicTitle().charAt(0);
 						
-			Map map = (Map) allEntries.get(""+Character.toUpperCase(firstLetter));			
+			Map map = (Map) allEntries.get(""+Character.toUpperCase(firstLetter));
+			if(map == null){
+				map = (Map) allEntries.get(OTHER);
+			}
 			map.put(topicIdent.getTopicTitle(),topicIdent);							
 		}
 			

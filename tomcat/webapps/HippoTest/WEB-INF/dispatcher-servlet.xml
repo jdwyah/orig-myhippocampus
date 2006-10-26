@@ -4,6 +4,10 @@
 
 <beans>
 
+	<bean id="splashController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="splash" />
+		<property name="userService" ref="userService" />
+	</bean>
 	<bean id="indexController" class="com.aavu.server.web.controllers.BasicController">
 		<property name="view" value="index" />
 		<property name="userService" ref="userService" />
@@ -78,7 +82,8 @@
 				<prop key="/site/secure/addLink.html">addLinkController</prop>
 				<prop key="/site/secure/getTopics.html">ajaxController</prop>
 
-				<prop key="/site/index.html">indexController</prop>
+				<prop key="/site/index.html">splashController</prop>
+				<prop key="/site/index2.html">indexController</prop>
 				<prop key="/site/tour.html">tourController</prop>
 				<prop key="/site/manifesto.html">manifestoController</prop>
 			</props>

@@ -21,6 +21,7 @@
 
 package com.aavu.client.widget.datepicker;
 
+
 import java.util.Date;
 
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -121,8 +122,10 @@ public abstract class DatePicker extends TextBox implements KeyboardListener{
 	 * 
 	 * @param Date
 	 */
-	public void setSelectedDate(Date selectedDate) {
+	public void setSelectedDate(Date selectedDate) {		
 		this.selectedDate = selectedDate;
+		String dateStr = dateFormatter.formatDate(selectedDate);
+		setText(dateStr);
 	}
 	
 	/*

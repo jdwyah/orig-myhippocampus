@@ -78,7 +78,9 @@ public class CalendarPanel extends AbsolutePanel {
 	 */
 	public void redrawCalendar(){
 		this.clearCalendar(this.currentMonth);
-		this.buildMonthBody(this.datePicker.getCurrentDate(), this.currentMonth);
+		
+		//JD
+		this.buildMonthBody(this.datePicker.getSelectedDate(), this.currentMonth);
 	}
 	
 	/*
@@ -203,11 +205,12 @@ public class CalendarPanel extends AbsolutePanel {
 			  calPanel.getDateFormat()
 			  );
 			  */
-			String dateStr = calPanel.getDateFormatter().formatDate(new Date(	currentDate.getYear(), 
+			Date newDate = new Date(	currentDate.getYear(), 
 					currentDate.getMonth(), 
-					Integer.parseInt(this.calPanel.cellValues[row][col])
-			));
-			this.calPanel.datePicker.setText(dateStr);
+					Integer.parseInt(this.calPanel.cellValues[row][col]));
+						
+			this.calPanel.datePicker.setSelectedDate(newDate);
+		//	this.calPanel.datePicker.setText(dateStr);
 			this.calPanel.datePicker.hide();
 		}
 	}

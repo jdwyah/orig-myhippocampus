@@ -90,7 +90,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				Object object = oa[i];
 				System.out.println(" "+i+" "+object+" "+object.getClass());
 			}
-			BigInteger topic_id = (BigInteger) oa[0];
+			//?BigInteger topic_id = (BigInteger) oa[0];
+			Long topic_id = (Long) oa[0];
 			String dateStr = (String) oa[2];
 			Date date = new Date(Long.parseLong(dateStr));			
 			
@@ -135,11 +136,13 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		System.out.println("SAVE "+t.getTitle());
 
 		if(t.getTitle().equals("")){
+			log.info("Throw HBE exception for Empty Title");
 			throw new HippoBusinessException("Empty Title");
 		}		
 		Object[] args = {t.getTitle(),t.getUser()};
 		Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
 		if(sameNamed != null && sameNamed.getId() != t.getId()){
+			log.info("Throw HBE exception for Duplicate Title");
 			throw new HippoBusinessException("Duplicate Name");
 		}
 		

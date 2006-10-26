@@ -21,6 +21,10 @@
 
 package com.aavu.client.widget.datepicker;
 
+
+
+import java.util.Date;
+
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -31,6 +35,10 @@ import com.google.gwt.user.client.ui.Widget;
  * SimpleDatePicker is a date picker which sub classes
  * DatePicker and defines a calendar popup which allows
  * user to traverse back and forth in month and year
+ * 
+ * 
+ * 
+ * WARN! NOTE ETC!!!!!  DON'T Use any date format besides mm/dd/yyyy !!
  */
 public class SimpleDatePicker extends DatePicker implements ClickListener {
 
@@ -143,7 +151,14 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * Methods from ClickListener
 	 */
 	public void onClick(Widget sender) {
-		this.setSelectedDate(DateUtil.convertString2Date(this.getText()));
+//		System.out.println("ONCLICK!!!!!!!!!!!! ");
+//		System.out.println("sel "+getSelectedDate()+" || "+this.getText()+" || "+getCurrentDate());
+//		
+//		System.out.println("STRING: "+this.getText());
+		Date ddd = DateUtil.convertString2Date(this.getText());
+		//System.out.println("ddd "+ddd);
+		this.setSelectedDate(ddd);
+		//System.out.println("b4show  "+getSelectedDate()+" "+this.getText()+" "+getCurrentDate());
 		this.show();
 	}
 	

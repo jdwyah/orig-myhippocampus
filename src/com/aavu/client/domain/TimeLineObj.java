@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
@@ -67,6 +68,7 @@ public class TimeLineObj implements IsSerializable {
 		jo.put("start", new JSONString(sdf.format(getStart())));
 		jo.put("title", new JSONString(topic.getTopicTitle()));
 		jo.put("description", new JSONString("blah blah"));
+		jo.put("link", new JSONString("HippoTest.html#"+getTopic().getTopicID()));
 
 		return jo;
 	}
