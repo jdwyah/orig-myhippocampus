@@ -19,7 +19,7 @@
 			<meta attribute="field-description">The title of this entry</meta>
 		</property>
 
-		<property name="data" type="string">
+	 	<property name="data" type="string">
 			<meta attribute="use-in-equals">true</meta>
 			<meta attribute="field-description">The optional data element</meta>
 			<column name="data" sql-type="text"></column>
@@ -36,7 +36,7 @@
 			<column name="dateCreated" sql-type="timestamp" />
 		</property>
 
-		<property name="publicVisible" type="boolean" column="public_visible">
+	 	<property name="publicVisible" type="boolean" column="public_visible">
 			<meta attribute="use-in-equals">true</meta>
 			<meta attribute="field-description">Shared?</meta>
 		</property>
@@ -45,6 +45,9 @@
 			<key column="topic_id" />
 			<many-to-many column="scope_id" class="Topic" />
 		</set>
+		
+		<many-to-one name="subject" class="com.aavu.client.domain.subjects.Subject"></many-to-one>
+		
  <!-- 
 		<map name="metaValues" table="topic_meta_values">
 			<key column="topic_meta_value_id"></key>
@@ -80,14 +83,20 @@
 
 		<!-- meaningless from DB perspective. only usefull for differentiation -->
 		<subclass name="Tag" discriminator-value="tag">
-			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractTag</meta>
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 		</subclass>
 		
+			
+		<!-- meaningless from DB perspective. only usefull for differentiation -->
+		<subclass name="HippoDate" discriminator-value="date">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
+		</subclass>
+
 		<!-- meaningless from DB perspective. only usefull for differentiation -->
 		<subclass name="Occurrence" discriminator-value="occurrence">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 		</subclass>
-		
+
 		<!-- also meaningless from DB -->
 		<subclass name="Meta" discriminator-value="meta">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
@@ -127,7 +136,7 @@
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractParentChild</meta>
 			</subclass>
 
-		
+			
 
 		</subclass>
 	</class>

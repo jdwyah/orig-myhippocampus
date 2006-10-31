@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabListenerCollection;
@@ -49,7 +50,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
  * </p>
  */
 public class VertableTabBar extends Composite implements SourcesTabEvents,
-ClickListener {
+ClickListener, MouseListener {
 
 	private CellPanel panel;
 	private Widget selectedTab;
@@ -208,6 +209,7 @@ ClickListener {
 
 		item.setWordWrap(false);
 		item.addClickListener(this);
+		item.addMouseListener(this);
 		item.setStyleName("gwt-TabBarItem");
 		cellPanelWithMethods.insert(item, beforeIndex + 1);
 	}
@@ -288,4 +290,21 @@ ClickListener {
 				item.removeStyleName("gwt-TabBarItem-selected");
 		}
 	}
+
+	
+	/**
+	 * added to the labels in insertTab()
+	 */
+	public void onMouseEnter(Widget sender) {
+		for (int i = 1; i < cellPanelWithMethods.getWidgetCount() - 1; ++i) {
+			if (cellPanelWithMethods.getWidget(i) == sender) {
+				selectTab(i - 1);
+				return;
+			}
+		}
+	}
+	public void onMouseDown(Widget sender, int x, int y) {}
+	public void onMouseLeave(Widget sender){}
+	public void onMouseMove(Widget sender, int x, int y) {}
+	public void onMouseUp(Widget sender, int x, int y) {}
 }

@@ -50,7 +50,7 @@ public class Converter {
 			Class methodReturnType=method.getReturnType();
 	
 			
-			//System.out.println("method "+methodReturnType);
+			//System.out.println("method "+method.getName()+" rtn: "+methodReturnType);
 			//System.out.println("param length"+method.getGenericParameterTypes().length);
 			if(methodReturnType == java.util.Set.class
 					&&

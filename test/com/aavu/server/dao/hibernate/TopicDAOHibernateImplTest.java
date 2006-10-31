@@ -1,5 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,9 +8,9 @@ import org.apache.log4j.Logger;
 import org.springframework.test.AssertThrows;
 
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaTopic;
-import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -533,6 +534,24 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 				topicDAO.save(t3);
 			}
 		}.runTest();
+		
+		
+		//
+		//Dates are a different case. They should be able to have the same title
+		//
+		final HippoDate d2 = new HippoDate();
+		d2.setUser(u);
+		d2.setDate(new Date());
+		final HippoDate d3 = new HippoDate();
+		d3.setUser(u);
+		d3.setDate(new Date());
+		
+		assertEquals(d2.getTitle(), d3.getTitle());
+		
+		topicDAO.save(d2);
+		topicDAO.save(d3);
+		
+		
 	}
 	
 	

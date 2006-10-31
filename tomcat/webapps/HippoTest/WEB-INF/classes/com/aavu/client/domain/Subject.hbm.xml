@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.aavu.client.domain.subjects">
+
+	<class name="Subject" table="subjects" discriminator-value="subject">
+		<meta attribute="generated-class">com.aavu.client.domain.subjects.generated.AbstractSubject</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<id name="id" type="long" column="user_id">
+			<generator class="native"></generator>
+		</id>
+
+		<discriminator column="discriminator" type="string"></discriminator>
+		
+		<property name="foreignID" type="string" column="foreignID">
+			<meta attribute="use-in-equals">true</meta>
+		</property>
+		
+		<property name="name" type="string" column="name">
+			<meta attribute="use-in-equals">true</meta>
+		</property>
+		
+		<!-- No DB properties -->
+		<subclass name="Amazon" discriminator-value="amazon">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.subjects.generated.AbstractJUNK</meta>
+		
+			<subclass name="AmazonBook" discriminator-value="amazon_book">
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.subjects.generated.AbstractJUNK</meta>
+			</subclass>
+			<subclass name="AmazonMagazine" discriminator-value="amazon_magazine">
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.subjects.generated.AbstractJUNK</meta>
+			</subclass>
+		</subclass>
+
+		<!-- No DB properties -->
+		<subclass name="HippoSubject" discriminator-value="hippoSubject">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.subjects.generated.AbstractJUNK</meta>
+		
+			<subclass name="HippoCountry" discriminator-value="hippo_country">
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.subjects.generated.AbstractJUNK</meta>
+			</subclass>
+			
+		</subclass>
+	
+	</class>
+
+</hibernate-mapping>

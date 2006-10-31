@@ -27,6 +27,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaSeeAlso;
@@ -45,6 +46,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public static DetachedCriteria loadEmAll(DetachedCriteria crit){
 		return crit.setFetchMode("user", FetchMode.JOIN)		
 		.setFetchMode("instances", FetchMode.JOIN)
+		.setFetchMode("subject", FetchMode.JOIN)
 		.setFetchMode("types", FetchMode.JOIN)
 		.setFetchMode("types.associations", FetchMode.JOIN)
 		.setFetchMode("types.associations.types", FetchMode.JOIN)
@@ -141,7 +143,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		}		
 		Object[] args = {t.getTitle(),t.getUser()};
 		Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
-		if(sameNamed != null && sameNamed.getId() != t.getId()){
+		if(!(t instanceof HippoDate) && sameNamed != null && sameNamed.getId() != t.getId()){
 			log.info("Throw HBE exception for Duplicate Title");
 			throw new HippoBusinessException("Duplicate Name");
 		}

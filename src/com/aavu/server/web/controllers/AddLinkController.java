@@ -37,7 +37,9 @@ public class AddLinkController extends SimpleFormController {
 		command.setUrl(req.getParameter("url"));
 		
 		command.setDescription(req.getParameter("description"));
-				
+		
+		command.setNotes(req.getParameter("notes"));
+		
 		return command;
 		
 	}
@@ -48,7 +50,7 @@ public class AddLinkController extends SimpleFormController {
 		log.debug("command: "+command);
 		AddLinkCommand addLink = (AddLinkCommand) command;
 		
-		Occurrence occ = new Occurrence(userService.getCurrentUser(),addLink.getUrl(),addLink.getNotes());
+		Occurrence occ = new Occurrence(userService.getCurrentUser(),addLink.getDescription(),addLink.getUrl(),addLink.getNotes());
 		
 		occ = (Occurrence) topicService.save(occ);
 		

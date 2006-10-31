@@ -30,6 +30,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	private String A = "VBXCXSS";
 	private String B = "XVNSDF*(D";
 	private String B2 = "XVN_DFSD";
+	private String B3 = "#378942425494  944;;;435 45;;45 34534&*^&%^@#(@*@(";
 	private String C = "41234HSAD@##";
 	
 	private int publicTagNumber;
@@ -102,8 +103,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testGetAllTagsNoDupes() throws HippoBusinessException {
 		Tag[] tags = add3();
 
-		Topic t1 = new Topic();
-		t1.setUser(u);
+		Topic t1 = new Topic(u,"FOO");		
 		t1.tagTopic(tags[0]);		
 		topicDAO.save(t1);
 		
@@ -115,13 +115,11 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		Tag savedTag = tagDAO.getTag(u, A);
 		
-		Topic t2 = new Topic();
-		t2.setUser(u);
+		Topic t2 = new Topic(u,"BAR");		
 		t2.tagTopic(savedTag);		
 		topicDAO.save(t2);
 		
-		Topic t3 = new Topic();
-		t3.setUser(u);
+		Topic t3 = new Topic(u,"SHMEE");		
 		t3.tagTopic(tags[1]);		
 		topicDAO.save(t2);
 		
@@ -268,7 +266,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		//
 		Topic t2 = new Topic();
 		t2.setData(C);
-		t2.setTitle(B2);
+		t2.setTitle(B3);
 		t2.setUser(u);				
 		t2.tagTopic(three[1]);				
 		t2.tagTopic(three[0]);

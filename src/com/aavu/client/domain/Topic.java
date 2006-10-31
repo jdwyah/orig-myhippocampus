@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.domain.generated.AbstractTopic;
+import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
@@ -30,8 +31,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(((JSONString)value.get("data")).stringValue());
 	}
 
-	public Topic(User user, String title, String data, Date lastUpdated, Date created, boolean publicVisible, Set children, Set parents, Set metas, Set occurences, Set associations) {
-		super(user, title, data, lastUpdated, created, publicVisible, children, parents, metas, occurences, associations);
+	public Topic(User user, String title, String data, Date lastUpdated, Date created, boolean publicVisible, Set children, Subject subject,Set parents, Set metas, Set occurences, Set associations) {
+		super(user, title, data, lastUpdated, created, publicVisible, children, subject, parents, metas, occurences, associations);
 	}
 
 	public Topic(User u, String title) {

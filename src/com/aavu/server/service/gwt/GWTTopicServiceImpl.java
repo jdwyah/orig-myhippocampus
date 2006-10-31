@@ -220,8 +220,12 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			//returning java.sql.timestamp, which, surprise surprise 
 			//is another thing that breaks GWT serialization.
 			//
-			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
-			t.setCreated(new Date(t.getCreated().getTime()));
+			log.debug("upd "+t.getLastUpdated());
+			log.debug("cre "+t.getCreated());
+			if(t.getLastUpdated() != null)
+				t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+			if(t.getCreated() != null)
+				t.setCreated(new Date(t.getCreated().getTime()));
 
 			log.debug("starting convert sets");
 			log.debug("SIZE: "+t.getTypes().size());

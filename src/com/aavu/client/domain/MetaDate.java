@@ -24,10 +24,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class MetaDate extends Meta implements IsSerializable,Serializable {
 
 	private static final String TYPE = "Date";
-	private transient static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
 	
 	private transient Topic topic;
-	private transient Topic mv;
+	private transient HippoDate mv;
 	
 	private transient static TopicCache topicService;	
 	public static void setTopicService(TopicCache topicService) {
@@ -46,10 +45,10 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 		Label label = new Label(getName());
 		
 		widget.add(label);
-		Topic mv = (Topic) topic.getSingleMetaValueFor(this);
+		HippoDate mv = (HippoDate) topic.getSingleMetaValueFor(this);
 		if(mv != null){
 						
-			widget.add(new Label(" "+df.format(new Date(Long.parseLong(mv.getData())))));	
+			widget.add(new Label(" "+mv.getTitle()));	
 		}
 		else{
 			widget.add(new Label(""));
@@ -73,17 +72,16 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	    // Set the Date Format
 	    datePicker.setDateFormat(DateFormatter.DATE_FORMAT_MMDDYYYY);
 	    
-	    mv = (Topic) topic.getSingleMetaValueFor(this);
+	    mv = (HippoDate) topic.getSingleMetaValueFor(this);
 	    
 	    if(mv != null){
-	    	long longDate = Long.parseLong(mv.getData());
-	    	Date date = new Date(longDate);
-	    	datePicker.setCurrentDate(date);
+	    	
+	    	datePicker.setCurrentDate(mv.getDate());
 	    	
 	    	SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");						
-	    	datePicker.setText(df.format(date));
+	    	datePicker.setText(df.format(mv.getDate()));
 	    }else{
-	    	mv = new Topic();
+	    	mv = new HippoDate();
 	    }
 	    	    
 	    datePicker.addChangeListener(new ChangeListener(){
@@ -98,11 +96,12 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 					public void execute() {
 						SimpleDatePicker dp = (SimpleDatePicker) sender;
 						Date cDate = dp.getSelectedDate();
-						String val = cDate.getTime()+"";
+						//String val = cDate.getTime()+"";
 						
+						mv.setDate(cDate);
 						
-						mv.setTitle(df.format(cDate));
-						mv.setData(val);
+						//mv.setTitle(df.format(cDate));
+						//mv.setData(val);
 												
 						//topicService.getTopicIdentForNameOrCreateNew(linkTo, callback)
 						
