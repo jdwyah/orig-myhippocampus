@@ -18,7 +18,7 @@ public class TopicEditWidget extends Composite {
 	private SpecialTextbox textArea = null;
 
 	private TagBoard tagBoard;
-	private Widget subjectBoard;
+	private SubjectBoard subjectBoard;
 	
 	private Topic topic;
 	private TopicViewAndEditWidget topicViewAndEditWidget;
@@ -64,6 +64,7 @@ public class TopicEditWidget extends Composite {
 			titleBox.setText(topic.getTitle());		
 			textArea.setText(topic.getData());
 						
+			subjectBoard.load(topic);
 			tagBoard.load(topic);
 			seeAlsoBoard.load(topic);
 		}
@@ -74,6 +75,8 @@ public class TopicEditWidget extends Composite {
 	public void save() {
 		topic.setData(textArea.getText());
 		topic.setTitle(titleBox.getText());
+		
+		topic.setSubject(subjectBoard.getSelectedSubject());
 		
 		tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
 

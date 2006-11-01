@@ -1,6 +1,5 @@
 package com.aavu.server.dao.hibernate;
 
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,12 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -28,15 +25,13 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.HippoDate;
-import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaSeeAlso;
-import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 
@@ -147,6 +142,24 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			log.info("Throw HBE exception for Duplicate Title");
 			throw new HippoBusinessException("Duplicate Name");
 		}
+		
+		//
+		//Save the subject. If they've just added the subject it will be unsaved,
+		//even if it's already in the DB, do a lookup.
+		//
+		Subject curSubj = t.getSubject();		
+		if(curSubj != null && curSubj.getId() == 0){
+			DetachedCriteria crit = DetachedCriteria.forClass(curSubj.getClass())
+			.add(Expression.eq("foreignID", curSubj.getForeignID()));
+			Subject saved = (Subject) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+			if(saved == null){
+				getHibernateTemplate().save(curSubj);
+			}else{
+				t.setSubject(saved);
+			}
+		}
+		
+		
 		
 		//
 		//Bit of a chicken & egg thing here with TransientReferences..

@@ -4,10 +4,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.SubjectInfo;
+import com.aavu.client.gui.ext.ObjectListBox;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -33,7 +35,9 @@ public class SubjectBoard extends Composite{
 	private Label editMe;
 	private SubjectServicePicker subjectTypeList;
 
-	private TextBox titleBox; 
+	private TextBox titleBox;
+
+	private Subject selectedSubject; 
 
 	public SubjectBoard(final Manager manager, TextBox titleBox) {	
 		this.manager = manager;
@@ -71,30 +75,42 @@ public class SubjectBoard extends Composite{
 
 		initWidget(mainPanel);
 	}
-	
-	public void setSubject(Subject subject){		
+
+	public void load(Topic topic) {
+		setSubject(topic.getSubject());
+		subjectTypeList.setSubject(topic.getSubject());
+	}
+	private void setSubject(Subject subject){		
+		selectedSubject = subject;
+		
 		selectedPanel.setSubject(subject);
 		editMe.setVisible(true);
 		chooserPanel.setVisible(false);
 		infoPanel.setVisible(false);
 	}
-	public void chooseSubject(){		
+
+	public Subject getSelectedSubject() {	
+		return selectedSubject;
+	}
+	private void chooseSubject(){		
 		editMe.setVisible(false);
 	
 		Subject s = subjectTypeList.getSelectedService();
-		manager.getSubjectService().lookup(s,titleBox.getText(),new StdAsyncCallback("SubjectService"){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
+		if(s != null){
+			manager.getSubjectService().lookup(s,titleBox.getText(),new StdAsyncCallback("SubjectService"){
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
 
-				System.out.println("result: "+result);
+					System.out.println("result: "+result);
 
-				List subjectList = (List) result;
-				chooserPanel.setList(subjectList);
-				
-				chooserPanel.setVisible(true);
-				infoPanel.setVisible(true);
-			}
-		});
+					List subjectList = (List) result;
+					chooserPanel.setList(subjectList);
+
+					chooserPanel.setVisible(true);
+					infoPanel.setVisible(true);
+				}
+			});
+		}
 
 	}
 	
@@ -114,7 +130,11 @@ public class SubjectBoard extends Composite{
 			clear();
 			infoPanel.clear();
 			
-			add(new Label(Manager.myConstants.subject_choose()));
+			if(subjectList.size() > 0){
+				add(new Label(Manager.myConstants.subject_choose()));
+			}else{
+				add(new Label(Manager.myConstants.subject_no_matches()));
+			}
 			
 			int i = 0;
 			for (Iterator iter = subjectList.iterator(); iter.hasNext();) {
@@ -159,7 +179,11 @@ public class SubjectBoard extends Composite{
 		
 
 		public void setSubject(Subject subject) {
-			lab.setText(subject.getName());
+			if(subject == null){
+				lab.setText(Manager.myConstants.subject_none());
+			}else{
+				lab.setText(subject.getName());
+			}
 		}
 		
 	}
@@ -196,35 +220,26 @@ public class SubjectBoard extends Composite{
 		}		
 	}
 
-	private class SubjectServicePicker extends ListBox {
-
-		String none = "(None)";
-		String book = "Book";
-		String country = "Country";
+	private class SubjectServicePicker extends ObjectListBox {
 
 		public SubjectServicePicker(){
 			super();		
-			addItem(none);
-			addItem(book);
-			addItem(country);					
+			addItem(Manager.myConstants.subject_none(),null);
+			addItem(Manager.myConstants.book(),new AmazonBook());
+			addItem(Manager.myConstants.country(),new HippoCountry());					
+		}
+
+
+		public void setSubject(Subject subject) {
+			setSelectedObjectToType(subject);
 		}
 
 		public Subject getSelectedService() {
-
-			String sel = getItemText(getSelectedIndex());
-
-			if(sel.equals(none)){
-				return null;		
-			}else if (sel.equals(book)){
-				return new AmazonBook();
-			}else if (sel.equals(country)){
-				return new HippoCountry();
-			}
-
-			return null;
+			return (Subject) getSelectedObject();			
 		}
-
-
 	}
+
+
+
 
 }

@@ -95,12 +95,24 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		panel.clear();
 		panel.add(topicTitlePanel);
 
-
+		panel.add(doSubject(topic));
 		panel.add(doTags(topic));
 		panel.add(doSeeAlsos(topic));
 		panel.add(doOccurences(topic));
 		panel.add(textPanel);
 
+	}
+
+	private Widget doSubject(Topic topic2) {
+		HorizontalPanel horizP = new HorizontalPanel();
+
+		horizP.add(new HeaderLabel(Manager.myConstants.subject()));
+		if(topic2.getSubject() == null){
+			horizP.add(new Label(Manager.myConstants.subject_none()));
+		}else{
+			horizP.add(new Label(topic2.getSubject().getName()));
+		}
+		return horizP;
 	}
 
 	private Widget doSeeAlsos(Topic topic2) {

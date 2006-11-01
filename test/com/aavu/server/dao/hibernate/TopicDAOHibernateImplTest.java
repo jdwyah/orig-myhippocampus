@@ -16,6 +16,8 @@ import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.subjects.AmazonBook;
+import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
@@ -553,7 +555,53 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
-	
+	public void testSubjectSave() throws HippoBusinessException {
+		Topic t = new Topic(u,B);
+		
+		Subject b_Subj = new AmazonBook();
+		b_Subj.setForeignID(D);
+		b_Subj.setName(E);
+		
+		t.setSubject(b_Subj);
+		
+		topicDAO.save(t);
+		
+		Topic savedT = topicDAO.getForName(u, B);
+		
+		assertEquals(D,savedT.getSubject().getForeignID());
+		
+		
+		//
+		//Test that a second saved topic with the same subject
+		//get's the same subject object
+		//
+		Subject c_Subj = new AmazonBook();
+		c_Subj.setForeignID(D);
+		c_Subj.setName(E);
+				
+		assertEquals(0, c_Subj.getId());
+		
+		//hmm. interesting. I guess that's right, although maybe they should be .eq logically. dunno.
+		assertNotSame(b_Subj, c_Subj);
+		
+		Topic t2 = new Topic(u,C);
+		t2.setSubject(c_Subj);		
+		topicDAO.save(t2);
+		
+		Topic s1 = topicDAO.getForName(u, B);
+		Topic s2 = topicDAO.getForName(u, C);
+		
+		Subject ss1 = s1.getSubject();
+		Subject ss2 = s2.getSubject();
+		
+		assertEquals(ss1.getId(), ss2.getId());
+		assertEquals(ss1.getForeignID(), ss2.getForeignID());
+		assertEquals(ss1,ss2);
+		
+		
+		
+		
+	}
 	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;

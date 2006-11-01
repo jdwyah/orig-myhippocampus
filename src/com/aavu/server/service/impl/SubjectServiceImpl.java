@@ -41,6 +41,17 @@ public class SubjectServiceImpl implements SubjectService {
 		countries.put("Guam",new HippoCountry("COUNTRY#Guam","Guam"));
 		countries.put("France",new HippoCountry("COUNTRY#France","France"));
 		countries.put("Germany",new HippoCountry("COUNTRY#Germany","Germany"));		
+		countries.put("Spain",new HippoCountry("COUNTRY#Spain","Spain"));
+		countries.put("England",new HippoCountry("COUNTRY#England","England"));
+		countries.put("Ireland",new HippoCountry("COUNTRY#Ireland","Ireland"));
+		countries.put("Mexico",new HippoCountry("COUNTRY#Mexico","Mexico"));
+		countries.put("India",new HippoCountry("COUNTRY#India","India"));
+		countries.put("Russia",new HippoCountry("COUNTRY#Russia","Russia"));
+		countries.put("Italy",new HippoCountry("COUNTRY#Italy","Italy"));
+		countries.put("Romania",new HippoCountry("COUNTRY#Romania","Romania"));
+		countries.put("Egypt",new HippoCountry("COUNTRY#Egypt","Egypt"));
+		countries.put("Israel",new HippoCountry("COUNTRY#Israel","Israel"));
+		countries.put("Iraq",new HippoCountry("COUNTRY#Iraq","Iraq"));
 	}
 
 
