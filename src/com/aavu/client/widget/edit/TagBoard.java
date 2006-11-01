@@ -80,13 +80,10 @@ public class TagBoard extends Composite implements CompleteListener {
 
 		//First, do a name lookup on this tag
 		//
-		tagCache.getTagAddIfNew(tagName, new AsyncCallback(){
-
-			public void onFailure(Throwable caught) {
-				System.out.println("fail tagservice.getTagAddIfNew "+caught);	
-			}
+		tagCache.getTagAddIfNew(tagName, new StdAsyncCallback("tagservice.getTagAddIfNew"){
 
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				Tag tag = (Tag) result;				
 				addTag(tag);
 				manager.growIsland(tag);

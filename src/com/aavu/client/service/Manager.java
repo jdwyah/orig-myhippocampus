@@ -1,31 +1,23 @@
 package com.aavu.client.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.StatusCode;
-import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TagEditorWindow;
+import com.aavu.client.gui.TopicDisplayWindow;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
-import com.aavu.client.gui.timeline.OldTimeLine;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Label;
 
 public class Manager implements TopicSaveListener {
 
@@ -35,6 +27,7 @@ public class Manager implements TopicSaveListener {
 	public static Consts myConstants;
 	private MainMap map;
 	private User user;
+	
 
 	
 
@@ -185,6 +178,9 @@ public class Manager implements TopicSaveListener {
 	}
 	public void updateStatus(int i, String call, StatusCode send) {
 		map.updateStatusWindow(i, call, send);
+	}
+	public GWTSubjectServiceAsync getSubjectService() {
+		return hippoCache.getSubjectService();
 	}
 	
 

@@ -9,6 +9,7 @@ import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class TopicEditWidget extends Composite {
 
@@ -17,6 +18,7 @@ public class TopicEditWidget extends Composite {
 	private SpecialTextbox textArea = null;
 
 	private TagBoard tagBoard;
+	private Widget subjectBoard;
 	
 	private Topic topic;
 	private TopicViewAndEditWidget topicViewAndEditWidget;
@@ -31,6 +33,7 @@ public class TopicEditWidget extends Composite {
 		
 		textArea = new SpecialTextbox(manager.getTopicCache());
 		
+		subjectBoard = new SubjectBoard(manager,titleBox);
 		tagBoard = new TagBoard(manager);
 		seeAlsoBoard = new SeeAlsoBoard(manager);
 		
@@ -41,6 +44,7 @@ public class TopicEditWidget extends Composite {
 		panel.add(new HeaderLabel(Manager.myConstants.title()));
 		panel.add(titleBox);
 		
+		panel.add(subjectBoard);
 		panel.add(tagBoard);		
 		panel.add(seeAlsoBoard);
 		

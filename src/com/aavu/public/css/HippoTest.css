@@ -83,6 +83,21 @@ a:visited {
 .H-StatusLabels .H-Success {
 	background-color: green;	
 }
+
+.H-SubjectChooser {
+	background-color: grey;	
+	padding: 4px;
+}
+.H-SubjectChooser .H-Selected {
+	background-color: green;
+}
+.H-SubjectInfoPanel {
+	background-color: aqua;
+}
+.H-SubjectSelectedPanel {
+	
+}
+
 .H-EnterInfoButton {
 	background-image: url("../img/bluecheck-bullet-14.gif");
 	background-repeat: no-repeat;

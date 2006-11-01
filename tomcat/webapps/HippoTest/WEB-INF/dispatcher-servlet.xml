@@ -73,6 +73,7 @@
 				<prop key="/service/topicService">GWTTopicService</prop>
 				<prop key="/service/tagService">GWTTagService</prop>
 				<prop key="/service/userService">GWTUserService</prop>
+				<prop key="/service/subjectService">GWTSubjectService</prop>
 
 				<prop key="/site/acegilogin.html">loginController</prop>
 				<prop key="/site/signup.html">createUserController</prop>

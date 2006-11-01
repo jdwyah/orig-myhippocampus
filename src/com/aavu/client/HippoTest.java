@@ -7,6 +7,8 @@ import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
+import com.aavu.client.service.remote.GWTSubjectService;
+import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicService;
@@ -58,6 +60,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		GWTTopicServiceAsync topicService;
 		GWTTagServiceAsync tagService;
 		GWTUserServiceAsync userService;
+		GWTSubjectServiceAsync subjectService;
 		
 		topicService = (GWTTopicServiceAsync) GWT.create(GWTTopicService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) topicService;
@@ -68,9 +71,9 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		String pre = "";
 		if(GWT.isScript()){
 			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
-			//pre = "http://www.myhippocampus.com/service/";
+			pre = "http://www.myhippocampus.com/service/";
 			       
-			pre = "http://localhost:8080/service/";
+			//pre = "http://localhost:8080/service/";
 			
 		}else{
 			pre = GWT.getModuleBaseURL();
@@ -90,11 +93,16 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		ServiceDefTarget endpointUser = (ServiceDefTarget) userService;
 		endpointUser.setServiceEntryPoint(pre + "userService");
 		
+		subjectService = (GWTSubjectServiceAsync) GWT.create(GWTSubjectService.class);
+		ServiceDefTarget endpointSubject = (ServiceDefTarget) subjectService;
+		endpointSubject.setServiceEntryPoint(pre+ "subjectService");
+		
+		
 		//Window.alert("4");
 
 		final String user_endpoint_debug = pre + "userService";
 		
-		hippoCache = new HippoCache(topicService,tagService,userService);
+		hippoCache = new HippoCache(topicService,tagService,userService,subjectService);
 		
 
 		

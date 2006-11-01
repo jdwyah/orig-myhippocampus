@@ -1,5 +1,5 @@
 package com.aavu.client.domain.subjects;
 
-public class Amazon extends Subject {
+public abstract class Amazon extends Subject {
 
 }

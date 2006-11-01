@@ -16,7 +16,15 @@ public interface Consts extends Constants {
 	String addTag();
 	String occurrences();
 	String deleteMe();
-	String editMe();	
+	String editMe();
 	
+	String book_title();	
+	String book_author();	
+	String book_publisher();
+	String country_name();
+	String subject_none();
+	String subject_edit();
+	String subject();
+	String subject_choose();	
 	
 }

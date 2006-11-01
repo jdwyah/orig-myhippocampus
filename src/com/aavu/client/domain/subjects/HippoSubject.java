@@ -1,5 +1,5 @@
 package com.aavu.client.domain.subjects;
 
-public class HippoSubject extends Subject {
+public abstract class HippoSubject extends Subject {
 
 }

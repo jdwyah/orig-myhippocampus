@@ -14,6 +14,10 @@
 	<bean id="GWTUserService" class="com.aavu.server.service.gwt.GWTUserServiceImpl">
 		<property name="userService" ref="userService"/>
 	</bean>
+	
+	<bean id="GWTSubjectService" class="com.aavu.server.service.gwt.GWTSubjectServiceImpl">	
+		<property name="subjectService" ref="subjectService"/>
+	</bean>
 
 	
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
@@ -29,6 +33,7 @@
 		<property name="topicDAO" ref="topicDAO"></property>
 		<property name="userService" ref="userService"/>		
 	</bean>
-	
+	<bean id="subjectService" class="com.aavu.server.service.impl.SubjectServiceImpl">
+	</bean>
 
 </beans>
