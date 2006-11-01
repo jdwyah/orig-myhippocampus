@@ -144,6 +144,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			System.out.println("setting nul_____________________________________________");
 			t.setLastUpdated(null);
 			t.setCreated(null);
+			t.setSubject(null);
 
 			t.setScopes(new HashSet());			
 			t.setInstances(new HashSet());						
@@ -191,7 +192,8 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 			t.setScopes(new HashSet());						
 			t.setInstances(new HashSet());						
-			t.setOccurences(new HashSet());						
+			t.setOccurences(new HashSet());	
+			t.setSubject(null);
 
 			log.debug("has Members "+hasMembers);
 
@@ -240,7 +242,8 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 			log.debug("starting convert sets-assocations");
 			t.setAssociations(converter(t.getAssociations(),level,true));
-
+			
+			t.getSubject().setTopics(new HashSet());
 		}
 		log.debug("Finally: t "+t.getId()+" "+t.getUser());
 

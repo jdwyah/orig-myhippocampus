@@ -20,6 +20,12 @@
 			<meta attribute="use-in-equals">true</meta>
 		</property>
 		
+		<set name="topics" inverse="true">
+			<key column="user_id" />
+			<one-to-many class="com.aavu.client.domain.Topic" />
+		</set>
+		
+		
 		<!-- No DB properties -->
 		<subclass name="Amazon" discriminator-value="amazon">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.subjects.generated.AbstractJUNK</meta>

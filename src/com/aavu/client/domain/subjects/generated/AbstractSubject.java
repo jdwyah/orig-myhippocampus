@@ -1,5 +1,7 @@
 package com.aavu.client.domain.subjects.generated;
 
+import java.util.Set;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 // Generated Oct 31, 2006 9:16:47 AM by Hibernate Tools 3.1.0.beta5
 
@@ -15,10 +17,12 @@ public abstract class AbstractSubject  implements IsSerializable, java.io.Serial
      private long id;
      private String foreignID;
      private String name;
-
+     private Set topics;
+     
      // Constructors
 
-    /** default constructor */
+
+	/** default constructor */
     public AbstractSubject() {
     }
 
@@ -52,6 +56,13 @@ public abstract class AbstractSubject  implements IsSerializable, java.io.Serial
         this.name = name;
     }
 
+    public Set getTopics() {
+		return topics;
+	}
+
+	public void setTopics(Set topics) {
+		this.topics = topics;
+	}
 
    public boolean equals(Object other) {
          if ( (this == other ) ) return true;

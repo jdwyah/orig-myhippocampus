@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaTopic;
@@ -12,6 +11,8 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.subjects.AmazonBook;
+import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
@@ -32,6 +33,8 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	private String B2 = "XVN_DFSD";
 	private String B3 = "#378942425494  944;;;435 45;;45 34534&*^&%^@#(@*@(";
 	private String C = "41234HSAD@##";
+	private String S = "SUBJECT Paris";
+	private String G = "*(DY8932kl";
 	
 	private int publicTagNumber;
 
@@ -279,6 +282,106 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		//test 
 		//
 		stats = tagDAO.getTagStats(u);
+		for (TagStat ts : stats){
+			if(ts.getTagId() == three[0].getId()){
+				assertEquals(2,ts.getNumberOfTopics());
+			}else if(ts.getTagId() == three[1].getId()){			
+				assertEquals(1,ts.getNumberOfTopics());
+			}
+			else if(ts.getTagId() == three[2].getId()){			
+				assertEquals(1,ts.getNumberOfTopics());
+			}
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
+		}		
+		
+		
+	}
+	
+	public void testTagStatWithSubjects() throws HippoBusinessException{
+		Tag[] three = add3();
+
+		//test
+		//tag stats shoudl all be 0
+		//
+		List<TagStat> stats = tagDAO.getTagStats(u);
+		for (TagStat ts : stats){
+			assertEquals(0,ts.getNumberOfTopics());
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
+		}		
+		
+		Subject subj1 = new AmazonBook();
+		subj1.setForeignID(A);
+		subj1.setName(S);
+		
+		Topic t = new Topic();
+		t.setData(B);
+		t.setTitle(C);
+		t.setUser(u);
+		t.tagTopic(three[0]);
+		t.setSubject(subj1);
+					
+		t = topicDAO.save(t);
+		
+		//test
+		//tag 0 should have one topic
+		//
+		stats = tagDAO.getTagStats(u);
+		
+		for (TagStat ts : stats){
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics()+" "+ts.getTagName());
+			
+			if(ts.getTagId() == three[0].getId()){
+				assertEquals(1,ts.getNumberOfTopics());
+			}
+			//the amazon book
+			else if(ts.getTagName().equals(AmazonBook.getSubjectName())){
+				assertEquals(1,ts.getNumberOfTopics());
+			}
+			else{							
+				assertEquals(0,ts.getNumberOfTopics());
+			}					
+		}		
+		assertEquals(4, stats.size());
+		
+				
+		Subject subj2 = new AmazonBook();
+		subj2.setForeignID(B);
+		subj2.setName(A);
+		
+	
+		//Add a new topic with tags 0 & 1
+		//and subject 1
+		//
+		Topic t2 = new Topic();
+		t2.setData(C);
+		t2.setTitle(B3);
+		t2.setUser(u);				
+		t2.tagTopic(three[1]);				
+		t2.tagTopic(three[0]);
+		t2.setSubject(subj1);
+		topicDAO.save(t2);
+		
+		Topic topic3 = new Topic(u, G);
+		//add tag 2 to topic 1
+		//and subject 2
+		System.out.println("-----------------");
+		System.out.println("T: "+t+" ID: "+t.getId());
+		System.out.println("S "+subj2+" ID: "+subj2.getId());
+		System.out.println("ST "+topic3+" ID "+t.getId());
+		
+		topic3.tagTopic(three[2]);
+		topic3.setSubject(subj2);
+		
+		System.out.println("subj "+topic3.getSubject()+"  ID "+topic3.getSubject().getId());
+		topicDAO.save(topic3);
+		
+		//test 
+		//
+		stats = tagDAO.getTagStats(u);
+		
+		//tag 1,2,3 & 2*AmazonBook makes 4. (Not 5!)
+		assertEquals(4, stats.size());
+		
 		for (TagStat ts : stats){
 			if(ts.getTagId() == three[0].getId()){
 				assertEquals(2,ts.getNumberOfTopics());

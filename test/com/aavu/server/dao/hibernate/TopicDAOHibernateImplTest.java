@@ -602,6 +602,28 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
+	public void testSubjectSaveTransientProblem() throws HippoBusinessException {
+		Topic t = new Topic(u,B);
+		
+		topicDAO.save(t);
+		
+		Topic savedT = topicDAO.getForName(u, B);
+		
+		Subject b_Subj = new AmazonBook();
+		b_Subj.setForeignID(D);
+		b_Subj.setName(E);
+		
+		t.setSubject(b_Subj);
+		
+		topicDAO.save(t);
+		
+		Topic savedTAgain = topicDAO.getForName(u, B);
+		
+		assertEquals(D,savedTAgain.getSubject().getForeignID());
+		
+				
+	}
+	
 	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;

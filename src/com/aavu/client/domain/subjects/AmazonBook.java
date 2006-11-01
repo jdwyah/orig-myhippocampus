@@ -47,4 +47,7 @@ public class AmazonBook extends Amazon {
 		subjectInfo.add(new SubjectInfo(Manager.myConstants.book_publisher(),getManufacturer(),false));
 		return subjectInfo;
 	}
+	public static String getSubjectName() {
+		return "amazon_book";
+	}
 }
