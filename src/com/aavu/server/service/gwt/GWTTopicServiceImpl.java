@@ -40,6 +40,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 			return convert(topicService.save(topic));
 		}  catch (HippoException ex) {
+			log.error("Throw Hippo Exception: "+ex);
 			throw ex;
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -243,7 +244,9 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			log.debug("starting convert sets-assocations");
 			t.setAssociations(converter(t.getAssociations(),level,true));
 			
-			t.getSubject().setTopics(new HashSet());
+			if(t.getSubject() != null){
+				t.getSubject().setTopics(new HashSet());
+			}
 		}
 		log.debug("Finally: t "+t.getId()+" "+t.getUser());
 

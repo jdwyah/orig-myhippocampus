@@ -72,24 +72,24 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 				"where  user is ? or publicVisible = true"
 				,user);
 		
-		List<Object[]> subjectList = getHibernateTemplate().find(""+
-				"select top.subject.class.id, top.subject.class, count(top.subject.class) from Topic top "+
-				"where top.user is ? "+
-				"group by top.subject.class"
-				,user);
+//		List<Object[]> subjectList = getHibernateTemplate().find(""+
+//				"select top.subject.class.id, top.subject.class, count(top.subject.class) from Topic top "+
+//				"where top.user is ? "+
+//				"group by top.subject.class"
+//				,user);
 		
 		log.debug("tagstats size "+list.size());		
-		log.debug("subject list: "+subjectList.size());
+//		log.debug("subject list: "+subjectList.size());
 		
-		List<TagStat> rtn = new ArrayList<TagStat>(subjectList.size() + list.size());
+//		List<TagStat> rtn = new ArrayList<TagStat>(subjectList.size() + list.size());
+		List<TagStat> rtn = new ArrayList<TagStat>(list.size());
 		
-		
-		for (Object[] o : subjectList){
-			if(log.isDebugEnabled()){
-				log.debug("SUBJECT "+o[0]+" "+o[1]+" "+o[2]);				
-			}
-			rtn.add(new TagStat((Long)o[0],(String)o[1],(Integer)o[2]));			
-		}
+//		for (Object[] o : subjectList){
+//			if(log.isDebugEnabled()){
+//				log.debug("SUBJECT "+o[0]+" "+o[1]+" "+o[2]);				
+//			}
+//			rtn.add(new TagStat((Long)o[0],(String)o[1],(Integer)o[2]));			
+//		}
 		
 		
 		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719

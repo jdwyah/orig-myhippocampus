@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
+import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -55,11 +56,21 @@ public class Dashboard extends SimplePanel {
 				manager.showTimeline();
 			}});
 
+		Button facebookB = new Button("FaceBook");
+		facebookB.addClickListener(new ClickListener(){
+
+			public void onClick(Widget sender) {
+				String login = "http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222";
+				ExternalPopup ex = new ExternalPopup(login);
+			}});
+		
 		
 		mainPanel.add(addNewButton);
 		mainPanel.add(tagButton);
 		//mainPanel.add(initIslands);
 		mainPanel.add(timeLine);
+		
+//		mainPanel.add(facebookB);
 		
 		
 

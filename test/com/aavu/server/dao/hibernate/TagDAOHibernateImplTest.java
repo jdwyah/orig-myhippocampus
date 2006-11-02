@@ -297,6 +297,12 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 	
+	/**
+	 * NOTE: changed my mind about whether subjects shoudl be tags. Decided that they're 
+	 * not. Instead the SubjectGui is doing some auto-tagging, but that's beyond our concern here.
+	 * These tests now show that subjects are irrelevant. 
+	 * @throws HippoBusinessException
+	 */
 	public void testTagStatWithSubjects() throws HippoBusinessException{
 		Tag[] three = add3();
 
@@ -332,16 +338,12 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 			
 			if(ts.getTagId() == three[0].getId()){
 				assertEquals(1,ts.getNumberOfTopics());
-			}
-			//the amazon book
-			else if(ts.getTagName().equals(AmazonBook.getSubjectName())){
-				assertEquals(1,ts.getNumberOfTopics());
-			}
+			}			
 			else{							
 				assertEquals(0,ts.getNumberOfTopics());
 			}					
 		}		
-		assertEquals(4, stats.size());
+		assertEquals(3, stats.size());
 		
 				
 		Subject subj2 = new AmazonBook();
@@ -379,8 +381,9 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		//
 		stats = tagDAO.getTagStats(u);
 		
-		//tag 1,2,3 & 2*AmazonBook makes 4. (Not 5!)
-		assertEquals(4, stats.size());
+		////tag 1,2,3 & 2*AmazonBook makes 4. (Not 5!)
+		//tag 1,2,3 & 2*AmazonBook makes 3!. (Subjects don't count anymore!)
+		assertEquals(3, stats.size());
 		
 		for (TagStat ts : stats){
 			if(ts.getTagId() == three[0].getId()){

@@ -143,6 +143,8 @@ public class SubjectServiceImpl implements SubjectService {
 				book.setDetailURL(element.elementText("DetailPageURL"));
 				book.setManufacturer(attrib.elementText("Manufacturer"));
 				
+				
+				
 				log.debug("Found Book: "+book);
 								
 				rtn.add(book);

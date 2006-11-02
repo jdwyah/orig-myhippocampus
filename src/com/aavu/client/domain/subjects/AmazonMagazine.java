@@ -13,4 +13,9 @@ public class AmazonMagazine extends Amazon {
 		subjectInfo.add(new SubjectInfo(Manager.myConstants.book_title(),getName(),false));
 		return subjectInfo;
 	}
+
+	//@Override
+	public String getTagName() {
+		return Manager.myConstants.magazine();
+	}
 }

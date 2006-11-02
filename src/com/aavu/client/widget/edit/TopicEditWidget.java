@@ -33,8 +33,9 @@ public class TopicEditWidget extends Composite {
 		
 		textArea = new SpecialTextbox(manager.getTopicCache());
 		
-		subjectBoard = new SubjectBoard(manager,titleBox);
+		
 		tagBoard = new TagBoard(manager);
+		subjectBoard = new SubjectBoard(manager,titleBox,tagBoard);
 		seeAlsoBoard = new SeeAlsoBoard(manager);
 		
 		setupTopic();

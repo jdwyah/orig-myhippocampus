@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
@@ -37,18 +38,23 @@ public class SubjectBoard extends Composite{
 
 	private TextBox titleBox;
 
-	private Subject selectedSubject; 
+	private Subject selectedSubject;
 
-	public SubjectBoard(final Manager manager, TextBox titleBox) {	
+	private Topic topic;
+
+	private TagBoard tagBoard; 
+
+	public SubjectBoard(final Manager manager, TextBox titleBox, TagBoard tagBoard) {	
 		this.manager = manager;
 		this.titleBox = titleBox;
+		this.tagBoard = tagBoard;
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
-		
+
 		chooserPanel  = new ChooserPanel();
 		infoPanel = new InfoPanel();
-		
-		
+
+
 		selectedPanel = new SelectedPanel();
 
 		editMe = new Label(Manager.myConstants.subject_edit());
@@ -57,12 +63,12 @@ public class SubjectBoard extends Composite{
 				chooseSubject();
 			}});
 		editMe.setVisible(false);
-		
+
 		subjectTypeList = new SubjectServicePicker();
 		subjectTypeList.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {
 				chooseSubject();
-				
+
 			}});
 
 		mainPanel.add(new HeaderLabel(Manager.myConstants.subject()));
@@ -77,12 +83,20 @@ public class SubjectBoard extends Composite{
 	}
 
 	public void load(Topic topic) {
+		this.topic = topic;
 		setSubject(topic.getSubject());
 		subjectTypeList.setSubject(topic.getSubject());
 	}
-	private void setSubject(Subject subject){		
-		selectedSubject = subject;
+	private void setSubject(Subject subject){	
+				
+		//TODO remove old TAG
+		//tagBoard.removeTag(selectedSubject.getTagName())
 		
+		selectedSubject = subject;
+		if(subject != null){
+			tagBoard.tagTopic(subject.getTagName());
+		}
+
 		selectedPanel.setSubject(subject);
 		editMe.setVisible(true);
 		chooserPanel.setVisible(false);
@@ -94,7 +108,7 @@ public class SubjectBoard extends Composite{
 	}
 	private void chooseSubject(){		
 		editMe.setVisible(false);
-	
+
 		Subject s = subjectTypeList.getSelectedService();
 		if(s != null){
 			manager.getSubjectService().lookup(s,titleBox.getText(),new StdAsyncCallback("SubjectService"){
@@ -113,7 +127,7 @@ public class SubjectBoard extends Composite{
 		}
 
 	}
-	
+
 
 	/**
 	 * Panel responsible for giving the user the options in the subject list
@@ -126,16 +140,17 @@ public class SubjectBoard extends Composite{
 			setStyleName("H-SubjectChooser");
 		}
 
+		//List <Subject>
 		public void setList(List subjectList) {
 			clear();
 			infoPanel.clear();
-			
+
 			if(subjectList.size() > 0){
 				add(new Label(Manager.myConstants.subject_choose()));
 			}else{
 				add(new Label(Manager.myConstants.subject_no_matches()));
 			}
-			
+
 			int i = 0;
 			for (Iterator iter = subjectList.iterator(); iter.hasNext();) {
 				if (i > 2)
@@ -167,16 +182,16 @@ public class SubjectBoard extends Composite{
 			}			
 		}
 	}
-	
+
 	private class SelectedPanel extends VerticalPanel{
-		
+
 		private Label lab = new Label(Manager.myConstants.subject_none());
-		
+
 		public SelectedPanel(){
 			setStyleName("H-SubjectSelectedPanel");
 			add(lab);			
 		}
-		
+
 
 		public void setSubject(Subject subject) {
 			if(subject == null){
@@ -185,9 +200,9 @@ public class SubjectBoard extends Composite{
 				lab.setText(subject.getName());
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Label for "Did you mean:" 
 	 * 
@@ -211,9 +226,9 @@ public class SubjectBoard extends Composite{
 		public void onMouseLeave(Widget sender) {
 			removeStyleName("H-Selected");
 		}
-		
+
 		public void onMouseDown(Widget sender, int x, int y) {}
-		
+
 		public void onMouseMove(Widget sender, int x, int y) {}
 		public void onMouseUp(Widget sender, int x, int y) {
 			setSubject(subject);

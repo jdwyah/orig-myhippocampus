@@ -29,6 +29,7 @@ public interface Consts extends Constants {
 	String subject();
 	String subject_choose();
 	String subject_no_matches();
+	String magazine();
 	
 		
 	

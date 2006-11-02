@@ -8,5 +8,12 @@ public abstract class Subject extends AbstractSubject {
 
 	//List<SubjectInfo>
 	public abstract List getInfos();
-
+	
+	/**
+	 * This should return the name of the Tag that we automatically 
+	 * assign to things with this Subject. 
+	 * 
+	 * @return
+	 */
+	public abstract String getTagName();
 }

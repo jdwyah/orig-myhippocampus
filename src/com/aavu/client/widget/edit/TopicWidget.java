@@ -128,9 +128,12 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 		horizP.add(new HeaderLabel(Manager.myConstants.occurrences()));
 
-
+		System.out.println("OCCUR: "+topic2.getOccurences().size());
+		System.out.println(topic2.toPrettyString());
+		
 		for (Iterator iter = topic2.getOccurences().iterator(); iter.hasNext();) {
 			Occurrence occ = (Occurrence) iter.next();
+			
 			horizP.add(new ExternalLink(occ));	
 		}
 

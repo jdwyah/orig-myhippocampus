@@ -14,11 +14,15 @@ public class HippoCountry extends HippoSubject {
 		setName(string);
 	}
 	
-//	@Override
+	//@Override
 	public List getInfos() {
 		List subjectInfo = new ArrayList();
 		subjectInfo.add(new SubjectInfo(Manager.myConstants.country_name(),getName(),false));
 		return subjectInfo;
 	}
-
+	
+	//@Override
+	public String getTagName() {
+		return Manager.myConstants.country();
+	}
 }

@@ -19,6 +19,8 @@
 		<property name="subjectService" ref="subjectService"/>
 	</bean>
 
+	<bean id="facebookService" class="com.aavu.server.service.facebook.impl.FacebookServiceImpl">
+	</bean>
 	
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"/>	

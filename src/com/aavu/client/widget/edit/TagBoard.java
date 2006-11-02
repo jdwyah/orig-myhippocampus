@@ -86,7 +86,6 @@ public class TagBoard extends Composite implements CompleteListener {
 				super.onSuccess(result);
 				Tag tag = (Tag) result;				
 				addTag(tag);
-				manager.growIsland(tag);
 			}});
 
 
@@ -143,10 +142,10 @@ public class TagBoard extends Composite implements CompleteListener {
 	 */
 	private void addTag(final Tag tag) {
 
-		cur_topic.tagTopic(tag);
-
-		showTag(tag);
-		
+		if(cur_topic.tagTopic(tag)){
+			showTag(tag);
+			manager.growIsland(tag);
+		}
 		tagsToSave.add(tag);
 	}
 	
