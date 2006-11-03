@@ -2,7 +2,6 @@ package com.aavu.client.widget.edit;
 
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.gwtwidgets.client.util.WindowUtils;
@@ -10,15 +9,17 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.MetaSeeAlso;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.URI;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.util.SimpleDateFormatGWT;
 import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.ReferencePanel;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.History;
@@ -27,7 +28,6 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,7 +43,9 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	private VerticalPanel panel = new VerticalPanel();
 
 	public Topic topic;
-	private GWTTopicServiceAsync topicServiceA;
+
+	private ReferencePanel referencesPanel;
+	private Manager manager;
 
 	private static SimpleDateFormatGWT df; 
 
@@ -51,12 +53,14 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	 * NOTE: this class is responsible for noticing possible clicks on links,
 	 * then tickling the History object, since the <A> won't do this for us
 	 * and we'll never getHistoryChanged events.
+	 * @param manager 
 	 * 
 	 * 
 	 * @param topic
 	 */
-	public TopicWidget(Topic topic){
-
+	public TopicWidget(Manager manager, Topic topic){
+		this.manager = manager;
+		
 		panel.setSpacing(4);		
 		titleLabel.addStyleName("ta-compose-Label");
 
@@ -84,7 +88,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	public void setup(){
 
 		textPanel.clear();
-		textPanel.add(new TextDisplay(topic.getData()));		
+		textPanel.add(new TextDisplay(topic.getLatestEntry().getData()));		
 
 		topicTitlePanel.clear();
 		topicTitlePanel.add(titleLabel);
@@ -98,8 +102,12 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		panel.add(doSubject(topic));
 		panel.add(doTags(topic));
 		panel.add(doSeeAlsos(topic));
-		panel.add(doOccurences(topic));
+		panel.add(doExternalLinks(topic));
 		panel.add(textPanel);
+		
+		referencesPanel = new ReferencePanel(manager,topic);
+		panel.add(referencesPanel);
+		referencesPanel.load();
 
 	}
 
@@ -123,7 +131,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		return see.getWidget(topic2);
 
 	}
-	private Widget doOccurences(Topic topic2) {
+	private Widget doExternalLinks(Topic topic2) {
 		HorizontalPanel horizP = new HorizontalPanel();
 
 		horizP.add(new HeaderLabel(Manager.myConstants.occurrences()));
@@ -133,8 +141,9 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		
 		for (Iterator iter = topic2.getOccurences().iterator(); iter.hasNext();) {
 			Occurrence occ = (Occurrence) iter.next();
-			
-			horizP.add(new ExternalLink(occ));	
+			if(occ instanceof URI){
+				horizP.add(new ExternalLink((URI)occ));
+			}
 		}
 
 		return horizP;		
@@ -158,10 +167,6 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 			Meta element = (Meta) iter.next();
 			tagPanel.add(element.getWidget(top));
 		}
-	}
-
-	public void setTopicServiceA(GWTTopicServiceAsync topicServiceA) {
-		this.topicServiceA = topicServiceA;
 	}
 
 
@@ -210,4 +215,5 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		}		
 	}
 
+	
 }

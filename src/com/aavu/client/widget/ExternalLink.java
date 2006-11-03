@@ -1,15 +1,13 @@
 package com.aavu.client.widget;
 
-import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.URI;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.HasHTML;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -29,10 +27,10 @@ public class ExternalLink extends Widget implements HasHTML, SourcesClickEvents 
 		setStyleName("gwt-Hyperlink");
 	}
 
-	public ExternalLink(Occurrence occ) {
+	public ExternalLink(URI occ) {
 		this();		
-		setText(occ.getData());
-		setTarget(occ.getTitle());
+		setText(occ.getTitle());
+		setTarget(occ.getUri());
 	}
 
 

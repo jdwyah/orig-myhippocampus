@@ -17,18 +17,13 @@ package com.aavu.client.gui.ext;
 
 import java.util.Iterator;
 
-import org.gwtwidgets.client.wrap.Effect;
-import org.gwtwidgets.client.wrap.EffectOption;
-
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabListener;
@@ -122,6 +117,9 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 	public void add(Widget w, String tabText) {
 		insert(w, tabText, getWidgetCount());
 	}
+	public void add(Widget w, Label tab) {
+		insert(w, tab, getWidgetCount());
+	}
 
 	/**
 	 * Adds a widget to the tab panel.
@@ -201,6 +199,11 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 	public void insert(Widget widget, String tabText, int beforeIndex) {
 		children.insert(widget, beforeIndex);
 		vertableTabBar.insertTab(tabText, beforeIndex);
+		deck.insert(widget, beforeIndex);
+	}
+	public void insert(Widget widget, Label tab, int beforeIndex) {
+		children.insert(widget, beforeIndex);
+		vertableTabBar.insertTab(tab, beforeIndex);
 		deck.insert(widget, beforeIndex);
 	}
 

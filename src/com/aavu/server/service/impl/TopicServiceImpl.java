@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
@@ -58,6 +60,12 @@ public class TopicServiceImpl implements TopicService {
 			rtn.add(save(topic));
 		}
 		return rtn;
+	}
+	public Occurrence save(Occurrence link) {
+		return topicDAO.save(link);
+	}
+	public List<TopicIdentifier> getLinksTo(Topic topic) {
+		return topicDAO.getLinksTo(topic, userService.getCurrentUser());
 	}
 
 }

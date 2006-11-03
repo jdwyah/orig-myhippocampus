@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.aavu.client.domain">
+
+	<class name="Occurrence" table="occurrences" discriminator-value="occurrence">
+		<meta attribute="generated-class">com.aavu.client.domain.generated.AbstractOccurrence</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<id name="id" type="long" column="occurrence_id">
+			<generator class="native"></generator>
+		</id>
+
+		<discriminator column="discriminator" type="string"></discriminator>
+
+		<many-to-one name="user" class="User" column="user_id" />
+		
+		<property name="title" type="string" column="title"/>
+		<property name="data" type="string" column="data"/>
+		
+
+		<property name="lastUpdated" type="java.util.Date">
+			<meta attribute="field-description">Last updated</meta>
+			<column name="dateUpdated" sql-type="timestamp" />
+		</property>
+
+		<property name="created" type="java.util.Date">
+			<meta attribute="use-in-equals">true</meta>
+			<meta attribute="field-description">Created date</meta>
+			<column name="dateCreated" sql-type="timestamp" />
+		</property>
+
+		
+		<!-- No DB properties -->
+		<subclass name="Entry" discriminator-value="entry">
+			<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+		
+			<subclass name="Comment" discriminator-value="comment">
+				<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+			</subclass>
+		</subclass>
+
+		<!-- Has a DB property! -->
+		<subclass name="URI" discriminator-value="uri">
+			<meta attribute="generated-class" inherit="false">AbstractURI</meta>
+		
+			<property name="uri" type="string" column="uri"/>
+			
+			<subclass name="WebLink" discriminator-value="link">
+				<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+			</subclass>
+			
+			<!-- could have local HD links too.. -->
+			
+		</subclass>
+	
+	</class>
+
+</hibernate-mapping>

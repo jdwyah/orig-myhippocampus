@@ -2,10 +2,13 @@ package com.aavu.server.service;
 
 import java.util.List;
 
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.exception.HippoBusinessException;
 
 public interface TopicService {
@@ -25,5 +28,9 @@ public interface TopicService {
 	List<TimeLineObj> getTimelineObjs();
 
 	List<Topic> save(Topic[] topics) throws HippoBusinessException;
+
+	Occurrence save(Occurrence link);
+	
+	List<TopicIdentifier> getLinksTo(Topic topic);
 
 }

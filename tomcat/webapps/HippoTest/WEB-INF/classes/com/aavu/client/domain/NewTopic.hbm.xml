@@ -19,11 +19,11 @@
 			<meta attribute="field-description">The title of this entry</meta>
 		</property>
 
-	 	<property name="data" type="string">
+	 	<!--<property name="data" type="string">
 			<meta attribute="use-in-equals">true</meta>
 			<meta attribute="field-description">The optional data element</meta>
 			<column name="data" sql-type="text"></column>
-		</property>
+		</property>-->
 
 		<property name="lastUpdated" type="java.util.Date">
 			<meta attribute="field-description">Last updated</meta>
@@ -46,7 +46,7 @@
 			<many-to-many column="scope_id" class="Topic" />
 		</set>
 		
-		<many-to-one name="subject" class="com.aavu.client.domain.subjects.Subject"></many-to-one>
+		<many-to-one name="subject" class="com.aavu.client.domain.subjects.Subject" cascade="save-update"></many-to-one>
 		
  <!-- 
 		<map name="metaValues" table="topic_meta_values">
@@ -71,12 +71,12 @@
 			<many-to-many column="topic_id" class="Topic" />
 		</set>-->
 		
-		<set name="occurences" table="occurences">
+		<set name="occurences" table="topic_occurences" cascade="save-update">
 			<key column="occurrence_id"></key>
-			<many-to-many column="topic_id" class="Topic" />
+			<many-to-many column="topic_id" class="Occurrence" />
 		</set>
 
-	    <set name="associations" table="associations">
+	    <set name="associations" table="topic_associations">
 			<key column="association_id"></key>			
 			<many-to-many column="topic_id" class="Association" />
 		</set>
@@ -89,11 +89,6 @@
 			
 		<!-- meaningless from DB perspective. only usefull for differentiation -->
 		<subclass name="HippoDate" discriminator-value="date">
-			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
-		</subclass>
-
-		<!-- meaningless from DB perspective. only usefull for differentiation -->
-		<subclass name="Occurrence" discriminator-value="occurrence">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 		</subclass>
 
@@ -133,7 +128,7 @@
   			</set>
 
 			<subclass name="ParentChild" discriminator-value="parentChild">
-				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractParentChild</meta>
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
 
 			

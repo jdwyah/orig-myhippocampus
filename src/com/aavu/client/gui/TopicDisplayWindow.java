@@ -51,7 +51,7 @@ public class TopicDisplayWindow extends PopupWindow {
 						public void onSuccess(Object result) {
 							super.onSuccess(result);
 							previewWindow.clear();
-							previewWindow.add(new TopicWidget((Topic)result));
+							previewWindow.add(new TopicWidget(manager,(Topic)result));
 						}});
 				  }});
 			l.addClickListener(new ClickListener(){

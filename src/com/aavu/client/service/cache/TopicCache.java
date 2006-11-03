@@ -299,4 +299,10 @@ public class TopicCache {
 		saveListeners.add(l);
 	}
 
+
+
+	public void getLinksTo(Topic topic2, StdAsyncCallback callback) {
+		topicService.getLinksTo(topic2, callback);
+	}
+
 }

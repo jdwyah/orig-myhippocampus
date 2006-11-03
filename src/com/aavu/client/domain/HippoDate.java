@@ -31,12 +31,12 @@ public class HippoDate extends Topic implements IsSerializable, Serializable{
 	}
 
 	public Date getDate(){
-		long longDate = Long.parseLong(getData());
+		long longDate = Long.parseLong(getTitle());
 		return new Date(longDate);    
 	}
 	public void setDate(Date date){
-		setData(date.getTime()+"");
-		setTitle(df.format(date));
+		setTitle(date.getTime()+"");
+		//setTitle(df.format(date));
 	}
 
 }

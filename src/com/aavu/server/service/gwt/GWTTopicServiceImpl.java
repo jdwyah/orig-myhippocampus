@@ -12,10 +12,12 @@ import org.gwtwidgets.server.rpc.GWTSpringController;
 import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.TopicService;
@@ -118,6 +120,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	 * @return
 	 */
 	public static Topic convert(Topic t){
+
 		return convert(t,0);	
 	}
 	public static Topic convert(Topic t,int level){
@@ -177,7 +180,7 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			log.debug("l1 "+t);
 			log.debug("last: "+t.getLastUpdated());
 			log.debug("created: "+t.getCreated());
-			
+
 			//didn't need to convert the postgres one, but mysql is
 			//returning java.sql.timestamp, which, surprise surprise 
 			//is another thing that breaks GWT serialization.
@@ -239,11 +242,11 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			t.setInstances(converter(t.getInstances(),level));
 
 			log.debug("starting convert sets-occurrences");
-			t.setOccurences(converter(t.getOccurences(),level));
+			t.setOccurences(converterOccurenceSet(t.getOccurences()));
 
 			log.debug("starting convert sets-assocations");
 			t.setAssociations(converter(t.getAssociations(),level,true));
-			
+
 			if(t.getSubject() != null){
 				t.getSubject().setTopics(new HashSet());
 			}
@@ -275,6 +278,24 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			}
 		}catch(LazyInitializationException ex){
 			log.debug("caught lazy @ level "+level);
+		}
+		return rtn;		
+	}
+	public static Set converterOccurenceSet(Set in){
+		HashSet<Occurrence> rtn = new HashSet<Occurrence>();
+		try{			
+			for (Iterator iter = in.iterator(); iter.hasNext();) {
+				Occurrence top = (Occurrence) iter.next();		
+				if(top.getLastUpdated() != null){
+					top.setLastUpdated(new Date(top.getLastUpdated().getTime()));
+				}
+				if(top.getCreated() != null){
+					top.setCreated(new Date(top.getCreated().getTime()));
+				}
+				rtn.add(top);
+			}
+		}catch(LazyInitializationException ex){
+			log.warn("caught lazy in convertOccurrence");
 		}
 		return rtn;		
 	}
@@ -384,6 +405,17 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+
+	public List getLinksTo(Topic topic) throws HippoException {
+		try{
+			return topicService.getLinksTo(topic);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
 		}
 	}
 

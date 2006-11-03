@@ -14,6 +14,7 @@ import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.AddLinkCommand;
@@ -50,9 +51,9 @@ public class AddLinkController extends SimpleFormController {
 		log.debug("command: "+command);
 		AddLinkCommand addLink = (AddLinkCommand) command;
 		
-		Occurrence occ = new Occurrence(userService.getCurrentUser(),addLink.getDescription(),addLink.getUrl(),addLink.getNotes());
+		WebLink link = new WebLink(userService.getCurrentUser(),addLink.getDescription(),addLink.getUrl(),addLink.getNotes());
 		
-		occ = (Occurrence) topicService.save(occ);
+		link = (WebLink) topicService.save(link);
 		
 		String[] tags = addLink.getTags().split(";");
 		
@@ -66,7 +67,7 @@ public class AddLinkController extends SimpleFormController {
 				t.setTitle(string);				
 				t.setUser(userService.getCurrentUser());							
 			}			
-			t.getOccurences().add(occ);
+			t.getOccurences().add(link);
 			topicService.save(t);	
 		}
 		

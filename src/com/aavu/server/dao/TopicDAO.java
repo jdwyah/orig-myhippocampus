@@ -3,6 +3,7 @@ package com.aavu.server.dao;
 import java.util.List;
 
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -33,5 +34,7 @@ public interface TopicDAO {
 	List<Topic> getAllTopics();
 
 	void deleteAllTables();
+
+	Occurrence save(Occurrence link);
 
 }

@@ -16,8 +16,8 @@ import com.aavu.client.domain.generated.AbstractTopic;
 public class Converter {
 	private static final Logger log = Logger.getLogger(Converter.class);
 
-	private Object originalCaller;
-	private Object valueForCaller;
+	private static Object originalCaller;
+	private static Object valueForCaller;
 
 	public static boolean scan(AbstractTopic object){
 		
@@ -76,12 +76,17 @@ public class Converter {
 					b = true;
 				}
 				
-				for (AbstractTopic topic : sourceCollection) {
-					log.debug("INSIDE!!!!!!!!!!!!!!!!!!!!!! ");
-					if(scan(topic)){
-						log.warn("Field: "+method.getName()+" was Hibernate.");
-						b = true;
-					}	
+				try{
+					for (AbstractTopic topic : sourceCollection) {
+						log.debug("INSIDE!!!!!!!!!!!!!!!!!!!!!! ");
+						if(scan(topic)){
+							log.warn("Field: "+method.getName()+" was Hibernate.");
+							b = true;
+						}	
+					}
+				}catch(ClassCastException c){
+					//lazy code above, some of these will now be occurrence, not topics
+					log.debug("cast error: "+c);
 				}
 				
 			}
@@ -91,7 +96,7 @@ public class Converter {
 		
 	}
 	
-	public Object convert(Object object){
+	public static Object convert(Object object){
 
 		Class  objectClass = object.getClass();
 		String className = object.getClass().getName();
@@ -194,7 +199,7 @@ public class Converter {
 		return returnObject;
 	}
 
-	private boolean isPrimitive(Class objectClass){
+	private static boolean isPrimitive(Class objectClass){
 		Logger log=Logger.getRootLogger();
 //		log.debug("isPrimitive()");
 		//log.debug(objectClass.toString());
@@ -215,7 +220,7 @@ public class Converter {
 			return false;
 	}
 
-	private boolean isDate(Class objectClass){
+	private static boolean isDate(Class objectClass){
 		if(objectClass==Date.class)
 			return true;
 		Class clas=objectClass;
@@ -230,7 +235,7 @@ public class Converter {
 		return isDate;
 	}
 
-	private Date convertToDate(Date date){
+	private static Date convertToDate(Date date){
 		if(date==null)
 			return null;
 		return new Date(date.getTime());
@@ -257,7 +262,7 @@ public class Converter {
 		return isCollection;
 	}
 
-	private List convertToList(Collection collection){
+	private static List convertToList(Collection collection){
 		List targetList=new ArrayList();
 
 		for(Object obj:collection.toArray())

@@ -198,22 +198,26 @@ ClickListener, MouseListener {
 	 * @param beforeIndex the index before which this tab will be inserted
 	 */
 	public void insertTab(String text, boolean asHTML, int beforeIndex) {
-		if ((beforeIndex < 0) || (beforeIndex > getTabCount()))
-			throw new IndexOutOfBoundsException();
-
+		
 		Label item;
 		if (asHTML)
 			item = new HTML(text);
 		else
 			item = new Label(text);
+		insertTab(item, beforeIndex);	}
 
+	public void insertTab(Label item, int beforeIndex) {
+		if ((beforeIndex < 0) || (beforeIndex > getTabCount()))
+			throw new IndexOutOfBoundsException();
+
+		
 		item.setWordWrap(false);
 		item.addClickListener(this);
 		item.addMouseListener(this);
 		item.setStyleName("gwt-TabBarItem");
 		cellPanelWithMethods.insert(item, beforeIndex + 1);
 	}
-
+	
 	/**
 	 * Inserts a new tab at the specified index.
 	 * 

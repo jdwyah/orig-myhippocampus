@@ -63,7 +63,7 @@ public class TopicEditWidget extends Composite {
 		System.out.println("setupTopic");
 		if(topic != null){
 			titleBox.setText(topic.getTitle());		
-			textArea.setText(topic.getData());
+			textArea.setText(topic.getLatestEntry().getData());
 						
 			subjectBoard.load(topic);
 			tagBoard.load(topic);
@@ -74,7 +74,7 @@ public class TopicEditWidget extends Composite {
 
 
 	public void save() {
-		topic.setData(textArea.getText());
+		topic.getLatestEntry().setData(textArea.getText());
 		topic.setTitle(titleBox.getText());
 		
 		topic.setSubject(subjectBoard.getSelectedSubject());

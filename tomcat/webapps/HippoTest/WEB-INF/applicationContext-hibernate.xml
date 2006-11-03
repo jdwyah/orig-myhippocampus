@@ -25,6 +25,7 @@
 				<value>com/aavu/client/domain/User.hbm.xml</value>
 				<value>com/aavu/client/domain/NewTopic.hbm.xml</value>
 				<value>com/aavu/client/domain/Subject.hbm.xml</value>
+				<value>com/aavu/client/domain/Occurrence.hbm.xml</value>				
 			</list>
 		</property>
 		<property name="hibernateProperties">

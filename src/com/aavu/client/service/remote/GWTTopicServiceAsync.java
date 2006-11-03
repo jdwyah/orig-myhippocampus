@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface GWTTopicServiceAsync {
@@ -27,10 +29,12 @@ public interface GWTTopicServiceAsync {
 	
 	/*
 	 * @Deprecated
-	 */
+	 */	
 	void getTopicByID(long topicID, AsyncCallback back);
 	void getTimelineObjs(AsyncCallback callback);	
-
+	
+	//List<TopicIdentifier> 
+	void getLinksTo(Topic topic, AsyncCallback callback);
 }
 
 

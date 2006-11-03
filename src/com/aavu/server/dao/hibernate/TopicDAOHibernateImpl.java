@@ -26,6 +26,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaSeeAlso;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -74,7 +75,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //				
 //			}});
 		
-		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.data from Topic top "+
+		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
 				"join top.associations  ass "+
 				"join ass.types  type "+
 				"join ass.members metaValue "+
@@ -159,7 +160,16 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}
 		}
 		
-		
+//		//NOTE: Saving the user here. 
+//		//Where should the user really be getting saved? We're saving it to 
+//		//Topic in Service layer. 
+//		for (Iterator iter = t.getOccurences().iterator(); iter.hasNext();) {			
+//			Occurrence occur = (Occurrence) iter.next();
+//			if(occur.getUser() == null){
+//				occur.setUser(t.getUser());
+//			}
+//			getHibernateTemplate().save(occur);
+//		}
 		
 		//
 		//Bit of a chicken & egg thing here with TransientReferences..
@@ -277,7 +287,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		Object[] params = {topic.getId(),user};
 		System.out.println("----------------------------");
 		System.out.println("------------"+topic+"-------");
-		List<Object[]> list = getHibernateTemplate().find(""+
+		List<Object[]> associationsToThis = getHibernateTemplate().find(""+
 				"select title, id from Topic top "+		
 				//"join top.associations "+
 				"where ? in elements(top.associations.members) "+
@@ -290,12 +300,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //				"and user is ? "
 //				,params);
 //	
+		List<Object[]> instancesOfThisTopicSlashTag = getHibernateTemplate().find(""+
+				"select title, id from Topic top "+
+				"where top.types.id is ? "+
+				"and user is ? "
+				,params);
 		
-//		List<Object[]> ass = getHibernateTemplate().find(""+
-//				"select title, id from Association ass "+		
-//				"where ? in elements(members) "+
-//				"and user is ? "
-//				,params);
 		
 //		List<Association> l2 = getHibernateTemplate().find(""+
 //				"from Association ass "+		
@@ -308,8 +318,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //			System.out.println("ass "+association+" ass "+association.getId());
 //		}
 		
-		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
-		for (Object[] o : list){
+		associationsToThis.addAll(instancesOfThisTopicSlashTag);
+		
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(associationsToThis.size());
+		for (Object[] o : associationsToThis){
 			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
 		}
 		return rtn;		
@@ -419,16 +431,23 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				Statement statement = conn.createStatement();
 				
 				boolean res = statement.execute("DELETE FROM topic_scopes");
-				res = statement.execute("DELETE FROM associations");
+				res = statement.execute("DELETE FROM topic_associations");
 				res = statement.execute("DELETE FROM instancetable");
 				res = statement.execute("DELETE FROM member_topics");
-				res = statement.execute("DELETE FROM occurences");
+				res = statement.execute("DELETE FROM topic_occurences");
+				res = statement.execute("DELETE FROM occurrences");
+				res = statement.execute("DELETE FROM subjects");
 				res = statement.execute("DELETE FROM typetable");
 				res = statement.execute("DELETE FROM topics");				
 				return res;
 				
 			}});
 
+	}
+
+	public Occurrence save(Occurrence link) {
+		getHibernateTemplate().saveOrUpdate(link);
+		return link;
 	}
 
 	

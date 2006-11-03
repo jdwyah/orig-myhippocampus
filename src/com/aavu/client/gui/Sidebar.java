@@ -5,13 +5,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.gwtwidgets.client.ui.PNGImage;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.VertableTabPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -132,11 +140,27 @@ public class Sidebar extends FocusPanel implements MouseListener {
 			}
 			
 			//System.out.println("ADD key "+key.toString()+" "+st+key.toString()+KEYEND);
-			tabPanel.add(vp, st+key.toString()+KEYEND, true);
+			
+			//tabPanel.add(vp,new SidebarLabel(st+key.toString()+KEYEND));
+			tabPanel.add(vp,st+key.toString()+KEYEND,true);
 
 		}
 	}
 
+//	private class SidebarLabel extends Composite {
+//		private Label l;
+//		public SidebarLabel(String string) {			
+//			setStyleName("H-SidebarLabel");
+//			
+//			l = new Label(string);
+//			
+//			AbsolutePanel cp = new AbsolutePanel();
+//			cp.add(new PNGImage("img/"));
+//			cp.add(l);
+//			
+//		}
+//		
+//	}
 	
 
 	public void onMouseEnter(Widget sender) {

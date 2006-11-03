@@ -59,7 +59,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	
 	public void load(Topic topic){
 		this.topic = topic;
-		topicWidget = new TopicWidget(topic);
+		topicWidget = new TopicWidget(manager,topic);
 		topicEditWidget = new TopicEditWidget(this,manager,topic);
 		
 		activateMainView();

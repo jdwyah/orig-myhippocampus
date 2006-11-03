@@ -6,7 +6,9 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoException;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 
@@ -30,5 +32,6 @@ public interface GWTTopicService extends RemoteService {
 	//List<TimeLineObj>
 	List getTimelineObjs();
 
-	
+	//List<TopicIdentifier> 
+	List getLinksTo(Topic topic) throws HippoException;
 }

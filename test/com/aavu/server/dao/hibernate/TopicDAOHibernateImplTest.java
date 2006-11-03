@@ -1,6 +1,7 @@
 package com.aavu.server.dao.hibernate;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testSave() throws HippoBusinessException {
 	
 		Topic t = new Topic();
-		t.setData(B);
+		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 				
@@ -96,7 +97,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic savedTopic = topicDAO.getForID(u, saved.getTopicID());
 		
 		assertEquals(C, savedTopic.getTitle());
-		assertEquals(B, savedTopic.getData());
+		assertEquals(B, savedTopic.getLatestEntry().getData());
 		assertEquals(u, savedTopic.getUser());
 		
 		assertEquals(1, savedTopic.getTypes().size());
@@ -114,7 +115,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testSaveComplexMetas() throws HippoBusinessException {
 						
 		Topic patriotGames = new Topic();
-		patriotGames.setData(B);
+		patriotGames.getLatestEntry().setData(B);
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 				
@@ -199,12 +200,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 				
 		Topic t = new Topic();
-		t.setData(B);
+		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 				
 		Topic t2 = new Topic();
-		t2.setData(C);
+		t2.getLatestEntry().setData(C);
 		t2.setTitle(B);
 		t2.setUser(u);
 		
@@ -242,7 +243,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testGetAllTopicIdentifiers() throws HippoBusinessException{	
 		
 		Topic t = new Topic();
-		t.setData(B);
+		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
@@ -278,31 +279,37 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	
 	public void testSaveSeeAlsos() throws HippoBusinessException{
 		
-		Topic stringTheory = new Topic(u,B);
+		Topic author = new Topic(u,B);
 		
 
-		stringTheory = topicDAO.save(stringTheory);
+		author = topicDAO.save(author);
 		
-		Topic feinman = new Topic(u,C);		
+		Topic patGames = new Topic(u,C);		
 		
-		feinman = topicDAO.save(feinman);
+		patGames = topicDAO.save(patGames);
 		
-		stringTheory.addSeeAlso(feinman.getIdentifier());
+		author.addSeeAlso(patGames.getIdentifier());
 		
 		System.out.println("_________________");
 		
-		System.out.println(stringTheory.toPrettyString());
+		System.out.println(author.toPrettyString());
 		
-		stringTheory = topicDAO.save(stringTheory);
+		author = topicDAO.save(author);
 		
 		System.out.println("++++++++++++++++++");
 		
-		Topic savedST = stringTheory.getSeeAlsoAssociation();
+		Topic savedST = author.getSeeAlsoAssociation();
 				
 		Association savedSee = (Association) savedST;
 		
-
-		assertTrue(savedSee.getMembers().contains(feinman));
+		System.out.println(author.toPrettyString());
+		System.out.println("----------");
+		System.out.println("member size "+savedSee.getMembers().size());
+		Topic member = (Topic) savedSee.getMembers().iterator().next();
+		System.out.println("member: "+member.toPrettyString());
+		System.out.println("comp "+member.compare(patGames));
+		
+		assertTrue(savedSee.getMembers().contains(patGames));
 
 		//
 		//oy, what are we going to do with the cache? I guess just null out cache 
@@ -310,15 +317,15 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//bunch of error prone stuff going on with these multi-directional associations
 		//that need to be updated on both sides, eh?
 		//		
-		System.out.println("get id "+stringTheory.getId());
+		System.out.println("get id "+author.getId());
 				
-		Topic savedStringT = topicDAO.getForID(u, stringTheory.getId());
+		Topic savedStringT = topicDAO.getForID(u, author.getId());
 				
 		assertNotNull(savedStringT);
 		
 		
 		
-		Topic savedFN = topicDAO.getForID(u, feinman.getId());
+		Topic savedFN = topicDAO.getForID(u, patGames.getId());
 		assertNotNull(savedFN);
 		
 		
@@ -345,15 +352,15 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//
 		Topic bullcrap = new Topic(u,D);		
 		bullcrap = topicDAO.save(bullcrap);		
-		stringTheory.addSeeAlso(bullcrap.getIdentifier());		
-		topicDAO.save(stringTheory);
+		author.addSeeAlso(bullcrap.getIdentifier());		
+		topicDAO.save(author);
 		
 		
 		
-		savedStringT = topicDAO.getForID(u, stringTheory.getId());		
+		savedStringT = topicDAO.getForID(u, author.getId());		
 		assertNotNull(savedStringT);
 		
-		savedFN = topicDAO.getForID(u, feinman.getId());
+		savedFN = topicDAO.getForID(u, patGames.getId());
 		assertNotNull(savedFN);
 		
 		Topic savedBull = topicDAO.getForID(u, bullcrap.getId());
@@ -414,7 +421,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		topicDAO.deleteAllTables();
 		
 		Topic patriotGames = new Topic(u,C);
-		patriotGames.setData(B);
+		patriotGames.getLatestEntry().setData(B);
 				
 		Tag book = new Tag(u,D);
 						
@@ -594,6 +601,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Subject ss1 = s1.getSubject();
 		Subject ss2 = s2.getSubject();
 		
+		assertTrue(ss1.equals(ss2));
 		assertEquals(ss1.getId(), ss2.getId());
 		assertEquals(ss1.getForeignID(), ss2.getForeignID());
 		assertEquals(ss1,ss2);

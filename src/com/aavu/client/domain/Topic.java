@@ -20,9 +20,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setLastUpdated(new Date());
 		setCreated(new Date());
 		setTitle("");
-
-		//important. helps activates edit area
-		setData("<BODY contentEditable=true></BODY>");		
+		Entry initialEntry = new Entry();
+		getOccurences().add(initialEntry);
 	}
 
 	public Topic(JSONObject value) {
@@ -31,11 +30,12 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(((JSONString)value.get("data")).stringValue());
 	}
 
-	public Topic(User user, String title, String data, Date lastUpdated, Date created, boolean publicVisible, Set children, Subject subject,Set parents, Set metas, Set occurences, Set associations) {
-		super(user, title, data, lastUpdated, created, publicVisible, children, subject, parents, metas, occurences, associations);
+	public Topic(User user, String title, Date lastUpdated, Date created, boolean publicVisible, Set children, Subject subject,Set parents, Set metas, Set occurences, Set associations) {
+		super(user, title, lastUpdated, created, publicVisible, children, subject, parents, metas, occurences, associations);		
 	}
 
 	public Topic(User u, String title) {
+		this();
 		setUser(u);
 		setTitle(title);
 	}
@@ -103,7 +103,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 
-	public void tagTopic(Topic tag){
+	public boolean tagTopic(Topic tag){
 
 
 //		System.out.println("tagging with "+tag.getTitle());
@@ -126,12 +126,21 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 //		Window.alert("pretty "+tag.toPrettyString());
 
 
-		getTypes().add(tag);
+		return getTypes().add(tag);
 //		Window.alert("FOO3");
-
 
 	}
 
+	public Entry getLatestEntry(){
+		Entry rtn = null;
+		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+			Occurrence occur = (Occurrence) iter.next();
+			if(occur instanceof Entry){
+				rtn = (Entry) occur;
+			}
+		}
+		return rtn;
+	}
 
 
 	public String toString(){
@@ -323,17 +332,22 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		StringBuffer sb = new StringBuffer();
 		if ( (this == other ) ) sb.append("true obj id");
 		if ( (other == null ) ) sb.append("false other null");
-		if ( !(other instanceof AbstractTopic) ) sb.append("false other diff type");
-		AbstractTopic castOther = ( AbstractTopic ) other; 
+		if ( !(other instanceof Topic) ) sb.append("false other diff type");
+		Topic castOther = ( Topic ) other; 
 		if(sb.length() > 0){
 			return sb.toString();
 		}
 		sb.append("Compare:\n");
 		sb.append(this.getId()+" id "+castOther.getId()+"\n");
 		sb.append(this.getTitle()+" title "+castOther.getTitle()+"\n");
-		sb.append(this.getData()+" data "+castOther.getData()+"\n");
+		sb.append(this.getCreated()+" created "+castOther.getCreated()+"\n");
+		sb.append(this.getLatestEntry()+" data "+castOther.getLatestEntry()+"\n");
 		sb.append(this.getUser()+" user "+castOther.getUser()+"\n");
 		sb.append(this.isPublicVisible()+" public "+castOther.isPublicVisible()+"\n");
+		
+		sb.append("EQ: "+(( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )		
+		 && (this.isPublicVisible()==castOther.isPublicVisible())));
+		
 		return sb.toString();
 	}
 
