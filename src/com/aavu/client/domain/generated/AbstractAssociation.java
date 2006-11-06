@@ -1,5 +1,5 @@
 package com.aavu.client.domain.generated;
-// Generated Nov 3, 2006 8:10:46 AM by Hibernate Tools 3.1.0.beta5
+// Generated Nov 6, 2006 10:20:40 AM by Hibernate Tools 3.1.0.beta5
 
 
 import com.aavu.client.domain.User;
