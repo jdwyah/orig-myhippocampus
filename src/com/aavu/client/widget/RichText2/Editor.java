@@ -362,10 +362,13 @@ public class Editor extends Composite /* implements HasHTML*/{
 	
 	
 	native static void expandSelectionJS(Element element)/*-{
-		element.contentWindow.focus();
-		var doc = element.contentWindow.document;		  
-		var range = doc.selection.createRange();
-		var suc = range.expand("word");
+		
+		//element.contentWindow.focus();
+		//var doc = element.contentWindow.document;		  
+		//var range = doc.selection.createRange();
+		//var suc = range.expand("word");
+		
+		
 	//	alert(range.htmlText);
 	//	alert(range.text);
     //	alert(suc+" "+range.text);

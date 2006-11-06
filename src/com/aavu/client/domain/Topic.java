@@ -19,9 +19,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	public Topic(){
 		setLastUpdated(new Date());
 		setCreated(new Date());
-		setTitle("");
-		Entry initialEntry = new Entry();
-		getOccurences().add(initialEntry);
+		setTitle("");		
 	}
 
 	public Topic(JSONObject value) {
@@ -138,6 +136,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			if(occur instanceof Entry){
 				rtn = (Entry) occur;
 			}
+		}
+		if(rtn == null){
+			Entry initialEntry = new Entry();
+			getOccurences().add(initialEntry);
+			return initialEntry;
 		}
 		return rtn;
 	}

@@ -122,6 +122,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)		
 		.add(Expression.eq("user", user))
 		.add(Expression.ilike("title", match, MatchMode.ANYWHERE))
+		.add(Expression.ne("class", "association"))
+		.add(Expression.ne("class", "seealso"))
+		.add(Expression.ne("class", "metadate"))
 		.addOrder( Order.asc("title") )
 		.setProjection(Property.forName("title"));	
 		
