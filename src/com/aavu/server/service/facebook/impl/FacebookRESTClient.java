@@ -62,7 +62,7 @@ import org.w3c.dom.NodeList;
  * To see verbose output (incoming XML and outgoing requests), use a log
  * level of FINE or higher.
  */
-public class FacebookRestClient {
+public class FacebookRESTClient {
 	  private Logger  _log = Logger.getLogger(getClass().getName());
 	  private String  _secret;
 	  private String  _sessionKey;
@@ -70,7 +70,7 @@ public class FacebookRestClient {
 	  private URL     _serverUrl;
 	  private boolean _debug;
 
-	  public FacebookRestClient(String serverAddr, String sessionKey, String apiKey, String secret) throws MalformedURLException {
+	  public FacebookRESTClient(String serverAddr, String sessionKey, String apiKey, String secret) throws MalformedURLException {
 	    _sessionKey = sessionKey;
 	    _apiKey     = apiKey;
 	    _secret     = secret;

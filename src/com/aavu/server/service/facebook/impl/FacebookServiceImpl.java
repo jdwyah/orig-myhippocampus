@@ -39,7 +39,7 @@ public class FacebookServiceImpl implements FacebookService {
 		String sessionKey = getSessionKey();
 		
 		
-		FacebookRestClient client = new FacebookRestClient(
+		FacebookRESTClient client = new FacebookRESTClient(
 		server,
 		sessionKey,
 		apiKey,

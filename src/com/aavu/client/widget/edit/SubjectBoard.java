@@ -10,6 +10,7 @@ import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.SubjectInfo;
+import com.aavu.client.domain.subjects.WikiSubject;
 import com.aavu.client.gui.ext.ObjectListBox;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
@@ -241,7 +242,8 @@ public class SubjectBoard extends Composite{
 			super();		
 			addItem(Manager.myConstants.subject_none(),null);
 			addItem(Manager.myConstants.book(),new AmazonBook());
-			addItem(Manager.myConstants.country(),new HippoCountry());					
+			addItem(Manager.myConstants.country(),new HippoCountry());	
+			addItem(Manager.myConstants.wiki(), new WikiSubject());
 		}
 
 

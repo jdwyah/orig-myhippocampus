@@ -1,5 +1,7 @@
 package com.aavu.client.exception;
 
+import org.dom4j.DocumentException;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class HippoException extends Exception implements IsSerializable {
@@ -18,6 +20,11 @@ public class HippoException extends Exception implements IsSerializable {
 	public HippoException(String string) {
 		super(string);
 		savedMessage = string;
+	}
+
+	public HippoException(Exception e) {
+		super(e);
+		savedMessage = e.getMessage();
 	}
 
 	//@Override

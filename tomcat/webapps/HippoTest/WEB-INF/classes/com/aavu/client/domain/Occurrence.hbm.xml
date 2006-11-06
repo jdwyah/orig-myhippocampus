@@ -12,10 +12,16 @@
 
 		<discriminator column="discriminator" type="string"></discriminator>
 
-		<many-to-one name="user" class="User" column="user_id" />
+		<many-to-one name="user" class="User" column="user_id">
+			<meta attribute="use-in-equals">true</meta>
+		</many-to-one>
 		
-		<property name="title" type="string" column="title"/>
-		<property name="data" type="string" column="data"/>
+		<property name="title" type="string" column="title">
+			<meta attribute="use-in-equals">true</meta>		
+		</property>
+		<property name="data" type="string" column="data">
+			<meta attribute="use-in-equals">true</meta>
+		</property>
 		
 
 		<property name="lastUpdated" type="java.util.Date">

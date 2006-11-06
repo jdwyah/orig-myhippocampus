@@ -51,6 +51,9 @@ public class AddLinkController extends SimpleFormController {
 		log.debug("command: "+command);
 		AddLinkCommand addLink = (AddLinkCommand) command;
 		
+		
+		log.debug("addLinkCommand: "+addLink);
+		
 		WebLink link = new WebLink(userService.getCurrentUser(),addLink.getDescription(),addLink.getUrl(),addLink.getNotes());
 		
 		link = (WebLink) topicService.save(link);
@@ -60,6 +63,10 @@ public class AddLinkController extends SimpleFormController {
 		log.debug("tags: "+Arrays.toString(tags));
 		for (String string : tags) {			
 			log.debug("str: "+string);			
+			if(string.equals("")){				
+				string = addLink.getDescription();
+				log.debug("blank tags, setting topic to; "+string);
+			}
 			Topic t = topicService.getForName(string);			
 			if(null == t){
 				log.debug("was null, creating as Tag ");
@@ -68,7 +75,9 @@ public class AddLinkController extends SimpleFormController {
 				t.setUser(userService.getCurrentUser());							
 			}			
 			t.getOccurences().add(link);
-			topicService.save(t);	
+			System.out.println("-----t-----"+t.toPrettyString());
+			Topic st = topicService.save(t);
+			System.out.println("-----st-----"+st.toPrettyString());
 		}
 		
 	}

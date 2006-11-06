@@ -31,7 +31,7 @@
 		</property>
 
 		<property name="created" type="java.util.Date">
-			<meta attribute="use-in-equals">true</meta>
+			<!-- <meta attribute="use-in-equals">true</meta>-->
 			<meta attribute="field-description">Created date</meta>
 			<column name="dateCreated" sql-type="timestamp" />
 		</property>

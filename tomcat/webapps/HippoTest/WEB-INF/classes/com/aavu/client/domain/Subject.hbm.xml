@@ -46,7 +46,10 @@
 			</subclass>
 			
 		</subclass>
-	
+		<!-- No DB properties -->
+		<subclass name="WikiSubject" discriminator-value="wikiSubject">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.subjects.generated.AbstractJUNK</meta>			
+		</subclass>
 	</class>
 
 </hibernate-mapping>

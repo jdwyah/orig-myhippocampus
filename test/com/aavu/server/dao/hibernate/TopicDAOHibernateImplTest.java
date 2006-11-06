@@ -1,5 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
@@ -610,6 +612,11 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
+	/**
+	 * This test starts working when we add Occurences cascade="save-update"
+	 * 
+	 * @throws HippoBusinessException
+	 */
 	public void testSubjectSaveTransientProblem() throws HippoBusinessException {
 		Topic t = new Topic(u,B);
 		
@@ -628,9 +635,44 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic savedTAgain = topicDAO.getForName(u, B);
 		
 		assertEquals(D,savedTAgain.getSubject().getForeignID());
-		
-				
+						
 	}
+	
+	public void testSaveLink() throws HippoBusinessException {
+		WebLink link = 	new WebLink(u,B,C,D);
+		
+		link = (WebLink) topicDAO.save(link);
+		
+		String string = "";
+		
+					
+			log.debug("str: "+string);			
+			if(string.equals("")){				
+				string = C;
+				log.debug("blank tags, setting topic to; "+string);
+			}
+			Topic t = topicDAO.getForName(u, string);			
+			
+			if(null == t){
+				log.debug("was null, creating as Tag ");
+				t = new Tag();
+				t.setTitle(string);				
+				t.setUser(u);							
+			}			
+			
+			assertEquals(1, t.getOccurences().size());
+			
+			t.getOccurences().add(link);
+			assertEquals(2, t.getOccurences().size());
+			
+			System.out.println("-----t-----"+t.toPrettyString());
+			Topic st = topicDAO.save(t);
+			System.out.println("-----st-----"+st.toPrettyString());
+		
+			assertEquals(2, st.getOccurences().size());
+						
+	}
+	
 	
 	
 	public void setTagDAO(TagDAO tagDAO) {

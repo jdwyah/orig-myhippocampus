@@ -182,6 +182,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		StringBuffer tagsStr = new StringBuffer();
 		StringBuffer metaVStr = new StringBuffer();
 		StringBuffer instanceStr = new StringBuffer();
+		StringBuffer occurencesStr = new StringBuffer();
 		
 		try{			
 			tagsStr.append(indent+"Types: \n"+indent);
@@ -235,10 +236,21 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		}catch(Exception e){
 			instanceStr.append(indent+"Topic Pretty Instances Errored");
 		}
+		try{			
+			occurencesStr.append(indent+"Occurrences:\n"+indent);
+			for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+				Occurrence occurence = (Occurrence) iter.next();
+				
+				occurencesStr.append("Occurrence: "+occurence.getTitle()+" "+occurence.getId()+" "+occurence.getData()+"\n"+indent);							
+			}
+		}catch(Exception e){
+			occurencesStr.append(indent+"Topic Pretty Occurrences Errored");
+		}
 		return "\nID "+getId()+" title "+getTitle()+"\n"+indent+
 		" "+tagsStr+"\n"+indent+
 		" "+metaVStr+"\n"+indent+
 		" "+instanceStr+"\n"+indent+
+		" "+occurencesStr+"\n"+indent+
 		"User:"+((getUser() == null)? "null" : getUser().getId()+"");
 
 	}

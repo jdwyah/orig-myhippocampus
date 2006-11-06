@@ -31,6 +31,9 @@ public interface Consts extends Constants {
 	String subject_no_matches();
 	String magazine();
 	String references();
+	String wiki();
+	String wiki_summary();
+	String wiki_url();
 	
 		
 	
