@@ -1,13 +1,14 @@
 package com.aavu.server.service.gwt;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -20,47 +21,47 @@ public class Converter {
 	private static Object valueForCaller;
 
 	public static boolean scan(AbstractTopic object){
-		
+
 		Class  objectClass = object.getClass();
 		while(!objectClass.getSuperclass().getName().contains("Object")){
 			objectClass = objectClass.getSuperclass();
 		}
-		
-		
+
+
 		Method[] methods=objectClass.getDeclaredMethods();
-		
-		
+
+
 		String className = object.getClass().getName();
 		if(className.contains("Persistent")){
 			return true;
 		}
 		log.debug("classname "+className);
-		
+
 		boolean b = false;
-	
-		
+
+
 		for (Method method : methods) {
-			
+
 			//System.out.println("method "+method.getName());
-			
+
 			if(!method.getName().startsWith("get"))
 				continue;
 
 			//get return type of a method
 			Class methodReturnType=method.getReturnType();
-	
-			
+
+
 			//System.out.println("method "+method.getName()+" rtn: "+methodReturnType);
 			//System.out.println("param length"+method.getGenericParameterTypes().length);
 			if(methodReturnType == java.util.Set.class
 					&&
 					method.getGenericParameterTypes().length == 0){
-				
-				
+
+
 				log.debug("Examine method "+method.getName());
-			
+
 				//System.out.println("implement "+methodReturnType+"   "+implementsCollection(methodReturnType));			
-								
+
 				Collection<AbstractTopic> sourceCollection = null;
 				try {
 					sourceCollection = (Collection)method.invoke(object,null);
@@ -70,12 +71,12 @@ public class Converter {
 
 				//System.out.println("rtn: "+sourceCollection);
 				//System.out.println(sourceCollection.getClass());
-				
+
 				if(sourceCollection.getClass().toString().contains("Persist")){
 					log.error("RETURNING A HIBERNATE CLASS!!!!!!!!!!");
 					b = true;
 				}
-				
+
 				try{
 					for (AbstractTopic topic : sourceCollection) {
 						log.debug("INSIDE!!!!!!!!!!!!!!!!!!!!!! ");
@@ -88,14 +89,61 @@ public class Converter {
 					//lazy code above, some of these will now be occurrence, not topics
 					log.debug("cast error: "+c);
 				}
-				
+
 			}
 		}
-		
+
 		return b;
-		
+
 	}
-	
+
+	private static void printAllFields(Object fromObj,Class objectClass,int ii) throws InstantiationException, IllegalAccessException{
+		if(objectClass != null && ii < 20){
+			
+			//Class  objectClass = object.getClass();
+			System.out.println("object class "+objectClass);
+			Field[] fields = objectClass.getDeclaredFields();
+			
+			//objectClass.
+//			Class  objectClass = object.getClass();
+//			while(!objectClass.getSuperclass().getName().contains("Object")){
+//				objectClass = objectClass.getSuperclass();
+//			}
+			
+			System.out.println("Fields "+Arrays.deepToString(fields));
+			for(int i=0;i<fields.length;i++){
+				
+				log.info("F "+fields[i].getName()+" "+fields[i].getType()+" "+fields[i].getClass()+" "+fields[i].getClass().isPrimitive());
+				
+				fields[i].setAccessible(true);
+				
+				Object value = fields[i].get(fromObj);
+				System.out.println("VALUE "+value+" "+value.getClass().getName());
+				
+				if(value == null){
+					System.out.println("null");
+				}else if(value.getClass().getName().contains("Lazy")){
+					System.out.println("lazy");					
+				}else if(value.getClass().getName().contains("HibernateSet")){
+					System.out.println("hibernate");
+					Set cur = (Set) value;
+					Set s = new HashSet();
+					for (Object object : cur) {
+						s.add(convert(object));
+					}
+				}else if(isPrimitive(value.getClass())){
+					System.out.println("primitive");
+				}else if(implementsCollection(value.getClass())){
+					System.out.println("convert collection");
+					fields[i].set(fromObj, convert(value));
+				}
+			}
+			
+			System.out.println("super "+objectClass.getSuperclass());
+			printAllFields(fromObj,objectClass.getSuperclass(),++ii);
+		}
+	}
+
 	public static Object convert(Object object){
 
 		Class  objectClass = object.getClass();
@@ -111,15 +159,19 @@ public class Converter {
 			Method[] methods=objectClass.getDeclaredMethods();
 			//              log.info("getMethods");
 
-			for(int i=0;i<fields.length;i++){
-				//                      log.info(""+fields[i].getClass().isPrimitive());
-			}
+		//	printAllFields(object,objectClass,0);
+
+System.out.println("NUM FIELDS "+objectClass.getDeclaredFields().length);
 
 			for(int i=0;i<methods.length;i++){
 				try{
 					if(!methods[i].getName().startsWith("get"))
 						continue;
+					
 
+					
+					System.out.println("DO METHOD: "+methods[i].getName());
+					
 					//get return type of a method
 					Class methodReturnType=methods[i].getReturnType();
 

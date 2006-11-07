@@ -38,7 +38,11 @@ function ocean_DoFSCommand(command, args) {
 function islandClicked(arg) {
 	//alert("receivedURLs from flash"+arg);
 	//alert(flashCommand);
-	flashCommand("islandClicked",arg);
+	flashCommand("islandClicked",arg,0,0);
+}
+function isleMovedTo(islandID, xx, yy) {
+	//alert("isle move "+islandID+" "+xx+" "+yy);
+	flashCommand("isleMovedTo",islandID,xx,yy);
 }
 function flashReady() {
 	flashReadyVar = true;

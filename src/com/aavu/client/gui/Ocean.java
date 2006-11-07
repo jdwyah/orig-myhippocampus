@@ -9,6 +9,7 @@ import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Ocean extends FlashContainer {
@@ -47,9 +48,12 @@ public class Ocean extends FlashContainer {
 		
 	}
 	
-	protected void callbackOverride(String command, int arg){
+	protected void callbackOverride(String command, int int0,double d0,double d1){
 		if(command.equals("islandClicked")){
-			manager.showTopicsForTag(arg);
+			manager.showTopicsForTag(int0);
+		}
+		if(command.equals("isleMovedTo")){
+			System.out.println("isleMovedTo "+int0+" "+d0+" "+d1);						
 		}
 		
 	}
@@ -57,10 +61,25 @@ public class Ocean extends FlashContainer {
 	
 	
 	protected String islandObj(long id, String name,int size){
-		return "<object>"+numberProp("id",id)+stringProp("tag",name)+numberProp("size",size)+"</object>";
+		return "<object>"+numberProp("id",id)+stringProp("tag",name)+numberProp("size",size)+numberProp("xx",getNum())+numberProp("yy",getNum())+"</object>";
 	}
 
+	private long getNum() {
+		return 100+(long) (Math.random()*400);
+	}
 
+	/**
+	initLand(userID, islandArray, uniqueTopics, worldSize);
+	where islandArray contains elements containing:
+	  -id:Number
+	  -tag:String
+	  -size:Number
+	  -xx:Number
+	  -yy:Number
+
+	when a user drags an island, the island transmits to the external interface:
+	isleMovedTo(islandID, xx, yy);
+	*/
 	protected String getCommand(User user,TagStat[] tagStats,int totalNumberOfTopics){
 		StringBuffer sb = new StringBuffer();
 		//sb.append("<invoke name=\"initLand\" returntype=\"javascript\"><arguments>");

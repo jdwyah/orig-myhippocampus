@@ -58,10 +58,11 @@ public class Dashboard extends SimplePanel {
 
 		Button facebookB = new Button("FaceBook");
 		facebookB.addClickListener(new ClickListener(){
-
-			public void onClick(Widget sender) {
-				String login = "http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222";
-				ExternalPopup ex = new ExternalPopup(login);
+//http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222&popup=true
+//http://www.myhippocampus.com/site/facebook.html?auth_token=5db53300a9cebdc59ead9ea882cb57df
+			public void onClick(Widget sender) {				
+				String login = "http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222&popup=true";
+				ExternalPopup ex = new ExternalPopup("Facebook",login,626,436);
 			}});
 		
 		
@@ -70,9 +71,8 @@ public class Dashboard extends SimplePanel {
 		//mainPanel.add(initIslands);
 		mainPanel.add(timeLine);
 		
-//		mainPanel.add(facebookB);
-		
-		
+		//mainPanel.add(facebookB);
+				
 
 		add(mainPanel);
 		//sets

@@ -33,13 +33,14 @@ public class AddLinkController extends SimpleFormController {
 
 	@Override
 	protected Object formBackingObject(HttpServletRequest req) throws Exception {
+		log.debug("FormBackingObject");
 		AddLinkCommand command = new AddLinkCommand();
 		
-		command.setUrl(req.getParameter("url"));
+		command.setCommand_url(req.getParameter("url"));
 		
-		command.setDescription(req.getParameter("description"));
+		command.setCommand_description(req.getParameter("description"));
 		
-		command.setNotes(req.getParameter("notes"));
+		command.setCommand_notes(req.getParameter("notes"));
 		
 		return command;
 		
@@ -54,17 +55,17 @@ public class AddLinkController extends SimpleFormController {
 		
 		log.debug("addLinkCommand: "+addLink);
 		
-		WebLink link = new WebLink(userService.getCurrentUser(),addLink.getDescription(),addLink.getUrl(),addLink.getNotes());
+		WebLink link = new WebLink(userService.getCurrentUser(),addLink.getCommand_description(),addLink.getCommand_url(),addLink.getCommand_notes());
 		
 		link = (WebLink) topicService.save(link);
 		
-		String[] tags = addLink.getTags().split(";");
+		String[] tags = addLink.getCommand_tags().split(";");
 		
 		log.debug("tags: "+Arrays.toString(tags));
 		for (String string : tags) {			
 			log.debug("str: "+string);			
 			if(string.equals("")){				
-				string = addLink.getDescription();
+				string = addLink.getCommand_description();
 				log.debug("blank tags, setting topic to; "+string);
 			}
 			Topic t = topicService.getForName(string);			

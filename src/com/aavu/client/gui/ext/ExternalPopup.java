@@ -4,26 +4,47 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.HTTPRequest;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Frame;
 
-public class ExternalPopup {
+public class ExternalPopup extends PopupWindow {
 	private JavaScriptObject window;
 
-	public ExternalPopup (String url) {
+	private Frame external;
 
-		int left = Window.getClientWidth()/2 - 250;
-		int top = Window.getClientHeight()/2 - 150;
+	public ExternalPopup (String title,String url, int xx, int yy) {
+		super(title);
+		external = new Frame(url);
 
-		window = openNative(url,left,top);
 
 		Timer t = new Timer(){
 			public void run() {
 				schedule(10000);
-				System.out.println(getValue(window));				
+				System.out.println(external.getUrl());
+
+				//System.out.println(getValue(window));				
 			}};
 
 
-			t.schedule(5000);		
-		//	HTTPRequest.asyncGet(url, url, url, handler)
+		t.schedule(200);		
+
+		setContentPanel(external);
+//
+		setPixelSize(xx, yy);
+		
+//			int left = Window.getClientWidth()/2 - 250;
+//			int top = Window.getClientHeight()/2 - 150;
+
+//			window = openNative(url,left,top);
+
+//			Timer t = new Timer(){
+//			public void run() {
+//			schedule(10000);
+//			System.out.println(getValue(window));				
+//			}};
+
+
+//			t.schedule(5000);		
+			//	HTTPRequest.asyncGet(url, url, url, handler)
 
 	}
 
@@ -48,17 +69,17 @@ public class ExternalPopup {
    		myhippo_window.focus();
 
 //alert("3");
- 
+
  		alert("my hip: "+myhippo_window);
  		alert("my hip loc: "+myhippo_window.location);
  		alert("3");
- 	
+
  		alert("4");
  		alert("my hip win: "+myhippo_window.window);
  		alert("5");
  		alert("my hip doc: "+myhippo_window.document);
  		alert("6");
- 		
+
 // 		var gURLBar = document.getElementById("urlbar");     
 //        var location, title;
 //        var browser = window.getBrowser();
@@ -69,7 +90,7 @@ public class ExternalPopup {
 //        else{
 //          location = gURLBar.value; 
 //        }
- 		
+
 		return myhippo_window;	
 
 	}-*/;
