@@ -8,24 +8,33 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
+import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HasHTML;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
+import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ExternalLink extends Widget implements HasHTML, SourcesClickEvents {
+public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEvents, SourcesMouseEvents {
 
 	private Element anchorElem;
 	private ClickListenerCollection fClickListeners;
+	private MouseListenerCollection fMouseListeners;
 	private String target;
 
 	/**
 	 * Creates an empty hyperlink.
 	 */
 	public ExternalLink() {
-		setElement(DOM.createDiv());
+		super(DOM.createDiv());
 		DOM.appendChild(getElement(), anchorElem = DOM.createAnchor());
 		sinkEvents(Event.ONCLICK);
+		sinkEvents(Event.MOUSEEVENTS);
+		
 		setStyleName("gwt-Hyperlink");
 	}
 
@@ -34,8 +43,7 @@ public class ExternalLink extends Widget implements HasHTML, SourcesClickEvents 
 		setText(occ.getTitle());
 		setTarget(occ.getUri());
 
-		//l = new Label(title.substring(0, maxStringLength-3)+"...");
-		//addMouseListener(new TooltipListener(0,0,title));
+		addMouseListener(new TooltipListener(0,0,occ.getUri()+"<BR>"+occ.getData()));
 	}
 
 
@@ -75,6 +83,23 @@ public class ExternalLink extends Widget implements HasHTML, SourcesClickEvents 
 //			DOM.eventPreventDefault(event);
 //		}
 //	}
+	public void onBrowserEvent(Event event) {
+		switch (DOM.eventGetType(event)) {
+	      case Event.ONCLICK:
+	        if (fClickListeners != null)
+	        	fClickListeners.fireClick(this);
+	        break;
+
+	      case Event.ONMOUSEDOWN:
+	      case Event.ONMOUSEUP:
+	      case Event.ONMOUSEMOVE:
+	      case Event.ONMOUSEOVER:
+	      case Event.ONMOUSEOUT:
+	        if (fMouseListeners != null)
+	        	fMouseListeners.fireMouseEvent(this, event);
+	        break;
+	    }
+	  }
 
 	public void removeClickListener(ClickListener listener) {
 		if (fClickListeners != null)
@@ -99,6 +124,17 @@ public class ExternalLink extends Widget implements HasHTML, SourcesClickEvents 
 
 	public void setText(String text) {
 		DOM.setInnerHTML(anchorElem, text);
+	}
+
+	public void addMouseListener(MouseListener listener) {
+		if (fMouseListeners == null)
+			fMouseListeners = new MouseListenerCollection();
+		fMouseListeners.add(listener);
+	}
+
+	public void removeMouseListener(MouseListener listener) {
+		if(fMouseListeners != null)
+			fMouseListeners.remove(listener);
 	}
 
 }
