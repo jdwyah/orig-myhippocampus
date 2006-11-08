@@ -8,24 +8,30 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 
-import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.WikiSubject;
 import com.aavu.client.exception.HippoException;
-import com.aavu.server.service.SubjectService;
-import com.aavu.server.service.gwt.BaseTestNoTransaction;
+import com.aavu.server.domain.DeliciousPost;
+import com.aavu.server.service.ExternalServicesService;
+import com.aavu.server.service.TopicService;
+import com.aavu.server.service.gwt.BaseTestWithTransaction;
 
-public class SubjectServiceImplTest extends BaseTestNoTransaction {
+public class SubjectServiceImplTest extends BaseTestWithTransaction {
 
-	private SubjectService subjectService;
+	private ExternalServicesService subjectService;
 
-
-	public void setSubjectService(SubjectService subjectService) {
+	private TopicService topicService;
+	
+	public void setSubjectService(ExternalServicesService subjectService) {
 		this.subjectService = subjectService;
+	}
+	public void setTopicService(TopicService topicService) {
+		this.topicService = topicService;
 	}
 
 	public void testFoo() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException{
@@ -81,10 +87,17 @@ public class SubjectServiceImplTest extends BaseTestNoTransaction {
 			System.out.println("list: "+subject.getName()+" "+subject.getForeignID());
 		}
 	}
-	public void testDeliciousReq() throws IOException, DocumentException{
-		Document d = subjectService.deliciousReq();
-		
+	public void testDeliciousReq() throws IOException, DocumentException, HippoException{
+		List<DeliciousPost> posts = subjectService.deliciousReq("jdwyah","internet.com");
 
 		
+	}
+	
+	public void testDeliciousAdd() throws IOException, DocumentException, HippoException{
+		
+		assertEquals(0, topicService.getAllTopicIdentifiers().size());		
+		subjectService.addDeliciousTags("jdwyah", "internet.com");
+		
+		assertTrue(topicService.getAllTopicIdentifiers().size() > 40);
 	}
 }

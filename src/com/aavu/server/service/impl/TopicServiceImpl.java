@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
-import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 
 public class TopicServiceImpl implements TopicService {
+	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 	
 	private TopicDAO topicDAO;
 	private UserService userService;
@@ -66,6 +69,24 @@ public class TopicServiceImpl implements TopicService {
 	}
 	public List<TopicIdentifier> getLinksTo(Topic topic) {
 		return topicDAO.getLinksTo(topic, userService.getCurrentUser());
+	}
+	public void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException {
+
+		for (String string : tags) {			
+			log.debug("str: "+string);			
+			
+			Topic t = getForName(string);			
+			if(null == t){
+				log.debug("was null, creating as Tag ");
+				t = new Topic();
+				t.setTitle(string);				
+				t.setUser(userService.getCurrentUser());							
+			}			
+			t.getOccurences().add(link);
+			System.out.println("-----t-----"+t.toPrettyString());
+			Topic st = save(t);
+			System.out.println("-----st-----"+st.toPrettyString());
+		}
 	}
 
 }

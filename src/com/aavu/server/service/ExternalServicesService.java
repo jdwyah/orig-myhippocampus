@@ -8,10 +8,13 @@ import org.dom4j.DocumentException;
 
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoException;
+import com.aavu.server.domain.DeliciousPost;
 
-public interface SubjectService {
+public interface ExternalServicesService {
 
 	List<? extends Subject> lookup(Class type, String matchString) throws HippoException;
 
-	Document deliciousReq() throws IOException, DocumentException;
+	List<DeliciousPost> deliciousReq(String username, String password) throws HippoException;
+
+	void addDeliciousTags(String username, String password)throws HippoException;
 }

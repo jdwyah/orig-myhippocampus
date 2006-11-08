@@ -62,24 +62,14 @@ public class AddLinkController extends SimpleFormController {
 		String[] tags = addLink.getCommand_tags().split(";");
 		
 		log.debug("tags: "+Arrays.toString(tags));
-		for (String string : tags) {			
-			log.debug("str: "+string);			
-			if(string.equals("")){				
-				string = addLink.getCommand_description();
-				log.debug("blank tags, setting topic to; "+string);
-			}
-			Topic t = topicService.getForName(string);			
-			if(null == t){
-				log.debug("was null, creating as Tag ");
-				t = new Tag();
-				t.setTitle(string);				
-				t.setUser(userService.getCurrentUser());							
-			}			
-			t.getOccurences().add(link);
-			System.out.println("-----t-----"+t.toPrettyString());
-			Topic st = topicService.save(t);
-			System.out.println("-----st-----"+st.toPrettyString());
+		
+		
+		if(tags[0].equals("")){
+			log.debug("blank tags, setting topic to; "+addLink.getCommand_description());		
+			tags[0] = addLink.getCommand_description();
 		}
+		
+		topicService.addLinkToTags(link, tags);
 		
 	}
 

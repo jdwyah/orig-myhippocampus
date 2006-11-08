@@ -1,6 +1,7 @@
 package com.aavu.client.widget;
 
 import com.aavu.client.domain.URI;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -8,6 +9,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.HasHTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -31,6 +33,9 @@ public class ExternalLink extends Widget implements HasHTML, SourcesClickEvents 
 		this();		
 		setText(occ.getTitle());
 		setTarget(occ.getUri());
+
+		//l = new Label(title.substring(0, maxStringLength-3)+"...");
+		//addMouseListener(new TooltipListener(0,0,title));
 	}
 
 

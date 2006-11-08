@@ -3,12 +3,12 @@ package com.aavu.server.service.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -19,17 +19,24 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.WikiSubject;
 import com.aavu.client.exception.HippoException;
-import com.aavu.server.service.SubjectService;
+import com.aavu.server.domain.DeliciousPost;
+import com.aavu.server.service.ExternalServicesService;
+import com.aavu.server.service.TopicService;
+import com.aavu.server.service.UserService;
 
 
-public class SubjectServiceImpl implements SubjectService {
-	private static final Logger log = Logger.getLogger(SubjectServiceImpl.class);
+public class ExternalServicesServiceImpl implements ExternalServicesService {
+	private static final Logger log = Logger.getLogger(ExternalServicesServiceImpl.class);
 
+	private UserService userService;
+	private TopicService topicService;
+	
 	private static Map<String, HippoCountry> countries = new HashMap<String, HippoCountry>();
 
 	static{		
@@ -198,16 +205,26 @@ public class SubjectServiceImpl implements SubjectService {
 	}
 	/*
 	 * <posts update="2006-11-08T14:38:11Z" user="jdwyah">
-		<post href="http://beta.contactoffice.com/" description="Beta ContactOffice NUI" hash="c5cb22b7753489a15c924f04102c4b07" tag="gwt Web2.0" time="2006-11-07T14:06:47Z"/>
+		<post href="http://beta.contactoffice.com/" 
+		description="Beta ContactOffice NUI" 
+		hash="c5cb22b7753489a15c924f04102c4b07" 
+		tag="gwt Web2.0" 
+		time="2006-11-07T14:06:47Z"/>
 	   </posts>
 	 * 
 	 */
-	public Document deliciousReq() throws IOException, DocumentException{
+	public List<DeliciousPost> deliciousReq(String username, String password) throws HippoException {
 		String baseURL ="https://api.del.icio.us/v1/posts/all?";
-		Vector<RestParam> params = new Vector<RestParam>();		
 		
+		List<DeliciousPost> posts = new LinkedList<DeliciousPost>();
 
-		Document doc = xmlRESTReq(baseURL, params,"jdwyah","internet.com");
+		Document doc;
+		try {
+			doc = xmlRESTReq(baseURL, new Vector<RestParam>(),username,password);
+		} catch (Exception e) {
+			log.error(e);
+			throw new HippoException(e);
+		} 
 		Element root = doc.getRootElement();		
 		
 		System.out.println("root" +root);
@@ -216,14 +233,31 @@ public class SubjectServiceImpl implements SubjectService {
 		System.out.println("itemL"+postList);
 		
 		for (Element post : postList) {
-			
-			System.out.println("Post "+post.attributeValue("description")+" "+post.attributeValue("href")+" "+post.attributeValue("tag")+" ");
-								
+			posts.add(new DeliciousPost(post.attributeValue("description"),
+					post.attributeValue("href"),
+					post.attributeValue("tag"),
+					post.attributeValue("extended")));			
+			System.out.println("Post "+post.attributeValue("description")+" "+
+					post.attributeValue("href")+" "+
+					post.attributeValue("tag")+" "+
+					post.attributeValue("extended")+" ");								
 		}
 		
-		return doc;
+		return posts;
 	}
-	
+
+	public void addDeliciousTags(String username, String password) throws HippoException {
+
+		List<DeliciousPost> posts = deliciousReq(username, password);
+		
+		for (DeliciousPost post : posts) {
+			WebLink ww = new WebLink(userService.getCurrentUser(),post.getDescription(),post.getHref(),post.getExtended());
+			String[] tags = post.getTags();
+			
+			topicService.addLinkToTags(ww, tags);
+		}
+		
+	}
 	
 	private class RestParam {
 		private String name;
@@ -277,5 +311,14 @@ public class SubjectServiceImpl implements SubjectService {
 
 		return response;
 	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public void setTopicService(TopicService topicService) {
+		this.topicService = topicService;
+	}
+
 
 }

@@ -16,7 +16,7 @@
 	</bean>
 	
 	<bean id="GWTSubjectService" class="com.aavu.server.service.gwt.GWTSubjectServiceImpl">	
-		<property name="subjectService" ref="subjectService"/>
+		<property name="externalServicesService" ref="externalServicesService"/>
 	</bean>
 
 	<bean id="facebookService" class="com.aavu.server.service.facebook.impl.FacebookServiceImpl">
@@ -35,7 +35,9 @@
 		<property name="topicDAO" ref="topicDAO"></property>
 		<property name="userService" ref="userService"/>		
 	</bean>
-	<bean id="subjectService" class="com.aavu.server.service.impl.SubjectServiceImpl">
+	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
+		<property name="userService" ref="userService"/>	
+		<property name="topicService" ref="topicService"/>	
 	</bean>
 
 </beans>

@@ -34,7 +34,10 @@ public interface Consts extends Constants {
 	String wiki();
 	String wiki_summary();
 	String wiki_url();
-	
+	String deliciousPopupTitle();
+	String deliciousUsername();
+	String deliciousPassword();
+	String deliciousSubmit();
 		
 	
 }

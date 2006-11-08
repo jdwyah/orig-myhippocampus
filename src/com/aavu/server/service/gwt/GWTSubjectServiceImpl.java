@@ -8,16 +8,17 @@ import org.hibernate.HibernateException;
 
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTSubjectService;
-import com.aavu.server.service.SubjectService;
+import com.aavu.server.service.ExternalServicesService;
 
 public class GWTSubjectServiceImpl extends GWTSpringController implements GWTSubjectService {
 	private static final Logger log = Logger.getLogger(GWTSubjectServiceImpl.class);
 	
-	public SubjectService subjectService;
+	public ExternalServicesService externalServicesService;
 
-	public void setSubjectService(SubjectService subjectService) {
-		this.subjectService = subjectService;
+	public void setExternalServicesService(ExternalServicesService subjectService) {
+		this.externalServicesService = subjectService;
 	}
 
 
@@ -28,7 +29,7 @@ public class GWTSubjectServiceImpl extends GWTSpringController implements GWTSub
 			throw new HippoBusinessException("Lookup of Null type");
 		}
 		try{
-			return subjectService.lookup(type.getClass(),matchString);
+			return externalServicesService.lookup(type.getClass(),matchString);
 		}
 		catch(Exception e){
 			log.error("Lookup error "+e);
@@ -37,5 +38,9 @@ public class GWTSubjectServiceImpl extends GWTSpringController implements GWTSub
 		}
 	}
 
+	public void addDeliciousTags(String username, String password) throws HippoException {
+		externalServicesService.addDeliciousTags(username,password);
+	}
+	
 }
 

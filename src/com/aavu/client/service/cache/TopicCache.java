@@ -305,4 +305,6 @@ public class TopicCache {
 		topicService.getLinksTo(topic2, callback);
 	}
 
+
+
 }

@@ -182,6 +182,9 @@ public class Manager implements TopicSaveListener {
 	public GWTSubjectServiceAsync getSubjectService() {
 		return hippoCache.getSubjectService();
 	}
+	public void addDeliciousTags(String username, String password) {
+		hippoCache.getSubjectService().addDeliciousTags(username, password, new StdAsyncCallback("AddDeliciousTags"){});
+	}
 	
 
 

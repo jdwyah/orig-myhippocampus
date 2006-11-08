@@ -40,7 +40,7 @@ public class User extends AbstractUser implements IsSerializable {
 	}
 
 	public int getWorldSize() {
-		return 2000;
+		return 4000;
 	}
 
 }

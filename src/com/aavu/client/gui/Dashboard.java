@@ -42,12 +42,13 @@ public class Dashboard extends SimplePanel {
 				manager.newTopic();
 			}});
 
-//		Button initIslands = new Button("Init Islands");
-//		initIslands.addClickListener(new ClickListener(){
-//
-//			public void onClick(Widget sender) {
-//				manager.doIslands();
-//			}});
+		Button addDeliciousTags = new Button("Add Delicious Tags");
+		addDeliciousTags.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				DeliciousWidget widg = new DeliciousWidget(manager); 
+				widg.setPopupPosition(200, 200);
+				widg.show();
+			}});
 
 		Button timeLine = new Button("TimeLine");
 		timeLine.addClickListener(new ClickListener(){
@@ -67,9 +68,9 @@ public class Dashboard extends SimplePanel {
 		
 		
 		mainPanel.add(addNewButton);
-		mainPanel.add(tagButton);
-		//mainPanel.add(initIslands);
+		mainPanel.add(tagButton);		
 		mainPanel.add(timeLine);
+		mainPanel.add(addDeliciousTags);
 		
 		//mainPanel.add(facebookB);
 				

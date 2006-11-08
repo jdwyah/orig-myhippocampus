@@ -33,4 +33,13 @@ public interface TopicService {
 	
 	List<TopicIdentifier> getLinksTo(Topic topic);
 
+	/**
+	 * Create the link and save it for each of the tags enumerated, creating
+	 * and saving those if necessary. 
+	 * 
+	 * @param link
+	 * @param tags
+	 * @throws HippoBusinessException 
+	 */
+	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 }

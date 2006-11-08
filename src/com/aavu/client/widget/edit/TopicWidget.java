@@ -132,7 +132,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 	}
 	private Widget doExternalLinks(Topic topic2) {
-		HorizontalPanel horizP = new HorizontalPanel();
+		VerticalPanel horizP = new VerticalPanel();
 
 		horizP.add(new HeaderLabel(Manager.myConstants.occurrences()));
 
