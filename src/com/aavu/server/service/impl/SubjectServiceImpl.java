@@ -196,6 +196,33 @@ public class SubjectServiceImpl implements SubjectService {
 
 		return rtn;
 	}
+	/*
+	 * <posts update="2006-11-08T14:38:11Z" user="jdwyah">
+		<post href="http://beta.contactoffice.com/" description="Beta ContactOffice NUI" hash="c5cb22b7753489a15c924f04102c4b07" tag="gwt Web2.0" time="2006-11-07T14:06:47Z"/>
+	   </posts>
+	 * 
+	 */
+	public Document deliciousReq() throws IOException, DocumentException{
+		String baseURL ="https://api.del.icio.us/v1/posts/all?";
+		Vector<RestParam> params = new Vector<RestParam>();		
+		
+
+		Document doc = xmlRESTReq(baseURL, params,"jdwyah","internet.com");
+		Element root = doc.getRootElement();		
+		
+		System.out.println("root" +root);
+		
+		List<Element> postList = root.elements("post");
+		System.out.println("itemL"+postList);
+		
+		for (Element post : postList) {
+			
+			System.out.println("Post "+post.attributeValue("description")+" "+post.attributeValue("href")+" "+post.attributeValue("tag")+" ");
+								
+		}
+		
+		return doc;
+	}
 	
 	
 	private class RestParam {
@@ -214,7 +241,12 @@ public class SubjectServiceImpl implements SubjectService {
 		}
 	}
 
+
+	
 	private Document xmlRESTReq(String baseURL,Vector<RestParam> params) throws IOException, DocumentException{
+		return xmlRESTReq(baseURL, params,null,null);
+	}	
+	private Document xmlRESTReq(String baseURL,Vector<RestParam> params,String username, String password) throws IOException, DocumentException{
 		StringBuilder url = new StringBuilder(baseURL);
 
 		for (RestParam p : params) {
@@ -230,6 +262,13 @@ public class SubjectServiceImpl implements SubjectService {
 
 		URLConnection restConn = theRESTService.openConnection();
 
+		//do auth
+		if(username != null){
+			String authString = username + ":" + password;
+			String auth = "Basic " + new sun.misc.BASE64Encoder().encode(authString.getBytes());
+			restConn.setRequestProperty  ("Authorization", auth);		        
+		}		  
+		
 		InputStream in = restConn.getInputStream();
 
 		SAXReader reader = new SAXReader();

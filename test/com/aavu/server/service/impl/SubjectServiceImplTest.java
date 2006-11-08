@@ -1,12 +1,15 @@
 package com.aavu.server.service.impl;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
 
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
@@ -77,5 +80,11 @@ public class SubjectServiceImplTest extends BaseTestNoTransaction {
 		for (Subject subject : list) {
 			System.out.println("list: "+subject.getName()+" "+subject.getForeignID());
 		}
+	}
+	public void testDeliciousReq() throws IOException, DocumentException{
+		Document d = subjectService.deliciousReq();
+		
+
+		
 	}
 }

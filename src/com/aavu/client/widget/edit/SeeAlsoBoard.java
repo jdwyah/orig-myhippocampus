@@ -9,12 +9,15 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class SeeAlsoBoard extends Composite implements CompleteListener {
 
@@ -32,12 +35,20 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 
 		alsos = new SeeAlsoWidget();
 		
+		EnterInfoButton enterInfoButton = new EnterInfoButton();		
+		enterInfoButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender){
+				completed(topicCompleter.getText());
+			}
+		});
+
 		
 		VerticalPanel mainP = new VerticalPanel();
 		
 		HorizontalPanel cp = new HorizontalPanel();
 		cp.add(new HeaderLabel(Manager.myConstants.seeAlsos()));
 		cp.add(topicCompleter);
+		cp.add(enterInfoButton);
 		
 		mainP.add(cp);
 		mainP.add(alsos);
@@ -67,7 +78,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 				myTopic.addSeeAlso(to);
 
 				alsos.add(to);
-					
+				topicCompleter.setText("");
 			}});
 		
 	}
