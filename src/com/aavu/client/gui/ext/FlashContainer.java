@@ -81,8 +81,8 @@ public class FlashContainer extends SimplePanel {
 	protected String boolProp(String name,boolean val){
 		return "<property id='"+name+"'><bool>"+val+"</bool></property>";
 	}
-	protected String numberProp(String name,long val){
-		if(-1 == val){
+	protected String numberPropChangeZeroAndNeg1ToNull(String name,long val){
+		if(-1 == val || 0 == val){
 			return "<property id='"+name+"'><null/></property>";
 		}
 		return "<property id='"+name+"'>"+number(val)+"</property>";

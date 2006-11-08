@@ -73,7 +73,7 @@ public class Ocean extends FlashContainer {
 	
 	
 	protected String islandObj(long id, String name,int size, int latitude, int longitude){		
-		return "<object>"+numberProp("id",id)+stringProp("tag",name)+numberProp("size",size)+numberProp("xx",latitude)+numberProp("yy",longitude)+"</object>";
+		return "<object>"+numberPropChangeZeroAndNeg1ToNull("id",id)+stringProp("tag",name)+numberPropChangeZeroAndNeg1ToNull("size",size)+numberPropChangeZeroAndNeg1ToNull("xx",latitude)+numberPropChangeZeroAndNeg1ToNull("yy",longitude)+"</object>";
 	}
 
 	/**
