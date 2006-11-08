@@ -312,7 +312,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		List<TagStat> stats = tagDAO.getTagStats(u);
 		for (TagStat ts : stats){
 			assertEquals(0,ts.getNumberOfTopics());
-			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics()+" lat "+ts.getLatitude()+" long "+ts.getLongitude());		
 		}		
 		
 		Subject subj1 = new AmazonBook();
@@ -394,7 +394,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 			else if(ts.getTagId() == three[2].getId()){			
 				assertEquals(1,ts.getNumberOfTopics());
 			}
-			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
+			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics()+" lat "+ts.getLatitude()+" long "+ts.getLongitude());		
 		}		
 		
 		

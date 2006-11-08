@@ -82,6 +82,9 @@ public class FlashContainer extends SimplePanel {
 		return "<property id='"+name+"'><bool>"+val+"</bool></property>";
 	}
 	protected String numberProp(String name,long val){
+		if(-1 == val){
+			return "<property id='"+name+"'><null/></property>";
+		}
 		return "<property id='"+name+"'>"+number(val)+"</property>";
 	}
 	protected String stringProp(String name,String val){
@@ -158,9 +161,9 @@ public class FlashContainer extends SimplePanel {
     	}		    	
 	}-*/;
 
-	public void callback(String command, int int0,double d0,double d1){		
-		System.out.println("flash message 1"+command+" "+int0+" d0 "+d0+" d1 "+d1);
-		callbackOverride(command, int0,d0,d1);
+	public void callback(String command,  int int0,int int1,int int2){	
+		//System.out.println("flash message 1"+command+" "+int0+" int1 "+int1+" int2 "+int2);
+		callbackOverride(command, int0,int1,int2);
 	}
 	
 	/**
@@ -171,7 +174,7 @@ public class FlashContainer extends SimplePanel {
 	 * @param arg
 	 * @param int2 
 	 */
-	protected void callbackOverride(String command, int int0,double d0,double d1){
+	protected void callbackOverride(String command, int int0,int int1,int int2){
 	}
 	
 	/**
@@ -181,10 +184,10 @@ public class FlashContainer extends SimplePanel {
 	native void initFunctions()/*-{
 	
 	var callBackTarget = this;
-	$wnd.flashCommand = function(command,int0,float0,float1){    				
+	$wnd.flashCommand = function(command,int0,int1,int2){    				
 		//alert("s "+command+" "+(typeof command));
 		//alert("s "+(typeof args));											    	                															    
-    	callBackTarget.@com.aavu.client.gui.ext.FlashContainer::callback(Ljava/lang/String;IDD)(command,int0,float0,float1);
+    	callBackTarget.@com.aavu.client.gui.ext.FlashContainer::callback(Ljava/lang/String;III)(command,int0,int1,int2);
     };
 	
 	}-*/;

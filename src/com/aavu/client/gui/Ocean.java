@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
@@ -48,24 +49,31 @@ public class Ocean extends FlashContainer {
 		
 	}
 	
-	protected void callbackOverride(String command, int int0,double d0,double d1){
+	protected void callbackOverride(String command, int int0,final int int1,final int int2){
 		if(command.equals("islandClicked")){
 			manager.showTopicsForTag(int0);
 		}
 		if(command.equals("isleMovedTo")){
-			System.out.println("isleMovedTo "+int0+" "+d0+" "+d1);						
+			System.out.println("isleMovedTo "+int0+" "+int1+" "+int2);			
+			manager.getTopicCache().getTopicByIdA(int0, new StdAsyncCallback("GetTopicById"){
+
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
+					Topic t = (Topic) result;
+					t.setLatitude(int2);
+					t.setLongitude(int1);					
+					manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
+				}
+				
+			});
 		}
 		
 	}
 	
 	
 	
-	protected String islandObj(long id, String name,int size){
-		return "<object>"+numberProp("id",id)+stringProp("tag",name)+numberProp("size",size)+numberProp("xx",getNum())+numberProp("yy",getNum())+"</object>";
-	}
-
-	private long getNum() {
-		return 100+(long) (Math.random()*400);
+	protected String islandObj(long id, String name,int size, int latitude, int longitude){		
+		return "<object>"+numberProp("id",id)+stringProp("tag",name)+numberProp("size",size)+numberProp("xx",latitude)+numberProp("yy",longitude)+"</object>";
 	}
 
 	/**
@@ -95,7 +103,7 @@ public class Ocean extends FlashContainer {
 				sb.append("<property id='");
 				sb.append(listCount);
 				sb.append("'>");
-				sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics()));
+				sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics(), stat.getLongitude(), stat.getLatitude()));
 				sb.append("</property>");
 				listCount++;
 			}

@@ -23,6 +23,9 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
       * The title of this entry
      */
      private String title;
+     
+     private int latitude;
+     private int longitude;
      /**
       * Last updated
      */
@@ -105,7 +108,24 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
     public void setTitle(String title) {
         this.title = title;
     }
-    /**       
+    
+    public int getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(int latitude) {
+		this.latitude = latitude;
+	}
+
+	public int getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(int longitude) {
+		this.longitude = longitude;
+	}
+
+	/**       
      *      * Last updated
      */
     public Date getLastUpdated() {

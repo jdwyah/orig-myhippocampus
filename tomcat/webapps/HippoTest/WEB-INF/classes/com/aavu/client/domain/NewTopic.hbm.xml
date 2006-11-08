@@ -18,6 +18,13 @@
 			<meta attribute="use-in-equals">true</meta>
 			<meta attribute="field-description">The title of this entry</meta>
 		</property>
+		
+		<property name="latitude" type="int" column="latitude">
+			<meta attribute="field-description">The latitude</meta>
+		</property>
+		<property name="longitude" type="int" column="longitude">
+			<meta attribute="field-description">The longitude</meta>
+		</property>
 
 	 	<!--<property name="data" type="string">
 			<meta attribute="use-in-equals">true</meta>

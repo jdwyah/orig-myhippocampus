@@ -67,7 +67,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	public List<TagStat> getTagStats(User user) {
 						
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select tag.id, tag.title, tag.instances.size from Tag tag "+
+				"select tag.id, tag.title, tag.instances.size, tag.latitude, tag.longitude from Tag tag "+
 				//"left join topics "+
 				"where  user is ? or publicVisible = true"
 				,user);
@@ -96,9 +96,9 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		//
 		for (Object[] o : list){
 			if(log.isDebugEnabled()){
-				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]);				
-			}
-			rtn.add(new TagStat((Long)o[0],(String)o[1],(Integer)o[2]));			
+				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);								 
+			}			
+			rtn.add(new TagStat((Long)o[0],(Integer)o[2],(String)o[1],(Integer) o[3],(Integer) o[4]));			
 		}
 		
 		return rtn;		 				
