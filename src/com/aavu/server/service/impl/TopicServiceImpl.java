@@ -5,6 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.compass.core.Compass;
+import org.compass.core.CompassDetachedHits;
+import org.compass.core.CompassHitIterator;
+import org.compass.core.CompassHits;
+import org.compass.core.CompassTemplate;
+import org.compass.core.impl.DefaultCompassHit;
+import org.compass.gps.CompassGps;
 
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
@@ -16,12 +23,16 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 public class TopicServiceImpl implements TopicService {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 	
 	private TopicDAO topicDAO;
 	private UserService userService;
+	private Compass compass;
+	private CompassGps compassGPS;
+	private CompassTemplate compassTemplate;
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -29,8 +40,14 @@ public class TopicServiceImpl implements TopicService {
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
+	public void setCompass(Compass compass) {
+		this.compass = compass;
+	}	
+	public void setCompassGPS(CompassGps compassGPS) {
+		this.compassGPS = compassGPS;
+	}
 	
-
+	
 	public Topic getForName(String string) {
 		return topicDAO.getForName(userService.getCurrentUser(),string);
 	}
@@ -89,4 +106,54 @@ public class TopicServiceImpl implements TopicService {
 		}
 	}
 
+	
+	public void afterPropertiesSet() throws Exception {
+		if (compass == null) {
+			throw new IllegalArgumentException("Must set compass property");
+		}
+		this.compassTemplate = new CompassTemplate(compass);
+		compassGPS.start();
+		//compassGPS.index();
+	}
+
+	public List<Topic> search(String searchString){
+		System.out.println("STARTING SEACH "+searchString);
+		try {
+			afterPropertiesSet();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+//		Topic t = new Topic(null,"Coffee");
+//		compassTemplate.save(t);
+//		Topic t2 = new Topic(null,"Cafe");
+//		compassTemplate.save(t2);
+//		Topic t3 = new Topic(null,"Bill Clinton");
+//		compassTemplate.save(t3);
+//		Topic t4 = new Topic(null,"Cafe Creme");
+//		compassTemplate.save(t4);
+		
+		
+		CompassHits hits = compassTemplate.find(searchString);
+		
+		
+        System.out.println("Results:\t" + hits.getLength());
+
+//        compassTemplate.getCompass().getSearchEngineIndexManager().createIndex();
+        
+        CompassDetachedHits detachedHits = hits.detach();
+        CompassHitIterator iterator = detachedHits.iterator();
+        while(iterator.hasNext()){
+              DefaultCompassHit defaultCompassHit =
+                    (DefaultCompassHit)iterator.next();
+              System.out.println("alias: "+defaultCompassHit.getAlias());
+              System.out.println("score: "+defaultCompassHit.getScore());
+              System.out.println("data: "+defaultCompassHit.getData());
+              
+        }
+        
+        
+		
+		return null;
+	}
+	
 }

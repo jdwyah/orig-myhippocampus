@@ -28,7 +28,9 @@
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
 		<property name="topicDAO" ref="topicDAO"/>
-		<property name="userService" ref="userService"/>		
+		<property name="userService" ref="userService"/>	
+		<property name="compass" ref="compass"/>
+		<property name="compassGPS" ref="compassGPS"></property>
 	</bean>
 	<bean id="tagService" class="com.aavu.server.service.impl.TagServiceImpl">
 		<property name="tagDAO" ref="tagDAO"></property>
@@ -39,5 +41,6 @@
 		<property name="userService" ref="userService"/>	
 		<property name="topicService" ref="topicService"/>	
 	</bean>
+
 
 </beans>

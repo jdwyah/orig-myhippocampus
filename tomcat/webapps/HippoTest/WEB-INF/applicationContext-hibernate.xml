@@ -108,4 +108,55 @@
 	
 	
 
+	<!--  COMPASS START -->
+	<bean id="compass" class="org.compass.spring.LocalCompassBean" abstract="false" singleton="true" lazy-init="default"
+		autowire="default" dependency-check="default">
+		<property name="resourceLocations">
+			<list>
+				<value>classpath:com/aavu/client/domain/hippocompass.cmd.xml</value>
+				<value>classpath:hippocompass.cpm.xml</value>
+			</list>
+		</property>
+		<property name="compassSettings">
+			<props>
+				<prop key="compass.engine.connection">file://DB/compass/hippo</prop>
+				<prop key="compass.transaction.factory">org.compass.spring.transaction.SpringSyncTransactionFactory</prop>
+			</props>
+		</property>
+		<!-- <property name="classMappings">
+			<list>
+				<value>com.aavu.client.domain.generated.AbstractTopic</value>
+			</list>
+		</property>-->
+		<property name="transactionManager">
+			<ref local="txManager" />
+		</property>
+	</bean>
+	<bean id="hibernateGpsDevice" class="org.compass.spring.device.hibernate.SpringHibernate3GpsDevice" abstract="false"
+		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="name">
+			<value>hibernateDevice</value>
+		</property>
+		<property name="sessionFactory">
+			<ref local="mySessionFactory" />
+		</property>
+	</bean>
+	<bean id="compassGPS" class="org.compass.gps.impl.SingleCompassGps" init-method="start" destroy-method="stop" abstract="false"
+		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="compass">
+			<ref bean="compass" />
+		</property>
+		<property name="gpsDevices">
+			<list>
+				<bean class="org.compass.spring.device.SpringSyncTransactionGpsDeviceWrapper" abstract="false" singleton="true"
+					lazy-init="default" autowire="default" dependency-check="default">
+					<property name="gpsDevice" ref="hibernateGpsDevice" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!--  COMPASS END -->
+
+	
+
 </beans>
