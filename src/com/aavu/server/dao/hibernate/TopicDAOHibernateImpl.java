@@ -13,6 +13,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -52,7 +53,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.setFetchMode("associations.members", FetchMode.JOIN)	
 		.setFetchMode("associations.types", FetchMode.JOIN);
 	}
-	
+
 	/**
 	 * remember, MetaDate objects only exist for one Tag ie a Book's ReadDate is not a 
 	 * play's ReadDate.  We search on Tag, because we could be timeline-ing a Tag:
@@ -61,27 +62,27 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 */
 	public List<TimeLineObj> getTimeline(User user) {
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
-		
+
 //		List<Object> ll= null;
 //		(List<Object>) getHibernateTemplate().execute(new HibernateCallback(){
-//			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
-//				
-//				return sess.createSQLQuery("select top.topic_id, top.title, metavalue.data from topic_meta_values "+
-//						"join topics meta on topic_meta_values.topic_id = meta.topic_id "+
-//						"join topics top on topic_meta_values.topic_meta_value_id = top.topic_id "+
-//						"join topics metavalue on topic_meta_values.metaValue = metavalue.topic_id "+
-//						"where meta.discriminator = 'metadate'")				
-//			    .list();
-//				
-//			}});
-		
+//		public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+
+//		return sess.createSQLQuery("select top.topic_id, top.title, metavalue.data from topic_meta_values "+
+//		"join topics meta on topic_meta_values.topic_id = meta.topic_id "+
+//		"join topics top on topic_meta_values.topic_meta_value_id = top.topic_id "+
+//		"join topics metavalue on topic_meta_values.metaValue = metavalue.topic_id "+
+//		"where meta.discriminator = 'metadate'")				
+//		.list();
+
+//		}});
+
 		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
 				"join top.associations  ass "+
 				"join ass.types  type "+
 				"join ass.members metaValue "+
-				 "where type.class = MetaDate");
-		
-		
+		"where type.class = MetaDate");
+
+
 		for (Object topic : ll) {
 			Object[] oa = (Object[]) topic;
 			for (int i = 0; i < oa.length; i++) {
@@ -92,7 +93,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			Long topic_id = (Long) oa[0];
 			String dateStr = (String) oa[2];
 			Date date = new Date(Long.parseLong(dateStr));			
-			
+
 			rtn.add(new TimeLineObj(new TopicIdentifier(topic_id.longValue(),(String)oa[1]),date,null));						
 		}
 		if(log.isDebugEnabled())
@@ -100,19 +101,19 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				log.debug("TIMELINE ");
 				log.debug(obj);
 			}
-		
+
 		return rtn;	
 	}
 
 	public Topic getForName(User user, String string) {
 
 		log.debug("user "+user.getUsername()+" string "+string);
-		
+
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
-		.add(Expression.eq("user", user))
-		.add(Expression.eq("title", string)));
-		
-		
+				.add(Expression.eq("user", user))
+				.add(Expression.eq("title", string)));
+
+
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 
 		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title = :title", "user", user);
@@ -127,12 +128,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.ne("class", "metadate"))
 		.addOrder( Order.asc("title") )
 		.setProjection(Property.forName("title"));	
-		
+
 		return getHibernateTemplate().findByCriteria(crit);
 	}
 
-	
-	
+
+
 	public Topic save(Topic t) throws HippoBusinessException {
 		System.out.println("SAVE "+t.getTitle());
 
@@ -146,7 +147,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			log.info("Throw HBE exception for Duplicate Title");
 			throw new HippoBusinessException("Duplicate Name");
 		}
-		
+
 		//
 		//Save the subject. If they've just added the subject it will be unsaved,
 		//even if it's already in the DB, do a lookup.
@@ -162,52 +163,52 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				t.setSubject(saved);
 			}
 		}
-		
+
 //		//NOTE: Saving the user here. 
 //		//Where should the user really be getting saved? We're saving it to 
 //		//Topic in Service layer. 
 //		for (Iterator iter = t.getOccurences().iterator(); iter.hasNext();) {			
-//			Occurrence occur = (Occurrence) iter.next();
-//			if(occur.getUser() == null){
-//				occur.setUser(t.getUser());
-//			}
-//			getHibernateTemplate().save(occur);
+//		Occurrence occur = (Occurrence) iter.next();
+//		if(occur.getUser() == null){
+//		occur.setUser(t.getUser());
 //		}
-		
+//		getHibernateTemplate().save(occur);
+//		}
+
 		//
 		//Bit of a chicken & egg thing here with TransientReferences..
 		//
-		
-		
+
+
 
 //		System.out.println("METAS "+t.getMetas().size());
 //		for (Iterator iter = t.getMetas().iterator(); iter.hasNext();) {
-//			Meta meta = (Meta) iter.next();
-//			log.debug("saving its metas ? "+meta.getTitle());		
-//			if(meta.getId() == 0){			
-//				log.debug("was unsaved. save"+meta.getTitle());
-//				getHibernateTemplate().saveOrUpdate(meta);
-//			}
-//			log.debug("done");
+//		Meta meta = (Meta) iter.next();
+//		log.debug("saving its metas ? "+meta.getTitle());		
+//		if(meta.getId() == 0){			
+//		log.debug("was unsaved. save"+meta.getTitle());
+//		getHibernateTemplate().saveOrUpdate(meta);
 //		}
-//		
+//		log.debug("done");
+//		}
+
 //		System.out.println("METAValues "+t.getMetaValues().entrySet().size());
 //		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//			Topic metaValue = (Topic) t.getMetaValues().get(iter.next());
-//			log.debug("saving its metavalue element ? "+metaValue.getTitle());		
-//			if(metaValue.getId() == 0){			
-//				log.debug("was unsaved. save"+metaValue.getTitle());
-//				getHibernateTemplate().saveOrUpdate(metaValue);
-//			}
-//			log.debug("done");
+//		Topic metaValue = (Topic) t.getMetaValues().get(iter.next());
+//		log.debug("saving its metavalue element ? "+metaValue.getTitle());		
+//		if(metaValue.getId() == 0){			
+//		log.debug("was unsaved. save"+metaValue.getTitle());
+//		getHibernateTemplate().saveOrUpdate(metaValue);
 //		}
-		
+//		log.debug("done");
+//		}
+
 		System.out.println("now set Associations : ");
 		for (Iterator iter = t.getAssociations().iterator(); iter.hasNext();) {			
 			Association assoc = (Association) iter.next();
 			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
 			System.out.println("assocDetail "+assoc.getTitle()+" "+assoc.getId());
-			
+
 			for (Iterator iterator = assoc.getTypes().iterator(); iterator.hasNext();) {
 				Topic type = (Topic) iterator.next();
 				assoc.setUser(t.getUser());
@@ -227,61 +228,61 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}
 			getHibernateTemplate().saveOrUpdate(assoc);			
 		}
-	
-		
+
+
 		System.out.println("and middle Save me "+t.getTitle()+" type: "+t.getClass());
 		//and save me
 		//
 		getHibernateTemplate().saveOrUpdate(t);		
-		
+
 		//call saveList() instead
-		
+
 //		System.out.println("now TYPES "+t.getTypes().size());
 //		for (Iterator iter = t.getTypes().iterator(); iter.hasNext();) {
-//			Topic type = (Topic) iter.next();
-//			log.debug("saving it's ? "+type.getTitle());
-//
-//			//this let's us save a topic and make it's tag save too. 
-//			//needs to happen AFTER the save of the topic, or it will 
-//			//have a reference to the non-persisted topic.
-//			//
-//			//NOTE: having this after means, that all of a topic's tags
-//			//must be saved before this method is called or we'll get the 
-//			//reverse problem. This is different than metas which can be unsaved
-//			//and then will be saved above if new.
-//			//
-//			log.debug("save "+type.getTitle()+" "+type.getId());
-//			
-//			Topic prev = (Topic) getHibernateTemplate().get(Topic.class, type.getId());
-//			if(prev != null){
-//				//log.debug("prev "+prev+" instance size "+prev.getInstances().size());
-//				prev.getInstances().addAll(type.getInstances());
-//			}else{
-//				log.debug("no prev ");
-//				getHibernateTemplate().saveOrUpdate(type);
-//			}
-//			log.debug("done");
+//		Topic type = (Topic) iter.next();
+//		log.debug("saving it's ? "+type.getTitle());
+
+//		//this let's us save a topic and make it's tag save too. 
+//		//needs to happen AFTER the save of the topic, or it will 
+//		//have a reference to the non-persisted topic.
+//		//
+//		//NOTE: having this after means, that all of a topic's tags
+//		//must be saved before this method is called or we'll get the 
+//		//reverse problem. This is different than metas which can be unsaved
+//		//and then will be saved above if new.
+//		//
+//		log.debug("save "+type.getTitle()+" "+type.getId());
+
+//		Topic prev = (Topic) getHibernateTemplate().get(Topic.class, type.getId());
+//		if(prev != null){
+//		//log.debug("prev "+prev+" instance size "+prev.getInstances().size());
+//		prev.getInstances().addAll(type.getInstances());
+//		}else{
+//		log.debug("no prev ");
+//		getHibernateTemplate().saveOrUpdate(type);
 //		}
-		
-		
-		
+//		log.debug("done");
+//		}
+
+
+
 //		if (t instanceof Association) {			
-//			Association assoc = (Association) t;
-//			System.out.println("ASSOC ");
-//			//
-//			//key's aren't topic anymore. just "TO" "FROM" etc
-//			//
-//			for (Iterator iter = assoc.getMembers().values().iterator(); iter.hasNext();) {
-//				Topic e = (Topic) iter.next();
-//				System.out.println("e "+e);
-//				System.out.println("id "+e.getId());
-//				Topic realEntry = (Topic) getHibernateTemplate().get(Topic.class, e.getId());
-//				System.out.println("real "+realEntry);
-//				realEntry.getAssociations().add(assoc);				
-//				getHibernateTemplate().saveOrUpdate(realEntry);				
-//			}
-//			
-//			getHibernateTemplate().saveOrUpdate(assoc);
+//		Association assoc = (Association) t;
+//		System.out.println("ASSOC ");
+//		//
+//		//key's aren't topic anymore. just "TO" "FROM" etc
+//		//
+//		for (Iterator iter = assoc.getMembers().values().iterator(); iter.hasNext();) {
+//		Topic e = (Topic) iter.next();
+//		System.out.println("e "+e);
+//		System.out.println("id "+e.getId());
+//		Topic realEntry = (Topic) getHibernateTemplate().get(Topic.class, e.getId());
+//		System.out.println("real "+realEntry);
+//		realEntry.getAssociations().add(assoc);				
+//		getHibernateTemplate().saveOrUpdate(realEntry);				
+//		}
+
+//		getHibernateTemplate().saveOrUpdate(assoc);
 //		}
 		return t;		
 	}
@@ -296,33 +297,33 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				"where ? in elements(top.associations.members) "+
 				"and user is ? "
 				,params);
-//		
+
 //		List<Object[]> list = getHibernateTemplate().find(""+
-//				"select id from Association ass "+		
-//				"where ? in elements(members) "+
-//				"and user is ? "
-//				,params);
-//	
+//		"select id from Association ass "+		
+//		"where ? in elements(members) "+
+//		"and user is ? "
+//		,params);
+
 		List<Object[]> instancesOfThisTopicSlashTag = getHibernateTemplate().find(""+
 				"select title, id from Topic top "+
 				"where top.types.id is ? "+
 				"and user is ? "
 				,params);
-		
-		
+
+
 //		List<Association> l2 = getHibernateTemplate().find(""+
-//				"from Association ass "+		
-//				"where ? in elements(members) "+
-//				"and user is ? "
-//				,params);
-//		
+//		"from Association ass "+		
+//		"where ? in elements(members) "+
+//		"and user is ? "
+//		,params);
+
 //		System.out.println("---------L2 "+l2.size());
 //		for (Association association : l2) {
-//			System.out.println("ass "+association+" ass "+association.getId());
+//		System.out.println("ass "+association+" ass "+association.getId());
 //		}
-		
+
 		associationsToThis.addAll(instancesOfThisTopicSlashTag);
-		
+
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(associationsToThis.size());
 		for (Object[] o : associationsToThis){
 			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
@@ -360,7 +361,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Property.forName("title"))
 		.add(Property.forName("id"));
 	}
-	
+
 
 	/**
 	 * TODO replace hardcoded class discriminators with .class
@@ -377,9 +378,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 //		List<Topic> l = getHibernateTemplate().findByCriteria(crit);
 //		for (Topic topic : l) {
-//			System.out.println("topic "+topic+"  class "+topic.getClass());
+//		System.out.println("topic "+topic+"  class "+topic.getClass());
 //		}
-		
+
 		List<Object[]> list = getHibernateTemplate().findByCriteria(crit);
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
@@ -395,15 +396,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public Topic getForID(User user, long topicID) {
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
-		.add(Expression.eq("user", user))
-		.add(Expression.eq("id", topicID)));
-					
+				.add(Expression.eq("user", user))
+				.add(Expression.eq("id", topicID)));
+
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));			
 	}
 
 	public void tester() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -432,7 +433,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 				Connection conn = sess.connection();
 				Statement statement = conn.createStatement();
-				
+
 				boolean res = statement.execute("DELETE FROM topic_scopes");
 				res = statement.execute("DELETE FROM topic_associations");
 				res = statement.execute("DELETE FROM instancetable");
@@ -443,7 +444,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				res = statement.execute("DELETE FROM typetable");
 				res = statement.execute("DELETE FROM topics");				
 				return res;
-				
+
 			}});
 
 	}
@@ -453,6 +454,25 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return link;
 	}
 
-	
+	public List<TopicIdentifier> getTopicForOccurrence(long id) {
+
+		List<Object[]> list = getHibernateTemplate().find(""+
+				"select title, id from Topic top "+		
+				"where ? in elements(top.occurences) "						
+				,id);
+				
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+
+		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list){
+			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+		}
+
+		return rtn;
+
+	}
+
+
 
 }

@@ -37,4 +37,6 @@ public interface TopicDAO {
 
 	Occurrence save(Occurrence link);
 
+	List<TopicIdentifier> getTopicForOccurrence(long id);
+
 }

@@ -37,7 +37,8 @@
 	</bean>
 	<bean id="searchService" class="com.aavu.server.service.impl.SearchServiceImpl">
 		<property name="compass" ref="compass"/>
-		<property name="compassGPS" ref="compassGPS"></property>	
+		<property name="compassGPS" ref="compassGPS"></property>
+		<property name="topicDAO" ref="topicDAO"></property>	
 	</bean>
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
 		<property name="userService" ref="userService"/>	

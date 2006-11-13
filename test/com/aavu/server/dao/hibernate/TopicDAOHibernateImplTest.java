@@ -673,6 +673,42 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
+	/**
+	 * Should let us link occurrence the topic that uses it..
+	 * 
+	 * A bit confused.. shoudl this really be a one-way many-to-many like
+	 * it is now? Can an occurrence exist for many topics? Ahh. crap, yes it can.
+	 * Hmm. 
+	 * 
+	 * 
+	 * @throws HippoBusinessException
+	 */
+	public void testGetTopicForOccurrence() throws HippoBusinessException{
+		WebLink link = 	new WebLink(u,B,C,D);
+		link = (WebLink) topicDAO.save(link);
+		String string = "";
+		log.debug("str: "+string);			
+		if(string.equals("")){				
+			string = C;
+			log.debug("blank tags, setting topic to; "+string);
+		}
+		Topic t = topicDAO.getForName(u, string);			
+		if(null == t){
+			log.debug("was null, creating as Tag ");
+			t = new Tag();
+			t.setTitle(string);				
+			t.setUser(u);							
+		}			
+		assertEquals(0, t.getOccurences().size());
+		t.getOccurences().add(link);
+		assertEquals(1, t.getOccurences().size());
+		Topic st = topicDAO.save(t);
+
+		System.out.println("ling "+link.getId());
+		List<TopicIdentifier> ident = topicDAO.getTopicForOccurrence(link.getId());
+		assertEquals(t.getId(),ident.get(0).getTopicID());
+		
+	}
 
 
 	public void setTagDAO(TagDAO tagDAO) {

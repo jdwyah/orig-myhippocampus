@@ -42,12 +42,13 @@
 		<property name="validator" ref="createUserValidator" />
 		<property name="userService" ref="userService" />
 	</bean>
-
+	
 	<bean id="userManagerController" class="com.aavu.server.web.controllers.UserManagerController">
 		<property name="userService" ref="userService" />
 		<property name="viewUserList" value="secure/extreme/userList" />
 		<property name="methodNameResolver" ref="userManagerResolver" />
 	</bean>
+
 	<bean id="userManagerResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
 		<property name="paramName" value="action" />
 	</bean>
