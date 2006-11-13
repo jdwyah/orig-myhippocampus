@@ -23,6 +23,7 @@
 			<meta attribute="use-in-equals">true</meta>
 		</property>
 		
+		<many-to-one name="topic" class="com.aavu.client.domain.Topic"></many-to-one>
 
 		<property name="lastUpdated" type="java.util.Date">
 			<meta attribute="field-description">Last updated</meta>

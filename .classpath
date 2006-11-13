@@ -41,5 +41,6 @@
 	<classpathentry sourcepath="C:/workspace/source/compass1.1m3-src.jar" kind="lib" path="lib/compass-gps-1.1M3.jar"/>
 	<classpathentry kind="lib" path="lib/compass-spring-1.1M3.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-core.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-highlighter.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

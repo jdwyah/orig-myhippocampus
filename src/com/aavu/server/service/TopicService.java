@@ -43,5 +43,4 @@ public interface TopicService {
 	 */
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 	
-	List<Topic> search(String searchString);
 }

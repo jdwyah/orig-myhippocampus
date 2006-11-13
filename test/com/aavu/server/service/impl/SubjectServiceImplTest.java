@@ -46,14 +46,6 @@ public class SubjectServiceImplTest extends BaseTestWithTransaction {
 
 
 	}
-	public void testSearch(){
-		List<Topic> rtn = topicService.search("yirgacheffe");
-		
-		rtn = topicService.search("Coffee");
-		
-		rtn = topicService.search("Shah");
-		
-	}
 
 	public void testCountryLookup() throws HippoException {
 		List<? extends Subject> list = subjectService.lookup(HippoCountry.class, "Chad");

@@ -82,13 +82,13 @@
       <div class="middle-column-box-white">
         <div class="middle-column-box-title-blue"><@spring.message "addLink.addALink"/></div>
 		  <p class="subheading"><@spring.message "addLink.URL"/></p>					
-		    <p><@spring.formInput "command.url", "size=\"80\""/><@regError/></p>
+		    <p><@spring.formInput "command.command_url", "size=\"80\""/><@regError/></p>
 		  <p class="subheading"><@spring.message "addLink.Description"/></p>					
-		    <p><@spring.formInput "command.description", "size=\"80\""/><@regError/></p>
+		    <p><@spring.formInput "command.command_description", "size=\"80\""/><@regError/></p>
 		  <p class="subheading"><@spring.message "addLink.Notes"/></p>					
-		    <p><@spring.formTextarea "command.notes", "rows=\"2\" cols=\"40\""/><@regError/></p>		    		    
+		    <p><@spring.formTextarea "command.command_notes", "rows=\"2\" cols=\"40\""/><@regError/></p>		    		    
 		  <p class="subheading"><@spring.message "addLink.Tags"/></p>		
-		    <p><@autocomplete "command.tags", "tags", "/site/secure/getTopics.html", "addLink.typeInATag"/></p>
+		    <p><@autocomplete "command.command_tags", "tags", "/site/secure/getTopics.html", "addLink.typeInATag"/></p>
       </div>
       
       

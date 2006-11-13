@@ -67,6 +67,16 @@ Caused by: org.compass.core.config.ConfigurationException: No mapping match clas
         </property>
 
     </class>
+    <class name="Entry" alias="Entry" extends="entity" >
+
+		<!-- Highlighter performance -> position_offsets -->
+		<!-- http://forums.opensymphony.com/thread.jspa?messageID=93583&#93583 -->
+        <property name="data" managed-id="false" >  <!--  converter="html" -->      
+            <meta-data converter="html" term-vector="positions_offsets" >${hippo.title}</meta-data>
+        </property>
+
+		<reference name="topic" ref-alias="Topic"/>
+    </class>
 <!--     <class name="Owner" alias="${petclinic.owner}" extends="person">
 
         <property name="firstName">
