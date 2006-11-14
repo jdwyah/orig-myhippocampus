@@ -173,9 +173,9 @@ public class Editor extends Composite /* implements HasHTML*/{
 		}
 	}
 
-
+//TODO taken out in 1.2.11
 	public void setFocus(boolean b) {
-		text.setFocus(b);
+		//text.setFocus(b);		
 	}
 
 	/**

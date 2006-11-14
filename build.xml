@@ -65,7 +65,7 @@
 		<echo message="gwt classpath=${gwt.classpath}"/>
 		
 		<!-- compile java to javascript here -->
-		<java failonerror="true" classname="com.google.gwt.dev.GWTCompiler" fork="true">
+		<java maxmemory="512M" failonerror="true" classname="com.google.gwt.dev.GWTCompiler" fork="true">
 			<classpath>
 				<pathelement path="${javacode}" />
 				<path refid="tool.and.lib" />

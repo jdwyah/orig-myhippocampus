@@ -42,7 +42,7 @@ public class MainMap extends Composite {
 		
 		//mainP.add(tagSearch);
 		
-		mainP.addStyleName("");
+		//mainP.addStyleName("");
 		initWidget(mainP);
 	}
 		
