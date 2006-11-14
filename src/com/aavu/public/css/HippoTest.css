@@ -1,5 +1,5 @@
 body {
-	background-color: #ECF1EF;
+	background-color: transparent;
 	color: black;
 	font-family: Arial, sans-serif;
 	margin: 20px 20px 20px 20px;
@@ -37,6 +37,7 @@ a:visited {
 	background: #FF0000;
 	position: absolute;
 	border: 2px solid #000;
+	z-index: 2;
 }
 
 .H-Sidebar {
@@ -117,7 +118,7 @@ a:visited {
 	border: none;
 	top: 0px;
 	left: 0px;
-	z-index: 1;
+	z-index: 2;
 }
 
 .H-Ocean { /*background-image: url("../img/lg_1.gif");
@@ -127,7 +128,7 @@ a:visited {
 	left: 0px;
 	height: 100%;
 	width: 100%;
-	z-index: 0;
+	z-index: 1;
 }
 
 .H-LineOfTime {
@@ -181,6 +182,7 @@ a:visited {
 
 .PopWindow {
 	border: 1px solid black;
+	z-index: 3;
 }
 
 .PopBody {

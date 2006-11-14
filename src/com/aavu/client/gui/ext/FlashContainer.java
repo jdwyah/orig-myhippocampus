@@ -22,7 +22,7 @@ public class FlashContainer extends SimplePanel {
 	"<param name=\"quality\" value=\"high\" />"+
 	"<param name=\"bgcolor\" value=\"#ffffff\" />"+
 	"<param name=\"allowScriptAccess\" value=\"always\" />"+
-	"<param name='wmode' value='transparent' />"+
+	"<param name='wmode' value='opaque' />"+
 	"<param name=\"scale\" VALUE=\"\" />"+
 	"<param name=\"swLiveConnect\" VALUE=\"true\" />"+
 	"<param name=\"movie\" value=\"";
@@ -30,7 +30,7 @@ public class FlashContainer extends SimplePanel {
 	String flashStr3 ="\" />";
 
 	String flashStr4 = "<embed src=\"";
-	String flashStr5 = "\" swLiveConnect=\"true\" quality=\"high\" bgcolor=\"#ffffff\" allowScriptAccess='always' wmode='transparent' width=\"100%\" height=\"100%\" name=\"";
+	String flashStr5 = "\" swLiveConnect=\"true\" quality=\"high\" bgcolor=\"#ffffff\" allowScriptAccess='always' wmode='opaque' width=\"100%\" height=\"100%\" name=\"";
 	String flashStr6 = "\" scale=\"\" align=\"middle\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" /></object>";
 
 	private String name;

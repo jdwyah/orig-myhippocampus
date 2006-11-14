@@ -88,7 +88,7 @@
 		  <p class="subheading"><@spring.message "addLink.Notes"/></p>					
 		    <p><@spring.formTextarea "command.command_notes", "rows=\"2\" cols=\"40\""/><@regError/></p>		    		    
 		  <p class="subheading"><@spring.message "addLink.Tags"/></p>		
-		    <p><@autocomplete "command.command_tags", "tags", "/site/secure/getTopics.html", "addLink.typeInATag"/></p>
+		    <p><@autocomplete "command.command_tags", "command_tags", "/site/secure/getTopics.html", "addLink.typeInATag"/></p>
       </div>
       
       

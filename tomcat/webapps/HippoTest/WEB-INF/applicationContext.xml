@@ -6,6 +6,7 @@
 
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
 		<property name="topicService" ref="topicService"/>
+		<property name="searchService" ref="searchService"/>
 	</bean>
 	<bean id="GWTTagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl">
 		<property name="tagService" ref="tagService"/>

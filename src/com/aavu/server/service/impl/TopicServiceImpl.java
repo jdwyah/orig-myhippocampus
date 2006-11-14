@@ -94,9 +94,7 @@ public class TopicServiceImpl implements TopicService {
 				t.setUser(userService.getCurrentUser());							
 			}			
 			t.getOccurences().add(link);
-			System.out.println("-----t-----"+t.toPrettyString());
 			Topic st = save(t);
-			System.out.println("-----st-----"+st.toPrettyString());
 		}
 	}
 

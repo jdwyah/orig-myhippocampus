@@ -34,7 +34,7 @@ public class MainMap extends Composite {
 		statusPanel = new StatusPanel();
 		
 		
-		mainP.add(new CompassRose());
+		mainP.add(new CompassRose(manager));
 		mainP.add(ocean);
 		mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));

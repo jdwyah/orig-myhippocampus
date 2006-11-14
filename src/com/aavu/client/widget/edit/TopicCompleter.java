@@ -1,9 +1,7 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
 
 

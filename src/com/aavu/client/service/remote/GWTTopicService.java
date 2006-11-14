@@ -2,6 +2,7 @@ package com.aavu.client.service.remote;
 
 import java.util.List;
 
+import com.aavu.client.domain.SearchResult;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
@@ -34,4 +35,7 @@ public interface GWTTopicService extends RemoteService {
 
 	//List<TopicIdentifier> 
 	List getLinksTo(Topic topic) throws HippoException;
+	
+	//List<SearchResult>
+	List search(String searchString) throws HippoException;
 }

@@ -38,6 +38,10 @@ public interface Consts extends Constants {
 	String deliciousUsername();
 	String deliciousPassword();
 	String deliciousSubmit();
+	String search();
+	String searchResultsTitle();
+	String searchScore();
+	String searchCallback();
 		
 	
 }

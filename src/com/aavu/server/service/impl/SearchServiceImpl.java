@@ -5,10 +5,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.compass.core.Compass;
+import org.compass.core.CompassCallback;
 import org.compass.core.CompassDetachedHits;
+import org.compass.core.CompassException;
 import org.compass.core.CompassHighlightedText;
+import org.compass.core.CompassHit;
 import org.compass.core.CompassHitIterator;
 import org.compass.core.CompassHits;
+import org.compass.core.CompassHitsOperations;
+import org.compass.core.CompassSession;
 import org.compass.core.CompassTemplate;
 import org.compass.core.impl.DefaultCompassHit;
 import org.compass.gps.CompassGps;
@@ -51,7 +56,7 @@ public class SearchServiceImpl implements SearchService {
 		//compassGPS.index();
 	}
 
-	public List<SearchResult> search(String searchString){
+	public List<SearchResult> search(final String searchString){
 		
 		try {
 			afterPropertiesSet();
@@ -59,30 +64,36 @@ public class SearchServiceImpl implements SearchService {
 			e1.printStackTrace();
 		}
 		
-		CompassHits hits = compassTemplate.find(searchString);
-		log.debug("Search: "+searchString+"Results:\t" + hits.getLength());
+		
+		
 
-		//
-		//need to do this before we unattach the hits
-		//http://www.opensymphony.com/compass/versions/1.1M2/html/core-workingwithobjects.html#CompassHighlighter
-		//
-		for (int i = 0; i < hits.length(); i++) {
-			log.debug("hi "+hits.highlighter(i).fragment("title"));
-			//huh, guess this is ${hippo.title} since entry has only data
-			hits.highlighter(i).fragment("title"); // this will cache the highlighted fragment
-		}
+		CompassHitsOperations hits = compassTemplate.executeFind(new CompassCallback(){
+			public Object doInCompass(CompassSession session) throws CompassException {
+
+				CompassHits hits = session.find(searchString);
+				
+				//
+				//need to do this before we unattach the hits
+				//http://www.opensymphony.com/compass/versions/1.1M2/html/core-workingwithobjects.html#CompassHighlighter
+				//
+				for (int i = 0; i < hits.length(); i++) {
+					log.debug("hi "+hits.highlighter(i).fragment("title"));
+					//huh, guess this is ${hippo.title} since entry has only data
+					hits.highlighter(i).fragment("title"); // this will cache the highlighted fragment
+				}				
+				return hits.detach();
+			}});
+		
+		log.debug("Search: "+searchString+"Results:\t" + hits.getLength());
 				
 		List<SearchResult> returnList = new ArrayList<SearchResult>(hits.length());
-		
-		CompassDetachedHits detachedHits = hits.detach();
-		CompassHitIterator iterator = detachedHits.iterator();
-		while(iterator.hasNext()){
-			DefaultCompassHit defaultCompassHit =
-				(DefaultCompassHit)iterator.next();
+				
+		for(int i = 0;i < hits.length();i++){
+			CompassHit defaultCompassHit = hits.hit(i);
 			
-			log.debug("alias: "+defaultCompassHit.getAlias());
+			
 			log.debug("score: "+defaultCompassHit.getScore());
-
+			log.debug("alias: "+defaultCompassHit.getAlias());
 			
 			SearchResult res = null;
 			

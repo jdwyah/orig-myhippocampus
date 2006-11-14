@@ -3,6 +3,8 @@ package com.aavu.client.gui;
 import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.gui.ext.MultiDivPanel;
+import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -12,38 +14,38 @@ import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CompassRose extends SimplePanel implements ClickListener {
+public class CompassRose extends SimplePanel {
 	
 	private PopupPanel searchD;
-
-	public CompassRose(){
+	private TextBox searchText = new TextBox();
+	private Manager manager;
+	
+	public CompassRose(Manager _manager){
+		this.manager = _manager;
 		
 		PNGImage rose = new PNGImage("img/CompassRose.png",120,120);
-		rose.addClickListener(this);
+				
+		Button searchB = new Button(manager.myConstants.search());
+		searchB.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				System.out.println("click "+searchText.getText());
+				manager.doSearch(searchText.getText());
+			}});
 		
-		TabBar t;
-		HorizontalPanel hp = new HorizontalPanel();
-		hp.add(new Label("Search:"));
-		hp.add(new TextBox());
-		
-		searchD = new PopupPanel(true);		
-		searchD.add(hp);
-		searchD.hide();
-		
-		MultiDivPanel mainP = new MultiDivPanel();
+		HorizontalPanel mainP = new HorizontalPanel();
 		
 		mainP.add(rose);
-		mainP.add(searchD);
+		mainP.add(new Label(manager.myConstants.search()));
+		mainP.add(searchText);
+		mainP.add(searchB);
 		
-		setElement(mainP.getElement());
 		
+		
+		add(mainP);
 		addStyleName("H-AbsolutePanel");
 		addStyleName("H-CompassRose");
 		
 	}
 
-	public void onClick(Widget sender) {
-		searchD.show();
-	}
 
 }

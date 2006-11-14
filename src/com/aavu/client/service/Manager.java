@@ -1,11 +1,14 @@
 package com.aavu.client.service;
 
+import java.util.List;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
+import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TagEditorWindow;
 import com.aavu.client.gui.TopicDisplayWindow;
@@ -68,7 +71,22 @@ public class Manager implements TopicSaveListener {
 		tw.setPopupPosition(DEF_X,DEF_Y);
 		tw.show();
 	}
-
+	public void doSearch(String text) {
+		System.out.println("Search "+text);
+		hippoCache.getTopicCache().search(text,new StdAsyncCallback(myConstants.searchCallback()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				System.out.println("ssss");
+				List searchRes = (List) result;
+				
+				SearchResultsWindow tw = new SearchResultsWindow(Manager.this,searchRes);
+				tw.setPopupPosition(DEF_X,DEF_Y);
+				tw.show();		
+			}			
+		});
+	}
+	
+	
 	public void showTimeline() {
 //		List timeLinesObjs = new ArrayList();
 //		for(int i=0;i<10;i++){
@@ -185,6 +203,7 @@ public class Manager implements TopicSaveListener {
 	public void addDeliciousTags(String username, String password) {
 		hippoCache.getSubjectService().addDeliciousTags(username, password, new StdAsyncCallback("AddDeliciousTags"){});
 	}
+	
 	
 
 

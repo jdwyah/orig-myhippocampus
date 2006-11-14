@@ -305,6 +305,10 @@ public class TopicCache {
 		topicService.getLinksTo(topic2, callback);
 	}
 
+	public void search(String text, StdAsyncCallback callback) {		
+		topicService.search(text, callback);		
+	}
+
 
 
 }

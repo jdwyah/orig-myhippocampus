@@ -19,7 +19,7 @@ public abstract class AbstractOccurrence  implements IsSerializable, java.io.Ser
      private User user;
      private String title;
      private String data;
-     private Topic topic;
+     //private Topic topic;
      
      /**
       * Last updated
@@ -76,13 +76,13 @@ public abstract class AbstractOccurrence  implements IsSerializable, java.io.Ser
         this.data = data;
     }
     
-    public Topic getTopic() {
-		return topic;
-	}
-
-	public void setTopic(Topic topic) {
-		this.topic = topic;
-	}
+//    public Topic getTopic() {
+//		return topic;
+//	}
+//
+//	public void setTopic(Topic topic) {
+//		this.topic = topic;
+//	}
 
 	/**       
      *      * Last updated

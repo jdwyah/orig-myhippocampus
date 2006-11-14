@@ -1,11 +1,15 @@
 package com.aavu.client.domain;
 
-public class SearchResult {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class SearchResult implements IsSerializable {
 
 	private long topicID;
 	private String title;
 	private String text;
 	private float score;
+	
+	public SearchResult(){}
 		
 	public SearchResult(long topicID, float score, String title, String text) {
 		super();
@@ -41,6 +45,9 @@ public class SearchResult {
 	
 	public String toString(){
 		return getTopicID()+" "+getScore()+" "+getTitle()+" "+getText();
+	}
+	public TopicIdentifier getTopicIdentifier() {		
+		return new TopicIdentifier(topicID,title);
 	}
 	
 }

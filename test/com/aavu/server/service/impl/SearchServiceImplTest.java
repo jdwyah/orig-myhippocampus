@@ -5,9 +5,10 @@ import java.util.List;
 import com.aavu.client.domain.SearchResult;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
+import com.aavu.server.service.gwt.BaseTestNoTransaction;
 import com.aavu.server.service.gwt.BaseTestWithTransaction;
 
-public class SearchServiceImplTest extends BaseTestWithTransaction {
+public class SearchServiceImplTest extends BaseTestNoTransaction {
 
 	private SearchService searchService;
 

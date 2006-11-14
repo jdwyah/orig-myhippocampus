@@ -20,6 +20,7 @@ import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
+import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
 
 
@@ -27,10 +28,14 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 
 	private static final Logger log = Logger.getLogger(GWTTopicServiceImpl.class);
 
-	private TopicService topicService ;
+	private TopicService topicService;
+	private SearchService searchService;
 
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
+	}
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
 	}
 
 
@@ -412,6 +417,17 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	public List getLinksTo(Topic topic) throws HippoException {
 		try{
 			return topicService.getLinksTo(topic);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
+
+
+	public List search(String searchString) throws HippoException {
+		try{
+			return searchService.search(searchString);
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();

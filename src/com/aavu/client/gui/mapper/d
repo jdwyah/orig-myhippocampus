@@ -1,0 +1,505 @@
+<HTML>
+  <HEAD>
+
+
+
+    <META content="com.pramati.MindWalker" name="gwt:module"/>
+    <TITLE>
+MindWalker    </TITLE>
+
+
+    <LINK href="MindWalker.css" rel="stylesheet"/>
+
+
+    <SCRIPT language="javascript">
+
+window.fileName = &quot;null&quot;;
+window.isSample = &quot;false&quot;;
+window.contextPath = &quot;/MindWalker&quot;;
+    </SCRIPT>
+    <LINK href="chrome://webdeveloper/content/stylesheets/imports/tooltips.css"
+          id="webdeveloper-display-id-class-details" rel="stylesheet" type="text/css"/>
+    <STYLE id="webdeveloper-display-id-class-details-tooltips" type="text/css">
+span.webdeveloper-id-class-details { background-color: #ffff99 !important; border-color: #ffcc66 !important; color: #000000 !important;  -moz-opacity: 0.9 !important;  opacity: 0.9 !important; }    </STYLE>
+  </HEAD>
+  <BODY marginwidth="0" marginheight="0" background="images/mindwalker_bg.gif"
+        width="100%" topmargin="0" leftmargin="0">
+    <IFRAME src="com.pramati.MindWalker.nocache.html" style="border: 0px none ; width: 0px; height: 0px;"/>
+
+
+    <TABLE width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+
+      <TBODY>
+        <TR valign="top">
+          <TD background="images/mindwalker_bg.gif">
+
+	            <TABLE width="100%" cellspacing="0" cellpadding="0" background="images/mindwalker_bg.gif">
+
+		              <TBODY>
+                <TR valign="top">
+                  <TD colspan="2">
+                    <SCRIPT src="gwt.js" language="javascript"/>
+                  </TD>
+                </TR>
+
+		                <TR>
+                  <TD align="left">
+                    <IMG src="images/mindwalker.png"/>
+                  </TD>
+                  <TD align="right">
+                    <FONT size="1" color="#888888">
+                      <I>
+For Starters                      </I>
+...                      <B>
+Add Child:                      </B>
+ [Enter].                       <B>
+Add Sibling:                      </B>
+ [Ctrl] + Down Arrow.                       <B>
+Remove Node:                      </B>
+ [Ctrl] + BSpace                       <B>
+Go to Root:                      </B>
+ [Ctrl] + Home.                    </FONT>
+                  </TD>
+                </TR>
+
+		                <TR valign="bottom">
+                  <SPAN class="webdeveloper-id-class-details">
+ #top                  </SPAN>
+                  <TD align="left" id="top" colspan="2">
+                    <TABLE cellspacing="20" cellpadding="0">
+                      <TBODY>
+                        <TR>
+                          <TD align="left" style="vertical-align: top;">
+                            <TABLE cellspacing="0" cellpadding="0" style="position: static;">
+                              <TBODY>
+                                <TR>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                    </SPAN>
+                                    <DIV class="gwt-HTML" style="position: static;">
+dhiraj                                    </DIV>
+                                  </TD>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .vpanel                                    </SPAN>
+                                    <TABLE cellspacing="0" cellpadding="0"
+                                           class="vpanel" style="position: static; display: none;">
+                                      <TBODY>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="105" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-TextBox                                                    </SPAN>
+                                                    <INPUT type="text"
+                                                           class="gwt-TextBox" style="position: static;"/>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="80" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Save                                                    </DIV>
+                                                  </TD>
+                                                  <TD width="25" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Cancel                                                    </DIV>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                      </TBODY>
+                                    </TABLE>
+                                  </TD>
+                                </TR>
+                              </TBODY>
+                            </TABLE>
+                          </TD>
+                          <TD align="left" style="vertical-align: top;">
+                            <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                            </SPAN>
+                            <DIV class="gwt-HTML" style="position: static;">
+New                            </DIV>
+                          </TD>
+                          <TD align="left" style="vertical-align: top;">
+                            <TABLE cellspacing="0" cellpadding="0" style="position: static;">
+                              <TBODY>
+                                <TR>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                    </SPAN>
+                                    <DIV class="gwt-HTML" style="position: static;">
+Load                                    </DIV>
+                                  </TD>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .vpanel                                    </SPAN>
+                                    <TABLE cellspacing="0" cellpadding="0"
+                                           class="vpanel" style="position: static; display: none;">
+                                      <TBODY>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="105" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .ListBox                                                    </SPAN>
+                                                    <SELECT class="ListBox" style="position: static; width: 150px;">
+                                                      <OPTION>
+mindmap1.mwl                                                      </OPTION>
+                                                      <OPTION>
+Untitled.mwl                                                      </OPTION>
+                                                      <OPTION>
+mindmap2.mwl                                                      </OPTION>
+                                                      <OPTION>
+mindmap4.mwl                                                      </OPTION>
+                                                      <OPTION>
+rama.mwl                                                      </OPTION>
+                                                      <OPTION>
+first.mwl                                                      </OPTION>
+                                                      <OPTION>
+mindmap5.mwl                                                      </OPTION>
+                                                      <OPTION>
+dhiraj.mwl                                                      </OPTION>
+                                                      <OPTION>
+india.mwl                                                      </OPTION>
+                                                      <OPTION>
+mindmap3.mwl                                                      </OPTION>
+                                                      <OPTION>
+naveen try.mwl                                                      </OPTION>
+                                                      <OPTION>
+Ankit Narang.mwl                                                      </OPTION>
+                                                      <OPTION>
+fsdfsd.mwl                                                      </OPTION>
+                                                      <OPTION>
+fgg.mwl                                                      </OPTION>
+                                                      <OPTION>
+fgdfgdfgdfgdfgdfgdfgdf.mwl                                                      </OPTION>
+                                                      <OPTION>
+fun map.mwl                                                      </OPTION>
+                                                      <OPTION>
+tEST.mwl                                                      </OPTION>
+                                                      <OPTION>
+TW.mwl                                                      </OPTION>
+                                                      <OPTION>
+local.mwl                                                      </OPTION>
+                                                      <OPTION>
+ketan.mwl                                                      </OPTION>
+                                                      <OPTION>
+Kalyan.mwl                                                      </OPTION>
+                                                      <OPTION>
+mindmap6.mwl                                                      </OPTION>
+                                                      <OPTION>
+GFM.mwl                                                      </OPTION>
+                                                      <OPTION>
+ujj.mwl                                                      </OPTION>
+                                                      <OPTION>
+RamTest.mwl                                                      </OPTION>
+                                                      <OPTION>
+eeeUntitled.mwl                                                      </OPTION>
+                                                      <OPTION>
+vc.mwl                                                      </OPTION>
+                                                      <OPTION>
+c:\howisitpossible.txt.mwl                                                      </OPTION>
+                                                    </SELECT>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="80" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Load                                                    </DIV>
+                                                  </TD>
+                                                  <TD width="25" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Cancel                                                    </DIV>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                      </TBODY>
+                                    </TABLE>
+                                  </TD>
+                                </TR>
+                              </TBODY>
+                            </TABLE>
+                          </TD>
+                          <TD align="left" style="vertical-align: top;">
+                            <TABLE cellspacing="0" cellpadding="0" style="position: static;">
+                              <TBODY>
+                                <TR>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                    </SPAN>
+                                    <DIV class="gwt-HTML" style="position: static;">
+Share                                    </DIV>
+                                  </TD>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .vpanel                                    </SPAN>
+                                    <TABLE cellspacing="0" cellpadding="0"
+                                           class="vpanel" style="position: static; display: none;">
+                                      <TBODY>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="105" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-TextBox                                                    </SPAN>
+                                                    <INPUT type="text"
+                                                           class="gwt-TextBox" style="position: static;"/>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="80" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Send                                                    </DIV>
+                                                  </TD>
+                                                  <TD width="25" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Cancel                                                    </DIV>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                      </TBODY>
+                                    </TABLE>
+                                  </TD>
+                                </TR>
+                              </TBODY>
+                            </TABLE>
+                          </TD>
+                          <TD align="left" style="vertical-align: top;">
+                            <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                            </SPAN>
+                            <DIV class="gwt-HTML" style="position: static;">
+Download                            </DIV>
+                          </TD>
+                          <TD align="left" style="vertical-align: top;">
+                            <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                            </SPAN>
+                            <DIV class="gwt-HTML" style="position: static;">
+Help                            </DIV>
+                          </TD>
+                          <TD align="left" style="vertical-align: top;">
+                            <TABLE cellspacing="0" cellpadding="0" style="position: static;">
+                              <TBODY>
+                                <TR>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                    </SPAN>
+                                    <DIV class="gwt-HTML" style="position: static;">
+Samples                                    </DIV>
+                                  </TD>
+                                  <TD align="left" style="vertical-align: top;">
+                                    <SPAN class="webdeveloper-id-class-details">
+ .vpanel                                    </SPAN>
+                                    <TABLE cellspacing="0" cellpadding="0"
+                                           class="vpanel" style="position: static; display: none;">
+                                      <TBODY>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="105" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .ListBox                                                    </SPAN>
+                                                    <SELECT class="ListBox" style="position: static; width: 150px;">
+                                                      <OPTION>
+dhiraj.mwl                                                      </OPTION>
+                                                    </SELECT>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                        <TR>
+                                          <TD align="left" style="vertical-align: top;">
+                                            <TABLE cellspacing="0"
+                                                   cellpadding="0" style="position: static;">
+                                              <TBODY>
+                                                <TR>
+                                                  <TD width="80" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Load                                                    </DIV>
+                                                  </TD>
+                                                  <TD width="25" align="left" style="vertical-align: top;">
+                                                    <SPAN class="webdeveloper-id-class-details">
+ .gwt-HTML                                                    </SPAN>
+                                                    <DIV class="gwt-HTML" style="position: static;">
+Cancel                                                    </DIV>
+                                                  </TD>
+                                                </TR>
+                                              </TBODY>
+                                            </TABLE>
+                                          </TD>
+                                        </TR>
+                                      </TBODY>
+                                    </TABLE>
+                                  </TD>
+                                </TR>
+                              </TBODY>
+                            </TABLE>
+                          </TD>
+                        </TR>
+                      </TBODY>
+                    </TABLE>
+                  </TD>
+                </TR>
+
+		                <TR>
+                  <TD colspan="2">
+
+		                    <TABLE>
+
+		                      <TBODY>
+                        <TR>
+                          <SPAN class="webdeveloper-id-class-details">
+ #mindmapSlot                          </SPAN>
+                          <TD id="mindmapSlot">
+                            <DIV style="overflow: hidden;">
+                              <SPAN class="webdeveloper-id-class-details">
+ .rroottextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="rroottextboxnofocus"
+                                     size="12" style="position: absolute; left: 567px; top: 368px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .ltextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="ltextboxnofocus"
+                                     size="2" style="position: absolute; left: 685px; top: 343px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .ltextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="ltextboxnofocus"
+                                     size="3" style="position: absolute; left: 685px; top: 368px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .ltextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="ltextboxnofocus"
+                                     size="3" style="position: absolute; left: 685px; top: 393px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .lroottextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="lroottextboxnofocus"
+                                     size="1" style="position: absolute; left: 567px; top: 368px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .rtextboxfocus                              </SPAN>
+                              <INPUT type="text" class="rtextboxnofocus"
+                                     size="3" style="position: absolute; left: 492px; top: 331px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .rtextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="rtextboxnofocus"
+                                     size="7" style="position: absolute; left: 472px; top: 356px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .rtextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="rtextboxnofocus"
+                                     size="8" style="position: absolute; left: 467px; top: 381px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <SPAN class="webdeveloper-id-class-details">
+ .rtextboxnofocus                              </SPAN>
+                              <INPUT type="text" class="rtextboxnofocus"
+                                     size="7" style="position: absolute; left: 472px; top: 406px;"/>
+                              <IMG src="images/plus.gif" style="display: none;"/>
+                              <IMG src="images/line.gif" style="width: 1px; height: 36px; position: absolute; left: 547px; top: 339px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 547px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 527px; top: 339px;"/>
+                              <IMG src="images/line.gif" style="width: 1px; height: 11px; position: absolute; left: 547px; top: 364px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 547px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 527px; top: 364px;"/>
+                              <IMG src="images/line.gif" style="width: 1px; height: 14px; position: absolute; left: 547px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 547px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 527px; top: 389px;"/>
+                              <IMG src="images/line.gif" style="width: 1px; height: 39px; position: absolute; left: 547px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 547px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 527px; top: 414px;"/>
+                              <IMG src="images/line.gif" style="width: 1px; height: 24px; position: absolute; left: 665px; top: 351px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 645px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 665px; top: 351px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 645px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 665px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 1px; height: 26px; position: absolute; left: 665px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 645px; top: 375px;"/>
+                              <IMG src="images/line.gif" style="width: 20px; height: 1px; position: absolute; left: 665px; top: 401px;"/>
+                            </DIV>
+                          </TD>
+                        </TR>
+
+		                      </TBODY>
+                    </TABLE>
+
+		                  </TD>
+                </TR>
+
+	              </TBODY>
+            </TABLE>
+
+          </TD>
+        </TR>
+
+      </TBODY>
+    </TABLE>
+
+
+    <SPAN class="webdeveloper-id-class-details">
+ #webdeveloper-element-information    </SPAN>
+  </BODY>
+</HTML>

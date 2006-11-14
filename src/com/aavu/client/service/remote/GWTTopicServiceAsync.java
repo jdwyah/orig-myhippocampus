@@ -35,6 +35,9 @@ public interface GWTTopicServiceAsync {
 	
 	//List<TopicIdentifier> 
 	void getLinksTo(Topic topic, AsyncCallback callback);
+	
+	//List<SearchResult>
+	void search(String searchString,AsyncCallback callback);
 }
 
 

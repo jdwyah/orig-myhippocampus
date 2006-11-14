@@ -1,0 +1,68 @@
+.gwt-TextBox {
+	height: 18px;
+	border: 0;
+	background-color: #333333;
+	font-face: Arial;
+	color: #EEEEEE;	
+	font-size: 10px;
+}
+
+.ltextboxnofocus {
+	font-face: Arial;
+	color: #CCCCCC;
+	border: 1px #555555 ridge;
+	font-size: 12px;
+	z-index: 3;
+	background-color: #222222;
+}
+
+.ltextboxfocus {
+	font-face: Arial;
+	color: #FFFFFF;
+	border: 1px #555555 ridge;
+	font-size: 12px;	
+	background-color: #333333;
+	font-size: 10px;
+	z-index: 3;
+}
+
+.rtextboxnofocus {
+	font-face: Arial;
+	color: #CCCCCC;
+	border: 1px #555555 ridge;
+	font-size: 12px;
+	text-align: right;
+	z-index: 3;
+	background-color: #222222;
+	spacing:2px;
+}
+
+.rtextboxfocus {
+	font-face: Arial;
+	color: #FFFFFF;
+	border: 1px #555555 ridge;
+	font-size: 12px;	
+	background-color: #333333;
+	font-size: 10px;
+	z-index: 3;
+}
+
+.lroottextboxnofocus {
+	font-face: Arial;
+	color: #333333;
+	border: 0;
+	font-size: 10px;
+	z-index: 1;
+	text-align: center;
+	background-color: #FFCC33;
+	}
+
+.rroottextboxnofocus {
+	font-face: Arial;
+	color: #333333;
+	border: 0;
+	font-size: 10px;
+	z-index: 3;
+	text-align: center;
+	background-color: #FFCC33;
+}

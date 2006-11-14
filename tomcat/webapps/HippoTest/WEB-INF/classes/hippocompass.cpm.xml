@@ -75,7 +75,7 @@ Caused by: org.compass.core.config.ConfigurationException: No mapping match clas
             <meta-data converter="html" term-vector="positions_offsets" >${hippo.title}</meta-data>
         </property>
 
-		<reference name="topic" ref-alias="Topic"/>
+		<!-- <reference name="topic" ref-alias="Topic"/>-->
     </class>
 <!--     <class name="Owner" alias="${petclinic.owner}" extends="person">
 

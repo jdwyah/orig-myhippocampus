@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
+import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -66,6 +67,14 @@ public class Dashboard extends SimplePanel {
 				ExternalPopup ex = new ExternalPopup("Facebook",login,626,436);
 			}});
 		
+		
+		Button mapper = new Button("Mapper");
+		mapper.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				MapperWidget widg = new MapperWidget(manager); 
+				widg.setPopupPosition(200, 200);
+				widg.show();
+			}});
 		
 		mainPanel.add(addNewButton);
 		mainPanel.add(tagButton);		
