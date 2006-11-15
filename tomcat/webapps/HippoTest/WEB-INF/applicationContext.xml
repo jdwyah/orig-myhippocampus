@@ -40,6 +40,7 @@
 		<property name="compass" ref="compass"/>
 		<property name="compassGPS" ref="compassGPS"></property>
 		<property name="topicDAO" ref="topicDAO"></property>	
+		<property name="userService" ref="userService"/>
 	</bean>
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
 		<property name="userService" ref="userService"/>	

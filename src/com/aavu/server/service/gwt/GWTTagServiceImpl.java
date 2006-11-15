@@ -71,6 +71,8 @@ public class GWTTagServiceImpl extends GWTSpringController implements GWTTagServ
 			String[] list = new String[]{};
 			list = tagService.getTagsStarting(match).toArray(list);
 						
+			log.debug("Found: "+list.length+" matches ");
+			
 			return list;
 
 		}  catch (Exception e) {

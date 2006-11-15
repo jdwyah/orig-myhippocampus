@@ -8,18 +8,19 @@
 
 		<description>MyHippocampus Meta Data</description>
 		<uri>http://myhippocampus/hippo</uri>
-
-		<alias id="topic" displayName="Topic">
-			<description>Topic alias</description>
-			<uri>http://myhippocampus/hippo/alias/topic</uri>
-			<name>topic</name>
-		</alias>
-		
-		<meta-data id="title" displayName="Title">
-			<description>The title of an object</description>
-			<uri>http://myhippocampus/hippo/title</uri>
-			<name>title</name>
+	
+		<meta-data id="text" displayName="Text">
+			<description>The search part of an object</description>
+			<uri>http://myhippocampus/hippo/text</uri>
+			<name>text</name>
 		</meta-data>
+		
+		<meta-data id="username" displayName="Username">
+			<description>User Alias</description>
+			<uri>http://myhippocampus/hippo/username</uri>
+			<name>username</name>
+		</meta-data>
+		
 	</meta-data-group>
 
 	<!-- <meta-data-group id="petclinic" displayName="Petclinic Meta Data">

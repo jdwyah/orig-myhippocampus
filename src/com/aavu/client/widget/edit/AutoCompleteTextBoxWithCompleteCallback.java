@@ -1,8 +1,9 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
+import com.aavu.client.widget.autocompletion.AutoCompleteTextBoxAsync;
 
-public class AutoCompleteTextBoxWithCompleteCallback extends AutoCompleteTextBox {
+public class AutoCompleteTextBoxWithCompleteCallback extends AutoCompleteTextBoxAsync {
 	
 	private CompleteListener listener;
 	

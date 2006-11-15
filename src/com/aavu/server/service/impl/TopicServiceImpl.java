@@ -3,19 +3,10 @@ package com.aavu.server.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.compass.core.Compass;
-import org.compass.core.CompassDetachedHits;
-import org.compass.core.CompassHighlightedText;
-import org.compass.core.CompassHitIterator;
-import org.compass.core.CompassHits;
-import org.compass.core.CompassTemplate;
-import org.compass.core.impl.DefaultCompassHit;
-import org.compass.gps.CompassGps;
 
-import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
@@ -26,7 +17,6 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 public class TopicServiceImpl implements TopicService {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
@@ -50,10 +40,19 @@ public class TopicServiceImpl implements TopicService {
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 
+	/**
+	 * TODO I don't really like setting the user here, but it's tricky 
+	 * to give the Topic & Entry objects something that knows about users.
+	 * 
+	 */
 	public Topic save(Topic topic) throws HippoBusinessException {
 		System.out.println("Topic Save Setting User "+userService.getCurrentUser());
 		topic.setLastUpdated(new Date());
 		topic.setUser(userService.getCurrentUser());
+		Set<Occurrence> occs = topic.getOccurences();
+		for(Occurrence o : occs){
+			o.setUser(userService.getCurrentUser());
+		}
 		return topicDAO.save(topic);
 	}
 	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag) {

@@ -8,4 +8,5 @@ public interface SearchService {
 
 	List<SearchResult> search(String searchString);
 	
+	void indexNow();
 }

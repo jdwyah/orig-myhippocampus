@@ -49,7 +49,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 				Expression.or(
 				Expression.eq("user", user),Expression.eq("publicVisible", true))))
 		.setProjection(Property.forName("title"));				
-		
+		log.debug("USER: "+user+" USER ID "+user.getId()+" NAME "+user.getUsername()+" MATCH|"+match+"|");
 		return getHibernateTemplate().findByCriteria(crit);
 	}
 
