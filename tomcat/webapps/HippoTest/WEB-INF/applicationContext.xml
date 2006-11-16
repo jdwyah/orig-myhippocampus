@@ -39,6 +39,7 @@
 	<bean id="searchService" class="com.aavu.server.service.impl.SearchServiceImpl">
 		<property name="compass" ref="compass"/>
 		<property name="compassGPS" ref="compassGPS"></property>
+		<property name="mirrorGPS" ref="hibernateGpsDevice"/>
 		<property name="topicDAO" ref="topicDAO"></property>	
 		<property name="userService" ref="userService"/>
 	</bean>

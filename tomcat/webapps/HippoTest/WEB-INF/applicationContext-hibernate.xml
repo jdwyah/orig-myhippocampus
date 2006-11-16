@@ -122,6 +122,7 @@
 				<prop key="compass.engine.connection">${HOST.compass.repo}</prop>
 				<prop key="compass.transaction.factory">org.compass.spring.transaction.SpringSyncTransactionFactory</prop>
 				<prop key="compass.converter.html.type">com.aavu.server.lucene.util.HTMLConverter</prop>
+				<prop key="compass.engine.analyzer.html.type">com.aavu.server.lucene.util.HTMLAnalyzer</prop>
 			</props>
 		</property>
 		<!-- <property name="classMappings">

@@ -1,5 +1,6 @@
 package com.aavu.client.gui;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.util.LorumIpsum;
@@ -42,7 +43,14 @@ public class DeliciousWidget extends PopupWindow {
 		Button godoitB = new Button(manager.myConstants.deliciousSubmit());
 		godoitB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				manager.addDeliciousTags(username.getText(),password.getText());	
+				manager.addDeliciousTags(username.getText(),password.getText(),new StdAsyncCallback("AddDeliciousTags"){
+
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+						manager.refreshAll();
+						DeliciousWidget.this.close();
+					}					
+				});	
 			}});
 
 		mainPanel.add(godoitB);

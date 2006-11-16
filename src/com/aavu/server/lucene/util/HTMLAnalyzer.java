@@ -1,46 +1,46 @@
 package com.aavu.server.lucene.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 
+import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Field;
 import org.compass.core.converter.ConversionException;
-import org.compass.core.converter.basic.AbstractBasicConverter;
-import org.compass.core.mapping.ResourcePropertyMapping;
 
 import com.aavu.server.lucene.util.html.HTMLParser;
 
 public class HTMLAnalyzer extends StandardAnalyzer {
-
-	
-	
+	private static final Logger log = Logger.getLogger(HTMLAnalyzer.class);
+		
 	@Override
-	public TokenStream tokenStream(String arg0, Reader arg1) {
-		// TODO Auto-generated method stub
-		return super.tokenStream(arg0, arg1);
+	public TokenStream tokenStream(String name, Reader reader) {
+
+		if(log.isDebugEnabled()){
+			TokenStream ts = super.tokenStream(name, htmlReaderFromReader(reader));
+			Token t;
+			try {
+				while((t = ts.next()) != null){
+					log.debug("token: "+t);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return super.tokenStream(name,htmlReaderFromReader(reader));
 	}
 
-	public Object fromString(String htmlString, ResourcePropertyMapping arg1)
-	throws ConversionException {
+	private Reader htmlReaderFromReader(Reader reader) throws ConversionException {
 
-		StringReader reader = new StringReader(htmlString);
 		HTMLParser parser = new HTMLParser(reader);
-
-		StringBuilder sb = new StringBuilder();
-		String thisLine;
 		try {
-			BufferedReader parsedReader = new BufferedReader(parser.getReader());
-			while ((thisLine = parsedReader.readLine()) != null) { // while loop begins here
-				sb.append(thisLine);
-			} // end while 
-			return sb.toString();			
+			return parser.getReader();
 		} catch (IOException e) {
 			throw new ConversionException(e.getMessage());
 		}
+		
 	}
 
 }

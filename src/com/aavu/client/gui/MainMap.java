@@ -50,6 +50,9 @@ public class MainMap extends Composite {
 	public void growIsland(Tag tag) {
 		ocean.growIsland(tag);
 	}
+	public void refreshIslands(){
+		//TODO
+	}
 
 	public void updateSidebar() {
 		sideBar.load();

@@ -23,6 +23,7 @@ import org.compass.core.CompassTemplate;
 import org.compass.core.CompassQueryBuilder.CompassBooleanQueryBuilder;
 import org.compass.core.CompassQueryBuilder.CompassQueryStringBuilder;
 import org.compass.gps.CompassGps;
+import org.compass.gps.MirrorDataChangesGpsDevice;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.aavu.client.domain.Entry;
@@ -40,10 +41,15 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 	private CompassTemplate compassTemplate;
 	
 	private Compass compass;
+	
+	private MirrorDataChangesGpsDevice mirrorGPS;
 	private CompassGps compassGPS;
 	private TopicDAO topicDAO;
 	private UserService userService;
 	
+	public void setMirrorGPS(MirrorDataChangesGpsDevice mirrorGPS) {
+		this.mirrorGPS = mirrorGPS;
+	}
 	public void setCompass(Compass compass) {
 		this.compass = compass;
 	}	
@@ -70,7 +76,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 	}
 
 	public List<SearchResult> search(final String searchString){
-		return search(searchString,userService.getCurrentUser().getUsername(), 0, 10);
+		return search(searchString,userService.getCurrentUser().getUsername(), 0, 400);
 	}
 	private List<SearchResult> search(final String searchString,final String username,final int start, final int num){
 
@@ -129,7 +135,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				//http://www.opensymphony.com/compass/versions/1.1M2/html/core-workingwithobjects.html#CompassHighlighter
 				//
 				for (int i = 0; i < hits.length(); i++) {
-					log.debug("hi "+hits.highlighter(i).fragment("text"));
+					log.debug("HIT "+i+" T:"+hits.highlighter(i).fragment("text"));					
 					//huh, guess this is ${hippo.title} since entry has only data
 					hits.highlighter(i).fragment("text"); // this will cache the highlighted fragment
 				}				
@@ -159,6 +165,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 			SearchResult res = null;
 			
 			Object obj = defaultCompassHit.getData();
+			System.out.println("DATA: "+defaultCompassHit.getData());
 			
 			if (obj instanceof Entry) {
 				Entry entry = (Entry) obj;
@@ -198,6 +205,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 		return returnList;
 	}
 	public void indexNow() {
-		compassGPS.index();
+		System.out.println("Index Now");
+		mirrorGPS.setMirrorDataChanges(true);		
 	}
 }

@@ -27,6 +27,9 @@ public class HTMLConverter extends AbstractBasicConverter {
 			while ((thisLine = parsedReader.readLine()) != null) { // while loop begins here
 				sb.append(thisLine);
 			} // end while 
+			
+			System.out.println("CONVERT "+htmlString);
+			System.out.println("TOOOOOO "+sb.toString());
 			return sb.toString();			
 		} catch (IOException e) {
 			throw new ConversionException(e.getMessage());

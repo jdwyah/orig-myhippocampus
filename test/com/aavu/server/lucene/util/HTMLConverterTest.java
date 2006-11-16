@@ -19,6 +19,12 @@ public class HTMLConverterTest extends TestCase {
 		
 		res = (String) convert.fromString("<HTML><BODY><A href=\"http://www.dsfs.so\">Link</A> <font type=\"arial\"><B>Foo</B></font>45435</BODY></HTML>", null);
 		assertEquals("LinkFoo45435", res);
+		
+		res = (String) convert.fromString("<HEAD></HEAD>\n"+
+		"<BODY contentEditable=true><FONT size=2>\n"+
+		"<P>At Full Cuty, and extemely balanced coffee, herby, caramelly, with rustic hints</P></FONT></BODY>\n",null);		
+		assertEquals("At Full Cuty, and extemely balanced coffee, herby, caramelly, with rustic hints ", res);
+		
 	}
 
 }

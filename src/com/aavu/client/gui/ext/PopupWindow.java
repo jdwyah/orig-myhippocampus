@@ -57,7 +57,10 @@ public class PopupWindow extends ModablePopupPanel implements ClickListener{
     
 
     public void onClick(Widget sender){
-            hide();
+            close();
+    }
+    public void close(){
+    	hide();
     }
 
     public void setContentPanel(Widget widget){

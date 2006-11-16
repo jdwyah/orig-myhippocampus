@@ -21,6 +21,7 @@ import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Manager implements TopicSaveListener {
 
@@ -200,8 +201,12 @@ public class Manager implements TopicSaveListener {
 	public GWTSubjectServiceAsync getSubjectService() {
 		return hippoCache.getSubjectService();
 	}
-	public void addDeliciousTags(String username, String password) {
-		hippoCache.getSubjectService().addDeliciousTags(username, password, new StdAsyncCallback("AddDeliciousTags"){});
+	public void addDeliciousTags(String username, String password,AsyncCallback callback) {
+		hippoCache.getSubjectService().addDeliciousTags(username, password, callback);		
+	}
+	public void refreshAll(){
+		map.updateSidebar();
+		map.refreshIslands();
 	}
 	
 	

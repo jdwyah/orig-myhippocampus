@@ -9,8 +9,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class AutoCompleteTextBoxAsync extends TextBox
-implements KeyboardListener, MatchesRequiring {
+public class AutoCompleteTextBoxAsync extends TextBox implements KeyboardListener, MatchesRequiring {
 
 	protected CompletionItems items = null;
 	protected boolean popupAdded = false;

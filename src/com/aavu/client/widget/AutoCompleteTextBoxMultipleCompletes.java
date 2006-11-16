@@ -1,9 +1,9 @@
 package com.aavu.client.widget;
 
-import com.aavu.client.widget.autocompletion.AutoCompleteTextBox;
+import com.aavu.client.widget.autocompletion.AutoCompleteTextBoxAsync;
 import com.aavu.client.widget.autocompletion.Completable;
 
-public class AutoCompleteTextBoxMultipleCompletes extends AutoCompleteTextBox {
+public class AutoCompleteTextBoxMultipleCompletes extends AutoCompleteTextBoxAsync {
 
 
 	
@@ -29,7 +29,7 @@ public class AutoCompleteTextBoxMultipleCompletes extends AutoCompleteTextBox {
 		String text = baseText.substring(liof);
 		System.out.println("Base: |"+baseText+"|");
 		System.out.println("Text: |"+text+"|");
-		matches = new Completable[] {};
+		//matches = new Completable[] {};
 		if (text.length() > 0) {
 			items.getCompletionItems(text, this);
 		} else {

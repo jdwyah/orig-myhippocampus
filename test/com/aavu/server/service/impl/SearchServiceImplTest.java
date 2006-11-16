@@ -2,6 +2,9 @@ package com.aavu.server.service.impl;
 
 import java.util.List;
 
+import org.compass.gps.device.hibernate.Hibernate3GpsDevice;
+import org.compass.spring.device.hibernate.SpringHibernate3GpsDevice;
+
 import com.aavu.client.domain.SearchResult;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -29,6 +32,11 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 	}
 	
 	@Override
+	protected void onSetUpBeforeTransaction() throws Exception {		
+		super.onSetUpBeforeTransaction();
+		setUsername("test");
+	}
+	@Override
 	protected void onSetUpInTransaction() throws Exception {
 
 		super.onSetUpInTransaction();
@@ -43,7 +51,28 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 	private static final String B = "Some other long title";
 	private static final String B2 = "long some";
 		
+	public void testEZ() {
+
+		List<SearchResult> rtn = null;//
+//		rtn = searchService.search("Coffee");
+//		
+//		rtn = searchService.search("Shah");
+//
+//		rtn = searchService.search("tom");
+//
+//		rtn = searchService.search("full");
+
+		//it is currently searching 
+		rtn = searchService.search("contentEditable=true");
+
+//		rtn = searchService.search("body");
+//
+//		rtn = searchService.search("crack second");
+	}
+	
 	public void testSearch() throws HippoBusinessException, InterruptedException{
+		
+		searchService.indexNow();
 		
 		Topic t = new Topic(u,A);		
 		t = topicService.save(t);
@@ -51,9 +80,7 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 		Topic t2 = new Topic(u,B);		
 		t2 = topicService.save(t);
 		
-		Topic t3 = topicService.getForName(A);
-		
-	//	searchService.indexNow();		
+		Topic t3 = topicService.getForName(A);		
 		
 		List<SearchResult> rtn = searchService.search(A);
 		assertEquals(1, rtn.size());
@@ -67,23 +94,7 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 		rtn = searchService.search(B2);
 		assertEquals(1, rtn.size());
 		
-		
-		
-		
-//		rtn = searchService.search("Coffee");
-//		
-//		rtn = searchService.search("Shah");
-//
-//		rtn = searchService.search("tom");
-//
-//		rtn = searchService.search("full");
-//
-//		//it is currently searching 
-//		rtn = searchService.search("contentEditable=true");
-//
-//		rtn = searchService.search("body");
-//
-//		rtn = searchService.search("crack second");
+				
 	}	
 
 }

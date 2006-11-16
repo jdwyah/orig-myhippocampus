@@ -13,6 +13,12 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
 
 public class BaseTestWithTransaction extends AbstractTransactionalSpringContextTests {
+	
+	private static String username = "test-with-data";	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	@Override
 	protected String[] getConfigLocations() {
 
@@ -46,7 +52,7 @@ public class BaseTestWithTransaction extends AbstractTransactionalSpringContextT
 	 */
 	private static void createSecureContext() {
 
-		TestingAuthenticationToken auth = new TestingAuthenticationToken("test-with-data", "test-with-data", new GrantedAuthority[] {
+		TestingAuthenticationToken auth = new TestingAuthenticationToken(username, username, new GrantedAuthority[] {
 				new GrantedAuthorityImpl("ROLE_TELLER"), new GrantedAuthorityImpl("ROLE_PERMISSION_LIST") });
 		
 		SecurityContext secureContext = new SecurityContextImpl();
