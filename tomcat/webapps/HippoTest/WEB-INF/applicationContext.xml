@@ -5,47 +5,50 @@
 <beans>
 
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
-		<property name="topicService" ref="topicService"/>
-		<property name="searchService" ref="searchService"/>
+		<property name="topicService" ref="topicService" />
+		<property name="searchService" ref="searchService" />
 	</bean>
 	<bean id="GWTTagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl">
-		<property name="tagService" ref="tagService"/>
+		<property name="tagService" ref="tagService" />
 	</bean>
 
 	<bean id="GWTUserService" class="com.aavu.server.service.gwt.GWTUserServiceImpl">
-		<property name="userService" ref="userService"/>
-	</bean>
-	
-	<bean id="GWTSubjectService" class="com.aavu.server.service.gwt.GWTSubjectServiceImpl">	
-		<property name="externalServicesService" ref="externalServicesService"/>
+		<property name="userService" ref="userService" />
 	</bean>
 
-	<bean id="facebookService" class="com.aavu.server.service.facebook.impl.FacebookServiceImpl">
+	<bean id="GWTSubjectService" class="com.aavu.server.service.gwt.GWTSubjectServiceImpl">
+		<property name="externalServicesService" ref="externalServicesService" />
 	</bean>
-	
+
+	<bean id="facebookService" class="com.aavu.server.service.facebook.impl.FacebookServiceImpl"></bean>
+
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
-		<property name="userDAO" ref="userDAO"/>	
+		<property name="userDAO" ref="userDAO" />
 		<property name="hackUserSwitch" value="${HOST.hack.user.switch}"></property>
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
-		<property name="topicDAO" ref="topicDAO"/>
-		<property name="userService" ref="userService"/>	
+		<property name="topicDAO" ref="topicDAO" />
+		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="tagService" class="com.aavu.server.service.impl.TagServiceImpl">
 		<property name="tagDAO" ref="tagDAO"></property>
 		<property name="topicDAO" ref="topicDAO"></property>
-		<property name="userService" ref="userService"/>		
+		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="searchService" class="com.aavu.server.service.impl.SearchServiceImpl">
-		<property name="compass" ref="compass"/>
+		<property name="compass" ref="compass" />
 		<property name="compassGPS" ref="compassGPS"></property>
-		<property name="mirrorGPS" ref="hibernateGpsDevice"/>
-		<property name="topicDAO" ref="topicDAO"></property>	
-		<property name="userService" ref="userService"/>
+		<property name="mirrorGPS" ref="hibernateGpsDevice" />
+		<property name="topicDAO" ref="topicDAO"></property>
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="messageService" class="com.aavu.server.service.impl.MessageServiceImpl">
+		<property name="userDAO" ref="userDAO" />
+		<property name="topicService" ref="topicService" />
 	</bean>
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
-		<property name="userService" ref="userService"/>	
-		<property name="topicService" ref="topicService"/>	
+		<property name="userService" ref="userService" />
+		<property name="topicService" ref="topicService" />
 	</bean>
 
 

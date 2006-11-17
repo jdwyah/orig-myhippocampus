@@ -14,5 +14,5 @@ public interface UserDAO {
 	List<User> getAllUsers();
 	User getUserForId(long id);
 	void delete(User user);
-	User getUserByUsername(String username);
+	User getUserByUsername(String username) throws UsernameNotFoundException ;
 }

@@ -42,7 +42,7 @@
 		<property name="validator" ref="createUserValidator" />
 		<property name="userService" ref="userService" />
 	</bean>
-	
+
 	<bean id="userManagerController" class="com.aavu.server.web.controllers.UserManagerController">
 		<property name="userService" ref="userService" />
 		<property name="viewUserList" value="secure/extreme/userList" />
@@ -58,7 +58,7 @@
 		<property name="methodNameResolver" ref="ajaxControllerResolver" />
 	</bean>
 	<bean id="ajaxControllerResolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
-		<property name="alwaysUseFullPath" value="true"/>
+		<property name="alwaysUseFullPath" value="true" />
 		<property name="mappings">
 			<props>
 				<prop key="/site/secure/getTopics.html">topicSearch</prop>
@@ -66,6 +66,11 @@
 		</property>
 	</bean>
 
+
+	<bean name="hessianMessageService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<property name="service" ref="messageService" />
+		<property name="serviceInterface" value="com.aavu.server.service.MessageService" />
+	</bean>
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="alwaysUseFullPath" value="true" />
@@ -75,6 +80,7 @@
 				<prop key="/service/tagService">GWTTagService</prop>
 				<prop key="/service/userService">GWTUserService</prop>
 				<prop key="/service/subjectService">GWTSubjectService</prop>
+				<prop key="/service/messageService">hessianMessageService</prop>
 
 				<prop key="/site/acegilogin.html">loginController</prop>
 				<prop key="/site/signup.html">createUserController</prop>

@@ -31,7 +31,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		return getHibernateTemplate().find("from User");
 	}
 
-	public User getUserByUsername(String username) {		
+	public User getUserByUsername(String username) throws UsernameNotFoundException {		
 		//Hack to run a 1-time initialization of the DB
 		//
 		if(init){			
