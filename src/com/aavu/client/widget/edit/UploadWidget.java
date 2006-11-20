@@ -2,6 +2,7 @@ package com.aavu.client.widget.edit;
 
 import org.gwtwidgets.client.ui.ProgressBar;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -13,6 +14,7 @@ import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -23,7 +25,14 @@ public class UploadWidget extends Composite {
 	private Manager manager;
 	private FileUpload upload; 
 
-	public UploadWidget(final Manager manager,String path){
+	/**
+	 * corresponds to FileUploadBean.java must have the same fields.
+	 * 
+	 * @param manager
+	 * @param topic
+	 * @param path
+	 */
+	public UploadWidget(final Manager manager,Topic topic,String path){
 		this.manager = manager;
 		// Create a FormPanel and point it at a service.
 		final FormPanel form = new FormPanel();
@@ -38,6 +47,9 @@ public class UploadWidget extends Composite {
 		VerticalPanel panel = new VerticalPanel();
 		form.setWidget(panel);
 
+		//Create a TextBox, giving it a name so that it will be submitted.
+	    Hidden tb = new Hidden("topicID",topic.getId()+"");	    
+	    panel.add(tb);
 		
 		// Create a FileUpload widget.
 		upload = new FileUpload();

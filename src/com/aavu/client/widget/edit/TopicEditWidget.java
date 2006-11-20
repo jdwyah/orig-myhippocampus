@@ -26,6 +26,7 @@ public class TopicEditWidget extends Composite {
 	private TopicViewAndEditWidget topicViewAndEditWidget;
 	
 	private SeeAlsoBoard seeAlsoBoard;
+	private UploadWidget uploadWidget;
 	
 	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, Manager manager, Topic topic){
 		this.topic = topic;
@@ -39,7 +40,7 @@ public class TopicEditWidget extends Composite {
 		tagBoard = new TagBoard(manager);
 		subjectBoard = new SubjectBoard(manager,titleBox,tagBoard);
 		seeAlsoBoard = new SeeAlsoBoard(manager);
-		
+		uploadWidget = new UploadWidget(manager,topic,HippoTest.realModuleBase+UPLOAD_PATH); 
 		setupTopic();
 		
 		VerticalPanel panel = new VerticalPanel();
@@ -50,9 +51,14 @@ public class TopicEditWidget extends Composite {
 		panel.add(subjectBoard);
 		panel.add(tagBoard);		
 		panel.add(seeAlsoBoard);
+		panel.add(uploadWidget);
 		
-		panel.add(new UploadWidget(manager,HippoTest.realModuleBase+UPLOAD_PATH));
-		
+		//don't let them upload to an unsaved topic
+		//TODO make this appear after a save and give an indication that they need 
+		//to save to make this appear.
+		if(topic.getId() == 0){
+			uploadWidget.setVisible(false);
+		}
 		panel.add(textArea);
 	
 	

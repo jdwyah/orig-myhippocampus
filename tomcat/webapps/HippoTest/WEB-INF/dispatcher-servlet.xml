@@ -68,6 +68,8 @@
 	<bean id="fileUploadController" class="com.aavu.server.web.controllers.FileUploadController">
 		<property name="successView" value="simpleString"/>
 		<property name="commandClass" value="com.aavu.server.web.domain.FileUploadBean"/>
+		<property name="awsConnection" ref="awsConnection"/>
+		<property name="userService" ref="userService"/>
 	</bean>
 
 	<bean name="hessianMessageService" class="org.springframework.remoting.caucho.HessianServiceExporter">

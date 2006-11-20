@@ -4,6 +4,10 @@
 
 <beans>
 
+	<bean id="propertyConfigurer" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config.properties" />
+	</bean>
+
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
 		<property name="topicService" ref="topicService" />
 		<property name="searchService" ref="searchService" />
@@ -51,5 +55,10 @@
 		<property name="topicService" ref="topicService" />
 	</bean>
 
+	<bean id="awsConnection" class="com.aavu.server.s3.com.amazon.s3.AWSAuthConnection">
+		<property name="awsAccessKeyId" value="${aws.s3.auth}" />
+		<property name="awsSecretAccessKey" value="${aws.s3.secret}" />
+		<property name="defaultBucket" value="myhippocampus"/>
+	</bean>
 
 </beans>

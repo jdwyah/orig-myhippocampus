@@ -30,6 +30,26 @@ public class S3Test extends TestCase {
 
     static final int UnspecifiedMaxKeys = -1;
 
+    public void testHippoStuff() throws MalformedURLException, IOException{
+        
+        AWSAuthConnection conn = new AWSAuthConnection(awsAccessKeyId, awsSecretAccessKey);
+        														  
+        ListBucketResponse listBucketResponse1 = conn.listBucket("myhippocampus", null, null, null, null);
+        System.out.println("list "+listBucketResponse1.entries.size());
+        for (Iterator iter = listBucketResponse1.entries.iterator(); iter.hasNext();) {
+        	ListEntry element = (ListEntry) iter.next();
+        	System.out.println("element "+element.key);
+        }
+        System.out.println("response: "+listBucketResponse1.connection.getResponseCode());
+        
+        listBucketResponse1 = conn.listBucket("myhippocampus", "test/218/",null,null,null);
+        System.out.println("list "+listBucketResponse1.entries.size());
+        for (Iterator iter = listBucketResponse1.entries.iterator(); iter.hasNext();) {
+        	ListEntry element = (ListEntry) iter.next();
+        	System.out.println("element "+element.key);
+        }
+        
+    }
     public void testDriver() throws MalformedURLException, IOException{
         if (awsAccessKeyId.startsWith("<INSERT")) {
             System.err.println("Please examine S3Test.java and update it with your credentials");
@@ -38,7 +58,8 @@ public class S3Test extends TestCase {
 
 
         AWSAuthConnection conn = new AWSAuthConnection(awsAccessKeyId, awsSecretAccessKey);
-
+      
+        
         Response response = conn.createBucket(bucketName, null);
         assertEquals(
                 "couldn't create bucket",
