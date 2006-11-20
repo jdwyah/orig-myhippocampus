@@ -1,5 +1,5 @@
 body {
-	background-color: transparent;
+	background-color: #ECF1EF;
 	color: black;
 	font-family: Arial, sans-serif;
 	margin: 20px 20px 20px 20px;
@@ -37,7 +37,6 @@ a:visited {
 	background: #FF0000;
 	position: absolute;
 	border: 2px solid #000;
-	z-index: 1;
 }
 
 .H-Sidebar {
@@ -45,7 +44,6 @@ a:visited {
 	margin-left: 600px;
 	top: 0px;
 	right: 0px;
-	border: 0px;
 }
 
 .H-Dashboard {
@@ -57,49 +55,6 @@ a:visited {
 	text-align: left; /* counter the body center */
 	border: 2px solid #000;
 }
-.H-StatusPanel {
-	top: 0px;
-	left: 60%;
-	width: 200px;
-	height: 40px;
-	background-color: transparent;
-	margin: 0 auto; /* align for good browsers */
-	text-align: left; /* counter the body center */
-	border: 2px solid #000;
-
-}
-
-.H-StatusLabels {
-	filter:alpha(opacity=40);
-	-moz-opacity:.40;
-	opacity:.40;
-	-khtml-opacity:.4;
-}	
-	
-.H-StatusLabels .H-Send {
-	background: yellow;	
-}
-.H-StatusLabels .H-Fail {
-	background: red;	
-}
-.H-StatusLabels .H-Success {
-	background-color: green;	
-}
-
-.H-SubjectChooser {
-	background-color: grey;	
-	padding: 4px;
-}
-.H-SubjectChooser .H-Selected {
-	background-color: green;
-}
-.H-SubjectInfoPanel {
-	background-color: aqua;
-}
-.H-SubjectSelectedPanel {
-	
-}
-
 .H-EnterInfoButton {
 	background-image: url("../img/bluecheck-bullet-14.gif");
 	background-repeat: no-repeat;
@@ -154,11 +109,22 @@ a:visited {
 	padding: 3px;
         font-weight: bold;
 }
-.H-Tooltip {
+
+.H-SideBarKey {
+	color: black;
+        font-size: 13px;
+	font-family : arial, helvetica, sans-serif;
+}
+
+.H-SideBarKeyNoElements {
+	color: gray;
+	font-family: arial, helvetica, sans-serif;
+}
+
+.tooltip .gwt-HTML {
 	border: 1px solid black;
 	padding: 2px 3px 3px 3px;
 	background-color: #ffffcc; /*Pale Weak Yellow*/
-	z-index: 3;
 }
 
 .H-HeaderLabel {
@@ -181,7 +147,6 @@ a:visited {
 
 .PopWindow {
 	border: 1px solid black;
-	z-index: 2;
 }
 
 .PopBody {
@@ -211,102 +176,6 @@ a:visited {
 	margin-right: 2px;
 	cursor: pointer;
 }
-.AutoCompleteChoices {
-	z-index: 9;
-}
-.H-SideBarKey {
-	color: black;
-    font-size: 13px;
-	background-image: url("../img/regTab.png");
-	font-family : arial, helvetica, sans-serif;
-	text-align: center;
-	width: 20px;
-	height: 20px;
-}
-
-.H-SideBarKeyNoElements {
-	color: gray;
-	background-image: url("../img/unselTab.png");	
-	font-family: arial, helvetica, sans-serif;
-	text-align: center;
-	width: 20px;
-	height: 20px;
-	
-}
-.H-SearchResults {
-	padding: 3px;	
-}
-.H-SearchResults .H-Title{
-	background: #87EBFF;
-}
-.gwt-TabPanel {
-	clear: both;
-	margin: 0em 0em 1.5em 0em;
-	/*border-top: solid 0.1em rgb(175, 175, 175);
-	border-bottom: solid 0.1em rgb(175, 175, 175);*/
-	
-	background-color: #ffcc66; 
-    opacity: 0.7;
-	line-height: 2.0em;
-	height: 2.0em;
-	color: rgb(50, 50, 50);
-}
-
-.gwt-TabPanelBottom {
-	width: 110;
-}
-
-.gwt-TabBar {
-	margin: 0em;
-	padding: 0em;
-	list-style: none;
-	font-weight: bold;
-	font-size: 1em;
-	text-transform: uppercase;
-}
-
-.gwt-TabBar .gwt-TabBarFirst {
-	/*display: block;
-	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: rgb(235, 235, 235);
-	text-decoration: none;
-	color: rgb(50, 50, 50);*/
-	width: 20px;
-	height: 20px;
-}
-
-.gwt-TabBar .gwt-TabBarRest {
-	/*display: block;
-	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: rgb(235, 235, 235);
-	text-decoration: none;
-	color: rgb(50, 50, 50);*/
-}
-
-.gwt-TabBar .gwt-TabBarItem {
-	/*display: block;
-	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: rgb(235, 235, 235);
-	text-decoration: none;
-	color: rgb(50, 50, 50);*/
-}
-
-.gwt-TabBar .gwt-TabBarItem-selected {
-	background-image: url("../img/selectedTab.png");
-	width: 30px;
-	/*padding: 0em 0.5em 0em 0.5em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: #339900;
-	background-image: 
-	color: black;*/
-}
-
-
-
-
 
 .gwt-BorderedPanel {
 	
@@ -406,6 +275,64 @@ a:visited {
 	font-size: smaller;
 }
 
+.gwt-TabPanel {
+	clear: both;
+	margin: 0em 0em 1.5em 0em;
+	border-top: solid 0.1em rgb(175, 175, 175);
+	border-bottom: solid 0.1em rgb(175, 175, 175);
+	background-color: #ffcc66; 
+        opacity: 0.7;
+	line-height: 2.0em;
+	height: 2.0em;
+	color: rgb(50, 50, 50);
+}
+
+.gwt-TabPanelBottom {
+
+}
+
+.gwt-TabBar {
+	margin: 0em;
+	padding: 0em;
+	list-style: none;
+	font-weight: bold;
+	font-size: 1em;
+	text-transform: uppercase;
+}
+
+.gwt-TabBar .gwt-TabBarFirst {
+	display: block;
+	padding: 0em 1.0em 0em 1.0em;
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(235, 235, 235);
+	text-decoration: none;
+	color: rgb(50, 50, 50);
+}
+
+.gwt-TabBar .gwt-TabBarRest {
+	display: block;
+	padding: 0em 1.0em 0em 1.0em;
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(235, 235, 235);
+	text-decoration: none;
+	color: rgb(50, 50, 50);
+}
+
+.gwt-TabBar .gwt-TabBarItem {
+	display: block;
+	padding: 0em 1.0em 0em 1.0em;
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: rgb(235, 235, 235);
+	text-decoration: none;
+	color: rgb(50, 50, 50);
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+	padding: 0em 0.5em 0em 0.5em;
+	border-right: solid 0.1em rgb(175, 175, 175);
+	background-color: #339900;
+	color: black;
+}
 
 .gwt-TextArea {
 	height: 400px;
@@ -415,8 +342,7 @@ a:visited {
 .gwt-TextBox {
 	font-family : arial, helvetica, sans-serif;
 	font-size: 11px;
-	background-color: white;
-	background: white;
+
 }
 
 .gwt-Tree {

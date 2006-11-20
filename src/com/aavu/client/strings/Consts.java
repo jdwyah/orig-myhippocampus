@@ -42,6 +42,11 @@ public interface Consts extends Constants {
 	String searchResultsTitle();
 	String searchScore();
 	String searchCallback();
+	
+	String upload();
+	String upload_complete();
+	String upload_submit();
+	String upload_select_file();
 		
 	
 }

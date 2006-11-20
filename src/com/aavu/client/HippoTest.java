@@ -51,6 +51,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	private HippoCache hippoCache;
 	private Manager manager;
 	
+	public static String realModuleBase;
 	
 	private void initServices(){
 		//if(9==9)
@@ -68,17 +69,20 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		//Window.alert("2");
 		
-		String pre = "";
+		realModuleBase = "";
+		
 		if(GWT.isScript()){
-			pre = GWT.getModuleBaseURL();//HippoTest/service/topicService
-			pre = "http://www.myhippocampus.com/service/";
-			       
-			//pre = "http://localhost:8080/service/";
+			realModuleBase = GWT.getModuleBaseURL();//HippoTest/service/topicService
+			realModuleBase = "http://www.myhippocampus.com/";
+					
+			//pre = "http://localhost:8080/";
 			
 		}else{
-			pre = GWT.getModuleBaseURL();
-			pre = "http://localhost:8080/service/";
+			realModuleBase = GWT.getModuleBaseURL();
+			realModuleBase = "http://localhost:8080/";
 		}
+		String pre = realModuleBase + "service/";
+		
 		//Window.alert("3");
 		msg = pre+" "+GWT.isScript()+" "+(pre + "topicService");
 		

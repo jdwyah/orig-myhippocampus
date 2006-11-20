@@ -9,6 +9,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -50,17 +51,18 @@ public class SearchResultsWindow extends PopupWindow {
 		public SearchLink(final Manager manager, final SearchResult result) {
 			VerticalPanel mainPanel = new VerticalPanel();
 			
-			Label l = new Label(result.getTitle());
+			TopicLink tl = new TopicLink(result.getTopicIdentifier());
+			tl.addStyleName("H-Title");
+			mainPanel.addStyleName("H-SearchResults");
 			
-			l.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
-					manager.bringUpChart(result.getTopicIdentifier());
-				}				
-			});
-			
-			mainPanel.add(l);			
-			mainPanel.add(new HTML(result.getText()));
-			mainPanel.add(new Label(manager.myConstants.searchScore()+result.getScore()));
+			if(result.getText() == null){
+				mainPanel.add(tl);							
+				//mainPanel.add(new Label(manager.myConstants.searchScore()+result.getScore()));				
+			}else{
+				mainPanel.add(tl);			
+				mainPanel.add(new HTML(result.getText()));
+				//mainPanel.add(new Label(manager.myConstants.searchScore()+result.getScore()));				
+			}			
 			
 			initWidget(mainPanel);
 		}

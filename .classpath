@@ -42,5 +42,6 @@
 	<classpathentry kind="lib" path="tools/gwt/gwt-user-1.2.11.jar"/>
 	<classpathentry kind="lib" path="lib/spring-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/ehcache-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-fileupload-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

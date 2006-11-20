@@ -65,7 +65,10 @@
 			</props>
 		</property>
 	</bean>
-
+	<bean id="fileUploadController" class="com.aavu.server.web.controllers.FileUploadController">
+		<property name="successView" value="simpleString"/>
+		<property name="commandClass" value="com.aavu.server.web.domain.FileUploadBean"/>
+	</bean>
 
 	<bean name="hessianMessageService" class="org.springframework.remoting.caucho.HessianServiceExporter">
 		<property name="service" ref="messageService" />
@@ -88,16 +91,25 @@
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
 
 				<prop key="/site/secure/addLink.html">addLinkController</prop>
-				<prop key="/site/secure/getTopics.html">ajaxController</prop>
+				<prop key="/site/secure/getTopics.html">ajaxController</prop>				
+				<!-- change, but hosted gwt login diff w/ /site/secure/ -->
+				<prop key="/service/upload.html">fileUploadController</prop>
 
 				<prop key="/site/index.html">splashController</prop>
 				<prop key="/site/index2.html">indexController</prop>
 				<prop key="/site/tour.html">tourController</prop>
 				<prop key="/site/manifesto.html">manifestoController</prop>
+				
+
 			</props>
 		</property>
 
 	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10485760"/><!-- 10MB -->
+	</bean>
+
 
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer" abstract="false"
 		singleton="true" lazy-init="default" autowire="default" dependency-check="default">

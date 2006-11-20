@@ -357,9 +357,24 @@ public class Editor extends Composite /* implements HasHTML*/{
 	public JavaScriptObject getExpandedSelection(){
 		System.out.println("expand");
 		expandSelectionJS(textElement);
+		
 		return getSelectionRange();
 	}
 	
+//	public native void setSelectionRangeFF(Element elem, int pos, int length) /*-{
+//	    elem.setSelectionRange(pos, pos + length);
+//	  }-*/;
+//	public native void setSelectionRangeIE(Element elem, int pos, int length) /*-{
+//    	try {
+//      		var tr = elem.createTextRange();
+//      		tr.collapse(true);
+//      		tr.moveStart('character', pos);
+//      		tr.moveEnd('character', length);
+//      		tr.select();
+//    	}
+//    	catch (e) {
+//    	}
+//  	}-*/;
 	
 	native static void expandSelectionJS(Element element)/*-{
 		

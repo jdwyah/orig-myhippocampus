@@ -35,7 +35,7 @@ public class Tooltip extends MouseListenerAdapter {
     	this.button = button;
     	tooltip = new SimplePanel(){};
         tooltip.add( new HTML(text) );
-        tooltip.setStyleName("Tooltip");        
+        tooltip.setStyleName("H-Tooltip");        
     }
     
  

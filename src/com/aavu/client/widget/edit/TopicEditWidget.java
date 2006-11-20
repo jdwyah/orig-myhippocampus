@@ -2,6 +2,7 @@ package com.aavu.client.widget.edit;
 
 import java.util.Set;
 
+import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
@@ -12,7 +13,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicEditWidget extends Composite {
-
+	
+	private static final String UPLOAD_PATH = "service/upload.html";//"site/secure/upload.html";
 	
 	private TextBox titleBox = new TextBox();
 	private SpecialTextbox textArea = null;
@@ -42,14 +44,14 @@ public class TopicEditWidget extends Composite {
 		
 		VerticalPanel panel = new VerticalPanel();
 		
-		panel.add(new HeaderLabel(Manager.myConstants.title()));
+		panel.add(new HeaderLabel(manager.myConstants.title()));
 		panel.add(titleBox);
 		
 		panel.add(subjectBoard);
 		panel.add(tagBoard);		
 		panel.add(seeAlsoBoard);
 		
-			
+		panel.add(new UploadWidget(manager,HippoTest.realModuleBase+UPLOAD_PATH));
 		
 		panel.add(textArea);
 	

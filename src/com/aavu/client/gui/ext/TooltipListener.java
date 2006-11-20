@@ -50,7 +50,7 @@ public class TooltipListener extends MouseListenerAdapter {
 		/**
 		 * The default css class name for the tool tip
 		 */
-		private static final String     DEFAULT_TOOLTIP_STYLE   = "tooltip";
+		private static final String     DEFAULT_TOOLTIP_STYLE   = "H-Tooltip";
 
 		/**
 		 * The default delay, in milliseconds,
