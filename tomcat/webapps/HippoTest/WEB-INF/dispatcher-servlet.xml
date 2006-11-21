@@ -71,6 +71,10 @@
 		<property name="awsConnection" ref="awsConnection"/>
 		<property name="userService" ref="userService"/>
 	</bean>
+	<bean id="showFileController" class="com.aavu.server.web.controllers.S3Controller">
+		<property name="awsConnection" ref="awsConnection"/>
+		<property name="userService" ref="userService"/>	
+	</bean>
 
 	<bean name="hessianMessageService" class="org.springframework.remoting.caucho.HessianServiceExporter">
 		<property name="service" ref="messageService" />
@@ -96,6 +100,7 @@
 				<prop key="/site/secure/getTopics.html">ajaxController</prop>				
 				<!-- change, but hosted gwt login diff w/ /site/secure/ -->
 				<prop key="/service/upload.html">fileUploadController</prop>
+				<prop key="/service/showFile.html">showFileController</prop>
 
 				<prop key="/site/index.html">splashController</prop>
 				<prop key="/site/index2.html">indexController</prop>

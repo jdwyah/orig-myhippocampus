@@ -140,9 +140,9 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		System.out.println(topic2.toPrettyString());
 		
 		for (Iterator iter = topic2.getOccurences().iterator(); iter.hasNext();) {
-			Occurrence occ = (Occurrence) iter.next();
+			Occurrence occ = (Occurrence) iter.next();			
 			if(occ instanceof URI){
-				horizP.add(new ExternalLink((URI)occ));
+				horizP.add(new ExternalLink(occ));
 			}
 		}
 

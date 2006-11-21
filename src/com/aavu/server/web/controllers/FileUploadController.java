@@ -1,7 +1,11 @@
 package com.aavu.server.web.controllers;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +52,8 @@ public class FileUploadController extends SimpleFormController {
 	 * Return is a simple string with the key that we'll then save as the URI of 
 	 * an S3File Occurence for the Topic in UploadWidget. 
 	 * 
-	 * 
+	 * //    		conn.put(BUCKET_NAME, filename, S3.S3Object(filedata),
+	   //   	            {'x-amz-acl': 'public-read', 'Content-Type': content_type})
 	 */
 	@Override
 	protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
@@ -81,6 +86,13 @@ public class FileUploadController extends SimpleFormController {
     		
     		log.debug("ready to put bucket |"+awsConnection.getDefaultBucket()+"|");
     		log.debug("ready to put at "+key);
+    		log.debug("putting content-type: "+bean.getFile().getContentType());
+    		    		    		    		
+    		Map<String, List<String>> metaMap = new HashMap<String, List<String>>();
+    		List<String> type = new ArrayList<String>();
+    		type.add(bean.getFile().getContentType());
+    		metaMap.put("content-type", type);
+    		s3object.metadata = metaMap;
     		
     		Response awsResp = awsConnection.put(awsConnection.getDefaultBucket(), key, s3object, null);
     		if(awsResp.connection.getResponseCode() != HttpURLConnection.HTTP_OK){

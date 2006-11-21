@@ -54,6 +54,7 @@ public class UploadBoard extends Composite {
 		initWidget(mainPanel);
 	}
 	public void addS3File(S3File file){
+		
 		mainPanel.add(new Label(file.getTitle()));
 	}
 }

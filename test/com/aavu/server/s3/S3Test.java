@@ -31,10 +31,10 @@ public class S3Test extends TestCase {
     static final int UnspecifiedMaxKeys = -1;
 
     public void testHippoStuff() throws MalformedURLException, IOException{
-        
+        String BUCKET = "myhippocampus";
         AWSAuthConnection conn = new AWSAuthConnection(awsAccessKeyId, awsSecretAccessKey);
         														  
-        ListBucketResponse listBucketResponse1 = conn.listBucket("myhippocampus", null, null, null, null);
+        ListBucketResponse listBucketResponse1 = conn.listBucket(BUCKET, null, null, null, null);
         System.out.println("list "+listBucketResponse1.entries.size());
         for (Iterator iter = listBucketResponse1.entries.iterator(); iter.hasNext();) {
         	ListEntry element = (ListEntry) iter.next();
@@ -42,11 +42,27 @@ public class S3Test extends TestCase {
         }
         System.out.println("response: "+listBucketResponse1.connection.getResponseCode());
         
-        listBucketResponse1 = conn.listBucket("myhippocampus", "test/218/",null,null,null);
+        listBucketResponse1 = conn.listBucket(BUCKET, "test/218/",null,null,null);
         System.out.println("list "+listBucketResponse1.entries.size());
         for (Iterator iter = listBucketResponse1.entries.iterator(); iter.hasNext();) {
         	ListEntry element = (ListEntry) iter.next();
         	System.out.println("element "+element.key);
+        	System.out.println("ETAG "+element.eTag);
+        	System.out.println("Storage "+element.storageClass);
+        	
+        	GetResponse res = conn.get(BUCKET, element.key,null);
+        	Map meta = res.object.metadata;
+        	for (Iterator iterator = meta.keySet().iterator(); iterator.hasNext();) {
+				String mkey = (String) iterator.next();
+				System.out.println("KEY "+mkey);
+				List values = (List) meta.get(mkey);
+				for (Iterator iterator2 = values.iterator(); iterator2.hasNext();) {
+					String val = (String) iterator2.next();
+					System.out.println("val: "+val);
+				}
+				
+			}
+        	System.out.println("Obj: "+res.object);
         }
         
     }

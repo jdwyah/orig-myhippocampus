@@ -1,5 +1,8 @@
 package com.aavu.client.widget;
 
+import com.aavu.client.HippoTest;
+import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.URI;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.google.gwt.user.client.DOM;
@@ -38,14 +41,34 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		setStyleName("gwt-Hyperlink");
 	}
 
-	public ExternalLink(URI occ) {
-		this();		
+	public void init(URI occ) {
+			
 		setText(occ.getTitle());
 		setTarget(occ.getUri());
 
 		addMouseListener(new TooltipListener(0,0,occ.getUri()+"<BR>"+occ.getData()));
 	}
+	public void init(S3File file){
+		init((URI) file);	
+		String link = HippoTest.realModuleBase+HippoTest.FILE_PATH+urlEncode(file.getUri());
+		System.out.println("EXTERNAL LINK FOR S3 "+link);
+		setTarget(link);		
+	}
+	public ExternalLink(Occurrence occ) {
+		this();
+		if(occ instanceof S3File){
+			init((S3File)occ);
+		}else if(occ instanceof URI){
+			init((URI)occ);
+		}else{
+			throw new UnsupportedOperationException();
+		}
+	}
 
+	private static native String urlEncode( String str )
+    /*-{
+        return escape( str );
+    }-*/; 
 
 
 
