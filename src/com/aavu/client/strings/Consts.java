@@ -47,6 +47,8 @@ public interface Consts extends Constants {
 	String upload_complete();
 	String upload_submit();
 	String upload_select_file();
+	String files();
+	String upload_add();
 		
 	
 }

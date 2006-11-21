@@ -56,6 +56,10 @@
 				<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
 			</subclass>
 			
+			<subclass name="S3File" discriminator-value="file">
+				<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+			</subclass>
+			
 			<!-- could have local HD links too.. -->
 			
 		</subclass>

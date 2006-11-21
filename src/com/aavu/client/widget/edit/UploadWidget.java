@@ -2,6 +2,7 @@ package com.aavu.client.widget.edit;
 
 import org.gwtwidgets.client.ui.ProgressBar;
 
+import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Timer;
@@ -23,17 +24,20 @@ public class UploadWidget extends Composite {
 
 	private ProgressBar progressBar;
 	private Manager manager;
-	private FileUpload upload; 
+	private FileUpload upload;
+	private Topic topic; 
 
 	/**
 	 * corresponds to FileUploadBean.java must have the same fields.
 	 * 
 	 * @param manager
+	 * @param board 
 	 * @param topic
 	 * @param path
 	 */
-	public UploadWidget(final Manager manager,Topic topic,String path){
+	public UploadWidget(final Manager manager,Topic _topic,final UploadBoard board, String path){
 		this.manager = manager;
+		this.topic = _topic;
 		// Create a FormPanel and point it at a service.
 		final FormPanel form = new FormPanel();
 		form.setAction(path);
@@ -44,7 +48,7 @@ public class UploadWidget extends Composite {
 		form.setMethod(FormPanel.METHOD_POST);
 
 		// Create a panel to hold all of the form widgets.
-		VerticalPanel panel = new VerticalPanel();
+		HorizontalPanel panel = new HorizontalPanel();
 		form.setWidget(panel);
 
 		//Create a TextBox, giving it a name so that it will be submitted.
@@ -55,11 +59,9 @@ public class UploadWidget extends Composite {
 		upload = new FileUpload();
 		upload.setName("file");
 		panel.add(upload);
-
-		HorizontalPanel uploads = new HorizontalPanel();
 		
 		// Add a 'submit' button.
-		uploads.add(new Button(manager.myConstants.upload_submit(), new ClickListener() {
+		panel.add(new Button(manager.myConstants.upload_submit(), new ClickListener() {
 			public void onClick(Widget sender) {
 				form.submit();
 			}
@@ -68,9 +70,8 @@ public class UploadWidget extends Composite {
 		progressBar = new ProgressBar(20
 				,ProgressBar.SHOW_TEXT);
 		initProgressBar();
-		uploads.add(progressBar);
-		
-		panel.add(uploads);
+		panel.add(progressBar);
+				
 
 		// Add an event handler to the form.
 		form.addFormHandler(new FormHandler() {
@@ -81,8 +82,21 @@ public class UploadWidget extends Composite {
 				// further explanation).
 				progressBar.setProgress(100);
 				progressBar.setText(manager.myConstants.upload_complete());
-				Window.alert(event.getResults());
 				
+				
+				
+				if(event.getResults().startsWith("Error")){				
+					Window.alert(event.getResults());
+					return;
+				}else{
+					String uri = event.getResults();
+					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),uri,null);
+					topic.getOccurences().add(fileObj);
+					board.addS3File(fileObj);
+				}
+				
+				//make it disappear
+				//
 				Timer t = new Timer() {
 					public void run() {
 						initProgressBar();					

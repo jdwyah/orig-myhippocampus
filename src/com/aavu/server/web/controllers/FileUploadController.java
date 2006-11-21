@@ -23,7 +23,14 @@ import com.aavu.server.web.domain.FileUploadBean;
 
 public class FileUploadController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(FileUploadController.class);
-	private static final Integer MAX_RES = 10;
+
+	/**
+	 * This string will be parsed in UploadWidget.java to see if there's been an error,
+	 * otherwise it will assume the string is the filename so we need to make sure to begin
+	 * the return with Error if there's been a problem.
+	 * TODO make sure we always do
+	 */
+	private static final String ERR_STR = "Error:";
 	
 	private UserService userService;
 	private AWSAuthConnection awsConnection; 
@@ -37,6 +44,12 @@ public class FileUploadController extends SimpleFormController {
 		this.userService = userService;
 	}
 
+	/**
+	 * Return is a simple string with the key that we'll then save as the URI of 
+	 * an S3File Occurence for the Topic in UploadWidget. 
+	 * 
+	 * 
+	 */
 	@Override
 	protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
 		
@@ -55,6 +68,7 @@ public class FileUploadController extends SimpleFormController {
         if (file == null) {
              // hmm, that's strange, the user did not upload anything
         	log.warn("Uploaded null");
+        	return new ModelAndView(getSuccessView(),"string",ERR_STR+" Null Upload");
         }else{
         	log.debug("Uploaded ok");
 	
@@ -71,7 +85,7 @@ public class FileUploadController extends SimpleFormController {
     		Response awsResp = awsConnection.put(awsConnection.getDefaultBucket(), key, s3object, null);
     		if(awsResp.connection.getResponseCode() != HttpURLConnection.HTTP_OK){
     			log.error("File Upload failure "+awsResp);
-    			throw new HippoInfrastructureException("File Upload failure "+awsResp);
+    			throw new HippoInfrastructureException(ERR_STR+" File Upload failure "+awsResp);
     		}
     		
     		//TODO remove this check
@@ -81,11 +95,10 @@ public class FileUploadController extends SimpleFormController {
     			ListEntry element = (ListEntry) iter.next();
 				log.debug("f: "+element.key+" "+element.size);
 			}
-    		
+
+    		return new ModelAndView(getSuccessView(),"string",key);    		
         }
 
-		return new ModelAndView(getSuccessView(),"string","Success");
-		
 	}
 
 

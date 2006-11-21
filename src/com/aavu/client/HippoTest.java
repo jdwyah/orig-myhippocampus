@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class HippoTest implements EntryPoint, HistoryListener {
 
 	public static final String EMPTY = "-1";
+	public static final String UPLOAD_PATH = "service/upload.html";//"site/secure/upload.html";
 	
 	private TagOrganizerView tagView;
 	private BrowseView browseView;
