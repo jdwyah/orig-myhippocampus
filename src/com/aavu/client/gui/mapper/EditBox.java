@@ -9,11 +9,13 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 
 public class EditBox extends Composite implements FocusListener, KeyboardListener, ChangeListener {
 
@@ -46,7 +48,8 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 		
 		
 				
-		mainPanel = new HorizontalPanel();
+		mainPanel = new HorizontalPanel();			
+		mainPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		mainPanel.setStyleName("H-MapperBox");
 		
 		childSpur = new Image("img/line.gif");
@@ -64,7 +67,7 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 			myBox.addStyleName("H-MapperTextBox-Right");
 			mainPanel.add(parentSpur);
 			mainPanel.add(myBox);
-			mainPanel.add(childSpur);			
+			mainPanel.add(childSpur);						
 		}else{			
 			mainPanel.add(childSpur);
 			mainPanel.add(myBox);
