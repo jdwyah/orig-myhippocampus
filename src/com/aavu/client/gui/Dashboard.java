@@ -79,7 +79,8 @@ public class Dashboard extends SimplePanel {
 		mainPanel.add(addNewButton);
 		mainPanel.add(tagButton);		
 		mainPanel.add(timeLine);
-		mainPanel.add(addDeliciousTags);
+		mainPanel.add(addDeliciousTags);		
+		mainPanel.add(mapper);
 		
 		//mainPanel.add(facebookB);
 				

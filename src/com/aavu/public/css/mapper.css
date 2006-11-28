@@ -1,68 +1,28 @@
-.gwt-TextBox {
-	height: 18px;
-	border: 0;
-	background-color: #333333;
-	font-face: Arial;
-	color: #EEEEEE;	
-	font-size: 10px;
+.H-Mapper {
+	background: #FFFFFF;
+}
+.H-MapperBox {
+}
+.H-MapperSpur {
+	vertical-align: middle;
 }
 
-.ltextboxnofocus {
+.H-MapperTextBox {
 	font-face: Arial;
-	color: #CCCCCC;
-	border: 1px #555555 ridge;
+	color: #FF9F6F;
+	border: 1px #1FF8F8 ridge;
 	font-size: 12px;
-	z-index: 3;
-	background-color: #222222;
-}
-
-.ltextboxfocus {
-	font-face: Arial;
-	color: #FFFFFF;
-	border: 1px #555555 ridge;
-	font-size: 12px;	
-	background-color: #333333;
-	font-size: 10px;
+	background-color: #DCFFFF;
 	z-index: 3;
 }
 
-.rtextboxnofocus {
-	font-face: Arial;
-	color: #CCCCCC;
-	border: 1px #555555 ridge;
-	font-size: 12px;
-	text-align: right;
-	z-index: 3;
-	background-color: #222222;
+
+.H-MapperTextBox-Right {
+	text-align: right;		
 	spacing:2px;
 }
-
-.rtextboxfocus {
-	font-face: Arial;
-	color: #FFFFFF;
-	border: 1px #555555 ridge;
-	font-size: 12px;	
-	background-color: #333333;
-	font-size: 10px;
-	z-index: 3;
-}
-
-.lroottextboxnofocus {
-	font-face: Arial;
-	color: #333333;
-	border: 0;
-	font-size: 10px;
-	z-index: 1;
-	text-align: center;
-	background-color: #FFCC33;
-	}
-
-.rroottextboxnofocus {
-	font-face: Arial;
-	color: #333333;
-	border: 0;
-	font-size: 10px;
-	z-index: 3;
-	text-align: center;
-	background-color: #FFCC33;
+.H-MapperTextBox-Focus {
+	color: #E6BEFF;
+	border: 1px #FF46E8 ridge;
+	background-color: #FFFABC;
 }

@@ -49,6 +49,8 @@ public interface Consts extends Constants {
 	String upload_select_file();
 	String files();
 	String upload_add();
+	String mapperTitle();
+	String mapperHelpText();
 		
 	
 }
