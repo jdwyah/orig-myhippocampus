@@ -5,8 +5,11 @@ import java.util.Set;
 import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -27,7 +30,9 @@ public class TopicEditWidget extends Composite {
 	
 	private UploadBoard uploadBoard;
 	
-	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, Manager manager, Topic topic){
+	private MapperWidget mapper;
+	
+	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, final Manager manager, Topic topic){
 		this.topic = topic;
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 		
@@ -41,8 +46,16 @@ public class TopicEditWidget extends Composite {
 		seeAlsoBoard = new SeeAlsoBoard(manager);
 		uploadBoard = new UploadBoard(manager,topic);
 		
-		setupTopic();
+		mapper = new MapperWidget(manager,600,400);
+		mapper.hide();
+		Button mapB = new Button(manager.myConstants.mapperAddMap());
+		mapB.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {				
+				mapper.setPopupPosition(200, 200);
+				mapper.show();
+			}});
 		
+		setupTopic();		
 		VerticalPanel panel = new VerticalPanel();
 		
 		panel.add(new HeaderLabel(manager.myConstants.title()));
@@ -52,6 +65,7 @@ public class TopicEditWidget extends Composite {
 		panel.add(tagBoard);		
 		panel.add(seeAlsoBoard);
 		panel.add(uploadBoard);
+		panel.add(mapB);
 				
 		panel.add(textArea);
 	

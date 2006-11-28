@@ -68,19 +68,10 @@ public class Dashboard extends SimplePanel {
 			}});
 		
 		
-		Button mapper = new Button("Mapper");
-		mapper.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				MapperWidget widg = new MapperWidget(manager); 
-				widg.setPopupPosition(200, 200);
-				widg.show();
-			}});
-		
 		mainPanel.add(addNewButton);
 		mainPanel.add(tagButton);		
 		mainPanel.add(timeLine);
 		mainPanel.add(addDeliciousTags);		
-		mainPanel.add(mapper);
 		
 		//mainPanel.add(facebookB);
 				

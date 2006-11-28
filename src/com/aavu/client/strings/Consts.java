@@ -51,6 +51,7 @@ public interface Consts extends Constants {
 	String upload_add();
 	String mapperTitle();
 	String mapperHelpText();
+	String mapperAddMap();
 		
 	
 }

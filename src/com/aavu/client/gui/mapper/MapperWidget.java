@@ -22,17 +22,17 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	private Manager manager;
 	private AbsolutePanel mainPanel;
 	private TopicMap map; 	
-	private int width = 800;
+	private int width = 0;
 	private RootBox rootBox;
 	
 	
-	public MapperWidget(Manager _manager) {		
+	public MapperWidget(Manager _manager,int width, int height) {		
 		super(_manager.myConstants.mapperTitle());
 		this.manager = _manager;		
-
+		this.width = width;
+		
 		mainPanel = new AbsolutePanel();		
-		mainPanel.setPixelSize(width, 1000);
-
+		mainPanel.setPixelSize(width, height);
 				
 		map = testMap();
 		map.addChangeListener(this);
