@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.aavu.client.domain.mapper">
+
+	<class name="Mapper" table="Mapper">
+		<meta attribute="generated-class">com.aavu.client.domain.mapper.generated.AbstractMapper</meta>
+		<id name="id" type="long" column="map_id">
+			<generator class="native"></generator>
+		</id>
+
+		<many-to-one name="topic" class="com.aavu.client.domain.Topic"></many-to-one>
+
+		<set name="leftSide">
+			<key column="map_id" />
+			<one-to-many class="com.aavu.client.domain.mapper.MapElement" />
+		</set>
+		
+		<set name="rightSide">
+			<key column="map_id" />
+			<one-to-many class="com.aavu.client.domain.mapper.MapElement" />
+		</set>
+		
+	</class>
+
+	<class name="MapElement" table="MapElements">
+		<meta attribute="generated-class">com.aavu.client.domain.mapper.generated.AbstractMapElement</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<id name="id" type="long" column="mapelement_id">
+			<generator class="native"></generator>
+		</id>
+			
+		<property name="title" type="string" column="title">
+			<meta attribute="use-in-equals">true</meta>		
+		</property>	
+		
+		<!-- Nullable -->	
+		<many-to-one name="topic" class="com.aavu.client.domain.Topic" not-null="false"></many-to-one>
+
+		<property name="lft" type="int" column="lft">
+			<meta attribute="use-in-equals">true</meta>		
+		</property>	
+		
+		<property name="rgt" type="int" column="rgt">
+			<meta attribute="use-in-equals">true</meta>		
+		</property>	
+			
+	
+	</class>
+
+</hibernate-mapping>

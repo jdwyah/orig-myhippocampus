@@ -6,22 +6,22 @@ import java.util.List;
 
 import com.aavu.client.gui.mapper.EditBox;
 
-public class MapNode {
+public class NavigableMindNode {
 
-	private MapNode parent;
+	private NavigableMindNode parent;
 	private List children = new ArrayList();
 	
 	private String data;
 	private int width = 0;
 	private transient EditBox box;
 	
-	public MapNode(String data) {
+	public NavigableMindNode(String data) {
 		super();		
 		this.data = data;
 		
 	}
 
-	public void addChild(MapNode node){
+	public void addChild(NavigableMindNode node){
 		node.setParent(this);
 		children.add(node);
 	}
@@ -33,7 +33,7 @@ public class MapNode {
 		else {
 			int rtn = 0;
 			for (Iterator iter = children.iterator(); iter.hasNext();) {
-				MapNode child = (MapNode) iter.next();
+				NavigableMindNode child = (NavigableMindNode) iter.next();
 				rtn += child.getWidthOfTree();
 			}
 			width = rtn;
@@ -50,11 +50,11 @@ public class MapNode {
 		this.data = data;
 	}
 
-	public MapNode getParent() {
+	public NavigableMindNode getParent() {
 		return parent;
 	}
 
-	public void setParent(MapNode parent) {
+	public void setParent(NavigableMindNode parent) {
 		this.parent = parent;
 	}
 
@@ -67,17 +67,15 @@ public class MapNode {
 	}
 	
 	public String toString(){
-		System.out.println("blank call");
 		StringBuffer sb = new StringBuffer();
 		return toString(sb,"");
 	}
 	public String toString(StringBuffer sb,String space){
-		System.out.println("sb call "+getData());
 		sb.append(space);
 		sb.append(getData());
 		sb.append("\n");
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
-			MapNode child = (MapNode) iter.next();
+			NavigableMindNode child = (NavigableMindNode) iter.next();
 			child.toString(sb, space+"    ");
 		}		
 		return sb.toString();

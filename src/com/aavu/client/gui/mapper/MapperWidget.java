@@ -4,9 +4,9 @@ package com.aavu.client.gui.mapper;
 
 import java.util.Iterator;
 
-import com.aavu.client.domain.mapper.MapNode;
-import com.aavu.client.domain.mapper.RootNode;
-import com.aavu.client.domain.mapper.TopicMap;
+import com.aavu.client.domain.mapper.NavigableMindNode;
+import com.aavu.client.domain.mapper.NavigableRootNode;
+import com.aavu.client.domain.mapper.NavigableMindTree;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
@@ -21,7 +21,7 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	private static final int PUSHY = 30;
 	private Manager manager;
 	private AbsolutePanel mainPanel;
-	private TopicMap map; 	
+	private NavigableMindTree map; 	
 	private int width = 0;
 	private RootBox rootBox;
 	
@@ -46,10 +46,10 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	    setContentPanel(totalPanel);
 	}
 	
-	private void initMap(TopicMap map, int width){
+	private void initMap(NavigableMindTree map, int width){
 		
 		int center = width/2;
-		RootNode root = map.getRoot();
+		NavigableRootNode root = map.getRoot();
 		
 		System.out.println("Root at "+center+" "+center);
 		
@@ -59,7 +59,7 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 		drawMap(root,center);		
 		
 	}
-	private void drawMap(RootNode root,int center){
+	private void drawMap(NavigableRootNode root,int center){
 		int leftWidth = root.getLeft().getWidthOfTree() - 1;
 		int rigthWidth = root.getRight().getWidthOfTree() - 1;
 		
@@ -74,14 +74,14 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	}
 	
 
-	private void drawLeft(EditBox left, MapNode node, AbsolutePanel panel, int i, int startLeft) {
+	private void drawLeft(EditBox left, NavigableMindNode node, AbsolutePanel panel, int i, int startLeft) {
 		drawChildren(left, node, panel, true, i, startLeft);
 	}
-	private void drawRight(EditBox right, MapNode node, AbsolutePanel panel, int i, int startRight) {
+	private void drawRight(EditBox right, NavigableMindNode node, AbsolutePanel panel, int i, int startRight) {
 		drawChildren(right, node, panel, false, i, startRight);
 	}
 
-	private void drawChildren(EditBox curBox,MapNode node,AbsolutePanel panel,boolean onLeft, int curIndex, int yBase) {
+	private void drawChildren(EditBox curBox,NavigableMindNode node,AbsolutePanel panel,boolean onLeft, int curIndex, int yBase) {
 		System.out.println("-----");
 		System.out.println(node.getData()+" curIdx "+curIndex+" base "+yBase+" ");
 		
@@ -95,7 +95,7 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 		
 		int idx = 0;
 		for (Iterator iter = node.getChildren().iterator(); iter.hasNext();) {
-			MapNode child = (MapNode) iter.next();
+			NavigableMindNode child = (NavigableMindNode) iter.next();
 			
 			//Calculate Y location of the composite
 			//
@@ -178,11 +178,11 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 		//return Integer.parseInt(wid.substring(0,wid.length()-2));
 	}
 
-	private TopicMap testMap(){
-		RootNode root = new RootNode("root");
+	private NavigableMindTree testMap(){
+		NavigableRootNode root = new NavigableRootNode("root");
 		
-		MapNode left = new MapNode("dummy");
-		MapNode right = new MapNode("dummyR");
+		NavigableMindNode left = new NavigableMindNode("dummy");
+		NavigableMindNode right = new NavigableMindNode("dummyR");
 		
 		
 		
@@ -216,7 +216,7 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 		root.setLeft(left);
 		root.setRight(right);
 				
-		TopicMap tm = new TopicMap(root);
+		NavigableMindTree tm = new NavigableMindTree(root);
 		
 		System.out.println(tm);
 		

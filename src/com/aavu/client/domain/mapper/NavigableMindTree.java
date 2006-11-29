@@ -4,56 +4,56 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicMap {
+public class NavigableMindTree {
 
-	private RootNode root;
+	private NavigableRootNode root;
 	private ChangeListener listener;
 
-	public TopicMap(RootNode root) {
+	public NavigableMindTree(NavigableRootNode root) {
 		super();
 		this.root = root;
 	}
 
-	public RootNode getRoot() {
+	public NavigableRootNode getRoot() {
 		return root;
 	}
 
-	public void setRoot(RootNode root) {
+	public void setRoot(NavigableRootNode root) {
 		this.root = root;
 	}
 	
 	public String toString(){
 		StringBuffer sb = new StringBuffer(root.getData());
-		sb.append("LEFT: "+root.getLeft());
+		sb.append("\nLEFT: "+root.getLeft());
 		sb.append("RIGHT: "+root.getRight());
 		return sb.toString();
 	}
 
-	public void addChild(RootNode node) {
+	public void addChild(NavigableRootNode node) {
 		System.out.println("ROOT ADD");
 		if(node.getLeft().getChildren().size() < node.getRight().getChildren().size()){
-			node.getLeft().addChild(new MapNode(""));
+			node.getLeft().addChild(new NavigableMindNode(""));
 		}else{
-			node.getRight().addChild(new MapNode(""));
+			node.getRight().addChild(new NavigableMindNode(""));
 		}
 		if(listener != null){
 			listener.onChange(null);
 		}
 	}
-	public void addChild(MapNode node) {
+	public void addChild(NavigableMindNode node) {
 		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.RootNode")){
-			addChild((RootNode)node);
+			addChild((NavigableRootNode)node);
 			return;
 		}
 		System.out.println("REGULAR ADD");
-		node.addChild(new MapNode(""));
+		node.addChild(new NavigableMindNode(""));
 		fireChange();
 	}
-	public void addSibling(MapNode node) {		
+	public void addSibling(NavigableMindNode node) {		
 		addChild(node.getParent());
 	}
 
-	public void delete(MapNode node) {
+	public void delete(NavigableMindNode node) {
 		node.getParent().getChildren().remove(node);
 		fireChange();
 	}

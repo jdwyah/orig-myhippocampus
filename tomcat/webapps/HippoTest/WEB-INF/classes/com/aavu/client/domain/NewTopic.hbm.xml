@@ -19,10 +19,10 @@
 			<meta attribute="field-description">The title of this entry</meta>
 		</property>
 		
-		<property name="latitude" type="int" column="latitude">
+		<property name="latitude" type="int" column="latitude" not-null="true">
 			<meta attribute="field-description">The latitude</meta>
 		</property>
-		<property name="longitude" type="int" column="longitude">
+		<property name="longitude" type="int" column="longitude" not-null="true">
 			<meta attribute="field-description">The longitude</meta>
 		</property>
 

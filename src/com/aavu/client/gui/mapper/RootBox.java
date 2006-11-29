@@ -1,20 +1,20 @@
 package com.aavu.client.gui.mapper;
 
-import com.aavu.client.domain.mapper.RootNode;
-import com.aavu.client.domain.mapper.TopicMap;
+import com.aavu.client.domain.mapper.NavigableRootNode;
+import com.aavu.client.domain.mapper.NavigableMindTree;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Image;
 
 
 public class RootBox extends EditBox {
 
-	private RootNode root;
+	private NavigableRootNode root;
 
 	private Image otherVLine;
 
 	private boolean otherConnAdded;
 	
-	public RootBox(TopicMap map,RootNode root, int centerx, int centery) {
+	public RootBox(NavigableMindTree map,NavigableRootNode root, int centerx, int centery) {
 		super(map,root,centerx,centery,false);
 		this.root = root;	
 		root.getLeft().setBox(this);

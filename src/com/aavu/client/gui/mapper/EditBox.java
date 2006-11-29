@@ -1,8 +1,8 @@
 package com.aavu.client.gui.mapper;
 
-import com.aavu.client.domain.mapper.MapNode;
-import com.aavu.client.domain.mapper.RootNode;
-import com.aavu.client.domain.mapper.TopicMap;
+import com.aavu.client.domain.mapper.NavigableMindNode;
+import com.aavu.client.domain.mapper.NavigableRootNode;
+import com.aavu.client.domain.mapper.NavigableMindTree;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -26,9 +26,9 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 	
 	private int y;
 	private int x;
-	private MapNode node;
+	private NavigableMindNode node;
 	private boolean onLeft;
-	private TopicMap map;	
+	private NavigableMindTree map;	
 	
 	private TextBox myBox;	
 	private Image connectorLine;
@@ -38,7 +38,7 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 	protected Image parentSpur;
 	protected Image childSpur;
 	
-	public EditBox(TopicMap map,boolean onLeft){
+	public EditBox(NavigableMindTree map,boolean onLeft){
 		super();
 		this.map = map;
 		this.onLeft = onLeft;
@@ -78,7 +78,7 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 	}
 	
 
-	public EditBox(TopicMap map,MapNode node, int x, int y, boolean onLeft) {
+	public EditBox(NavigableMindTree map,NavigableMindNode node, int x, int y, boolean onLeft) {
 		this(map,onLeft);		
 		this.y = y;
 		this.x = x;
@@ -113,10 +113,10 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 	public void setY(int y) {
 		this.y = y;
 	}
-	public MapNode getNode() {
+	public NavigableMindNode getNode() {
 		return node;
 	}
-	public void setNode(MapNode node) {
+	public void setNode(NavigableMindNode node) {
 		this.node = node;
 	}
 
@@ -205,13 +205,13 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 			int index = node.getParent().getChildren().indexOf(node);
 			
 			if(index-1 >= 0){			
-				((MapNode)node.getParent().getChildren().get(index-1)).getBox().setFocus(true);
+				((NavigableMindNode)node.getParent().getChildren().get(index-1)).getBox().setFocus(true);
 			}
 		}
 		if(keyCode == KEY_DOWN){
 			int index = node.getParent().getChildren().indexOf(node);
 			if(index+1 < node.getParent().getChildren().size()){
-				((MapNode)node.getParent().getChildren().get(index+1)).getBox().setFocus(true);
+				((NavigableMindNode)node.getParent().getChildren().get(index+1)).getBox().setFocus(true);
 			}
 		}
 	}
@@ -224,9 +224,9 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 
 	private void moveUp(Widget sender) {		
 		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.RootNode")){
-			RootNode root = (RootNode) node;
+			NavigableRootNode root = (NavigableRootNode) node;
 			System.out.println("ROOT UP");
-			((MapNode)root.getLeft().getChildren().get(0)).getBox().setFocus(true);
+			((NavigableMindNode)root.getLeft().getChildren().get(0)).getBox().setFocus(true);
 			return;
 		}
 		node.getParent().getBox().setFocus(true);
@@ -235,19 +235,19 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 
 	private void moveDown(Widget sender) {
 		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.RootNode")){
-			RootNode root = (RootNode) node;
+			NavigableRootNode root = (NavigableRootNode) node;
 			System.out.println("ROOT DOWN");
 			if(root.getRight().getChildren().size() > 0){
-				((MapNode)root.getRight().getChildren().get(1)).getBox().setFocus(true);
+				((NavigableMindNode)root.getRight().getChildren().get(1)).getBox().setFocus(true);
 			}			
 		}
 		else if(node.getChildren().size() > 0){
-			((MapNode)node.getChildren().get(0)).getBox().setFocus(true);
+			((NavigableMindNode)node.getChildren().get(0)).getBox().setFocus(true);
 		}
 	}
 
 
-	public TopicMap getTopicMap() {		
+	public NavigableMindTree getTopicMap() {		
 		return map;
 	}
 

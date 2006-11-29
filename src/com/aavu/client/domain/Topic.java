@@ -28,8 +28,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(((JSONString)value.get("data")).stringValue());
 	}
 
-	public Topic(User user, String title, Date lastUpdated, Date created, boolean publicVisible, Set children, Subject subject,Set parents, Set metas, Set occurences, Set associations) {
-		super(user, title, lastUpdated, created, publicVisible, children, subject, parents, metas, occurences, associations);		
+	public Topic(User user, String title,int latitude, int longitude, Date lastUpdated, Date created, boolean publicVisible, Set children, Subject subject,Set parents, Set metas, Set occurences, Set associations) {
+		super(user, title, latitude, longitude,lastUpdated, created, publicVisible, children, subject, parents, metas, occurences, associations);		
 	}
 
 	public Topic(User u, String title) {

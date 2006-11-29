@@ -1,5 +1,5 @@
 package com.aavu.client.domain.generated;
-// Generated Nov 6, 2006 10:20:40 AM by Hibernate Tools 3.1.0.beta5
+// Generated Nov 29, 2006 10:34:46 AM by Hibernate Tools 3.1.0.beta5
 
 
 import com.aavu.client.domain.User;
@@ -17,10 +17,10 @@ public abstract class AbstractAssociation extends com.aavu.client.domain.Topic i
 
     // Fields    
 
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.Topic>
-	 */
-	private Set members = new HashSet();
+	 /**
+     * @gwt.typeArgs <com.aavu.client.domain.Topic>
+     */
+     private Set members = new HashSet();
 
      // Constructors
 
@@ -28,9 +28,10 @@ public abstract class AbstractAssociation extends com.aavu.client.domain.Topic i
     public AbstractAssociation() {
     }
 
+	
     /** full constructor */
-    public AbstractAssociation(User user, String title, Date lastUpdated, Date created, boolean publicVisible, Set scopes, Subject subject, Set instances, Set types, Set occurences, Set associations, Set members) {
-        super(user, title, lastUpdated, created, publicVisible, scopes, subject, instances, types, occurences, associations);        
+    public AbstractAssociation(User user, String title, int latitude, int longitude, Date lastUpdated, Date created, boolean publicVisible, Set scopes, Subject subject, Set instances, Set types, Set occurences, Set associations, Set members) {
+        super(user, title, latitude, longitude, lastUpdated, created, publicVisible, scopes, subject, instances, types, occurences, associations);        
        this.members = members;
     }
     

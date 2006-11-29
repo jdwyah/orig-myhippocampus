@@ -1,5 +1,5 @@
 package com.aavu.client.domain.generated;
-// Generated Nov 3, 2006 8:10:46 AM by Hibernate Tools 3.1.0.beta5
+// Generated Nov 29, 2006 10:34:46 AM by Hibernate Tools 3.1.0.beta5
 
 
 import com.aavu.client.domain.User;
@@ -23,8 +23,13 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
       * The title of this entry
      */
      private String title;
-     
+     /**
+      * The latitude
+     */
      private int latitude;
+     /**
+      * The longitude
+     */
      private int longitude;
      /**
       * Last updated
@@ -67,10 +72,17 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
     public AbstractTopic() {
     }
 
+	/** minimal constructor */
+    public AbstractTopic(int latitude, int longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
     /** full constructor */
-    public AbstractTopic(User user, String title, Date lastUpdated, Date created, boolean publicVisible, Set scopes, Subject subject, Set instances, Set types, Set occurences, Set associations) {
+    public AbstractTopic(User user, String title, int latitude, int longitude, Date lastUpdated, Date created, boolean publicVisible, Set scopes, Subject subject, Set instances, Set types, Set occurences, Set associations) {
        this.user = user;
        this.title = title;
+       this.latitude = latitude;
+       this.longitude = longitude;
        this.lastUpdated = lastUpdated;
        this.created = created;
        this.publicVisible = publicVisible;
@@ -108,24 +120,27 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
     public void setTitle(String title) {
         this.title = title;
     }
-    
+    /**       
+     *      * The latitude
+     */
     public int getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(int latitude) {
-		this.latitude = latitude;
-	}
-
-	public int getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(int longitude) {
-		this.longitude = longitude;
-	}
-
-	/**       
+        return this.latitude;
+    }
+    
+    public void setLatitude(int latitude) {
+        this.latitude = latitude;
+    }
+    /**       
+     *      * The longitude
+     */
+    public int getLongitude() {
+        return this.longitude;
+    }
+    
+    public void setLongitude(int longitude) {
+        this.longitude = longitude;
+    }
+    /**       
      *      * Last updated
      */
     public Date getLastUpdated() {
@@ -206,7 +221,6 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
 		 AbstractTopic castOther = ( AbstractTopic ) other; 
          
 		 return ( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )
- //&& ( (this.getCreated()==castOther.getCreated()) || ( this.getCreated()!=null && castOther.getCreated()!=null && this.getCreated().equals(castOther.getCreated()) ) )
  && (this.isPublicVisible()==castOther.isPublicVisible());
    }
    
@@ -217,7 +231,9 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
          
          result = 37 * result + ( getTitle() == null ? 0 : this.getTitle().hashCode() );
          
-         //result = 37 * result + ( getCreated() == null ? 0 : this.getCreated().hashCode() );
+         
+         
+         
          result = 37 * result + (this.isPublicVisible()?1:0);
          
          

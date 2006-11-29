@@ -19,8 +19,9 @@
 		<property name="title" type="string" column="title">
 			<meta attribute="use-in-equals">true</meta>		
 		</property>
-		<property name="data" type="string" column="data">
+		<property name="data" type="string">
 			<meta attribute="use-in-equals">true</meta>
+			<column name="data" sql-type="text"></column>
 		</property>
 		
 		<!-- <many-to-one name="topic" class="com.aavu.client.domain.Topic"></many-to-one>-->
