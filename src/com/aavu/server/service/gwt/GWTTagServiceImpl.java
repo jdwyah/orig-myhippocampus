@@ -1,24 +1,18 @@
 package com.aavu.server.service.gwt;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.gwtwidgets.server.rpc.GWTSpringController;
 
-import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagService;
-import com.aavu.client.widget.autocompletion.Completable;
 import com.aavu.server.service.TagService;
 
-public class GWTTagServiceImpl extends GWTSpringController implements GWTTagService {
+public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringController implements GWTTagService {
 
 	private static final Logger log = Logger.getLogger(GWTTagServiceImpl.class);
 

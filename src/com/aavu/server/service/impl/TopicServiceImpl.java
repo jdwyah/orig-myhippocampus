@@ -7,12 +7,14 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
@@ -95,6 +97,9 @@ public class TopicServiceImpl implements TopicService {
 			t.getOccurences().add(link);
 			Topic st = save(t);
 		}
+	}
+	public MindTree getTree(MindTreeOcc occ) {
+		return topicDAO.getTree(occ);
 	}
 
 

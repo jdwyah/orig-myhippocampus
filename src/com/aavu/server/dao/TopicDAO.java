@@ -3,12 +3,14 @@ package com.aavu.server.dao;
 import java.util.List;
 
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 
 public interface TopicDAO {
@@ -38,5 +40,8 @@ public interface TopicDAO {
 	Occurrence save(Occurrence link);
 
 	List<TopicIdentifier> getTopicForOccurrence(long id);
+
+	MindTree getTree(MindTreeOcc occ);
+	MindTree save(MindTree tree);
 
 }

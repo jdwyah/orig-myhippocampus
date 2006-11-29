@@ -3,7 +3,6 @@ package com.aavu.server.service.gwt;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.gwtwidgets.server.rpc.GWTSpringController;
 import org.hibernate.HibernateException;
 
 import com.aavu.client.domain.subjects.Subject;
@@ -12,7 +11,7 @@ import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTSubjectService;
 import com.aavu.server.service.ExternalServicesService;
 
-public class GWTSubjectServiceImpl extends GWTSpringController implements GWTSubjectService {
+public class GWTSubjectServiceImpl extends org.gwtwidgets.server.spring.GWTSpringController implements GWTSubjectService {
 	private static final Logger log = Logger.getLogger(GWTSubjectServiceImpl.class);
 	
 	public ExternalServicesService externalServicesService;

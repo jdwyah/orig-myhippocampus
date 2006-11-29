@@ -20,13 +20,15 @@ public class HTMLAnalyzer extends StandardAnalyzer {
 		if(log.isDebugEnabled()){
 			TokenStream ts = super.tokenStream(name, htmlReaderFromReader(reader));
 			Token t;
-			try {
-				while((t = ts.next()) != null){
-					log.debug("token: "+t);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			if(log.isDebugEnabled()){
+//				try {
+//					while((t = ts.next()) != null){
+//						log.debug("token: "+t);
+//					}
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
 		}
 		
 		return super.tokenStream(name,htmlReaderFromReader(reader));

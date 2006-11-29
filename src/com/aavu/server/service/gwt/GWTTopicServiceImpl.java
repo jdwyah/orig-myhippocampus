@@ -8,23 +8,23 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.gwtwidgets.server.rpc.GWTSpringController;
 import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
-import com.aavu.client.domain.User;
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
 
 
-public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopicService {
+public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringController implements GWTTopicService {
 
 	private static final Logger log = Logger.getLogger(GWTTopicServiceImpl.class);
 
@@ -286,6 +286,13 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 		}
 		return rtn;		
 	}
+	/**
+	 * 1) Over-write dates
+	 * 2) Null out the lazy loaded MindTree for MindTreeOcc's 
+	 * 
+	 * @param in
+	 * @return
+	 */
 	public static Set converterOccurenceSet(Set in){
 		HashSet<Occurrence> rtn = new HashSet<Occurrence>();
 		try{			
@@ -296,6 +303,10 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 				}
 				if(top.getCreated() != null){
 					top.setCreated(new Date(top.getCreated().getTime()));
+				}				
+				if (top instanceof MindTreeOcc) {
+					MindTreeOcc mto = (MindTreeOcc) top;
+					mto.setMindTree(null);
 				}
 				rtn.add(top);
 			}
@@ -428,6 +439,15 @@ public class GWTTopicServiceImpl extends GWTSpringController implements GWTTopic
 	public List search(String searchString) throws HippoException {
 		try{
 			return searchService.search(searchString);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
+	public MindTree getTree(MindTreeOcc occ) throws HippoException {
+		try{
+			return topicService.getTree(occ);
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();

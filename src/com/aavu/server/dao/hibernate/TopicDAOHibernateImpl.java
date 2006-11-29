@@ -27,12 +27,14 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaSeeAlso;
+import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
@@ -471,6 +473,17 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		return rtn;
 
+	}
+
+	public MindTree getTree(MindTreeOcc occ) {		
+		DetachedCriteria crit  = DetachedCriteria.forClass(MindTreeOcc.class)
+		.add(Expression.eq("id", occ.getId()))
+		.setProjection(Projections.property("MindTree"));		
+		return (MindTree) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));		
+	}	
+	public MindTree save(MindTree tree) {
+		getHibernateTemplate().saveOrUpdate(tree);
+		return tree;
 	}
 
 

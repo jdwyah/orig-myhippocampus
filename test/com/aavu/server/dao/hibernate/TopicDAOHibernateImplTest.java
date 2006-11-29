@@ -13,12 +13,14 @@ import com.aavu.client.domain.Association;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaTopic;
+import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
@@ -711,6 +713,36 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 
+	public void testGetTree() throws HippoBusinessException{
+		
+		Topic t = new Topic(u,B);
+		t = topicDAO.save(t);
+		
+		MindTreeOcc occ = new MindTreeOcc(t);		
+		MindTree tree = occ.getMindTree();
+		
+		//save tree explicitly
+		topicDAO.save(tree);
+		
+//		//save occ explicitly?
+//		topicDAO.save(occ);		
+		
+		t.getOccurences().add(occ);
+		
+		Topic saved = topicDAO.save(t);
+		
+		assertEquals(1, saved.getOccurences().size());
+		
+		MindTreeOcc socc = (MindTreeOcc) saved.getOccurences().iterator().next();
+		
+		MindTree savedTree = topicDAO.getTree(socc);
+				
+		assertNotNull(savedTree);
+		
+	}
+
+
+	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
