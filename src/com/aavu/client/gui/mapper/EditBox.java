@@ -222,8 +222,9 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 	}
 
 
+	//TODO GWT.getTypeName() why can't we polymorph this?
 	private void moveUp(Widget sender) {		
-		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.RootNode")){
+		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.NavigableRootNode")){
 			NavigableRootNode root = (NavigableRootNode) node;
 			System.out.println("ROOT UP");
 			((NavigableMindNode)root.getLeft().getChildren().get(0)).getBox().setFocus(true);
@@ -232,9 +233,9 @@ public class EditBox extends Composite implements FocusListener, KeyboardListene
 		node.getParent().getBox().setFocus(true);
 	}
 
-
+	//TODO GWT.getTypeName() why can't we polymorph this?
 	private void moveDown(Widget sender) {
-		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.RootNode")){
+		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.NavigableRootNode")){
 			NavigableRootNode root = (NavigableRootNode) node;
 			System.out.println("ROOT DOWN");
 			if(root.getRight().getChildren().size() > 0){

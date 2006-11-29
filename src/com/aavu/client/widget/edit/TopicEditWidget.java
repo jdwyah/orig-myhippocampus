@@ -29,8 +29,7 @@ public class TopicEditWidget extends Composite {
 	private SeeAlsoBoard seeAlsoBoard;
 	
 	private UploadBoard uploadBoard;
-	
-	private MapperWidget mapper;
+	private MindMapBoard mindMapBoard;
 	
 	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, final Manager manager, Topic topic){
 		this.topic = topic;
@@ -46,14 +45,8 @@ public class TopicEditWidget extends Composite {
 		seeAlsoBoard = new SeeAlsoBoard(manager);
 		uploadBoard = new UploadBoard(manager,topic);
 		
-		mapper = new MapperWidget(manager,600,400);
-		mapper.hide();
-		Button mapB = new Button(manager.myConstants.mapperAddMap());
-		mapB.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {				
-				mapper.setPopupPosition(200, 200);
-				mapper.show();
-			}});
+		mindMapBoard = new MindMapBoard(manager,topic,this);
+		
 		
 		setupTopic();		
 		VerticalPanel panel = new VerticalPanel();
@@ -65,7 +58,7 @@ public class TopicEditWidget extends Composite {
 		panel.add(tagBoard);		
 		panel.add(seeAlsoBoard);
 		panel.add(uploadBoard);
-		panel.add(mapB);
+		panel.add(mindMapBoard);
 				
 		panel.add(textArea);
 	

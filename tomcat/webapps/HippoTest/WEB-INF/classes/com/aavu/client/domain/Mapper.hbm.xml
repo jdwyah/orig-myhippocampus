@@ -2,8 +2,8 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.aavu.client.domain.mapper">
 
-	<class name="Mapper" table="Mapper">
-		<meta attribute="generated-class">com.aavu.client.domain.mapper.generated.AbstractMapper</meta>
+	<class name="MindTree" table="mind_tree">
+		<meta attribute="generated-class">com.aavu.client.domain.mapper.generated.AbstractMindTree</meta>
 		<id name="id" type="long" column="map_id">
 			<generator class="native"></generator>
 		</id>
@@ -11,22 +11,22 @@
 		<many-to-one name="topic" class="com.aavu.client.domain.Topic"></many-to-one>
 
 		<set name="leftSide">
-			<key column="map_id" />
-			<one-to-many class="com.aavu.client.domain.mapper.MapElement" />
+			<key column="left_map_id" />
+			<one-to-many class="com.aavu.client.domain.mapper.MindTreeElement" />
 		</set>
 		
 		<set name="rightSide">
-			<key column="map_id" />
-			<one-to-many class="com.aavu.client.domain.mapper.MapElement" />
+			<key column="right_map_id" />
+			<one-to-many class="com.aavu.client.domain.mapper.MindTreeElement" />
 		</set>
 		
 	</class>
 
-	<class name="MapElement" table="MapElements">
-		<meta attribute="generated-class">com.aavu.client.domain.mapper.generated.AbstractMapElement</meta>
+	<class name="MindTreeElement" table="mind_tree_elements">
+		<meta attribute="generated-class">com.aavu.client.domain.mapper.generated.AbstractMindTreeElement</meta>
 		<meta attribute="scope-class">public abstract</meta>
 
-		<id name="id" type="long" column="mapelement_id">
+		<id name="id" type="long" column="tree_element_id">
 			<generator class="native"></generator>
 		</id>
 			

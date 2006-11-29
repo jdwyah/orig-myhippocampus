@@ -48,6 +48,12 @@
 		</subclass>
 
 		<!-- Has a DB property! -->
+		<subclass name="MindTreeOcc" discriminator-value="mindtree">
+			<meta attribute="generated-class" inherit="false">AbstractMindTreeOccurence</meta>
+			<many-to-one name="MindTree" class="com.aavu.client.domain.mapper.MindTree"></many-to-one>			
+		</subclass>
+
+		<!-- Has a DB property! -->
 		<subclass name="URI" discriminator-value="uri">
 			<meta attribute="generated-class" inherit="false">AbstractURI</meta>
 		

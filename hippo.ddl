@@ -27,6 +27,26 @@
         drop 
         foreign key FKAF560A69978CE7C6;
 
+    alter table mind_tree 
+        drop 
+        foreign key FK2781EB6B4E230C15;
+
+    alter table mind_tree_elements 
+        drop 
+        foreign key FK440EAF4B1484FB6A;
+
+    alter table mind_tree_elements 
+        drop 
+        foreign key FK440EAF4BD40E47B5;
+
+    alter table mind_tree_elements 
+        drop 
+        foreign key FK440EAF4B4E230C15;
+
+    alter table occurrences 
+        drop 
+        foreign key FK2EC250C2B830444;
+
     alter table occurrences 
         drop 
         foreign key FK2EC250C2BFBBD543;
@@ -71,6 +91,10 @@
 
     drop table if exists member_topics;
 
+    drop table if exists mind_tree;
+
+    drop table if exists mind_tree_elements;
+
     drop table if exists occurrences;
 
     drop table if exists subjects;
@@ -88,6 +112,8 @@
         discriminator varchar(255) not null,
         user_id bigint,
         title varchar(255),
+        latitude integer not null,
+        longitude integer not null,
         dateUpdated timestamp,
         dateCreated timestamp,
         public_visible bit,
@@ -117,14 +143,32 @@
         primary key (member_topics_id, member_id)
     ) type=InnoDB;
 
+    create table mind_tree (
+        map_id bigint not null auto_increment,
+        topic bigint,
+        primary key (map_id)
+    ) type=InnoDB;
+
+    create table mind_tree_elements (
+        tree_element_id bigint not null auto_increment,
+        title varchar(255),
+        topic bigint,
+        lft integer,
+        rgt integer,
+        left_map_id bigint,
+        right_map_id bigint,
+        primary key (tree_element_id)
+    ) type=InnoDB;
+
     create table occurrences (
         occurrence_id bigint not null auto_increment,
         discriminator varchar(255) not null,
         user_id bigint,
         title varchar(255),
-        data varchar(255),
+        data text,
         dateUpdated timestamp,
         dateCreated timestamp,
+        MindTree bigint,
         uri varchar(255),
         primary key (occurrence_id)
     ) type=InnoDB;
@@ -202,6 +246,36 @@
         add constraint FKAF560A69978CE7C6 
         foreign key (member_id) 
         references Topics (topic_id);
+
+    alter table mind_tree 
+        add index FK2781EB6B4E230C15 (topic), 
+        add constraint FK2781EB6B4E230C15 
+        foreign key (topic) 
+        references Topics (topic_id);
+
+    alter table mind_tree_elements 
+        add index FK440EAF4B1484FB6A (left_map_id), 
+        add constraint FK440EAF4B1484FB6A 
+        foreign key (left_map_id) 
+        references mind_tree (map_id);
+
+    alter table mind_tree_elements 
+        add index FK440EAF4BD40E47B5 (right_map_id), 
+        add constraint FK440EAF4BD40E47B5 
+        foreign key (right_map_id) 
+        references mind_tree (map_id);
+
+    alter table mind_tree_elements 
+        add index FK440EAF4B4E230C15 (topic), 
+        add constraint FK440EAF4B4E230C15 
+        foreign key (topic) 
+        references Topics (topic_id);
+
+    alter table occurrences 
+        add index FK2EC250C2B830444 (MindTree), 
+        add constraint FK2EC250C2B830444 
+        foreign key (MindTree) 
+        references mind_tree (map_id);
 
     alter table occurrences 
         add index FK2EC250C2BFBBD543 (user_id), 

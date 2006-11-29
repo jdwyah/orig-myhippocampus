@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.domain.generated.AbstractTopic;
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.json.client.JSONNumber;
@@ -141,6 +142,28 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			Entry initialEntry = new Entry();
 			getOccurences().add(initialEntry);
 			return initialEntry;
+		}
+		return rtn;
+	}
+
+	/**
+	 * limitted to just 1 for now
+	 * 
+	 * @return
+	 */
+	public MindTreeOcc getMindTree() {
+		MindTreeOcc rtn = null;
+		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+			Occurrence occur = (Occurrence) iter.next();
+			if(occur instanceof MindTreeOcc){
+				rtn = (MindTreeOcc) occur;
+				break;
+			}
+		}
+		if(rtn == null){
+			MindTreeOcc initialTree = new MindTreeOcc(this);
+			getOccurences().add(initialTree);
+			return initialTree;
 		}
 		return rtn;
 	}
@@ -373,5 +396,6 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 		getAssociations().add(cur);
 	}
+
 	
 }

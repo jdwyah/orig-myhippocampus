@@ -40,12 +40,14 @@ public class NavigableMindTree {
 			listener.onChange(null);
 		}
 	}
+	
+	//TODO GWT.getTypeName() why can't we polymorph this?
 	public void addChild(NavigableMindNode node) {
-		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.RootNode")){
+		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.NavigableRootNode")){
 			addChild((NavigableRootNode)node);
 			return;
 		}
-		System.out.println("REGULAR ADD");
+		System.out.println("REGULAR ADD to "+node.getData());
 		node.addChild(new NavigableMindNode(""));
 		fireChange();
 	}

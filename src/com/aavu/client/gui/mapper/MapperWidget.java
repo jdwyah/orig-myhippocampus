@@ -4,6 +4,7 @@ package com.aavu.client.gui.mapper;
 
 import java.util.Iterator;
 
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.mapper.NavigableMindNode;
 import com.aavu.client.domain.mapper.NavigableRootNode;
 import com.aavu.client.domain.mapper.NavigableMindTree;
@@ -23,21 +24,21 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	private AbsolutePanel mainPanel;
 	private NavigableMindTree map; 	
 	private int width = 0;
+	private int height = 0;
 	private RootBox rootBox;
+	
 	
 	
 	public MapperWidget(Manager _manager,int width, int height) {		
 		super(_manager.myConstants.mapperTitle());
 		this.manager = _manager;		
 		this.width = width;
+		this.height = height;
 		
 		mainPanel = new AbsolutePanel();		
 		mainPanel.setPixelSize(width, height);
 				
-		map = testMap();
-		map.addChangeListener(this);
-	    initMap(map, width);
-	    
+	
 	    mainPanel.setStyleName("H-Mapper");
 		
 	    VerticalPanel totalPanel = new VerticalPanel();
@@ -45,26 +46,36 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	    totalPanel.add(mainPanel);
 	    setContentPanel(totalPanel);
 	}
+
+	public void loadTree(MindTree mindTree) {
+		System.out.println("Load Tree: "+mindTree);		
+		map = mindTree.getNavigableMindTree();
+		System.out.println("Map: "+map);
+		map.addChangeListener(this);
+	    initMap(map);	    
+	}	
 	
-	private void initMap(NavigableMindTree map, int width){
+	private void initMap(NavigableMindTree map){
+		mainPanel.clear();
 		
 		int center = width/2;
+		int centerH = height/2;
 		NavigableRootNode root = map.getRoot();
 		
-		System.out.println("Root at "+center+" "+center);
+		System.out.println("Root at "+center+" "+centerH);
 		
-		rootBox = new RootBox(map,root,center,center);		
-		mainPanel.add(rootBox,center,center);		
+		rootBox = new RootBox(map,root,center,centerH);		
+		mainPanel.add(rootBox,center,centerH);		
 		
-		drawMap(root,center);		
+		drawMap(root,centerH);		
 		
 	}
-	private void drawMap(NavigableRootNode root,int center){
+	private void drawMap(NavigableRootNode root,int centerHeight){
 		int leftWidth = root.getLeft().getWidthOfTree() - 1;
 		int rigthWidth = root.getRight().getWidthOfTree() - 1;
 		
-		int startLeft = center - (leftWidth * PUSHY) /2; 		 
-		int startRight = center - (rigthWidth * PUSHY) /2;
+		int startLeft = centerHeight - (leftWidth * PUSHY) /2; 		 
+		int startRight = centerHeight - (rigthWidth * PUSHY) /2;
 		
 		System.out.println("Start "+ startLeft+" width "+leftWidth);
 				
@@ -169,66 +180,12 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 		}
 	}
 
-	private int getWidthForElem(Widget widg) {
-		String wid = DOM.getAttribute(widg.getElement(), "width"); 
-		System.out.println("wid "+wid);
-		
-		return 40;
-		//return Integer.parseInt(wid);
-		//return Integer.parseInt(wid.substring(0,wid.length()-2));
-	}
-
-	private NavigableMindTree testMap(){
-		NavigableRootNode root = new NavigableRootNode("root");
-		
-		NavigableMindNode left = new NavigableMindNode("dummy");
-		NavigableMindNode right = new NavigableMindNode("dummyR");
-		
-		
-		
-//		MapNode r1 = new MapNode("r1");
-//		MapNode r2 = new MapNode("r2");
-//		right.addChild(r1);
-//		right.addChild(r2);
-//		
-//		MapNode l1 = new MapNode("l1");
-//		MapNode l2 = new MapNode("l2");
-//		left.addChild(l1);
-//		left.addChild(l2);
-//		
-//		MapNode l11 = new MapNode("l11");
-//		l1.addChild(l11);
-//		
-//		MapNode l21 = new MapNode("l21");
-//		MapNode l22 = new MapNode("l221");
-//		MapNode l23 = new MapNode("l23");
-//		l2.addChild(l21);
-//		l2.addChild(l22);
-//		l2.addChild(l23);
-//		
-//		MapNode l221 = new MapNode("l221");
-//		MapNode l222 = new MapNode("l222");
-//		MapNode l223 = new MapNode("l223");
-//		l22.addChild(l221);
-//		l22.addChild(l222);
-//		l22.addChild(l223);
-		
-		root.setLeft(left);
-		root.setRight(right);
-				
-		NavigableMindTree tm = new NavigableMindTree(root);
-		
-		System.out.println(tm);
-		
-		return tm;
-	}
-
 	public void onChange(Widget sender) {
 		redraw();
 	}
 
 	private void redraw() {
-		drawMap(map.getRoot(), width/2);		
+		drawMap(map.getRoot(), height/2);		
 	}
-	
+
 }
