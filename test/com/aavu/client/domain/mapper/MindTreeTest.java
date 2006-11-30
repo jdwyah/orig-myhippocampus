@@ -11,6 +11,7 @@ public class MindTreeTest extends TestCase {
 		tree.setFromNavigableTree(testMap());
 		NavigableMindTree navigable = tree.getNavigableMindTree();
 		
+		
 		NavigableMindNode leftR = navigable.getRoot().getLeft();
 		assertEquals(2,leftR.getChildren().size());
 		

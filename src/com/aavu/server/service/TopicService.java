@@ -46,5 +46,7 @@ public interface TopicService {
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 
 	MindTree getTree(MindTreeOcc occ);
+
+	MindTree saveTree(MindTree tree);
 	
 }

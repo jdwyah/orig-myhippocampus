@@ -1,5 +1,6 @@
 package com.aavu.client.widget.edit;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.mapper.MindTree;
@@ -17,13 +18,16 @@ public class MindMapBoard extends Composite {
 	protected static final int MAP_WIDTH = 600;
 	
 	private MapperWidget mapper;
-	private MindTreeOcc tree;
+	private MindTreeOcc treeOcc;
+	private Topic topic;
 
 	public MindMapBoard(final Manager manager, Topic topic, TopicEditWidget widget) {
 
+		this.topic = topic;
+		
 		VerticalPanel mainPanel = new VerticalPanel();
 		
-		tree = topic.getMindTree();
+		treeOcc = topic.getMindTree();
 		
 				
 		Button mapB = new Button(manager.myConstants.mapperAddMap());
@@ -34,14 +38,23 @@ public class MindMapBoard extends Composite {
 					mapper.hide();					
 				}
 
-				if(tree.getMindTree() == null){
-					System.out.println("GO GET SAVED TREE");
+				/*
+				 * We're specifically nulling out the MindTree elements before serialization 
+				 * so we need to fetch & save explicitly 
+				 */
+				if(treeOcc.getMindTree() == null){
+					manager.getTopicCache().getTreeFor(treeOcc,new StdAsyncCallback(manager.myConstants.mapperAsyncGet()){
+						public void onSuccess(Object result) {
+							super.onSuccess(result);
+							MindTree tree = (MindTree) result;
+							treeOcc.setMindTree(tree);
+							loadNShow(treeOcc);
+						}						
+					});
+				}else{
+					loadNShow(treeOcc);
 				}
 				
-				mapper.loadTree(tree.getMindTree());
-				
-				mapper.setPopupPosition(200, 200);
-				mapper.show();
 			}});
 		
 		
@@ -50,4 +63,12 @@ public class MindMapBoard extends Composite {
 		initWidget(mainPanel);
 	}
 
+	
+	private void loadNShow(MindTreeOcc treeOcc2) {
+		mapper.loadTree(topic,treeOcc2);		
+		mapper.setPopupPosition(200, 200);
+		mapper.show();
+	}
+
+	
 }

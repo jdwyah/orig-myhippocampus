@@ -162,7 +162,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		}
 		if(rtn == null){
 			MindTreeOcc initialTree = new MindTreeOcc(this);
-			getOccurences().add(initialTree);
+						
+			//getOccurences().add(initialTree);
+			
 			return initialTree;
 		}
 		return rtn;

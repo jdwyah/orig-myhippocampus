@@ -181,6 +181,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 			panel.add(new Label("Error"));
 			panel.add(new Label(e.getMessage()));
 			
+			RootPanel.get("loading").setVisible(false);
 			RootPanel.get().add(panel);
 			
 		}
@@ -199,6 +200,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 
 		
 		MainMap mainMap = new MainMap(manager);
+		RootPanel.get("loading").setVisible(false);
 		RootPanel.get().add(mainMap);
 		
 				

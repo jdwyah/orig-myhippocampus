@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	
 	
-	private Button editTextButton = new Button("Edit Text");
-	private Button cancelButton = new Button("Cancel");	
-	private Button saveButton = new Button("Save");
+	private Button editTextButton;
+	private Button cancelButton;	
+	private Button saveButton;
 	
 	private TopicWidget topicWidget;
 	private TopicEditWidget topicEditWidget;
@@ -38,6 +38,11 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	public TopicViewAndEditWidget(TopicWindow window, Manager manager) {
 		this.manager = manager;
 		this.window = window;
+		
+		editTextButton = new Button(manager.myConstants.topic_edit());
+		cancelButton = new Button(manager.myConstants.topic_cancel());	
+		saveButton = new Button(manager.myConstants.save());
+		
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		

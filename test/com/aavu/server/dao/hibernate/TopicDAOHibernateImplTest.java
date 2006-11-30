@@ -21,6 +21,7 @@ import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.mapper.MindTree;
+import com.aavu.client.domain.mapper.MindTreeElement;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
@@ -720,6 +721,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		MindTreeOcc occ = new MindTreeOcc(t);		
 		MindTree tree = occ.getMindTree();
+		tree.getRightSide().add(new MindTreeElement("Foo",null,0,3));
+		tree.getRightSide().add(new MindTreeElement("Foo2",null,1,2));
+		tree.getLeftSide().add(new MindTreeElement("FooL",null,0,1));
+		
 		
 		//save tree explicitly
 		topicDAO.save(tree);
@@ -739,6 +744,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 				
 		assertNotNull(savedTree);
 		
+		assertEquals(2, savedTree.getRightSide().size());
+		assertEquals(1, savedTree.getLeftSide().size());
 	}
 
 

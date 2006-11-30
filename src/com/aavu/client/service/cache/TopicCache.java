@@ -8,9 +8,11 @@ import java.util.Map;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -307,6 +309,12 @@ public class TopicCache {
 
 	public void search(String text, StdAsyncCallback callback) {		
 		topicService.search(text, callback);		
+	}
+	public void getTreeFor(MindTreeOcc treeOcc, StdAsyncCallback callback) {
+		topicService.getTree(treeOcc, callback);
+	}
+	public void saveTree(MindTree mindTree, StdAsyncCallback callback) {
+		topicService.saveTree(mindTree, callback);
 	}
 
 

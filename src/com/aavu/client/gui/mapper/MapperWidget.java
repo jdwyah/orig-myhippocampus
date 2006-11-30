@@ -4,6 +4,9 @@ package com.aavu.client.gui.mapper;
 
 import java.util.Iterator;
 
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.MindTreeOcc;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.mapper.NavigableMindNode;
 import com.aavu.client.domain.mapper.NavigableRootNode;
@@ -12,7 +15,9 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,8 +31,8 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	private int width = 0;
 	private int height = 0;
 	private RootBox rootBox;
-	
-	
+	private MindTreeOcc mindTreeOcc;
+	private Topic topic;
 	
 	public MapperWidget(Manager _manager,int width, int height) {		
 		super(_manager.myConstants.mapperTitle());
@@ -36,20 +41,39 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 		this.height = height;
 		
 		mainPanel = new AbsolutePanel();		
-		mainPanel.setPixelSize(width, height);
-				
-	
+		mainPanel.setPixelSize(width, height);				
 	    mainPanel.setStyleName("H-Mapper");
 		
+	    Button saveButton = new Button(_manager.myConstants.save());
+	    saveButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				mindTreeOcc.getMindTree().setFromNavigableTree(map);
+			
+				//TODO extract logic to Topic.java
+				//TODO this manager ref is static otherwise odd IllegalAccessError
+				//http://groups.google.com/group/Google-Web-Toolkit/browse_thread/thread/8c39a4e91805691a/8b1c2dea6755a70f?lnk=gst&q=IllegalAccessError&rnum=1#8b1c2dea6755a70f
+				manager.getTopicCache().saveTree(mindTreeOcc.getMindTree(),new StdAsyncCallback(Manager.myConstants.mapperAsyncSave()){
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+						MindTree res = (MindTree) result;
+						mindTreeOcc.setMindTree(res);
+						topic.getOccurences().add(mindTreeOcc);						
+					}					
+				});
+			}});	    
+	    
 	    VerticalPanel totalPanel = new VerticalPanel();
 	    totalPanel.add(new Label(manager.myConstants.mapperHelpText()));
+	    totalPanel.add(saveButton);
 	    totalPanel.add(mainPanel);
 	    setContentPanel(totalPanel);
 	}
 
-	public void loadTree(MindTree mindTree) {
-		System.out.println("Load Tree: "+mindTree);		
-		map = mindTree.getNavigableMindTree();
+	public void loadTree(Topic topic,MindTreeOcc treeOcc) {
+		this.mindTreeOcc = treeOcc;
+		this.topic = topic;
+		System.out.println("Load Tree: "+treeOcc);		
+		map = treeOcc.getMindTree().getNavigableMindTree();
 		System.out.println("Map: "+map);
 		map.addChangeListener(this);
 	    initMap(map);	    

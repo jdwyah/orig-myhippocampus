@@ -42,4 +42,5 @@ public interface GWTTopicService extends RemoteService {
 	List search(String searchString) throws HippoException;
 	
 	MindTree getTree(MindTreeOcc occ) throws HippoException;
+	MindTree saveTree(MindTree tree) throws HippoException;
 }

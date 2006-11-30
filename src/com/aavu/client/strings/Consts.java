@@ -52,6 +52,11 @@ public interface Consts extends Constants {
 	String mapperTitle();
 	String mapperHelpText();
 	String mapperAddMap();
+	String mapperAsyncGet();
+	String mapperAsyncSave();
+	String save();
+	String topic_edit();	
+	String topic_cancel();
 		
 	
 }

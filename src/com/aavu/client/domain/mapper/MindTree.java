@@ -113,9 +113,14 @@ public class MindTree extends AbstractMindTree implements IsSerializable {
 	}
 
 
-
+	/**
+	 * set from Navigable nodes, ie turn GUI into DB savable MindTreeElements 
+	 *  
+	 * @param tree
+	 */
 	public void setFromNavigableTree(NavigableMindTree tree){		
 		setSide(getLeftSide(),tree.getRoot().getLeft());
+		setSide(getRightSide(), tree.getRoot().getRight());
 	}
 	private void setSide(Set side, NavigableMindNode node){
 

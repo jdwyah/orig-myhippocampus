@@ -15,6 +15,7 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -27,9 +28,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Sidebar extends FocusPanel implements MouseListener {
 	
-	private Manager manager;
-
-	private VertableTabPanel tabPanel;
 	
 	private static final String KEYS = "<span class=\"H-SideBarKey\">";
 	private static final String KEYS_NOELEM = "<span class=\"H-SideBarKey H-SideBarKeyNoElements\">";
@@ -47,7 +45,11 @@ public class Sidebar extends FocusPanel implements MouseListener {
 			return o.toLowerCase().compareTo(o.toLowerCase());
 		}};
 
-		
+	private Manager manager;
+
+	private VertableTabPanel tabPanel;
+				
+	private Timer hideTimer; 
 		
 	public Sidebar(Manager manager){
 		
@@ -62,6 +64,11 @@ public class Sidebar extends FocusPanel implements MouseListener {
 		addStyleName("H-Sidebar");
 		
 		addMouseListener(this);
+		
+		hideTimer = new Timer(){
+			public void run() {				
+				tabPanel.hideDeck();
+			}};
 	}
 
 	public void load(){
@@ -164,11 +171,12 @@ public class Sidebar extends FocusPanel implements MouseListener {
 	
 
 	public void onMouseEnter(Widget sender) {
+		hideTimer.cancel();		
 		tabPanel.showDeck();
 	}
 
-	public void onMouseLeave(Widget sender) {
-		tabPanel.hideDeck();
+	public void onMouseLeave(Widget sender) {	
+		hideTimer.schedule(800);				
 	}
 	
 	public void onMouseDown(Widget sender, int x, int y) {}

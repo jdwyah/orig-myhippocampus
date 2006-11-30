@@ -101,6 +101,9 @@ public class TopicServiceImpl implements TopicService {
 	public MindTree getTree(MindTreeOcc occ) {
 		return topicDAO.getTree(occ);
 	}
+	public MindTree saveTree(MindTree tree) {
+		return topicDAO.save(tree);
+	}
 
 
 	

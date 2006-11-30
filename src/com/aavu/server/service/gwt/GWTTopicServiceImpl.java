@@ -447,12 +447,38 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 	}
 	public MindTree getTree(MindTreeOcc occ) throws HippoException {
 		try{
-			return topicService.getTree(occ);
+			return convertTree(topicService.getTree(occ));
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
 			throw new HippoException(e.getMessage());
 		}
+	}
+	public MindTree saveTree(MindTree tree) throws HippoException {
+		try{
+			return  convertTree(topicService.saveTree(tree));
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
+	private MindTree convertTree(MindTree tree) {
+		tree.setLeftSide(convertSetSimple(tree.getLeftSide()));
+		tree.setRightSide(convertSetSimple(tree.getRightSide()));
+		tree.setTopic(null);
+		return tree;
+	}
+	private Set convertSetSimple(Set in) {
+		HashSet rtn = new HashSet();
+		try{			
+			for (Iterator iter = in.iterator(); iter.hasNext();) {				
+				rtn.add(iter.next());
+			}
+		}catch(LazyInitializationException ex){
+			log.debug("caught lazy ");
+		}
+		return rtn;		
 	}
 
 }
