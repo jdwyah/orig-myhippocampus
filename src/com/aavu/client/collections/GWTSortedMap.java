@@ -45,6 +45,13 @@ public class GWTSortedMap implements Map {
 	}
 
 	/**
+	 * Carefull. This class manages this itself, but if you want to prevent
+	 * a sort you can... 
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+	/**
 	 * Unimplemented. Call keySet() instead
 	 */
 	public Set entrySet() {

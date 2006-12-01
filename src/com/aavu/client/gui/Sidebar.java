@@ -64,11 +64,13 @@ public class Sidebar extends FocusPanel implements MouseListener {
 		addStyleName("H-Sidebar");
 		
 		addMouseListener(this);
+		tabPanel.hideDeck();
 		
 		hideTimer = new Timer(){
 			public void run() {				
 				tabPanel.hideDeck();
 			}};
+		
 	}
 
 	public void load(){
@@ -120,8 +122,15 @@ public class Sidebar extends FocusPanel implements MouseListener {
 		for (Iterator iter = sidebarEntries.keySet().iterator(); iter.hasNext();) {
 			String key = (String) iter.next();
 			
-			Map topics = (Map) sidebarEntries.get(key);
-
+			GWTSortedMap topics = (GWTSortedMap) sidebarEntries.get(key);
+			
+			/*
+			 * NOTE this. We're claiming it's not dirty.
+			 * 
+			 * hmm.. now it doesn't sort case insensitive..
+			 */
+			//topics.setDirty(false);
+			
 			VerticalPanel vp = new VerticalPanel();
 			vp.setVerticalAlignment(VerticalPanel.ALIGN_TOP);
 						
@@ -131,7 +140,7 @@ public class Sidebar extends FocusPanel implements MouseListener {
 				String title = (String) iterator.next();
 				final TopicIdentifier topic = (TopicIdentifier) topics.get(title);
 				
-				vp.add(new TopicLink(topic,13));
+				vp.add(new TopicLink(topic,11));
 				
 				st = KEYS;
 			}

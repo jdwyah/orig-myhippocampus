@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagService;
@@ -133,7 +134,7 @@ public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringCon
 		return (Tag) GWTTopicServiceImpl.convert(t);
 	}
 
-	public TagStat[] getTagStats() {
+	public TagStat[] getTagStats() throws HippoException {
 		try{
 			List<TagStat> stats = tagService.getTagStats();
 			TagStat[] rtn = new TagStat[stats.size()];
@@ -141,7 +142,17 @@ public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringCon
 		}catch(Exception e){
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			return null;
+			throw new HippoException(e);
+		}
+	}
+
+	public Tag makeMeATag(Topic topic) throws HippoException {
+		try{
+			return convert(tagService.makeMeATag(topic));
+		}catch(Exception e){
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e);
 		}
 	}
 

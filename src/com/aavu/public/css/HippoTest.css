@@ -9,10 +9,15 @@ div.loading {
 	position: absolute;
 	top: 45%;
 	left: 45%;
-	border: 2px;
-	border-color: red;
-	color: black;		
+	border: 1px solid #1FF8F8;
+	background-color: #DCFFFF;
+	width: 65px;
+	height: 30px;
+	color: #FF9F6F;		
+	padding: 5px;
 }
+
+
 
 div.definition {
 	width: 350px;

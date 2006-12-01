@@ -475,59 +475,21 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	}
 
-	public MindTree getTree(MindTreeOcc occ) {		
-//		DetachedCriteria crit  = DetachedCriteria.forClass(MindTreeOcc.class)
-//		.add(Expression.eq("id", occ.getId()))
-//		.setProjection(Projections.property("MindTree"));
-		
-//		.setFetchMode("MindTree.leftSide", FetchMode.JOIN)		
-//		.setFetchMode("MindTree.rightSide", FetchMode.JOIN);
 	
-		
+	/**
+	 * Note don't sysout fullocc since it's User is not loaded and that LazyLEx's
+	 * 
+	 */
+	public MindTree getTree(MindTreeOcc occ) {		
+
 		DetachedCriteria crit  = DetachedCriteria.forClass(MindTreeOcc.class)
 		.add(Expression.eq("id", occ.getId()))		
 		.setFetchMode("MindTree", FetchMode.JOIN)		
 		.setFetchMode("MindTree.leftSide", FetchMode.JOIN)		
 		.setFetchMode("MindTree.rightSide", FetchMode.JOIN);
 
-		MindTreeOcc fullocc = (MindTreeOcc) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
-		
-		
-//		
-//		System.out.println("occ "+occ.getId());
-//		
-//		List l = getHibernateTemplate().find(""+
-//				"from MindTreeOcc occ "+		
-//				"join occ.MindTree "+
-//				"join occ.MindTree.leftSide "+
-//				"join occ.MindTree.rightSide "+
-//				"where occ.id is ? "
-//				,occ.getId());
-//		
-//		System.out.println("l: "+l);
-//		for (Iterator iter = l.iterator(); iter.hasNext();) {
-//			Object o = (Object) iter.next();
-//			System.out.println("o "+o);
-//		}
-//		
-//		MindTreeOcc fullocc = (MindTreeOcc) l.get(0);
-		
-//		System.out.println("l "+fullocc);
-//		System.out.println("l "+fullocc.getMindTree());
-//		System.out.println("l "+fullocc.getMindTree().getLeftSide());
-		
-		return fullocc.getMindTree();
-		
-//		return  (MindTree) DataAccessUtils.uniqueResult(getHibernateTemplate().find(""+
-//				"select MindTree from MindTreeOcc occ "+		
-//				"join occ.MindTree "+
-////				"join occ.MindTree.leftSide "+
-////				"join occ.MindTree.rightSide "+
-//				"where id is ? "
-//				,occ.getId()));
-		
-//		MindTree tree = (MindTree) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));		
-//		return 	(MindTree) getHibernateTemplate().get(MindTree.class, tree);	
+		MindTreeOcc fullocc = (MindTreeOcc) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));		
+		return fullocc.getMindTree();	
 	}	
 	public MindTree save(MindTree tree) {
 		getHibernateTemplate().saveOrUpdate(tree);

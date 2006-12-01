@@ -1,16 +1,21 @@
 package com.aavu.server.dao.hibernate;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Tag;
@@ -54,7 +59,11 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	}
 
 	public void removeTag(User user, Tag selectedTag){		
-		getHibernateTemplate().delete(selectedTag);		
+
+		//TODO re-implement
+		//but for now this is dangerous.. could be orphaning lots of things
+		
+		//getHibernateTemplate().delete(selectedTag);		
 	}
 
 	/**
@@ -102,6 +111,30 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		}
 		
 		return rtn;		 				
+	}
+
+	/**
+	 * PEND low, don't _really_ need to return a LoadEmAll tag do we. Could do TagIdentifier..
+	 */
+	public Tag upgradeToTag(final Topic t) {
+
+		int res = (Integer) getHibernateTemplate().execute(new HibernateCallback(){
+			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+				String hqlUpdate = "update Topic set discriminator = 'tag' where topic_id = :id";
+				int updatedEntities = sess.createQuery( hqlUpdate )
+				.setLong( "id", t.getId() )	                            
+				.executeUpdate();				
+				return updatedEntities;				
+			}});
+		System.out.println("res: "+res);
+		
+		getHibernateTemplate().evict(t);
+		
+		DetachedCriteria crit  =  TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
+				.add(Expression.eq("id", t.getId())));
+		
+		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));		
+		
 	}
 
 }

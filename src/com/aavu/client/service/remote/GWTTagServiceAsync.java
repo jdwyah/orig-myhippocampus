@@ -1,6 +1,7 @@
 package com.aavu.client.service.remote;
 
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -19,4 +20,7 @@ public interface GWTTagServiceAsync {
 	void getTagForName(String completeText, AsyncCallback call);
 	
 	void getTagStats(AsyncCallback callback);
+
+	//Tag
+	void makeMeATag(Topic topic, AsyncCallback callback);
 }

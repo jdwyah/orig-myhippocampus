@@ -174,7 +174,8 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		    
 		}catch(Exception e){
 			Window.alert("e: "+e);
-			System.out.println("Problem initting services! "+e);
+			System.out.println("Problem initting services! "+e);			
+			e.printStackTrace();
 			
 			VerticalPanel panel = new VerticalPanel();
 			
@@ -210,7 +211,10 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	    // This method is called whenever the application's history changes. Set
 	    // the label to reflect the current history token.
 		System.out.println("history changed to "+historyToken);
-		if(historyToken != EMPTY){
+		
+		//manager == null if we open directly to the page with a #link
+		//
+		if(historyToken != EMPTY && manager != null){
 			manager.gotoTopic(historyToken);
 			
 			//huh... seems to be fine in IE, but FF fires a reload and the request fails.

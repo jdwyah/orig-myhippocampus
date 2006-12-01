@@ -36,7 +36,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 
 	private FlowPanel topicTitlePanel = new FlowPanel();
-	private Label titleLabel = new Label("Title: ");
+	private Label titleLabel;
 
 	private FlowPanel textPanel = new FlowPanel();
 
@@ -61,12 +61,11 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	public TopicWidget(Manager manager, Topic topic){
 		this.manager = manager;
 		
-		panel.setSpacing(4);		
-		titleLabel.addStyleName("ta-compose-Label");
+		panel.setSpacing(4);	
+		titleLabel = new Label(manager.myConstants.title());	
 
 		topicTitlePanel.add(titleLabel);
-		topicTitlePanel.addStyleName("middle-column-box-title-blue");
-
+	
 		panel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
 		panel.setWidth("100%");
 		panel.add(topicTitlePanel);
@@ -93,7 +92,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		topicTitlePanel.clear();
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(new Label(topic.getTitle()));
-		topicTitlePanel.add(new Label(" Updated: "+formatDate(topic.getLastUpdated())));
+		topicTitlePanel.add(new Label(manager.myConstants.topic_updated()+formatDate(topic.getLastUpdated())));
 
 
 		panel.clear();

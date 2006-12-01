@@ -5,6 +5,7 @@ import org.gwtwidgets.client.wrap.Effect;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.ModablePopupPanel;
+import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.RichText2.HippoEditor;
 import com.aavu.client.widget.RichText2.KeyCodeEventListener;
@@ -116,9 +117,11 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 		String linkTo = completer.getText();
 
-		topicCache.getTopicIdentForNameOrCreateNew(linkTo, new StdAsyncCallback("getTopicIdForNameOrCreateNew"){
+		topicCache.getTopicIdentForNameOrCreateNew(linkTo, new StdAsyncCallback(Manager.myConstants.topic_lookupAsync()){
 
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				
 				TopicIdentifier topic = (TopicIdentifier) result;
 				
 				textArea.setSelectionRange(range);

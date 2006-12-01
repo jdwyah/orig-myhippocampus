@@ -466,7 +466,10 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 	private MindTree convertTree(MindTree tree) {
 		tree.setLeftSide(convertSetSimple(tree.getLeftSide()));
 		tree.setRightSide(convertSetSimple(tree.getRightSide()));
+		
+		//TODO eek... this might be a bug -> bad things...
 		tree.setTopic(null);
+		
 		return tree;
 	}
 	private Set convertSetSimple(Set in) {

@@ -273,6 +273,7 @@ public class TopicCache {
 		TopicIdentifier found = CacheUtils.searchTopics(topicIdentifiers,linkTo);
 				
 		if(found != null){
+			System.out.println("Found "+found);
 			callback.onSuccess(found);			
 		}
 		else{

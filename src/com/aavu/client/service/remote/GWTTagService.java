@@ -2,8 +2,10 @@ package com.aavu.client.service.remote;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface GWTTagService extends RemoteService {
@@ -20,5 +22,7 @@ public interface GWTTagService extends RemoteService {
 	
 	Tag getTagForName(String completeText);
 	
-	TagStat[] getTagStats();
+	TagStat[] getTagStats() throws HippoException;
+	
+	Tag makeMeATag(Topic topic) throws HippoException;
 }

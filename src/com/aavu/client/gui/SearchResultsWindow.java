@@ -33,12 +33,15 @@ public class SearchResultsWindow extends PopupWindow {
 		
 		VerticalPanel previewPanel = new VerticalPanel();
 				
-		if(searchRes != null){
+		
+		if(searchRes == null || searchRes.size() == 0){
+			mainPanel.add(new Label(manager.myConstants.searchResultsNone()));
+		}
+		else{
 			for (Iterator iter = searchRes.iterator(); iter.hasNext();) {
 				SearchResult result = (SearchResult) iter.next();
 				mainPanel.add(new SearchLink(manager,result));
-			}
-			
+			}			
 		}		
 		
 		setContentPanel(mainPanel);

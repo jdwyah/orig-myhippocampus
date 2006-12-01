@@ -2,15 +2,17 @@ package com.aavu.client.widget.edit;
 
 import java.util.Set;
 
-import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,10 +32,13 @@ public class TopicEditWidget extends Composite {
 	
 	private UploadBoard uploadBoard;
 	private MindMapBoard mindMapBoard;
+	private Manager manager;
+	private HorizontalPanel topPanel;
 	
-	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, final Manager manager, Topic topic){
-		this.topic = topic;
+	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, final Manager manager, Topic _topic){
+		this.topic = _topic;
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
+		this.manager = manager;
 		
 		System.out.println("topic edit widg "+topic);
 		
@@ -46,13 +51,18 @@ public class TopicEditWidget extends Composite {
 		uploadBoard = new UploadBoard(manager,topic);
 		
 		mindMapBoard = new MindMapBoard(manager,topic,this);
+
 		
+		topPanel = new HorizontalPanel();
+		topPanel.add(new HeaderLabel(manager.myConstants.title()));
+		topPanel.add(titleBox);
+
 		
 		setupTopic();		
+		
 		VerticalPanel panel = new VerticalPanel();
 		
-		panel.add(new HeaderLabel(manager.myConstants.title()));
-		panel.add(titleBox);
+		panel.add(topPanel);
 		
 		panel.add(subjectBoard);
 		panel.add(tagBoard);		
@@ -77,10 +87,39 @@ public class TopicEditWidget extends Composite {
 			subjectBoard.load(topic);
 			tagBoard.load(topic);
 			seeAlsoBoard.load(topic);
+			
+			
+			
+			/*
+			 * Island creation
+			 */
+			if(topPanel.getWidgetCount() > 2){
+				topPanel.remove(2);
+			}
+			if(!(topic instanceof Tag)){
+				Button islandButton = new Button(manager.myConstants.tag_upgrade());
+				islandButton.addClickListener(new ClickListener(){
+					public void onClick(Widget sender) {
+						makeThisAnIsland();
+					}});				
+				topPanel.add(islandButton);
+			}else{
+				topPanel.add(new Label(manager.myConstants.tag_topicIsA()));
+			}
 		}
 	}
 
+	private void makeThisAnIsland(){
+		manager.getTagCache().makeMeATag(topic,new StdAsyncCallback(manager.myConstants.tag_upgradeAsync()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				Tag tag = (Tag) result;
+				manager.growIsland(tag);
+				setupTopic();
+			}
 
+		});
+	}
 
 	public void save() {
 		topic.getLatestEntry().setData(textArea.getText());

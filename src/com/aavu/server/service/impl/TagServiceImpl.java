@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
@@ -103,6 +104,9 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 	}
 	public List<TagStat> getTagStats() {
 		return tagDAO.getTagStats(userService.getCurrentUser());
+	}
+	public Tag makeMeATag(Topic topic) {
+		return tagDAO.upgradeToTag(topic);
 	}
 
 

@@ -68,7 +68,11 @@ public class TagBoard extends Composite implements CompleteListener {
 		tagBoxP.add(addTagButton);
 		
 		mainPanel.add(tagBoxP);
-		mainPanel.add(tagPanel);
+		
+		VerticalPanel tagPanelS = new VerticalPanel();
+		tagPanelS.add(new Label(Manager.myConstants.tags()));
+		tagPanelS.add(tagPanel);
+		mainPanel.add(tagPanelS);
 				
 		initWidget(mainPanel);				
 	}

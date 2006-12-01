@@ -2,6 +2,7 @@ package com.aavu.client.service.cache;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -46,5 +47,9 @@ public class TagCache {
 
 	public void getTagStats(AsyncCallback callback) {		
 		tagService.getTagStats(callback);
+	}
+
+	public void makeMeATag(Topic topic, AsyncCallback callback) {
+		tagService.makeMeATag(topic,callback);
 	}
 }

@@ -31,13 +31,13 @@ public class Dashboard extends SimplePanel {
 
 		mainPanel = new HorizontalPanel();
 
-		Button tagButton = new Button("Tags");
+		Button tagButton = new Button(_manager.myConstants.yourTags());
 		tagButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.showTagBoard();
 			}});
 
-		Button addNewButton = new Button("New Topic");
+		Button addNewButton = new Button(_manager.myConstants.topic_new());
 		addNewButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.newTopic();

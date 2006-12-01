@@ -1,7 +1,7 @@
 package com.aavu.client.strings;
 
-import com.aavu.client.domain.Topic;
 import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface Consts extends Constants {	
 	
@@ -42,6 +42,7 @@ public interface Consts extends Constants {
 	String searchResultsTitle();
 	String searchScore();
 	String searchCallback();
+	String searchResultsNone();	
 	
 	String upload();
 	String upload_complete();
@@ -57,6 +58,15 @@ public interface Consts extends Constants {
 	String save();
 	String topic_edit();	
 	String topic_cancel();
+	String topic_updated();
+	String topic_new();
+	String topic_lookupAsync();
+	
+	String tags();	
+	String tag_upgrade();
+	String mapperSaveFirst();
+	String tag_topicIsA();
+	String tag_upgradeAsync();
 		
 	
 }

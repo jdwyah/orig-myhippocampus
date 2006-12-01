@@ -9,6 +9,7 @@ import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -57,8 +58,14 @@ public class MindMapBoard extends Composite {
 				
 			}});
 		
-		
-		mainPanel.add(mapB);		
+		//This avoid a transientObject save problem when saving the 
+		//mind map
+		//TODO get rid of this requirement
+		if(topic.getId() <= 0){
+			mainPanel.add(new Label(manager.myConstants.mapperSaveFirst()));			
+		}else{
+			mainPanel.add(mapB);
+		}
 		
 		initWidget(mainPanel);
 	}
