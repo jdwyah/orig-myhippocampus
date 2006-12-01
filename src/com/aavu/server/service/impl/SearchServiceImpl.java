@@ -30,6 +30,7 @@ import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.SearchResult;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.SearchService;
@@ -180,7 +181,16 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				CompassHighlightedText text = defaultCompassHit.getHighlightedText();
 				res = new SearchResult(topicID.getTopicID(),defaultCompassHit.getScore(),topicID.getTopicTitle(),text.getHighlightedText("text"));
 				
-			}else if (obj instanceof Topic) {
+			}else if (obj instanceof URI) {
+				URI uri = (URI) obj;
+				List<TopicIdentifier> topicIDList = topicDAO.getTopicForOccurrence(uri.getId());
+				
+				//TODO what if it has multiple refs?
+				TopicIdentifier topicID = topicIDList.get(0);
+				
+				res = new SearchResult(topicID.getTopicID(),defaultCompassHit.getScore(),uri.getTitle(),uri.getData());
+			}
+			else if (obj instanceof Topic) {
 				Topic top = (Topic) obj;
 				
 				res = new SearchResult(top.getId(),defaultCompassHit.getScore(),top.getTitle(),null);
@@ -188,8 +198,9 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 			//I think root == false takes care of this..
 			else if (obj instanceof User) {
 				log.warn("Shouldn't Happen");
-				User top = (User) obj;				
-				res = new SearchResult(top.getId(),defaultCompassHit.getScore(),top.getUsername(),null);
+				User user = (User) obj;		
+				//TODO user.getID() will break this
+				//res = new SearchResult(user.getId(),defaultCompassHit.getScore(),user.getUsername(),null);
 			}
 			else{				
 				log.warn("???"+ obj);				
