@@ -25,10 +25,11 @@ public class BasicController extends AbstractController {
 	}
 
 	@Override
-	protected ModelAndView handleRequestInternal(HttpServletRequest arg0,
+	protected ModelAndView handleRequestInternal(HttpServletRequest req,
 			HttpServletResponse arg1) throws Exception {
 
-		
+		log.debug("SERVLET PATH: "+req.getServletPath());
+
 		User su = null;
 		try{
 			su = userService.getCurrentUser();	

@@ -21,7 +21,6 @@
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/standard-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.6.jar"/>
-	<classpathentry kind="lib" path="lib/sitemesh-2.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/acegi-security-1.0.1.withSource.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-2.7.6rc1.jar"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.0.2.jar"/>
@@ -44,5 +43,6 @@
 	<classpathentry kind="lib" path="lib/ehcache-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/gwt-widgets-server-0.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/sitemesh-2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

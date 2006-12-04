@@ -89,6 +89,8 @@
 
     drop table if exists instancetable;
 
+    drop table if exists mailing_list;
+
     drop table if exists member_topics;
 
     drop table if exists mind_tree;
@@ -135,6 +137,15 @@
         from_id bigint not null,
         topic_id bigint not null,
         primary key (from_id, topic_id)
+    ) type=InnoDB;
+
+    create table mailing_list (
+        id bigint not null auto_increment,
+        email varchar(255),
+        userAgent varchar(255),
+        referer varchar(255),
+        host varchar(255),
+        primary key (id)
     ) type=InnoDB;
 
     create table member_topics (

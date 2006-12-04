@@ -5,8 +5,13 @@
 </head>
 
 <body>
+
+ <#if message?exists>
+	 <p class="message">${message}</p>
+ </#if>
+
 									
-	<!--
+
       <p class="splash-word">hippocampus(n)</p>
       <p class="splash-definition">A part of the brain that plays an essential role in the formation of new memories about experienced events.</p>
       <p class="splash-definition">The name derives from its curved shape in coronal sections of the brain, which resembles a seahorse. </p>
@@ -14,25 +19,18 @@
 
       <p class="splash-word">MyHippocampus(n)</p>
 	  <p class="splash-definition">What you see when you look in the mirror of your mind.</p>
-  	  <p class="splash-definition">Your personal <A class="hid" HREF="<@spring.url "/site/index2.html"/>">sea monster</A>.</p>
+  	  <p class="splash-definition">Your personal sea monster.</p>
 
-	 
 
-	  <p class="subheading">#4 Install the Firefox plugin! (<A HREF="<@spring.url "/resources/myhippo.xpi"/>">click here</A>)</p>
--->
-
- <#if message?exists>
-	 <p class="message">${message}</p>
- </#if>
 
 
     <#if user?exists>
 
-	    <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/>My Page</a>
+	    <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/>Goto My Page!</a>
 		<br>
 		<a href="j_acegi_logout">Logout</a>
 	<#else>
-<p class="subheading">Login:</p>
+<p class="subheading">Have an account? (you lucky dog!)</p>
       <div class="middle-column-box-blue">
         <div class="middle-column-box-title-white">
 		 <form action="j_acegi_security_check" method="POST">
@@ -50,7 +48,7 @@
 	</#if>
 	
 
-<p class="subheading">Want to know when we go live?</p>	
+<p class="subheading">No account, but want to know when we go live?</p>	
 		<form action="<@spring.url "/site/interested.html"/>" method="POST">
 		      <table>
         		<tr><td>Add your email:</td><td><input name="email" type="text"/></td></tr>
