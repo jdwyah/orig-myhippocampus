@@ -10,12 +10,12 @@
 
 		<many-to-one name="topic" class="com.aavu.client.domain.Topic"></many-to-one>
 
-		<set name="leftSide">
+		<set name="leftSide" cascade="all" lazy="false">
 			<key column="left_map_id" />
 			<one-to-many class="com.aavu.client.domain.mapper.MindTreeElement" />
 		</set>
 		
-		<set name="rightSide">
+		<set name="rightSide" cascade="all" lazy="false">
 			<key column="right_map_id" />
 			<one-to-many class="com.aavu.client.domain.mapper.MindTreeElement" />
 		</set>

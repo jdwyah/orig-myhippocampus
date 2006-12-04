@@ -41,9 +41,9 @@ public class NavigableMindTree {
 		}
 	}
 	
-	//TODO GWT.getTypeName() why can't we polymorph this?
+
 	public void addChild(NavigableMindNode node) {
-		if(GWT.getTypeName(node).equals("com.aavu.client.domain.mapper.NavigableRootNode")){
+		if(node instanceof NavigableRootNode){
 			addChild((NavigableRootNode)node);
 			return;
 		}

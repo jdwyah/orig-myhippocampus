@@ -4,7 +4,7 @@
   </head>
 
   <body>
-    <h1>Login FTL</h1>
+    <h1>Login</h1>
 
 	<#if login_error?has_content>
       <font color="red">
@@ -19,8 +19,7 @@
         <tr><td>Password:</td><td><input type='password' name='j_password'></td></tr>
         <tr><td><input type="checkbox" name="_acegi_security_remember_me"></td><td>Don't ask for my password for two weeks</td></tr>
 
-        <tr><td colspan='2'><input name="submit" type="submit"></td></tr>
-        <tr><td colspan='2'><input name="reset" type="reset"></td></tr>
+        <tr><td colspan='2'><input name="submit" value="Login" type="submit"></td></tr>
       </table>
 
     </form>

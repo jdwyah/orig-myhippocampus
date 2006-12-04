@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!-- Note: Server Domain package, not client -->
+<hibernate-mapping package="com.aavu.server.domain">
+
+	<class name="MailingListEntry" table="mailing_list">
+		<meta attribute="generated-class">com.aavu.server.domain.generated.AbstractMailingListEntry</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<id name="id" type="long" column="id">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="email" type="string" column="email">
+			<meta attribute="use-in-equals">true</meta>
+		</property>
+		
+		<property name="userAgent" type="string" column="userAgent">
+		</property>
+		<property name="referer" type="string" column="referer">
+		</property>
+		<property name="host" type="string" column="host">
+		</property>		
+	
+	
+	</class>
+
+</hibernate-mapping>

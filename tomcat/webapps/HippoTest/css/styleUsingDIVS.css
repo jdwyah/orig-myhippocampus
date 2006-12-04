@@ -2,34 +2,37 @@
 /*****************/
 /*   MAIN BODY   */
 /*****************/
-.container {
+#container {
 	font-size: 62.5%;
 	margin: 0em auto;
 	padding: 0em;	
   	font-family: Verdana,Tahoma, Arial,sans-serif;
-    background-color: #FFFFFF;
+    background-color: #CBD043;
 }
 
-.sidePanel {
+#sidePanel {
 	background-color: #CBD043;
 	width: 255px;
 	height: 900px;
-    vertical-align: top;
 }
 
-.mainPanel {
-    margin-left: 40px;
-    align: right;
-    vertical-align: top;
+#mainPanel {
+        background-color: #FFFFFF;
+        margin-left: 40px;
+align: right;
 }
 
-.message {
-	border: 2px;
-	border-color: red;
-	padding: 5px;
-	background-color: #FFBB99;	
+#header {
+	float: right;
+	position: relative;
+	left: 0px;
+	top: 0px;
 }
 
+#wrap {
+	width: 76em;
+	margin: 0em auto;
+}
 
 .splash-title {
 	font-size: 60pt;
@@ -60,12 +63,12 @@
 /**************/
 /*   HEADER   */
 /**************/
-.header-section {
+#header-section {
 	width: 76em;
 	margin: 0em 0em 0em 0em;
 }
 
-.header-background {
+#header-background {
 	width: 100%; 
 	height: 100%;
 	float: left;
@@ -73,7 +76,7 @@
 	margin: 0em 0em 0em 0em;
 }
 
-.header-background-left {
+#header-background-left {
 	width: 14.5em;
 	float: left;
 	margin: 0em 0em 0em 0em;
@@ -81,7 +84,7 @@
 	border: none;
 }
 
-.header-background-right {
+#header-background-right {
 	width: 61.5em;
 	float: right;
 	margin: 0em 0em 0em 0em;
@@ -89,19 +92,19 @@
 	border: none;
 }
 
-.header {
+#header {
 	clear: both;
 	margin: 0em 0em 1.5em 0em;
 	border-top: solid 0.1em rgb(175,175,175);
 	border-bottom: solid 0.1em rgb(175,175,175);
-	background-color: #FFFFFF;	
+	background-color: rgb(235,235,235);	
 	text-transform: uppercase;
 	line-height: 2.0em;
 	height: 2.0em;
 	color: rgb(50,50,50);
 }
 
-.header ul {	
+#header ul {	
 	margin: 0em;
 	padding: 0em;
 	list-style: none;
@@ -109,12 +112,12 @@
 	font-size: 1.0em;
 }	
 
-.header li {
+#header li {
 	float: left;
 	white-space: nowrap;
 }
 
-.header li a {
+#header li a {
 	display: block;
 	padding: 0em 1.0em 0em 1.0em;
 	border-right: solid 0.1em rgb(175,175,175);	
@@ -123,7 +126,7 @@
 	color: rgb(50,50,50);
 }
 
-.header a:hover {
+#header a:hover {
 	border-right: solid 0.1em rgb(175,175,175);	
 	background-color: rgb(220,220,220);			
 	text-transform: uppercase;
@@ -131,11 +134,11 @@
 	color: rgb(50,50,50);
 }
 
-.header .selected {
+#header .selected {
 	padding: 0em 0.5em 0em 0.5em;
 	border-right: solid 0.1em rgb(175,175,175);		
 	background-color: rgb(220,220,220);
 	color: rgb(50,50,50);
 }
 
-* html .header a {width:1%;}
+* html #header a {width:1%;}

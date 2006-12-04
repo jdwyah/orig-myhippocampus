@@ -22,6 +22,7 @@
 				<value>com/aavu/client/domain/Subject.hbm.xml</value>
 				<value>com/aavu/client/domain/Occurrence.hbm.xml</value>				
 				<value>com/aavu/client/domain/Mapper.hbm.xml</value>
+				<value>com/aavu/client/domain/MailingList.hbm.xml</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -102,7 +103,9 @@
 		<property name="userService" ref="userService"/>
 	</bean>
 	
-	
+	<bean id="mailingListDAO" class="com.aavu.server.dao.hibernate.MailingListDAOHibernateImpl">
+		<property name="sessionFactory" ref="mySessionFactory"/>	
+	</bean>	
 
 	<!--  COMPASS START -->
 	<bean id="compass" class="org.compass.spring.LocalCompassBean" abstract="false" singleton="true" lazy-init="default"

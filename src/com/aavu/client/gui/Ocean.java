@@ -103,7 +103,11 @@ public class Ocean extends FlashContainer {
 				sb.append("<property id='");
 				sb.append(listCount);
 				sb.append("'>");
-				sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics(), stat.getLongitude(), stat.getLatitude()));
+				/*
+				 * NOTE: stat.getNumberOfTopics() + 1
+				 * otherwise we have blank islands 
+				 */
+				sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics() + 1, stat.getLongitude(), stat.getLatitude()));
 				sb.append("</property>");
 				listCount++;
 			}

@@ -4,10 +4,6 @@
 
 <beans>
 
-	<bean id="splashController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="splash" />
-		<property name="userService" ref="userService" />
-	</bean>
 	<bean id="indexController" class="com.aavu.server.web.controllers.BasicController">
 		<property name="view" value="index" />
 		<property name="userService" ref="userService" />
@@ -31,6 +27,13 @@
 	<bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
 		<property name="view" value="acegilogin" />
 	</bean>
+	
+	<bean id="mailingListController" class="com.aavu.server.web.controllers.MailingListController">
+		<property name="formView" value="index" />
+		<property name="successView" value="index" />
+		<property name="mailingDAO" ref="mailingListDAO"/>
+	</bean>
+
 
 	<bean id="createUserValidator" class="com.aavu.server.web.domain.validation.CreateUserRequestValidator">
 		<property name="userService" ref="userService"></property>
@@ -92,6 +95,7 @@
 				<prop key="/service/messageService">hessianMessageService</prop>
 
 				<prop key="/site/acegilogin.html">loginController</prop>
+				<prop key="/site/interested.html">mailingListController</prop>
 				<prop key="/site/signup.html">createUserController</prop>
 
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
@@ -102,8 +106,7 @@
 				<prop key="/service/upload.html">fileUploadController</prop>
 				<prop key="/service/showFile.html">showFileController</prop>
 
-				<prop key="/site/index.html">splashController</prop>
-				<prop key="/site/index2.html">indexController</prop>
+				<prop key="/site/index.html">indexController</prop>
 				<prop key="/site/tour.html">tourController</prop>
 				<prop key="/site/manifesto.html">manifestoController</prop>
 				
