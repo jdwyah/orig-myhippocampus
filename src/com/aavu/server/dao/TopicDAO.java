@@ -12,6 +12,7 @@ import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.server.web.domain.UserPageBean;
 
 public interface TopicDAO {
 
@@ -43,5 +44,7 @@ public interface TopicDAO {
 
 	MindTree getTree(MindTreeOcc occ);
 	MindTree save(MindTree tree);
+
+	void populateUsageStats(UserPageBean rtn);
 
 }

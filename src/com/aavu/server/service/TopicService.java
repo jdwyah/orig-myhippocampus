@@ -12,6 +12,7 @@ import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.server.web.domain.UserPageBean;
 
 public interface TopicService {
 
@@ -48,5 +49,7 @@ public interface TopicService {
 	MindTree getTree(MindTreeOcc occ);
 
 	MindTree saveTree(MindTree tree);
+
+	UserPageBean getUserPageBean(User su);
 	
 }

@@ -73,6 +73,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		
 		topicService.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback("SeeAlsoComplete"){
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				TopicIdentifier to = (TopicIdentifier) result;
 				
 				myTopic.addSeeAlso(to);

@@ -23,9 +23,7 @@
       </table>
 
     </form>
-	
-	<p>
-	<a href="j_acegi_logout">Logout</a>
+
 
   </body>
 </html>

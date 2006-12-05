@@ -38,6 +38,7 @@ import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.web.domain.UserPageBean;
 
 public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicDAO{
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImpl.class);
@@ -93,17 +94,37 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}
 			//?BigInteger topic_id = (BigInteger) oa[0];
 			Long topic_id = (Long) oa[0];
+			
 			String dateStr = (String) oa[2];
 			Date date = new Date(Long.parseLong(dateStr));			
-
+			
+			//add metaDate
 			rtn.add(new TimeLineObj(new TopicIdentifier(topic_id.longValue(),(String)oa[1]),date,null));						
 		}
-		if(log.isDebugEnabled())
+	
+		//add created
+		//
+		List<Object[]> createdlist = getHibernateTemplate().find("select top.id, top.title, top.created from Topic top ");
+		for (Object topic : createdlist) {
+			Object[] oa = (Object[]) topic;
+			
+			//?BigInteger topic_id = (BigInteger) oa[0];
+			Long topic_id = (Long) oa[0];
+						
+			Date createdDateTimestamp = (Date) oa[2];			
+			//PEND GWT conversion in regular DAO code. should kinda move this to GWTService layer
+			Date createdDate = new Date(createdDateTimestamp.getTime());	
+			
+			//add date Created
+			rtn.add(new TimeLineObj(new TopicIdentifier(topic_id.longValue(),(String)oa[1]),createdDate,null));									
+		}
+		
+		if(log.isDebugEnabled()){
 			for (TimeLineObj obj : rtn) {
 				log.debug("TIMELINE ");
 				log.debug(obj);
 			}
-
+		}
 		return rtn;	
 	}
 
@@ -494,6 +515,32 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public MindTree save(MindTree tree) {
 		getHibernateTemplate().saveOrUpdate(tree);
 		return tree;
+	}
+
+	/**
+	 * update the parameter
+	 * 
+	 */
+	public void populateUsageStats(UserPageBean rtn) {
+		
+		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
+		.add(Expression.eq("user", rtn.getUser()))
+		.add(Expression.ne("class", "association"))
+		.add(Expression.ne("class", "seealso"))
+		.add(Expression.ne("class", "metadate"))
+		.setProjection(Projections.rowCount());
+		
+		rtn.setNumberOfTopics((Integer) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit)));
+		
+		rtn.setNumberOfIslands((Integer) DataAccessUtils.uniqueResult(getHibernateTemplate().find(""+
+				"select count(id) from Tag tag "+
+				"where user is ? "
+				,rtn.getUser())));
+		rtn.setNumberOfLinks((Integer) DataAccessUtils.uniqueResult(getHibernateTemplate().find(""+
+				"select count(id) from WebLink link "+
+				"where user is ? "
+				,rtn.getUser())));
+		
 	}
 
 

@@ -13,26 +13,28 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
+import com.aavu.server.web.domain.UserPageBean;
 
 public class TopicServiceImpl implements TopicService {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 
 	private TopicDAO topicDAO;
 	private UserService userService;
-	
+
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
-	
+
 
 	public Topic getForName(String string) {
 		return topicDAO.getForName(userService.getCurrentUser(),string);
@@ -104,8 +106,14 @@ public class TopicServiceImpl implements TopicService {
 	public MindTree saveTree(MindTree tree) {
 		return topicDAO.save(tree);
 	}
+	public UserPageBean getUserPageBean(User su) {
+		UserPageBean rtn = new UserPageBean();
+		rtn.setUser(su);
+		topicDAO.populateUsageStats(rtn);
+		return rtn;
+	}
 
 
-	
+
 
 }

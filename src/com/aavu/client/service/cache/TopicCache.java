@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -26,7 +27,10 @@ public class TopicCache {
 	private Map topicByID = new HashMap();
 	private GWTTopicServiceAsync topicService;
 
-	private List topicIdentifiers = new ArrayList();
+	/**
+	 * map with null values. we just need something sortable.
+	 */
+	private GWTSortedMap topicIdentifiers = new GWTSortedMap();
 	
 	private List saveListeners = new ArrayList();
 	
@@ -95,18 +99,18 @@ public class TopicCache {
 	 */
 	public void getAllTopicIdentifiers(final StdAsyncCallback callback) {
 		if(topicIdentifiers.size() != 0){
-			callback.onSuccess(topicIdentifiers);			
+			callback.onSuccess(topicIdentifiers.getKeyList());			
 		} else {
 			topicService.getAllTopicIdentifiers(new AsyncCallback(){
 				public void onSuccess(Object result) {
 					TopicIdentifier[] topicIdents = (TopicIdentifier[]) result;
 					System.out.println("rec "+topicIdents.length);
-					topicIdentifiers = new ArrayList();
+					topicIdentifiers.clear();
 					for (int i = 0; i < topicIdents.length; i++) {
 						System.out.println("adding! "+i+" id:"+topicIdents[i].getTopicID()+" "+topicIdents[i].getTopicTitle());
-						topicIdentifiers.add(topicIdents[i]);						
+						topicIdentifiers.put(topicIdents[i],null);						
 					}					
-					callback.onSuccess(topicIdentifiers);
+					callback.onSuccess(topicIdentifiers.getKeyList());
 				}
 				public void onFailure(Throwable caught) {
 					callback.onFailure(caught);
@@ -169,9 +173,10 @@ public class TopicCache {
 				if(res == null){
 					continue;
 				}
+				System.out.println("R/A "+res.getIdentifier());
 				//TODO bogus, need to check!!
 				topicIdentifiers.remove(res.getIdentifier());
-				topicIdentifiers.add(res.getIdentifier());
+				topicIdentifiers.put(res.getIdentifier(),null);
 				
 				//topicByName.put(res.getTitle(), res);
 				//topicByID.put(res.getId(), res);
@@ -234,6 +239,7 @@ public class TopicCache {
 				System.out.println("single adding to cache title:"+t.getTitle());
 				//topicByName.put(t.getTitle(), t);
 				//topicByID.put(new Long(t.getId()), t);
+				
 
 			}else if(rtn == TOPIC_LIST){
 				Topic[] t = (Topic[]) result;
@@ -243,6 +249,8 @@ public class TopicCache {
 					System.out.println("list adding to cache "+topic.getTitle());
 					//topicByName.put(topic.getTitle(), topic);
 					//topicByID.put(new Long(topic.getId()), topic);
+					
+					
 				}				
 			}
 
@@ -260,6 +268,9 @@ public class TopicCache {
 
 	/**
 	 * returns a topicID to callback
+	 *  
+	 * NOTE: this relies on the topicIdentifiers list being a correctly sorted list, otherwise
+	 * binary search won't work.
 	 *  
 	 * @param linkTo
 	 * @param callback

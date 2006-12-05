@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,6 +31,18 @@ public class GWTSortedMap implements Map {
 	 */
 	public GWTSortedMap(Comparator comp){
 		this.compare = comp;
+	}
+	
+	public List getKeyList() {
+		if(dirty){
+			System.out.println("SORT ");
+			if(compare == null){
+				Collections.sort(keys.getList());
+			}else{
+				Collections.sort(keys.getList(),compare);
+			}
+		}
+		return keys.getList();
 	}
 	
 	public Set keySet() {

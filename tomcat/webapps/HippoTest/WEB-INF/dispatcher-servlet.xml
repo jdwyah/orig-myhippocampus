@@ -4,9 +4,11 @@
 
 <beans>
 
-	<bean id="indexController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="index" />
-		<property name="userService" ref="userService" />
+	<bean id="indexController" class="com.aavu.server.web.controllers.IndexController">
+		<property name="view" value="index"/>
+		<property name="loggedInView" value="secure/userPage"/>
+		<property name="userService" ref="userService"/>
+		<property name="topicService" ref="topicService"/>
 	</bean>
 	<bean id="tourController" class="com.aavu.server.web.controllers.BasicController">
 		<property name="view" value="tour" />
@@ -102,7 +104,8 @@
 
 				<prop key="/site/secure/addLink.html">addLinkController</prop>
 				<prop key="/site/secure/getTopics.html">ajaxController</prop>				
-				<!-- change, but hosted gwt login diff w/ /site/secure/ -->
+				
+				<!-- change, but hosted gwt login difficult w/ /site/secure/ -->
 				<prop key="/service/upload.html">fileUploadController</prop>
 				<prop key="/service/showFile.html">showFileController</prop>
 

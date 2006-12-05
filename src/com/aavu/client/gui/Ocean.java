@@ -99,19 +99,18 @@ public class Ocean extends FlashContainer {
 		for (int i = 0; i < tagStats.length; i++) {
 			TagStat stat = tagStats[i];
 			
-			if(stat.getNumberOfTopics() > 0){
-				sb.append("<property id='");
-				sb.append(listCount);
-				sb.append("'>");
-				/*
-				 * NOTE: stat.getNumberOfTopics() + 1
-				 * otherwise we have blank islands 
-				 */
-				sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics() + 1, stat.getLongitude(), stat.getLatitude()));
-				sb.append("</property>");
-				listCount++;
-			}
+			sb.append("<property id='");
+			sb.append(listCount);
+			sb.append("'>");
+			/*
+			 * NOTE: stat.getNumberOfTopics() + 1
+			 * otherwise we have blank islands 
+			 */
+			sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics() + 1, stat.getLongitude(), stat.getLatitude()));
+			sb.append("</property>");
+			listCount++;
 		}
+		
 //		sb.append("<property id='0'>"+islandObj(7,"Music",2)+"</property>");
 //		sb.append("<property id='1'>"+islandObj(8,"Contacts",8)+"</property>");
 //		sb.append("<property id='2'>"+islandObj(24,"Books",10)+"</property>");

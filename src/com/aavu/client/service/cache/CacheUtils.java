@@ -1,7 +1,10 @@
 package com.aavu.client.service.cache;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.TopicIdentifier;
 
 public class CacheUtils {
@@ -18,6 +21,15 @@ public class CacheUtils {
 		}
 	}
 
+	/**
+	 * This will just search the keyList of a sorted map.
+	 * @param map
+	 * @param linkTo
+	 * @return
+	 */
+	public static TopicIdentifier searchTopics(GWTSortedMap map, String linkTo) {		
+		return searchTopics(map.getKeyList(), linkTo);
+	}
 
 	private static int indexedBinarySearch(List list, Comparable key)
 	{
@@ -38,4 +50,6 @@ public class CacheUtils {
 		}
 		return -(low + 1);  // key not found
 	}
+
+
 }
