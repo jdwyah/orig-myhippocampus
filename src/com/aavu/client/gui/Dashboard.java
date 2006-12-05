@@ -2,8 +2,11 @@ package com.aavu.client.gui;
 
 import java.util.Map;
 
+import org.gwtwidgets.client.ui.ImageButton;
+
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
@@ -31,17 +34,25 @@ public class Dashboard extends SimplePanel {
 
 		mainPanel = new HorizontalPanel();
 
-		Button tagButton = new Button(_manager.myConstants.yourTags());
-		tagButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				manager.showTagBoard();
-			}});
+//		Button tagButton = new Button(_manager.myConstants.yourTags());
+//		tagButton.addClickListener(new ClickListener(){
+//			public void onClick(Widget sender) {
+//				manager.showTagBoard();
+//			}});
 
-		Button addNewButton = new Button(_manager.myConstants.topic_new());
+		ImageButton addNewButton = new ImageButton(_manager.myConstants.topic_new_image(),60,46);
 		addNewButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.newTopic();
 			}});
+		addNewButton.addMouseListener(new TooltipListener(0,0,_manager.myConstants.topic_new()));
+		
+		ImageButton addNewIslandButton = new ImageButton(_manager.myConstants.island_new_image(),60,41);
+		addNewIslandButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.newIsland();
+			}});
+		addNewIslandButton.addMouseListener(new TooltipListener(0,0,_manager.myConstants.island_new()));
 
 		Button addDeliciousTags = new Button("Add Delicious Tags");
 		addDeliciousTags.addClickListener(new ClickListener(){
@@ -51,13 +62,14 @@ public class Dashboard extends SimplePanel {
 				widg.show();
 			}});
 
-		Button timeLine = new Button("TimeLine");
+		ImageButton timeLine = new ImageButton(_manager.myConstants.timeline_image(),40,60);
 		timeLine.addClickListener(new ClickListener(){
 
 			public void onClick(Widget sender) {
 				manager.showTimeline();
 			}});
-
+		timeLine.addMouseListener(new TooltipListener(0,0,_manager.myConstants.timeline()));
+		
 		Button facebookB = new Button("FaceBook");
 		facebookB.addClickListener(new ClickListener(){
 //http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222&popup=true
@@ -69,9 +81,11 @@ public class Dashboard extends SimplePanel {
 		
 		
 		mainPanel.add(addNewButton);
-		mainPanel.add(tagButton);		
+		mainPanel.add(addNewIslandButton);
+		
+//		mainPanel.add(tagButton);		
 		mainPanel.add(timeLine);
-		mainPanel.add(addDeliciousTags);		
+//		mainPanel.add(addDeliciousTags);		
 		
 		//mainPanel.add(facebookB);
 				

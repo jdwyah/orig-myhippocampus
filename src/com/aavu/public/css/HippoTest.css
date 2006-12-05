@@ -64,12 +64,14 @@ a:visited {
 
 .H-Dashboard {
 	bottom: 0px;
-	left: 20%;
+	left: 40%;
 	width: 200px;
 	height: 40px;
 	margin: 0 auto; /* align for good browsers */
 	text-align: left; /* counter the body center */
-	border: 2px solid #000;
+	background: transparent;
+	padding: 30px;
+	border: none;
 }
 .H-StatusPanel {
 	top: 0px;

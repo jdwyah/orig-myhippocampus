@@ -53,18 +53,23 @@ public class Manager implements TopicSaveListener {
 			}});
 
 	}
-	public void bringUpChart(Topic topic) {
+	public TopicWindow bringUpChart(Topic topic) {
 		TopicWindow tw = new TopicWindow(this,topic);
 		tw.setPopupPosition(DEF_X,DEF_Y);
-		tw.show();		
+		tw.show();
+		return tw;
 	}
 
 	public void newTopic() {
 		Topic blank = new Topic();
 		blank.setTitle("new");
-		bringUpChart(blank);		
+		bringUpChart(blank).setToEdit();		
 	}
-
+	public void newIsland() {
+		Tag blank = new Tag();
+		blank.setTitle("new");
+		bringUpChart(blank).setToEdit();		
+	}
 
 	public void showTagBoard() {
 
@@ -208,6 +213,7 @@ public class Manager implements TopicSaveListener {
 		map.updateSidebar();
 		map.refreshIslands();
 	}
+	
 	
 	
 

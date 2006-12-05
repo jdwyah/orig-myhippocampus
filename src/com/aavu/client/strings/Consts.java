@@ -67,6 +67,10 @@ public interface Consts extends Constants {
 	String mapperSaveFirst();
 	String tag_topicIsA();
 	String tag_upgradeAsync();
+	String island_new();
+	String topic_new_image();
+	String island_new_image();
+	String timeline_image();
 		
 	
 }
