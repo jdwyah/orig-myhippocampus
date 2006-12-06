@@ -15,11 +15,11 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
  * 
  * sample properties file:
  * 
- *  server.jdbc.user=live_user
+ *  jdbc.user=live_user
  *  server.jdbc.url=jdbc:postgresql://db.host.com:5432/db
  *  server.magic.file.location=/var/magic_file
  *
- *  devel.jdbc.user=devel_user
+ *  jdbc.user=devel_user
  *  devel.jdbc.url=jdbc:postgresql://devel-db.host.com:5432/db
  *  devel.magic.file.location=c:\\var\magic_file
  *    
@@ -34,13 +34,14 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
  *  class="com.mchange.v2.c3p0.ComboPooledDataSource"
  *  destroy-method="close">
  *  <property name="driverClass" value="${jdbc.driverClass}" />
- *  <property name="jdbcUrl" value="${jdbc.url}" />
+ *  <property name="jdbcUrl" value="${HOST.jdbc.url}" />
  *  <property name="user" value="${jdbc.user}" />
  *  <property name="password" value="${jdbc.password}" />  
  * </bean>
  * 
  * 
- * @author Jeff Dwyer (blog)
+ * @author Jeff Dwyer (blog) http://jdwyah.blogspot.com
+ *
  */
 public class HostPrecedingPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 

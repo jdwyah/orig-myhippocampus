@@ -45,14 +45,14 @@ public class Dashboard extends SimplePanel {
 			public void onClick(Widget sender) {
 				manager.newTopic();
 			}});
-		addNewButton.addMouseListener(new TooltipListener(0,0,_manager.myConstants.topic_new()));
+		addNewButton.addMouseListener(new TooltipListener(0,-20,_manager.myConstants.topic_new()));
 		
 		ImageButton addNewIslandButton = new ImageButton(_manager.myConstants.island_new_image(),60,41);
 		addNewIslandButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.newIsland();
 			}});
-		addNewIslandButton.addMouseListener(new TooltipListener(0,0,_manager.myConstants.island_new()));
+		addNewIslandButton.addMouseListener(new TooltipListener(0,-20,_manager.myConstants.island_new()));
 
 		Button addDeliciousTags = new Button("Add Delicious Tags");
 		addDeliciousTags.addClickListener(new ClickListener(){
@@ -68,7 +68,7 @@ public class Dashboard extends SimplePanel {
 			public void onClick(Widget sender) {
 				manager.showTimeline();
 			}});
-		timeLine.addMouseListener(new TooltipListener(0,0,_manager.myConstants.timeline()));
+		timeLine.addMouseListener(new TooltipListener(0,-20,_manager.myConstants.timeline()));
 		
 		Button facebookB = new Button("FaceBook");
 		facebookB.addClickListener(new ClickListener(){
