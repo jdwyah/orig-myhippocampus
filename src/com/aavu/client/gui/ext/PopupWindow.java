@@ -58,9 +58,11 @@ public class PopupWindow {
 		frame.setContent(w);
 	}
 	public void close(){
+		System.out.println("PopupWindow close()");
 		frame.destroy();
 	}
 	public void hide(){
+		System.out.println("PopupWindow hide()");
 		frame.minimize();
 	}
 

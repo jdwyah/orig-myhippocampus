@@ -22,6 +22,7 @@ import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
 import com.google.gwt.core.client.GWT;
@@ -34,7 +35,8 @@ public class Manager implements TopicSaveListener {
 	private MainMap map;
 	private User user;
 	
-	private FramesManager framesManager; 
+	private FramesManager framesManager;
+	private TagLocalService tagLocalService; 
 
 	public Manager(HippoCache hippoCache, User user){
 		this.hippoCache = hippoCache;
@@ -118,29 +120,24 @@ public class Manager implements TopicSaveListener {
 	}
 
 	/*
-	 * TODO this works, but relies on us loading tags by ID on server side
-	 * Perhaps getTopicsWithTag should take just the ID?
+	 * TODO this works, but slow nested Async
 	 */
-	public void showTopicsForTag(int arg) {
-		Tag t = new Tag();
-		t.setId(arg);
-		showTopicsForTag(t);
-	}
-	public void showTopicsForTag(String completeText) {
-		hippoCache.getTagCache().getTagForName(completeText,new StdAsyncCallback("Get Tag For Name"){
+	public void showTopicsForTag(long id) {
+		
+		getTopicCache().getTopicByIdA(id, new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
-				final Tag tag = (Tag) result;
-				showTopicsForTag(tag);	
-			}});
+				showTopicsForTag((Tag)result);		
+			}});		
 	}
+
 	public void showTopicsForTag(final Tag tag) {
 		getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback("Get Topics with Tag"){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				TopicIdentifier[] topics = (TopicIdentifier[]) result;
 
-				IslandDetailsWindow tcw = new IslandDetailsWindow(tag.getName(),topics,Manager.this);
+				IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);
 						
 			}});				
 	}
@@ -217,6 +214,12 @@ public class Manager implements TopicSaveListener {
 	}
 	public GInternalFrame newFrame() {
 		return framesManager.newFrame();
+	}
+	public TagLocalService getTagLocalService() {
+		if(tagLocalService == null){
+			tagLocalService = new TagLocalService();
+		}
+		return tagLocalService;
 	}
 	
 	

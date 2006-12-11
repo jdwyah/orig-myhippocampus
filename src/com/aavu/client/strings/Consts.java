@@ -1,13 +1,12 @@
 package com.aavu.client.strings;
 
-import com.google.gwt.i18n.client.Constants;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.i18n.client.Messages;
 
-public interface Consts extends Constants {	
+public interface Consts extends Messages {	
 	
 	String helloWorld();
 	String yourTags();
-	String tagContentsTitle();
+	String tagContentsTitle(String tagName);
 	String endDuration();
 	String startDuration();
 	String timeline();
@@ -71,6 +70,11 @@ public interface Consts extends Constants {
 	String topic_new_image();
 	String island_new_image();
 	String timeline_image();
+	
+	String island_property();
+	String island_property_new();
+	String island_property_save();
+	String oceanIslandLookupAsync();
 		
 	
 }
