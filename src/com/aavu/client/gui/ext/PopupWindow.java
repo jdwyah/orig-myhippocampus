@@ -40,8 +40,8 @@ public class PopupWindow {
 		
 		//This must be called before anything else.
 		frame.setStyle("mac_os_x");
-		frame.setWidth(WIDTH);
-		frame.setWidth(HEIGHT);
+		frame.setWidth(width);
+		frame.setWidth(height);
 		
 		frame.showCenter(false);
 		

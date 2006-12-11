@@ -228,7 +228,12 @@ a:visited {
 	cursor: pointer;
 }
 .AutoCompleteChoices {
-	z-index: 9;
+	z-index: 9999;
+}
+.H-PopupPreview {
+	z-index: 9999;
+	border: 2px;
+	border-color: black;
 }
 .H-SideBarKey {
 	color: black;

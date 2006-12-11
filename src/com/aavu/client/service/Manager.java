@@ -15,7 +15,7 @@ import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TagEditorWindow;
-import com.aavu.client.gui.TopicDisplayWindow;
+import com.aavu.client.gui.IslandDetailsWindow;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
@@ -140,7 +140,7 @@ public class Manager implements TopicSaveListener {
 				super.onSuccess(result);
 				TopicIdentifier[] topics = (TopicIdentifier[]) result;
 
-				TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
+				IslandDetailsWindow tcw = new IslandDetailsWindow(tag.getName(),topics,Manager.this);
 						
 			}});				
 	}

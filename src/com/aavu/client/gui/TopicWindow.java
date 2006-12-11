@@ -9,7 +9,7 @@ import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 
 public class TopicWindow extends PopupWindow {
 
-	public static final int WIDTH = 700;
+	public static final int WIDTH = 800;
 	public static final int HEIGHT = 500;
 	
 	private TopicViewAndEditWidget widg;
