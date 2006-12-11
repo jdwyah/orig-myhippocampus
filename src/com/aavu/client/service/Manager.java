@@ -2,6 +2,10 @@ package com.aavu.client.service;
 
 import java.util.List;
 
+import org.gwm.client.FramesManager;
+import org.gwm.client.FramesManagerFactory;
+import org.gwm.client.GInternalFrame;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -24,22 +28,25 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Manager implements TopicSaveListener {
-
-	private static final int DEF_Y = 200;
-	private static final int DEF_X = 200;
+	
 	private HippoCache hippoCache;
 	public static Consts myConstants;
 	private MainMap map;
 	private User user;
 	
-
-	
+	private FramesManager framesManager; 
 
 	public Manager(HippoCache hippoCache, User user){
 		this.hippoCache = hippoCache;
 		this.user = user;
 		initConstants();
 		hippoCache.getTopicCache().addSaveListener(this);
+		
+		
+		
+		framesManager = new FramesManagerFactory().createFramesManager(); 
+		
+		
 	}
 	private void initConstants() {
 		myConstants = (Consts) GWT.create(Consts.class);
@@ -54,9 +61,9 @@ public class Manager implements TopicSaveListener {
 
 	}
 	public TopicWindow bringUpChart(Topic topic) {
-		TopicWindow tw = new TopicWindow(this,topic);
-		tw.setPopupPosition(DEF_X,DEF_Y);
-		tw.show();
+		
+		TopicWindow tw = new TopicWindow(this,topic,newFrame());		
+		
 		return tw;
 	}
 
@@ -73,9 +80,8 @@ public class Manager implements TopicSaveListener {
 
 	public void showTagBoard() {
 
-		TagEditorWindow tw = new TagEditorWindow(hippoCache);
-		tw.setPopupPosition(DEF_X,DEF_Y);
-		tw.show();
+		TagEditorWindow tw = new TagEditorWindow(hippoCache,newFrame());
+		
 	}
 	public void doSearch(String text) {
 		System.out.println("Search "+text);
@@ -86,8 +92,7 @@ public class Manager implements TopicSaveListener {
 				List searchRes = (List) result;
 				
 				SearchResultsWindow tw = new SearchResultsWindow(Manager.this,searchRes);
-				tw.setPopupPosition(DEF_X,DEF_Y);
-				tw.show();		
+					
 			}			
 		});
 	}
@@ -108,9 +113,7 @@ public class Manager implements TopicSaveListener {
 //		tl.show();
 //		
 		
-		HippoTimeLine hippoTime = new HippoTimeLine(this,null);		
-		hippoTime.setPopupPosition(DEF_X,DEF_Y);
-		hippoTime.show();
+		HippoTimeLine hippoTime = new HippoTimeLine(this,null);				
 		
 	}
 
@@ -138,8 +141,7 @@ public class Manager implements TopicSaveListener {
 				TopicIdentifier[] topics = (TopicIdentifier[]) result;
 
 				TopicDisplayWindow tcw = new TopicDisplayWindow(tag.getName(),topics,Manager.this);
-				tcw.setPopupPosition(DEF_X,DEF_Y);
-				tcw.show();		
+						
 			}});				
 	}
 	
@@ -212,6 +214,9 @@ public class Manager implements TopicSaveListener {
 	public void refreshAll(){
 		map.updateSidebar();
 		map.refreshIslands();
+	}
+	public GInternalFrame newFrame() {
+		return framesManager.newFrame();
 	}
 	
 	

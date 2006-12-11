@@ -20,7 +20,7 @@ public class TopicDisplayWindow extends PopupWindow {
 	private VerticalPanel mainPanel;	
 
 	public TopicDisplayWindow(String title, TopicIdentifier[] topics,Manager manager) {
-		super(manager.myConstants.tagContentsTitle());
+		super(manager.newFrame(),manager.myConstants.tagContentsTitle());
 
 		mainPanel = new VerticalPanel();
 		
@@ -34,7 +34,7 @@ public class TopicDisplayWindow extends PopupWindow {
 		}
 		mainPanel.add(previewPanel);
 		
-		setContentPanel(mainPanel);
+		setContent(mainPanel);
 
 	}
 

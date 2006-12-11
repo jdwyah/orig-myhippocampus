@@ -35,7 +35,7 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	private Topic topic;
 	
 	public MapperWidget(Manager _manager,int width, int height) {		
-		super(_manager.myConstants.mapperTitle());
+		super(_manager.newFrame(),_manager.myConstants.mapperTitle());
 		this.manager = _manager;		
 		this.width = width;
 		this.height = height;
@@ -66,7 +66,7 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 	    totalPanel.add(new Label(manager.myConstants.mapperHelpText()));
 	    totalPanel.add(saveButton);
 	    totalPanel.add(mainPanel);
-	    setContentPanel(totalPanel);
+	    setContent(totalPanel);
 	}
 
 	public void loadTree(Topic topic,MindTreeOcc treeOcc) {

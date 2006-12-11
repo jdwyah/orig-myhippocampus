@@ -73,8 +73,7 @@ public class MindMapBoard extends Composite {
 	
 	private void loadNShow(MindTreeOcc treeOcc2) {
 		mapper.loadTree(topic,treeOcc2);		
-		mapper.setPopupPosition(200, 200);
-		mapper.show();
+	
 	}
 
 	

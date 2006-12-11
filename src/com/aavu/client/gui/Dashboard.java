@@ -57,9 +57,7 @@ public class Dashboard extends SimplePanel {
 		Button addDeliciousTags = new Button("Add Delicious Tags");
 		addDeliciousTags.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				DeliciousWidget widg = new DeliciousWidget(manager); 
-				widg.setPopupPosition(200, 200);
-				widg.show();
+				DeliciousWidget widg = new DeliciousWidget(manager); 				
 			}});
 
 		ImageButton timeLine = new ImageButton(_manager.myConstants.timeline_image(),40,60);

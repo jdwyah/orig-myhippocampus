@@ -20,7 +20,7 @@ public class DeliciousWidget extends PopupWindow {
 	private TextBox username;
 
 	public DeliciousWidget(Manager _manager) {
-		super(_manager.myConstants.deliciousPopupTitle());
+		super(_manager.newFrame(),_manager.myConstants.deliciousPopupTitle());
 		this.manager = _manager;
 
 		VerticalPanel mainPanel = new VerticalPanel();
@@ -55,7 +55,7 @@ public class DeliciousWidget extends PopupWindow {
 
 		mainPanel.add(godoitB);
 
-		setWidget(mainPanel);
+		setContent(mainPanel);
 	}	
 
 

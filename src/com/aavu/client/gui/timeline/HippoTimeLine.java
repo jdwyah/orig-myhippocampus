@@ -23,12 +23,12 @@ public class HippoTimeLine extends PopupWindow {
 	 * @param timeLinesObjs
 	 */
 	public HippoTimeLine(Manager manager,List timeLinesObjs){
-		super(manager.myConstants.timeline());
+		super(manager.newFrame(),manager.myConstants.timeline());
 		this.topicCache = manager.getTopicCache();
 		
 		timeline = new SimileTimeline("foo");
 
-		setContentPanel(timeline);				
+		setContent(timeline);				
 	}
 
 

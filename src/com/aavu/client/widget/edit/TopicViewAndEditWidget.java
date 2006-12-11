@@ -69,7 +69,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		activateMainView();
 		System.out.println("############################## "+topic.getTitle());
-		window.setText(topic.getTitle());
+		window.setTitle(topic.getTitle());
 		
 		Effect.highlight(topicPanel);
 	}

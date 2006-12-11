@@ -12,7 +12,17 @@ public class ExternalPopup extends PopupWindow {
 	private Frame external;
 
 	public ExternalPopup (String title,String url, int xx, int yy) {
-		super(title);
+		
+		/*
+		 * 
+		 * 
+		 * BROKEN/UNUSED
+		 * 
+		 * 
+		 */
+		super(null,title);
+		//super(title);
+		
 		external = new Frame(url);
 
 
@@ -27,9 +37,9 @@ public class ExternalPopup extends PopupWindow {
 
 		t.schedule(200);		
 
-		setContentPanel(external);
-//
-		setPixelSize(xx, yy);
+	//	setContentPanel(external);
+
+	//	setPixelSize(xx, yy);
 		
 //			int left = Window.getClientWidth()/2 - 250;
 //			int top = Window.getClientHeight()/2 - 150;

@@ -27,7 +27,7 @@ public class SearchResultsWindow extends PopupWindow {
 
 
 	public SearchResultsWindow(Manager manager, List searchRes) {
-		super(manager.myConstants.searchResultsTitle());
+		super(manager.newFrame(),manager.myConstants.searchResultsTitle());
 
 		mainPanel = new VerticalPanel();
 		
@@ -44,7 +44,7 @@ public class SearchResultsWindow extends PopupWindow {
 			}			
 		}		
 		
-		setContentPanel(mainPanel);
+		setContent(mainPanel);
 	}
 
 

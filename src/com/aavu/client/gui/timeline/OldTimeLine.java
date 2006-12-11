@@ -28,7 +28,7 @@ public class OldTimeLine extends PopupWindow {
 	 * @param timeLinesObjs
 	 */
 	public OldTimeLine(Manager manager,List timeLinesObjs){
-		super(manager.myConstants.helloWorld());
+		super(manager.newFrame(),manager.myConstants.helloWorld());
 		
 		VerticalPanel times = new VerticalPanel();
 		
@@ -56,7 +56,7 @@ public class OldTimeLine extends PopupWindow {
 		}
 	
 		
-		setContentPanel(times);
+		setContent(times);
 				
 	}
 	
