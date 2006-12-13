@@ -14,6 +14,7 @@ public interface Consts extends Messages {
 	String title();
 	String addTag();
 	String occurrences();
+	String occurrencesN(int size);
 	String deleteMe();
 	String editMe();
 	
@@ -59,6 +60,8 @@ public interface Consts extends Messages {
 	String topic_cancel();
 	String topic_updated();
 	String topic_new();
+	String topic_new_on_island();
+	String topic_new_title();
 	String topic_lookupAsync();
 	
 	String tags();	
@@ -75,6 +78,8 @@ public interface Consts extends Messages {
 	String island_property_new();
 	String island_property_save();
 	String oceanIslandLookupAsync();
+	String island_topics_on();
+	String question_img_src();
 		
 	
 }

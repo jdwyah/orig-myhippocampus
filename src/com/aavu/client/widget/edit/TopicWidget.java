@@ -34,6 +34,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TopicWidget extends FocusPanel implements ClickListener {
 
+	private static SimpleDateFormatGWT df; 
+	
+	public static Widget getSeeAlsoWidget(Topic topic2) {
+		Association assoc = topic2.getSeeAlsoAssociation();		
+		MetaSeeAlso see = (MetaSeeAlso) assoc.getFirstType();
+		return see.getWidget(topic2);
+	}
+	
 
 	private FlowPanel topicTitlePanel = new FlowPanel();
 	private Label titleLabel;
@@ -47,8 +55,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	private ReferencePanel referencesPanel;
 	private Manager manager;
 
-	private static SimpleDateFormatGWT df; 
-
+	
 	/**
 	 * NOTE: this class is responsible for noticing possible clicks on links,
 	 * then tickling the History object, since the <A> won't do this for us
@@ -100,8 +107,10 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 		panel.add(doSubject(topic));
 		panel.add(doTags(topic));
-		panel.add(doSeeAlsos(topic));
-		panel.add(doExternalLinks(topic));
+		panel.add(getSeeAlsoWidget(topic));
+		
+		panel.add(new LinkDisplayWidget(topic));
+		
 		panel.add(textPanel);
 		
 		referencesPanel = new ReferencePanel(manager,topic);
@@ -121,32 +130,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		}
 		return horizP;
 	}
-
-	private Widget doSeeAlsos(Topic topic2) {
-
-		Association assoc = topic2.getSeeAlsoAssociation();
-		
-		MetaSeeAlso see = (MetaSeeAlso) assoc.getFirstType();
-		return see.getWidget(topic2);
-
-	}
-	private Widget doExternalLinks(Topic topic2) {
-		VerticalPanel horizP = new VerticalPanel();
-
-		horizP.add(new HeaderLabel(Manager.myConstants.occurrences()));
-
-		System.out.println("OCCUR: "+topic2.getOccurences().size());
-		System.out.println(topic2.toPrettyString());
-		
-		for (Iterator iter = topic2.getOccurences().iterator(); iter.hasNext();) {
-			Occurrence occ = (Occurrence) iter.next();			
-			if(occ instanceof URI){
-				horizP.add(new ExternalLink(occ));
-			}
-		}
-
-		return horizP;		
-	}
+	
 
 	private Widget doTags(Topic t){
 		VerticalPanel panel = new VerticalPanel();	

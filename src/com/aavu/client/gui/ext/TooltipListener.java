@@ -24,18 +24,31 @@ public class TooltipListener extends MouseListenerAdapter {
 	private String text;
 
 	private TooltipPopup tooltip;
+	private boolean useRelTop;
 	
+	/**
+	 * 
+	 * @param relx
+	 * @param rely
+	 * @param text
+	 */
 	public TooltipListener(int relx,int rely,String text){
 		this.relx = relx;
 		this.rely = rely;
 		this.text = text;
+		this.useRelTop = true;
 	}
 	
+	public TooltipListener(String text) {		
+		this.text = text;
+		this.useRelTop = false;
+	}
+
 	public void onMouseEnter(Widget sender) {
 		if (tooltip != null) {
 			tooltip.hide();
 		}
-		tooltip = new TooltipPopup(sender, relx,rely, text, false);
+		tooltip = new TooltipPopup(sender, relx,rely, text, useRelTop);
 		tooltip.show();
 	}
 

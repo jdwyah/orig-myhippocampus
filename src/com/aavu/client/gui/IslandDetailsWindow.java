@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gwtwidgets.client.ui.ImageButton;
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -12,20 +13,24 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.edit.LinkDisplayWidget;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.aavu.client.widget.tags.MetaChooser;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -33,20 +38,28 @@ public class IslandDetailsWindow extends PopupWindow {
 
 	private HorizontalPanel mainPanel;	
 
-	public IslandDetailsWindow(Tag tag, TopicIdentifier[] topics,Manager manager) {
+	public IslandDetailsWindow(final Tag tag, TopicIdentifier[] topics,final Manager manager) {
 		
 		super(manager.newFrame(),manager.myConstants.tagContentsTitle(tag.getTitle()));
+				
+				
+		HorizontalPanel buttons = new HorizontalPanel();	
 		
-		//TODO tag title is null since we loaded this from flash by ID only.
+		//TODO where should this image x/y really be?
+		ImageButton addNewButton = new ImageButton(manager.myConstants.topic_new_image(),Dashboard.NEW_BUTTON_W/2,Dashboard.NEW_BUTTON_H/2);		
+		addNewButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				Topic t = new Topic(tag.getUser(),manager.myConstants.topic_new_title());
+				t.tagTopic(tag);
+				manager.bringUpChart(t);
+			}});
+		addNewButton.addMouseListener(new TooltipListener(manager.myConstants.topic_new_on_island()));
+		buttons.add(addNewButton);
 		
-		mainPanel = new HorizontalPanel();		
-		
-		HorizontalPanel buttons = new HorizontalPanel();		
-		buttons.add(new Button("Add to this Island"));
 		
 		VerticalPanel leftSide = new VerticalPanel();		
 		leftSide.add(buttons);		
-		
+		leftSide.add(new Label(manager.myConstants.island_topics_on()));
 		
 		PopupPreview previewPop = new PopupPreview();
 		
@@ -60,13 +73,30 @@ public class IslandDetailsWindow extends PopupWindow {
 		
 		
 		VerticalPanel rightSide = new VerticalPanel();
-		rightSide.add(new HeaderLabel(manager.myConstants.island_property()));
+		rightSide.setStyleName("H-IslandDetailProperties");
+		rightSide.add(new HeaderLabel(manager.myConstants.island_property(),true));
 		
 		
 		rightSide.add(new TagPropertyPanel(manager,tag));
 		
-		mainPanel.add(leftSide);
-		mainPanel.add(rightSide);
+		
+		DockPanel mainPanel = new DockPanel();
+		
+		mainPanel.add(leftSide,DockPanel.CENTER);
+		mainPanel.add(rightSide,DockPanel.EAST);
+		
+		
+		StackPanel bottomPanel = new StackPanel();
+		
+		LinkDisplayWidget ldw = new LinkDisplayWidget(tag);
+		ldw.addMeTo(bottomPanel,manager);
+		
+		bottomPanel.add(TopicWidget.getSeeAlsoWidget(tag),"See Also");
+		
+		bottomPanel.add(new Label("entries!!!"),"Entries(1)");
+		bottomPanel.add(new Label("References!!!!!!"),"References(0)");
+		
+		mainPanel.add(bottomPanel,DockPanel.SOUTH);
 		
 		setContent(mainPanel);
 

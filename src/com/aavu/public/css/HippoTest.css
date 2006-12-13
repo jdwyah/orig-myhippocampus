@@ -170,12 +170,7 @@ a:visited {
 	padding: 3px;
         font-weight: bold;
 }
-.H-Tooltip {
-	border: 1px solid black;
-	padding: 2px 3px 3px 3px;
-	background-color: #ffffcc; /*Pale Weak Yellow*/
-	z-index: 3;
-}
+
 
 .H-HeaderLabel {
 	font-family: cursive;
@@ -194,7 +189,7 @@ a:visited {
 	background-image: url("../img/earth.png");
 	background-repeat: repeat;
 }
-
+/*
 .PopWindow {
 	border: 1px solid black;
 	z-index: 2;
@@ -226,6 +221,12 @@ a:visited {
 	margin-top: 2px;
 	margin-right: 2px;
 	cursor: pointer;
+}*/
+.H-Tooltip {
+	border: 1px solid black;
+	padding: 2px 3px 3px 3px;
+	background-color: #ffffcc; /*Pale Weak Yellow*/
+	z-index: 9999;
 }
 .AutoCompleteChoices {
 	z-index: 9999;
@@ -259,6 +260,11 @@ a:visited {
 }
 .H-SearchResults .H-Title{
 	background: #87EBFF;
+}
+.H-IslandDetailProperties{
+	position: relative;
+	left: 70%;
+	border-left: thin dotted black;
 }
 .gwt-TabPanel {
 	clear: both;
@@ -453,87 +459,19 @@ a:visited {
 }
 
 .gwt-StackPanel {
-	
+	background-color: white;
+	border: 1px solid #AAAAAA;
+	width: 15em;
 }
 
 .gwt-StackPanel .gwt-StackPanelItem {
-	background-color: #C3D9FF;
+	background-image: url("../img/gray_gradient.gif");
+	background-repeat: repeat-x;
+	background-color: #EEEEEE;
 	cursor: pointer;
 	cursor: hand;
 }
 
 .gwt-StackPanel .gwt-StackPanelItem-selected {
-	
-}
-
-/* -------------------------------------------------------------------------- */
-.ks-Sink {
-	border: 8px solid #C3D9FF;
-	background-color: #E8EEF7;
-	width: 100%;
-	height: 24em;
-}
-
-.ks-Info {
-	background-color: #C3D9FF;
-	padding: 10px 10px 2px 10px;
-	font-size: smaller;
-}
-
-.ks-List {
-	margin-top: 8px;
-	margin-bottom: 8px;
-	font-size: smaller;
-}
-
-.ks-List .ks-SinkItem {
-	width: 100%;
-	padding: 0.3em;
-	padding-right: 16px;
-	cursor: pointer;
-	cursor: hand;
-}
-
-.ks-List .ks-SinkItem-selected {
-	background-color: #C3D9FF;
-}
-
-.ks-images-Image {
-	margin: 8px;
-}
-
-.ks-images-Button {
-	margin: 8px;
-	cursor: pointer;
-	cursor: hand;
-}
-
-.ks-layouts {
-	margin: 8px;
-}
-
-.ks-layouts-Label {
-	background-color: #C3D9FF;
-	font-weight: bold;
-	margin-top: 1em;
-	padding: 2px 0px 2px 0px;
-	width: 100%;
-}
-
-.ks-layouts-Scroller {
-	height: 128px;
-	border: 2px solid #C3D9FF;
-	padding: 8px;
-	margin: 8px;
-}
-
-.ks-popups-Popup {
-	background-color: white;
-	border: 1px solid #87B3FF;
-	padding: 4px;
-}
-
-.infoProse {
-	margin: 8px;
 }
 

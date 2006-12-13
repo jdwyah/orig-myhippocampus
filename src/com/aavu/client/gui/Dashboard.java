@@ -17,6 +17,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Dashboard extends SimplePanel {
 
+	public static final int NEW_BUTTON_W = 60;
+	public static final int NEW_BUTTON_H = 46;
+
 
 	private Manager manager;
 
@@ -40,7 +43,7 @@ public class Dashboard extends SimplePanel {
 //				manager.showTagBoard();
 //			}});
 
-		ImageButton addNewButton = new ImageButton(_manager.myConstants.topic_new_image(),60,46);
+		ImageButton addNewButton = new ImageButton(_manager.myConstants.topic_new_image(),NEW_BUTTON_W,NEW_BUTTON_H);
 		addNewButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.newTopic();

@@ -55,29 +55,37 @@ public class Manager implements TopicSaveListener {
 	}	
 
 	public void bringUpChart(TopicIdentifier ident) {
-		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback("BringUpChart"){
+		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback(myConstants.topic_lookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				bringUpChart((Topic) result);				
 			}});
 
 	}
-	public TopicWindow bringUpChart(Topic topic) {
+	public void bringUpChart(Topic topic) {
+		bringUpChart(topic, false);
+	}
+	public void bringUpChart(Topic topic, boolean editMode) {
 		
-		TopicWindow tw = new TopicWindow(this,topic,newFrame());		
-		
-		return tw;
+		if(topic instanceof Tag){
+			showTopicsForTag((Tag)topic);
+		}else{
+			TopicWindow tw = new TopicWindow(this,topic,newFrame());		
+			if(editMode){
+				tw.setToEdit();
+			}
+		}
 	}
 
 	public void newTopic() {
 		Topic blank = new Topic();
-		blank.setTitle("new");
-		bringUpChart(blank).setToEdit();		
+		blank.setTitle(myConstants.topic_new_title());
+		bringUpChart(blank,true);		
 	}
 	public void newIsland() {
 		Tag blank = new Tag();
-		blank.setTitle("new");
-		bringUpChart(blank).setToEdit();		
+		blank.setTitle(myConstants.topic_new_title());
+		bringUpChart(blank,true);		
 	}
 
 	public void showTagBoard() {
@@ -121,6 +129,8 @@ public class Manager implements TopicSaveListener {
 
 	/*
 	 * TODO this works, but slow nested Async
+	 * 
+	 * Used By Flash Ocean
 	 */
 	public void showTopicsForTag(long id) {
 		
@@ -132,7 +142,7 @@ public class Manager implements TopicSaveListener {
 	}
 
 	public void showTopicsForTag(final Tag tag) {
-		getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback("Get Topics with Tag"){
+		getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				TopicIdentifier[] topics = (TopicIdentifier[]) result;
