@@ -8,6 +8,7 @@ import com.aavu.client.gui.Dashboard;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -17,19 +18,24 @@ import com.google.gwt.user.client.ui.Widget;
 public class HeaderLabel extends Composite {
 
 	public HeaderLabel(String string) {
-		this(string,false);
+		this(string,null);
 	}
 
-	public HeaderLabel(String string, boolean question) {
+	public HeaderLabel(String string, final String helpText) {
 		Label l = new Label(string);		
 		l.setStyleName("H-HeaderLabel");	
 		
-		if(question){
+		if(null != helpText){
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.add(l);
 			
 			ImageButton help = new ImageButton(Manager.myConstants.question_img_src(),13,13);
 			help.addMouseListener(new TooltipListener("Help me!"));
+			help.addClickListener(new ClickListener(){
+				public void onClick(Widget sender) {
+					Window.alert(helpText);					
+				}				
+			});
 			hp.add(help);
 					
 			initWidget(hp);

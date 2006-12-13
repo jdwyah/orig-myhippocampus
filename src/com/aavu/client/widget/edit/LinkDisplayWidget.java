@@ -8,7 +8,6 @@ import com.aavu.client.domain.URI;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.HeaderLabel;
-import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class LinkDisplayWidget extends VerticalPanel {
@@ -31,9 +30,10 @@ public class LinkDisplayWidget extends VerticalPanel {
 		}
 
 	}
+	
 
-	public void addMeTo(StackPanel stack, Manager manager) {
-		stack.add(this,manager.myConstants.occurrencesN(size));
+	public int getSize() {
+		return size;
 	}
 
 }

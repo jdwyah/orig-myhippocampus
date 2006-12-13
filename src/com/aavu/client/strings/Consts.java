@@ -11,6 +11,7 @@ public interface Consts extends Messages {
 	String startDuration();
 	String timeline();
 	String seeAlsos();
+	String seeAlsosN(int i);
 	String title();
 	String addTag();
 	String occurrences();
@@ -80,6 +81,8 @@ public interface Consts extends Messages {
 	String oceanIslandLookupAsync();
 	String island_topics_on();
 	String question_img_src();
+	String island_property_help();
+	
 		
 	
 }

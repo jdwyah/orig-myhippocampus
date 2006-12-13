@@ -42,11 +42,15 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 	}
 
 	public void init(URI occ) {
-			
+					
 		setText(occ.getTitle());
 		setTarget(occ.getUri());
 
-		addMouseListener(new TooltipListener(0,0,occ.getUri()+"<BR>"+occ.getData()));
+		if(null != occ.getData()){
+			addMouseListener(new TooltipListener(occ.getUri()+"<BR>"+occ.getData()));
+		}else{
+			addMouseListener(new TooltipListener(occ.getUri()));
+		}
 	}
 	public void init(S3File file){
 		init((URI) file);	

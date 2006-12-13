@@ -18,6 +18,7 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.edit.LinkDisplayWidget;
+import com.aavu.client.widget.edit.TopicDetailsTabBar;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.aavu.client.widget.tags.MetaChooser;
 import com.aavu.client.wiki.TextDisplay;
@@ -58,14 +59,17 @@ public class IslandDetailsWindow extends PopupWindow {
 		
 		
 		VerticalPanel leftSide = new VerticalPanel();		
+		leftSide.setStyleName("H-IslandTopicList");
 		leftSide.add(buttons);		
-		leftSide.add(new Label(manager.myConstants.island_topics_on()));
+		
+		leftSide.add(new HeaderLabel(manager.myConstants.island_topics_on()));
 		
 		PopupPreview previewPop = new PopupPreview();
 		
 		if(topics != null){
 			for (int i = 0; i < topics.length; i++) {
 				TopicIdentifier topic = topics[i];
+				
 				leftSide.add(new TopicPreviewLink(manager,topic,previewPop));
 			}
 		}
@@ -74,29 +78,33 @@ public class IslandDetailsWindow extends PopupWindow {
 		
 		VerticalPanel rightSide = new VerticalPanel();
 		rightSide.setStyleName("H-IslandDetailProperties");
-		rightSide.add(new HeaderLabel(manager.myConstants.island_property(),true));
+		rightSide.add(new HeaderLabel(manager.myConstants.island_property(),manager.myConstants.island_property_help()));
 		
 		
 		rightSide.add(new TagPropertyPanel(manager,tag));
 		
 		
 		DockPanel mainPanel = new DockPanel();
+		mainPanel.addStyleName("H.IslandDetailDock");
 		
 		mainPanel.add(leftSide,DockPanel.CENTER);
 		mainPanel.add(rightSide,DockPanel.EAST);
+//		
+//		
+//		StackPanel bottomPanel = new StackPanel();
+//		
+//		LinkDisplayWidget ldw = new LinkDisplayWidget(tag);
+//		ldw.addMeTo(bottomPanel,manager);
+//		
+//		bottomPanel.add(TopicWidget.getSeeAlsoWidget(tag),"See Also");
+//		
+//		bottomPanel.add(new Label("entries!!!"),"Entries(1)");
+//		bottomPanel.add(new Label("References!!!!!!"),"References(0)");
 		
 		
-		StackPanel bottomPanel = new StackPanel();
+		TopicDetailsTabBar bottom = new TopicDetailsTabBar(tag,manager);
 		
-		LinkDisplayWidget ldw = new LinkDisplayWidget(tag);
-		ldw.addMeTo(bottomPanel,manager);
-		
-		bottomPanel.add(TopicWidget.getSeeAlsoWidget(tag),"See Also");
-		
-		bottomPanel.add(new Label("entries!!!"),"Entries(1)");
-		bottomPanel.add(new Label("References!!!!!!"),"References(0)");
-		
-		mainPanel.add(bottomPanel,DockPanel.SOUTH);
+		mainPanel.add(bottom,DockPanel.SOUTH);
 		
 		setContent(mainPanel);
 

@@ -76,13 +76,13 @@ ClickListener, MouseListener {
 
 		initWidget(panel);
 		sinkEvents(Event.ONCLICK);
-		setStyleName("gwt-TabBar");
+		setStyleName("H-VertTabBar");
 
 		
 
 		HTML first = new HTML("&nbsp;", true), rest = new HTML("&nbsp;", true);
-		first.setStyleName("gwt-TabBarFirst");
-		rest.setStyleName("gwt-TabBarRest");
+		first.setStyleName("H-VertTabBarFirst");
+		rest.setStyleName("H-VertTabBarRest");
 		first.setHeight("100%");
 		rest.setHeight("100%");
 
@@ -214,7 +214,7 @@ ClickListener, MouseListener {
 		item.setWordWrap(false);
 		item.addClickListener(this);
 		item.addMouseListener(this);
-		item.setStyleName("gwt-TabBarItem");
+		item.setStyleName("H-VertTabBarItem");
 		cellPanelWithMethods.insert(item, beforeIndex + 1);
 	}
 	
@@ -289,9 +289,9 @@ ClickListener, MouseListener {
 	private void setSelectionStyle(Widget item, boolean selected) {
 		if (item != null) {
 			if (selected)
-				item.addStyleName("gwt-TabBarItem-selected");
+				item.addStyleName("H-VertTabBarItem-selected");
 			else
-				item.removeStyleName("gwt-TabBarItem-selected");
+				item.removeStyleName("H-VertTabBarItem-selected");
 		}
 	}
 
