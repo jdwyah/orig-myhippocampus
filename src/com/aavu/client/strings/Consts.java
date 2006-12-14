@@ -49,6 +49,8 @@ public interface Consts extends Messages {
 	String upload_complete();
 	String upload_submit();
 	String upload_select_file();
+	String upload_save_topic_first();
+	
 	String filesN(int i);
 	String upload_add();
 	String mapperTitle();
@@ -60,9 +62,10 @@ public interface Consts extends Messages {
 	String topic_edit();	
 	String topic_cancel();
 	String topic_updated();
-	String topic_new();
+	String topic_new();	
 	String topic_new_on_island();
 	String topic_new_title();
+	String topic_blank();
 	String topic_lookupAsync();
 	
 	String tags();	
@@ -83,6 +86,9 @@ public interface Consts extends Messages {
 	String question_img_src();
 	String island_property_help();
 	String entry();
+	String save_greenLight();
+	String save_redLight();
+	
 	
 		
 	

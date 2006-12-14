@@ -99,8 +99,8 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 
 		vertableTabBar.addTabListener(this);
 		initWidget(panel);
-		setStyleName("gwt-TabPanel");
-		deck.setStyleName("gwt-TabPanelBottom");
+		setStyleName("H-VertTabPanel");
+		deck.setStyleName("H-VertTabPanelBottom");
 	}
 
 	public void add(Widget w) {

@@ -26,8 +26,10 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 	private Topic myTopic;
 	
 	private SeeAlsoWidget alsos;
+	private SaveNeededListener saveNeeded;
 	
-	public SeeAlsoBoard(Manager manager) {
+	public SeeAlsoBoard(Manager manager, SaveNeededListener saveNeeded) {
+		this.saveNeeded = saveNeeded;
 		topicService = manager.getTopicCache();
 		
 		topicCompleter = new TopicCompleter();		
@@ -57,14 +59,15 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		initWidget(mainP);
 	}
 
-	public void load(Topic topic) {
+	public int load(Topic topic) {
 		myTopic = topic;
 				
 		Association assoc = myTopic.getSeeAlsoAssociation();
 		if(assoc == null){
 			System.out.println("no see alsos");
+			return 0;
 		}else{
-			alsos.load(assoc);
+			return alsos.load(assoc);
 		}
 		
 	}
@@ -80,6 +83,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 
 				alsos.add(to);
 				topicCompleter.setText("");
+				saveNeeded.onChange(SeeAlsoBoard.this);
 			}});
 		
 	}
@@ -98,11 +102,14 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 			initWidget(horizP);
 		}
 		
-		public void load(Association seeAlsoAssoc){
+		public int load(Association seeAlsoAssoc){
+			int size = 0;
 			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
 				horizP.add(new TopicLink(top));
+				size++;
 			}
+			return size;
 		}
 
 		public void add(TopicIdentifier to2) {

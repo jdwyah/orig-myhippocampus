@@ -6,10 +6,10 @@ import java.util.Set;
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.service.Manager;
-import com.aavu.client.service.cache.HippoCache;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -22,7 +22,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	
 	private Button editTextButton;
 	private Button cancelButton;	
-	private Button saveButton;
+	//private Button saveButton;
 	
 	private TopicWidget topicWidget;
 	private TopicEditWidget topicEditWidget;
@@ -32,20 +32,15 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	
 	public Topic topic;
 	private Manager manager;
-	private TopicWindow window;	
+	private SaveNeededListener saveNeeded;
 	
 	//TODO fix window null
-	public TopicViewAndEditWidget(Manager manager) {
-		this(null,manager);
-	}
-	public TopicViewAndEditWidget(TopicWindow window, Manager manager) {
+	public TopicViewAndEditWidget(Manager manager, SaveNeededListener saveNeeded) {
+		this.saveNeeded = saveNeeded;
 		this.manager = manager;
-		this.window = window;
 		
 		editTextButton = new Button(manager.myConstants.topic_edit());
 		cancelButton = new Button(manager.myConstants.topic_cancel());	
-		saveButton = new Button(manager.myConstants.save());
-		
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
@@ -55,7 +50,6 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		cancelButton.addClickListener(this);
 		editTextButton.addClickListener(this);
-		saveButton.addClickListener(this);
 		
 		mainPanel.add(lp);
 		mainPanel.add(topicPanel);
@@ -73,9 +67,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		activateMainView();
 		System.out.println("############################## "+topic.getTitle());
 		
-		if(window != null){
-			window.setTitle(topic.getTitle());
-		}
+		
 		Effect.highlight(topicPanel);
 	}
 		
@@ -88,9 +80,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		else if (source == editTextButton){
 			activateEditView();
 		}
-		else if (source == saveButton){
-			topicEditWidget.save();									
-		}
+		
 		
 	}
 	
@@ -110,30 +100,18 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		topicPanel.add(topicEditWidget);				
 				
 		lp.clear();
-		lp.add(cancelButton);
-		lp.add(saveButton);		
+		lp.add(cancelButton);		
+		
+		saveNeeded.onChange(this);
 	}
+
+	public Entry getEntry(){
+		return topic.getLatestEntry();
+	}
+	public String getEntryText(){		
+		return topicEditWidget.getCurrentText();
+	}
+
 	
-
-	public void save(Topic topic2, Set otherTopicsToSave) {
-		
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!");
-		//TODO is this good or bad? a bit early.. 
-		load(topic2);
-		
-		manager.getTopicCache().save(topic2, otherTopicsToSave, new StdAsyncCallback("topicDetail save") {				
-			
-			public void onSuccess(Object result) {		
-				super.onSuccess(result);
-				System.out.println("????????????????????");
-				//this should prevent double saves
-				Topic[] saved = (Topic[]) result;
-				load(saved[0]);
-				
-				activateMainView();
-			}
-		});	
-
-	}
 	
 }

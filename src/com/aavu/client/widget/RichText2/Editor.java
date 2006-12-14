@@ -57,6 +57,7 @@ public class Editor extends Composite /* implements HasHTML*/{
 	private boolean loadedOk = false;
 
     private KeyCodeEventListener listener;
+	private String html_pre_load_holder;
 
 
 	/**
@@ -277,9 +278,15 @@ public class Editor extends Composite /* implements HasHTML*/{
 
 	/**
 	 * Get the current HTML text of the editor.
+	 * 
+	 * Very important (ie crash) not to run native getHTML if we haven't actually loaded. 
+	 * 
 	 * @see #setHTML(String)
 	 */
 	public String getHTML(){
+		if(!inited || !loadedOk){
+			return html_pre_load_holder;
+		}
 		return getHTML(textElement);
 	}
 
@@ -297,6 +304,7 @@ public class Editor extends Composite /* implements HasHTML*/{
 	 */
 	public void setHTML(final String html) {
 		if (isFrameLoaded(textElement)){
+			html_pre_load_holder = html;
 			System.out.println("really set");
 			setHTML(textElement, html);
 		}else{			

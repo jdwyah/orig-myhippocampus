@@ -45,11 +45,14 @@ public class TagBoard extends Composite implements CompleteListener {
 	private TagCache tagCache;
 	private Manager manager;
 	
-	private Set tagsToSave = new HashSet(); 
+	private Set tagsToSave = new HashSet();
 
-	public TagBoard(Manager manager) {
+	private SaveNeededListener saveNeeded; 
+
+	public TagBoard(Manager manager,SaveNeededListener saveNeeded) {
 		this.manager = manager;
 		this.tagCache = manager.getTagCache();
+		this.saveNeeded = saveNeeded;
 
 		tagBox = new TagAutoCompleteBox(this,tagCache);
 
@@ -61,16 +64,17 @@ public class TagBoard extends Composite implements CompleteListener {
 		});
 
 		VerticalPanel mainPanel = new VerticalPanel();
-				
-		HorizontalPanel tagBoxP = new HorizontalPanel();
-		tagBoxP.add(new HeaderLabel(Manager.myConstants.addTag()));
-		tagBoxP.add(tagBox);
-		tagBoxP.add(addTagButton);
 		
+		mainPanel.add(new HeaderLabel(Manager.myConstants.tags()));
+		
+		HorizontalPanel tagBoxP = new HorizontalPanel();		
+		tagBoxP.add(new Label(Manager.myConstants.addTag()));
+		tagBoxP.add(tagBox);
+		tagBoxP.add(addTagButton);		
 		mainPanel.add(tagBoxP);
 		
-		VerticalPanel tagPanelS = new VerticalPanel();
-		tagPanelS.add(new Label(Manager.myConstants.tags()));
+		
+		VerticalPanel tagPanelS = new VerticalPanel();		
 		tagPanelS.add(tagPanel);
 		mainPanel.add(tagPanelS);
 				
@@ -105,7 +109,7 @@ public class TagBoard extends Composite implements CompleteListener {
 	 * 
 	 * @param topic
 	 */
-	public void load(Topic topic){
+	public int load(Topic topic){
 		
 		tagPanel.clear();
 		
@@ -113,15 +117,13 @@ public class TagBoard extends Composite implements CompleteListener {
 		
 		listeners.clear();
 		
-//		tags.clear();
-//		
-//		metaMap.clear();
-//		
-		
+		int rtnSize = 0;
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag tag = (Tag) iter.next();
 			showTag(tag);
+			rtnSize++;			
 		}		
+		return rtnSize;
 	}
 	
 	private void showTag(final Tag tag){
@@ -151,6 +153,7 @@ public class TagBoard extends Composite implements CompleteListener {
 			manager.growIsland(tag);
 		}
 		tagsToSave.add(tag);
+		saveNeeded.onChange(this);
 	}
 	
 	private void displayMetas(Tag tag) {
@@ -175,13 +178,14 @@ public class TagBoard extends Composite implements CompleteListener {
 
 	public void saveThingsNowEvent(StdAsyncCallback callback) {
 		GWT.log("savethingsnowevent",null);
-
+		System.out.println("save things now");
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			SaveListener listener = (SaveListener) iterator.next();		
-			
+			System.out.println("dispatch to listener");
 			listener.saveNowEvent();
 			
 		}
+		System.out.println("returning");
 		callback.onSuccess(tagsToSave);
 							
 	}

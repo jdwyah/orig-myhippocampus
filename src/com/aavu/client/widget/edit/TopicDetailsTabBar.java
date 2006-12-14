@@ -12,27 +12,53 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TopicDetailsTabBar extends TabPanel {
 
-	public TopicDetailsTabBar(Topic topic,Manager manager){
+	private TopicViewAndEditWidget tvw;
+
+	public TopicDetailsTabBar(Topic topic,Manager manager,SaveNeededListener saveNeeded){
 		
-		TopicViewAndEditWidget tvw = new TopicViewAndEditWidget(manager);
+		boolean selected = false;
+		
+		tvw = new TopicViewAndEditWidget(manager,saveNeeded);
 		tvw.load(topic);
 		add(tvw,Manager.myConstants.entry());
-	
+		if(!selected && !tvw.getEntry().isEmpty()){
+			System.out.println("SELEC ENTRY");
+			selectTab(getWidgetCount()-1);
+			selected = true;
+		}
+		
 		LinkDisplayWidget ldw = new LinkDisplayWidget(topic);
 		add(ldw,Manager.myConstants.occurrencesN(ldw.getSize()));
+		if(!selected && ldw.getSize() > 0){
+			System.out.println("SELEC LINKS");
+			selectTab(getWidgetCount()-1);
+			selected = true;
+		}
 				
-		SeeAlsoDisplayWidget sdw = new SeeAlsoDisplayWidget(topic);
-		add(sdw,Manager.myConstants.seeAlsosN(sdw.getSize()));		
+		SeeAlsoBoard sab = new SeeAlsoBoard(manager,saveNeeded);
+		int size = sab.load(topic);		
+		add(sab,Manager.myConstants.seeAlsosN(size));				
+		if(!selected && size > 0){
+			System.out.println("SELEC SEE ALSO");
+			selectTab(getWidgetCount()-1);
+			selected = true;
+		}
 		
-		UploadBoard ub = new UploadBoard(manager,topic);		
+		UploadBoard ub = new UploadBoard(manager,topic,saveNeeded);		
 		add(ub,Manager.myConstants.filesN(ub.getSize()));		
 		
-		MindMapBoard mindMapBoard = new MindMapBoard(manager,topic);
+		MindMapBoard mindMapBoard = new MindMapBoard(manager,topic,saveNeeded);
 		add(mindMapBoard,Manager.myConstants.mapperTitle());
 		
 		ReferencePanel referencesPanel = new ReferencePanel(manager,topic);
 		add(referencesPanel,Manager.myConstants.references());
 		referencesPanel.load();
+		
+		
+	}
+
+	public String getEntryText() {
+		return tvw.getEntryText();
 	}
 	
 }

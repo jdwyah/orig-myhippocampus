@@ -77,7 +77,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 			realModuleBase = GWT.getModuleBaseURL();//HippoTest/service/topicService
 			realModuleBase = "http://www.myhippocampus.com/";
 					
-			//realModuleBase = "http://localhost:8080/";
+			realModuleBase = "http://localhost:8080/";
 			
 		}else{
 			realModuleBase = GWT.getModuleBaseURL();

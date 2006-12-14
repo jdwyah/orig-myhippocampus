@@ -72,7 +72,7 @@ public class Manager implements TopicSaveListener {
 		}else{
 			TopicWindow tw = new TopicWindow(this,topic);		
 			if(editMode){
-				tw.setToEdit();
+				//tw.setToEdit();
 			}
 		}
 	}

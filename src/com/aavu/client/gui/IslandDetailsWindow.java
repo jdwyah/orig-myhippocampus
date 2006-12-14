@@ -20,19 +20,16 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class IslandDetailsWindow extends TopicTagSuperWindow {
 
+	public static final int WIDTH = 700;
+	public static final int HEIGHT = 500;	
 
-
-	private Tag tag;
-	private Manager manager;
 	private TopicIdentifier[] topics;
 
 
 	public IslandDetailsWindow(final Tag tag, TopicIdentifier[] topics,final Manager manager) {
 		
-		super(manager.newFrame(),manager.myConstants.tagContentsTitle(tag.getTitle()));
-				
-		this.tag = tag;
-		this.manager = manager;		
+		super(manager.newFrame(),manager.myConstants.tagContentsTitle(tag.getTitle()),WIDTH,HEIGHT);
+						
 		this.topics = topics;
 		
 		init(tag,manager);
@@ -47,8 +44,8 @@ public class IslandDetailsWindow extends TopicTagSuperWindow {
 		ImageButton addNewButton = new ImageButton(manager.myConstants.topic_new_image(),Dashboard.NEW_BUTTON_W/2,Dashboard.NEW_BUTTON_H/2);		
 		addNewButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				Topic t = new Topic(tag.getUser(),manager.myConstants.topic_new_title());
-				t.tagTopic(tag);
+				Topic t = new Topic(topic.getUser(),manager.myConstants.topic_new_title());
+				t.tagTopic(topic);
 				manager.bringUpChart(t);
 			}});
 		addNewButton.addMouseListener(new TooltipListener(manager.myConstants.topic_new_on_island()));		
@@ -81,12 +78,11 @@ public class IslandDetailsWindow extends TopicTagSuperWindow {
 	
 	//@Override
 	protected void addRightExtras(CellPanel panel) {
-		VerticalPanel rightSideExtras = new VerticalPanel();
-		rightSideExtras.setStyleName("H-IslandDetailProperties");
+		VerticalPanel rightSideExtras = new VerticalPanel();		
 		rightSideExtras.add(new HeaderLabel(Manager.myConstants.island_property(),Manager.myConstants.island_property_help()));
 
 
-		rightSideExtras.add(new TagPropertyPanel(manager, tag));
+		rightSideExtras.add(new TagPropertyPanel(manager, (Tag) topic));
 		panel.add(rightSideExtras);
 	}
 

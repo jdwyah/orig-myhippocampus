@@ -21,15 +21,17 @@ public class UploadBoard extends Composite {
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Topic topic;
 	private int size = 0;
+	private SaveNeededListener saveNeeded;
 
-	public UploadBoard(final Manager manager, Topic _topic) {
+	public UploadBoard(final Manager manager, Topic _topic, SaveNeededListener _saveNeeded) {
 		this.topic = _topic;
+		this.saveNeeded = _saveNeeded;
 		
 		//don't let them upload to an unsaved topic
 		//TODO make this appear after a save and give an indication that they need 
 		//to save to make this appear.
 		if(topic.getId() == 0){
-			initWidget(mainPanel);
+			initWidget(new Label(Manager.myConstants.upload_save_topic_first()));
 			return;
 		}
 		
@@ -41,7 +43,8 @@ public class UploadBoard extends Composite {
 		addOne.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				UploadWidget widg = new UploadWidget(manager,topic,UploadBoard.this,HippoTest.realModuleBase+HippoTest.UPLOAD_PATH);		
-				mainPanel.add(widg);			
+				mainPanel.add(widg);	
+				saveNeeded.onChange(UploadBoard.this);
 			}});
 		rowOne.add(addOne);		
 		mainPanel.add(rowOne);		

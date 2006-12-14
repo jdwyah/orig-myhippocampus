@@ -11,6 +11,8 @@ import com.aavu.client.domain.subjects.HippoCountry;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.SubjectInfo;
 import com.aavu.client.domain.subjects.WikiSubject;
+import com.aavu.client.gui.TopicTagSuperWindow;
+import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.ObjectListBox;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
@@ -37,18 +39,21 @@ public class SubjectBoard extends Composite{
 	private Label editMe;
 	private SubjectServicePicker subjectTypeList;
 
-	private TextBox titleBox;
+	private EditableLabelExtension titleBox;
 
 	private Subject selectedSubject;
 
 	private Topic topic;
 
-	private TagBoard tagBoard; 
+	private TagBoard tagBoard;
 
-	public SubjectBoard(final Manager manager, TextBox titleBox, TagBoard tagBoard) {	
+	private SaveNeededListener saveNeeded; 
+
+	public SubjectBoard(final Manager manager, EditableLabelExtension titleBox2, TagBoard tagBoard, SaveNeededListener saveNeeded) {	
 		this.manager = manager;
-		this.titleBox = titleBox;
+		this.titleBox = titleBox2;
 		this.tagBoard = tagBoard;
+		this.saveNeeded = saveNeeded;
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 
@@ -102,6 +107,8 @@ public class SubjectBoard extends Composite{
 		editMe.setVisible(true);
 		chooserPanel.setVisible(false);
 		infoPanel.setVisible(false);
+		
+		saveNeeded.onChange(this);
 	}
 
 	public Subject getSelectedSubject() {	

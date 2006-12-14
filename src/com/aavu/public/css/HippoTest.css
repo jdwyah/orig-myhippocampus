@@ -271,13 +271,13 @@ a:visited {
 .H-IslandTopicList{
 	padding: 2.0em;	
 }
-.H-IslandDetailProperties{
-	position: relative;
-	left: 70%;
+.H-TopicTagRight{
+/*	position: relative;
+	left: 70%;*/
 	height: 100%;
 	border-left: thin dotted black;
 }
-.gwt-TabPanel {
+.H-VertTabPanel {
 	clear: both;
 	margin: 0em 0em 1.5em 0em;
 	/*border-top: solid 0.1em rgb(175, 175, 175);
@@ -290,7 +290,7 @@ a:visited {
 	color: rgb(50, 50, 50);
 }
 
-.gwt-TabPanelBottom {
+.H-VertTabPanelBottom {
 	width: 110;
 }
 
@@ -519,3 +519,7 @@ a:visited {
 .gwt-StackPanel .gwt-StackPanelItem-selected {
 }
 
+
+.editableLabel-label-hover {
+	background-color: #ffffcc;
+}

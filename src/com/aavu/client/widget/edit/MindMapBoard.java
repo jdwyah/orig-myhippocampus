@@ -21,10 +21,11 @@ public class MindMapBoard extends Composite {
 	private MapperWidget mapper;
 	private MindTreeOcc treeOcc;
 	private Topic topic;
+	private SaveNeededListener saveNeeded;
 
 
-	public MindMapBoard(final Manager manager, Topic topic) {
-
+	public MindMapBoard(final Manager manager, Topic topic, SaveNeededListener _saveNeeded) {
+		this.saveNeeded = _saveNeeded;
 		this.topic = topic;
 		
 		VerticalPanel mainPanel = new VerticalPanel();
@@ -56,6 +57,7 @@ public class MindMapBoard extends Composite {
 				}else{
 					loadNShow(treeOcc);
 				}
+				saveNeeded.onChange(MindMapBoard.this);
 				
 			}});
 		

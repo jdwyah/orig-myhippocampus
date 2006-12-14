@@ -18,22 +18,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicEditWidget extends Composite {
-	
-	private TextBox titleBox = new TextBox();
+		
 	private SpecialTextbox textArea = null;
 
-	private TagBoard tagBoard;
-	private SubjectBoard subjectBoard;
+	//private TagBoard tagBoard;
+	//private SubjectBoard subjectBoard;
 	
 	private Topic topic;
-	private TopicViewAndEditWidget topicViewAndEditWidget;
-	
-	private SeeAlsoBoard seeAlsoBoard;
-	
-	private UploadBoard uploadBoard;
-	private MindMapBoard mindMapBoard;
+	private TopicViewAndEditWidget topicViewAndEditWidget;	
+
 	private Manager manager;
-	private HorizontalPanel topPanel;
 	
 	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, final Manager manager, Topic _topic){
 		this.topic = _topic;
@@ -43,32 +37,16 @@ public class TopicEditWidget extends Composite {
 		System.out.println("topic edit widg "+topic);
 		
 		textArea = new SpecialTextbox(manager.getTopicCache());
-		
-		
-		tagBoard = new TagBoard(manager);
-		subjectBoard = new SubjectBoard(manager,titleBox,tagBoard);
-		seeAlsoBoard = new SeeAlsoBoard(manager);
-		uploadBoard = new UploadBoard(manager,topic);
-		
-		mindMapBoard = new MindMapBoard(manager,topic);
-
-		
-		topPanel = new HorizontalPanel();
-		topPanel.add(new HeaderLabel(manager.myConstants.title()));
-		topPanel.add(titleBox);
-
-		
+				
+		//tagBoard = new TagBoard(manager);
+		//subjectBoard = new SubjectBoard(manager,titleBox,tagBoard);
+			
 		setupTopic();		
 		
-		VerticalPanel panel = new VerticalPanel();
+		VerticalPanel panel = new VerticalPanel();		
 		
-		panel.add(topPanel);
-		
-		panel.add(subjectBoard);
-		panel.add(tagBoard);		
-		panel.add(seeAlsoBoard);
-		panel.add(uploadBoard);
-		panel.add(mindMapBoard);
+		//panel.add(subjectBoard);
+		//panel.add(tagBoard);		
 				
 		panel.add(textArea);
 	
@@ -80,61 +58,13 @@ public class TopicEditWidget extends Composite {
 	
 	private void setupTopic() {
 		System.out.println("setupTopic");
-		if(topic != null){
-			titleBox.setText(topic.getTitle());		
-			textArea.setText(topic.getLatestEntry().getData());
-						
-			subjectBoard.load(topic);
-			tagBoard.load(topic);
-			seeAlsoBoard.load(topic);
-			
-			
-			
-			/*
-			 * Island creation
-			 */
-			if(topPanel.getWidgetCount() > 2){
-				topPanel.remove(2);
-			}
-			if(!(topic instanceof Tag)){
-				Button islandButton = new Button(manager.myConstants.tag_upgrade());
-				islandButton.addClickListener(new ClickListener(){
-					public void onClick(Widget sender) {
-						makeThisAnIsland();
-					}});				
-				topPanel.add(islandButton);
-			}else{
-				topPanel.add(new Label(manager.myConstants.tag_topicIsA()));
-			}
+		if(topic != null){		
+			textArea.setText(topic.getLatestEntry().getData());			
 		}
 	}
 
-	private void makeThisAnIsland(){
-		manager.getTagCache().makeMeATag(topic,new StdAsyncCallback(manager.myConstants.tag_upgradeAsync()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				Tag tag = (Tag) result;
-				manager.growIsland(tag);
-				setupTopic();
-			}
-
-		});
-	}
-
-	public void save() {
-		topic.getLatestEntry().setData(textArea.getText());
-		topic.setTitle(titleBox.getText());
-		
-		topic.setSubject(subjectBoard.getSelectedSubject());
-		
-		tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
-
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				Set otherTopicsToSave = (Set) result;
-				topicViewAndEditWidget.save(topic,otherTopicsToSave);					
-			}});
-		
+	public String getCurrentText(){
+		return textArea.getText();
 	}
 
 
