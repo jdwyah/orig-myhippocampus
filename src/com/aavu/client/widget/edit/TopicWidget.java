@@ -99,7 +99,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		topicTitlePanel.clear();
 		topicTitlePanel.add(titleLabel);
 		topicTitlePanel.add(new Label(topic.getTitle()));
-		topicTitlePanel.add(new Label(manager.myConstants.topic_updated()+formatDate(topic.getLastUpdated())));
+	//	topicTitlePanel.add(new Label(manager.myConstants.topic_updated()+formatDate(topic.getLastUpdated())));
 
 
 		panel.clear();
@@ -153,15 +153,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	}
 
 
-	public String formatDate(java.util.Date date){		
-		if(df == null){
-			df = new SimpleDateFormatGWT("yyyy-MM-dd HH:mm:ss");
-		}
-		if(date != null){
-			return df.format(date);
-		}
-		return null;
-	}
+	
 
 
 

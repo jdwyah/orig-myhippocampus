@@ -70,7 +70,7 @@ public class Manager implements TopicSaveListener {
 		if(topic instanceof Tag){
 			showTopicsForTag((Tag)topic);
 		}else{
-			TopicWindow tw = new TopicWindow(this,topic,newFrame());		
+			TopicWindow tw = new TopicWindow(this,topic);		
 			if(editMode){
 				tw.setToEdit();
 			}

@@ -15,6 +15,7 @@ public class LinkDisplayWidget extends VerticalPanel {
 	private int size = 0;
 
 	public LinkDisplayWidget(Topic topic) {
+		addStyleName("H-LinkDisplay");
 		
 		add(new HeaderLabel(Manager.myConstants.occurrences()));
 

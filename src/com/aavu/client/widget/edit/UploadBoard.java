@@ -20,6 +20,7 @@ public class UploadBoard extends Composite {
 		
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Topic topic;
+	private int size = 0;
 
 	public UploadBoard(final Manager manager, Topic _topic) {
 		this.topic = _topic;
@@ -32,8 +33,10 @@ public class UploadBoard extends Composite {
 			return;
 		}
 		
+		
+		
 		HorizontalPanel rowOne = new HorizontalPanel();
-		rowOne.add(new HeaderLabel(Manager.myConstants.files()));
+		
 		Button addOne = new Button(Manager.myConstants.upload_add());
 		addOne.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
@@ -41,13 +44,14 @@ public class UploadBoard extends Composite {
 				mainPanel.add(widg);			
 			}});
 		rowOne.add(addOne);		
-		mainPanel.add(rowOne);
-		
+		mainPanel.add(rowOne);		
+
 		System.out.println("UploadBoard OCCUR: "+topic.getOccurences().size());				
 		for (Iterator iter = topic.getOccurences().iterator(); iter.hasNext();) {
 			Occurrence occ = (Occurrence) iter.next();
 			if(occ instanceof S3File){
 				addS3File((S3File) occ);
+				size++;
 			}
 		}		
 		
@@ -57,4 +61,8 @@ public class UploadBoard extends Composite {
 		
 		mainPanel.add(new Label(file.getTitle()));
 	}
+	public int getSize() {
+		return size;
+	}
+	
 }

@@ -22,7 +22,8 @@ public class MindMapBoard extends Composite {
 	private MindTreeOcc treeOcc;
 	private Topic topic;
 
-	public MindMapBoard(final Manager manager, Topic topic, TopicEditWidget widget) {
+
+	public MindMapBoard(final Manager manager, Topic topic) {
 
 		this.topic = topic;
 		
@@ -71,6 +72,8 @@ public class MindMapBoard extends Composite {
 	}
 
 	
+
+
 	private void loadNShow(MindTreeOcc treeOcc2) {
 		mapper.loadTree(topic,treeOcc2);		
 	

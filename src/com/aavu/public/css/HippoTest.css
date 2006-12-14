@@ -255,6 +255,9 @@ a:visited {
 	height: 20px;
 	
 }
+.H-LinkDisplay {
+	width: 100em;
+}
 .H-SearchResults {
 	padding: 3px;	
 }
@@ -263,7 +266,7 @@ a:visited {
 }
 
 .H.IslandDetailDock{
-	padding: 10.0em;
+	padding: 10.0em;	
 }
 .H-IslandTopicList{
 	padding: 2.0em;	

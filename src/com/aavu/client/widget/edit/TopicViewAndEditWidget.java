@@ -34,7 +34,10 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	private Manager manager;
 	private TopicWindow window;	
 	
-	
+	//TODO fix window null
+	public TopicViewAndEditWidget(Manager manager) {
+		this(null,manager);
+	}
 	public TopicViewAndEditWidget(TopicWindow window, Manager manager) {
 		this.manager = manager;
 		this.window = window;
@@ -69,8 +72,10 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		activateMainView();
 		System.out.println("############################## "+topic.getTitle());
-		window.setTitle(topic.getTitle());
 		
+		if(window != null){
+			window.setTitle(topic.getTitle());
+		}
 		Effect.highlight(topicPanel);
 	}
 		

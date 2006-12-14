@@ -50,7 +50,7 @@ public class TopicEditWidget extends Composite {
 		seeAlsoBoard = new SeeAlsoBoard(manager);
 		uploadBoard = new UploadBoard(manager,topic);
 		
-		mindMapBoard = new MindMapBoard(manager,topic,this);
+		mindMapBoard = new MindMapBoard(manager,topic);
 
 		
 		topPanel = new HorizontalPanel();
