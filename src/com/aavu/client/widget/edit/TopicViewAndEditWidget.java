@@ -22,7 +22,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	
 	private Button editTextButton;
 	private Button cancelButton;	
-	//private Button saveButton;
+	private Button previewButton;
 	
 	private TopicWidget topicWidget;
 	private TopicEditWidget topicEditWidget;
@@ -34,6 +34,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 	private Manager manager;
 	private SaveNeededListener saveNeeded;
 	
+	
 	//TODO fix window null
 	public TopicViewAndEditWidget(Manager manager, SaveNeededListener saveNeeded) {
 		this.saveNeeded = saveNeeded;
@@ -41,6 +42,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		editTextButton = new Button(manager.myConstants.topic_edit());
 		cancelButton = new Button(manager.myConstants.topic_cancel());	
+		previewButton = new Button(manager.myConstants.topic_preview());
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
@@ -50,6 +52,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		
 		cancelButton.addClickListener(this);
 		editTextButton.addClickListener(this);
+		previewButton.addClickListener(this);
 		
 		mainPanel.add(lp);
 		mainPanel.add(topicPanel);
@@ -80,6 +83,12 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		else if (source == editTextButton){
 			activateEditView();
 		}
+		else if (source == previewButton){
+
+			saveNeeded.onChange(this);
+			topicWidget.setText(getEntryText());
+			activateMainView();
+		}
 		
 		
 	}
@@ -100,9 +109,9 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		topicPanel.add(topicEditWidget);				
 				
 		lp.clear();
+		lp.add(previewButton);
 		lp.add(cancelButton);		
 		
-		saveNeeded.onChange(this);
 	}
 
 	public Entry getEntry(){

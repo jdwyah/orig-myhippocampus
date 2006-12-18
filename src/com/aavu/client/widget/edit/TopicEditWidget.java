@@ -63,6 +63,7 @@ public class TopicEditWidget extends Composite {
 		}
 	}
 
+	
 	public String getCurrentText(){
 		return textArea.getText();
 	}

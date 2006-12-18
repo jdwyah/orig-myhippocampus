@@ -67,6 +67,7 @@ public interface Consts extends Messages {
 	String topic_new_title();
 	String topic_blank();
 	String topic_lookupAsync();
+	String topic_preview();
 	
 	String tags();	
 	String tag_upgrade();
@@ -88,6 +89,7 @@ public interface Consts extends Messages {
 	String entry();
 	String save_greenLight();
 	String save_redLight();
+	
 	
 	
 		

@@ -66,8 +66,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	public void setup(){
 
 		Entry entry = topic.getLatestEntry();
-		textPanel.clear();
-		textPanel.add(new TextDisplay(entry.getData()));		
+		setText(entry.getData());
 
 		panel.clear();
 		if(entry.isEmpty()){
@@ -77,6 +76,10 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 	}
 
+	public void setText(String data){
+		textPanel.clear();
+		textPanel.add(new TextDisplay(data));	
+	}
 
 
 
