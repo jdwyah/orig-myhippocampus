@@ -2,6 +2,7 @@
 
     <excludes>
 	  <pattern>*com.aavu.HippoTest*</pattern> 
+      <pattern>/site/secure/getTopics.html</pattern><!-- Ajax Straight HTML <UL> -->
 	</excludes>
     
    <!-- notes -->
@@ -12,7 +13,7 @@
    <!-- for site/index.html that == "/site"  ! "/site/*" -->
     
     
-    <!-- crucial not to match /index.html since that doesn't go through
+    <!-- crucial not to match /index.html (the redirect) since that doesn't go through
     Spring and the default.ftl needs to springMacroRequestContext -->
     <decorator name="none" page="none.ftl">
         <pattern>/*</pattern>
@@ -22,6 +23,9 @@
     <!-- This default.ftl uses decorators/spring.ftl which is a little messy
     since that normally just come from the spring jar. -->
     <decorator name="default" page="default.ftl">
-        <pattern>/site*</pattern>
+        <pattern>/site*</pattern>        
+    </decorator>
+    <decorator name="none" page="none.ftl">
+    	<pattern>/site/secure/addLink.html</pattern>
     </decorator>
 </decorators>

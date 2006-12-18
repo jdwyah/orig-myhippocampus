@@ -46,5 +46,6 @@
 	<classpathentry kind="lib" path="lib/gwt-simile-timeline.jar"/>
 	<classpathentry kind="lib" path="tools/gwt/gwt-user-1.2.22.jar"/>
 	<classpathentry kind="lib" path="lib/gwm-1.0b.jar"/>
+	<classpathentry kind="lib" path="lib/sitemesh-2.3-editted.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

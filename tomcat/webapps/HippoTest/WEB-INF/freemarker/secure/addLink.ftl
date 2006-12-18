@@ -14,30 +14,6 @@
   <link rel="stylesheet" type="text/css" href="<@spring.url "/css/style.css"/>"/>
   <title><@spring.message "addLink.title"/></title>
   
-	<style>  div.auto_complete {
-            width: 350px;
-            background: #fff;
-          }
-          div.auto_complete ul {
-            border:1px solid #888;
-            margin:0;
-            padding:0;
-            width:100%;
-            list-style-type:none;
-          }
-          div.auto_complete ul li {
-            margin:0;
-            padding:3px;
-          }
-          div.auto_complete ul li.selected { 
-            background-color: #ffb; 
-          }
-          div.auto_complete ul strong.highlight { 
-            color: #800; 
-            margin:0;
-            padding:0;
-          }
-	</style>
 </head>
 
 <body>
@@ -80,7 +56,7 @@
     <form action="" method="POST">
 	    <!-- Middle column full box -->
       <div class="middle-column-box-white">
-        <div class="middle-column-box-title-blue"><@spring.message "addLink.addALink"/></div>
+        <div class="middle-column-box-title-green"><@spring.message "addLink.addALink"/></div>
 		  <p class="subheading"><@spring.message "addLink.URL"/></p>					
 		    <p><@spring.formInput "command.command_url", "size=\"80\""/><@regError/></p>
 		  <p class="subheading"><@spring.message "addLink.Description"/></p>					
