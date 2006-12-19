@@ -13,7 +13,14 @@ public class AddLinkCommand {
 	private String command_url;
 	private String command_notes;
 	private String command_description;
+	/**
+	 * the hidden field
+	 */
 	private String command_tags;
+	/**
+	 * the visible field
+	 */
+	private String command_tags_field;
 	
 	public String getCommand_description() {
 		return command_description;
@@ -38,6 +45,12 @@ public class AddLinkCommand {
 	}
 	public void setCommand_url(String url) {
 		this.command_url = url;
+	}
+	public String getCommand_tags_field() {
+		return command_tags_field;
+	}
+	public void setCommand_tags_field(String command_tags_field) {
+		this.command_tags_field = command_tags_field;
 	}
 	public String toString(){
 		return "descr: "+getCommand_description()+"\nnotes "+getCommand_notes()+"\ntags "+getCommand_tags()+"\nurl "+getCommand_url();

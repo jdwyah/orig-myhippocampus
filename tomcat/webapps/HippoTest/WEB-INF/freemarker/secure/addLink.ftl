@@ -1,12 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html>
 <#import "/spring.ftl" as spring/>
 
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-  <meta name="description" content="Personal HD" />
-  <meta name="keywords" content="personal,knowledge,management" />
-  <meta name="author" content="Jeff Dwyer / Original design: Gerhard Erbes - gw@actamail.com/" />
   
   <script type="text/javascript" src="<@spring.url "/script/prototype.js"/>"></script>
   <script type="text/javascript" src="<@spring.url "/script/scriptaculous.js"/>"></script>
@@ -47,8 +42,48 @@
 									    {paramName: "match",
 									     minChars: 1});
 	  </script>
-      
-      
+            
+	</#macro>
+	
+		
+	<#macro autocompleteMulti field name source help>
+
+      <@spring.formInput path="${field}_field" attributes="size='80' onkeypress=\"return handleEnter(this, event)\" onClick=\"javascript:popNotice();\""/><@regError/>
+	  <@spring.formHiddenInput path="${field}"/><@regError/>
+	  <div id="tagline" style="display:none;"><@spring.message "${help}"/><p></div>
+	  <div class="auto_complete" id="${name}_FILL"></div>			
+	  
+	  <div class="selected_tags" id="${name}_DISP"></div>					
+	  <script type="text/javascript"> 
+
+		//prevent enter from submitting the form										
+		function handleEnter (field, event) {
+			var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+			if (keyCode == 13) {
+				//complete(a.getCurrentEntry())
+				return false;
+			} 
+			else
+				return true;
+		}      
+		function complete(option){	
+			document.getElementById('${name}').value=document.getElementById('${name}').value + ";"+option.innerHTML;
+			document.getElementById('${name}_DISP').innerHTML=document.getElementById('${name}_DISP').innerHTML +" "+option.innerHTML;
+			document.getElementById('${name}_field').value="";
+		}
+
+		function popNotice(){
+				  	Effect.Appear('tagline',{duration:2.0});
+ 					Effect.Fade('tagline',{delay:4.0});
+		}
+											
+		var a = new Ajax.Autocompleter('${name}_field','${name}_FILL','<@spring.url '${source}'/>', 
+									    {paramName: "match",
+									     minChars: 1,
+									     updateElement: complete });
+	  </script>
+                       
+            
 	</#macro>
 	
 
@@ -64,7 +99,7 @@
 		  <p class="subheading"><@spring.message "addLink.Notes"/></p>					
 		    <p><@spring.formTextarea "command.command_notes", "rows=\"2\" cols=\"40\""/><@regError/></p>		    		    
 		  <p class="subheading"><@spring.message "addLink.Tags"/></p>		
-		    <p><@autocomplete "command.command_tags", "command_tags", "/site/secure/getTopics.html", "addLink.typeInATag"/></p>
+		    <p><@autocompleteMulti "command.command_tags", "command_tags", "/site/secure/getTopics.html", "addLink.typeInATag"/></p>
       </div>
       
       

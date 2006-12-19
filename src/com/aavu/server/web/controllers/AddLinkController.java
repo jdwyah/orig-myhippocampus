@@ -18,6 +18,7 @@ import com.aavu.client.domain.WebLink;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.AddLinkCommand;
+import com.aavu.server.web.domain.validation.AddLinkCommandValidator;
 
 public class AddLinkController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(AddLinkController.class);
@@ -27,7 +28,8 @@ public class AddLinkController extends SimpleFormController {
 	private TopicService topicService;
 
 	public AddLinkController(){
-		setCommandClass(AddLinkCommand.class);				
+		setCommandClass(AddLinkCommand.class);	
+		setValidator(new AddLinkCommandValidator());
 	}	
 	
 
@@ -55,6 +57,7 @@ public class AddLinkController extends SimpleFormController {
 		
 		log.debug("addLinkCommand: "+addLink);
 		
+		
 		WebLink link = new WebLink(userService.getCurrentUser(),addLink.getCommand_description(),addLink.getCommand_url(),addLink.getCommand_notes());
 		
 		link = (WebLink) topicService.save(link);
@@ -62,7 +65,6 @@ public class AddLinkController extends SimpleFormController {
 		String[] tags = addLink.getCommand_tags().split(";");
 		
 		log.debug("tags: "+Arrays.toString(tags));
-		
 		
 		if(tags[0].equals("")){
 			log.debug("blank tags, setting topic to; "+addLink.getCommand_description());		
