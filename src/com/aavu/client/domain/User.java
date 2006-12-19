@@ -39,8 +39,10 @@ public class User extends AbstractUser implements IsSerializable {
 		return true;
 	}
 
-	public int getWorldSize() {
-		return 4000;
+	public int getWorldSize(int totalNumberOfTopics, int numberOfTags) {
+		//2000 @ 0 tags
+		//4000 @ 30 tags
+		return 2000+66*numberOfTags;
 	}
 
 }

@@ -69,7 +69,7 @@
       
       
        <div class="middle-column-box-white">
-        <div class="middle-column-box-title-blue"><@spring.message "addLink.submit"/></div>
+        <div class="middle-column-box-title-green"><@spring.message "addLink.submit"/></div>
 				<input name="submit" type="submit" value="<@spring.message "addLink.button.submit"/>">
        </div>
 	</div>

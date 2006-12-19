@@ -116,7 +116,7 @@ public class Ocean extends FlashContainer {
 //		sb.append("<property id='2'>"+islandObj(24,"Books",10)+"</property>");
 		sb.append("</array>");
 		sb.append(number(totalNumberOfTopics));
-		sb.append(number(user.getWorldSize()));
+		sb.append(number(user.getWorldSize(totalNumberOfTopics,tagStats.length)));
 		sb.append("</arguments></invoke>");    				
 		return sb.toString();
 	}

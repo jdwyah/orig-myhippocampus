@@ -43,8 +43,12 @@ public class CreateUserController extends SimpleFormController {
 			log.error("Fail Duplicate User");			
 		}
 				
-				
-		return super.onSubmit(arg0);
+
+		String successStr = "Thanks "+comm.getUsername()+" your account is setup and you're ready to login!";
+
+		return new ModelAndView(getSuccessView(),"message",successStr);
+
+
 	}
 
 	public void setUserService(UserService userService) {

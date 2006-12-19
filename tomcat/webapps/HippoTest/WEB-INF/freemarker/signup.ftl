@@ -12,35 +12,8 @@
 </head>
 
 <body>
-  <div id="wrap">
-
-    <!-- HEADER -->
-	  <!-- Background -->
-    <div id="header-section">
-		  <a href="#"><img id="header-background-left" src="<@spring.url "/img/img_logo.jpg"/>" alt=""/></a>
-          <img id="header-background-right" src="<@spring.url "/img/img_header.jpg"/>" alt=""/>
-	</div>
-
-	  <!-- Navigation -->
-    <div id="header">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="tour.html">Tour</a></li>
-        <li><a href="manifesto.html">Manifesto</a></li>
-        <li class="selected">Sign up</li>  
-      </ul>
-    </div>
-
-
-	  <!-- MIDDLE COLUMN -->
-    <div id="middle-column">
-	 
-									
-	    <!-- Middle column full box -->
-      <div class="middle-column-box-white">
-        <div class="middle-column-box-title-grey">Signup Now!</div>
-
-
+    
+<!--
  <div class="tableholder">
 
 		<table class="signup" cellspacing="0" cellpadding="0">
@@ -88,12 +61,11 @@
 		</table>
 	  </div>
 
-       
-      </div>
-	</div>
+-->
 
-
-
+  <!-- MIDDLE COLUMN -->
+    <div id="middle-column">
+	
 
 	<#macro regError>
 		<font color="#FF0000"><@spring.showErrors"<br>"/></font>
@@ -101,28 +73,25 @@
 
 
 	<p>
-      <div class="middle-column-box-blue">
-        <div class="middle-column-box-title-white">
+      <div class="middle-column-box-white">
+        <div class="middle-column-box-title-green">Sign-up now!</div>
         
     <form action="<@spring.url "/site/signup.html"/>" method="POST">
       <table>
         <tr><td>User:</td><td><@spring.formInput "command.username"/><@regError/></td></tr>
         <tr><td>Password:</td><td><@spring.formPasswordInput "command.password"/><@regError/></td></tr>
-        <tr><td>Password:</td><td><@spring.formPasswordInput "command.password2"/><@regError/></td></tr>
+        <tr><td>Password Again:</td><td><@spring.formPasswordInput "command.password2"/><@regError/></td></tr>
 
-        <tr><td colspan='2'><input name="submit" type="submit"></td></tr>
-        <tr><td colspan='2'><input name="reset" type="reset"></td></tr>
+        <tr><td colspan='2'><input name="submit" type="submit" value="Create Account"></td></tr>
       </table>
 
     </form>
 	   </div>
+	   
+	   
 	  </div>
 
 
-	  <!-- FOOTER -->
-    <div id="footer">
-       Copyright &copy; 2006 MyHippocampus | All Rights Reserved<br />Design by <a href="mailto:gw@actamail.com">Gerhard Erbes</a> | <a href="http://validator.w3.org/check?uri=referer" title="Validate code as W3C XHTML 1.1 Strict Compliant">W3C XHTML 1.1</a> | <a href="http://jigsaw.w3.org/css-validator/" title="Validate Style Sheet as W3C CSS 2.0 Compliant">W3C CSS 2.0</a>
-    </div>
-  </div>
+
 </body>
 </html>

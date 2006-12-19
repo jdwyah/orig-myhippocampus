@@ -98,16 +98,19 @@ public class SubjectBoard extends Composite{
 		//TODO remove old TAG
 		//tagBoard.removeTag(selectedSubject.getTagName())
 		
-		selectedSubject = subject;
-		if(subject != null){
-			tagBoard.tagTopic(subject.getTagName());
-		}
-
+		selectedSubject = subject;		
 		selectedPanel.setSubject(subject);
+		
 		editMe.setVisible(true);
 		chooserPanel.setVisible(false);
 		infoPanel.setVisible(false);
-		
+				
+	}
+	private void setNewSubject(Subject subject){	
+		setSubject(subject);		
+		if(subject != null){
+			tagBoard.tagTopic(subject.getTagName());
+		}
 		saveNeeded.onChange(this);
 	}
 
@@ -239,7 +242,7 @@ public class SubjectBoard extends Composite{
 
 		public void onMouseMove(Widget sender, int x, int y) {}
 		public void onMouseUp(Widget sender, int x, int y) {
-			setSubject(subject);
+			setNewSubject(subject);
 		}		
 	}
 

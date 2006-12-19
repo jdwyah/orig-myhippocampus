@@ -160,6 +160,8 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		leftPanel.add(leftTopPanel);
 		
 		subjectBoard = new SubjectBoard(manager,titleBox,tagBoard,this);
+		subjectBoard.load(topic);
+		
 		leftPanel.add(subjectBoard);
 
 		//Extension point

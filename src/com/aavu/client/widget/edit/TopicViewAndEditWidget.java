@@ -86,13 +86,15 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		else if (source == previewButton){
 
 			saveNeeded.onChange(this);
-			topicWidget.setText(getEntryText());
+			topicWidget.setText(getEditEntryText());
 			activateMainView();
 		}
 		
 		
 	}
 	
+
+
 	public void activateMainView(){
 	
 		topicPanel.clear();
@@ -118,9 +120,12 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		return topic.getLatestEntry();
 	}
 	public String getEntryText(){		
-		return topicEditWidget.getCurrentText();
+		return topicWidget.getText();
 	}
 
+	private String getEditEntryText() {
+		return topicEditWidget.getCurrentText();
+	}
 	
 	
 }

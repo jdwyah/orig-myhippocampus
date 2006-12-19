@@ -42,7 +42,6 @@
 	<classpathentry kind="lib" path="lib/ehcache-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/gwt-widgets-server-0.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/sitemesh-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/gwt-simile-timeline.jar"/>
 	<classpathentry kind="lib" path="tools/gwt/gwt-user-1.2.22.jar"/>
 	<classpathentry kind="lib" path="lib/gwm-1.0b.jar"/>

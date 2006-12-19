@@ -27,7 +27,7 @@ public class TopicDetailsTabBar extends TabPanel {
 			selected = true;
 		}
 		
-		LinkDisplayWidget ldw = new LinkDisplayWidget(topic);
+		LinkDisplayWidget ldw = new LinkDisplayWidget(topic,saveNeeded);
 		add(ldw,Manager.myConstants.occurrencesN(ldw.getSize()));
 		if(!selected && ldw.getSize() > 0){
 			System.out.println("SELEC LINKS");

@@ -33,6 +33,8 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 	public Topic topic;
 
+	private String data;
+
 
 	
 	/**
@@ -77,10 +79,14 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	}
 
 	public void setText(String data){
-		textPanel.clear();
+		this.data = data;
+		textPanel.clear();		
 		textPanel.add(new TextDisplay(data));	
 	}
 
+	public String getText() {
+		return data;
+	}
 
 
 	/**
@@ -115,6 +121,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 			History.newItem(token);
 		}		
 	}
+
 
 	
 }
