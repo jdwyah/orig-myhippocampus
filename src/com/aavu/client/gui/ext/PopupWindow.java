@@ -34,8 +34,6 @@ public class PopupWindow {
 	}
     public PopupWindow(GInternalFrame frame, String title,boolean modal, int width, int height) {
     
-    
-    
     	this.frame = frame;
 		
 		//This must be called before anything else.
@@ -48,6 +46,7 @@ public class PopupWindow {
 		
 		frame.setTitle(title);
 		
+		frame.setDestroyOnClose();
     }
 	
     public void setTitle(String title) {
@@ -59,7 +58,11 @@ public class PopupWindow {
 	}
 	public void close(){
 		System.out.println("PopupWindow close()");
-		frame.destroy();
+		try{
+			frame.destroy();
+		}catch(Exception e){
+			System.out.println("CAUGHT frame.destroy() exception in PopupWindow.close()");
+		}
 	}
 	public void hide(){
 		System.out.println("PopupWindow hide()");

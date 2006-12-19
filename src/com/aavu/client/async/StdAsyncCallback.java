@@ -1,6 +1,5 @@
 package com.aavu.client.async;
 
-import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.service.Manager;
@@ -35,6 +34,14 @@ public abstract class StdAsyncCallback implements AsyncCallback {
 			Window.alert(call+" failed! "+caught+" "+caught.getMessage());
 		}
 		System.out.println(call+" failed! "+caught+" msg "+caught.getMessage());
+		
+		//TODO make the GWT AOP recast the UsernameNotFound Exception to a 
+		//HippoUserException
+		if(caught.getMessage().startsWith("Username not found")){
+			manager.doLogin();
+		}else{
+			System.out.println("no match!!!!!!!!!!!!");
+		}
 		
 		if(manager != null){
 			try{

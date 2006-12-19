@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
 	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
 	private UserDAO userDAO;
-
-	private Boolean hackUserSwitch;
 	
 	public User getCurrentUser() {
 
@@ -42,11 +40,6 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		log.debug("loadUserByUsername "+username);
-		if(hackUserSwitch && username.equals("anonymousUser")){
-			log.debug("hack switch to test");
-			username = "test";
-		}
-		
 		
 		try {
 			return userDAO.getUserByUsername(username);	
@@ -117,9 +110,6 @@ public class UserServiceImpl implements UserService {
 
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
-	}
-	public void setHackUserSwitch(Boolean hackUserSwitch) {
-		this.hackUserSwitch = hackUserSwitch;
 	}
 
 	public void toggleEnabled(Integer id) {				

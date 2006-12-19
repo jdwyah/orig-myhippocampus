@@ -6,11 +6,13 @@ import org.gwm.client.FramesManager;
 import org.gwm.client.FramesManagerFactory;
 import org.gwm.client.GInternalFrame;
 
+import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
@@ -26,7 +28,9 @@ import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Manager implements TopicSaveListener {
 	
@@ -36,11 +40,11 @@ public class Manager implements TopicSaveListener {
 	private User user;
 	
 	private FramesManager framesManager;
-	private TagLocalService tagLocalService; 
+	private TagLocalService tagLocalService;
+	private MainMap mainMap; 
 
-	public Manager(HippoCache hippoCache, User user){
+	public Manager(HippoCache hippoCache){
 		this.hippoCache = hippoCache;
-		this.user = user;
 		initConstants();
 		hippoCache.getTopicCache().addSaveListener(this);
 		
@@ -48,6 +52,7 @@ public class Manager implements TopicSaveListener {
 		
 		framesManager = new FramesManagerFactory().createFramesManager(); 
 		
+		mainMap = new MainMap(this);
 		
 	}
 	private void initConstants() {
@@ -197,9 +202,7 @@ public class Manager implements TopicSaveListener {
 	public TagCache getTagCache() {
 		return hippoCache.getTagCache();
 	}
-	public User getUser() {
-		return user;
-	}
+
 	public void growIsland(Tag tag) {
 		map.growIsland(tag);
 	}
@@ -231,6 +234,79 @@ public class Manager implements TopicSaveListener {
 		}
 		return tagLocalService;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	
+	/**
+	 * Note: LoginWindow has a semaphore to prevent multiple instances
+	 * Will bring up a dialog that on success will call loginSuccess()
+	 * 
+	 */
+	public void doLogin() {
+		LoginWindow lw = new LoginWindow(this);
+	}
+	
+	
+	/**
+	 * Call when we've been not logged in, but we've now logged in, and we need to setup the 
+	 * GUI elements.
+	 *
+	 */
+	public void loginSuccess() {
+		setup();
+	}
+	
+	
+	/**
+	 * Called by HippoTest to replace the load screen with the map. Called before we've even
+	 * checked if a user exists.
+	 * 
+	 * @return
+	 */
+	public Widget getRootWidget() {
+		return mainMap;
+	}
+	
+	/**
+	 * User is logged in. Update GUI.
+	 *
+	 */
+	private void loadGUI() {
+		mainMap.load();
+	}
+	
+	/**
+	 * This will try to get the current user.
+	 * If it suceeds it will run the GUI load scripts.
+	 * If it doesn't suceed it will bring up the login dialog.
+	 *
+	 */
+	public void setup() {
+		hippoCache.getUserService().getCurrentUser(new AsyncCallback(){
+			public void onSuccess(Object result) {
+				user = (User) result;
+		
+				if(user != null){
+					System.out.println("found a user: "+user.getUsername());		
+					loadGUI();
+				}else{
+					doLogin();
+				}
+			}
+		
+			public void onFailure(Throwable caught) {
+				if(GWT.isScript()){
+					Window.alert("GetCurrentUser failed! "+caught+" \nEP:"+HippoTest.getRelativeURL(""));
+				}				
+				doLogin();											
+			}						
+		});		
+	}
+	
+	
 	
 	
 	

@@ -23,17 +23,12 @@ public class Ocean extends FlashContainer {
 		
 		setStyleName("H-Ocean");		
 	}
-	
-	//@Override
-	protected void onLoad() {
-		initIslands();
-	}
 
 	/**
 	 * Will init after async "getTagStats()" call
 	 *
 	 */
-	private void initIslands(){
+	public void load(){
 		System.out.println("Init Islands...");		
 				
 		manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){

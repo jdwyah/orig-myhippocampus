@@ -55,8 +55,6 @@ public class Sidebar extends FocusPanel implements MouseListener {
 		
 		this.manager = manager;
 		tabPanel = new VertableTabPanel(VertableTabPanel.VERTICAL);
-
-		load();
 		
 		add(tabPanel);
 		//sets
@@ -74,7 +72,7 @@ public class Sidebar extends FocusPanel implements MouseListener {
 	}
 
 	public void load(){
-		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback("Sidebar"){
+		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
 
 			public void onSuccess(Object result) {
 				super.onSuccess(result);

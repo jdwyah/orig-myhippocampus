@@ -55,17 +55,24 @@
 	  
 	  <div class="selected_tags" id="${name}_DISP"></div>					
 	  <script type="text/javascript"> 
-
-		//prevent enter from submitting the form										
+									
+		//prevent enter from submitting the form	
+		//& enter non-pre-existing tags									
 		function handleEnter (field, event) {
 			var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
 			if (keyCode == 13) {
-				//complete(a.getCurrentEntry())
+				//if there's an entry, let autocomplete do it. If no entry, it's a new tag, so add it
+				if(!a.getCurrentEntry()){
+					var t = {};
+					t.innerHTML = document.getElementById('${name}_field').value
+					complete(t);
+				}
 				return false;
 			} 
 			else
 				return true;
 		}      
+
 		function complete(option){	
 			document.getElementById('${name}').value=document.getElementById('${name}').value + ";"+option.innerHTML;
 			document.getElementById('${name}_DISP').innerHTML=document.getElementById('${name}_DISP').innerHTML +" "+option.innerHTML;

@@ -15,6 +15,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.gui.TopicSaveListener;
+import com.aavu.client.service.Manager;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -101,8 +102,9 @@ public class TopicCache {
 		if(topicIdentifiers.size() != 0){
 			callback.onSuccess(topicIdentifiers.getKeyList());			
 		} else {
-			topicService.getAllTopicIdentifiers(new AsyncCallback(){
+			topicService.getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
 				public void onSuccess(Object result) {
+					super.onSuccess(result);
 					TopicIdentifier[] topicIdents = (TopicIdentifier[]) result;
 					System.out.println("rec "+topicIdents.length);
 					topicIdentifiers.clear();

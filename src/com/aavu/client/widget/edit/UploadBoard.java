@@ -42,7 +42,7 @@ public class UploadBoard extends Composite {
 		Button addOne = new Button(Manager.myConstants.upload_add());
 		addOne.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				UploadWidget widg = new UploadWidget(manager,topic,UploadBoard.this,HippoTest.realModuleBase+HippoTest.UPLOAD_PATH);		
+				UploadWidget widg = new UploadWidget(manager,topic,UploadBoard.this,HippoTest.getRelativeURL(HippoTest.UPLOAD_PATH));		
 				mainPanel.add(widg);	
 				saveNeeded.onChange(UploadBoard.this);
 			}});

@@ -352,9 +352,10 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 
 	/**
 	 * this conversion is just list -> array
+	 * @throws HippoException 
 	 * 
 	 */
-	public TopicIdentifier[] getTopicIdsWithTag(Tag tag) {
+	public TopicIdentifier[] getTopicIdsWithTag(Tag tag) throws HippoException {
 		try {
 
 			return convertToArray(topicService.getTopicIdsWithTag(tag));
@@ -362,25 +363,26 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			return null;
+			throw new HippoException(e);		
 		}
 	}
 
 	/**
 	 * this conversion is just list -> array
+	 * @throws HippoException 
 	 * 
 	 */
-	public TopicIdentifier[] getAllTopicIdentifiers() {
+	public TopicIdentifier[] getAllTopicIdentifiers() throws HippoException {
 		try {
 			return convertToArray(topicService.getAllTopicIdentifiers());
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			return null;
+			throw new HippoException(e);			
 		}
 	}
 
-	public Topic getTopicByID(long topicID) {
+	public Topic getTopicByID(long topicID) throws HippoException {
 		try {
 
 			return convert(topicService.getForID(topicID));
@@ -388,18 +390,18 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			return null;
+			throw new HippoException(e);		
 		}
 	}
 
-	public List getTimelineObjs() {
+	public List getTimelineObjs() throws HippoException {
 		try {
 			return topicService.getTimelineObjs();
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			return null;
+			throw new HippoException(e);		
 		}
 	}
 
@@ -420,7 +422,7 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			return null;
+			throw new HippoException(e);		
 		}
 	}
 

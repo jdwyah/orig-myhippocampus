@@ -45,7 +45,15 @@ public class MainMap extends Composite {
 		//mainP.addStyleName("");
 		initWidget(mainP);
 	}
-		
+	
+	/**
+	 * Do things that require a login / data
+	 *
+	 */
+	public void load(){
+		sideBar.load();
+		ocean.load();
+	}
 
 	public void growIsland(Tag tag) {
 		ocean.growIsland(tag);

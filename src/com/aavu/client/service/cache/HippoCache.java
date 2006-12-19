@@ -5,6 +5,7 @@ import com.aavu.client.service.remote.GWTSubjectService;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
+import com.aavu.client.service.remote.GWTUserService;
 import com.aavu.client.service.remote.GWTUserServiceAsync;
 
 public class HippoCache {
@@ -40,6 +41,11 @@ public class HippoCache {
 
 	public TopicCache getTopicCache() {
 		return topicCache;
+	}
+	
+
+	public GWTUserServiceAsync getUserService() {
+		return userService;
 	}
 
 	public GWTSubjectServiceAsync getSubjectService() {		

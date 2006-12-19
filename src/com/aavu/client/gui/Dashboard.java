@@ -4,11 +4,13 @@ import java.util.Map;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
+import com.aavu.client.HippoTest;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -80,6 +82,12 @@ public class Dashboard extends SimplePanel {
 				ExternalPopup ex = new ExternalPopup("Facebook",login,626,436);
 			}});
 		
+		Button logoutB = new Button("Logout");
+		logoutB.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				Window.open(HippoTest.getRelativeURL("/site/j_acegi_logout"),"logout","");						
+			}});
+		
 		
 		mainPanel.add(addNewButton);
 		mainPanel.add(addNewIslandButton);
@@ -87,6 +95,8 @@ public class Dashboard extends SimplePanel {
 //		mainPanel.add(tagButton);		
 		mainPanel.add(timeLine);
 //		mainPanel.add(addDeliciousTags);		
+		
+		mainPanel.add(logoutB);
 		
 		//mainPanel.add(facebookB);
 				

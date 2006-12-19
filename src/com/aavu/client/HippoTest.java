@@ -2,7 +2,6 @@ package com.aavu.client;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaDate;
-import com.aavu.client.domain.MetaTopicList;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.service.Manager;
@@ -20,19 +19,15 @@ import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -43,17 +38,41 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	public static final String UPLOAD_PATH = "service/upload.html";//"site/secure/upload.html";
 	public static final String FILE_PATH = "service/showFile.html?key=";
 	
-	private TagOrganizerView tagView;
-	private BrowseView browseView;
-	
-	private String msg = "";
-	
-	private User user;
+	public static final String LOCAL_HOST = "http://localhost:8080/";
+	public static final String REMOTE_HOST = "http://www.myhippocampus.com/";
 	
 	private HippoCache hippoCache;
 	private Manager manager;
 	
-	public static String realModuleBase;
+//	public static String realModuleBase;
+	
+
+	/**
+	 * Switch between localhost for testing & 
+	 */
+	public static String getRelativeURL(String url) {
+		String realModuleBase;
+		
+		if(GWT.isScript()){			
+			
+			//Use for Deployment to production server
+			//
+			realModuleBase = REMOTE_HOST;
+					
+			//Use to test compiled browser locally
+			//
+			//realModuleBase = LOCAL_HOST;
+			
+		}else{
+			//realModuleBase = GWT.getModuleBaseURL();
+			
+			//This is the URL for GWT Hosted mode 
+			//
+			realModuleBase = LOCAL_HOST;
+		}
+		
+		return realModuleBase+url;
+	}
 	
 	private void initServices(){
 		//if(9==9)
@@ -71,22 +90,11 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		//Window.alert("2");
 		
-		realModuleBase = "";
-		
-		if(GWT.isScript()){
-			realModuleBase = GWT.getModuleBaseURL();//HippoTest/service/topicService
-			realModuleBase = "http://www.myhippocampus.com/";
-					
-			realModuleBase = "http://localhost:8080/";
-			
-		}else{
-			realModuleBase = GWT.getModuleBaseURL();
-			realModuleBase = "http://localhost:8080/";
-		}
-		String pre = realModuleBase + "service/";
+		//realModuleBase = "";
+	
+		String pre = getRelativeURL("service/");
 		
 		//Window.alert("3");
-		msg = pre+" "+GWT.isScript()+" "+(pre + "topicService");
 		
 		endpoint.setServiceEntryPoint(pre + "topicService");		
 		
@@ -105,53 +113,31 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		
 		//Window.alert("4");
-
-		final String user_endpoint_debug = pre + "userService";
 		
 		hippoCache = new HippoCache(topicService,tagService,userService,subjectService);
 		
 
+		manager = new Manager(hippoCache);
+
 		
-				
 		//static service setters.
 		//hopefully replace with Spring DI
 		//
 		TopicCompleter.setTopicService(hippoCache.getTopicCache());
 		MetaDate.setTopicService(hippoCache.getTopicCache());
-		
+		StdAsyncCallback.setManager(manager);
 		
 		//Window.alert("5");
-				
-		userService.getCurrentUser(new AsyncCallback(){
-			public void onSuccess(Object result) {
-				user = (User) result;
-				
-				manager = new Manager(hippoCache,user);				
-				
-				//static setters again
-				//
-				StdAsyncCallback.setManager(manager);
-				
-				if(user != null)
-				System.out.println("found a user: "+user.getUsername());				
-				loadGUI();
-			}
+		
+		loadGUI(manager.getRootWidget());
+		
+		manager.setup();
+		
+	}
 
-			public void onFailure(Throwable caught) {
-				if(GWT.isScript()){
-					Window.alert("GetCurrentUser failed! "+caught+" \nEP:"+user_endpoint_debug);
-				}
-				manager = new Manager(hippoCache,null);
-		
-				
-				
-				
-				loadGUI();
-			}			
-			
-		});
-		
-		//Window.alert("6");
+	private void loadGUI(Widget widget) {
+		RootPanel.get("loading").setVisible(false);
+		RootPanel.get().add(widget);				
 	}
 
 
@@ -191,22 +177,6 @@ public class HippoTest implements EntryPoint, HistoryListener {
 
 
 
-	private void loadGUI() {
-
-		String username="none";
-		if(user != null){
-			username = user.getUsername();
-		}
-		Label title = new Label("Add Article "+msg+" ||"+" &-"+username);
-
-		
-		MainMap mainMap = new MainMap(manager);
-		RootPanel.get("loading").setVisible(false);
-		RootPanel.get().add(mainMap);
-		
-				
-	}
-
 	public void onHistoryChanged(String historyToken) {
 	    // This method is called whenever the application's history changes. Set
 	    // the label to reflect the current history token.
@@ -222,6 +192,8 @@ public class HippoTest implements EntryPoint, HistoryListener {
 			History.newItem(EMPTY);
 		}
 	  }
+
+
 	
 
 }
