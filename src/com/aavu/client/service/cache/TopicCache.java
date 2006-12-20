@@ -333,4 +333,11 @@ public class TopicCache {
 
 
 
+	public void delete(Topic topic, StdAsyncCallback callback) {
+		topicService.delete(topic,callback);
+		//TODO update after delete
+	}
+
+
+
 }

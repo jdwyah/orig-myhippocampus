@@ -47,4 +47,6 @@ public interface TopicDAO {
 
 	void populateUsageStats(UserPageBean rtn);
 
+	void delete(Topic topic);
+
 }

@@ -5,10 +5,12 @@ import java.util.Map;
 
 import org.gwtwidgets.client.wrap.Effect;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class StatusPanel extends SimplePanel {
 
@@ -39,11 +41,13 @@ public class StatusPanel extends SimplePanel {
 			displayPanel.add(lab);
 		}
 		else if(statusCode == StatusCode.SUCCESS){
-			StatusLabel sl = (StatusLabel) map.get(new Integer(id)); 
+			final StatusLabel sl = (StatusLabel) map.get(new Integer(id)); 
 			System.out.println("sl "+sl);
 			if(sl != null){
 				sl.setCode(statusCode);
 				Effect.fade(sl);
+				removeInXSeconds(sl,3000);
+				
 			}
 		}
 		//FAIL
@@ -54,6 +58,21 @@ public class StatusPanel extends SimplePanel {
 				sl.setCode(statusCode);
 			}
 		}
+	}
+
+	/**
+	 * Utility to remove a widget after a short time,
+	 * for instance after we Effect.fade()
+	 * @param w
+	 * @param i
+	 */
+	private void removeInXSeconds(final Widget w, int i) {
+		Timer t = new Timer() {
+		      public void run() {
+		    	  w.removeFromParent();
+		      }
+		    };
+		t.schedule(i);		
 	}
 
 	/**

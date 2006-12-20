@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TagBoard extends Composite implements CompleteListener {
+public class TagBoard extends Composite implements CompleteListener, RemoveListener {
 
 	private VerticalPanel tagPanel = new VerticalPanel();
 	
@@ -127,13 +127,35 @@ public class TagBoard extends Composite implements CompleteListener {
 	}
 	
 	private void showTag(final Tag tag){
-		String name = tag.getName();
 		
-		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag);
+		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag,this);
 				
 		tagPanel.add(tagLabel);	
 		
 		displayMetas(tag);		
+	}
+
+	/**
+	 * Remove the tag and add the tag to the list of things that need to be saved.
+	 * Need to do a load to make sure that we have all necessary Data.
+	 */
+	public void remove(Tag tag,final Widget widgetToRemoveOnSuccess) {
+
+		manager.getTopicCache().getTopicByIdA(tag.getId(), new StdAsyncCallback(Manager.myConstants.topic_lookupAsync()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				Tag loadedTag = (Tag) result;
+				
+				boolean res = cur_topic.removeTag(loadedTag);
+				if(res){					
+					tagsToSave.add(loadedTag);
+					saveNeeded.onChange(TagBoard.this);
+					widgetToRemoveOnSuccess.removeFromParent();					
+				}else{
+					Window.alert("Problem Removing Tag");
+				}				
+			}			
+		});		
 	}
 	
 	/**

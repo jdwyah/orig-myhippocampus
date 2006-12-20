@@ -1,6 +1,7 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.ext.UpdateableTabPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ReferencePanel;
 import com.aavu.client.wiki.TextDisplay;
@@ -10,7 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class TopicDetailsTabBar extends TabPanel {
+public class TopicDetailsTabBar extends UpdateableTabPanel {
 
 	private TopicViewAndEditWidget tvw;
 
@@ -52,7 +53,7 @@ public class TopicDetailsTabBar extends TabPanel {
 		
 		ReferencePanel referencesPanel = new ReferencePanel(manager,topic);
 		add(referencesPanel,Manager.myConstants.references());
-		referencesPanel.load();
+		referencesPanel.load(this);
 		
 		
 	}
@@ -60,5 +61,6 @@ public class TopicDetailsTabBar extends TabPanel {
 	public String getEntryText() {
 		return tvw.getEntryText();
 	}
+
 	
 }

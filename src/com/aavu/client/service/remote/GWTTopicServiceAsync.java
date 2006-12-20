@@ -2,6 +2,7 @@ package com.aavu.client.service.remote;
 
 import java.util.List;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -46,6 +47,8 @@ public interface GWTTopicServiceAsync {
 	void getTree(MindTreeOcc occ,AsyncCallback callback);
 	//MindTree 
 	void saveTree(MindTree tree,AsyncCallback callback);
+
+	void delete(Topic topic, AsyncCallback callback);
 }
 
 

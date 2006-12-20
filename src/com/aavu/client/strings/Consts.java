@@ -16,8 +16,14 @@ public interface Consts extends Messages {
 	String addTag();
 	String occurrences();
 	String occurrencesN(int size);
-	String deleteMe();
+	String deleteMe();	
 	String editMe();
+	
+	String delete();
+	String delete_image();
+	String delete_async();
+	String delete_warningS(String topic);
+	
 	
 	String book();
 	String book_title();	
@@ -32,6 +38,8 @@ public interface Consts extends Messages {
 	String subject_no_matches();
 	String magazine();
 	String references();
+	String referencesN(int size);
+	
 	String wiki();
 	String wiki_summary();
 	String wiki_url();
@@ -92,6 +100,8 @@ public interface Consts extends Messages {
 	String save_redLight();
 
 	String loginTitle();
+	String seeAlso_async();
+	
 	
 	
 	

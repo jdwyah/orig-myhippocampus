@@ -65,6 +65,9 @@ public class MainMap extends Composite {
 	public void updateSidebar() {
 		sideBar.load();
 	}
+	public void updateSidebar(Topic t) {
+		sideBar.load(t);
+	}
 	//TODO shouldn't need null checks, but we do.
 	public void updateStatusWindow(int id, String string, StatusCode statusCode) {
 		if(statusPanel != null){

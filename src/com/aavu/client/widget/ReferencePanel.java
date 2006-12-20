@@ -7,6 +7,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.Manager;
+import com.aavu.client.widget.edit.TopicDetailsTabBar;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -29,18 +30,21 @@ public class ReferencePanel extends Composite {
 		initWidget(mainPanel);
 	}
 
-	public void load() {
+	public void load(final TopicDetailsTabBar bar) {
 		manager.getTopicCache().getLinksTo(topic,new StdAsyncCallback("GetLinksTo"){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				List list = (List) result;
 				
 				refPanel.clear();
+				int size = 0;
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					TopicIdentifier topicIdent = (TopicIdentifier) iter.next();
 					refPanel.add(new TopicLink(topicIdent));
+					size++;
 				}
 				
+				bar.updateTitle(ReferencePanel.this,Manager.myConstants.referencesN(size));
 			}
 			
 		});

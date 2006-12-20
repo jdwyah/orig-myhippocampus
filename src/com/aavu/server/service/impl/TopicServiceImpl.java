@@ -112,6 +112,26 @@ public class TopicServiceImpl implements TopicService {
 		topicDAO.populateUsageStats(rtn);
 		return rtn;
 	}
+	
+	/*
+	 * TODO maybe AOP secure this? 
+	 * 
+	 * (non-Javadoc)
+	 * @see com.aavu.server.service.TopicService#delete(com.aavu.client.domain.Topic)
+	 */
+	public void delete(Topic topic) throws HippoBusinessException {
+		if(userService.getCurrentUser().equals(topic.getUser())){
+			topicDAO.delete(topic);
+
+			//TODO delete S3Files 
+			//TODO delete Weblinks that were only referenced by us
+			//TODO_ delete our Entries - done
+			//TODO_ delete our MindTrees - done
+			
+		}else{
+			throw new HippoBusinessException("User "+userService.getCurrentUser().getUsername()+" can't delete this topic");
+		}
+	}
 
 
 

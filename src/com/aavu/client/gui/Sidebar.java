@@ -9,6 +9,7 @@ import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.VertableTabPanel;
 import com.aavu.client.service.Manager;
@@ -71,6 +72,13 @@ public class Sidebar extends FocusPanel implements MouseListener {
 		
 	}
 
+	/**
+	 * TODO make this only load the referenced topic
+	 * @param t
+	 */
+	public void load(Topic t) {
+		load();
+	}
 	public void load(){
 		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
 
@@ -189,5 +197,7 @@ public class Sidebar extends FocusPanel implements MouseListener {
 	public void onMouseDown(Widget sender, int x, int y) {}
 	public void onMouseMove(Widget sender, int x, int y) {}
 	public void onMouseUp(Widget sender, int x, int y) {}
+
+	
 
 }

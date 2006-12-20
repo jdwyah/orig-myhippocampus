@@ -210,7 +210,7 @@ public class Manager implements TopicSaveListener {
 	 * TODO don't load the entire darn list/use the cache etc
 	 */
 	public void topicSaved(Topic t) {
-		map.updateSidebar();
+		map.updateSidebar(t);
 	}
 	public void updateStatus(int i, String call, StatusCode send) {
 		map.updateStatusWindow(i, call, send);

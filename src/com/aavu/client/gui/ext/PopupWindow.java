@@ -40,6 +40,9 @@ public class PopupWindow {
 		frame.setStyle("mac_os_x");
 		frame.setWidth(width);
 		frame.setHeight(height);
+		frame.setMinimizable(true);
+		frame.setMaximizable(true);
+		frame.setDraggable(true);
 		
 		frame.showCenter(false);
 		

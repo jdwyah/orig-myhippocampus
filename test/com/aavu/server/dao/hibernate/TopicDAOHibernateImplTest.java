@@ -1,8 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.test.AssertThrows;
 
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaTopic;
@@ -749,6 +748,96 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 
+	public void testDelete() throws HippoBusinessException{
+		Topic patriotGames = new Topic();
+		patriotGames.getLatestEntry().setData(B);
+		patriotGames.setTitle(C);
+		patriotGames.setUser(u);
+
+		Tag book = new Tag(u,D);		
+
+		topicDAO.save(book);
+
+
+		patriotGames.tagTopic(book);
+
+		System.out.println("before: "+patriotGames.getId());
+
+		topicDAO.save(patriotGames);
+
+		System.out.println("after: "+patriotGames.getId());
+
+		System.out.println(patriotGames.toPrettyString());
+
+		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+
+		assertEquals(2, savedL.size());
+		
+		
+		book = (Tag) topicDAO.getForName(u, D);
+		assertEquals(1,book.getInstances().size());
+		
+		topicDAO.delete(patriotGames);
+		
+		savedL = topicDAO.getAllTopicIdentifiers(u);
+		assertEquals(1, savedL.size());
+		
+		book = (Tag) topicDAO.getForName(u, D);
+		assertEquals(0,book.getInstances().size());
+		
+		
+	}
+	public void testDeleteAdvanced() throws HippoBusinessException{
+		Topic patriotGames = new Topic();
+		patriotGames.getLatestEntry().setData(B);
+		patriotGames.setTitle(C);
+		patriotGames.setUser(u);
+
+		Tag book = new Tag(u,D);		
+
+		MetaTopic author = new MetaTopic();
+		author.setTitle(B);
+		author.setUser(u);
+		book.addMeta(author);
+
+		topicDAO.save(book);
+
+		Topic tomClancy = new Topic();
+		tomClancy.setTitle(E);
+		topicDAO.save(tomClancy);
+
+		patriotGames.tagTopic(book);
+		patriotGames.addMetaValue(author, tomClancy);
+
+		System.out.println("before: "+patriotGames.getId());
+
+				
+		topicDAO.save(patriotGames);
+
+		Entry lastEntry = patriotGames.getLatestEntry();
+		
+		System.out.println("after: "+patriotGames.getId());
+
+		System.out.println(patriotGames.toPrettyString());
+
+		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+
+		assertEquals(3, savedL.size());
+		
+		
+		book = (Tag) topicDAO.getForName(u, D);
+		assertEquals(1,book.getInstances().size());
+		
+		topicDAO.delete(patriotGames);
+		
+		savedL = topicDAO.getAllTopicIdentifiers(u);
+		assertEquals(2, savedL.size());
+		
+		book = (Tag) topicDAO.getForName(u, D);
+		assertEquals(0,book.getInstances().size());
+		
+		//TODO assert that lastEntry has been deleted
+	}
 	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;

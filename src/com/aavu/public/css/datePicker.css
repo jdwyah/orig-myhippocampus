@@ -19,7 +19,7 @@ TABLE.monthDates TD {
 	font-family:tahoma,sans-serif;
 	font-size:10px;
 	background: #FFFFFF;
-
+	z-index: 9999;
 }
 	
 .calendarPanel	{

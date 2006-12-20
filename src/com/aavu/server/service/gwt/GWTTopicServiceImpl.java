@@ -485,5 +485,17 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 		}
 		return rtn;		
 	}
+	
+	
+
+	public void delete(Topic topic) throws HippoException {
+		try{
+			topicService.delete(topic);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
 
 }

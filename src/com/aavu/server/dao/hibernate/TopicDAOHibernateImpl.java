@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.FetchMode;
@@ -25,6 +26,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
@@ -541,6 +543,40 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				"where user is ? "
 				,rtn.getUser())));
 		
+	}
+
+	public void delete(final Topic topic) {
+		//getHibernateTemplate().delete(topic);
+		getHibernateTemplate().execute(new HibernateCallback(){
+			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+
+				for (Topic instance : (Set<Topic>)topic.getInstances()) {
+					instance.getTypes().remove(topic);
+				}
+				for (Topic type : (Set<Topic>)topic.getTypes()) {
+					type.getInstances().remove(topic);
+				}
+				
+				for (Occurrence occurence : (Set<Occurrence>)topic.getOccurences()) {
+					
+					//TODO delete S3Files 
+					//TODO delete Weblinks that were only referenced by us					
+
+					if(occurence instanceof Entry){
+						sess.delete(occurence);
+					}
+					if(occurence instanceof MindTreeOcc){
+						sess.delete(occurence);
+					}
+				}
+				
+				for (Topic assoc : (Set<Topic>)topic.getAssociations()) {
+					//TODO what here? any cascade?					
+				}
+				
+				sess.delete(topic);				
+				return true;
+			}});
 	}
 
 

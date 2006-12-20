@@ -95,8 +95,9 @@ public class MetaTopicEditWidget extends SaveListener implements CompleteListene
 	 */
 	public void completed(final String completeText) {
 		System.out.println("COMPLETED LISTENER!");
-		completer.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback("SeeAlsoComplete"){
+		completer.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(Manager.myConstants.seeAlso_async()){
 			public void onSuccess(Object result) {
+				super.onSuccess(result);
 				System.out.println("GetTopicIdentForNameOrCreateNew: "+result);
 				TopicIdentifier to = (TopicIdentifier) result;
 				System.out.println("GetTopicIdentForNameOrCreateNewID: "+to);

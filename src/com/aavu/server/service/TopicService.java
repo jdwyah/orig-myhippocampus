@@ -51,5 +51,7 @@ public interface TopicService {
 	MindTree saveTree(MindTree tree);
 
 	UserPageBean getUserPageBean(User su);
+
+	void delete(Topic topic) throws HippoBusinessException;
 	
 }

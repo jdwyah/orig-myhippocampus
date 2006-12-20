@@ -130,6 +130,27 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	}
 
+	public boolean removeTag(Tag tag) {
+
+		System.out.println("REMOVE-------------------");
+		System.out.println(tag.toPrettyString());
+		System.out.println("FROM-------------------");
+		System.out.println(toPrettyString());
+		
+		boolean b = tag.getInstances().remove(this);
+		
+		boolean b2 = getTypes().remove(tag);
+		
+		System.out.println("Remove Tag: "+b+" "+b2);
+		return b && b2;
+		
+//		return tag.getInstances().remove(this)
+//		&&
+//		getTypes().remove(tag);
+	}
+
+	
+	
 	public Entry getLatestEntry(){
 		Entry rtn = null;
 		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
@@ -398,6 +419,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 		getAssociations().add(cur);
 	}
+
 
 	
 }

@@ -17,6 +17,7 @@ import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.SubjectBoard;
 import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -152,6 +153,15 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		leftTopPanel.add(titleBox);
 		leftTopPanel.add(new Label(Manager.myConstants.topic_updated()+formatDate(topic.getLastUpdated())));
 
+		ImageButton delete = new ImageButton(Manager.myConstants.delete_image(),20,20);
+		delete.addMouseListener(new TooltipListener(Manager.myConstants.delete()));
+		delete.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				delete();
+			}});
+		leftTopPanel.add(delete);
+				
+		
 		//Extension point
 		addLeftTopExtras(leftTopPanel);		
 		
@@ -261,7 +271,18 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 				saveButton.saveAccomplished();
 			}
 		});	
-
+	}
+	
+	private void delete() {
+		if(Window.confirm(Manager.myConstants.delete_warningS(topic.getTitle()))){
+			manager.getTopicCache().delete(topic,new StdAsyncCallback(Manager.myConstants.delete_async()){
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
+					close();
+					manager.refreshAll();
+				}				
+			});
+		}
 	}
 	
 }
