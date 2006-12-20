@@ -14,12 +14,12 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class ReferencePanel extends Composite {
 
-	private Topic topic;
+	
 	private Manager manager;
 	private FlowPanel refPanel;
 	
-	public ReferencePanel(Manager manager,Topic t){
-		this.topic = t;
+	public ReferencePanel(Manager manager){
+		
 		this.manager = manager;
 	
 		refPanel = new FlowPanel();
@@ -30,7 +30,7 @@ public class ReferencePanel extends Composite {
 		initWidget(mainPanel);
 	}
 
-	public void load(final TopicDetailsTabBar bar) {
+	public void load(Topic topic, final TopicDetailsTabBar bar) {
 		manager.getTopicCache().getLinksTo(topic,new StdAsyncCallback("GetLinksTo"){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);

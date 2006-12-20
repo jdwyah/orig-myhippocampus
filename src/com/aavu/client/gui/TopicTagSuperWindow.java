@@ -64,15 +64,22 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		 * TopicDetails on the bottom
 		 * 
 		 */
-		topicDetails = new TopicDetailsTabBar(topic,manager,this);
+		topicDetails = new TopicDetailsTabBar(manager,this);
 		
 		mainPanel.add(topicDetails,DockPanel.SOUTH);
-		
+				
 		setContent(mainPanel);
+		
+		load(topic);
 	}
 	
-	private void setupTopic() {
+	private void load(Topic loadme) {
+		topic = loadme;
+		tagBoard.load(topic);
+		topicDetails.load(topic);
 		
+		titleBox.setText(topic.getTitle());
+		setTitle(topic.getTitle());
 	}
 	
 	
@@ -132,7 +139,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 				super.onSuccess(result);
 				Tag tag = (Tag) result;
 				manager.growIsland(tag);
-				setupTopic();
+				load(tag);
 			}
 		});
 	}
@@ -266,7 +273,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 				//this should prevent double saves
 				Topic[] saved = (Topic[]) result;
 
-				//load(saved[0]);
+				load(saved[0]);
 				
 				saveButton.saveAccomplished();
 			}

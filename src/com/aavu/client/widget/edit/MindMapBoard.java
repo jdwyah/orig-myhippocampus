@@ -20,19 +20,37 @@ public class MindMapBoard extends Composite {
 	
 	private MapperWidget mapper;
 	private MindTreeOcc treeOcc;
-	private Topic topic;
+	
 	private SaveNeededListener saveNeeded;
+	private VerticalPanel mainPanel;
+	private Manager manager;
 
 
-	public MindMapBoard(final Manager manager, Topic topic, SaveNeededListener _saveNeeded) {
+	public MindMapBoard(Manager manager, SaveNeededListener _saveNeeded) {
 		this.saveNeeded = _saveNeeded;
-		this.topic = topic;
+		this.manager = manager;
+				
+		mainPanel = new VerticalPanel();
 		
-		VerticalPanel mainPanel = new VerticalPanel();
+		initWidget(mainPanel);
+	}
+
+	
+
+
+	private void loadNShow(Topic topic,MindTreeOcc treeOcc2) {
+		mapper.loadTree(topic,treeOcc2);		
+	
+	}
+
+
+	public void load(final Topic topic) {
+		
+		mainPanel.clear();
 		
 		treeOcc = topic.getMindTree();
 		
-				
+		
 		Button mapB = new Button(manager.myConstants.mapperAddMap());
 		mapB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {		
@@ -51,11 +69,11 @@ public class MindMapBoard extends Composite {
 							super.onSuccess(result);
 							MindTree tree = (MindTree) result;
 							treeOcc.setMindTree(tree);
-							loadNShow(treeOcc);
+							loadNShow(topic,treeOcc);
 						}						
 					});
 				}else{
-					loadNShow(treeOcc);
+					loadNShow(topic, treeOcc);
 				}
 				saveNeeded.onChange(MindMapBoard.this);
 				
@@ -69,16 +87,6 @@ public class MindMapBoard extends Composite {
 		}else{
 			mainPanel.add(mapB);
 		}
-		
-		initWidget(mainPanel);
-	}
-
-	
-
-
-	private void loadNShow(MindTreeOcc treeOcc2) {
-		mapper.loadTree(topic,treeOcc2);		
-	
 	}
 
 	

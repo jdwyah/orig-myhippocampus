@@ -16,13 +16,12 @@ public class LinkDisplayWidget extends VerticalPanel {
 	
 	private int size = 0;
 	
-	private TextBox textBox;
 	
-	public LinkDisplayWidget(Topic topic, SaveNeededListener saveNeeded) {
+	public LinkDisplayWidget(SaveNeededListener saveNeeded) {
 		addStyleName("H-LinkDisplay");
 		
-		System.out.println("OCCUR: "+topic.getOccurences().size());
-		System.out.println(topic.toPrettyString());
+//		System.out.println("OCCUR: "+topic.getOccurences().size());
+//		System.out.println(topic.toPrettyString());
 		
 //		EnterInfoButton enterInfoButton = new EnterInfoButton();		
 //		enterInfoButton.addClickListener(new ClickListener(){
@@ -30,7 +29,11 @@ public class LinkDisplayWidget extends VerticalPanel {
 //				add(textBox.getText());
 //			}
 //		});
-		
+
+	}
+	public void load(Topic topic){
+		clear();
+		size = 0;
 		for (Iterator iter = topic.getOccurences().iterator(); iter.hasNext();) {
 			Occurrence occ = (Occurrence) iter.next();			
 			if(occ instanceof URI){
@@ -38,11 +41,7 @@ public class LinkDisplayWidget extends VerticalPanel {
 				size ++;
 			}
 		}
-
 	}
-//	private void add(String link){
-//		
-//	}
 
 	public int getSize() {
 		return size;

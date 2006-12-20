@@ -13,54 +13,77 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TopicDetailsTabBar extends UpdateableTabPanel {
 
-	private TopicViewAndEditWidget tvw;
+	private TopicViewAndEditWidget topicViewAndEditW;
+	private SeeAlsoBoard seeAlsoBoard;
+	private UploadBoard uploadBoard;
+	private MindMapBoard mindMapBoard;
+	private ReferencePanel referencesPanel;
+	private LinkDisplayWidget linkDisplayW;
 
-	public TopicDetailsTabBar(Topic topic,Manager manager,SaveNeededListener saveNeeded){
+	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded){
+		
+		
+		topicViewAndEditW = new TopicViewAndEditWidget(manager,saveNeeded);		
+		add(topicViewAndEditW,Manager.myConstants.entry());
+				
+		linkDisplayW = new LinkDisplayWidget(saveNeeded);
+		add(linkDisplayW,Manager.myConstants.occurrencesN(linkDisplayW.getSize()));		
+				
+		seeAlsoBoard = new SeeAlsoBoard(manager,saveNeeded);		
+		add(seeAlsoBoard,Manager.myConstants.seeAlsosN(0));				
+		
+		
+		uploadBoard = new UploadBoard(manager,saveNeeded);		
+		add(uploadBoard,Manager.myConstants.filesN(0));		
+		
+		mindMapBoard = new MindMapBoard(manager,saveNeeded);
+		add(mindMapBoard,Manager.myConstants.mapperTitle());
+		
+		referencesPanel = new ReferencePanel(manager);
+		add(referencesPanel,Manager.myConstants.references());		
+		
+	}
+
+	public void load(Topic topic) {
 		
 		boolean selected = false;
-		
-		tvw = new TopicViewAndEditWidget(manager,saveNeeded);
-		tvw.load(topic);
-		add(tvw,Manager.myConstants.entry());
-		if(!selected && !tvw.getEntry().isEmpty()){
+				
+		topicViewAndEditW.load(topic);
+		if(!selected && !topicViewAndEditW.getEntry().isEmpty()){
 			System.out.println("SELEC ENTRY");
 			selectTab(getWidgetCount()-1);
 			selected = true;
 		}
 		
-		LinkDisplayWidget ldw = new LinkDisplayWidget(topic,saveNeeded);
-		add(ldw,Manager.myConstants.occurrencesN(ldw.getSize()));
-		if(!selected && ldw.getSize() > 0){
+		linkDisplayW.load(topic);
+		updateTitle(linkDisplayW,Manager.myConstants.occurrencesN(linkDisplayW.getSize()));
+		if(!selected && linkDisplayW.getSize() > 0){
 			System.out.println("SELEC LINKS");
 			selectTab(getWidgetCount()-1);
 			selected = true;
 		}
-				
-		SeeAlsoBoard sab = new SeeAlsoBoard(manager,saveNeeded);
-		int size = sab.load(topic);		
-		add(sab,Manager.myConstants.seeAlsosN(size));				
+		
+		int size = seeAlsoBoard.load(topic);		
+		updateTitle(seeAlsoBoard, Manager.myConstants.seeAlsosN(size));
 		if(!selected && size > 0){
 			System.out.println("SELEC SEE ALSO");
 			selectTab(getWidgetCount()-1);
 			selected = true;
 		}
 		
-		UploadBoard ub = new UploadBoard(manager,topic,saveNeeded);		
-		add(ub,Manager.myConstants.filesN(ub.getSize()));		
+		uploadBoard.load(topic);
+		updateTitle(uploadBoard,Manager.myConstants.filesN(uploadBoard.getSize()));		
 		
-		MindMapBoard mindMapBoard = new MindMapBoard(manager,topic,saveNeeded);
-		add(mindMapBoard,Manager.myConstants.mapperTitle());
+		mindMapBoard.load(topic);
 		
-		ReferencePanel referencesPanel = new ReferencePanel(manager,topic);
-		add(referencesPanel,Manager.myConstants.references());
-		referencesPanel.load(this);
-		
+		referencesPanel.load(topic,this);
 		
 	}
 
 	public String getEntryText() {
-		return tvw.getEntryText();
+		return topicViewAndEditW.getEntryText();
 	}
+
 
 	
 }
