@@ -1,0 +1,12 @@
+<config>
+	<context-values>
+		<resource path="tomcat/webapps/HippoTest/WEB-INF/freemarker/secure/extreme/userList.ftl">
+			<value key="user" object-class="com.aavu.server.domain.ServerSideUser"/>
+		</resource>
+		<resource path="tomcat/webapps/HippoTest/WEB-INF/freemarker/secure/userPage.ftl">
+			<value key="bean" object-class="com.aavu.server.web.domain.UserPageBean"/>
+		</resource>
+	</context-values>
+	<macro-library>
+	</macro-library>
+</config>
