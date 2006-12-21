@@ -111,6 +111,7 @@ public interface Consts extends Messages {
 	String link_url();
 	String link_notes();
 	String link_add();
+	String required();
 	
 	
 	

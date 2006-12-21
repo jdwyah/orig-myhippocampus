@@ -17,19 +17,26 @@ import com.google.gwt.user.client.ui.Widget;
 public class AddLinkPopup extends PopupWindow {
 
 	private static final int HEIGHT = 200;
-	private static final int WIDTH = 500;
+	private static final int WIDTH = 550;
 	private WebLink link;
+	private Label descReq;
+	private Label linkReq;
 
 	public AddLinkPopup(final LinkDisplayWidget widget, GInternalFrame frame, WebLink _link, final Topic myTopic, final SaveNeededListener saveNeeded) {
 		super(frame, Manager.myConstants.link_add_title(),WIDTH,HEIGHT);
 
 		this.link = _link;
 		
-		Grid mainPanel = new Grid(4,2);
+		Grid mainPanel = new Grid(4,3);
 		
 		mainPanel.setWidget(0, 0, new Label(Manager.myConstants.link_description()));		
 		mainPanel.setWidget(1, 0, new Label(Manager.myConstants.link_url()));
 		mainPanel.setWidget(2, 0, new Label(Manager.myConstants.link_notes()));
+		
+		descReq = new Label();
+		linkReq = new Label();
+		mainPanel.setWidget(0, 2, descReq);
+		mainPanel.setWidget(1, 2, linkReq);
 		
 		final TextBox descriptionT = new TextBox();
 		descriptionT.setSize("35em","2em");
@@ -55,6 +62,15 @@ public class AddLinkPopup extends PopupWindow {
 		Button submitB = new Button(Manager.myConstants.save());
 		submitB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
+				
+				if(descriptionT.getText().length() == 0){
+					descReq.setText(Manager.myConstants.required());
+					return;
+				}
+				if(urlT.getText().length() == 0){
+					linkReq.setText(Manager.myConstants.required());
+					return;
+				}
 				link.setDescription(descriptionT.getText());
 				link.setNotes(notesT.getText());
 				link.setUri(urlT.getText());
@@ -62,7 +78,10 @@ public class AddLinkPopup extends PopupWindow {
 				if(link.getId() == 0){
 					myTopic.getOccurences().add(link);
 				}
+				
 				saveNeeded.onChange(widget);
+				widget.load(myTopic);
+				close();
 			}});
 		
 		mainPanel.setWidget(3, 0, submitB);
