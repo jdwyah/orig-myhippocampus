@@ -15,4 +15,18 @@ public class WebLink extends URI implements Serializable,IsSerializable {
 		setData(notes);
 	}
 
+	public String getDescription() {
+		return getTitle();
+	}
+	public String getNotes(){
+		return getData();
+	}
+
+	public void setDescription(String text) {
+		setTitle(text);		
+	}
+	public void setNotes(String text){
+		setData(text);
+	}
+
 }

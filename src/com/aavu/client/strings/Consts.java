@@ -39,6 +39,7 @@ public interface Consts extends Messages {
 	String magazine();
 	String references();
 	String referencesN(int size);
+	String references_none();
 	
 	String wiki();
 	String wiki_summary();
@@ -79,7 +80,7 @@ public interface Consts extends Messages {
 	String topic_getAllAsync();
 	
 	String tags();	
-	String tag_upgrade();
+	String tag_upgradeS(String s);
 	String mapperSaveFirst();
 	String tag_topicIsA();
 	String tag_upgradeAsync();
@@ -100,7 +101,17 @@ public interface Consts extends Messages {
 	String save_redLight();
 
 	String loginTitle();
+	String login_failure();
+	String login_success();
+	
 	String seeAlso_async();
+	String all_referencesN(int i);
+	String link_add_title();
+	String link_description();
+	String link_url();
+	String link_notes();
+	String link_add();
+	
 	
 	
 	

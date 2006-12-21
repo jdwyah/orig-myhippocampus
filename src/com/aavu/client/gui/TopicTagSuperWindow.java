@@ -122,7 +122,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		 */
 		
 		if(!(topic instanceof Tag)){
-			Button islandButton = new Button(manager.myConstants.tag_upgrade());
+			Button islandButton = new Button(Manager.myConstants.tag_upgradeS(topic.getTitle()));
 			islandButton.addClickListener(new ClickListener(){
 				public void onClick(Widget sender) {
 					makeThisAnIsland();

@@ -4,6 +4,7 @@ import com.aavu.client.HippoTest;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -25,7 +26,8 @@ public class LoginWindow extends PopupWindow {
 	private static final String SECURITY_URL = "/site/j_acegi_security_check";
 	
 	private FormPanel form;
-	private Manager manager;	
+	private Manager manager;
+	private Label messageLabel;	
 
 	private static boolean semaphore = false;
 	
@@ -78,22 +80,28 @@ public class LoginWindow extends PopupWindow {
 		panel.add(new Button("Login", new ClickListener() {
 			public void onClick(Widget sender) {
 				form.submit();
-
-				close();
 			}
 		}));
+		
+		messageLabel = new Label("");		
+		panel.add(messageLabel);
 		
 		form.addFormHandler(new FormHandler() {
 			public void onSubmitComplete(FormSubmitCompleteEvent event) {
 
-				//TODO parse bad password etc
-				//Window.alert(event.getResults());
-
-				manager.loginSuccess();
+				//TODO parse bad password etc. Super-Fragile string comps				
+				if(event.getResults() == null 
+						||
+					-1 != event.getResults().indexOf(" Your login attempt was not successful")
+				){
+					System.out.println("DO FAILURE");
+					failure();
+				}else{
+					System.out.println("DO SUCC |"+event.getResults()+"|");
+					success();
+				}
 				
-				//free up the login lock for next time
-				semaphore = false;
-				close();
+				
 			}
 
 			public void onSubmit(FormSubmitEvent event) {
@@ -115,5 +123,22 @@ public class LoginWindow extends PopupWindow {
 		setContent(form);
 	}
 
+	private void failure(){
+		messageLabel.setText(Manager.myConstants.login_failure());
+	}
+	private void success(){
+		messageLabel.setText(Manager.myConstants.login_success());
+		manager.loginSuccess();
+		
+		Timer t = new Timer() {
+		      public void run() {
+		  		//free up the login lock for next time
+		  		semaphore = false;
+		  		close();    	  
+		      }
+		    };
+		t.schedule(2000);		
+		
+	}
 
 }

@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
-import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.Manager;
@@ -12,10 +11,10 @@ import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -95,25 +94,25 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 	 */
 	private class SeeAlsoWidget extends Composite {
 
-		private HorizontalPanel horizP;
+		private CellPanel seeAlsoPanel;
 		
 		public SeeAlsoWidget(){			
-			horizP = new HorizontalPanel();			
-			initWidget(horizP);
+			seeAlsoPanel = new VerticalPanel();			
+			initWidget(seeAlsoPanel);
 		}
 		
 		public int load(Association seeAlsoAssoc){
 			int size = 0;
 			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
-				horizP.add(new TopicLink(top));
+				seeAlsoPanel.add(new TopicLink(top));
 				size++;
 			}
 			return size;
 		}
 
 		public void add(TopicIdentifier to2) {
-			horizP.add(new TopicLink(to2));			
+			seeAlsoPanel.add(new TopicLink(to2));			
 		}		
 	}
 

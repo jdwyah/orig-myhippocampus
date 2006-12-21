@@ -47,7 +47,8 @@
 	</bean>
 	<bean id="messageService" class="com.aavu.server.service.impl.MessageServiceImpl">
 		<property name="userDAO" ref="userDAO" />
-		<property name="topicService" ref="topicService" />
+		<property name="tagDAO" ref="tagDAO" />
+		<property name="topicDAO" ref="topicDAO" />
 	</bean>
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
 		<property name="userService" ref="userService" />

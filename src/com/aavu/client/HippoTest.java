@@ -44,8 +44,6 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	private HippoCache hippoCache;
 	private Manager manager;
 	
-//	public static String realModuleBase;
-	
 
 	/**
 	 * Switch between localhost for testing & 
