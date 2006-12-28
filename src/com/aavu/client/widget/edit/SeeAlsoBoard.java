@@ -103,6 +103,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		
 		public int load(Association seeAlsoAssoc){
 			int size = 0;
+			seeAlsoPanel.clear();
 			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
 				seeAlsoPanel.add(new TopicLink(top));

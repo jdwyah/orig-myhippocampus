@@ -398,7 +398,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.ne("class", "association"))
 		.add(Expression.ne("class", "seealso"))
 		.add(Expression.ne("class", "metadate"))
-		.addOrder( Order.asc("title") )
+		.addOrder( Order.asc("title").ignoreCase() )
 		.setProjection(getTopicIdentifier());
 
 //		List<Topic> l = getHibernateTemplate().findByCriteria(crit);

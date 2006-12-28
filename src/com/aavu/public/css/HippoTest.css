@@ -2,7 +2,6 @@ body {
 	background-color: transparent;
 	color: black;
 	font-family: Arial, sans-serif;
-	margin: 20px 20px 20px 20px;
 }
 
 div.loading {
@@ -137,16 +136,26 @@ a:visited {
 	z-index: 1;
 }
 
-.H-Ocean { /*background-image: url("../img/lg_1.gif");
-	background-repeat: no-repeat;*/
+.H-Ocean { 
+	/*background-color: #CCE6FF;*/
+	background-image: url("../img/oceanBackBase.png");
+	background-repeat: repeat;
+	
 	position: absolute;
-	top: 0px;
+
 	left: 0px;
+	top: 0px;
+	
 	height: 100%;
 	width: 100%;
 	z-index: 0;
 }
-
+.H-Island {
+	background-color: transparent;
+}
+.H-IslandBanner {
+	z-index: 2;
+}
 .H-LineOfTime {
 	background: #FF0000;
 	padding: 3px;

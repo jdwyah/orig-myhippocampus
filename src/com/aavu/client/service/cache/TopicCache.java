@@ -176,6 +176,7 @@ public class TopicCache {
 					continue;
 				}
 				System.out.println("R/A "+res.getIdentifier());
+				
 				//TODO bogus, need to check!!
 				topicIdentifiers.remove(res.getIdentifier());
 				topicIdentifiers.put(res.getIdentifier(),null);

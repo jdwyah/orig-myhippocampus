@@ -2,6 +2,7 @@ package com.aavu.client.gui;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.gui.ext.PopupWindow;
@@ -29,13 +30,16 @@ public class MainMap extends Composite {
 		//TODO cleanout remove TagSearch class, css deadwood
 		//tagSearch = new TagSearch(manager);
 		
-		ocean = new Ocean(manager);
+		
+		
+		//ocean = new OceanFlashImpl(manager);
+		ocean = new OceanDHTMLImpl(manager);
 		
 		statusPanel = new StatusPanel();
 		
 		
 		mainP.add(new CompassRose(manager));
-		mainP.add(ocean);
+		mainP.add(ocean.getWidget());
 		mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
 		mainP.add(statusPanel);

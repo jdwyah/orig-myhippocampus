@@ -132,10 +132,9 @@ public class Sidebar extends FocusPanel implements MouseListener {
 			
 			/*
 			 * NOTE this. We're claiming it's not dirty.
-			 * 
-			 * hmm.. now it doesn't sort case insensitive..
+			 * Need to have Service/DAO return sorted & ignoreCase
 			 */
-			//topics.setDirty(false);
+			topics.setDirty(false);
 			
 			VerticalPanel vp = new VerticalPanel();
 			vp.setVerticalAlignment(VerticalPanel.ALIGN_TOP);
