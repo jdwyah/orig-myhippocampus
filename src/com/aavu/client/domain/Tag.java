@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Tag extends Topic implements  Completable, IsSerializable, Serializable, TagInfo{
 
 	public Tag(){
+		super();
 		setPublicVisible(false);
 	}	
 

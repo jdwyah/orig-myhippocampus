@@ -44,10 +44,11 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	private OceanDHTMLImpl ocean;
 	private int top;
 	private int left;
+	private IslandBanner banner;
 
 
 	
-	public Island(TagInfo stat, OceanDHTMLImpl ocean, DragHandler d, User user) {
+	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user) {
 		super();
 		this.tagStat = stat;
 		this.ocean = ocean;
@@ -62,52 +63,69 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		pr = new MiddleSquarePseudoRandom(seed,4);
 		
 		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS );	    
-		
-		d.add(this);
-			
+					
 		setStyleName("H-Island");
+		
+		banner = new IslandBanner(tagStat.getTagName());
+		
 		
 		situate(ocean);		
 		
 		//incr ie add a (no topic here) spot		
 		grow(tagStat.getNumberOfTopics() + 1);	
-		
-		int width = (max_x + 1 - min_x) * IMG_SPACING_W + IMG_WIDTH - IMG_SPACING_W;
-		int height = (max_y + 1 - min_y) * IMG_SPACING_H + IMG_HEIGHT - IMG_SPACING_H;
-		
-		DOM.setStyleAttribute(getElement(), "width", width+"px");
-		DOM.setStyleAttribute(getElement(), "height", height+"px");
-		
+				
 		
 		//position: absolute; left: 610px; top: 155px;
 		//DOM.setStyleAttribute(getElement(), "position", "absolute"); 		
+		
+		doPositioning();
 		
 		
 		//this code for lat long as 0-1 floats
 //		int top = (int) (tagStat.getLatitude() * ocean.getLatitude()) - gridToRelativeY(min_y);
 //		int left = (int) (tagStat.getLongitude() * ocean.getLongitude()) - gridToRelativeX(min_x);;
 		
-		/*
-		 * Ocean will pull these from us when it adds us
-		 */		
-		top = tagStat.getLatitude()  - gridToRelativeY(min_y);
-		left = tagStat.getLongitude()  - gridToRelativeX(min_x);		
-		
-		
+	
 		//String s = tagStat.getLongitude()+" "+tagStat.getLatitude()+" "+left+" "+top;
 
-		add(new IslandBanner(tagStat.getTagName()),0,0);
-		 
+				
 		
 		System.out.println(tagStat.getTagName()+" minx "+min_x+" max x "+max_x+" miny "+min_y+" maxy "+max_y);
 		System.out.println("Island top: "+top+" left "+left);		
-		System.out.println("Island width: "+width+" height "+height);		
+				
 		System.out.println("Island longi x "+tagStat.getLongitude());
 		System.out.println("Island lat y "+tagStat.getLatitude());
 		
 		
 	}
 	
+
+	/*
+	 * Ocean will pull these from us when it adds us
+	 */	
+	private void doPositioning() {			
+		top = tagStat.getLatitude()  - gridToRelativeY(min_y);
+		left = tagStat.getLongitude()  - gridToRelativeX(min_x);		
+		
+
+		/*
+		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
+		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
+		 */
+		int width = (max_x + 1 - min_x) * IMG_SPACING_W + IMG_WIDTH - IMG_SPACING_W;
+		int height = (max_y + 1 - min_y) * IMG_SPACING_H + IMG_HEIGHT - IMG_SPACING_H;
+		
+		//Magic # 11 is ~Coffee at 1.4em which == 68px 
+		if(tagStat.getTagName().length() * 11 > width){
+			DOM.setStyleAttribute(getElement(), "width", tagStat.getTagName().length()+"em");	
+		}else{
+			DOM.setStyleAttribute(getElement(), "width", width+"px");	
+		}
+		DOM.setStyleAttribute(getElement(), "height", height+"px");
+		
+		System.out.println("Island width: "+width+" height "+height);
+	}
+
 
 
 	public int getLeft() {
@@ -134,14 +152,14 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 				&&
 				tagStat.getLongitude() < 1){
 			
+			
 			System.out.println("Setting to random!!");
-			tagStat.setLongitude((int)(pr.nextDouble() * o.getLongitude()));
-			tagStat.setLatitude((int)(pr.nextDouble() * o.getLatitude()));
-			
-			
-		//	tagStat.setLongitude(pr.nextInt(10)+o.getLongitude()/2);
-		//	tagStat.setLatitude(pr.nextInt(10));//+o.getLatitude()/2);
-			
+			//avoid putting it on the edge
+			int longi = (int) (120 + pr.nextDouble() * (o.getLongitude() - 120));
+			int lati = (int) (120 + pr.nextDouble() * (o.getLatitude() - 120));
+			tagStat.setLongitude(longi);
+			tagStat.setLatitude(lati);
+						
 		}
 		if(tagStat.getLatitude() < -1 ){
 			System.out.println("-----------------");
@@ -160,6 +178,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 	public void grow() {
 		grow(1);
+		doPositioning();
+		ocean.setWidgetPosition(this, left, top);		
 	}
 
 	/**
@@ -170,15 +190,17 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 */
 	private void grow(int i) {
 
+		int x=0,y = 0;
+		
 		for (int j = 0; j < i; j++) {
 				
-			int x = GRID/2;			
-			int y = GRID/2;
-			
+			x = GRID/2;			
+			y = GRID/2;
+				
 			//TODO take this out.. only to prevent loops if Von Neuman PRG explodes
 			int c = 0;
 			while(true == used[x][y] && c < 200){
-				//System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
+				System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
 				c++;
 				
 				int dx = pr.nextInt(3) - 1;
@@ -187,7 +209,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 				y += dy;
 				//System.out.println("sw: "+sw);
 			}
-	//		System.out.println("FOUND: "+x+" "+y);
+			System.out.println("FOUND: "+x+" "+y);
 			used[x][y] = true;
 			
 			//update BOUNDS
@@ -205,8 +227,12 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 			}
 				
 		}
+
 		
-		//need to re-loop after all the min/maxes are set
+		clear();
+		add(banner,0,0);
+
+		//need to re-loop after all the min/maxes are set if we do multiples
 		//otherwise the gridToRelative will calc using the wrong min/max 
 		for (int cc = 0; cc < GRID; cc++) {
 			for (int j = 0; j < GRID; j++) {
@@ -214,6 +240,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 					addAcre(cc,j);
 			}
 		}
+		
 		
 	}
 	
@@ -241,7 +268,9 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		public Acre(ClickListener listener, int x, int y){
 			
 			Image isle = new Image("img\\earth"+(1+(x*y)%4)+".png");
-			isle.addClickListener(listener);
+
+			
+			//isle.addClickListener(listener);
 			
 			add(isle,0,0);
 			
@@ -276,17 +305,17 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 //	          clickListeners.fireClick(this);
 //	        break;
 //	      }
-	      case Event.ONMOUSEDOWN:
-	      case Event.ONMOUSEUP:
-	    	  wasMouseUp = true;
-	      case Event.ONMOUSEMOVE:
-	      case Event.ONMOUSEOVER:
-	      case Event.ONMOUSEOUT: {
-	        if (mouseListeners != null)
-	          mouseListeners.fireMouseEvent(this, event);
-	        break;
-	      }
-	     
+	    case Event.ONMOUSEUP:
+	    	wasMouseUp = true;
+	    case Event.ONMOUSEDOWN:
+	    case Event.ONMOUSEMOVE:
+	    case Event.ONMOUSEOVER:
+	    case Event.ONMOUSEOUT: {
+	    	if (mouseListeners != null)
+	    		mouseListeners.fireMouseEvent(this, event);
+	    	break;
+	    }
+
 	    }
 	    /*
 	     * detecting move requires subtracting out the @&**@#% shift of the ocean usually (8,8) in FF and (10,15) in IE7 
@@ -305,18 +334,19 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	    		ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
 	    		left = newLeft;
 	    		top = newTop;
+	    	}else{
+	    		/*
+	    		 * hmm...  
+	    		 * detecting here is good bc then we know if it was a drag, 
+	    		 * but the detection area is the whole island div.
+	    		 * Alternative #2 is listener on acres & banner, but then we need a 
+	    		 * new way to cancel if dragged. 
+	    		 */
+	    		onClick(this);
 	    	}
 	    	//System.out.println("Moved "+getAbsoluteLeft()+" "+left+" "+getAbsoluteTop()+" "+top);
 	    	//System.out.println("Ocean "+ocean.getAbsoluteLeft()+" top "+ocean.getAbsoluteTop()+" ");
 	    }
 	  }
-	
-	private class IslandBanner extends Label{
-		public IslandBanner(String text){
-			super(text);
-			setStyleName("H-IslandBanner");
-			addClickListener(Island.this);
-		}
-	}
 	
 }

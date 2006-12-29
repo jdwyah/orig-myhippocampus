@@ -4,6 +4,7 @@ import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -44,9 +45,14 @@ public class CompassRose extends AbsolutePanel {
 		add(searchText,120,0);
 		add(searchB,260,0);
 
-
-		addStyleName("H-AbsolutePanel");
-		addStyleName("H-CompassRose");
+		/*
+		 * override the AbsolutePanel position: relative
+		 * otherwise we got a left: 8px; top: 8px;
+		 */		
+		//DOM.setStyleAttribute(getElement(), "position", "absolute");		
+				
+		
+		setStyleName("H-CompassRose");
 
 	}
 	private void doSearch() {

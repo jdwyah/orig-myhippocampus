@@ -19,4 +19,6 @@ public interface Ocean {
 	public int getLatitude();
 	public int getLongitude();
 
+	public void removeIsland(long id);
+
 }

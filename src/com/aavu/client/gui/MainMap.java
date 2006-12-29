@@ -67,6 +67,10 @@ public class MainMap extends Composite {
 	public void growIsland(Tag tag) {
 		ocean.growIsland(tag);
 	}
+
+	public void removeIsland(long id) {
+		ocean.removeIsland(id);	
+	}
 	public void refreshIslands(){
 		//TODO
 	}
@@ -83,6 +87,7 @@ public class MainMap extends Composite {
 			statusPanel.update(id,string,statusCode);
 		}
 	}
+
 
 
 }

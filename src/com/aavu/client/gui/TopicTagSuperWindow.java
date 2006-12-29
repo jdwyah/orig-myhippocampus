@@ -18,6 +18,7 @@ import com.aavu.client.widget.edit.SubjectBoard;
 import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -282,13 +283,10 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	
 	private void delete() {
 		if(Window.confirm(Manager.myConstants.delete_warningS(topic.getTitle()))){
-			manager.getTopicCache().delete(topic,new StdAsyncCallback(Manager.myConstants.delete_async()){
+			manager.delete(topic,new StdAsyncCallback(""){				
 				public void onSuccess(Object result) {
-					super.onSuccess(result);
-					close();
-					manager.refreshAll();
-				}				
-			});
+					close();					
+				}});
 		}
 	}
 	

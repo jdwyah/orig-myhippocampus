@@ -326,6 +326,19 @@ public class Manager implements TopicSaveListener {
 			}						
 		});		
 	}
+	public void delete(final Topic topic,final AsyncCallback callback) {
+		getTopicCache().delete(topic,new StdAsyncCallback(Manager.myConstants.delete_async()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				callback.onSuccess(result);
+				
+				if(topic instanceof Tag){
+					mainMap.removeIsland(topic.getId());
+				}
+				refreshAll();
+			}				
+		});
+	}
 	
 
 

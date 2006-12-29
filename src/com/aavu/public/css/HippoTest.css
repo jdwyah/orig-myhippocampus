@@ -115,10 +115,13 @@ a:visited {
 }
 
 .H-CompassRose {
+	position: absolute;
 	background: transparent;
 	border: none;
 	top: 0px;
 	left: 0px;
+	width: 340px;
+	height: 120px;
 	z-index: 1;
 }
 
@@ -140,6 +143,8 @@ a:visited {
 	background-color: transparent;
 }
 .H-IslandBanner {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 1.4em;
 	z-index: 2;
 }
 .H-LineOfTime {

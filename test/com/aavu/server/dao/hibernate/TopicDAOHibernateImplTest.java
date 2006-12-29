@@ -838,6 +838,67 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		//TODO assert that lastEntry has been deleted
 	}
+	public void testDeleteAdvanced2() throws HippoBusinessException{
+		Topic patriotGames = new Topic();
+		patriotGames.getLatestEntry().setData(B);
+		patriotGames.setTitle(C);
+		patriotGames.setUser(u);
+
+		Topic forWhomTheBellTolls = new Topic();
+		forWhomTheBellTolls.getLatestEntry().setData(B);
+		forWhomTheBellTolls.setTitle(F);
+		forWhomTheBellTolls.setUser(u);
+		
+		Tag book = new Tag(u,D);		
+
+		MetaTopic author = new MetaTopic();
+		author.setTitle(B);
+		author.setUser(u);
+		book.addMeta(author);
+
+		topicDAO.save(book);
+
+		Topic tomClancy = new Topic();
+		tomClancy.setTitle(E);
+		topicDAO.save(tomClancy);
+
+		patriotGames.tagTopic(book);
+		patriotGames.addMetaValue(author, tomClancy);
+
+		System.out.println("before: "+patriotGames.getId());
+				
+		topicDAO.save(patriotGames);
+
+		
+		forWhomTheBellTolls.tagTopic(book);
+		topicDAO.save(forWhomTheBellTolls);
+		
+		Entry lastEntry = patriotGames.getLatestEntry();
+		
+		System.out.println("after: "+patriotGames.getId());
+
+		System.out.println(patriotGames.toPrettyString());
+
+		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+
+		assertEquals(4, savedL.size());
+		
+		
+		book = (Tag) topicDAO.getForName(u, D);
+		assertEquals(2,book.getInstances().size());
+		
+		topicDAO.delete(patriotGames);
+		
+		savedL = topicDAO.getAllTopicIdentifiers(u);
+		assertEquals(3, savedL.size());
+		
+		book = (Tag) topicDAO.getForName(u, D);
+		assertEquals(1,book.getInstances().size());
+		
+	
+		
+		
+	}
 	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;

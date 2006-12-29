@@ -545,11 +545,22 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		
 	}
 
-	public void delete(final Topic topic) {
-		//getHibernateTemplate().delete(topic);
+	/**
+	 * 
+	 */
+	public void delete(final Topic todelete) {
+		
+	
 		getHibernateTemplate().execute(new HibernateCallback(){
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 
+				/*
+				 * load-ing here prevents an error where todelete has unsaved occurences, which we then try to delete causing an "expected row 1"
+				 * kind of error. If you want to delete todelete, there's no reason to save his associations first. 
+				 * NOTE: we could just change this method to take the long topic_id instead of a real Topic.class
+				 */				
+				Topic topic  = (Topic) sess.get(Topic.class,todelete.getId());
+				
 				for (Topic instance : (Set<Topic>)topic.getInstances()) {
 					instance.getTypes().remove(topic);
 				}
@@ -562,12 +573,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 					//TODO delete S3Files 
 					//TODO delete Weblinks that were only referenced by us					
 
+					log.debug("remove occurrence: "+occurence.getId()+" "+occurence.getTitle()+" "+occurence.getData());
+
 					if(occurence instanceof Entry){
 						sess.delete(occurence);
 					}
 					if(occurence instanceof MindTreeOcc){
 						sess.delete(occurence);
 					}
+
 				}
 				
 				for (Topic assoc : (Set<Topic>)topic.getAssociations()) {

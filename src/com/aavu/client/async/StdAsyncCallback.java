@@ -39,8 +39,6 @@ public abstract class StdAsyncCallback implements AsyncCallback {
 		//HippoUserException
 		if(caught.getMessage().startsWith("Username not found")){
 			manager.doLogin();
-		}else{
-			System.out.println("no match!!!!!!!!!!!!");
 		}
 		
 		if(manager != null){

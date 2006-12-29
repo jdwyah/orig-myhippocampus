@@ -7,11 +7,6 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Widget;
 
 public class OceanFlashImpl extends FlashContainer implements Ocean {
 
@@ -141,5 +136,9 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 	public int getLongitude() {
 		// TODO Auto-generated method stub
 		return 600;
+	}
+
+	public void removeIsland(long id) {
+		throw new UnsupportedOperationException("Not Yet Implemented");
 	}
 }

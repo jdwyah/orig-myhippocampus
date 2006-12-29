@@ -92,7 +92,9 @@ public class LoginWindow extends PopupWindow {
 				//TODO parse bad password etc. Super-Fragile string comps				
 				if(event.getResults() == null 
 						||
-					-1 != event.getResults().indexOf(" Your login attempt was not successful")
+						-1 != event.getResults().indexOf("not successful")
+						||
+						-1 != event.getResults().indexOf("Bad credentials")
 				){
 					System.out.println("DO FAILURE");
 					failure();
