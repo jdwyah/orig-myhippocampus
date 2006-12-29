@@ -3,23 +3,14 @@ package com.aavu.client.gui;
 import java.util.Iterator;
 import java.util.List;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.SearchResult;
-import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;
-import com.aavu.client.widget.edit.TopicWidget;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class SearchResultsWindow extends PopupWindow {
 

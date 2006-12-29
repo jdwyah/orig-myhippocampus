@@ -135,7 +135,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 
 	private void loadGUI(Widget widget) {
 		RootPanel.get("loading").setVisible(false);
-		RootPanel.get().add(widget);				
+		RootPanel.get("slot1").add(widget);					
 	}
 
 
@@ -167,7 +167,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 			panel.add(new Label(e.getMessage()));
 			
 			RootPanel.get("loading").setVisible(false);
-			RootPanel.get().add(panel);
+			RootPanel.get("slot1").add(panel);
 			
 		}
 		

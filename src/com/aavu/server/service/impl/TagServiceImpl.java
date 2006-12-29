@@ -89,14 +89,14 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 	 * @throws HippoBusinessException 
 	 *  
 	 */
-	public void save(Tag selectedTag) throws HippoBusinessException {
+	public Tag save(Tag selectedTag) throws HippoBusinessException {
 
 		log.debug("Servic tag.save() setting user");
 
 		selectedTag.setUser(userService.getCurrentUser());
 
 		
-		topicDAO.save(selectedTag);
+		return (Tag) topicDAO.save(selectedTag);
 	}
 	
 	public Tag getTagForName(String completeText) {

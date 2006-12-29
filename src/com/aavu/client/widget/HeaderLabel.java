@@ -2,12 +2,8 @@ package com.aavu.client.widget;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
-import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
-import com.aavu.client.gui.Dashboard;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;

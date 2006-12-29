@@ -2,7 +2,7 @@ package com.aavu.client.domain;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TagStat implements IsSerializable {
+public class TagStat implements IsSerializable, TagInfo {
 	
 	private long  tagId;
 	private int numberOfTopics;

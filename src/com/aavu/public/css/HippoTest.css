@@ -16,20 +16,6 @@ div.loading {
 	padding: 5px;
 }
 
-
-
-div.definition {
-	width: 350px;
-	position: absolute;
-	top: 45%;
-	left: 45%;
-	background: #fff;
-	font-size: large;
-	font-style: italic;
-	
-}
-
-
 code {
 	font-size: small;
 }
@@ -409,7 +395,7 @@ a:visited {
 
 .gwt-DialogBox {
 	sborder: 8px solid #C3D9FF;
-	border: 2px outset;
+	border: 2px;
 	background-color: white;
 }
 

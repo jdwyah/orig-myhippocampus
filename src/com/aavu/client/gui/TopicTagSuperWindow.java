@@ -250,7 +250,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		
 		topic.setSubject(subjectBoard.getSelectedSubject());
 				
-		tagBoard.saveThingsNowEvent(new StdAsyncCallback("save things now"){
+		tagBoard.saveThingsNowEvent(new StdAsyncCallback(Manager.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);		
 				Set otherTopicsToSave = (Set) result;

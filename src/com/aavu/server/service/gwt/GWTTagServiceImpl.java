@@ -77,19 +77,20 @@ public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringCon
 		}
 	}
 
-	public void saveTag(Tag selectedTag) throws HippoException {
+	public Tag saveTag(Tag selectedTag) throws HippoException {
 		try{
 			log.debug("saving tag:");
 			log.debug(selectedTag.toPrettyString());
 			
-			tagService.save(selectedTag);
 			log.debug("saved tag: "+selectedTag);
 			
-		}  catch (HippoException ex) {
-			throw ex;
-		}  catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
+			return tagService.save(selectedTag);
+			
+			
+		}  catch (Exception ex) {
+			log.error("FAILURE: "+ex);
+			ex.printStackTrace();
+			throw new HippoException(ex);
 		}
 	}
 

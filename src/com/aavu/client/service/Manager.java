@@ -14,6 +14,7 @@ import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
+import com.aavu.client.gui.NewTagNameWindow;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TagEditorWindow;
@@ -30,6 +31,7 @@ import com.aavu.client.strings.Consts;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Manager implements TopicSaveListener {
@@ -87,10 +89,24 @@ public class Manager implements TopicSaveListener {
 		blank.setTitle(myConstants.topic_new_title());
 		bringUpChart(blank,true);		
 	}
-	public void newIsland() {
-		Tag blank = new Tag();
-		blank.setTitle(myConstants.topic_new_title());
-		bringUpChart(blank,true);		
+	/*
+	 * window will call createIsland
+	 */
+	public void newIsland(){
+		NewTagNameWindow n = new NewTagNameWindow(this);	
+	}
+	public void createIsland(String name) {
+		final Tag newIsland = new Tag();
+		newIsland.setTitle(name);
+		getTopicCache().save(newIsland, new StdAsyncCallback(Manager.myConstants.save_async()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				Topic[] res = (Topic[]) result;
+				mainMap.growIsland((Tag) res[0]);					
+			}
+			
+		});
+						
 	}
 
 	public void showTagBoard() {
@@ -267,6 +283,11 @@ public class Manager implements TopicSaveListener {
 	 * @return
 	 */
 	public Widget getRootWidget() {
+//		AbsolutePanel p = new AbsolutePanel();
+//		p.add(mainMap.getOcean(),0,0);
+//		p.add(mainMap,0,0);
+//		
+//		return p;
 		return mainMap;
 	}
 	
@@ -305,10 +326,6 @@ public class Manager implements TopicSaveListener {
 			}						
 		});		
 	}
-	
-	
-	
-	
 	
 
 

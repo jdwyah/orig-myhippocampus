@@ -4,6 +4,7 @@ import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -16,9 +17,8 @@ import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CompassRose extends SimplePanel {
-
-	private PopupPanel searchD;
+public class CompassRose extends AbsolutePanel {
+	
 	private TextBox searchText = new TextBox();
 	private Manager manager;
 
@@ -39,15 +39,12 @@ public class CompassRose extends SimplePanel {
 				}
 			}});
 
-		HorizontalPanel mainP = new HorizontalPanel();
-
-		mainP.add(rose);		
-		mainP.add(searchText);
-		mainP.add(searchB);
-
+		
+		add(rose,0,0);		
+		add(searchText,120,0);
+		add(searchB,260,0);
 
 
-		add(mainP);
 		addStyleName("H-AbsolutePanel");
 		addStyleName("H-CompassRose");
 

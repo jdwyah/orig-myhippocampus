@@ -19,47 +19,12 @@
 	    
 	</head>
 	<body> 
-	
-	<script language="Javascript">
-<!--
-
-var setable = "unset";
-var	flashReadyVar = false;
-var flashCommand = fff;
-
-function fff(vvv,sss){
-	alert("fff");
-	alert("setable "+setable);
-	//ocean_DoFSCommand("baaaaaaaaaaaar", "");
-}
-
-
-function ocean_DoFSCommand(command, args) {
-    alert("receive from flash fsCommand");	
-	flashCommand(command,args);
-}
-
-function islandClicked(arg) {
-	//alert("receivedURLs from flash"+arg);
-	//alert(flashCommand);
-	flashCommand("islandClicked",arg,0,0);
-}
-function isleMovedTo(islandID, xx, yy) {
-	//alert("isle move "+islandID+" "+xx+" "+yy);
-	flashCommand("isleMovedTo",islandID,xx,yy);
-}
-function flashReady() {
-	flashReadyVar = true;
-}
-
-//-->
-</script>
-	
+		
 		<!-- This script is the bootstrap stuff that simply must be there; it is sent down uncompressed -->
 		<script language='javascript' src='gwt.js'></script>
 
 		<iframe id='__gwt_historyFrame' style='width:0;height:0;border:0'></iframe>
-
+		<div id="slot1"></div>
 		<div id="loading" class="loading"><p>Loading...</p></div>
 		
 		<!-- Start of StatCounter Code -->

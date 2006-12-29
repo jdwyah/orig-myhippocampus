@@ -1,5 +1,7 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.Ocean;
@@ -38,13 +40,14 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	
 	boolean[][] used = new boolean[GRID][GRID];
 	
-	private TagStat tagStat;
+	private TagInfo tagStat;
 	private OceanDHTMLImpl ocean;
 	private int top;
 	private int left;
 
 
-	public Island(TagStat stat, OceanDHTMLImpl ocean, DragHandler d, User user) {
+	
+	public Island(TagInfo stat, OceanDHTMLImpl ocean, DragHandler d, User user) {
 		super();
 		this.tagStat = stat;
 		this.ocean = ocean;
@@ -65,11 +68,10 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		setStyleName("H-Island");
 		
 		situate(ocean);		
-		if(tagStat.getTagName().equals("Entrepreneurship")){
-			grow(tagStat.getNumberOfTopics()+4);	
-		}else{
-			grow(tagStat.getNumberOfTopics());	
-		}
+		
+		//incr ie add a (no topic here) spot		
+		grow(tagStat.getNumberOfTopics() + 1);	
+		
 		int width = (max_x + 1 - min_x) * IMG_SPACING_W + IMG_WIDTH - IMG_SPACING_W;
 		int height = (max_y + 1 - min_y) * IMG_SPACING_H + IMG_HEIGHT - IMG_SPACING_H;
 		
@@ -106,6 +108,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		
 	}
 	
+
 
 	public int getLeft() {
 		return left;
@@ -155,7 +158,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 
 
-	private void grow() {
+	public void grow() {
 		grow(1);
 	}
 
@@ -265,6 +268,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 			mouseListeners.remove(listener);
 	}
 	public void onBrowserEvent(Event event) {
+		boolean wasMouseUp = false;
+
 	    switch (DOM.eventGetType(event)) {
 //	      case Event.ONCLICK: {
 //	        if (clickListeners != null)
@@ -273,6 +278,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 //	      }
 	      case Event.ONMOUSEDOWN:
 	      case Event.ONMOUSEUP:
+	    	  wasMouseUp = true;
 	      case Event.ONMOUSEMOVE:
 	      case Event.ONMOUSEOVER:
 	      case Event.ONMOUSEOUT: {
@@ -282,12 +288,34 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	      }
 	     
 	    }
+	    /*
+	     * detecting move requires subtracting out the @&**@#% shift of the ocean usually (8,8) in FF and (10,15) in IE7 
+	     */
+	    if(wasMouseUp){
+	    	int absLeft = getAbsoluteLeft();
+	    	int absTop = getAbsoluteTop();
+	    	int oceanLeft = ocean.getAbsoluteLeft();
+	    	int oceanTop = ocean.getAbsoluteTop();
+	    	if(absLeft != left + oceanLeft
+	    			||
+	    			absTop != top + oceanTop){
+	    		int newLeft = absLeft - oceanLeft;
+	    		int newTop = absTop - oceanTop;
+	    		//System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!!");
+	    		ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
+	    		left = newLeft;
+	    		top = newTop;
+	    	}
+	    	//System.out.println("Moved "+getAbsoluteLeft()+" "+left+" "+getAbsoluteTop()+" "+top);
+	    	//System.out.println("Ocean "+ocean.getAbsoluteLeft()+" top "+ocean.getAbsoluteTop()+" ");
+	    }
 	  }
 	
 	private class IslandBanner extends Label{
 		public IslandBanner(String text){
 			super(text);
 			setStyleName("H-IslandBanner");
+			addClickListener(Island.this);
 		}
 	}
 	

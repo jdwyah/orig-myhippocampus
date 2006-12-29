@@ -11,10 +11,7 @@
 package com.aavu.client.widget.autocompletion;
 
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.core.client.GWT;
 
 public class RemoteTopicAutoCompletionItems implements CompletionItems {
 

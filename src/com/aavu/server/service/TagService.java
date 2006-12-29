@@ -11,7 +11,7 @@ import com.aavu.client.exception.PermissionDeniedException;
 
 public interface TagService {
 
-	void save(Tag selectedTag) throws HippoBusinessException;
+	Tag save(Tag selectedTag) throws HippoBusinessException;
 
 	List<String> getTagsStarting(String match);
 

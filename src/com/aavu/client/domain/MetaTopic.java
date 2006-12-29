@@ -1,16 +1,9 @@
 package com.aavu.client.domain;
 
-import java.util.Map;
-
-import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.MetaTopicEditWidget;
-import com.aavu.client.widget.edit.TopicCompleter;
-import com.aavu.client.widget.tags.MetaListBox;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MetaTopic extends Meta {

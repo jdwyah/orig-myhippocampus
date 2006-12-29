@@ -1,6 +1,7 @@
 package com.aavu.client.gui.dhtmlIslands;
 
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
@@ -17,13 +18,16 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean {
 	private int latitude = 600;
 	private Manager manager;
 
+	private Map islands = new HashMap();
+	private DragHandler dragHandler;
+	
 	public OceanDHTMLImpl(Manager manager) {
 		super();
 		this.manager = manager;
 		
 		setStyleName("H-Ocean");
-		
-		//setPixelSize(longitude, latitude);
+
+		dragHandler = new DragHandler(this);
 
 		
 	}
@@ -43,25 +47,33 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean {
 	
 	private void addAll(TagStat[] tagStats) {
 
-		DragHandler d = new DragHandler(this);
-
 		
 		for (int i = 0; i < tagStats.length; i++) {
 			TagStat stat = tagStats[i];
+						
+			Island isle = new Island(stat,this,dragHandler,manager.getUser());
+		
+			addIsland(new Long(stat.getTagId()), isle);
 			
-			//incr
-			stat.setNumberOfTopics(stat.getNumberOfTopics()+1);
-			
-			Island isle = new Island(stat,this,d,manager.getUser());
-			add(isle,isle.getLeft(),isle.getTop());
-
 		}
 		
 	}
 	
+	private void addIsland(Long id,Island isle){	
+		add(isle,isle.getLeft(),isle.getTop());	
+		islands.put(id, isle);
+	}
+	
 	public void growIsland(Tag tag) {
-		// TODO Auto-generated method stub
-
+		Island isle = (Island) islands.get(new Long(tag.getId()));
+		if(isle == null){
+			
+			Island newIsle = new Island(tag,this,dragHandler,manager.getUser());		
+			addIsland(new Long(tag.getId()), newIsle);
+			
+		}else{
+			isle.grow();
+		}
 	}
 	
 	

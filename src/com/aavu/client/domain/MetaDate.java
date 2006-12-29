@@ -2,17 +2,13 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
 
-import org.gwtwidgets.client.ui.cal.CalendarPanel;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.datepicker.DateFormatter;
-import com.aavu.client.widget.datepicker.DatePicker;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
-import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.IsSerializable;

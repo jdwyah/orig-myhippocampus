@@ -10,6 +10,7 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class MainMap extends Composite {
 
@@ -37,9 +38,9 @@ public class MainMap extends Composite {
 		
 		statusPanel = new StatusPanel();
 		
-		
 		mainP.add(new CompassRose(manager));
 		mainP.add(ocean.getWidget());
+				
 		mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
 		mainP.add(statusPanel);
@@ -49,6 +50,10 @@ public class MainMap extends Composite {
 		//mainP.addStyleName("");
 		initWidget(mainP);
 	}
+	
+//	public Widget getOcean() {
+//		return ocean.getWidget();
+//	}
 	
 	/**
 	 * Do things that require a login / data
@@ -78,4 +83,6 @@ public class MainMap extends Composite {
 			statusPanel.update(id,string,statusCode);
 		}
 	}
+
+
 }

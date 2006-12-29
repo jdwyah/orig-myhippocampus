@@ -18,7 +18,7 @@ public interface GWTTagService extends RemoteService {
 	
 	String[] match(String match);//List<String>
 	
-	void saveTag(Tag selectedTag) throws HippoException;
+	Tag saveTag(Tag selectedTag) throws HippoException;
 	
 	Tag getTagForName(String completeText);
 	

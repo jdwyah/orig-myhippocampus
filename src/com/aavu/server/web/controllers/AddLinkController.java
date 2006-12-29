@@ -10,9 +10,6 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
-import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.server.service.TopicService;
