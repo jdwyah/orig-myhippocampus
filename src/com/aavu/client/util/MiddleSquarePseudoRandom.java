@@ -5,11 +5,15 @@ public class MiddleSquarePseudoRandom implements PsuedoRandom {
 	private long curVal;
 	private int size;
 	private long sizeMax;
+	private long seed;
 
 	/**
 	 * See
 	 * http://en.wikipedia.org/wiki/Middle-square_method
 	 * Not a problem free implementation
+	 * 
+	 * The idea of this class is to give you randomish numbers, in a way that is 
+	 * always repeatable. In our case, organic looking islands that are repeatable.
 	 * 
 	 * @param seed
 	 * @param size
@@ -17,8 +21,8 @@ public class MiddleSquarePseudoRandom implements PsuedoRandom {
 	public MiddleSquarePseudoRandom(long seed,int size){
 		this.curVal = seed;
 		this.size = size;
-		this.sizeMax = (long) Math.pow(10, size);		
-		System.out.println("size m "+sizeMax);
+		this.sizeMax = (long) Math.pow(10, size);
+		this.seed = seed;		
 	}
 
 	public double nextDouble() {
@@ -48,6 +52,10 @@ public class MiddleSquarePseudoRandom implements PsuedoRandom {
 
 	public int nextInt(int max) {
 		return (int) (nextDouble() * max);
+	}
+
+	public void reInit() {
+		this.curVal = seed;
 	}
 
 }

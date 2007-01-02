@@ -23,6 +23,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 	private Type my_type;
 	
+	
 	private static final int GRID = 100;
 	
 	int max_x = 0;
@@ -34,7 +35,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	
 	private PsuedoRandom pr;
 	
-	boolean[][] used = new boolean[GRID][GRID];
+	int[][] used = new int[GRID][GRID];
 	
 	private TagInfo tagStat;
 	private OceanDHTMLImpl ocean;
@@ -42,18 +43,16 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	private int left;
 	private IslandBanner banner;
 
-
+	int bigs = 0;
+	int meds = 0;
+	int smalls = 0;
+	private int theSize;
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user) {
 		super();
 		this.tagStat = stat;
 		this.ocean = ocean;
 		
-		for (int i = 0; i < GRID; i++) {
-			for (int j = 0; j < GRID; j++) {
-				used[i][j] = false;
-			}
-		}
 		
 		long seed = user.getId()+tagStat.getTagId();
 		pr = new MiddleSquarePseudoRandom(seed,4);
@@ -81,22 +80,15 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 //		}
 		banner = new IslandBanner(tagStat.getTagName(),tagStat.getNumberOfTopics());
 
-		int theSize = tagStat.getNumberOfTopics()+1;
+		theSize = tagStat.getNumberOfTopics()+1;
 		
-		if(theSize >= 16){
-			my_type = TYPE_100;			
-		}
-		else if(theSize >= 4){
-			my_type = TYPE_60;
-		}
-		else{
-			my_type = TYPE_30;			
-		}		
+		
+		setType();			
 		
 		situate(ocean);		
 		
 		//incr ie add a (no topic here) spot		
-		grow(theSize);	
+		growInternal();	
 				
 		
 		//position: absolute; left: 610px; top: 155px;
@@ -122,6 +114,28 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		System.out.println("Island lat y "+tagStat.getLatitude());
 		
 		
+	}
+
+
+	private void setType() {
+		if(theSize >= 16){
+			my_type = TYPE_100;			
+		}
+		else if(theSize >= 4){
+			my_type = TYPE_60;
+		}
+		else{
+			my_type = TYPE_30;			
+		}
+	}
+
+
+	private void clearUseArray() {
+		for (int i = 0; i < GRID; i++) {
+			for (int j = 0; j < GRID; j++) {
+				used[i][j] = -1;
+			}
+		}
 	}
 	
 
@@ -207,8 +221,12 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 
 	public void grow() {
-		grow(1);
+		theSize++;
+		setType();
+		growInternal();
+		
 		doPositioning();
+		System.out.println("set to left "+left+" top "+top);
 		ocean.setWidgetPosition(this, left, top);		
 	}
 
@@ -218,16 +236,21 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 * 
 	 * @param i
 	 */
-	private void grow(int i) {
+	private void growInternal() {
 
-	//	int x=0,y = 0;
+		clearUseArray();
+		pr.reInit();	
 		
-		int bigs = i /16;
-		int meds = (i %16)/4;
-		int smalls = i %4;
+		/*
+		 * calculate here
+		 */
+		bigs = theSize /16;
+		meds = (theSize %16)/4;
+		smalls = theSize %4;
 		
+		System.out.println("grow "+theSize+" "+bigs+" "+meds+" "+smalls);
 		
-		for (int j = 0; j < bigs + meds + smalls; j++) {
+		for (int j = 1; j < bigs + meds + smalls + 1; j++) {
 				
 			int x = GRID/2;			
 			int y = GRID/2;
@@ -237,8 +260,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 				
 			//TODO take this out.. only to prevent loops if Von Neuman PRG explodes
 			int c = 0;
-			while(true == used[x][y] && c < 200){
-				System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
+			while(-1 != used[x][y] && c < 200){
+				//System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
 				c++;
 				
 				int dx = pr.nextInt(3) - 1;
@@ -247,8 +270,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 				y += dy;
 				//System.out.println("sw: "+sw);
 			}
-			System.out.println("FOUND: "+x+" "+y);
-			used[x][y] = true;
+			System.out.println("FOUND: "+x+" "+y+" "+j);
+			used[x][y] = j;
 			
 			//update BOUNDS
 			if(x < min_x){
@@ -272,31 +295,39 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 		//need to re-loop after all the min/maxes are set
 		//		
-		doIslandType(0,bigs,meds);
-		doIslandType(1,bigs,meds);
-		doIslandType(2,bigs,meds);
+		doIslandType(0);
+		doIslandType(1);
+		doIslandType(2);
 		
 		
 		
 	}
 	
-	private void doIslandType(int style,int bigs,int meds) {
+	/**
+	 * used[][] will be an array with value of the order in which we "found"
+	 * this square. Idea is to have the big ones in the center, surrounded by med,
+	 * then small. 
+	 * 
+	 * Would like to make it a bit smarter about laying out new little guys.
+	 * 
+	 * @param style
+	 */
+	private void doIslandType(int style) {
 		int x;
 		int count = 0;
 		Type type = null;
 		for (x = 0; x < GRID; x++) {
 			for (int j = 0; j < GRID; j++) {
-				if(used[x][j]){
-					if(count >= bigs + meds){
-						type = TYPE_30;
-												
-					}else if(count >= bigs){
+				if(used[x][j] > -1){
+					if(used[x][j] > bigs + meds){
+						type = TYPE_30;												
+					}else if(used[x][j] > bigs){
 						type = TYPE_60;												
 					}
 					else{
-						type = TYPE_100;
-												
+						type = TYPE_100;												
 					}
+					System.out.println("used "+x+" "+j+" "+used[x][j]+" "+type.prefix);
 					count++;
 					
 					if(0 == style){
@@ -316,11 +347,14 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	
 	/**
 	 * takes values from -50 -> 50 (GRID/2)
+	 * 
+	 * gridToRelative using my_type || type? 
+	 * 
 	 */
 	private void addAcre(int x, int y,Type type){
 		
-		int corrected_x = gridToRelativeX(x,type);
-		int corrected_y = gridToRelativeY(y,type);		
+		int corrected_x = gridToRelativeX(x,my_type);
+		int corrected_y = gridToRelativeY(y,my_type);		
 		
 		
 //		System.out.println("x "+x+" cx "+corrected_x);
@@ -333,15 +367,15 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 	private void addShadow(int x, int y,Type type){
 
-		int corrected_x = gridToRelativeX(x,type);
-		int corrected_y = gridToRelativeY(y,type);		
+		int corrected_x = gridToRelativeX(x,my_type);
+		int corrected_y = gridToRelativeY(y,my_type);		
 
 		add(new Shadow(x,y,type),corrected_x,corrected_y);
 	}
 	private void addInner(int x, int y,Type type){
 
-		int corrected_x = gridToRelativeX(x,type);
-		int corrected_y = gridToRelativeY(y,type);		
+		int corrected_x = gridToRelativeX(x,my_type);
+		int corrected_y = gridToRelativeY(y,my_type);		
 
 		add(new Inner(x,y,type),corrected_x,corrected_y);
 	}
