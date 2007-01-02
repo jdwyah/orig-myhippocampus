@@ -16,25 +16,19 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Island extends AbsolutePanel implements ClickListener, SourcesMouseEvents{
-
-//	private static final int IMG_WIDTH = 30;
-//	private static final int IMG_HEIGHT = 30;
-//	
-//	private static final int IMG_SPACING_W = 20;
-//	private static final int IMG_SPACING_H = 20;
-		
-	private static final int IMG_WIDTH = 100;
-	private static final int IMG_HEIGHT = 100;
 	
-	private static final int IMG_SPACING_W = 33;
-	private static final int IMG_SPACING_H = 33;
+	private final Type TYPE_30 = new Type(30,30,10,10,"30px",3);
+	private final Type TYPE_60 = new Type(60,60,18,18,"2",4);	
+	private final Type TYPE_100 =  new Type(100,100,33,33,"1",4);
+
+	private Type my_type;
 	
 	private static final int GRID = 100;
 	
-	int max_x = GRID/2;
-	int min_x = GRID/2;
-	int max_y = GRID/2;
-	int min_y = GRID/2;	
+	int max_x = 0;
+	int min_x = Integer.MAX_VALUE;
+	int max_y = 0;
+	int min_y = Integer.MAX_VALUE;
 	
 	private MouseListenerCollection mouseListeners;
 	
@@ -69,35 +63,47 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		setStyleName("H-Island");
 		
 		
-		switch (pr.nextInt(4)) {
-		case 0:
-			banner = new IslandBanner("Island of "+tagStat.getTagName());	
-			break;
-		case 1:
-			banner = new IslandBanner(tagStat.getTagName()+" Isle");	
-			break;
-		case 2:
-			banner = new IslandBanner("The Republic of "+tagStat.getTagName());	
-			break;
-		case 3:
-			banner = new IslandBanner(tagStat.getTagName());	
-			break;
-		default:
-			break;
+//		switch (pr.nextInt(4)) {
+//		case 0:
+//			banner = new IslandBanner("Island of "+tagStat.getTagName(),tagStat.getNumberOfTopics());	
+//			break;
+//		case 1:
+//			banner = new IslandBanner(tagStat.getTagName()+" Isle",tagStat.getNumberOfTopics());	
+//			break;
+//		case 2:
+//			banner = new IslandBanner("The Republic of "+tagStat.getTagName(),tagStat.getNumberOfTopics());	
+//			break;
+//		case 3:
+//			banner = new IslandBanner(tagStat.getTagName(),tagStat.getNumberOfTopics());	
+//			break;
+//		default:
+//			break;
+//		}
+		banner = new IslandBanner(tagStat.getTagName(),tagStat.getNumberOfTopics());
+
+		int theSize = tagStat.getNumberOfTopics()+1;
+		
+		if(theSize >= 16){
+			my_type = TYPE_100;			
 		}
-		
-		
+		else if(theSize >= 4){
+			my_type = TYPE_60;
+		}
+		else{
+			my_type = TYPE_30;			
+		}		
 		
 		situate(ocean);		
 		
 		//incr ie add a (no topic here) spot		
-		grow(tagStat.getNumberOfTopics() + 1);	
+		grow(theSize);	
 				
 		
 		//position: absolute; left: 610px; top: 155px;
 		//DOM.setStyleAttribute(getElement(), "position", "absolute"); 		
 		
 		doPositioning();
+		
 		
 		
 		//this code for lat long as 0-1 floats
@@ -109,7 +115,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 				
 		
-		System.out.println(tagStat.getTagName()+" minx "+min_x+" max x "+max_x+" miny "+min_y+" maxy "+max_y);
+		System.out.println(tagStat.getTagName()+" SIZE "+tagStat.getNumberOfTopics()+" minx "+min_x+" max x "+max_x+" miny "+min_y+" maxy "+max_y);
 		System.out.println("Island top: "+top+" left "+left);		
 				
 		System.out.println("Island longi x "+tagStat.getLongitude());
@@ -123,16 +129,17 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 * Ocean will pull these from us when it adds us
 	 */	
 	private void doPositioning() {			
-		top = tagStat.getLatitude()  - gridToRelativeY(min_y);
-		left = tagStat.getLongitude()  - gridToRelativeX(min_x);		
+		top = tagStat.getLatitude()  - gridToRelativeY(min_y,my_type);
+		left = tagStat.getLongitude()  - gridToRelativeX(min_x,my_type);		
 		
 
 		/*
 		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
 		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
 		 */
-		int width = (max_x + 1 - min_x) * IMG_SPACING_W + IMG_WIDTH - IMG_SPACING_W;
-		int height = (max_y + 1 - min_y) * IMG_SPACING_H + IMG_HEIGHT - IMG_SPACING_H;
+		int width = (max_x + 1 - min_x) * my_type.img_spacing_w + my_type.img_width - my_type.img_spacing_w;
+		int height = (max_y + 1 - min_y) * my_type.img_spacing_h + my_type.img_height - my_type.img_spacing_h;
+		
 		
 		//Magic # 11 is ~Coffee at 1.4em which == 68px 
 		if(tagStat.getTagName().length() * 11 > width){
@@ -141,6 +148,9 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 			DOM.setStyleAttribute(getElement(), "width", width+"px");	
 		}
 		DOM.setStyleAttribute(getElement(), "height", height+"px");
+		
+		//not working
+		banner.setWidth(width+"em");
 		
 		System.out.println("Island width: "+width+" height "+height);
 	}
@@ -156,12 +166,13 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 
 
-	private int gridToRelativeX(int gridValue){		
-		return (gridValue - min_x)* IMG_SPACING_W;		
+	private int gridToRelativeX(int gridValue,Type type){		
+		return (gridValue - min_x)* type.img_spacing_w;		
 	}
-	private int gridToRelativeY(int gridValue){	
-		return (gridValue - min_y)* IMG_SPACING_H;
+	private int gridToRelativeY(int gridValue,Type type){				
+		return (gridValue - min_y)* type.img_spacing_h;		
 	}
+
 
 
 
@@ -209,9 +220,17 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 */
 	private void grow(int i) {
 
-		int x=0,y = 0;
+	//	int x=0,y = 0;
 		
-		for (int j = 0; j < i; j++) {
+		int bigs = i /16;
+		int meds = (i %16)/4;
+		int smalls = i %4;
+		
+		
+		for (int j = 0; j < bigs + meds + smalls; j++) {
+				
+			int x = GRID/2;			
+			int y = GRID/2;
 				
 			x = GRID/2;			
 			y = GRID/2;
@@ -249,105 +268,121 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 		
 		clear();
-		add(banner,0,IMG_WIDTH/2);
+		add(banner,0,my_type.img_height/2);
 
-		//need to re-loop after all the min/maxes are set if we do multiples
-		//otherwise the gridToRelative will calc using the wrong min/max 
-		for (int cc = 0; cc < GRID; cc++) {
-			for (int j = 0; j < GRID; j++) {
-				if(used[cc][j])
-					addShadow(cc,j);
-			}
-		}
-		for (int cc = 0; cc < GRID; cc++) {
-			for (int j = 0; j < GRID; j++) {
-				if(used[cc][j])
-					addAcre(cc,j);
-			}
-		}
-		for (int cc = 0; cc < GRID; cc++) {
-			for (int j = 0; j < GRID; j++) {
-				if(used[cc][j])
-					addInner(cc,j);
-			}
-		}
+		//need to re-loop after all the min/maxes are set
+		//		
+		doIslandType(0,bigs,meds);
+		doIslandType(1,bigs,meds);
+		doIslandType(2,bigs,meds);
+		
+		
 		
 	}
+	
+	private void doIslandType(int style,int bigs,int meds) {
+		int x;
+		int count = 0;
+		Type type = null;
+		for (x = 0; x < GRID; x++) {
+			for (int j = 0; j < GRID; j++) {
+				if(used[x][j]){
+					if(count >= bigs + meds){
+						type = TYPE_30;
+												
+					}else if(count >= bigs){
+						type = TYPE_60;												
+					}
+					else{
+						type = TYPE_100;
+												
+					}
+					count++;
+					
+					if(0 == style){
+						addShadow(x,j,type);
+					}
+					else if(1 == style){
+						addAcre(x,j,type);
+					}
+					else if(2 == style){
+						addInner(x,j,type);
+					}
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * takes values from -50 -> 50 (GRID/2)
 	 */
-	private void addAcre(int x, int y){
+	private void addAcre(int x, int y,Type type){
 		
-		int corrected_x = gridToRelativeX(x);
-		int corrected_y = gridToRelativeY(y);				
+		int corrected_x = gridToRelativeX(x,type);
+		int corrected_y = gridToRelativeY(y,type);		
+		
 		
 //		System.out.println("x "+x+" cx "+corrected_x);
 //		System.out.println("y "+y+" cy "+corrected_y);
+//		
+
+		add(new Acre(this,x,y,type),corrected_x,corrected_y);
 		
-		add(new Acre(this,x,y),corrected_x,corrected_y);
 	}
 
-	private void addShadow(int x, int y){
+	private void addShadow(int x, int y,Type type){
 
-		int corrected_x = gridToRelativeX(x);
-		int corrected_y = gridToRelativeY(y);		
+		int corrected_x = gridToRelativeX(x,type);
+		int corrected_y = gridToRelativeY(y,type);		
 
-
-		System.out.println("x "+x+" cx "+corrected_x);
-		System.out.println("y "+y+" cy "+corrected_y);
-
-
-		add(new Shadow(x,y),corrected_x,corrected_y);
+		add(new Shadow(x,y,type),corrected_x,corrected_y);
 	}
-	private void addInner(int x, int y){
-		int corrected_x = gridToRelativeX(x);
-		int corrected_y = gridToRelativeY(y);		
-		add(new Inner(x,y),corrected_x,corrected_y);
-	}	
+	private void addInner(int x, int y,Type type){
+
+		int corrected_x = gridToRelativeX(x,type);
+		int corrected_y = gridToRelativeY(y,type);		
+
+		add(new Inner(x,y,type),corrected_x,corrected_y);
+	}
+	
+	
 
 	public void onClick(Widget sender) {			
 		ocean.islandClicked(tagStat.getTagId());
 	}
 	
-	private class Acre extends AbsolutePanel {
-		public Acre(ClickListener listener, int x, int y){
-						
-			Image isle = new Image("img\\type1_"+(1+(x*y)%4)+"_I.png");
-			isle.addClickListener(listener);
-			isle.setStyleName("Isle");
+	private class Level extends AbsolutePanel {
+		public Level(ClickListener listener, int x, int y,Type type,String extension,String style){
+									
+			Image isle = new Image("img\\type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
+			if(listener != null){
+				isle.addClickListener(listener);
+			}
+			isle.setStyleName(style);
 			add(isle,0,0);
-			
-			DOM.setStyleAttribute(getElement(), "width", IMG_WIDTH+"px");
-			DOM.setStyleAttribute(getElement(), "height", IMG_HEIGHT+"px");
-		}
-	}
-	private class Shadow extends AbsolutePanel {
-		public Shadow(int x, int y){
-			
-			
-			Image shadow = new Image("img\\type1_"+(1+(x*y)%4)+"_S.png");
-			add(shadow,0,0);
-			//shadow.setVisible(false);
-			shadow.setStyleName("Overlay");
 						
-			DOM.setStyleAttribute(getElement(), "width", IMG_WIDTH+"px");
-			DOM.setStyleAttribute(getElement(), "height", IMG_HEIGHT+"px");
+			DOM.setStyleAttribute(getElement(), "width", type.img_width+"px");
+			DOM.setStyleAttribute(getElement(), "height", type.img_height+"px");
+
 		}
 	}
-	private class Inner extends AbsolutePanel {
-		public Inner(int x, int y){
-			
-			
-			Image shadow = new Image("img\\type1_"+(1+(x*y)%4)+"_Inner.png");
-			add(shadow,0,0);
-			//shadow.setVisible(false);
-			shadow.setStyleName("Overlay");
-						
-			DOM.setStyleAttribute(getElement(), "width", IMG_WIDTH+"px");
-			DOM.setStyleAttribute(getElement(), "height", IMG_HEIGHT+"px");
+	private class Acre extends Level {
+		public Acre(ClickListener listener,int x, int y,Type type){
+			super(listener,x,y,type,"I","Isle");			
 		}
 	}
+	private class Shadow extends Level {
+		public Shadow(int x, int y,Type type){
+			super(null,x,y,type,"S","Overlay");			
+		}
+	}
+	private class Inner extends Level {
+		public Inner(int x, int y,Type type){
+			super(null,x,y,type,"Inner","Overlay");			
+		}
+	}
+	
 
 
 	public void addMouseListener(MouseListener listener) {
@@ -412,5 +447,26 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	    	//System.out.println("Ocean "+ocean.getAbsoluteLeft()+" top "+ocean.getAbsoluteTop()+" ");
 	    }
 	  }
+	
+
+	private class Type {
+		private int img_width;
+		private int img_height;
+		private int img_spacing_w;
+		private int img_spacing_h;
+		private String prefix;
+		private int numImages;
+		
+		public Type(int img_width, int img_height, int img_spacing_w, int img_spacing_h, String prefix, int numImages) {
+			super();
+			this.img_width = img_width;
+			this.img_height = img_height;
+			this.img_spacing_w = img_spacing_w;
+			this.img_spacing_h = img_spacing_h;
+			this.prefix = prefix;
+			this.numImages = numImages;
+		}
+		
+	}
 	
 }

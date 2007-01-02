@@ -1,0 +1,519 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Arial;}}
+{\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\f0\fs20 import mx.transitions.Tween;\par
+import mx.transitions.easing.*;\par
+import flash.geom.Point;\par
+import Hippo.*;\par
+\par
+class Hippo.Island \{\par
+\tab private var id:Number;\par
+\tab private var tag:String;\par
+\tab //private var size:Number;\tab\tab\tab\tab //does island need to know how big it is?\par
+\tab private var seed:Number;\tab\tab\tab\tab //for randomness\par
+\tab private var landClip:MovieClip;\par
+\tab private var waterClip:MovieClip;\par
+\tab private var depth:Number;\tab\tab\tab\tab //mc placement and coords for display()\par
+\tab private var linkA:Array;\tab\tab\tab\tab //a,b,c,d,e,f clockwise around hex ring (b at top)\par
+\tab private var libertyA:Array;\tab\tab\tab\tab //unordered list of available liberties (.xco, .yco, .letter)\par
+\tab private var orderA:Array;\tab\tab\tab\tab //array of Points\par
+\tab private var acreA:Array;\tab\tab\tab\tab //Acres corresponding to index of orderA\par
+\tab private var maxRadius:Number;\par
+\tab static private var sqSize:Number;\tab\tab //defined by WorldSize\par
+\tab //first four are hardcoded, subsequent are dynamic\par
+\tab static private var initCoordA = [\{xx:.56,yy:.5\},\{xx:.23,yy:.24\},\{xx:.13,yy:.63\},\{xx:.71,yy:.21\}];\par
+\tab static private var EDGEMARGIN = 15;\par
+\tab static private var TEXTSIZE = 16;\par
+\tab static private var NORMALWIDTH = 550;\tab //the "regular" stage size.  scale tag's font size accordingly.\par
+\tab\par
+\tab function Island(userID:Number, p_id:Number, p_tag:String, lAnc:MovieClip, wAnc:MovieClip, p_xx:Number, p_yy:Number) \{\par
+\tab\tab this.id = p_id;\par
+\tab\tab this.seed = Math.round(Math.abs(Math.sin(userID+id)*10000));\par
+\tab\tab this.depth = lAnc.getNextHighestDepth();\par
+\tab\tab this.landClip = lAnc.attachMovie("island","is"+depth,(depth+2));\par
+\tab\tab this.depth = wAnc.getNextHighestDepth();\par
+\tab\tab this.waterClip = wAnc.attachMovie("island_water","is"+depth,(depth+2));\par
+\tab\tab\par
+\tab\tab this.linkA = new Array();\par
+\tab\tab this.libertyA = new Array();\par
+\tab\tab this.orderA = new Array();\par
+\tab\tab this.acreA = new Array();\par
+\tab\tab this.maxRadius = 1;\tab\tab\tab\tab\tab\tab //keep low to force init of new rows\par
+\tab\tab rename(p_tag);\par
+\tab\tab resizeTag();\par
+\tab\}\par
+\tab\par
+\tab function display(islandCount, xx, yy) \{\par
+\tab\tab trace("Placing Clip at depth"+islandCount);\par
+\tab\tab if (xx != undefined && yy != undefined) \{\par
+\tab\tab\tab trace("  moving clip to ["+xx+","+yy+"]");\par
+\tab\tab\tab landClip._x = xx;\par
+\tab\tab\tab landClip._y = yy;\par
+\tab\tab\tab waterClip._x = xx;\par
+\tab\tab\tab waterClip._y = yy;\par
+\tab\tab\} else if (islandCount < initCoordA.length) \{\par
+\tab\tab\tab //first four hardcoded\par
+\tab\tab\tab landClip._x = initCoordA[islandCount].xx * Stage.width;\par
+\tab\tab\tab landClip._y = initCoordA[islandCount].yy * Stage.height;\par
+\tab\tab\tab waterClip._x = initCoordA[islandCount].xx * Stage.width;\par
+\tab\tab\tab waterClip._y = initCoordA[islandCount].yy * Stage.height;\par
+\tab\tab\} else \{\par
+\tab\tab\tab landClip._x = (seed % 1000)/1000 * (Stage.width - EDGEMARGIN*2) + EDGEMARGIN;\par
+\tab\tab\tab landClip._y = (seed % 873)/873 * (Stage.height - EDGEMARGIN*2) + EDGEMARGIN;\par
+\tab\tab\tab waterClip._x = (seed % 1000)/1000 * (Stage.width - EDGEMARGIN*2) + EDGEMARGIN;\par
+\tab\tab\tab waterClip._y = (seed % 873)/873 * (Stage.height - EDGEMARGIN*2) + EDGEMARGIN;\par
+\tab\tab\}\par
+\tab\}\par
+\tab\par
+\tab function grow() \{\par
+\tab\tab //trace(" Attempting to grow-- ");\par
+\tab\tab if (linkA["x0"]["y0"] == undefined) \{\par
+\tab\tab\tab linkA["x0"] = new Array();\par
+\tab\tab\tab linkA["x1"] = new Array();\par
+\tab\tab\tab linkA["x-1"] = new Array();\par
+\tab\tab\tab linkA["x0"]["y0"] = \{a:false, b:false, c:false, d:false, e:false, f:false\};\par
+\tab\tab\tab checkLiberties(0, 0);\par
+\tab\tab\tab orderA.push(new Point(0, 0));\par
+\tab\tab\tab acreA.push(new Acre(id, 0, 0, landClip.landAnchor, waterClip.waterAnchor, "emerge"));\par
+\tab\tab\} else \{\par
+\tab\tab\tab var libObj = libertyA.splice(seed % libertyA.length,1);\par
+\tab\tab\tab addLand(libObj[0].xx, libObj[0].yy, libObj[0].letter);\par
+\tab\tab\}\par
+\tab\}\par
+\tab\par
+\tab function rename(newName:String) \{\par
+\tab\tab tag = newName;\par
+\tab\tab landClip.tagText.text = tag;\par
+\tab\}\par
+\tab\par
+\tab function resizeTag() \{\par
+\tab\tab var txFmt = new TextFormat();\par
+\tab\tab txFmt.size = Math.ceil(TEXTSIZE * NORMALWIDTH / Stage.width);\par
+\tab\tab landClip.tagText.setTextFormat(txFmt);\par
+\tab\}\par
+\tab\par
+\tab function shrink() \{\par
+\tab\tab trace("Shrink called, oA.l: "+orderA.length);\par
+\tab\tab if (orderA.length < 1) \{\par
+\tab\tab\tab return;\par
+\tab\tab\} else if (orderA.length == 1) \{\par
+\tab\tab\tab rename("");\par
+\tab\tab\}\par
+\tab\tab var lastOrder = orderA.pop();\par
+\tab\tab var lastAcre = acreA.pop();\par
+\tab\tab reverseLiberties(lastOrder.x, lastOrder.y);\par
+\tab\tab lastAcre.remove();\par
+\tab\}\par
+\par
+\tab function nudge(dist, angle) \{\par
+\tab\tab var xDist = Math.cos(angle)*dist;\par
+\tab\tab var yDist = Math.sin(angle)*dist;\par
+\tab\tab var lxTween = new Tween(landClip, "_x", Strong.easeInOut, landClip._x, landClip._x + xDist, 1, true);\par
+\tab\tab var lyTween = new Tween(landClip, "_y", Strong.easeInOut, landClip._y, landClip._y + yDist, 1, true);\par
+\tab\tab var wxTween = new Tween(waterClip, "_x", Strong.easeInOut, waterClip._x, waterClip._x + xDist, 1, true);\par
+\tab\tab var wyTween = new Tween(waterClip, "_y", Strong.easeInOut, waterClip._y, waterClip._y + yDist, 1, true);\par
+\tab\tab lxTween.start();\par
+\tab\tab lyTween.start();\par
+\tab\tab wxTween.start();\par
+\tab\tab wyTween.start();\par
+\tab\}\par
+\par
+\tab private function addLand(xx, yy, letter) \{\par
+\tab\tab switch (letter) \{\par
+\tab\tab\tab case "a":\par
+\tab\tab\tab\tab xx--; break;\par
+\tab\tab\tab case "b":\par
+\tab\tab\tab\tab yy--; break;\par
+\tab\tab\tab case "c":\par
+\tab\tab\tab\tab xx++; yy--; break;\par
+\tab\tab\tab case "d":\par
+\tab\tab\tab\tab xx++; break;\par
+\tab\tab\tab case "e":\par
+\tab\tab\tab\tab yy++; break;\par
+\tab\tab\tab case "f":\par
+\tab\tab\tab\tab xx--; yy++; break;\par
+\tab\tab\}\par
+\tab\tab //if we've expanded, initialize the new arrays\par
+\tab\tab var newRadius = Math.max(Math.abs(xx), Math.abs(yy));\par
+\tab\tab if (maxRadius < newRadius) \{\par
+\tab\tab\tab //trace(" new Radius of "+id+" :: "+newRadius);\par
+\tab\tab\tab maxRadius = newRadius;\par
+\tab\tab\tab if (linkA["x"+newRadius] == undefined) \{\par
+\tab\tab\tab\tab linkA["x"+newRadius] = new Array();\par
+\tab\tab\tab\tab linkA["x"+(-newRadius)] = new Array();\par
+\tab\tab\tab\}\par
+\tab\tab\tab //do things on radius increase?\par
+\tab\tab\}\par
+\tab\tab\par
+\tab\tab var aa = (typeof(linkA["x"+(xx-1)]["y" + yy  ]) == "object");\par
+\tab\tab var bb = (typeof(linkA["x" + xx  ]["y"+(yy-1)]) == "object");\par
+\tab\tab var cc = (typeof(linkA["x"+(xx+1)]["y"+(yy-1)]) == "object");\par
+\tab\tab var dd = (typeof(linkA["x"+(xx+1)]["y" + yy]) == "object");\par
+\tab\tab var ee = (typeof(linkA["x" + xx  ]["y"+(yy+1)]) == "object");\par
+\tab\tab var ff = (typeof(linkA["x"+(xx-1)]["y"+(yy+1)]) == "object");\par
+\tab\tab linkA["x"+xx]["y"+yy] = \{a:aa, b:bb, c:cc, d:dd, e:ee, f:ff\};\par
+\tab\tab checkLiberties(xx, yy, letter);\par
+\tab\tab\par
+\tab\tab var newAcre = new Acre(id, xx, yy, landClip.landAnchor, waterClip.waterAnchor, "set");\par
+\tab\tab acreA.push(newAcre);\par
+\tab\tab orderA.push(new Point(xx, yy));\par
+\tab\tab //trace(" Added land to "+id+" at ("+xx+","+yy+") :: oA.l: "+orderA.length);\par
+\tab\}\par
+\tab\tab\par
+\tab private function checkLiberties(xx, yy, letter) \{\par
+\tab\tab var obj = linkA["x"+xx]["y"+yy];\par
+\tab\tab\par
+\tab\tab //opposite letters are the usual, so don't mind those\par
+\tab\tab if (obj.a && letter != "d") \{ removeLiberty((xx-1), yy,   "d"); \}\par
+\tab\tab if (obj.b && letter != "e") \{ removeLiberty( xx   ,(yy-1),"e"); \}\par
+\tab\tab if (obj.c && letter != "f") \{ removeLiberty((xx+1),(yy-1),"f"); \}\par
+\tab\tab if (obj.d && letter != "a") \{ removeLiberty((xx+1), yy,   "a"); \}\par
+\tab\tab if (obj.e && letter != "b") \{ removeLiberty( xx   ,(yy+1),"b"); \}\par
+\tab\tab if (obj.f && letter != "c") \{ removeLiberty((xx-1),(yy+1),"c"); \}\par
+\tab\tab\par
+\tab\tab if (!obj.a) \{obj.a = addLiberty(xx, yy, "a");\}\par
+\tab\tab if (!obj.b) \{obj.b = addLiberty(xx, yy, "b");\}\par
+\tab\tab if (!obj.c) \{obj.c = addLiberty(xx, yy, "c");\}\par
+\tab\tab if (!obj.d) \{obj.d = addLiberty(xx, yy, "d");\}\par
+\tab\tab if (!obj.e) \{obj.e = addLiberty(xx, yy, "e");\}\par
+\tab\tab if (!obj.f) \{obj.f = addLiberty(xx, yy, "f");\}\par
+\tab\}\par
+\tab\par
+\tab private function addLiberty(xx, yy, letter):Boolean \{\par
+\tab\tab //trace("  +lib: \{["+xx+","+yy+"]::"+letter);\par
+\tab\tab libertyA.push(\{xx:xx, yy:yy, letter:letter\});\par
+\tab\tab return true;\par
+\tab\}\par
+\tab\par
+\tab private function removeLiberty(xx, yy, letter):Boolean \{\par
+\tab\tab for (var lib = 0; lib < libertyA.length; lib++) \{\par
+\tab\tab\tab if (xx == libertyA[lib].xx) \{\par
+\tab\tab\tab\tab if (yy == libertyA[lib].yy) \{\par
+\tab\tab\tab\tab\tab if (letter == libertyA[lib].letter) \{\par
+\tab\tab\tab\tab\tab\tab //trace("  -lib: \{["+xx+","+yy+"]::"+letter);\par
+\tab\tab\tab\tab\tab\tab libertyA.splice(lib,1);\par
+\tab\tab\tab\tab\tab\tab return true;\par
+\tab\tab\tab\tab\tab\}\par
+\tab\tab\tab\tab\}\par
+\tab\tab\tab\}\par
+\tab\tab\}\par
+\tab\tab return false;\par
+\tab\}\par
+\tab\par
+\tab //used with shrink()\par
+\tab private function reverseLiberties(xx:Number, yy:Number) \{\par
+\tab\tab //delink land pieces, or remove the liberty if it's water\par
+\tab\tab if (!disconnect((xx-1),  yy  , "d")) \{ removeLiberty(xx, yy, "a"); \}\par
+\tab\tab if (!disconnect( xx  , (yy-1), "e")) \{ removeLiberty(xx, yy, "b"); \}\par
+\tab\tab if (!disconnect((xx+1),(yy-1), "f")) \{ removeLiberty(xx, yy, "c"); \}\par
+\tab\tab if (!disconnect((xx+1),  yy  , "a")) \{ removeLiberty(xx, yy, "d"); \}\par
+\tab\tab if (!disconnect( xx  , (yy+1), "b")) \{ removeLiberty(xx, yy, "e"); \}\par
+\tab\tab if (!disconnect((xx-1),(yy+1), "c")) \{ removeLiberty(xx, yy, "f"); \}\par
+\tab\tab //alter links\par
+\tab\tab linkA["x"+xx]["y"+yy] = undefined;\par
+\tab\}\par
+\tab\par
+\tab //returns true if the target was land.\par
+\tab private function disconnect(tgtX:Number, tgtY:Number, srcLetter:String):Boolean \{\par
+\tab\tab if (typeof(linkA["x"+tgtX]["y"+tgtY]) == "object") \{\par
+\tab\tab\tab //it's a piece of land; set its link and add a Liberty\par
+\tab\tab\tab linkA["x"+tgtX]["y"+tgtY][srcLetter] = false;\par
+\tab\tab\tab return true;\par
+\tab\tab\} else \{\par
+\tab\tab\tab return false;\par
+\tab\tab\}\par
+\tab\}\par
+\tab\par
+\tab function setSqSize(p_sqSize:Number) \{\par
+\tab\tab Acre.sqSize = p_sqSize;\par
+\tab\tab for (var a = 0; a < acreA.length; a++) \{\par
+\tab\tab\tab acreA[a].redisplay();\par
+\tab\tab\}\par
+\tab\}\par
+\tab\par
+\tab function getX() \{\par
+\tab\tab return landClip._x;\par
+\tab\}\par
+\tab\par
+\tab function getY() \{\par
+\tab\tab return landClip._y;\par
+\tab\}\par
+\tab\par
+\tab function get radius() \{\par
+\tab\tab return maxRadius;\par
+\tab\}\par
+\}\par
+\par
+\par
+\par
+import mx.utils.Delegate;\par
+import flash.external.*;\par
+import flash.geom.*;\par
+\par
+//an Island contains several Acres (blocks, units..)\par
+class Hippo.Acre \{\par
+\tab private var isleID:Number;\par
+\tab private var landClip:MovieClip;\tab\tab\tab\tab\tab\tab //contains: mapSqBtn\par
+\tab private var shoreClip:MovieClip;\par
+\tab private var shallowClip:MovieClip;\par
+\tab private var pressInterval:Number;////\par
+\tab private var clickedPoint:Point;\par
+\tab static private var PRESSDELAY:Number = 150;////\tab\tab //number of ms to wait until it turns into a drag.\par
+\tab static private var DRAGDISTANCE:Number = 2;\par
+\tab static public var sqSize:Number;\par
+\tab static private var DEFAULTSIZE = 20;\par
+\tab\par
+\tab function Acre(p_isleID:Number, xx:Number, yy:Number, landAnchor, waterAnchor, action:String) \{\par
+\tab\tab isleID = p_isleID;\par
+\tab\tab var rotation = Math.random()*360;\par
+\tab\tab var sqShape = (Math.random() > .5) ? 1 : 1;\tab\tab\tab //randomly "1" or "2"\par
+\tab\tab landClip = arrange("landSq"+sqShape, landAnchor.lands, xx, yy, rotation);\par
+\tab\tab landClip.gotoAndPlay(action);\par
+\tab\tab shoreClip = arrange("shoreSq"+sqShape, landAnchor.shores, xx, yy, rotation);\par
+\tab\tab shoreClip.gotoAndPlay(action);\par
+\tab\tab shallowClip = arrange("shallowSq", waterAnchor, xx, yy, rotation);\par
+\tab\tab shallowClip.gotoAndPlay(action);\par
+\tab\tab landClip.mapSqBtn.onPress = Delegate.create(this, function () \{\par
+\tab\tab\tab clickedPoint = new Point(_xmouse, _ymouse);\par
+\tab\tab\tab startDrag(landClip._parent._parent._parent, false);\par
+\tab\tab\});\par
+\tab\tab landClip.mapSqBtn.onRelease = Delegate.create(this, function () \{\par
+\tab\tab\tab stopDrag();\par
+\tab\tab\tab if (Point.distance(clickedPoint, new Point(_xmouse, _ymouse)) < DRAGDISTANCE) \{\par
+\tab\tab\tab\tab trace("EXT CALL: Clicked "+isleID);\par
+\tab\tab\tab\tab ExternalInterface.call("islandClicked", isleID);\par
+\tab\tab\tab\} else \{\par
+\tab\tab\tab\tab var isleClip = landClip._parent._parent._parent;\par
+\tab\tab\tab\tab trace("EXT CALL: "+Math.round(isleClip._x)+","+Math.round(isleClip._y));\par
+\tab\tab\tab\tab ExternalInterface.call("isleMovedTo", isleID, Math.round(isleClip._x), Math.round(isleClip._y));\par
+\tab\tab\tab\}\par
+\tab\tab\});\par
+\tab\tab //setPreClick();\par
+\tab\}\par
+\tab\par
+\tab private function arrange(iden:String, subAnchor:MovieClip, xx:Number, yy:Number, rotation:Number) \{\par
+\tab\tab var depth = subAnchor.getNextHighestDepth();\par
+\tab\tab var theClip = subAnchor.attachMovie(iden, "sq"+depth, depth);\par
+\tab\tab theClip._x = xx * sqSize * Math.sqrt(3)/2;\tab\tab\tab\tab //hex accounting\par
+\tab\tab var yDrop = xx * sqSize / 2;\par
+\tab\tab theClip._xscale = (sqSize/DEFAULTSIZE) * 100;\par
+\tab\tab theClip._y = yy * sqSize + yDrop;\par
+\tab\tab theClip._yscale = (sqSize/DEFAULTSIZE) * 100;\par
+\tab\tab theClip._rotation = rotation;\par
+\tab\tab return theClip;\par
+\tab\}\par
+\tab\par
+\tab private function setPreClick() \{\par
+\tab\tab landClip.mapSqBtn.onPress = Delegate.create(this, function () \{\par
+\tab\tab\tab pressInterval = setInterval(Delegate.create(this, setPostClick), PRESSDELAY);\par
+\tab\tab\});\par
+\tab\tab landClip.mapSqBtn.onRelease = Delegate.create(this, function () \{\par
+\tab\tab\tab clearInterval(pressInterval);\par
+\tab\tab\tab ExternalInterface.call("islandClicked", isleID);\par
+\tab\tab\tab trace("Clicked :: xmit "+isleID);\par
+\tab\tab\});\par
+\tab\}\par
+\tab\par
+\tab private function setPostClick() \{\par
+\tab\tab trace("pI: "+pressInterval);\par
+\tab\tab clearInterval(pressInterval);\par
+\tab\tab //trace("   hitTest: "+landClip.mapSqBtn.hitTest(_xmouse, _ymouse, true));\par
+\tab\tab //if (!landClip.mapSqBtn.hitTest(_xmouse, _ymouse, true)) \{\par
+\tab\tab //\tab return;\tab\tab\tab //if we hit the island in passing, don't grab it.\par
+\tab\tab //\}\par
+\tab\tab delete landClip.mapSqBtn.onPress;\par
+\tab\tab trace(" Dragging parent, : "+landClip._parent._parent._parent);\par
+\tab\tab startDrag(landClip._parent._parent._parent, false);\par
+\tab\tab landClip.mapSqBtn.onReleaseOutside = Delegate.create(this, function () \{\par
+\tab\tab\tab stopDrag();\par
+\tab\tab\tab var isleClip = landClip._parent._parent._parent;\par
+\tab\tab\tab ExternalInterface.call("isleMovedTo", isleID, isleClip._x, isleClip._y);\par
+\tab\tab\tab setPreClick();\par
+\tab\tab\});\par
+\tab\tab landClip.mapSqBtn.onRelease = Delegate.create(this, function () \{\par
+\tab\tab\tab stopDrag();\par
+\tab\tab\tab var isleClip = landClip._parent._parent._parent;\par
+\tab\tab\tab trace("Dropped at "+isleClip._x+","+isleClip._y);\par
+\tab\tab\tab ExternalInterface.call("isleMovedTo", isleID, isleClip._x, isleClip._y);\par
+\tab\tab\tab setPreClick();\par
+\tab\tab\});\par
+\tab\}\par
+\tab\par
+\tab function redisplay() \{\par
+\tab\tab\par
+\tab\}\par
+\tab\par
+\tab function remove() \{\par
+\tab\tab trace("  Removing Acre @ x "+landClip._x);\par
+\tab\tab removeMovieClip(landClip);\par
+\tab\tab removeMovieClip(shoreClip);\par
+\tab\tab removeMovieClip(shallowClip);\par
+\tab\}\par
+\}\par
+\par
+\par
+\par
+\par
+import flash.geom.*;\par
+import flash.external.*;\par
+import Hippo.Island;\par
+\par
+stageSize.text = "Stage's width: "+Stage.width+", height: "+Stage.height;\par
+\par
+sampleID = 308;//Math.ceil(Math.random()*10000);\par
+var sqSize; \tab\tab\tab\tab //calc from initLand\par
+var userID;\tab\tab\tab\tab\tab //generates island seeds\par
+var islandA;\par
+var INITRADIUS = 3;\par
+//var INCREMENT = 4;\tab\tab //next size up for the island's array\par
+var islandCount = 0;\par
+//var MAXNEIGHBORS = 4;\tab\tab //number of other islands to consider\par
+\par
+var HCislandA = [\{id:1, tag:"is1", size:50\},\par
+\tab\tab\tab    \{id:2, tag:"is2", size:20\},\par
+\tab\tab\tab    \{id:3, tag:"is3", size:5\},\par
+\tab\tab\tab   /* \{id:5, tag:"is5", size:35\},\par
+\tab\tab\tab    \{id:6, tag:"is6", size:25\},\par
+\tab\tab\tab    \{id:7, tag:"is7", size:15\},\par
+\tab\tab\tab    \{id:8, tag:"is8", size:25\},\par
+\tab\tab\tab    \{id:9, tag:"is9", size:15\},\par
+\tab\tab\tab    \{id:11, tag:"is11", size:25\},\par
+\tab\tab\tab    \{id:12, tag:"is12", size:15\},\par
+\tab\tab\tab    \{id:13, tag:"is13", size:25\},\par
+\tab\tab\tab    \{id:14, tag:"is14", size:85\},\par
+\tab\tab\tab    \{id:15, tag:"is15", size:55\},\par
+\tab\tab\tab    \{id:16, tag:"is16", size:35\},\par
+\tab\tab\tab    \{id:17, tag:"is17", size:25\},\par
+\tab\tab\tab    \{id:18, tag:"is18", size:15\},\par
+\tab\tab\tab    \{id:19, tag:"is19", size:25\},\par
+\tab\tab\tab    \{id:20, tag:"is20", size:15\},\par
+\tab\tab\tab    \{id:21, tag:"is21", size:25\},\par
+\tab\tab\tab    \{id:22, tag:"is22", size:15\},\par
+\tab\tab\tab    \{id:23, tag:"is23", size:25\},\par
+\tab\tab\tab    \{id:24, tag:"is24", size:15\},\par
+\tab\tab\tab    \{id:25, tag:"is25", size:25\},\par
+\tab\tab\tab    \{id:26, tag:"is26", size:15\},\par
+\tab\tab\tab    \{id:27, tag:"is27", size:25\},*/\par
+\tab\tab\tab    \{id:4, tag:"is4", size:35\}];\par
+\par
+shk1Btn.onRelease = function () \{ shrink(1); \}\par
+shk2Btn.onRelease = function () \{ shrink(2); \}\par
+grow3Btn.onRelease = function () \{ grow(3); \}\par
+grow4Btn.onRelease = function () \{ grow(4); \}\par
+grow5Btn.onRelease = function () \{ grow(5); rename(5, "Isle 5");\}\par
+shk5Btn.onRelease = function () \{ shrink(5); \}\par
+grow6Btn.onRelease = function () \{ grow(6); \}\par
+grow8Btn.onRelease = function () \{ grow(8); \}\par
+\par
+/* Public functions\par
+ * \par
+ */\par
+\par
+function initLand(id, p_islandA, uniqueCount, worldSize) \{\par
+\tab sqSize = Math.ceil(Math.sqrt(Stage.width * Stage.height/worldSize));\par
+\tab userID = id;\par
+\tab islandA = new Array();\par
+\tab islandsCounted.text = p_islandA.length;\par
+\tab for (i = 0; i < p_islandA.length; i++) \{\par
+\tab\tab createIsland(i, p_islandA[i].id, p_islandA[i].size, p_islandA[i].tag, p_islandA[i].xx, p_islandA[i].yy);\par
+\tab\}\par
+\tab cloudLayer.gotoAndPlay(2);\par
+\}\par
+\par
+function grow(id) \{\tab //from JS.\par
+\tab if (islandA["id"+id] == undefined) \{\par
+\tab\tab createIsland(islandCount, id, 1, "");\par
+\tab\} else \{\par
+\tab\tab islandA["id"+id].grow();\par
+\tab\}\par
+\}\par
+\par
+function shrink(id) \{\par
+\tab islandA["id"+id].shrink();\par
+\}\par
+\par
+function rename(id, newName) \{\par
+\tab islandA["id"+id].rename(newName);\par
+\}\par
+\par
+\par
+/* Private functions\par
+ *\par
+ */\par
+ \par
+function createIsland(i, id, size, tag, xx, yy) \{\par
+ \tab isle = new Island(userID, id, tag, landAnchor, waterAnchor);\par
+\tab isle.setSqSize(sqSize);\par
+\tab isle.display(i, xx, yy);\par
+\tab if (typeof(xx) != "number" || typeof(yy) != "number") \{\tab\tab //placement not specified\par
+\tab\tab situateIsle(isle.getX(), isle.getY(), i);\tab //isle isn't in islandA yet.\par
+\tab\}\par
+\tab for (g = 0; g < size; g++) \{\par
+\tab\tab isle.grow();\par
+\tab\}\par
+\tab islandA["id"+id] = isle;\par
+\tab islandCount++;\par
+\tab trace("Island Placed.  islandA.length :: "+islandCount);\par
+\}\par
+\par
+function situateIsle(newX, newY, isleIndex) \{\par
+\tab if (isleIndex < 4) \{return;\}\par
+\tab for (var i in islandA) \{\par
+\tab\tab //trace(" analyzing "+i);\par
+\tab\tab var xx = islandA[i].getX();\par
+\tab\tab var yy = islandA[i].getY();\par
+\tab\tab var nudgeAngle = Math.atan2((yy - newY), (xx - newX));\par
+\tab\tab //trace("   PushAngle: "+nudgeAngle);\par
+\tab\tab\par
+\tab\tab if (Math.abs(nudgeAngle) > Math.PI/2) \{\par
+\tab\tab\tab wallDistX = xx - islandA[i].radius;\par
+\tab\tab\} else \{\par
+\tab\tab\tab wallDistX = Stage.width - (xx + islandA[i].radius);\par
+\tab\tab\}\par
+\tab\tab if (pushAngle > 0) \{\par
+\tab\tab\tab wallDistY = Stage.height - (yy + islandA[i].radius);\par
+\tab\tab\} else \{\par
+\tab\tab\tab wallDistY = yy - islandA[i].radius;\par
+\tab\tab\}\par
+\tab\tab nudgeDistX = Math.abs(wallDistX / Math.cos(nudgeAngle));\par
+\tab\tab nudgeDistY = Math.abs(wallDistY / Math.sin(nudgeAngle));\par
+\tab\tab\par
+\tab\tab distToWall = Math.min(nudgeDistX, nudgeDistY);\par
+\tab\tab //trace("   DistToWall: "+distToWall);\par
+\tab\tab dist = Point.distance(new Point(xx, yy), new Point(newX, newY));\par
+\tab\tab //radii overlap by new radius, old radius - distance\par
+\tab\tab var radiusAvg = (islandA[i].radius + INITRADIUS) / 2;\par
+\tab\tab var overlap = 2*radiusAvg*sqSize - dist;\par
+\tab\tab //trace("   Overlap: "+overlap);\par
+\tab\tab var nudgeDist = 0;\par
+\tab\tab if (overlap > 0) \{\par
+\tab\tab\tab nudgeDist = Math.sqrt(overlap)*Math.sqrt(distToWall) + radiusAvg*(1-overlap/distToWall);\par
+\tab\tab\} else if (overlap > -radiusAvg) \{\tab\tab //there's a gap; nudge\par
+\tab\tab\tab nudgeDist = radiusAvg * (1 + 2*overlap/distToWall);\par
+\tab\tab\}\par
+\tab\tab //trace("   PushDistance: "+pushDistance);\par
+\tab\tab if (nudgeDist > 0) \{\par
+\tab\tab\tab trace("Nudging "+i+" by "+nudgeDist);\par
+\tab\tab\tab islandA[i].nudge(nudgeDist, nudgeAngle);\par
+\tab\tab\}\par
+\tab\}\par
+\}\par
+\par
+var stageLst = new Object();\par
+stageLst.onResize = function () \{\par
+\tab stageSize.text = "Stage's width: "+Stage.width+", height: "+Stage.height;\par
+\par
+\tab trace("Stage resized to: "+Stage.width);\par
+\tab for (i = 0; i < HCislandA.length; i++) \{\par
+\tab\tab HCislandA[i].resizeTag();\par
+\tab\}\par
+\}\par
+Stage.addListener(stageLst);\par
+\par
+ExternalInterface.addCallback("initLand", this, initLand);\par
+ExternalInterface.addCallback("grow", this, grow);\par
+ExternalInterface.addCallback("shrink", this, shrink);\par
+ExternalInterface.addCallback("rename", this, rename);\par
+\par
+//done loading; tell js\par
+ExternalInterface.call("flashReady");\par
+}
+ 
