@@ -3,21 +3,22 @@ package com.aavu.client.gui;
 import java.util.Map;
 
 import org.gwtwidgets.client.ui.ImageButton;
+import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.HippoTest;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.ext.TooltipListener;
-import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Dashboard extends SimplePanel {
+public class Dashboard extends AbsolutePanel {
 
 	public static final int NEW_BUTTON_W = 60;
 	public static final int NEW_BUTTON_H = 46;
@@ -25,7 +26,6 @@ public class Dashboard extends SimplePanel {
 
 	private Manager manager;
 
-	private HorizontalPanel mainPanel;
 
 	// 'A' -> a's
 	// 'B-C' -> b's & c's
@@ -36,9 +36,7 @@ public class Dashboard extends SimplePanel {
 	public Dashboard(Manager _manager){
 
 		this.manager = _manager;
-
-		mainPanel = new HorizontalPanel();
-
+	
 //		Button tagButton = new Button(_manager.myConstants.yourTags());
 //		tagButton.addClickListener(new ClickListener(){
 //			public void onClick(Widget sender) {
@@ -89,19 +87,29 @@ public class Dashboard extends SimplePanel {
 			}});
 		
 		
-		mainPanel.add(addNewButton);
-		mainPanel.add(addNewIslandButton);
+		
+		PNGImage dashImage = new PNGImage("img\\dash.png",458,159);
+		dashImage.setStyleName("H-Dash");
+		add(dashImage,0,0);
+		
+		add(addNewButton,120,90);
+		add(addNewIslandButton,200,90);
 		
 //		mainPanel.add(tagButton);		
-		mainPanel.add(timeLine);
+		add(timeLine,270,90);
 //		mainPanel.add(addDeliciousTags);		
 		
-		mainPanel.add(logoutB);
+		//mainPanel.add(logoutB);
 		
 		//mainPanel.add(facebookB);
-				
-
-		add(mainPanel);
+		
+		
+		
+		DOM.setStyleAttribute(getElement(), "width", "458px");
+		DOM.setStyleAttribute(getElement(), "height", "159px");
+		DOM.setStyleAttribute(getElement(), "position", "absolute");
+		
+		//add(mainPanel);
 		//sets
 		addStyleName("H-AbsolutePanel");
 		addStyleName("H-Dashboard");		

@@ -48,14 +48,16 @@ a:visited {
 }
 
 .H-Dashboard {
+	/*background-image: url("../img/dash.gif");
+	background-repeat: no-repeat;*/
 	bottom: 0px;
-	left: 40%;
-	width: 200px;
-	height: 40px;
+	left: 30%;
+	width: 458px;
+	height: 159px;
 	margin: 0 auto; /* align for good browsers */
 	text-align: left; /* counter the body center */
 	background: transparent;
-	padding: 30px;
+	/*padding: 30px;*/
 	border: none;
 }
 .H-StatusPanel {
@@ -141,11 +143,20 @@ a:visited {
 }
 .H-Island {
 	background-color: transparent;
+
 }
-.H-IslandBanner {
+.H-IslandBanner{
+	z-index: 2;
+}
+.H-IslandBanner .gwt-Label { 
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 1.4em;
-	z-index: 2;
+}
+.H-IslandBanner .Text{
+	color: #600D25;
+}
+.H-IslandBanner .Shadow{
+	color: #F8F5F4;
 }
 .H-LineOfTime {
 	background: #FF0000;
