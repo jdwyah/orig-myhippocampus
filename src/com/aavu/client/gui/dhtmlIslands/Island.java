@@ -15,14 +15,11 @@ import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Island extends AbsolutePanel implements ClickListener, SourcesMouseEvents{
+public class Island extends AbsolutePanel implements ClickListener, SourcesMouseEvents, RemembersPosition{
 	
-	private final Type TYPE_30 = new Type(30,30,10,10,"30px",3);
-	private final Type TYPE_60 = new Type(60,60,18,18,"2",4);	
-	private final Type TYPE_100 =  new Type(100,100,33,33,"1",4);
-
-	private Type my_type;
+		
 	
+	private static ImageHolder imgHolder = new ImageHolder();
 	
 	private static final int GRID = 100;
 
@@ -32,6 +29,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	private static int move_me = 400;
 	
 	
+	private int my_spacing;
+		
 	int max_x = 0;
 	int min_x = Integer.MAX_VALUE;
 	int max_y = 0;
@@ -53,6 +52,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	int meds = 0;
 	int smalls = 0;
 	private int theSize;
+	private int height;
 
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user) {
@@ -124,15 +124,19 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	}
 
 
+	/**
+	 * 
+	 *
+	 */
 	private void setType() {
 		if(theSize >= 16){
-			my_type = TYPE_100;			
+			my_spacing = Type.SPACING_30;//NOTE not using 100's			
 		}
 		else if(theSize >= 4){
-			my_type = TYPE_60;
+			my_spacing = Type.SPACING_30;
 		}
 		else{
-			my_type = TYPE_30;			
+			my_spacing = Type.SPACING_30;
 		}
 	}
 
@@ -150,16 +154,16 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 * Ocean will pull these from us when it adds us
 	 */	
 	private void doPositioning() {			
-		top = tagStat.getLatitude()  - gridToRelativeY(min_y,my_type);
-		left = tagStat.getLongitude()  - gridToRelativeX(min_x,my_type);		
+		top = tagStat.getLatitude()  - gridToRelativeY(min_y,my_spacing);
+		left = tagStat.getLongitude()  - gridToRelativeX(min_x,my_spacing);		
 		
 
 		/*
 		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
 		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
 		 */
-		int width = (max_x + 1 - min_x) * my_type.img_spacing_w + my_type.img_width - my_type.img_spacing_w;
-		int height = (max_y + 1 - min_y) * my_type.img_spacing_h + my_type.img_height - my_type.img_spacing_h;
+		int width = (max_x + 1 - min_x) * my_spacing + Type.MAX_SIZE - my_spacing;
+		height = (max_y + 1 - min_y) * my_spacing + Type.MAX_SIZE - my_spacing;
 		
 		
 		//Magic # 11 is ~Coffee at 1.4em which == 68px 
@@ -187,11 +191,11 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 
 
-	private int gridToRelativeX(int gridValue,Type type){		
-		return (gridValue - min_x)* type.img_spacing_w;		
+	private int gridToRelativeX(int gridValue,int spacing){		
+		return (gridValue - min_x)* spacing;		
 	}
-	private int gridToRelativeY(int gridValue,Type type){				
-		return (gridValue - min_y)* type.img_spacing_h;		
+	private int gridToRelativeY(int gridValue,int spacing){				
+		return (gridValue - min_y)* spacing;		
 	}
 
 
@@ -246,24 +250,39 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		/*
 		 * calculate here
 		 */
-		bigs = theSize /16;
-		meds = (theSize %16)/4;
+//		bigs = theSize /16;
+//		meds = (theSize %16)/4;
+//		smalls = theSize %4;
+		
+		/*
+		 * don't use 100's for now
+		 */		
+		bigs = 0;//theSize /16;
+		meds = theSize / 4;
 		smalls = theSize %4;
 		
+		bigs = 0;
+		meds = 0;
+		smalls = theSize;
+		
+		
 		System.out.println("grow "+theSize+" "+bigs+" "+meds+" "+smalls);
+		int x = GRID/2;			
+		int y = GRID/2;
 		
 		for (int j = 1; j < bigs + meds + smalls + 1; j++) {
 				
-			int x = GRID/2;			
-			int y = GRID/2;
+			
 				
-			x = GRID/2;			
-			y = GRID/2;
+//			x = GRID/2;			
+//			y = GRID/2;
 				
 			//TODO take this out.. only to prevent loops if Von Neuman PRG explodes
 			int c = 0;
 			while(-1 != used[x][y] && c < 200){
-				//System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
+				
+				if(tagStat.getTagName().equals("Person"))
+				System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
 				c++;
 				
 				int dx = pr.nextInt(3) - 1;
@@ -293,7 +312,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 		
 		clear();
-		add(banner,0,my_type.img_height/2);
+		add(banner,0,height/2);
 
 		//need to re-loop after all the min/maxes are set
 		//		
@@ -317,29 +336,29 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	private void doIslandType(int style) {
 		int x;
 		int count = 0;
-		Type type = null;
+		AcreSize acreSize = null;
 		for (x = 0; x < GRID; x++) {
 			for (int j = 0; j < GRID; j++) {
 				if(used[x][j] > -1){
 					if(used[x][j] > bigs + meds){
-						type = TYPE_30;												
+						acreSize = AcreSize.SIZE_30;												
 					}else if(used[x][j] > bigs){
-						type = TYPE_60;												
+						acreSize = AcreSize.SIZE_60;												
 					}
 					else{
-						type = TYPE_100;												
+						acreSize = AcreSize.SIZE_100;												
 					}
-					System.out.println("used "+x+" "+j+" "+used[x][j]+" "+type.prefix);
+					System.out.println("used "+x+" "+j+" "+used[x][j]+" Acre: "+acreSize.getSize());
 					count++;
 					
 					if(0 == style){
-						addShadow(x,j,type);
+						addShadow(x,j,acreSize);
 					}
 					else if(1 == style){
-						addAcre(x,j,type);
+						addAcre(x,j,acreSize);
 					}
 					else if(2 == style){
-						addInner(x,j,type);
+						addInner(x,j,acreSize);
 					}
 				}
 			}
@@ -353,33 +372,33 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 * gridToRelative using my_type || type? 
 	 * 
 	 */
-	private void addAcre(int x, int y,Type type){
+	private void addAcre(int x, int y,AcreSize acreSize){
 		
-		int corrected_x = gridToRelativeX(x,my_type);
-		int corrected_y = gridToRelativeY(y,my_type);		
+		int corrected_x = gridToRelativeX(x,my_spacing);
+		int corrected_y = gridToRelativeY(y,my_spacing);		
 		
 		
-//		System.out.println("x "+x+" cx "+corrected_x);
-//		System.out.println("y "+y+" cy "+corrected_y);
+		System.out.println("x "+x+" cx "+corrected_x);
+		System.out.println("y "+y+" cy "+corrected_y);
 //		
 
-		add(new Acre(this,x,y,type),corrected_x,corrected_y);
+		add(new Acre(this,x,y,acreSize),corrected_x,corrected_y);
 		
 	}
 
-	private void addShadow(int x, int y,Type type){
+	private void addShadow(int x, int y,AcreSize acreSize){
 
-		int corrected_x = gridToRelativeX(x,my_type);
-		int corrected_y = gridToRelativeY(y,my_type);		
+		int corrected_x = gridToRelativeX(x,my_spacing);
+		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		add(new Shadow(x,y,type),corrected_x,corrected_y);
+		add(new Shadow(x,y,acreSize),corrected_x,corrected_y);
 	}
-	private void addInner(int x, int y,Type type){
+	private void addInner(int x, int y,AcreSize acreSize){
 
-		int corrected_x = gridToRelativeX(x,my_type);
-		int corrected_y = gridToRelativeY(y,my_type);		
+		int corrected_x = gridToRelativeX(x,my_spacing);
+		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		add(new Inner(x,y,type),corrected_x,corrected_y);
+		add(new Inner(x,y,acreSize),corrected_x,corrected_y);
 	}
 	
 	
@@ -388,34 +407,35 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		ocean.islandClicked(tagStat.getTagId());
 	}
 	
-	private class Level extends AbsolutePanel {
-		public Level(ClickListener listener, int x, int y,Type type,String extension,String style){
+	private class Level extends AbsolutePanel {		
+
+		public Level(ClickListener listener, int x, int y,AcreSize acreSize,String extension,String style){
 									
-			Image isle = new Image("img\\type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
+			Image isle = imgHolder.getImage(acreSize,tagStat.getTagId(),x,y,extension);//new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
 			if(listener != null){
 				isle.addClickListener(listener);
 			}
 			isle.setStyleName(style);
 			add(isle,0,0);
 						
-			DOM.setStyleAttribute(getElement(), "width", type.img_width+"px");
-			DOM.setStyleAttribute(getElement(), "height", type.img_height+"px");
+			DOM.setStyleAttribute(getElement(), "width", acreSize.getSize()+"px");
+			DOM.setStyleAttribute(getElement(), "height", acreSize.getSize()+"px");
 
 		}
 	}
 	private class Acre extends Level {
-		public Acre(ClickListener listener,int x, int y,Type type){
-			super(listener,x,y,type,"I","Isle");			
+		public Acre(ClickListener listener,int x, int y,AcreSize acreSize){
+			super(listener,x,y,acreSize,"I","Isle");			
 		}
 	}
 	private class Shadow extends Level {
-		public Shadow(int x, int y,Type type){
-			super(null,x,y,type,"S","Overlay");			
+		public Shadow(int x, int y,AcreSize acreSize){
+			super(null,x,y,acreSize,"S","Overlay");			
 		}
 	}
 	private class Inner extends Level {
-		public Inner(int x, int y,Type type){
-			super(null,x,y,type,"Inner","Overlay");			
+		public Inner(int x, int y,AcreSize acreSize){
+			super(null,x,y,acreSize,"Inner","Overlay");			
 		}
 	}
 	
@@ -485,24 +505,10 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	  }
 	
 
-	private class Type {
-		private int img_width;
-		private int img_height;
-		private int img_spacing_w;
-		private int img_spacing_h;
-		private String prefix;
-		private int numImages;
-		
-		public Type(int img_width, int img_height, int img_spacing_w, int img_spacing_h, String prefix, int numImages) {
-			super();
-			this.img_width = img_width;
-			this.img_height = img_height;
-			this.img_spacing_w = img_spacing_w;
-			this.img_spacing_h = img_spacing_h;
-			this.prefix = prefix;
-			this.numImages = numImages;
-		}
-		
+	
+	
+	public Widget getWidget() {	
+		return this;
 	}
 	
 }

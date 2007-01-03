@@ -1,7 +1,9 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,6 +17,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.Ocean;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.service.Manager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -23,9 +26,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListener {
 
+	static final String IMG_LOC = "img/simplicity/";
+	//static final String IMG_LOC = "img/oldmapStyle/";
+	
 	private Manager manager;
 
 	private Map islands = new HashMap();
+	private List objects = new ArrayList();
+	
 	private DragHandler dragHandler;
 
 	private int backY = 0;
@@ -47,6 +55,11 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 		dragHandler = new DragHandler(this);
 
+
+		//Decorations that will be obcured by the focus panel
+		//
+		decorate();
+		
 		FocusPanel focusBackdrop = new FocusPanel();
 		focusBackdrop.setWidth("100%");
 		focusBackdrop.setHeight("100%");
@@ -59,7 +72,22 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		 * override the AbsolutePanel position: relative
 		 * otherwise we got a left: 8px; top: 8px;
 		 */		
-		DOM.setStyleAttribute(getElement(), "position", "absolute");		
+		DOM.setStyleAttribute(getElement(), "position", "absolute");	
+		DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean.png)");
+		//url("../img/bluecheck-bullet-14.gif");
+	}
+
+	private void decorate() {
+		
+		addObject(new OceanLabel("Hippo<BR>Campus<BR>Ocean",300,300));
+		
+		addObject(new DashedBox(-1000,140,3000,60));
+		
+	}
+
+	private void addObject(RemembersPosition rp) {		
+		add(rp.getWidget(),rp.getLeft(),rp.getTop());
+		objects.add(rp);
 	}
 
 	public void load() {
@@ -105,6 +133,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		
 		Effect.appear(isle);
 		islands.put(new Long(info.getTagId()), isle);
+		objects.add(isle);
 	}
 	
 	
@@ -163,16 +192,16 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		curbackY = dy + backY;
 		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX+"px "+curbackY+"px");	
 		
-		for (Iterator iter = islands.entrySet().iterator(); iter.hasNext();) {
-			Entry e = (Entry) iter.next();
+		for (Iterator iter = objects.iterator(); iter.hasNext();) {
+			RemembersPosition rp = (RemembersPosition) iter.next();					
 			
-			//System.out.println("found "+o);
-			
-			Island isle = (Island) e.getValue();		
+			//System.out.println("found: "+GWT.getTypeName(rp));
 			
 //			System.out.println("Left "+isle.getLeft()+"  Top "+isle.getTop());
 //			System.out.println("cur "+curbackX+" cury "+curbackY);
-			setWidgetPosition(isle,isle.getLeft()+curbackX, isle.getTop()+curbackY);
+			
+			setWidgetPosition(rp.getWidget(),rp.getLeft()+curbackX, rp.getTop()+curbackY);	
+			
 			
 		}
 			

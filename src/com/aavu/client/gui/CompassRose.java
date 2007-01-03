@@ -26,7 +26,7 @@ public class CompassRose extends AbsolutePanel {
 	public CompassRose(Manager _manager){
 		this.manager = _manager;
 
-		PNGImage rose = new PNGImage("img/plaque.png",120,98);
+		PNGImage rose = new PNGImage("img/plaque.png",66,120);
 
 		Button searchB = new Button(manager.myConstants.search());
 		searchB.addClickListener(new ClickListener(){
@@ -42,8 +42,8 @@ public class CompassRose extends AbsolutePanel {
 
 		
 		add(rose,0,0);		
-		add(searchText,120,0);
-		add(searchB,260,0);
+		add(searchText,70,0);
+		add(searchB,210,0);
 
 		/*
 		 * override the AbsolutePanel position: relative
