@@ -1,7 +1,9 @@
 package com.aavu.client.gui.dhtmlIslands;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.gwtwidgets.client.wrap.Effect;
 
@@ -12,27 +14,31 @@ import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.Ocean;
 import com.aavu.client.gui.ext.GUIEffects;
-import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean {
+public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListener {
 
-	private int longitude = 800;
-	private int latitude = 600;
 	private Manager manager;
 
 	private Map islands = new HashMap();
 	private DragHandler dragHandler;
 
+	private int backY = 0;
+	private int backX = 0;
+	private int curbackX = 0;
+	private int curbackY = 0;
+	
+	private int dragStartX;
+
+	private int dragStartY;
+
+	private boolean dragging;
+	
 	public OceanDHTMLImpl(Manager manager) {
 		super();
 		this.manager = manager;
@@ -41,6 +47,14 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean {
 
 		dragHandler = new DragHandler(this);
 
+		FocusPanel focusBackdrop = new FocusPanel();
+		focusBackdrop.setWidth("100%");
+		focusBackdrop.setHeight("100%");
+		focusBackdrop.addMouseListener(this);
+		focusBackdrop.setStyleName("H-FocusBackDrop");		
+		add(focusBackdrop,0,0);
+		
+		
 		/*
 		 * override the AbsolutePanel position: relative
 		 * otherwise we got a left: 8px; top: 8px;
@@ -117,15 +131,6 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean {
 		}
 	}
 
-
-	public int getLatitude() {
-		return latitude;
-	}
-
-	public int getLongitude() {
-		return longitude;
-	}
-
 	public Widget getWidget() {
 		return this;
 	}
@@ -151,6 +156,67 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean {
 
 	}
 
+	
 
+	private void moveTo(int dx, int dy) {
+		curbackX = dx + backX;
+		curbackY = dy + backY;
+		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX+"px "+curbackY+"px");	
+		
+		for (Iterator iter = islands.entrySet().iterator(); iter.hasNext();) {
+			Entry e = (Entry) iter.next();
+			
+			//System.out.println("found "+o);
+			
+			Island isle = (Island) e.getValue();		
+			
+//			System.out.println("Left "+isle.getLeft()+"  Top "+isle.getTop());
+//			System.out.println("cur "+curbackX+" cury "+curbackY);
+			setWidgetPosition(isle,isle.getLeft()+curbackX, isle.getTop()+curbackY);
+			
+		}
+			
+	}
+	
+	public void onMouseEnter(Widget sender) {}
+	public void onMouseLeave(Widget sender) {
+		endDrag();
+	}
+	
+
+
+	public void onMouseDown(Widget sender, int x, int y) {		
+		dragging = true;
+		dragStartX = x;
+		dragStartY = y;
+	}
+
+	public void onMouseMove(Widget sender, int x, int y) {
+		if (dragging) {			
+			moveTo(x - dragStartX, y - dragStartY);			
+		}
+	}
+
+
+	public void onMouseUp(Widget sender, int x, int y) {	
+		endDrag();
+	}
+	
+	private void endDrag() {
+		if(dragging){
+//			System.out.println("(old)back x "+backX+" cur(new) "+curbackX);
+//			System.out.println("(old)back y "+backY+" cur(new) "+curbackY);
+			backX = curbackX;
+			backY = curbackY;			
+		}
+		dragging = false;
+	}
+	
+	public int getBackX() {		
+		return backX;
+	} 
+	public int getBackY() {		
+		return backY;
+	}
 
 }

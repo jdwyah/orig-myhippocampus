@@ -25,6 +25,12 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	
 	
 	private static final int GRID = 100;
+
+	/**
+	 * All new or (0,0) islands will show up at (move_me,move_me) + static 30 * number of islands
+	 */
+	private static int move_me = 400;
+	
 	
 	int max_x = 0;
 	int min_x = Integer.MAX_VALUE;
@@ -47,6 +53,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	int meds = 0;
 	int smalls = 0;
 	private int theSize;
+
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user) {
 		super();
@@ -79,7 +86,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 //			break;
 //		}
 		banner = new IslandBanner(tagStat.getTagName(),tagStat.getNumberOfTopics());
-
+		//banner.addClickListener(this);
 		theSize = tagStat.getNumberOfTopics()+1;
 		
 		
@@ -190,31 +197,26 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 
 
-	private void situate(Ocean o) {
+	private void situate(OceanDHTMLImpl o) {
 		System.out.println("Situate "+tagStat.getLongitude()+" "+tagStat.getLatitude());
-		if(tagStat.getLatitude() < 1
+		if(tagStat.getLatitude() == 0
 				&&
-				tagStat.getLongitude() < 1){
+				tagStat.getLongitude() == 0){
 			
 			
 			System.out.println("Setting to random!!");
 			//avoid putting it on the edge
-			int longi = (int) (120 + pr.nextDouble() * (o.getLongitude() - 120));
-			int lati = (int) (120 + pr.nextDouble() * (o.getLatitude() - 120));
+			
+//			int longi = (int) (120 + pr.nextDouble() * 800);
+//			int lati = (int) (120 + pr.nextDouble() * 600);
+			int longi = -o.getBackX() + move_me;
+			int lati = -o.getBackY() + move_me ;
+			move_me += 30;
 			tagStat.setLongitude(longi);
 			tagStat.setLatitude(lati);
 						
 		}
-		if(tagStat.getLatitude() < -1 ){
-			System.out.println("-----------------");
-			System.out.println("lat was "+tagStat.getLatitude());
-			tagStat.setLatitude(0);
-		}
-		if(tagStat.getLongitude() < -1 ){
-			System.out.println("long was "+tagStat.getLongitude());
-			tagStat.setLongitude(0);
-		}
-
+		
 		
 	}
 
@@ -226,7 +228,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		growInternal();
 		
 		doPositioning();
-		System.out.println("set to left "+left+" top "+top);
+		//System.out.println("set to left "+left+" top "+top);
 		ocean.setWidgetPosition(this, left, top);		
 	}
 
@@ -451,13 +453,13 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 	    }
 	    /*
-	     * detecting move requires subtracting out the @&**@#% shift of the ocean usually (8,8) in FF and (10,15) in IE7 
+	     * detecting move requires subtracting out the possible shift of the ocean 
 	     */
 	    if(wasMouseUp){
 	    	int absLeft = getAbsoluteLeft();
 	    	int absTop = getAbsoluteTop();
-	    	int oceanLeft = ocean.getAbsoluteLeft();
-	    	int oceanTop = ocean.getAbsoluteTop();
+	    	int oceanLeft = ocean.getBackX();
+	    	int oceanTop = ocean.getBackY();
 	    	if(absLeft != left + oceanLeft
 	    			||
 	    			absTop != top + oceanTop){

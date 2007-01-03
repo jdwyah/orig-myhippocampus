@@ -2,6 +2,7 @@ package com.aavu.client.gui.dhtmlIslands;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 
 
@@ -17,6 +18,7 @@ public class IslandBanner extends AbsolutePanel{
 	 * NOTE 
 	 * css value must be "fontSize" not "font-size" !!
 	 * see http://groups.google.com/group/Google-Web-Toolkit/msg/5d2850a39637e56f
+	 * 
 	 * @param text
 	 * @param size
 	 */
@@ -63,6 +65,10 @@ public class IslandBanner extends AbsolutePanel{
 		DOM.setStyleAttribute(getElement(), "width", str);
 		reg.setWidth(str);
 		shdw.setWidth(str);
+	}
+
+	public void addClickListener(ClickListener listener) {
+		reg.addClickListener(listener);
 	}
 	
 }

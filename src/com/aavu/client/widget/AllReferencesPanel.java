@@ -6,6 +6,7 @@ import java.util.List;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.LinkDisplayWidget;
 import com.aavu.client.widget.edit.SaveNeededListener;
@@ -26,6 +27,7 @@ public class AllReferencesPanel extends Composite {
 	private FlowPanel refPanel;
 	private StackPanel mainPanel;
 	private int totalSize;
+	private PopupWindow popwindow;
 	
 	/**
 	 * Hold SeeAlsos, Links & References
@@ -33,15 +35,15 @@ public class AllReferencesPanel extends Composite {
 	 * @param manager
 	 * @param saveNeeded
 	 */
-	public AllReferencesPanel(Manager manager, SaveNeededListener saveNeeded){
-		
+	public AllReferencesPanel(Manager manager, SaveNeededListener saveNeeded,PopupWindow popwindow){
+		this.popwindow = popwindow;
 		this.manager = manager;
 	
 		mainPanel = new StackPanel();
 		refPanel = new FlowPanel();
 		
 		
-		seeAlsoBoard = new SeeAlsoBoard(manager,saveNeeded);		
+		seeAlsoBoard = new SeeAlsoBoard(manager,saveNeeded,popwindow);		
 		mainPanel.add(seeAlsoBoard,Manager.myConstants.seeAlsosN(0));				
 		
 		
@@ -83,7 +85,7 @@ public class AllReferencesPanel extends Composite {
 				
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					TopicIdentifier topicIdent = (TopicIdentifier) iter.next();
-					refPanel.add(new TopicLink(topicIdent));
+					refPanel.add(new TopicLink(topicIdent,popwindow));
 				}
 				
 				updateTitle(refPanel,Manager.myConstants.referencesN(list.size()));

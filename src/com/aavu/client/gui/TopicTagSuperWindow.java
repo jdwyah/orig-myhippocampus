@@ -40,7 +40,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	private TagBoard tagBoard;
 	private TopicDetailsTabBar topicDetails;
 	private EditableLabelExtension titleBox;
-	private SubjectBoard subjectBoard;
+	//private SubjectBoard subjectBoard;
 
 	public TopicTagSuperWindow(GInternalFrame frame, String title, int width, int height) {
 		super(frame,title,width,height);		
@@ -65,7 +65,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		 * TopicDetails on the bottom
 		 * 
 		 */
-		topicDetails = new TopicDetailsTabBar(manager,this);
+		topicDetails = new TopicDetailsTabBar(manager,this,this);
 		
 		mainPanel.add(topicDetails,DockPanel.SOUTH);
 				
@@ -177,11 +177,6 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		
 		leftPanel.add(leftTopPanel);
 		
-		subjectBoard = new SubjectBoard(manager,titleBox,tagBoard,this);
-		subjectBoard.load(topic);
-		
-		leftPanel.add(subjectBoard);
-
 		//Extension point
 		addLeftExtras(leftPanel);
 		
@@ -248,9 +243,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		}
 		
 		topic.setTitle(titleBox.getText());
-		
-		topic.setSubject(subjectBoard.getSelectedSubject());
-				
+						
 		tagBoard.saveThingsNowEvent(new StdAsyncCallback(Manager.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);		

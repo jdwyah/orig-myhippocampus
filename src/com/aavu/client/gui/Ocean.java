@@ -15,9 +15,6 @@ public interface Ocean {
 	
 	public Widget getWidget();
 
-	
-	public int getLatitude();
-	public int getLongitude();
 
 	public void removeIsland(long id);
 

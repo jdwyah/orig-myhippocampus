@@ -45,7 +45,7 @@ public class SearchResultsWindow extends PopupWindow {
 		public SearchLink(final Manager manager, final SearchResult result) {
 			VerticalPanel mainPanel = new VerticalPanel();
 			
-			TopicLink tl = new TopicLink(result.getTopicIdentifier());
+			TopicLink tl = new TopicLink(result.getTopicIdentifier(),SearchResultsWindow.this);
 			tl.addStyleName("H-Title");
 			mainPanel.addStyleName("H-SearchResults");
 			

@@ -1,6 +1,7 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.UpdateableTabPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.AllReferencesPanel;
@@ -20,13 +21,13 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 	private AllReferencesPanel referencesPanel;
 	
 
-	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded){
+	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded,PopupWindow popWindow){
 		
 		
 		topicViewAndEditW = new TopicViewAndEditWidget(manager,saveNeeded);		
 		add(topicViewAndEditW,Manager.myConstants.entry());
 		
-		referencesPanel = new AllReferencesPanel(manager,saveNeeded);
+		referencesPanel = new AllReferencesPanel(manager,saveNeeded,popWindow);
 		add(referencesPanel,Manager.myConstants.references());		
 		
 		

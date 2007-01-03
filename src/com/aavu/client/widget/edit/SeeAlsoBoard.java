@@ -6,6 +6,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
@@ -26,9 +27,11 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 	
 	private SeeAlsoWidget alsos;
 	private SaveNeededListener saveNeeded;
+	private PopupWindow popwindow;
 	
-	public SeeAlsoBoard(Manager manager, SaveNeededListener saveNeeded) {
+	public SeeAlsoBoard(Manager manager, SaveNeededListener saveNeeded,PopupWindow popwindow) {
 		this.saveNeeded = saveNeeded;
+		this.popwindow = popwindow;
 		topicService = manager.getTopicCache();
 		
 		topicCompleter = new TopicCompleter();		
@@ -106,14 +109,14 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 			seeAlsoPanel.clear();
 			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
-				seeAlsoPanel.add(new TopicLink(top));
+				seeAlsoPanel.add(new TopicLink(top.getIdentifier(),popwindow));
 				size++;
 			}
 			return size;
 		}
 
 		public void add(TopicIdentifier to2) {
-			seeAlsoPanel.add(new TopicLink(to2));			
+			seeAlsoPanel.add(new TopicLink(to2,popwindow));			
 		}		
 	}
 
