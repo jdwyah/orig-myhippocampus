@@ -89,15 +89,20 @@ public class TopicServiceImpl implements TopicService {
 		for (String string : tags) {			
 			log.debug("str: "+string);			
 
-			Topic t = getForName(string);			
-			if(null == t){
-				log.debug("was null, creating as Tag ");
-				t = new Topic();
-				t.setTitle(string);				
-				t.setUser(userService.getCurrentUser());							
-			}			
-			t.getOccurences().add(link);
-			Topic st = save(t);
+			String clipped = string.trim();
+			
+			if(clipped.length() != 0){
+				Topic t = getForName(clipped);			
+				if(null == t){
+					log.debug("was null, creating as Tag ");
+					t = new Topic();
+					t.setTitle(clipped);				
+					t.setUser(userService.getCurrentUser());							
+				}			
+				t.getOccurences().add(link);
+				Topic st = save(t);
+			}
+			
 		}
 	}
 	public MindTree getTree(MindTreeOcc occ) {

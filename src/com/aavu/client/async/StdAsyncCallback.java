@@ -30,9 +30,12 @@ public abstract class StdAsyncCallback implements AsyncCallback {
 	}
 	
 	public void onFailure(Throwable caught) {
-		if(GWT.isScript()){
-			Window.alert(call+" failed! "+caught+" "+caught.getMessage());
-		}
+
+		
+		//if(GWT.isScript()){
+		//	Window.alert(call+" failed! "+caught+" "+caught.getMessage());
+		//}
+		
 		System.out.println(call+" failed! "+caught+" msg "+caught.getMessage());
 		
 		//TODO make the GWT AOP recast the UsernameNotFound Exception to a 

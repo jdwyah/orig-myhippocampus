@@ -115,6 +115,8 @@ public interface Consts extends Messages {
 	String required();
 	String save_async();
 	
+	String clouds_src();
+	
 	
 	
 	

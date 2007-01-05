@@ -21,7 +21,7 @@ public class GUIEffects {
 		      }
 		    };
 		t.schedule(fadeInX);		
-		removeInXSeconds(w,removeInX);
+		removeInXMilSecs(w,removeInX);
 	}
 	
 
@@ -42,7 +42,7 @@ public class GUIEffects {
 //				new EffectOption("to",0.0)});
 		
 		
-		removeInXSeconds(w, removeInX);
+		removeInXMilSecs(w, removeInX);
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class GUIEffects {
 	 * @param w
 	 * @param i
 	 */
-	public static void removeInXSeconds(final Widget w, int i) {
+	public static void removeInXMilSecs(final Widget w, int i) {
 		Timer t = new Timer() {
 		      public void run() {
 		    	  w.removeFromParent();

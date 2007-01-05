@@ -48,7 +48,7 @@
 			<meta attribute="field-description">Shared?</meta>
 		</property>
 
-		<set name="scopes" table="topic_scopes">
+		<set name="scopes" table="topic_scopes" >
 			<key column="topic_id" />
 			<many-to-many column="scope_id" class="Topic" />
 		</set>
@@ -64,11 +64,11 @@
 						
 	    </map>-->
 
- 		<set name="instances" table="instancetable">
+ 		<set name="instances" table="instancetable" cascade="none">
 			<key column="from_id" />
 			<many-to-many column="topic_id" class="Topic" />
 		</set>
-		<set name="types" table="typetable">
+		<set name="types" table="typetable" cascade="none">
 			<key column="from_id" />
 			<many-to-many column="topic_id" class="Topic" />
 		</set>

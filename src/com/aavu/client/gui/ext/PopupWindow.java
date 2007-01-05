@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -59,6 +60,14 @@ public class PopupWindow {
 	protected void setContent(Widget w) {
 		frame.setContent(w);
 	}
+
+	protected void setCenteredContent(Widget panel) {
+		SimplePanel outerPanel = new SimplePanel();
+		outerPanel.setStyleName("H-CenterDiv");
+		outerPanel.add(panel);
+		setContent(outerPanel);
+	}
+	
 	public void close(){
 		System.out.println("PopupWindow close()");
 		try{

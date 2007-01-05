@@ -3,9 +3,7 @@ package com.aavu.client.gui;
 import com.aavu.client.HippoTest;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FormHandler;
@@ -13,6 +11,7 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -21,8 +20,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class LoginWindow extends PopupWindow {
 	
-	private static final int HEIGHT = 300;
-	private static final int WIDTH = 400;
+	private static final int HEIGHT = 150;
+	private static final int WIDTH = 300;
 	private static final String SECURITY_URL = "/site/j_acegi_security_check";
 	
 	private FormPanel form;
@@ -30,6 +29,8 @@ public class LoginWindow extends PopupWindow {
 	private Label messageLabel;	
 
 	private static boolean semaphore = false;
+	
+	private static String lastNameEntered = "";
 	
 	/**
 	 * Prevents multiple instances with a semaphore.
@@ -59,11 +60,19 @@ public class LoginWindow extends PopupWindow {
 		// Create a panel to hold all of the form widgets.
 
 		VerticalPanel panel = new VerticalPanel();
+		
 		final TextBox username = new TextBox();
 		username.setName("j_username");
+		username.setText(lastNameEntered);
 
 		final PasswordTextBox password = new PasswordTextBox();
 		password.setName("j_password");
+		password.addKeyboardListener(new KeyboardListenerAdapter(){
+			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+				if(keyCode == KEY_ENTER){
+					form.submit();					
+				}
+			}});
 
 		HorizontalPanel uP = new HorizontalPanel();
 
@@ -86,7 +95,8 @@ public class LoginWindow extends PopupWindow {
 		messageLabel = new Label("");		
 		panel.add(messageLabel);
 		
-		form.addFormHandler(new FormHandler() {
+		form.addFormHandler(new FormHandler() {			
+
 			public void onSubmitComplete(FormSubmitCompleteEvent event) {
 
 				//TODO parse bad password etc. Super-Fragile string comps				
@@ -117,12 +127,13 @@ public class LoginWindow extends PopupWindow {
 //					Window.alert("Password cannot be empty");
 //					event.setCancelled(true);
 //				}
+				lastNameEntered = username.getText();
 			}
 		});
 
 		form.setWidget(panel);
 		
-		setContent(form);
+		setCenteredContent(form);
 	}
 
 	private void failure(){

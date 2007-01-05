@@ -63,8 +63,15 @@ public class AddLinkController extends SimpleFormController {
 		
 		log.debug("tags: "+Arrays.toString(tags));
 		
-		if(tags[0].equals("")){
-			log.debug("blank tags, setting topic to; "+addLink.getCommand_description());		
+		boolean found = false;
+		for (int i = 0; i < tags.length; i++) {
+			if(!tags[i].equals("")){
+				found = true;
+			}
+		}
+		
+		if(!found){
+			log.debug("No tags, setting topic to; "+addLink.getCommand_description());		
 			tags[0] = addLink.getCommand_description();
 		}
 		

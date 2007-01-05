@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.gwtwidgets.client.ui.PNGImage;
 import org.gwtwidgets.client.wrap.Effect;
+import org.gwtwidgets.client.wrap.EffectOption;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
@@ -19,9 +21,12 @@ import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.service.Manager;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListener {
@@ -46,6 +51,12 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	private int dragStartY;
 
 	private boolean dragging;
+
+	private Panel rightCloud;
+
+	
+	
+	private Panel leftCloud;
 	
 	public OceanDHTMLImpl(Manager manager) {
 		super();
@@ -60,13 +71,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		//
 		decorate();
 		
-		FocusPanel focusBackdrop = new FocusPanel();
-		focusBackdrop.setWidth("100%");
-		focusBackdrop.setHeight("100%");
-		focusBackdrop.addMouseListener(this);
-		focusBackdrop.setStyleName("H-FocusBackDrop");		
-		add(focusBackdrop,0,0);
-		
+		clouds();
 		
 		/*
 		 * override the AbsolutePanel position: relative
@@ -77,12 +82,72 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		//url("../img/bluecheck-bullet-14.gif");
 	}
 
+	private void clouds() {
+		leftCloud = new SimplePanel();
+		PNGImage lc = new PNGImage(Manager.myConstants.clouds_src(),120,120);		
+		lc.setStyleName("H-Clouds");
+		leftCloud.setStyleName("H-Clouds");
+		lc.setWidth("1000");
+		lc.setHeight("100%");
+		leftCloud.add(lc);
+			
+		rightCloud = new SimplePanel();
+		PNGImage rc = new PNGImage(Manager.myConstants.clouds_src(),120,120);
+		rc.setStyleName("H-Clouds");
+		rightCloud.setStyleName("H-Clouds");
+		rc.setWidth("1000");
+		rc.setHeight("100%");
+		rightCloud.add(rc);		
+		
+		leftCloud.setWidth("1000");
+		leftCloud.setHeight("100%");
+		
+		rightCloud.setWidth("1000");
+		rightCloud.setHeight("100%");
+		
+		add(leftCloud,0,0);
+		add(rightCloud,500,0);
+		
+	}
+
+	private void clearClouds() {
+		
+		if(GWT.isScript()){
+			
+			Effect.move(leftCloud, new EffectOption[] {
+					new EffectOption("x",-1000),
+					new EffectOption("y",0),
+					new EffectOption("duration",5.0)
+			});
+
+			Effect.move(rightCloud, new EffectOption[] {
+					new EffectOption("x",1000),
+					new EffectOption("y",0),
+					new EffectOption("duration",5.0)
+			});			
+		}else{
+			Effect.moveBy(leftCloud, 0,-1000);
+			Effect.moveBy(rightCloud, 0,1000);
+		}
+		
+		GUIEffects.removeInXMilSecs(leftCloud, 8000);
+		GUIEffects.removeInXMilSecs(rightCloud, 8000);
+	}
+
+
 	private void decorate() {
 		
 		addObject(new OceanLabel("Hippo<BR>Campus<BR>Ocean",300,300));
 		
 		addObject(new DashedBox(-1000,140,3000,60));
 		
+
+		FocusPanel focusBackdrop = new FocusPanel();
+		focusBackdrop.setWidth("100%");
+		focusBackdrop.setHeight("100%");
+		focusBackdrop.addMouseListener(this);
+		focusBackdrop.setStyleName("H-FocusBackDrop");		
+		add(focusBackdrop,0,0);
 	}
 
 	private void addObject(RemembersPosition rp) {		
@@ -104,8 +169,17 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	}
 
 	private void addAll(TagStat[] tagStats) {
-
-
+		
+		
+		//clear &remove old islands
+		islands.clear();
+		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
+			Entry e = (Entry) iter.next();
+			remove((Widget) e.getValue());
+			objects.remove(e.getValue());
+			
+		}
+		
 		for (int i = 0; i < tagStats.length; i++) {
 			TagStat stat = tagStats[i];
 
@@ -114,7 +188,8 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 			addIsland(stat, isle);
 
 		}
-
+		
+		clearClouds();
 	}
 
 	private void addIsland(TagInfo info,Island isle){			

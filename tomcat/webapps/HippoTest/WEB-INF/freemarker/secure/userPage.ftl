@@ -21,14 +21,19 @@
 	Number of Links: ${bean.numberOfLinks}<BR>
 	Number of Topics: ${bean.numberOfTopics}<BR>
 	
-	<#assign pct = bean.numberOfTopics / 350/>
-	<#assign width= 50 + 350 * pct/>
+	<#assign pct = bean.numberOfTopics / 400/>
+	<#assign width= 100 + 40 * pct/>
 	
-    <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/><img border="0" width="${width}" src="<@spring.url "/img/realbrain.png"/>"><br>Enter!</a>
+    <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/><img border="0" width="${width}" src="<@spring.url "/img/enterMyHippocampus.png"/>"><br>Enter!</a>
 	<P>
 	<a href="j_acegi_logout">Logout</a>
 	
-
+	<#if bean.user?exists>
+		<#if bean.user.supervisor>
+			<p>
+	         <a href="<@spring.url "/site/secure/extreme/userManager.html?action=list"/>"/>Admin</a></li>
+        </#if>
+    </#if>
 		
 
 </body>
