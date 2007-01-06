@@ -28,6 +28,7 @@ import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
+import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -318,10 +319,14 @@ public class Manager implements TopicSaveListener {
 				}
 			}
 		
-			public void onFailure(Throwable caught) {
-				if(GWT.isScript()){
-					Window.alert("GetCurrentUser failed! "+caught+" \nEP:"+HippoTest.getRelativeURL(""));
-				}				
+			/*
+			 * Expected, since we are preloading in an IFrame whether or not they've logged in
+			 * 
+			 * (non-Javadoc)
+			 * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
+			 */
+			public void onFailure(Throwable caught) {							
+				Logger.log("GetCurrentUser failed! "+caught+" \nEP:"+HippoTest.getRelativeURL(""));
 				doLogin();											
 			}						
 		});		

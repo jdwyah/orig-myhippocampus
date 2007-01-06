@@ -3,8 +3,7 @@ package com.aavu.client.async;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.service.Manager;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public abstract class StdAsyncCallback implements AsyncCallback {
@@ -31,10 +30,7 @@ public abstract class StdAsyncCallback implements AsyncCallback {
 	
 	public void onFailure(Throwable caught) {
 
-		
-		//if(GWT.isScript()){
-		//	Window.alert(call+" failed! "+caught+" "+caught.getMessage());
-		//}
+		Logger.log(call+" failed! "+caught+" "+caught.getMessage());
 		
 		System.out.println(call+" failed! "+caught+" msg "+caught.getMessage());
 		

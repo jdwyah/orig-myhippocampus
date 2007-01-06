@@ -22,7 +22,7 @@
 	Number of Topics: ${bean.numberOfTopics}<BR>
 	
 	<#assign pct = bean.numberOfTopics / 400/>
-	<#assign width= 100 + 40 * pct/>
+	<#assign width= 100 + 400 * pct/>
 	
     <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/><img border="0" width="${width}" src="<@spring.url "/img/enterMyHippocampus.png"/>"><br>Enter!</a>
 	<P>

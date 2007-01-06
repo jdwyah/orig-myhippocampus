@@ -93,9 +93,9 @@
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
 				/site/secure/extreme/**=ROLE_SUPERVISOR				
-<!-- 				/service/**=IS_AUTHENTICATED_REMEMBERED-->
+<!--  				/service/**=IS_AUTHENTICATED_REMEMBERED--><!-- need to put login service under diff path -->
 				/site/secure/**=IS_AUTHENTICATED_REMEMBERED
-				/com.aavu.hippotest/**=IS_AUTHENTICATED_REMEMBERED
+<!-- 				/com.aavu.hippotest/**=IS_AUTHENTICATED_REMEMBERED-->
 				/**=IS_AUTHENTICATED_ANONYMOUSLY
 			</value>
 		</property>

@@ -14,6 +14,7 @@ import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.service.remote.GWTUserService;
 import com.aavu.client.service.remote.GWTUserServiceAsync;
+import com.aavu.client.util.Logger;
 import com.aavu.client.widget.browse.BrowseView;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.aavu.client.widget.tags.TagOrganizerView;
@@ -157,8 +158,8 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		    History.addHistoryListener(this);
 		    
 		}catch(Exception e){
-			Window.alert("e: "+e);
-			System.out.println("Problem initting services! "+e);			
+			Logger.log("e: "+e);
+					
 			e.printStackTrace();
 			
 			VerticalPanel panel = new VerticalPanel();

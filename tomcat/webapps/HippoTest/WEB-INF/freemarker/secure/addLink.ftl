@@ -3,8 +3,8 @@
 
 <head>
   
-  <script type="text/javascript" src="<@spring.url "/script/prototype.js"/>"></script>
-  <script type="text/javascript" src="<@spring.url "/script/scriptaculous.js"/>"></script>
+  <script type="text/javascript" src="<@spring.url "/com.aavu.HippoTest/script/prototype.js"/>"></script>
+  <script type="text/javascript" src="<@spring.url "/com.aavu.HippoTest/script/scriptaculous.js"/>"></script>
   
   <link rel="stylesheet" type="text/css" href="<@spring.url "/css/style.css"/>"/>
   <title><@spring.message "addLink.title"/></title>
