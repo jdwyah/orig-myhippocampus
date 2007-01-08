@@ -314,8 +314,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public List<TopicIdentifier> getLinksTo(Topic topic,User user) {
 		Object[] params = {topic.getId(),user};
-		System.out.println("----------------------------");
-		System.out.println("------------"+topic+"-------");
+		log.debug("----------getLinksTo-----------");
+		log.debug("------------"+topic+"-------");
+		
+		/*
+		 * Get Associations that mention this Topic
+		 */
 		List<Object[]> associationsToThis = getHibernateTemplate().find(""+
 				"select title, id from Topic top "+		
 				//"join top.associations "+
@@ -329,25 +333,22 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //		"and user is ? "
 //		,params);
 
-		List<Object[]> instancesOfThisTopicSlashTag = getHibernateTemplate().find(""+
-				"select title, id from Topic top "+
-				"where top.types.id is ? "+
-				"and user is ? "
-				,params);
+		
+		
+		/*
+		 * Get Topics of 'Type' this, ie "things on our island"
+		 * 
+		 * Note: Not sending this anymore, since a Topic already loads this.
+		 */
+//		List<Object[]> instancesOfThisTopicSlashTag = getHibernateTemplate().find(""+
+//				"select title, id from Topic top "+
+//				"where top.types.id is ? "+
+//				"and user is ? "
+//				,params);
 
+		
 
-//		List<Association> l2 = getHibernateTemplate().find(""+
-//		"from Association ass "+		
-//		"where ? in elements(members) "+
-//		"and user is ? "
-//		,params);
-
-//		System.out.println("---------L2 "+l2.size());
-//		for (Association association : l2) {
-//		System.out.println("ass "+association+" ass "+association.getId());
-//		}
-
-		associationsToThis.addAll(instancesOfThisTopicSlashTag);
+		//associationsToThis.addAll(instancesOfThisTopicSlashTag);
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(associationsToThis.size());
 		for (Object[] o : associationsToThis){

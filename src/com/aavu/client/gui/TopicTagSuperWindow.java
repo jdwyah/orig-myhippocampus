@@ -17,6 +17,7 @@ import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.SubjectBoard;
 import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
+import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -42,6 +43,9 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	private EditableLabelExtension titleBox;
 	//private SubjectBoard subjectBoard;
 
+	private TopicViewAndEditWidget topicViewAndEditW;
+	
+	
 	public TopicTagSuperWindow(GInternalFrame frame, String title, int width, int height) {
 		super(frame,title,width,height);		
 	}
@@ -60,14 +64,6 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		mainPanel.add(leftSide,DockPanel.CENTER);
 		mainPanel.add(rightSide,DockPanel.EAST);
 		
-		
-		/*
-		 * TopicDetails on the bottom
-		 * 
-		 */
-		topicDetails = new TopicDetailsTabBar(manager,this,this);
-		
-		mainPanel.add(topicDetails,DockPanel.SOUTH);
 				
 		setContent(mainPanel);
 		
@@ -77,6 +73,9 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	private void load(Topic loadme) {
 		topic = loadme;
 		tagBoard.load(topic);
+		
+		topicViewAndEditW.load(topic);
+		
 		topicDetails.load(topic);
 		
 		titleBox.setText(topic.getTitle());
@@ -131,6 +130,11 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 			rightPanel.add(islandButton);
 		}
 		
+	
+		topicDetails = new TopicDetailsTabBar(manager,this,this);
+		
+		rightPanel.add(topicDetails);
+		
 		return rightPanel;
 	}	
 
@@ -179,6 +183,15 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		
 		//Extension point
 		addLeftExtras(leftPanel);
+		
+		
+		/*
+		 * Editor
+		 * 
+		 */
+		topicViewAndEditW = new TopicViewAndEditWidget(manager,this);		
+		leftPanel.add(topicViewAndEditW);
+		
 		
 		return leftPanel;
 	}
@@ -236,7 +249,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	public void save() {
 		
 		System.out.println("save() ");
-		String entryText = topicDetails.getEntryText();
+		String entryText = topicViewAndEditW.getEntryText();
 		System.out.println("Entry: "+entryText);
 		if(entryText != null){
 			topic.getLatestEntry().setData(entryText);

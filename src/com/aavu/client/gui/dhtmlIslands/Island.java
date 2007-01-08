@@ -165,9 +165,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		int width = (max_x + 1 - min_x) * my_spacing + Type.MAX_SIZE - my_spacing;
 		height = (max_y + 1 - min_y) * my_spacing + Type.MAX_SIZE - my_spacing;
 		
-		
-		//Magic # 11 is ~Coffee at 1.4em which == 68px 
-		if(tagStat.getTagName().length() * 11 > width){
+		System.out.println("Predicted Width "+getPredictedWidth());
+		if(getPredictedWidth() > width){
 			DOM.setStyleAttribute(getElement(), "width", tagStat.getTagName().length()+"em");	
 		}else{
 			DOM.setStyleAttribute(getElement(), "width", width+"px");	
@@ -180,6 +179,16 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		System.out.println("Island width: "+width+" height "+height);
 	}
 
+	/*
+	 * 114px == 'Entrepreneurship at font .8, 16 chars
+	 * (114/.8) = 142
+	 * 142/16 = 9
+	 * 
+	 *  (chars * 9) * fontSize
+	 */
+	private int getPredictedWidth(){
+		return (int) (tagStat.getTagName().length() * 9 * banner.getFontFor(tagStat.getNumberOfTopics()));
+	}
 
 
 	public int getLeft() {
@@ -315,8 +324,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		add(banner,0,height/2);
 
 		//need to re-loop after all the min/maxes are set
-		//		
-		doIslandType(0);
+		//				
+		//doIslandType(0);		
 		doIslandType(1);
 		doIslandType(2);
 		

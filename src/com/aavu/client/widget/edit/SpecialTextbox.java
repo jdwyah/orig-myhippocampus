@@ -13,14 +13,17 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SpecialTextbox extends Composite implements KeyCodeEventListener, ClickListener {
+public class SpecialTextbox extends Composite implements KeyCodeEventListener, ClickListener, SourcesChangeEvents {
 
 	/**
 	 * no I'm not kidding. 92 is "|" on IE & FF, but ctrl-Pipe is 28 on IE. I dunno.
@@ -38,13 +41,14 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 	private TopicCache topicCache;
 
+	private ChangeListenerCollection listeners;
 
 	public SpecialTextbox(TopicCache topicC){
 		super();
 		this.topicCache = topicC;
 
 		textArea = new HippoEditor(this);
-		textArea.setKeyEventlistener(this);
+		textArea.setKeyEventlistener(this);		
 
 		HorizontalPanel mainPanel = new HorizontalPanel();		
 
@@ -73,7 +77,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 		completePopup = new ModablePopupPanel(true);		
 		completePopup.setPopupPosition(300,300);
-		completePopup.addStyleName("PopWindow");
+		completePopup.addStyleName("H-PopLinkWindow");
 
 		HorizontalPanel completePanel = new HorizontalPanel();
 		completePanel.add(completer);
@@ -92,9 +96,12 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 
 
-	public void keyCodeEvent(int i) {
-		if(i == KEY_PIPE_FF || i == KEY_PIPE_IE){
+	public void keyCodeEvent(int i,boolean ctrl) {
+		if(ctrl && (i == KEY_PIPE_FF || i == KEY_PIPE_IE)){
 			openLinkDialog();			
+		}
+		if(listeners != null){
+			listeners.fireChange(this);
 		}
 	}
 
@@ -171,6 +178,25 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 				completer.setFocus(true);		
 			}});
 
+	}
+
+
+
+
+	public void addChangeListener(ChangeListener listener) {
+		if(listeners == null){
+			listeners = new ChangeListenerCollection();
+		}
+		listeners.add(listener);
+	}
+
+
+
+
+	public void removeChangeListener(ChangeListener listener) {
+		if(listeners != null){
+			listeners.remove(listener);
+		}		
 	}
 
 }

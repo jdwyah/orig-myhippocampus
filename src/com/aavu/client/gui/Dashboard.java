@@ -88,6 +88,14 @@ public class Dashboard extends SimplePanel {
 				Window.open(HippoTest.getRelativeURL("/site/j_acegi_logout"),"logout","");						
 			}});
 		
+		ImageButton glossaryButton = new ImageButton(_manager.myConstants.glossary_image(),64,45);
+		glossaryButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.showGlossary();
+			}});
+		glossaryButton.addMouseListener(new TooltipListener(0,-20,_manager.myConstants.glossary_tooltip()));
+		
+		
 		
 		mainPanel.add(addNewButton);
 		mainPanel.add(addNewIslandButton);
@@ -96,7 +104,10 @@ public class Dashboard extends SimplePanel {
 		mainPanel.add(timeLine);
 //		mainPanel.add(addDeliciousTags);		
 		
+		mainPanel.add(glossaryButton);
+		
 		mainPanel.add(logoutB);
+		
 		
 		//mainPanel.add(facebookB);
 				

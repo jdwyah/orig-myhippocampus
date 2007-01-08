@@ -9,15 +9,17 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicEditWidget extends Composite {
+public class TopicEditWidget extends Composite implements SourcesChangeEvents {
 		
 	private SpecialTextbox textArea = null;
 
@@ -37,6 +39,7 @@ public class TopicEditWidget extends Composite {
 		System.out.println("topic edit widg "+topic);
 		
 		textArea = new SpecialTextbox(manager.getTopicCache());
+		
 				
 		//tagBoard = new TagBoard(manager);
 		//subjectBoard = new SubjectBoard(manager,titleBox,tagBoard);
@@ -66,6 +69,18 @@ public class TopicEditWidget extends Composite {
 	
 	public String getCurrentText(){
 		return textArea.getText();
+	}
+
+
+
+	public void addChangeListener(ChangeListener listener) {
+		textArea.addChangeListener(listener);
+	}
+
+
+
+	public void removeChangeListener(ChangeListener listener) {
+		textArea.removeChangeListener(listener);
 	}
 
 

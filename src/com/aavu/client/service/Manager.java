@@ -12,6 +12,8 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.gui.Glossary;
+import com.aavu.client.gui.GlossaryWindow;
 import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.NewTagNameWindow;
@@ -21,6 +23,7 @@ import com.aavu.client.gui.TagEditorWindow;
 import com.aavu.client.gui.IslandDetailsWindow;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.TopicWindow;
+import com.aavu.client.gui.ext.Orientation;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
@@ -44,7 +47,8 @@ public class Manager implements TopicSaveListener {
 	
 	private FramesManager framesManager;
 	private TagLocalService tagLocalService;
-	private MainMap mainMap; 
+	private MainMap mainMap;
+	private Glossary glossary; 
 
 	public Manager(HippoCache hippoCache){
 		this.hippoCache = hippoCache;
@@ -108,6 +112,13 @@ public class Manager implements TopicSaveListener {
 			
 		});
 						
+	}
+	public void showGlossary() {
+		if(glossary == null){
+			glossary = new Glossary(this,Orientation.HORIZONTAL);
+			glossary.load();
+		}
+		GlossaryWindow gw = new GlossaryWindow(glossary,newFrame());
 	}
 
 	public void showTagBoard() {
@@ -345,6 +356,7 @@ public class Manager implements TopicSaveListener {
 		});
 	}
 	
+		
 
 
 }

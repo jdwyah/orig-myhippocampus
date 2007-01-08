@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class IslandDetailsWindow extends TopicTagSuperWindow {
 
-	public static final int WIDTH = 700;
+	public static final int WIDTH = 900;
 	public static final int HEIGHT = 500;	
 
 	private TopicIdentifier[] topics;

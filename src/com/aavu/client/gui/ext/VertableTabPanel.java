@@ -63,8 +63,6 @@ import com.google.gwt.user.client.ui.WidgetCollection;
 public class VertableTabPanel extends Composite implements TabListener,
 SourcesTabEvents, HasWidgets, IndexedPanel {
 
-	public static final int HORIZONTAL = 0;
-	public static final int VERTICAL = 1;
 
 	private WidgetCollection children = new WidgetCollection(this);
 	private DeckPanel deck = new DeckPanel();
@@ -77,18 +75,18 @@ SourcesTabEvents, HasWidgets, IndexedPanel {
 	 * Creates an empty tab panel.
 	 */
 	public VertableTabPanel() {
-		this(HORIZONTAL);
+		this(Orientation.HORIZONTAL);
 	}
-	public VertableTabPanel(int alignment) {
+	public VertableTabPanel(Orientation orient) {
 		CellPanel panel = null;  
 		
-		if(alignment == HORIZONTAL){
+		if(orient == Orientation.HORIZONTAL){
 			panel = new VerticalPanel();			
 		}else{
 			panel = new HorizontalPanel();
 		}
 
-		vertableTabBar = new VertableTabBar(alignment);
+		vertableTabBar = new VertableTabBar(orient);
 		
 		deckWrapper.add(deck);
 		

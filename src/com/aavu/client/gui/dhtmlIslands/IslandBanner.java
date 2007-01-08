@@ -48,7 +48,7 @@ public class IslandBanner extends AbsolutePanel{
 		
 	}
 
-	private double getFontFor(int size) {	
+	public double getFontFor(int size) {	
 		if(size <= 0 ){
 			size = 1;
 		}

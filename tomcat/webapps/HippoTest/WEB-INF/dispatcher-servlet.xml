@@ -20,7 +20,7 @@
 	</bean>
 	<bean id="addLinkController" class="com.aavu.server.web.controllers.AddLinkController">
 		<property name="formView" value="secure/addLink" />
-		<property name="successView" value="index" />
+		<property name="successView" value="closeWindow" />
 		<property name="userService" ref="userService" />
 		<property name="topicService" ref="topicService" />
 	</bean>

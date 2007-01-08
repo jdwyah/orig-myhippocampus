@@ -11,86 +11,71 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicViewAndEditWidget extends Composite implements ClickListener{
+public class TopicViewAndEditWidget extends Composite implements ClickListener, ChangeListener{
 	
-	
-	private Button editTextButton;
-	private Button cancelButton;	
-	private Button previewButton;
 	
 	private TopicWidget topicWidget;
 	private TopicEditWidget topicEditWidget;
 
 	private VerticalPanel topicPanel;
-	private VerticalPanel lp;
-	
+		
 	public Topic topic;
 	private Manager manager;
 	private SaveNeededListener saveNeeded;
 	
 	
-	//TODO fix window null
 	public TopicViewAndEditWidget(Manager manager, SaveNeededListener saveNeeded) {
 		this.saveNeeded = saveNeeded;
 		this.manager = manager;
 		
-		editTextButton = new Button(manager.myConstants.topic_edit());
-		cancelButton = new Button(manager.myConstants.topic_cancel());	
-		previewButton = new Button(manager.myConstants.topic_preview());
+		
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		
-		lp = new VerticalPanel();
-		
 		topicPanel = new VerticalPanel();
 		
-		cancelButton.addClickListener(this);
-		editTextButton.addClickListener(this);
-		previewButton.addClickListener(this);
-		
-		mainPanel.add(lp);
-		mainPanel.add(topicPanel);
+		mainPanel.add(topicPanel);		
 		
 		
 		initWidget(mainPanel);
+		setStyleName("H-ViewEdit");
 	}	
 	
 	
 	public void load(Topic topic){
 		this.topic = topic;
 		topicWidget = new TopicWidget(manager,topic);
+		topicWidget.addClickListener(this);
+		topicWidget.addMouseListener(new MouseListenerAdapter(){
+			public void onMouseEnter(Widget sender) {
+				Effect.highlight(topicWidget);	
+			}});
+		
 		topicEditWidget = new TopicEditWidget(this,manager,topic);
+		topicEditWidget.addChangeListener(this);
 		
 		activateMainView();
 		System.out.println("############################## "+topic.getTitle());
 		
 		
-		Effect.highlight(topicPanel);
+		Effect.highlight(topicWidget);
 	}
 		
 	
 
 	public void onClick(Widget source){
-		if (source == cancelButton){
-			activateMainView();
-		}
-		else if (source == editTextButton){
+		if (source == topicWidget){			
 			activateEditView();
-		}
-		else if (source == previewButton){
-
-			saveNeeded.onChange(this);
-			topicWidget.setText(getEditEntryText());
-			activateMainView();
-		}
-		
-		
+		}				
 	}
 	
 
@@ -100,20 +85,13 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 		topicPanel.clear();
 		topicPanel.add(topicWidget);				
 
-		lp.clear();
-		lp.add(editTextButton);
-		
 	}
 	
 	public void activateEditView() {
 		
 		topicPanel.clear();
 		topicPanel.add(topicEditWidget);				
-				
-		lp.clear();
-		lp.add(previewButton);
-		lp.add(cancelButton);		
-		
+						
 	}
 
 	public Entry getEntry(){
@@ -125,6 +103,11 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener{
 
 	private String getEditEntryText() {
 		return topicEditWidget.getCurrentText();
+	}
+
+
+	public void onChange(Widget sender) {
+		saveNeeded.onChange(this);
 	}
 	
 	

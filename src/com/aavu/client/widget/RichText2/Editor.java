@@ -499,9 +499,9 @@ public class Editor extends Composite /* implements HasHTML*/{
 	 * 
 	 * @param i
 	 */
-	private void keyEvent(int i){
+	private void keyEvent(int i,boolean ctrl){
 		if(listener != null){
-			listener.keyCodeEvent(i);
+			listener.keyCodeEvent(i,ctrl);
 		}
 	}
 	private void muppet(int i){
@@ -525,9 +525,9 @@ public class Editor extends Composite /* implements HasHTML*/{
 		var code = arg.which ? arg.which : arg.keyCode;
 //		alert("ev code: "+code);		
 		
-		if(arg.ctrlKey){											    	                															    	
-    		callBackTarget.@com.aavu.client.widget.RichText2.Editor::keyEvent(I)(code);    		
-    	}
+		//if(arg.ctrlKey){											    	                															    	
+    		callBackTarget.@com.aavu.client.widget.RichText2.Editor::keyEvent(IZ)(code,arg.ctrlKey);    		
+    	//}
     };
     var muppet = function(arg){    		
 		var code = 1;															    	                															    	

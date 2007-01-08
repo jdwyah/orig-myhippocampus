@@ -12,7 +12,7 @@ public class HippoEditor extends Editor {
 	public HippoEditor(ClickListener linkClickListener){
 		super();
 		this.linkClickListener = linkClickListener;
-		setTextSize((TopicWindow.WIDTH - 50)+"px", "400px");
+		setTextSize((TopicWindow.WIDTH - 120)+"px", "400px");
 	}
 
 	//@Override

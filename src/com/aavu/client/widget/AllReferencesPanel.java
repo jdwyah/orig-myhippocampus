@@ -47,7 +47,7 @@ public class AllReferencesPanel extends Composite {
 		mainPanel.add(seeAlsoBoard,Manager.myConstants.seeAlsosN(0));				
 		
 		
-		mainPanel.add(refPanel,Manager.myConstants.referencesN(0));
+		mainPanel.add(refPanel,Manager.myConstants.referencesToN(0));
 		
 		
 		linkDisplayW = new LinkDisplayWidget(manager,saveNeeded);

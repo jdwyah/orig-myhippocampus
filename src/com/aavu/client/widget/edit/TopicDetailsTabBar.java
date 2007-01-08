@@ -14,19 +14,17 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TopicDetailsTabBar extends UpdateableTabPanel {
 
-	private TopicViewAndEditWidget topicViewAndEditW;
+	
 	
 	private UploadBoard uploadBoard;
-	private MindMapBoard mindMapBoard;
+	//private MindMapBoard mindMapBoard;
 	private AllReferencesPanel referencesPanel;
 	
 
 	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded,PopupWindow popWindow){
 		
 		
-		topicViewAndEditW = new TopicViewAndEditWidget(manager,saveNeeded);		
-		add(topicViewAndEditW,Manager.myConstants.entry());
-		
+	
 		referencesPanel = new AllReferencesPanel(manager,saveNeeded,popWindow);
 		add(referencesPanel,Manager.myConstants.references());		
 		
@@ -34,36 +32,24 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 		uploadBoard = new UploadBoard(manager,saveNeeded);		
 		add(uploadBoard,Manager.myConstants.filesN(0));		
 		
-		mindMapBoard = new MindMapBoard(manager,saveNeeded);
-		add(mindMapBoard,Manager.myConstants.mapperTitle());
-		
+//		mindMapBoard = new MindMapBoard(manager,saveNeeded);
+//		add(mindMapBoard,Manager.myConstants.mapperTitle());
+//		
 		
 	}
 
 	public void load(Topic topic) {
-		
-		boolean selected = false;
 				
-		topicViewAndEditW.load(topic);
-		if(!selected && !topicViewAndEditW.getEntry().isEmpty()){
-			System.out.println("SELEC ENTRY");
-			selectTab(getWidgetIndex(topicViewAndEditW));
-			selected = true;
-		}else{
-			selectTab(getWidgetIndex(referencesPanel));
-		}
+		selectTab(getWidgetIndex(referencesPanel));
+
 			
 		uploadBoard.load(topic);
 		updateTitle(uploadBoard,Manager.myConstants.filesN(uploadBoard.getSize()));		
 		
-		mindMapBoard.load(topic);
+		//mindMapBoard.load(topic);
 		
 		referencesPanel.load(topic,this);
 		
-	}
-
-	public String getEntryText() {
-		return topicViewAndEditW.getEntryText();
 	}
 
 

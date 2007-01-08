@@ -39,6 +39,7 @@ public interface Consts extends Messages {
 	String magazine();
 	String references();
 	String referencesN(int size);
+	String referencesToN(int size);
 	String references_none();
 	
 	String wiki();
@@ -51,6 +52,7 @@ public interface Consts extends Messages {
 	String search();
 	String searchResultsTitle();
 	String searchScore();
+	String searchResultsN(int i);
 	String searchCallback();
 	String searchResultsNone();	
 	
@@ -116,6 +118,10 @@ public interface Consts extends Messages {
 	String save_async();
 	
 	String clouds_src();
+	String glossary_image();
+	String glossary_tooltip();
+	String glossary();
+		
 	
 	
 	

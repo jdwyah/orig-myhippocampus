@@ -61,8 +61,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		this.topic = topic;
 
 		setup();
-
-		Effect.highlight(panel);
+		
 	}
 
 	public void setup(){

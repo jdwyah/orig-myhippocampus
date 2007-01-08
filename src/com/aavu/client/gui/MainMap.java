@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class MainMap extends Composite {
 
-	private Sidebar sideBar;	
+	//private Sidebar sideBar;	
 	private Manager manager;
 	//private TagSearch tagSearch;	
 	private Ocean ocean;
@@ -26,7 +26,7 @@ public class MainMap extends Composite {
 		
 		MultiDivPanel mainP = new MultiDivPanel();	
 
-		sideBar = new Sidebar(manager);
+		//sideBar = new Sidebar(manager);
 		
 		//TODO cleanout remove TagSearch class, css deadwood
 		//tagSearch = new TagSearch(manager);
@@ -41,7 +41,7 @@ public class MainMap extends Composite {
 		mainP.add(new CompassRose(manager));
 		mainP.add(ocean.getWidget());
 				
-		mainP.add(sideBar);
+		//mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
 		mainP.add(statusPanel);
 		
@@ -60,7 +60,7 @@ public class MainMap extends Composite {
 	 *
 	 */
 	public void load(){
-		sideBar.load();
+		//sideBar.load();
 		ocean.load();
 	}
 
@@ -76,11 +76,12 @@ public class MainMap extends Composite {
 	}
 
 	public void updateSidebar() {
-		sideBar.load();
+		//sideBar.load();
 	}
 	public void updateSidebar(Topic t) {
-		sideBar.load(t);
+		//sideBar.load(t);
 	}
+	
 	//TODO shouldn't need null checks, but we do.
 	public void updateStatusWindow(int id, String string, StatusCode statusCode) {
 		if(statusPanel != null){

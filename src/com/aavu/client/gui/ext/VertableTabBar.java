@@ -55,16 +55,16 @@ ClickListener, MouseListener {
 	private CellPanel panel;
 	private Widget selectedTab;
 	private TabListenerCollection tabListeners;
-	private int alignment;
+	private Orientation alignment;
 	private CellPanelWithMethods cellPanelWithMethods;
 	/**
 	 * Creates an empty tab bar.
-	 * @param alignment 
+	 * @param orient 
 	 */
-	public VertableTabBar(int alignment) {
-		this.alignment = alignment;
+	public VertableTabBar(Orientation orient) {
+		this.alignment = orient;
 		
-		if(alignment == VertableTabPanel.HORIZONTAL){
+		if(orient == Orientation.HORIZONTAL){
 			panel = new HorizontalPanel();
 			((HorizontalPanel)panel).setVerticalAlignment(HorizontalPanel.ALIGN_BOTTOM);
 		}else{
@@ -102,28 +102,28 @@ ClickListener, MouseListener {
 		}
 
 		public Widget getWidget(int i) {
-			if(alignment == VertableTabPanel.HORIZONTAL)
+			if(alignment == Orientation.HORIZONTAL)
 				return ((HorizontalPanel)panel).getWidget(i);
 			else
 				return ((VerticalPanel)panel).getWidget(i);
 		}
 
 		public int getWidgetCount() {
-			if(alignment == VertableTabPanel.HORIZONTAL)
+			if(alignment == Orientation.HORIZONTAL)
 				return ((HorizontalPanel)panel).getWidgetCount();
 			else
 				return ((VerticalPanel)panel).getWidgetCount();
 		}
 
 		public void insert(Label item, int i) {
-			if(alignment == VertableTabPanel.HORIZONTAL)
+			if(alignment == Orientation.HORIZONTAL)
 				((HorizontalPanel)panel).insert(item, i);
 			else
 				((VerticalPanel)panel).insert(item, i);
 		}
 
 		public int getWidgetIndex(Widget selectedTab) {
-			if(alignment == VertableTabPanel.HORIZONTAL)
+			if(alignment == Orientation.HORIZONTAL)
 				return ((HorizontalPanel)panel).getWidgetIndex(selectedTab);
 			else
 				return ((VerticalPanel)panel).getWidgetIndex(selectedTab);
