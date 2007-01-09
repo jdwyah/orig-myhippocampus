@@ -75,7 +75,7 @@ public class Glossary extends FocusPanel {
 	public void load(Topic t) {
 		load();
 	}
-	public void load(){
+	public void load(){		
 		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
 
 			public void onSuccess(Object result) {

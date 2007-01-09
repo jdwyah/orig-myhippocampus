@@ -94,6 +94,8 @@ public class FileUploadController extends SimpleFormController {
     		metaMap.put("content-type", type);
     		s3object.metadata = metaMap;
     		
+    		log.debug("Put with type: "+bean.getFile().getContentType());
+    		
     		Response awsResp = awsConnection.put(awsConnection.getDefaultBucket(), key, s3object, null);
     		if(awsResp.connection.getResponseCode() != HttpURLConnection.HTTP_OK){
     			log.error("File Upload failure "+awsResp);
@@ -105,7 +107,7 @@ public class FileUploadController extends SimpleFormController {
     		log.debug("Found: "+listresp.entries.size());
     		for (Iterator iter = listresp.entries.iterator(); iter.hasNext();) {
     			ListEntry element = (ListEntry) iter.next();
-				log.debug("f: "+element.key+" "+element.size);
+				log.debug("f: "+element.key+" Size: "+element.size+" ");
 			}
 
     		return new ModelAndView(getSuccessView(),"string",key);    		

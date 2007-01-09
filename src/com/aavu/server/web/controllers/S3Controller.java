@@ -39,6 +39,9 @@ public class S3Controller extends AbstractController {
 	protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String key = request.getParameter("key");
+		if(null == key ){ 
+			throw new HippoBusinessException("No Key");
+		}
 		
 		User u = userService.getCurrentUser();
 		
@@ -55,8 +58,10 @@ public class S3Controller extends AbstractController {
 			List l = (List) awsResponse.object.metadata.get("content-type");
 			contentType = (String) l.get(0);
 		}catch(Exception e){
-			log.debug("Fail "+e+" trying with text/plain");
+			log.warn("Fail "+e+" trying with text/plain");
 		}
+		
+		log.debug("Returning contentType "+contentType);
 		
 		byte[] content = file.data;
 				

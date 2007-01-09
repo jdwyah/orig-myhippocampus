@@ -98,7 +98,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 		return topic.getLatestEntry();
 	}
 	public String getEntryText(){		
-		return topicWidget.getText();
+		return getEditEntryText();
 	}
 
 	private String getEditEntryText() {

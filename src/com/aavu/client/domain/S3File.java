@@ -8,11 +8,25 @@ public class S3File extends URI implements Serializable,IsSerializable {
 	
 	public S3File(){}
 		
-	public S3File(User user, String filename, String s3postfix, String notes) {
+	public S3File(User user, String filename, String s3postfix) {
 		setUser(user);
-		setTitle(filename);
+		
 		setUri(s3postfix);
-		setData(notes);
+		
+		/*
+		 * parse out just the file name, (no path)
+		 */
+		String title = filename;
+		int i = filename.lastIndexOf('\\');
+		if(i != -1){
+			title = filename.substring(i+1);
+		}		
+		setTitle(title);
+		
+		/*
+		 * store path & name in data
+		 */
+		setData(filename);
 	}
 
 }

@@ -99,7 +99,7 @@ public class TopicCache {
 	 * 
 	 * @param callback
 	 */
-	public void getAllTopicIdentifiers(final StdAsyncCallback callback) {
+	public void getAllTopicIdentifiers(final AsyncCallback callback) {
 		if(!topicIdentifiersDirty){
 			callback.onSuccess(topicIdentifiers.getKeyList());			
 		} else {
@@ -277,33 +277,57 @@ public class TopicCache {
 	 * NOTE: this relies on the topicIdentifiers list being a correctly sorted list, otherwise
 	 * binary search won't work.
 	 *  
+	 * Since it's possible that we'll need to init the TopicIdentifiers list first, create our own callback 
+	 * to wrap the functionality.
+	 *  
 	 * @param linkTo
 	 * @param callback
 	 */
 	public void getTopicIdentForNameOrCreateNew(String linkTo, final StdAsyncCallback callback) {
 
-		//TODO replace with lookup in topicIdentifiers, since we don't really need a topic
-		//obj here, just a TopicIdentifier
-		//
+		TopicLookupOrNewCallback ourCall = new TopicLookupOrNewCallback(callback,linkTo);
 		
-		TopicIdentifier found = CacheUtils.searchTopics(topicIdentifiers,linkTo);
-				
-		if(found != null){
-			System.out.println("Found "+found);
-			callback.onSuccess(found);			
+		if(topicIdentifiersDirty){
+			getAllTopicIdentifiers(ourCall);
+		}else{
+			ourCall.onSuccess(null);
+		}		
+	}
+	/**
+	 * This callback expects to be onSuccessed once the topicIdentifiers have been loaded 
+	 */
+	private class TopicLookupOrNewCallback implements AsyncCallback {
+
+		private AsyncCallback originalCallback;
+		private String linkTo;
+
+		public TopicLookupOrNewCallback(AsyncCallback originalCallback,String linkTo) {
+			this.originalCallback = originalCallback;
+			this.linkTo = linkTo;
 		}
-		else{
-			System.out.println("Create New! ");
-			Topic toSave = new Topic();
-			toSave.setTitle(linkTo);
-			save(toSave, new AsyncCallback(){
-				public void onSuccess(Object result) {
-					Topic[] saved = (Topic[]) result;
-					callback.onSuccess(saved[0].getIdentifier());
-				}
-				public void onFailure(Throwable caught) {
-					callback.onFailure(caught);
-				}});
+		public void onFailure(Throwable caught) {					
+			originalCallback.onFailure(caught);
+		}
+		public void onSuccess(Object result) {
+			TopicIdentifier found = CacheUtils.searchTopics(topicIdentifiers,linkTo);
+			
+			if(found != null){
+				System.out.println("Found "+found);
+				originalCallback.onSuccess(found);			
+			}
+			else{
+				System.out.println("Create New! ");
+				Topic toSave = new Topic();
+				toSave.setTitle(linkTo);
+				save(toSave, new AsyncCallback(){
+					public void onSuccess(Object result) {
+						Topic[] saved = (Topic[]) result;
+						originalCallback.onSuccess(saved[0].getIdentifier());
+					}
+					public void onFailure(Throwable caught) {
+						originalCallback.onFailure(caught);
+					}});
+			}
 		}
 		
 	}

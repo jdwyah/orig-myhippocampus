@@ -7,6 +7,7 @@ import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
+import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -32,6 +33,8 @@ public class UploadBoard extends Composite {
 	}
 	
 	public void load(final Topic topic) {
+		
+		mainPanel.clear();
 		
 		HorizontalPanel rowOne = new HorizontalPanel();
 		
@@ -68,7 +71,8 @@ public class UploadBoard extends Composite {
 	
 	public void addS3File(S3File file){
 		
-		mainPanel.add(new Label(file.getTitle()));
+		
+		mainPanel.add(new ExternalLink(file));
 	}
 	public int getSize() {
 		return size;

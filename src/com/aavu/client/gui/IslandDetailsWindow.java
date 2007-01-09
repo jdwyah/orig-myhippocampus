@@ -8,6 +8,7 @@ import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.TopicLink;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -70,7 +71,8 @@ public class IslandDetailsWindow extends TopicTagSuperWindow {
 			for (int i = 0; i < topics.length; i++) {
 				TopicIdentifier topic = topics[i];
 				
-				leftSideExtra.add(new TopicPreviewLink(manager,topic,previewPop));
+				leftSideExtra.add(new TopicLink(topic,this));
+				//leftSideExtra.add(new TopicPreviewLink(manager,topic,previewPop));
 			}
 		}
 		panel.add(leftSideExtra);

@@ -70,17 +70,26 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		setText(entry.getData());
 
 		panel.clear();
+
+		panel.add(textPanel);
+		
+		/*
+		 * shouldn't need the else, but if they enter just a <BR> then there's 
+		 * no place to click to edit.
+		 */
 		if(entry.isEmpty()){
 			panel.add(new Label(Manager.myConstants.topic_blank()));
+		}else{
+			panel.add(new Label(Manager.myConstants.topic_edit()));
 		}
-		panel.add(textPanel);		
 
 	}
 
 	public void setText(String data){
 		this.data = data;
 		textPanel.clear();		
-		textPanel.add(new TextDisplay(data));	
+		textPanel.add(new TextDisplay(data));
+		
 	}
 
 	public String getText() {
