@@ -39,8 +39,10 @@
 	<class name="Entry" alias="Entry" extends="entity,userSecured">
 		<!-- Highlighter performance -> position_offsets -->
 		<!-- http://forums.opensymphony.com/thread.jspa?messageID=93583&#93583 -->
-		<property name="data" managed-id="false"><!--  converter="html" -->
-			<meta-data converter="html" analyzer="html" term-vector="positions_offsets">${hippo.text}</meta-data>
+		<property name="data" managed-id="false"><!-- converter="html" -->
+
+  			<meta-data converter="html" term-vector="positions_offsets">${hippo.text}</meta-data>
+  			<!-- <meta-data converter="html" analyzer="html" term-vector="positions_offsets">${hippo.text}</meta-data> -->
 		</property>
 
 	</class>

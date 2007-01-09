@@ -11,6 +11,13 @@ import org.compass.core.converter.ConversionException;
 
 import com.aavu.server.lucene.util.html.HTMLParser;
 
+/**
+ * NOTE: Unused. Created during some confusion over the role of compass Converters vs Analyzers
+ * 
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class HTMLAnalyzer extends StandardAnalyzer {
 	private static final Logger log = Logger.getLogger(HTMLAnalyzer.class);
 		
@@ -20,15 +27,15 @@ public class HTMLAnalyzer extends StandardAnalyzer {
 		if(log.isDebugEnabled()){
 			TokenStream ts = super.tokenStream(name, htmlReaderFromReader(reader));
 			Token t;
-//			if(log.isDebugEnabled()){
-//				try {
-//					while((t = ts.next()) != null){
-//						log.debug("token: "+t);
-//					}
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
+			if(log.isDebugEnabled()){
+				try {
+					while((t = ts.next()) != null){
+						log.debug("token: "+t);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		return super.tokenStream(name,htmlReaderFromReader(reader));

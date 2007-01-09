@@ -28,8 +28,25 @@ public class HTMLConverter extends AbstractBasicConverter {
 				sb.append(thisLine);
 			} // end while 
 			
-			System.out.println("CONVERT "+htmlString);
-			System.out.println("TOOOOOO "+sb.toString());
+			return sb.toString();			
+		} catch (IOException e) {
+			throw new ConversionException(e.getMessage());
+		}
+	}
+
+	@Override
+	public String toString(Object o, ResourcePropertyMapping resourcePropertyMapping) {
+		StringReader reader = new StringReader((String) o);
+		HTMLParser parser = new HTMLParser(reader);
+
+		StringBuilder sb = new StringBuilder();
+		String thisLine;
+		try {
+			BufferedReader parsedReader = new BufferedReader(parser.getReader());
+			while ((thisLine = parsedReader.readLine()) != null) { // while loop begins here
+				sb.append(thisLine);
+			} // end while 
+			
 			return sb.toString();			
 		} catch (IOException e) {
 			throw new ConversionException(e.getMessage());

@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.compass.gps.device.hibernate.Hibernate3GpsDevice;
@@ -54,22 +55,35 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 	public void testEZ() {
 
 		List<SearchResult> rtn = null;//
-//		rtn = searchService.search("Coffee");
-//		
+		rtn = searchService.search("Coffee");
+		assertEquals(2, rtn.size());
+		
 //		rtn = searchService.search("Shah");
 //
-//		rtn = searchService.search("tom");
-//
+		rtn = searchService.search("tom");
+		assertEquals(2, rtn.size());
+		
 //		rtn = searchService.search("full");
 
 		//it is currently searching 
 		rtn = searchService.search("contentEditable=true");
+		assertEquals(0, rtn.size());
 
-//		rtn = searchService.search("body");
-//
-//		rtn = searchService.search("crack second");
+		rtn = searchService.search("body");
+		//dbg("body",rtn);		
+		assertEquals(2, rtn.size());
+		
+		rtn = searchService.search("crack second");
+		assertEquals(1, rtn.size());
 	}
 	
+	private void dbg(String string, List<SearchResult> rtn) {
+		System.out.println("\n\n---------"+string+"-------");
+		for (SearchResult result : rtn) {
+			System.out.println("rtn "+result);
+		}
+		System.out.println("----------------");
+	}
 	public void testSearch() throws HippoBusinessException, InterruptedException{
 		
 		searchService.indexNow();
