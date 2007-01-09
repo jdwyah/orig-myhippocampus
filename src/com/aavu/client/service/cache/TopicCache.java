@@ -34,6 +34,7 @@ public class TopicCache {
 	private GWTSortedMap topicIdentifiers = new GWTSortedMap();
 	
 	private List saveListeners = new ArrayList();
+	private boolean topicIdentifiersDirty = true;
 	
 
 	public TopicCache(GWTTopicServiceAsync topicService) {
@@ -99,7 +100,7 @@ public class TopicCache {
 	 * @param callback
 	 */
 	public void getAllTopicIdentifiers(final StdAsyncCallback callback) {
-		if(topicIdentifiers.size() != 0){
+		if(!topicIdentifiersDirty){
 			callback.onSuccess(topicIdentifiers.getKeyList());			
 		} else {
 			topicService.getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
@@ -112,7 +113,8 @@ public class TopicCache {
 						System.out.println("adding! "+i+" id:"+topicIdents[i].getTopicID()+" "+topicIdents[i].getTopicTitle());
 						topicIdentifiers.put(topicIdents[i],null);						
 					}					
-					callback.onSuccess(topicIdentifiers.getKeyList());
+					topicIdentifiersDirty = false;
+					callback.onSuccess(topicIdentifiers.getKeyList());					
 				}
 				public void onFailure(Throwable caught) {
 					callback.onFailure(caught);

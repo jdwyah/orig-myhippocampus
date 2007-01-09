@@ -114,7 +114,7 @@ public class Manager implements TopicSaveListener {
 						
 	}
 	public void showGlossary() {
-		if(glossary == null){
+		if(glossary == null || glossary.isDirty()){
 			glossary = new Glossary(this,Orientation.HORIZONTAL);
 			glossary.load();
 		}

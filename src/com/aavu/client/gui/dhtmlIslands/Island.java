@@ -165,9 +165,10 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		int width = (max_x + 1 - min_x) * my_spacing + Type.MAX_SIZE - my_spacing;
 		height = (max_y + 1 - min_y) * my_spacing + Type.MAX_SIZE - my_spacing;
 		
-		System.out.println("Predicted Width "+getPredictedWidth());
-		if(getPredictedWidth() > width){
-			DOM.setStyleAttribute(getElement(), "width", tagStat.getTagName().length()+"em");	
+		int predicted = getPredictedWidth();
+		System.out.println("Predicted Width "+predicted);
+		if(predicted > width){
+			DOM.setStyleAttribute(getElement(), "width", predicted+"px");	
 		}else{
 			DOM.setStyleAttribute(getElement(), "width", width+"px");	
 		}
@@ -187,6 +188,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 *  (chars * 9) * fontSize
 	 */
 	private int getPredictedWidth(){
+		System.out.println("FP "+tagStat.getTagName().length() * 9);
+		System.out.println("SP: "+banner.getFontFor(tagStat.getNumberOfTopics()));
 		return (int) (tagStat.getTagName().length() * 9 * banner.getFontFor(tagStat.getNumberOfTopics()));
 	}
 

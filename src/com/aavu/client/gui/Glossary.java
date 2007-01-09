@@ -52,6 +52,7 @@ public class Glossary extends FocusPanel {
 
 	
 	protected VertableTabPanel tabPanel;
+	private boolean dirty = true;
 				
 	public Glossary(Manager manager,Orientation orient){
 		
@@ -81,6 +82,7 @@ public class Glossary extends FocusPanel {
 				super.onSuccess(result);
 				List topics = (List) result;
 				alphabetizeTopics(topics);
+				dirty = false;
 			}
 		});
 	}
@@ -161,6 +163,10 @@ public class Glossary extends FocusPanel {
 			tabPanel.add(vp,st+key.toString()+KEYEND,true);
 
 		}
+	}
+
+	public boolean isDirty() {
+		return dirty;
 	}
 
 

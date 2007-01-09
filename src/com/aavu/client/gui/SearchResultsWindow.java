@@ -33,11 +33,10 @@ public class SearchResultsWindow extends PopupWindow {
 		}
 		else{
 			mainPanel.add(new Label(Manager.myConstants.searchResultsN(searchRes.size())));
-			boolean odd = true;
+			
 			for (Iterator iter = searchRes.iterator(); iter.hasNext();) {
 				SearchResult result = (SearchResult) iter.next();
-				mainPanel.add(new SearchLink(manager,result,odd));
-				odd = !odd;
+				mainPanel.add(new SearchLink(manager,result));								
 			}			
 		}		
 		
@@ -49,15 +48,12 @@ public class SearchResultsWindow extends PopupWindow {
 
 		
 
-		public SearchLink(final Manager manager, final SearchResult result, boolean odd) {
+		public SearchLink(final Manager manager, final SearchResult result) {
 			VerticalPanel mainPanel = new VerticalPanel();
 			
 						
 			TopicLink tl = new TopicLink(result.getTopicIdentifier(),SearchResultsWindow.this);
 			tl.addStyleName("H-Title");
-			if(odd){
-				tl.addStyleName("H-Title-Alternate");
-			}
 			
 			mainPanel.addStyleName("H-SearchResults");
 			
