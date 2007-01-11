@@ -70,7 +70,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			System.out.println("cur_v "+cur_val);			
 			
 			if(cur_val.equals(metaValue)){
-				System.out.println("Were Equal, Moving on.");
+				System.out.println("Were Equal, Moving on. C: "+cur_val.getTitle()+" mv "+metaValue.getTitle());
 				return;
 			}else{
 				System.out.println("cur "+cur_val.getIdentifier());

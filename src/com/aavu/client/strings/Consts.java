@@ -9,7 +9,7 @@ public interface Consts extends Messages {
 	String tagContentsTitle(String tagName);
 	String endDuration();
 	String startDuration();
-	String timeline();
+	
 	String seeAlsos();
 	String seeAlsosN(int i);
 	String title();
@@ -92,7 +92,10 @@ public interface Consts extends Messages {
 	String island_create();
 	String topic_new_image();
 	String island_new_image();
+	
+	String timeline();
 	String timeline_image();
+	String timeline_no_objs_msg();
 	
 	String island_property();
 	String island_property_new();
@@ -126,6 +129,7 @@ public interface Consts extends Messages {
 	String meta_text();
 	String meta_date();
 	String meta_text_async_save();
+	
 	
 		
 	

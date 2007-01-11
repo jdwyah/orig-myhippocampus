@@ -23,7 +23,6 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 
 	private static final String TYPE = "Date";//BAD Manager.myConstants.meta_date();
 	
-	private transient Topic topic;
 	private transient HippoDate mv;
 	
 	private transient static TopicCache topicService;	
@@ -38,8 +37,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	}
 	
 	//@Override
-	public Widget getEditorWidget(final Topic topic, SaveNeededListener saveNeeded,Manager manager) {
-		this.topic = topic;
+	public Widget getEditorWidget(final Topic topic, final SaveNeededListener saveNeeded,Manager manager) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 				
@@ -93,7 +91,9 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 							public void onSuccess(Object result) {	
 								super.onSuccess(result);
 								Topic[] res = (Topic[]) result;
-								topic.addMetaValue(MetaDate.this, res[0]);
+								mv = (HippoDate) res[0];
+								topic.addMetaValue(MetaDate.this, mv);
+								saveNeeded.onChange(sender);
 							}});
 			    
 					}});

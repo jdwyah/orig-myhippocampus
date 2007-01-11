@@ -84,7 +84,7 @@ public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringCon
 			
 			log.debug("saved tag: "+selectedTag);
 			
-			return tagService.save(selectedTag);
+			return convert(tagService.save(selectedTag));
 			
 			
 		}  catch (Exception ex) {

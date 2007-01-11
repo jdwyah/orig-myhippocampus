@@ -2,8 +2,6 @@ package com.aavu.client;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaDate;
-import com.aavu.client.domain.User;
-import com.aavu.client.gui.MainMap;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.remote.GWTSubjectService;
@@ -15,15 +13,11 @@ import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.service.remote.GWTUserService;
 import com.aavu.client.service.remote.GWTUserServiceAsync;
 import com.aavu.client.util.Logger;
-import com.aavu.client.widget.browse.BrowseView;
 import com.aavu.client.widget.edit.TopicCompleter;
-import com.aavu.client.widget.tags.TagOrganizerView;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -186,8 +180,12 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		if(historyToken != EMPTY && manager != null){
 			manager.gotoTopic(historyToken);
 			
-			//huh... seems to be fine in IE, but FF fires a reload and the request fails.
-			//change to "-1"
+			/* huh... seems to be fine in IE, but FF fires a reload and the request fails.
+			 * change to "-1"
+			 * 
+			 * also if we open topic 193. then close the window. then open 193, it will think we've
+			 * already opened it. 		
+			 */
 			History.newItem(EMPTY);
 		}
 	  }
