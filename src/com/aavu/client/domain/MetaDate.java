@@ -6,9 +6,11 @@ import java.util.Date;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.datepicker.DateFormatter;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
+import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -19,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class MetaDate extends Meta implements IsSerializable,Serializable {
 
-	private static final String TYPE = "Date";
+	private static final String TYPE = "Date";//BAD Manager.myConstants.meta_date();
 	
 	private transient Topic topic;
 	private transient HippoDate mv;
@@ -34,28 +36,9 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	public String getType() {
 		return TYPE;
 	}
-
-	public Widget getWidget(Topic topic) {
-
-		HorizontalPanel widget = new HorizontalPanel();
-		Label label = new Label(getName());
-		
-		widget.add(label);
-		HippoDate mv = (HippoDate) topic.getSingleMetaValueFor(this);
-		if(mv != null){
-						
-			widget.add(new Label(" "+mv.getTitle()));	
-		}
-		else{
-			widget.add(new Label(""));
-		}
-		
-		
-		return widget;
-	}
 	
 	//@Override
-	public Widget getEditorWidget(final Topic topic) {
+	public Widget getEditorWidget(final Topic topic, SaveNeededListener saveNeeded,Manager manager) {
 		this.topic = topic;
 		
 		HorizontalPanel widget = new HorizontalPanel();
@@ -70,7 +53,10 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	    
 	    mv = (HippoDate) topic.getSingleMetaValueFor(this);
 	    
+	    System.out.println("MV was : "+mv);
+	    
 	    if(mv != null){
+	    	
 	    	
 	    	datePicker.setCurrentDate(mv.getDate());
 	    	
@@ -100,6 +86,8 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 						//mv.setData(val);
 												
 						//topicService.getTopicIdentForNameOrCreateNew(linkTo, callback)
+						
+						System.out.println("Go to Save MV "+mv.getId()+" "+mv.getDate());
 						
 						topicService.save(mv, new StdAsyncCallback("Meta Date Save"){
 							public void onSuccess(Object result) {	

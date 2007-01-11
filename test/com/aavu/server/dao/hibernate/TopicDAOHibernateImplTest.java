@@ -11,6 +11,7 @@ import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
@@ -125,7 +126,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Tag book = new Tag(u,D);		
 
+		MetaText ss = new MetaText();
 		MetaTopic author = new MetaTopic();
+		
 		author.setTitle(B);
 		author.setUser(u);
 		book.addMeta(author);

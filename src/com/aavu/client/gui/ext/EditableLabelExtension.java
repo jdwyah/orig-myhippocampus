@@ -57,6 +57,10 @@ import com.google.gwt.user.client.ui.Widget;
  * + made cancelLabelChange public [ref request id: 1518134]
  * + made originalText have default value of empty string [to support ref request id: 1518134] 
  * *End*
+ * 
+ * HIPPO NOTE
+ * Only difference wrt to the original is that ours has a "hover" listener & associated style change.
+ * 
  */
 public class EditableLabelExtension extends Composite implements HasWordWrap, HasText
 {

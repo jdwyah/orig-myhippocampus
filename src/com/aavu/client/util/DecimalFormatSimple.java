@@ -42,8 +42,8 @@ public class DecimalFormatSimple {
 		}
 		
 		if(d < 0){
-			if((int)Math.ceil(d) == 0){
-				return "-."+mantissa.toString().substring(3,3+decimals);
+			if((int)Math.ceil(d) == 0){				
+				return "-."+mantissa.toString().substring(3,(3+decimals < mantissa.toString().length())? 3+decimals : mantissa.toString().length());
 			}else{
 				return (int)Math.ceil(d)+"."+mantissa.toString().substring(3,3+decimals);
 			}

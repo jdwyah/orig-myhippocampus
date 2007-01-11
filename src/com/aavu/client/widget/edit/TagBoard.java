@@ -15,7 +15,6 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
-import com.aavu.client.widget.tags.SaveListener;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -41,7 +40,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 //	private Map metaMap = new HashMap();
 
 	private Topic cur_topic;
-	private List listeners = new ArrayList();
+
 	private TagCache tagCache;
 	private Manager manager;
 	
@@ -115,8 +114,6 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		
 		cur_topic = topic;
 		
-		listeners.clear();
-		
 		int rtnSize = 0;
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 			Tag tag = (Tag) iter.next();
@@ -184,30 +181,16 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
 			Meta element = (Meta) iter.next();
 			GWT.log("displayMetas", null);
-			if(element.needsSaveCallback()){
-				GWT.log("needs callback", null);
-				SaveListener w = (SaveListener) element.getEditorWidget(cur_topic);
-				tagPanel.add(w);
-				listeners.add(w);
-			}else{
-				Widget w = element.getEditorWidget(cur_topic);
-				tagPanel.add(w);
-			}
 		
+			Widget w = element.getEditorWidget(cur_topic,saveNeeded,manager);
+			tagPanel.add(w);
+
 		}
 
 	}
 
 	public void saveThingsNowEvent(StdAsyncCallback callback) {
-		GWT.log("savethingsnowevent",null);
-		System.out.println("save things now");
-		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
-			SaveListener listener = (SaveListener) iterator.next();		
-			System.out.println("dispatch to listener");
-			listener.saveNowEvent();
-			
-		}
-		System.out.println("returning");
+		
 		callback.onSuccess(tagsToSave);
 							
 	}

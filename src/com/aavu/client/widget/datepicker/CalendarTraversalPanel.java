@@ -105,7 +105,7 @@ public class CalendarTraversalPanel extends DockPanel implements ClickListener{
 	 * 
 	 * Displays the current month and year
 	 */
-	private void drawTitle(){
+	void drawTitle(){
 		redrawTitle();
 	}
 	

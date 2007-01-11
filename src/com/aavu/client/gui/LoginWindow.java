@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import com.aavu.client.HippoTest;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -105,11 +106,13 @@ public class LoginWindow extends PopupWindow {
 						-1 != event.getResults().indexOf("not successful")
 						||
 						-1 != event.getResults().indexOf("Bad credentials")
+						||
+						-1 != event.getResults().indexOf("404")
 				){
-					System.out.println("DO FAILURE");
+					Logger.log("Login Fail: "+event.getResults());
 					failure();
 				}else{
-					System.out.println("DO SUCC |"+event.getResults()+"|");
+					Logger.log("DO SUCC |"+event.getResults()+"|");
 					success();
 				}
 				
@@ -131,6 +134,8 @@ public class LoginWindow extends PopupWindow {
 			}
 		});
 
+		
+		
 		form.setWidget(panel);
 		
 		setCenteredContent(form);

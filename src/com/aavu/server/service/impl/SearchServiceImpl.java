@@ -22,10 +22,12 @@ import org.compass.core.CompassSession;
 import org.compass.core.CompassTemplate;
 import org.compass.core.CompassQueryBuilder.CompassBooleanQueryBuilder;
 import org.compass.core.CompassQueryBuilder.CompassQueryStringBuilder;
+import org.compass.core.engine.SearchEngineException;
 import org.compass.gps.CompassGps;
 import org.compass.gps.MirrorDataChangesGpsDevice;
 import org.springframework.beans.factory.InitializingBean;
 
+import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.SearchResult;
 import com.aavu.client.domain.Topic;
@@ -73,7 +75,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 		
 		//TODO find another way to call this, since it's a bit inefficient
 		//to do it everytime tomcat restarts
-		compassGPS.index();
+		//compassGPS.index();
 	}
 
 	public List<SearchResult> search(final String searchString){
@@ -136,9 +138,13 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				//http://www.opensymphony.com/compass/versions/1.1M2/html/core-workingwithobjects.html#CompassHighlighter
 				//
 				for (int i = 0; i < hits.length(); i++) {
-					log.debug("HIT "+i+" T:"+hits.highlighter(i).fragment("text"));					
-					//huh, guess this is ${hippo.title} since entry has only data
-					hits.highlighter(i).fragment("text"); // this will cache the highlighted fragment
+					try{
+						log.debug("HIT "+i+" T:"+hits.highlighter(i).fragment("text"));					
+						//huh, guess this is ${hippo.title} since entry has only data
+						hits.highlighter(i).fragment("text"); // this will cache the highlighted fragment
+					}catch(SearchEngineException see){
+						log.warn("Search Engine Exception: "+see+" search term "+searchString+" username "+username);
+					}
 				}				
 				return hits.detach(start,num);
 			}});
@@ -155,7 +161,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 			CompassHit defaultCompassHit = hits.hit(i);
 			
 			
-			log.debug("score: "+defaultCompassHit.getScore());
+			log.debug(i+" score: "+defaultCompassHit.getScore());
 			log.debug("alias: "+defaultCompassHit.getAlias());
 			
 			if(defaultCompassHit.getScore() < .05){
@@ -175,25 +181,43 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 
 				List<TopicIdentifier> topicIDList = topicDAO.getTopicForOccurrence(entry.getId());
 				
-				//TODO what if it has multiple refs?
-				TopicIdentifier topicID = topicIDList.get(0);
-				
-				CompassHighlightedText text = defaultCompassHit.getHighlightedText();
-				res = new SearchResult(topicID.getTopicID(),defaultCompassHit.getScore(),topicID.getTopicTitle(),text.getHighlightedText("text"));
-				
+				if(topicIDList.size() > 0){
+					//TODO what if it has multiple refs?
+					TopicIdentifier topicID = topicIDList.get(0);
+
+					CompassHighlightedText text = defaultCompassHit.getHighlightedText();
+					
+					//PEND take this out   == null only when we do the search for a term that is a username...
+					if(text == null){
+						res = new SearchResult(topicID.getTopicID(),defaultCompassHit.getScore(),topicID.getTopicTitle(),null);
+					}else{
+						res = new SearchResult(topicID.getTopicID(),defaultCompassHit.getScore(),topicID.getTopicTitle(),text.getHighlightedText("text"));
+					}
+				}
 			}else if (obj instanceof URI) {
 				URI uri = (URI) obj;
 				List<TopicIdentifier> topicIDList = topicDAO.getTopicForOccurrence(uri.getId());
 				
-				//TODO what if it has multiple refs?
-				TopicIdentifier topicID = topicIDList.get(0);
-				
-				res = new SearchResult(topicID.getTopicID(),defaultCompassHit.getScore(),uri.getTitle(),uri.getData());
+				//PEND errored when we searched for a username... ie "test"
+				if(topicIDList.size() > 0){
+					//TODO what if it has multiple refs?				
+					TopicIdentifier topicID = topicIDList.get(0);
+					res = new SearchResult(topicID.getTopicID(),defaultCompassHit.getScore(),uri.getTitle(),uri.getData());
+				}
 			}
 			else if (obj instanceof Topic) {
 				Topic top = (Topic) obj;
 				
-				res = new SearchResult(top.getId(),defaultCompassHit.getScore(),top.getTitle(),null);
+				//TODO doesn't work!! need to exclude in cpm. Returning as a Topic.class
+				//TODO messy. Maybe we need TopLevelTopic.class?
+				if(!(top instanceof Association)){
+					System.out.println("found top: "+top);
+					res = new SearchResult(top.getId(),defaultCompassHit.getScore(),top.getTitle(),null);
+				}else{
+					System.out.println("was assoc, skip "+top);
+				}
+				
+				
 			}
 			//I think root == false takes care of this..
 			else if (obj instanceof User) {
@@ -207,7 +231,10 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 			}
 			log.debug("Found: "+res);
 			
-			returnList.add(res);
+			
+			if(res != null){
+				returnList.add(res);
+			}
 
 		}
 

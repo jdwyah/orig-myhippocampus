@@ -70,6 +70,8 @@ public interface Consts extends Messages {
 	String mapperAsyncGet();
 	String mapperAsyncSave();
 	String save();
+	
+	String topic_meta();
 	String topic_edit();	
 	String topic_cancel();
 	String topic_updated();
@@ -121,6 +123,10 @@ public interface Consts extends Messages {
 	String glossary_image();
 	String glossary_tooltip();
 	String glossary();
+	String meta_text();
+	String meta_date();
+	String meta_text_async_save();
+	
 		
 	
 	

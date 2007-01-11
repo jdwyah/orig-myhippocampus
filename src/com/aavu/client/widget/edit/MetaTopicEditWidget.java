@@ -6,26 +6,28 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.EnterInfoButton;
-import com.aavu.client.widget.tags.SaveListener;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MetaTopicEditWidget extends SaveListener implements CompleteListener {
+public class MetaTopicEditWidget extends Composite implements CompleteListener {
 
 	private Topic topic;
 	private MetaTopic meta;
 	private TopicCompleter completer; 
 	private ActionableTopicLabel topicDisplayLink;
 	private EnterInfoButton enterB;
+	private SaveNeededListener saveNeeded;
 	
-	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic) {
+	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic, SaveNeededListener saveNeeded) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 
 		this.topic = topic;
 		this.meta = meta;
+		this.saveNeeded = saveNeeded;
 						
 		completer = new TopicCompleter();
 		completer.addListener(this);
@@ -70,22 +72,6 @@ public class MetaTopicEditWidget extends SaveListener implements CompleteListene
 		enterB.setVisible(false);	
 	}
 	
-	//@Override
-	/**
-	 * NOTE not used! replaced w/ completed
-	 * do a local lookup for Topic, if not found, create a new one.
-	 */
-	public void saveNowEvent() {
-//		
-//		Topic completed = completer.getTopicCompletedOrNullForNew();
-//		System.out.println("Completed "+completed);
-//		if(completed == null){
-//			completed = new Topic(topic.getUser(),completer.getText());			
-//		}		
-//		
-//		topic.addMetaValue(meta, completed);
-	}
-	
 
 	/**
 	 * replaces the saveNowEvent
@@ -105,7 +91,7 @@ public class MetaTopicEditWidget extends SaveListener implements CompleteListene
 				topic.addMetaValue(meta, new Topic(to));
 				
 				setToShowMode(to);
-				
+				saveNeeded.onChange(MetaTopicEditWidget.this);
 			}});
 	}
 }

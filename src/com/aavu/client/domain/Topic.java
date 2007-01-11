@@ -420,6 +420,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		getAssociations().add(cur);
 	}
 
+	/**
+	 * Overridable. 
+	 * 
+	 * Used by TopicDAO to ensure unique names (if we want them) 
+	 * 
+	 * @return
+	 */
+	public boolean mustHaveUniqueName() {		
+		return true;
+	}
+
 
 	
 }

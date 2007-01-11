@@ -1,14 +1,13 @@
 package com.aavu.client.domain;
 
-import com.aavu.client.widget.TopicLink;
+import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.MetaTopicEditWidget;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MetaTopic extends Meta {
 
-	private static final String TYPE = "Topic";
+	private static final String TYPE = "Topic";//BAD Manager.myConstants.topic_meta();
 	private String value;
 	private String transientValue; //as widget changes, only this updates
 	
@@ -21,20 +20,6 @@ public class MetaTopic extends Meta {
 		this.value = value;
 	}
 
-	public Widget getWidget(Topic topic) {
-		HorizontalPanel widget = new HorizontalPanel();
-
-		Label metaName = new Label(getName());
-
-		widget.add(metaName);
-		Topic mv = (Topic) topic.getSingleMetaValueFor(this);
-		if(mv != null){
-			widget.add(new TopicLink(mv));
-		}
-
-		return widget;
-	}
-
 	/**
 	 * Saves text from textbox widget as current value
 	 */
@@ -42,17 +27,14 @@ public class MetaTopic extends Meta {
 		this.value = this.transientValue;
 	}
 
-	public Widget getEditorWidget(final Topic topic) {
+	public Widget getEditorWidget(final Topic topic, SaveNeededListener saveNeeded,Manager manager) {
 		
 		
-		MetaTopicEditWidget mtw = new MetaTopicEditWidget(this,topic);
+		MetaTopicEditWidget mtw = new MetaTopicEditWidget(this,topic,saveNeeded);
 	
 		return mtw;
 	}
 
-	public boolean needsSaveCallback() {
-		return true;
-	}
 	
 	//@Override
 	public String getType() {		

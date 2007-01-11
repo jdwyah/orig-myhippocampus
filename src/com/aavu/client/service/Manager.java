@@ -14,13 +14,12 @@ import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
 import com.aavu.client.gui.Glossary;
 import com.aavu.client.gui.GlossaryWindow;
+import com.aavu.client.gui.IslandDetailsWindow;
 import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.NewTagNameWindow;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
-import com.aavu.client.gui.TagEditorWindow;
-import com.aavu.client.gui.IslandDetailsWindow;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.gui.ext.Orientation;
@@ -33,9 +32,7 @@ import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Manager implements TopicSaveListener {
@@ -121,11 +118,12 @@ public class Manager implements TopicSaveListener {
 		GlossaryWindow gw = new GlossaryWindow(glossary,newFrame());
 	}
 
-	public void showTagBoard() {
-
-		TagEditorWindow tw = new TagEditorWindow(hippoCache,newFrame());
-		
-	}
+//	public void showTagBoard() {
+//
+//		TagEditorWindow tw = new TagEditorWindow(hippoCache,newFrame());
+//		
+//	}
+	
 	public void doSearch(String text) {
 		System.out.println("Search "+text);
 		hippoCache.getTopicCache().search(text,new StdAsyncCallback(myConstants.searchCallback()){

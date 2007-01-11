@@ -77,10 +77,12 @@ public class CalendarPanel extends AbsolutePanel {
 	 * Shows new dates per the month or year selected by the user
 	 */
 	public void redrawCalendar(){
+		System.out.println("REDRAWING");
 		this.clearCalendar(this.currentMonth);
 		
-		//JD
-		this.buildMonthBody(this.datePicker.getSelectedDate(), this.currentMonth);
+		//JD		
+		this.buildMonthBody(this.datePicker.getCurrentDate(), this.currentMonth);
+		//this.buildMonthBody(this.datePicker.getSelectedDate(), this.currentMonth);
 	}
 	
 	/*

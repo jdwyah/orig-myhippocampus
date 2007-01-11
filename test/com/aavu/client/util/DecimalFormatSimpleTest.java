@@ -31,5 +31,11 @@ public class DecimalFormatSimpleTest extends TestCase {
 			
 		assertEquals("-.123", dfc3.format(-.12343242332423412342314234234310));
 		
+		
+		//Weird  .1%1 -> .10000
+		//but    -.1%1 -> -.1   (no 0's)
+		assertEquals("1.120", dfc3.format(1.12));
+		assertEquals("1.100", dfc3.format(1.1));
+		assertEquals("-.1", dfc3.format(-.1));
 	}
 }

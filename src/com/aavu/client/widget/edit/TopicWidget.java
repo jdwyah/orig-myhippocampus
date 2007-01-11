@@ -20,12 +20,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicWidget extends FocusPanel implements ClickListener {
-
-	public static Widget getSeeAlsoWidget(Topic topic2) {
-		Association assoc = topic2.getSeeAlsoAssociation();		
-		MetaSeeAlso see = (MetaSeeAlso) assoc.getFirstType();
-		return see.getWidget(topic2);
-	}
 	
 	private FlowPanel textPanel = new FlowPanel();
 

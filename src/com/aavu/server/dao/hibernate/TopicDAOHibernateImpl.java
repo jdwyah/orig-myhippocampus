@@ -106,20 +106,20 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	
 		//add created
 		//
-		List<Object[]> createdlist = getHibernateTemplate().find("select top.id, top.title, top.created from Topic top ");
-		for (Object topic : createdlist) {
-			Object[] oa = (Object[]) topic;
-			
-			//?BigInteger topic_id = (BigInteger) oa[0];
-			Long topic_id = (Long) oa[0];
-						
-			Date createdDateTimestamp = (Date) oa[2];			
-			//PEND GWT conversion in regular DAO code. should kinda move this to GWTService layer
-			Date createdDate = new Date(createdDateTimestamp.getTime());	
-			
-			//add date Created
-			rtn.add(new TimeLineObj(new TopicIdentifier(topic_id.longValue(),(String)oa[1]),createdDate,null));									
-		}
+//		List<Object[]> createdlist = getHibernateTemplate().find("select top.id, top.title, top.created from Topic top ");
+//		for (Object topic : createdlist) {
+//			Object[] oa = (Object[]) topic;
+//			
+//			//?BigInteger topic_id = (BigInteger) oa[0];
+//			Long topic_id = (Long) oa[0];
+//						
+//			Date createdDateTimestamp = (Date) oa[2];			
+//			//PEND GWT conversion in regular DAO code. should kinda move this to GWTService layer
+//			Date createdDate = new Date(createdDateTimestamp.getTime());	
+//			
+//			//add date Created
+//			rtn.add(new TimeLineObj(new TopicIdentifier(topic_id.longValue(),(String)oa[1]),createdDate,null));									
+//		}
 		
 		if(log.isDebugEnabled()){
 			for (TimeLineObj obj : rtn) {
@@ -168,7 +168,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		}		
 		Object[] args = {t.getTitle(),t.getUser()};
 		Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
-		if(!(t instanceof HippoDate) && sameNamed != null && sameNamed.getId() != t.getId()){
+				
+		if(!(t.mustHaveUniqueName()) && sameNamed != null && sameNamed.getId() != t.getId()){
 			log.info("Throw HBE exception for Duplicate Title");
 			throw new HippoBusinessException("Duplicate Name");
 		}
@@ -399,6 +400,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.ne("class", "association"))
 		.add(Expression.ne("class", "seealso"))
 		.add(Expression.ne("class", "metadate"))
+		.add(Expression.ne("class", "date"))
+		.add(Expression.ne("class", "text"))
 		.addOrder( Order.asc("title").ignoreCase() )
 		.setProjection(getTopicIdentifier());
 

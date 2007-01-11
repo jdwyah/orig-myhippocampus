@@ -55,6 +55,9 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 	public void testEZ() {
 
 		List<SearchResult> rtn = null;//
+		rtn = searchService.search("test");
+		assertNotNull(rtn);
+		
 		rtn = searchService.search("Coffee");
 		assertEquals(2, rtn.size());
 		

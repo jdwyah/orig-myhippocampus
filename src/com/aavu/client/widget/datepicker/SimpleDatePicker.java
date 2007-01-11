@@ -132,6 +132,7 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 */
 	public void redrawCalendar(){
 		this.calendarPanel.redrawCalendar();
+		this.calendarTraversalPanel.drawTitle();
 	}
 
 	/*

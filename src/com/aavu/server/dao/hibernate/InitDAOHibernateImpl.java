@@ -15,9 +15,9 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 		try {
 			log.debug("doInit");
 
-			userService.createUser("test","test",false);
-			userService.createUser("jdwyah","jdwyah",true);
-			userService.createUser("vpech","vpech",true);
+//			userService.createUser("test","test",false);
+//			userService.createUser("jdwyah","jdwyah",true);
+//			userService.createUser("vpech","vpech",true);
 			
 		} catch (Exception e) {
 			log.error("Failed doInit "+e);

@@ -3,6 +3,8 @@ package com.aavu.client.domain;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.aavu.client.service.Manager;
+import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -15,26 +17,14 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class Meta extends Topic implements IsSerializable,Serializable{
 
 
-	public abstract Widget getEditorWidget(Topic top); 
-	public abstract Widget getWidget(Topic top);
+	public abstract Widget getEditorWidget(Topic top, SaveNeededListener saveNeeded, Manager manager); 
+	
 	public abstract String getType();
 
 
 
 	public String getName(){
 		return getTitle();
-	}
-
-	/**
-	 * Does our editor widget need a saveCallback?
-	 * 
-	 * This is done because I don't think we can user instanceof
-	 * to determine this on the fly.
-	 * 
-	 * @return
-	 */
-	public boolean needsSaveCallback() {
-		return false;
 	}
 
 }

@@ -146,10 +146,10 @@ a:visited {
 }
 
 .H-Clouds {
-	filter: alpha(opacity =     80);
-	-moz-opacity: .80;
-	opacity: .80;
-	-khtml-opacity: .8;
+	filter: alpha(opacity =     90);
+	-moz-opacity: .90;
+	opacity: .90;
+	-khtml-opacity: .9;
 	z-index: 3;
 }
 
