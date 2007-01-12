@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TagPropertyPanel extends Composite {
 
-	private VerticalPanel metaList = new VerticalPanel();
+	private VerticalPanel metaListPanel = new VerticalPanel();
 	private List metaChoosers = new ArrayList();  //list of meta chooser objects of current tag
 	
 	private TagLocalService tagLocalService;
@@ -33,7 +33,7 @@ public class TagPropertyPanel extends Composite {
 		
 		tagLocalService = _manager.getTagLocalService();
 		
-		metaList.clear();			
+		metaListPanel.clear();			
 		metaChoosers.clear();
 		
 		if(tag.getMetas() != null){
@@ -48,7 +48,7 @@ public class TagPropertyPanel extends Composite {
 		
 		VerticalPanel mainPanel = new VerticalPanel();
 		
-		mainPanel.add(metaList);
+		mainPanel.add(metaListPanel);
 		
 		Button addB = new Button(Manager.myConstants.island_property_new());
 		addB.addClickListener(new ClickListener(){
@@ -77,12 +77,12 @@ public class TagPropertyPanel extends Composite {
 		deleteButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender){
 				metaChoosers.remove(chooser);
-				metaList.remove(panel);
+				metaListPanel.remove(panel);
 			}
 		});
 
 		metaChoosers.add(chooser);
-		metaList.add(panel);
+		metaListPanel.add(panel);
 
 	}
 	
@@ -92,6 +92,7 @@ public class TagPropertyPanel extends Composite {
 		tag.getMetas().clear();
 		for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {
 			MetaChooser mc = (MetaChooser) iter.next();
+			System.out.println("adding back mc "+mc.getMeta().getId()+" "+mc.getMeta().getType()+" "+mc.getMeta().getTitle());
 			tag.addMeta(mc.getMeta());
 		}
 		//selectedTag.setMetas(metaChoosers);

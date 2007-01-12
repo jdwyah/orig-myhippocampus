@@ -5,6 +5,8 @@ import com.aavu.server.web.domain.MailingListCommand;
 
 public class MailingListEntry extends AbstractMailingListEntry {
 
+	public MailingListEntry(){};
+	
 	/**
 	 * Change the command into a DB serializable class. 
 	 * 

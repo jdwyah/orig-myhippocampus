@@ -87,7 +87,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		PNGImage lc = new PNGImage(Manager.myConstants.clouds_src(),120,120);		
 		lc.setStyleName("H-Clouds");
 		leftCloud.setStyleName("H-Clouds");
-		lc.setWidth("1000");
+		lc.setWidth("100%");
 		lc.setHeight("100%");
 		leftCloud.add(lc);
 			
@@ -95,18 +95,18 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		PNGImage rc = new PNGImage(Manager.myConstants.clouds_src(),120,120);
 		rc.setStyleName("H-Clouds");
 		rightCloud.setStyleName("H-Clouds");
-		rc.setWidth("1000");
+		rc.setWidth("100%");
 		rc.setHeight("100%");
 		rightCloud.add(rc);		
 		
-		leftCloud.setWidth("1000");
+		leftCloud.setWidth("70%");
 		leftCloud.setHeight("100%");
 		
-		rightCloud.setWidth("1000");
+		rightCloud.setWidth("70%");
 		rightCloud.setHeight("100%");
-		
-		add(leftCloud,0,0);
-		add(rightCloud,500,0);
+				
+		add(leftCloud,-40,0);
+		add(rightCloud,400,0);
 		
 	}
 

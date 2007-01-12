@@ -169,7 +169,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		Object[] args = {t.getTitle(),t.getUser()};
 		Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
 				
-		if(!(t.mustHaveUniqueName()) && sameNamed != null && sameNamed.getId() != t.getId()){
+		
+		if(t.mustHaveUniqueName() && sameNamed != null && sameNamed.getId() != t.getId()){
 			log.info("Throw HBE exception for Duplicate Title");
 			throw new HippoBusinessException("Duplicate Name");
 		}
@@ -536,13 +537,13 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.ne("class", "metadate"))
 		.setProjection(Projections.rowCount());
 		
-		rtn.setNumberOfTopics((Integer) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit)));
+		rtn.setNumberOfTopics(DataAccessUtils.intResult(getHibernateTemplate().findByCriteria(crit)));
 		
-		rtn.setNumberOfIslands((Integer) DataAccessUtils.uniqueResult(getHibernateTemplate().find(""+
+		rtn.setNumberOfIslands(DataAccessUtils.intResult(getHibernateTemplate().find(""+
 				"select count(id) from Tag tag "+
 				"where user is ? "
 				,rtn.getUser())));
-		rtn.setNumberOfLinks((Integer) DataAccessUtils.uniqueResult(getHibernateTemplate().find(""+
+		rtn.setNumberOfLinks(DataAccessUtils.intResult(getHibernateTemplate().find(""+
 				"select count(id) from WebLink link "+
 				"where user is ? "
 				,rtn.getUser())));

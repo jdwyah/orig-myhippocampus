@@ -35,6 +35,12 @@ public class UserPageBean {
 		this.numberOfTopics = numberOfTopics;
 	}
 	
+	@Override
+	public String toString() {
+		return "Islands: "+getNumberOfIslands()+" Links: "+getNumberOfLinks()+" Topics: "+getNumberOfTopics();		
+	}
+	
+	
 	
 	
 }

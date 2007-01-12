@@ -29,11 +29,17 @@
 
 		<property name="title">
 			<meta-data>${hippo.text}</meta-data>
-		</property>
+		</property><!--
 
-		<!-- <reference name="user" ref-alias="User"/>-->
-		<!-- <component name="user" ref-alias="User"/>  -->
-		<!-- <reference name="occurences" ref-alias="Entry"/>-->
+		 <reference name="user" ref-alias="User"/>
+		 <component name="user" ref-alias="User"/>  
+		 <reference name="occurences" ref-alias="Entry"/>
+	--></class>
+	
+	<class name="Association" alias="Association" extends="entity,userSecured">	
+		<property name="title">
+			<meta-data>${hippo.text}</meta-data>
+		</property>
 	</class>
 	
 	<class name="Entry" alias="Entry" extends="entity,userSecured">

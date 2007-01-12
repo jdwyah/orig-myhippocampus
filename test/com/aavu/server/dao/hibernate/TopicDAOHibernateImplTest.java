@@ -28,6 +28,7 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
+import com.aavu.server.web.domain.UserPageBean;
 
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImplTest.class);
@@ -902,6 +903,15 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
+	
+	public void testPopualateUsageStats(){
+		
+		UserPageBean bean = new UserPageBean();
+		topicDAO.populateUsageStats(bean);
+		
+		System.out.println(bean);
+	}
+	
 	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;

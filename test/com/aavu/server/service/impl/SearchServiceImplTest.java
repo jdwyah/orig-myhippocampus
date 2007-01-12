@@ -58,6 +58,12 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 		rtn = searchService.search("test");
 		assertNotNull(rtn);
 		
+		//Check to make sure we're skipping Associations		
+		rtn = searchService.search("UBER");
+		assertEquals(0,rtn.size());
+		
+		//if(9==9)return;
+		
 		rtn = searchService.search("Coffee");
 		assertEquals(2, rtn.size());
 		
