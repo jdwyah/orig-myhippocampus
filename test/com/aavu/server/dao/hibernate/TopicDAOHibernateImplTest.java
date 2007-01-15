@@ -28,6 +28,7 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
+import com.aavu.server.service.gwt.BaseTestWithTransaction;
 import com.aavu.server.web.domain.UserPageBean;
 
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
@@ -47,7 +48,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	private static final String H = "AnotherRecommender";
 
 	private TopicDAO topicDAO;
-	private TagDAO tagDAO;
+	
 	private UserDAO userDAO;
 
 	private User u;
@@ -914,8 +915,5 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 	
 	
-	public void setTagDAO(TagDAO tagDAO) {
-		this.tagDAO = tagDAO;
-	}
 
 }

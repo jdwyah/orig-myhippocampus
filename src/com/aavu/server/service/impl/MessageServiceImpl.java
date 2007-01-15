@@ -3,11 +3,11 @@ package com.aavu.server.service.impl;
 
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Tag;
@@ -22,8 +22,6 @@ import com.aavu.server.domain.MessageServiceReturn;
 import com.aavu.server.domain.PersistedFile;
 import com.aavu.server.service.FilePersistanceService;
 import com.aavu.server.service.MessageService;
-import com.aavu.server.service.TagService;
-import com.aavu.server.service.TopicService;
 
 public class MessageServiceImpl implements MessageService {
 	private static final Logger log = Logger.getLogger(MessageServiceImpl.class);
@@ -43,7 +41,7 @@ public class MessageServiceImpl implements MessageService {
 	 */
 	private TagDAO tagDAO;
 
-	private Tag getTagAddIfNew(String tagName,User user) throws HippoBusinessException {
+	private Tag createTagIfNeeded(String tagName,User user) throws HippoBusinessException {
 		log.debug("load tag named: "+tagName);
 
 		Tag rt = tagDAO.getTag(user,tagName);
@@ -75,11 +73,13 @@ public class MessageServiceImpl implements MessageService {
 	 * TODO Natural language parse the message
 	 * TODO Avoid name conflicts gracefully since Title must be unique. "(2)"
 	 * TODO I18N & Personalize
+	 * TODO rollback transaction on failures
 	 */
 	public MessageServiceReturn processMail(String username, String subject, String text, List<PersistedFile> attachements) {
 	
 		log.debug("Process Message for: |"+username+"|");
 
+		
 		try {
 			User u = userDAO.getUserByUsername(username);
 
@@ -90,14 +90,33 @@ public class MessageServiceImpl implements MessageService {
 			 * NOTE not using the TopicService means we need to be more careful about what we're trying to save,
 			 * setting Users, publicly visible etc.
 			 */
-			Topic topic = new Topic(u,subject);
+			
+			
+
+			/*
+			 * Avoid old topics with the same name by iterating, checking and adding to the title.
+			 */
+			Topic oldTopic = null;
+			String newTitle = subject;
+			int i = 0;
+			do{
+				oldTopic = topicDAO.getForName(u, newTitle);
+				if(oldTopic != null){
+					log.debug("Collision! "+newTitle);
+					newTitle = subject+"("+i+")";
+					i++;
+				}
+			}while(oldTopic != null);
+				
+			
+			Topic topic = new Topic(u,newTitle);
 			topic.setLastUpdated(new Date());
 			
 			Entry entry = topic.getLatestEntry();
 			entry.setUser(u);
 			entry.setInnerHTML(text);
 			
-			Tag inbox = getTagAddIfNew(INBOX,u);
+			Tag inbox = createTagIfNeeded(INBOX,u);
 			
 			topic.tagTopic(inbox);
 			
@@ -106,17 +125,25 @@ public class MessageServiceImpl implements MessageService {
 			for (PersistedFile file : attachements) {	
 				log.debug("Saving attachement "+file+" "+file.getFilename());
 				fileService.saveFileToTopic(file, topic, u);				
-			}
+			}			
+			
 			
 			return new MessageServiceReturn(true,"Success!",topic.getId());
 
-
 		} catch (UsernameNotFoundException e) {
 			log.warn("User Exception "+e.getMessage());
+			
+			//TODO replace with declarative based on exception type 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			
 			return new MessageServiceReturn(false,"Couldn't find user: "+username,-1);
 		} catch (HippoException e) {
 			log.warn("HippoException "+e.getMessage());
 			e.printStackTrace();
+			
+			//TODO replace with declarative based on exception type
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			
 			return new MessageServiceReturn(false,"HippoException "+e.getMessage(),-1);
 		}
 
