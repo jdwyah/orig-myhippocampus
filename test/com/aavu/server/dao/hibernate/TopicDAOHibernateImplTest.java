@@ -524,6 +524,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (TimeLineObj timeLine : list) {
 			System.out.println("timelineObj "+timeLine);
 		}
+		
 
 		System.out.println("list "+list.size());
 	}

@@ -6,13 +6,14 @@ public class MessageServiceReturn implements Serializable {
 
 	private boolean success;
 	private String message;
+	private long topicID;
 		
-	public MessageServiceReturn(){}
 	
-	public MessageServiceReturn(boolean success, String message) {
+	public MessageServiceReturn(boolean success, String message,long topicID) {
 		super();
 		this.success = success;
 		this.message = message;
+		this.topicID = topicID;
 	}
 	
 	public String getMessage() {
@@ -26,6 +27,14 @@ public class MessageServiceReturn implements Serializable {
 	}
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+
+	public long getTopicID() {
+		return topicID;
+	}
+
+	public void setTopicID(long topicID) {
+		this.topicID = topicID;
 	}
 	
 }

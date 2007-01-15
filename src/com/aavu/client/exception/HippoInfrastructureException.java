@@ -10,4 +10,8 @@ public class HippoInfrastructureException extends HippoException implements IsSe
 		super(string);
 	}
 
+	public HippoInfrastructureException(Exception e) {
+		super(e);
+	}
+
 }

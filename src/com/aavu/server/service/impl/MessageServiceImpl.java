@@ -3,6 +3,8 @@ package com.aavu.server.service.impl;
 
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
@@ -12,10 +14,13 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.MessageServiceReturn;
+import com.aavu.server.domain.PersistedFile;
+import com.aavu.server.service.FilePersistanceService;
 import com.aavu.server.service.MessageService;
 import com.aavu.server.service.TagService;
 import com.aavu.server.service.TopicService;
@@ -26,6 +31,8 @@ public class MessageServiceImpl implements MessageService {
 	private static final String INBOX = "Inbox";
 
 	private UserDAO userDAO;
+	private FilePersistanceService fileService;
+	
 	
 	/**
 	 * Doesn't use Topic Service bc that uses the SecurityContext getCurrentUser() and we're not really logged in
@@ -69,8 +76,8 @@ public class MessageServiceImpl implements MessageService {
 	 * TODO Avoid name conflicts gracefully since Title must be unique. "(2)"
 	 * TODO I18N & Personalize
 	 */
-	public MessageServiceReturn processMail(String username, String subject, String text) {
-
+	public MessageServiceReturn processMail(String username, String subject, String text, List<PersistedFile> attachements) {
+	
 		log.debug("Process Message for: |"+username+"|");
 
 		try {
@@ -94,15 +101,23 @@ public class MessageServiceImpl implements MessageService {
 			
 			topic.tagTopic(inbox);
 			
-			topicDAO.save(topic);
+			topic = topicDAO.save(topic);
 			
-			return new MessageServiceReturn(true,"Success!");
+			for (PersistedFile file : attachements) {	
+				log.debug("Saving attachement "+file+" "+file.getFilename());
+				fileService.saveFileToTopic(file, topic, u);				
+			}
+			
+			return new MessageServiceReturn(true,"Success!",topic.getId());
 
 
 		} catch (UsernameNotFoundException e) {
-			return new MessageServiceReturn(false,"Couldn't find user: "+username);
-		} catch (HippoBusinessException e) {
-			return new MessageServiceReturn(false,"HippoException "+e.getMessage());
+			log.warn("User Exception "+e.getMessage());
+			return new MessageServiceReturn(false,"Couldn't find user: "+username,-1);
+		} catch (HippoException e) {
+			log.warn("HippoException "+e.getMessage());
+			e.printStackTrace();
+			return new MessageServiceReturn(false,"HippoException "+e.getMessage(),-1);
 		}
 
 	}
@@ -119,5 +134,11 @@ public class MessageServiceImpl implements MessageService {
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
+
+	public void setFileService(FilePersistanceService fileService) {
+		this.fileService = fileService;
+	}
+
+	
 
 }

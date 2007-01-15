@@ -89,9 +89,9 @@ public class UploadWidget extends Composite {
 					Window.alert(event.getResults());
 					return;
 				}else{
-					String uri = event.getResults().trim();
+					String key = event.getResults().trim();
 					
-					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),uri);
+					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),key);
 					topic.getOccurences().add(fileObj);
 					board.addS3File(fileObj);
 				}

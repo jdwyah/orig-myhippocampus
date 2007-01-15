@@ -76,7 +76,9 @@
 		<url-pattern>*.ftl</url-pattern>
 	</servlet-mapping>
 
-
+	<session-config>
+        <session-timeout>120</session-timeout>
+    </session-config>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

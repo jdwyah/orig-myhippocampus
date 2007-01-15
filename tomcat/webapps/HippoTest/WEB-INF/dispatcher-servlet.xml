@@ -73,11 +73,11 @@
 	<bean id="fileUploadController" class="com.aavu.server.web.controllers.FileUploadController">
 		<property name="successView" value="simpleString"/>
 		<property name="commandClass" value="com.aavu.server.web.domain.FileUploadBean"/>
-		<property name="awsConnection" ref="awsConnection"/>
+		<property name="fileService" ref="fileService"/>
 		<property name="userService" ref="userService"/>
 	</bean>
 	<bean id="showFileController" class="com.aavu.server.web.controllers.S3Controller">
-		<property name="awsConnection" ref="awsConnection"/>
+		<property name="fileService" ref="fileService"/>
 		<property name="userService" ref="userService"/>	
 	</bean>
 

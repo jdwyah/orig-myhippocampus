@@ -60,5 +60,10 @@
 		<property name="awsSecretAccessKey" value="${aws.s3.secret}" />
 		<property name="defaultBucket" value="myhippocampus"/>
 	</bean>
+	
+	<bean id="fileService" class="com.aavu.server.service.impl.FilePersistanceServiceImpl">
+		<property name="awsConnection" ref="awsConnection"/>
+		<property name="topicDAO" ref="topicDAO"/>
+	</bean>
 
 </beans>

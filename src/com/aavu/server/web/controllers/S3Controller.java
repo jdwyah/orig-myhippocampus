@@ -12,19 +12,22 @@ import org.springframework.web.servlet.mvc.AbstractController;
 
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.server.domain.PersistedFile;
 import com.aavu.server.s3.com.amazon.s3.AWSAuthConnection;
 import com.aavu.server.s3.com.amazon.s3.GetResponse;
 import com.aavu.server.s3.com.amazon.s3.S3Object;
+import com.aavu.server.service.FilePersistanceService;
 import com.aavu.server.service.UserService;
 
 public class S3Controller extends AbstractController {
 	private static final Logger log = Logger.getLogger(S3Controller.class);
 
 	private UserService userService;
-	private AWSAuthConnection awsConnection; 
-		
-	public void setAwsConnection(AWSAuthConnection awsConnection) {
-		this.awsConnection = awsConnection;
+	
+	private FilePersistanceService fileService;
+	
+	public void setFileService(FilePersistanceService fileService) {
+		this.fileService = fileService;
 	}
 
 	public void setUserService(UserService userService) {
@@ -45,31 +48,14 @@ public class S3Controller extends AbstractController {
 		
 		User u = userService.getCurrentUser();
 		
-		if(!key.startsWith(u.getUsername())){
-			throw new HippoBusinessException("User "+u.getUsername()+" cannot access "+key);
-		}
 		
-		GetResponse awsResponse = awsConnection.get(awsConnection.getDefaultBucket(), key, null);
-		
-		S3Object file = awsResponse.object;
-		
-		String contentType = "text/plain";
-		try{
-			List l = (List) awsResponse.object.metadata.get("content-type");
-			contentType = (String) l.get(0);
-		}catch(Exception e){
-			log.warn("Fail "+e+" trying with text/plain");
-		}
-		
-		log.debug("Returning contentType "+contentType);
-		
-		byte[] content = file.data;
+		PersistedFile content = fileService.getFile(u,key);
 				
 		//String mimetype = this.getServletContext().getMimeType(filename);
 		
-		response.setContentType(contentType);
-		response.setContentLength(content.length);
-		FileCopyUtils.copy(content , response.getOutputStream());
+		response.setContentType(content.getContentType());
+		response.setContentLength(content.getContent().length);
+		FileCopyUtils.copy(content.getContent() , response.getOutputStream());
 		return null;
 	}
 

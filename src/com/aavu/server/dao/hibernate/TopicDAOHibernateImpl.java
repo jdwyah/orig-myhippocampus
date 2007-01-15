@@ -85,7 +85,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				"join top.associations  ass "+
 				"join ass.types  type "+
 				"join ass.members metaValue "+
-		"where type.class = MetaDate");
+		"where type.class = MetaDate and top.user = ?",user);
 
 
 		for (Object topic : ll) {
@@ -106,7 +106,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	
 		//add created
 		//
-//		List<Object[]> createdlist = getHibernateTemplate().find("select top.id, top.title, top.created from Topic top ");
+//		List<Object[]> createdlist = getHibernateTemplate().find("select top.id, top.title, top.created from Topic top where user = ?",user);
 //		for (Object topic : createdlist) {
 //			Object[] oa = (Object[]) topic;
 //			
@@ -144,6 +144,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title = :title", "user", user);
 	}
 
+	/*
+	 * TODO push this responsibility over to Compass, it should get better performance.
+	 * 
+	 * (non-Javadoc)
+	 * @see com.aavu.server.dao.TopicDAO#getTopicsStarting(com.aavu.client.domain.User, java.lang.String)
+	 */
 	public List<String> getTopicsStarting(User user, String match) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)		
 		.add(Expression.eq("user", user))
@@ -151,6 +157,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.ne("class", "association"))
 		.add(Expression.ne("class", "seealso"))
 		.add(Expression.ne("class", "metadate"))
+		.add(Expression.ne("class", "text"))//this is correct, right?
+		.add(Expression.ne("class", "date"))
 		.addOrder( Order.asc("title") )
 		.setProjection(Property.forName("title"));	
 
