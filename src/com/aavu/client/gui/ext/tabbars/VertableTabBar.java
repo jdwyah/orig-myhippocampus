@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.aavu.client.gui.ext;
+package com.aavu.client.gui.ext.tabbars;
 
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.CellPanel;

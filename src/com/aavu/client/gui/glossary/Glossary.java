@@ -1,42 +1,35 @@
-package com.aavu.client.gui;
+package com.aavu.client.gui.glossary;
 
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.gwtwidgets.client.ui.PNGImage;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
-import com.aavu.client.gui.ext.Orientation;
-import com.aavu.client.gui.ext.VertableTabPanel;
+import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.ext.tabbars.Orientation;
+import com.aavu.client.gui.ext.tabbars.TabHasWidgets;
+import com.aavu.client.gui.ext.tabbars.TabPanelExt;
+import com.aavu.client.gui.ext.tabbars.VertableTabPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Glossary extends FocusPanel {
 	
-	
+	//PEND unused
 	private static final String KEYS = "<span class=\"H-SideBarKey\">";
 	private static final String KEYS_NOELEM = "<span class=\"H-SideBarKey H-SideBarKeyNoElements\">";
 	private static final String KEYEND = "</span>";
 
 	private static final String OTHER = "#'s";
+	private static final int MAX_LINK_CHARS = 25;//11;
 	
 	/**
 	 * case insensitve comparator for topic names
@@ -51,20 +44,30 @@ public class Glossary extends FocusPanel {
 	private Manager manager;
 
 	
-	protected VertableTabPanel tabPanel;
+	//protected VertableTabPanel tabPanel;
 	private boolean dirty = true;
+				TabPanel panel;
+	protected TabHasWidgets tabPanel;
 				
 	public Glossary(Manager manager,Orientation orient){
 		
 		this.manager = manager;
-		tabPanel = new VertableTabPanel(orient);
 		
-		add(tabPanel);
 		
+		if(orient == Orientation.VERTICAL){
+			VertableTabPanel tabP = new VertableTabPanel(orient);
+			tabPanel = tabP;
+			add(tabP);
+		}else{
+			TabPanel tabP = new TabPanelExt();
+			tabPanel = (TabHasWidgets) tabP;
+			add(tabP);
+		}
+		
+				
 		//sets
-		addStyleName("H-AbsolutePanel");		
-		
-	
+		//addStyleName("H-AbsolutePanel");		
+			
 		
 	}
 
@@ -142,7 +145,7 @@ public class Glossary extends FocusPanel {
 				String title = (String) iterator.next();
 				final TopicIdentifier topic = (TopicIdentifier) topics.get(title);
 				
-				vp.add(new TopicLink(topic,11));
+				vp.add(new TopicLink(topic,MAX_LINK_CHARS));
 				
 				st = KEYS;
 			}

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.aavu.client.gui.ext;
+package com.aavu.client.gui.ext.tabbars;
 
 import java.util.Iterator;
 
@@ -61,7 +61,7 @@ import com.google.gwt.user.client.ui.WidgetCollection;
  * </p>
  */
 public class VertableTabPanel extends Composite implements TabListener,
-SourcesTabEvents, HasWidgets, IndexedPanel {
+SourcesTabEvents, TabHasWidgets, IndexedPanel {
 
 
 	private WidgetCollection children = new WidgetCollection(this);

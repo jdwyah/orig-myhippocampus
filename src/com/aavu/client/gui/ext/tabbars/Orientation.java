@@ -1,4 +1,4 @@
-package com.aavu.client.gui.ext;
+package com.aavu.client.gui.ext.tabbars;
 
 public class Orientation {
 
