@@ -112,23 +112,18 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 	private void clearClouds() {
 		
-		if(GWT.isScript()){
-			
-			Effect.move(leftCloud, new EffectOption[] {
+		GUIEffects.move(leftCloud,new EffectOption[] {
 					new EffectOption("x",-1000),
 					new EffectOption("y",0),
 					new EffectOption("duration",5.0)
-			});
-
-			Effect.move(rightCloud, new EffectOption[] {
-					new EffectOption("x",1000),
-					new EffectOption("y",0),
-					new EffectOption("duration",5.0)
-			});			
-		}else{
-			Effect.moveBy(leftCloud, 0,-1000);
-			Effect.moveBy(rightCloud, 0,1000);
-		}
+			},-1000,0);
+		GUIEffects.move(rightCloud,new EffectOption[] {
+				new EffectOption("x",1000),
+				new EffectOption("y",0),
+				new EffectOption("duration",5.0)
+		},1000,0);
+		
+	
 		
 		GUIEffects.removeInXMilSecs(leftCloud, 8000);
 		GUIEffects.removeInXMilSecs(rightCloud, 8000);
@@ -206,7 +201,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		add(isle,isle.getLeft(),isle.getTop());
 		//add(banner,isle.getLeft(),isle.getTop());
 		
-		Effect.appear(isle);
+		GUIEffects.appear(isle,4000);
 		islands.put(new Long(info.getTagId()), isle);
 		objects.add(isle);
 	}

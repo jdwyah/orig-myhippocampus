@@ -136,8 +136,7 @@ public class Glossary extends FocusPanel {
 			 */
 			topics.setDirty(false);
 			
-			VerticalPanel vp = new VerticalPanel();
-			vp.setVerticalAlignment(VerticalPanel.ALIGN_TOP);
+			GlossaryPage glossaryPage = new GlossaryPage(manager);
 						
 			String st = KEYS_NOELEM;			
 			
@@ -145,7 +144,7 @@ public class Glossary extends FocusPanel {
 				String title = (String) iterator.next();
 				final TopicIdentifier topic = (TopicIdentifier) topics.get(title);
 				
-				vp.add(new TopicLink(topic,MAX_LINK_CHARS));
+				glossaryPage.add(topic,MAX_LINK_CHARS);
 				
 				st = KEYS;
 			}
@@ -157,13 +156,13 @@ public class Glossary extends FocusPanel {
 			if(st == KEYS_NOELEM){
 				//PEND any effect??
 				//placeholder so there's always something in there			
-				vp.add(new Label("    (no topics)     "));
+				glossaryPage.add(new Label("    (no topics)     "));
 			}
 			
 			//System.out.println("ADD key "+key.toString()+" "+st+key.toString()+KEYEND);
 			
 			//tabPanel.add(vp,new SidebarLabel(st+key.toString()+KEYEND));
-			tabPanel.add(vp,st+key.toString()+KEYEND,true);
+			tabPanel.add(glossaryPage,st+key.toString()+KEYEND,true);
 
 		}
 	}

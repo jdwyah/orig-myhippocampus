@@ -64,9 +64,7 @@ public class IslandDetailsWindow extends TopicTagSuperWindow {
 		leftSideExtra.setStyleName("H-IslandTopicList");
 		
 		leftSideExtra.add(new HeaderLabel(manager.myConstants.island_topics_on()));
-		
-		PopupPreview previewPop = new PopupPreview();
-		
+				
 		if(topics != null){
 			for (int i = 0; i < topics.length; i++) {
 				TopicIdentifier topic = topics[i];
@@ -87,51 +85,6 @@ public class IslandDetailsWindow extends TopicTagSuperWindow {
 		rightSideExtras.add(new TagPropertyPanel(manager, (Tag) topic));
 		panel.add(rightSideExtras);
 	}
-
-
-	private class TopicPreviewLink extends Composite {
-
-		public TopicPreviewLink(final Manager manager, final TopicIdentifier ident, final PopupPreview preview) {
-			HorizontalPanel mainPanel = new HorizontalPanel();
-			
-			Label l = new Label(ident.getTopicTitle());
-//			l.addMouseListener(new MouseListenerAdapter(){
-//				  public void onMouseEnter(Widget sender) {
-//					  manager.getTopicCache().getTopic(ident, new StdAsyncCallback("Preview"){
-//						public void onSuccess(Object result) {
-//							super.onSuccess(result);
-//
-//							preview.setPopupPosition(getAbsoluteLeft()+30, getAbsoluteTop()+30);
-//							preview.setTopic((Topic)result);
-//							preview.show();
-//							
-//						}});
-//				  }});
-			l.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
-					manager.bringUpChart(ident);
-				}				
-			});
-			
-			mainPanel.add(l);
-			
-			initWidget(mainPanel);
-		}
-	}
-
-
-	private static class PopupPreview extends PopupPanel {
-
-		public PopupPreview() {
-			super(true);		
-			setStyleName("H-PopupPreview");
-		}
-
-		public void setTopic(Topic topic) {
-			setWidget(new TextDisplay(topic.getLatestEntry().getData()));			
-		}
-	}
-
 
 
 	

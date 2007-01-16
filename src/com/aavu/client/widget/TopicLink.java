@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -16,7 +17,7 @@ public class TopicLink extends SimplePanel implements ClickListener {
 
 	private static final int DEFAULT_MAX_STRING = 40;
 	private Label l;
-	private long id;
+	protected long id;
 	private PopupWindow popup; 
 	
 	/**
@@ -37,8 +38,9 @@ public class TopicLink extends SimplePanel implements ClickListener {
 	private TopicLink(String title, final long id){
 		this(title,id,DEFAULT_MAX_STRING);
 	}
-	public TopicLink(TopicIdentifier topic, int maxStringLength) {
+	public TopicLink(TopicIdentifier topic, PopupWindow popup,int maxStringLength) {
 		this(topic.getTopicTitle(),topic.getTopicID(),maxStringLength);
+		this.popup = popup;
 	}
 
 	private TopicLink(String title, long id, int maxStringLength){
@@ -47,7 +49,7 @@ public class TopicLink extends SimplePanel implements ClickListener {
 		l = null;
 		if(title.length() > maxStringLength){
 			l = new Label(title.substring(0, maxStringLength-3)+"...");
-			l.addMouseListener(new TooltipListener(0,0,title));
+			l.addMouseListener(new TooltipListener(0,20,title));
 		}else{
 			l = new Label(title);
 		}
@@ -82,10 +84,11 @@ public class TopicLink extends SimplePanel implements ClickListener {
 			}
 		}
 
-                      
-        
 	}
- 
+
+	public void addMouseListener(MouseListener listener){
+		l.addMouseListener(listener);
+	}
 	
 
 }

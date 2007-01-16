@@ -104,7 +104,10 @@ public interface Consts extends Messages {
 	String island_topics_on();
 	String question_img_src();
 	String island_property_help();
+	
 	String entry();
+	String none();
+	
 	String save_greenLight();
 	String save_redLight();
 

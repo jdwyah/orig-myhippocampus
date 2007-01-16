@@ -3,7 +3,9 @@ package com.aavu.client.gui.ext;
 import org.gwtwidgets.client.wrap.Effect;
 import org.gwtwidgets.client.wrap.EffectOption;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GUIEffects {
@@ -60,4 +62,33 @@ public class GUIEffects {
 		t.schedule(i);		
 	}
 
+
+	/**
+	 * options are not safe in Hosted GWT
+	 * @param toMove
+	 * @param options
+	 * @param x
+	 * @param y
+	 */
+	public static void move(Widget toMove, EffectOption[] options, int x, int y) {
+		if(GWT.isScript()){			
+			Effect.move(toMove, options);			
+		}else{			
+			Effect.moveBy(toMove, y,x);
+		}
+	}
+	/**
+	 * options are not safe in Hosted GWT
+	 * @param toAppear
+	 * @param duration
+	 */
+	public static void appear(Widget toAppear, int duration) {
+		if(GWT.isScript()){			
+			Effect.appear(toAppear, new EffectOption[] {
+					new EffectOption("duration",duration)});			
+		}else{			
+			Effect.appear(toAppear);
+		}
+	}
+	
 }

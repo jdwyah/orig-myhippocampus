@@ -50,7 +50,7 @@ public class DecimalFormatSimple {
 		}
 		else{
 			if((int)Math.floor(d) == 0){
-				return "."+mantissa.toString().substring(2,2+decimals);
+				return "."+mantissa.toString().substring(2,(2+decimals < mantissa.toString().length())? 2+decimals : mantissa.toString().length());
 			}else{
 				return (int)Math.floor(d)+"."+mantissa.toString().substring(2,2+decimals);
 			}

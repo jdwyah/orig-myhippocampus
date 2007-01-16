@@ -13,6 +13,7 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.user.client.ui.ComplexPanel;
 
 public class Topic extends AbstractTopic  implements Completable, IsSerializable{
 
@@ -429,6 +430,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public boolean mustHaveUniqueName() {		
 		return true;
+	}
+
+	public Set getWebLinks() {
+		Set rtn = new HashSet();
+		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+			Occurrence occ = (Occurrence) iter.next();			
+			if(occ instanceof WebLink){
+				rtn.add(occ);
+			}
+		}
+		return rtn;
 	}
 
 

@@ -19,8 +19,8 @@ public class Entry extends Occurrence implements Serializable,IsSerializable {
 		setData(INIT_STR+html+INIT_STR_END);
 	}
 	public boolean isEmpty(){
-		System.out.println("Empty Check |"+getData()+"|");
-		System.out.println("Empty Check "+getData().length()+" "+(INIT_STR.length()+INIT_STR_END.length()));
+		//System.out.println("Empty Check |"+getData()+"|");
+		//System.out.println("Empty Check "+getData().length()+" "+(INIT_STR.length()+INIT_STR_END.length()));
 		 
 		return getData() == null ||
 				(getData().length() == INIT_STR.length()+INIT_STR_END.length()); 

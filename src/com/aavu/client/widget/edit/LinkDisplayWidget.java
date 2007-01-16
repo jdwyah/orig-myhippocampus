@@ -72,19 +72,19 @@ public class LinkDisplayWidget extends Composite {
 		myTopic = topic;
 		linkPanel.clear();
 		size = 0;
-		for (Iterator iter = topic.getOccurences().iterator(); iter.hasNext();) {
-			Occurrence occ = (Occurrence) iter.next();			
-			if(occ instanceof WebLink){
-				HorizontalPanel lP = new HorizontalPanel();
-				lP.add(new ExternalLink(occ));
-				
-				EditLinkButton editB = new EditLinkButton(Manager.myConstants.editMe(),(WebLink) occ);							
-				lP.add(editB);				
-				
-				linkPanel.add(lP);
-				
-				size ++;
-			}
+		for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
+			WebLink occ = (WebLink) iter.next();			
+
+			HorizontalPanel lP = new HorizontalPanel();
+			lP.add(new ExternalLink(occ));
+
+			EditLinkButton editB = new EditLinkButton(Manager.myConstants.editMe(),(WebLink) occ);							
+			lP.add(editB);				
+
+			linkPanel.add(lP);
+
+			size ++;
+
 		}
 	}
 
