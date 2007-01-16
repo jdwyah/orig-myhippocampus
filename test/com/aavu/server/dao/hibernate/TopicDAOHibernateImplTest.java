@@ -82,7 +82,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t.setTitle(C);
 		t.setUser(u);
 
-		Tag tag = new Tag();
+		//explicitly not setting user
+		Tag tag = new Tag();		
 		tag.setName(D);
 
 		topicDAO.save(tag);
@@ -97,9 +98,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 
+		//tag does not show up bc user not set
 		assertEquals(1, savedL.size());		
 
-		TopicIdentifier saved = savedL.get(0);
+		TopicIdentifier saved = savedL.get(1);
 
 		Topic savedTopic = topicDAO.getForID(u, saved.getTopicID());
 
@@ -113,7 +115,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		assertEquals(D,	savedTag.getTitle());
 
-		//Tag's user will not be initialized
+		//Tag's user will still not be initialized, this happens in service
 		assertEquals(null, savedTag.getUser());
 
 

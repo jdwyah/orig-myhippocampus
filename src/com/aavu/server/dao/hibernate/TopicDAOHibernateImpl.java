@@ -25,6 +25,8 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import sun.security.jca.GetInstance;
+
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
@@ -173,16 +175,21 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		if(t.getTitle().equals("")){
 			log.info("Throw HBE exception for Empty Title");
 			throw new HippoBusinessException("Empty Title");
-		}		
-		Object[] args = {t.getTitle(),t.getUser()};
-		Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
-				
-		
-		if(t.mustHaveUniqueName() && sameNamed != null && sameNamed.getId() != t.getId()){
-			log.info("Throw HBE exception for Duplicate Title");
-			throw new HippoBusinessException("Duplicate Name");
-		}
+		}	
+		if(t.mustHaveUniqueName()){
+			log.debug("Getting same named");
+			Object[] args = {t.getTitle(),t.getUser()};
+			Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
+			log.debug("Rec "+sameNamed);		
 
+			if(sameNamed != null && sameNamed.getId() != t.getId()){
+				log.info("Throw HBE exception for Duplicate Title");
+				throw new HippoBusinessException("Duplicate Name");
+			}
+			//need to evict or we'll get a NonUniqueException
+			getHibernateTemplate().evict(sameNamed);
+		}
+		
 		//
 		//Save the subject. If they've just added the subject it will be unsaved,
 		//even if it's already in the DB, do a lookup.
@@ -268,6 +275,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		System.out.println("and middle Save me "+t.getTitle()+" type: "+t.getClass());
 		//and save me
 		//
+		
 		getHibernateTemplate().saveOrUpdate(t);		
 
 		//call saveList() instead
@@ -492,6 +500,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return link;
 	}
 
+	/**
+	 * NOTE: no user check. is that ok?
+	 */
 	public List<TopicIdentifier> getTopicForOccurrence(long id) {
 
 		List<Object[]> list = getHibernateTemplate().find(""+
@@ -563,7 +574,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 */
 	public void delete(final Topic todelete) {
 		
-	
+	log.info("Deleting: "+todelete);
 		getHibernateTemplate().execute(new HibernateCallback(){
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 
@@ -574,12 +585,19 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				 */				
 				Topic topic  = (Topic) sess.get(Topic.class,todelete.getId());
 				
+				log.info("Instances: "+topic.getInstances().size());
 				for (Topic instance : (Set<Topic>)topic.getInstances()) {
+					log.info("Was a tag. Removing instances "+instance);
 					instance.getTypes().remove(topic);
 				}
+				topic.getInstances().clear();
+				
+				log.info("Types: "+topic.getTypes().size());
 				for (Topic type : (Set<Topic>)topic.getTypes()) {
+					log.info("Removing from type "+type);
 					type.getInstances().remove(topic);
 				}
+				topic.getTypes().clear();
 				
 				for (Occurrence occurence : (Set<Occurrence>)topic.getOccurences()) {
 					
@@ -594,8 +612,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 					if(occurence instanceof MindTreeOcc){
 						sess.delete(occurence);
 					}
-
 				}
+				topic.getOccurences().clear();
 				
 				for (Topic assoc : (Set<Topic>)topic.getAssociations()) {
 					//TODO what here? any cascade?					

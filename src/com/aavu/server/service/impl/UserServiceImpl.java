@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
 	private UserDAO userDAO;
 	
-	public User getCurrentUser() {
+	public User getCurrentUser() throws UsernameNotFoundException {
 
 		log.debug("getCurrentUser");
 		
@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
 			log.warn(e);
 			throw e;
 		}
+		
 		
 	}
 	

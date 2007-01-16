@@ -2,6 +2,8 @@ package com.aavu.server.service;
 
 import java.util.List;
 
+import org.acegisecurity.userdetails.UsernameNotFoundException;
+
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.server.domain.ServerSideUser;
@@ -19,7 +21,7 @@ public interface UserService {
 
 	void toggleSupervisor(Integer id);
 
-	User getCurrentUser();
+	User getCurrentUser() throws UsernameNotFoundException;
 	
 	void delete(Integer id);
 
