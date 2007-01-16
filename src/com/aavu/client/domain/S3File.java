@@ -16,6 +16,9 @@ public class S3File extends URI implements Serializable,IsSerializable {
 		/*
 		 * parse out just the file name, (no path)
 		 */
+		if(filename == null){
+			filename = "unnamed";
+		}
 		String title = filename;
 		int i = filename.lastIndexOf('\\');
 		if(i != -1){
