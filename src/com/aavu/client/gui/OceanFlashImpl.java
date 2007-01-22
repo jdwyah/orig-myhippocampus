@@ -141,4 +141,8 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 	public void removeIsland(long id) {
 		throw new UnsupportedOperationException("Not Yet Implemented");
 	}
+
+	public void unFocus() {
+		throw new UnsupportedOperationException("Not Yet Implemented");		
+	}
 }

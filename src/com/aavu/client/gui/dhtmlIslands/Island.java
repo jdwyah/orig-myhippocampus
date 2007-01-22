@@ -2,7 +2,6 @@ package com.aavu.client.gui.dhtmlIslands;
 
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.User;
-import com.aavu.client.gui.Ocean;
 import com.aavu.client.util.MiddleSquarePseudoRandom;
 import com.aavu.client.util.PsuedoRandom;
 import com.google.gwt.user.client.DOM;
@@ -12,6 +11,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -28,6 +28,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 */
 	private static int move_me = 400;
 	
+	private int scale = 1;
 	
 	private int my_spacing;
 		
@@ -98,11 +99,16 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		growInternal();	
 				
 		
+		scale = 1;
+		
+		drawInOcean();
+
+		doPositioning();
+	
+		
+		
 		//position: absolute; left: 610px; top: 155px;
 		//DOM.setStyleAttribute(getElement(), "position", "absolute"); 		
-		
-		doPositioning();
-		
 		
 		
 		//this code for lat long as 0-1 floats
@@ -124,6 +130,32 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	}
 
 
+	private void drawInOcean() {
+
+		clear();
+		add(banner,0,height/2);
+
+		//need to re-loop after all the min/maxes are set
+		//				
+		//doIslandType(0);		
+		doIslandType(1);
+		doIslandType(2);
+				
+	}
+	private void drawJustTheIsland(AbsolutePanel panel) {
+
+		panel.clear();
+		panel.add(banner,0,height/2);
+		
+		//need to re-loop after all the min/maxes are set
+		//				
+		//doIslandType(0);		
+		doIslandType(1,panel);
+		doIslandType(2,panel);				
+	}
+	
+
+
 	/**
 	 * 
 	 *
@@ -138,6 +170,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		else{
 			my_spacing = Type.SPACING_30;
 		}
+		my_spacing *= scale;
 	}
 
 
@@ -153,26 +186,35 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	/*
 	 * Ocean will pull these from us when it adds us
 	 */	
-	private void doPositioning() {			
-		top = tagStat.getLatitude()  - gridToRelativeY(min_y,my_spacing);
-		left = tagStat.getLongitude()  - gridToRelativeX(min_x,my_spacing);		
-		
+	private void doPositioning() {
+		doPositioning(false,this);
+	}
+	private void doPositioning(boolean closeUpPositioning,Panel panel) {			
+		if(closeUpPositioning){
+			top = 300;  
+			left = 300;									
+		}else{
+			top = tagStat.getLatitude();  
+			left = tagStat.getLongitude();
+		}
+		top -= gridToRelativeY(min_y,my_spacing);
+		left -= gridToRelativeX(min_x,my_spacing);	
 
 		/*
 		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
 		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
 		 */
-		int width = (max_x + 1 - min_x) * my_spacing + Type.MAX_SIZE - my_spacing;
-		height = (max_y + 1 - min_y) * my_spacing + Type.MAX_SIZE - my_spacing;
+		int width = (max_x + 1 - min_x) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
+		height = (max_y + 1 - min_y) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
 		
-		int predicted = getPredictedWidth();
+		int predicted = getPredictedBannerWidth();
 		System.out.println("Predicted Width "+predicted);
 		if(predicted > width){
-			DOM.setStyleAttribute(getElement(), "width", predicted+"px");	
+			DOM.setStyleAttribute(panel.getElement(), "width", predicted+"px");	
 		}else{
-			DOM.setStyleAttribute(getElement(), "width", width+"px");	
+			DOM.setStyleAttribute(panel.getElement(), "width", width+"px");	
 		}
-		DOM.setStyleAttribute(getElement(), "height", height+"px");
+		DOM.setStyleAttribute(panel.getElement(), "height", height+"px");
 		
 		//not working
 		banner.setWidth(width+"em");
@@ -187,7 +229,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 * 
 	 *  (chars * 9) * fontSize
 	 */
-	private int getPredictedWidth(){
+	private int getPredictedBannerWidth(){
 		System.out.println("FP "+tagStat.getTagName().length() * 9);
 		System.out.println("SP: "+banner.getFontFor(tagStat.getNumberOfTopics()));
 		return (int) (tagStat.getTagName().length() * 9 * banner.getFontFor(tagStat.getNumberOfTopics()));
@@ -249,6 +291,8 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	}
 
 	/**
+	 * Creat an int[][] of the island's "used" graph. This is the framework upon
+	 * which we'll draw the island.
 	 * 
 	 * TODO will crash if things go beyond bounds of tag GRID
 	 * 
@@ -321,19 +365,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 			}
 				
 		}
-
-		
-		clear();
-		add(banner,0,height/2);
-
-		//need to re-loop after all the min/maxes are set
-		//				
-		//doIslandType(0);		
-		doIslandType(1);
-		doIslandType(2);
-		
-		
-		
+				
 	}
 	
 	/**
@@ -344,8 +376,12 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 * Would like to make it a bit smarter about laying out new little guys.
 	 * 
 	 * @param style
+	 * @param panel 
 	 */
 	private void doIslandType(int style) {
+		doIslandType(style, this);
+	}
+	private void doIslandType(int style, AbsolutePanel panel) {
 		int x;
 		int count = 0;
 		AcreSize acreSize = null;
@@ -364,13 +400,13 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 					count++;
 					
 					if(0 == style){
-						addShadow(x,j,acreSize);
+						addShadow(x,j,acreSize,panel);
 					}
 					else if(1 == style){
-						addAcre(x,j,acreSize);
+						addAcre(x,j,acreSize,panel);
 					}
 					else if(2 == style){
-						addInner(x,j,acreSize);
+						addInner(x,j,acreSize,panel);
 					}
 				}
 			}
@@ -384,7 +420,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	 * gridToRelative using my_type || type? 
 	 * 
 	 */
-	private void addAcre(int x, int y,AcreSize acreSize){
+	private void addAcre(int x, int y,AcreSize acreSize, AbsolutePanel panel){
 		
 		int corrected_x = gridToRelativeX(x,my_spacing);
 		int corrected_y = gridToRelativeY(y,my_spacing);		
@@ -394,23 +430,23 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		System.out.println("y "+y+" cy "+corrected_y);
 //		
 
-		add(new Acre(this,x,y,acreSize),corrected_x,corrected_y);
+		panel.add(new Acre(this,x,y,acreSize),corrected_x,corrected_y);
 		
 	}
 
-	private void addShadow(int x, int y,AcreSize acreSize){
+	private void addShadow(int x, int y,AcreSize acreSize, AbsolutePanel panel){
 
 		int corrected_x = gridToRelativeX(x,my_spacing);
 		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		add(new Shadow(x,y,acreSize),corrected_x,corrected_y);
+		panel.add(new Shadow(x,y,acreSize),corrected_x,corrected_y);
 	}
-	private void addInner(int x, int y,AcreSize acreSize){
+	private void addInner(int x, int y,AcreSize acreSize, AbsolutePanel panel){
 
 		int corrected_x = gridToRelativeX(x,my_spacing);
 		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		add(new Inner(x,y,acreSize),corrected_x,corrected_y);
+		panel.add(new Inner(x,y,acreSize),corrected_x,corrected_y);
 	}
 	
 	
@@ -420,6 +456,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 	}
 	
 	private class Level extends AbsolutePanel {		
+		
 
 		public Level(ClickListener listener, int x, int y,AcreSize acreSize,String extension,String style){
 									
@@ -428,10 +465,11 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 				isle.addClickListener(listener);
 			}
 			isle.setStyleName(style);
+			isle.setPixelSize(acreSize.getSize()*scale, acreSize.getSize()*scale);
 			add(isle,0,0);
 						
-			DOM.setStyleAttribute(getElement(), "width", acreSize.getSize()+"px");
-			DOM.setStyleAttribute(getElement(), "height", acreSize.getSize()+"px");
+			DOM.setStyleAttribute(getElement(), "width", acreSize.getSize()*scale+"px");
+			DOM.setStyleAttribute(getElement(), "height", acreSize.getSize()*scale+"px");
 
 		}
 	}
@@ -519,8 +557,34 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 	
 	
-	public Widget getWidget() {	
+	public Widget getWidget() {		
+	
+		
 		return this;
+	}
+
+	public void setBack(){
+
+		//TODO not ideal. need to separate the closeup and this. they shouldn't share top/left
+		doPositioning();
+}
+	
+	public Widget getCloseUp() {
+		
+		scale = 10;
+		
+		AbsolutePanel panel = new AbsolutePanel();
+		
+		drawJustTheIsland(panel);
+
+		doPositioning(true,panel);
+	
+		return panel;
+	}
+	
+
+	public TagInfo getStat() {
+		return tagStat;
 	}
 	
 }

@@ -41,8 +41,9 @@
 	<classpathentry kind="lib" path="lib/c3p0-0.9.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/ehcache-1.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.8.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate3.2.1.jar" sourcepath="C:/workspace/source/hibernate-3.2.1-src.zip"/>
 	<classpathentry kind="lib" path="lib/spring-2.0.2.jar" sourcepath="C:/workspace/source/spring-2.0.2-src.zip"/>
 	<classpathentry kind="lib" path="lib/spring-mock-2.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-snowball.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

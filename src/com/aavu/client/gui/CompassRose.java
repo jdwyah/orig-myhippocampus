@@ -22,7 +22,8 @@ public class CompassRose extends AbsolutePanel {
 	
 	private TextBox searchText = new TextBox();
 	private Manager manager;
-
+	Button backButton = new Button(manager.myConstants.back());
+	
 	public CompassRose(Manager _manager){
 		this.manager = _manager;
 
@@ -39,11 +40,18 @@ public class CompassRose extends AbsolutePanel {
 					doSearch();
 				}
 			}});
-
+		
+		backButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.unFocus();	
+				backButton.setVisible(false);
+			}});
+		backButton.setVisible(false);
 		
 		add(rose,0,0);		
 		add(searchText,70,0);
 		add(searchB,210,0);
+		add(backButton,270,0);
 
 		/*
 		 * override the AbsolutePanel position: relative
@@ -58,6 +66,9 @@ public class CompassRose extends AbsolutePanel {
 	private void doSearch() {
 		System.out.println("click "+searchText.getText());
 		manager.doSearch(searchText.getText());
+	}
+	public void showBackToOcean(boolean focussed) {
+		backButton.setVisible(focussed);
 	}
 
 }

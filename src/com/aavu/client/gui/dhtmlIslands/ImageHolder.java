@@ -51,7 +51,7 @@ public class ImageHolder {
 		
 		/*
 		 * avoid 50*50 = 0 by adding in id
-		 */
+		 */		
 		return new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(id+(x-5)*y)%type.numImages)+"_"+extension+".png");
 		
 	}

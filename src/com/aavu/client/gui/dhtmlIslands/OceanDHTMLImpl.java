@@ -36,7 +36,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	
 	private Manager manager;
 
-	private Map islands = new HashMap();
+	private Map islands = new HashMap();	
 	private List objects = new ArrayList();
 	
 	private DragHandler dragHandler;
@@ -57,6 +57,10 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	
 	
 	private Panel leftCloud;
+
+	private boolean focussed = false;
+
+	private Widget closeUp;	
 	
 	public OceanDHTMLImpl(Manager manager) {
 		super();
@@ -165,8 +169,8 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 	private void addAll(TagStat[] tagStats) {
 		
+		System.out.println("ADDALL");
 		
-		//clear &remove old islands
 		islands.clear();
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Entry e = (Entry) iter.next();
@@ -187,18 +191,29 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		clearClouds();
 	}
 
+	/**
+	 * clear &remove old islands
+	 *
+	 */
+	private void clearIslands(){		
+		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
+			Long e = (Long) iter.next();
+			remove((Widget) islands.get(e));					
+		}
+	}
+	private void clearCloseup(){		
+		
+		remove(closeUp);					
+		
+	}
+
 	private void addIsland(TagInfo info,Island isle){			
-		
-		
-		//IslandBanner banner = new IslandBanner(info.getTagName());				
-		//IslandWidg w = new IslandWidg(isle,banner);		
-		//dragHandler.add(w);
 		
 		
 		dragHandler.add(isle);
 		
 		//dragHandler.add(isle,isle,banner);		
-		add(isle,isle.getLeft(),isle.getTop());
+		add(isle.getWidget(),isle.getLeft(),isle.getTop());
 		//add(banner,isle.getLeft(),isle.getTop());
 		
 		GUIEffects.appear(isle,4000);
@@ -206,8 +221,35 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		objects.add(isle);
 	}
 	
+	private void showOcean(){
+		
+		clearCloseup();
+		
+		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
+			Long e = (Long) iter.next();
+						
+			Island island = (Island) islands.get(e);
+						
+			//TODO only for close
+			island.setBack();
+			
+			addIsland(island.getStat(), island);
+
+		}
+	}
 	
-	
+	public void showIsland(long id){
+		
+		clearIslands();
+
+		Island closeIsland = (Island) islands.get(new Long(id));
+			
+		closeUp = closeIsland.getCloseUp();
+		
+		add(closeUp);
+		
+		manager.setFocussed(true);		
+	}
 
 	public void growIsland(Tag tag) {
 		Island isle = (Island) islands.get(new Long(tag.getId()));
@@ -235,7 +277,18 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	}
 
 	public void islandClicked(long tagId) {
-		manager.showTopicsForTag(tagId);
+		
+		System.out.println("CLICKED focussed "+focussed+" ID  "+tagId);
+		
+		if(focussed){
+			showOcean();
+			focussed = false;
+		}else{
+			showIsland(tagId);
+			focussed = true;
+		}
+		
+		//manager.showTopicsForTag(tagId);
 	}
 
 	public void islandMoved(long islandID, final int longitude, final int latitude){
@@ -316,6 +369,10 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	} 
 	public int getBackY() {		
 		return backY;
+	}
+
+	public void unFocus() {
+		showOcean();
 	}
 
 }

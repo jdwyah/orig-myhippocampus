@@ -18,4 +18,6 @@ public interface Ocean {
 
 	public void removeIsland(long id);
 
+	public void unFocus();
+
 }

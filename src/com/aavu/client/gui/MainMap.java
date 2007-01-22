@@ -19,6 +19,7 @@ public class MainMap extends Composite {
 	//private TagSearch tagSearch;	
 	private Ocean ocean;
 	private StatusPanel statusPanel;
+	private CompassRose compassRose;
 	
 	public MainMap(Manager manager){
 		this.manager = manager;
@@ -38,7 +39,8 @@ public class MainMap extends Composite {
 		
 		statusPanel = new StatusPanel();
 		
-		mainP.add(new CompassRose(manager));
+		compassRose = new CompassRose(manager);
+		mainP.add(compassRose);
 		mainP.add(ocean.getWidget());
 				
 		//mainP.add(sideBar);
@@ -87,6 +89,14 @@ public class MainMap extends Composite {
 		if(statusPanel != null){
 			statusPanel.update(id,string,statusCode);
 		}
+	}
+
+	public void showBackToOcean(boolean focussed) {
+		compassRose.showBackToOcean(focussed);
+	}
+
+	public void unFocus() {
+		ocean.unFocus();
 	}
 
 

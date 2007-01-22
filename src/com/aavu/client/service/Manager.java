@@ -48,6 +48,8 @@ public class Manager implements TopicSaveListener {
 	private MainMap mainMap;
 	private Glossary glossary; 
 
+	private boolean focussed = false;
+	
 	public Manager(HippoCache hippoCache){
 		this.hippoCache = hippoCache;
 		initConstants();
@@ -281,6 +283,9 @@ public class Manager implements TopicSaveListener {
 	 * Call when we've been not logged in, but we've now logged in, and we need to setup the 
 	 * GUI elements.
 	 *
+	 *
+	 * TODO HIGH we're running setup TWICE. once from the UserSuccessCallback & once 
+	 * from LoginWindow. semaphore? these are both valid paths.
 	 */
 	public void loginSuccess() {
 		setup();
@@ -322,7 +327,14 @@ public class Manager implements TopicSaveListener {
 				user = (User) result;
 		
 				if(user != null){
-					System.out.println("found a user: "+user.getUsername());		
+					System.out.println("found a user: "+user.getUsername());	
+					
+					try {
+						throw new Exception();
+					} catch (Exception e) {					
+						e.printStackTrace();
+					}
+					
 					loadGUI();
 				}else{
 					doLogin();
@@ -353,6 +365,18 @@ public class Manager implements TopicSaveListener {
 				refreshAll();
 			}				
 		});
+	}
+	
+	public void setFocussed(boolean focussed) {
+		this.focussed = focussed;
+		mainMap.showBackToOcean(focussed);
+	}
+	public boolean isFocussed() {
+		return focussed;
+	}
+	public void unFocus() {
+		this.focussed = false;
+		mainMap.unFocus();
 	}
 	
 		
