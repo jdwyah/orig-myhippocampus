@@ -197,7 +197,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	}
 
 	
-	private String formatDate(java.util.Date date){		
+	protected String formatDate(java.util.Date date){		
 		if(df == null){
 			df = new SimpleDateFormatGWT("MM/dd/yy");
 		}

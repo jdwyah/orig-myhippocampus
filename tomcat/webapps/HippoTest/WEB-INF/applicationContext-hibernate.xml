@@ -126,8 +126,20 @@
 				<prop key="compass.transaction.factory">org.compass.spring.transaction.SpringSyncTransactionFactory</prop>
 				<prop key="compass.converter.html.type">com.aavu.server.lucene.util.HTMLConverter</prop>
 				<prop key="compass.engine.analyzer.html.type">com.aavu.server.lucene.util.HTMLAnalyzer</prop>
+				<prop key="compass.engine.analyzer.default.type">Snowball</prop>
+				<prop key="compass.engine.analyzer.default.name">English</prop> 
 			</props>
 		</property>
+		
+		<!-- 
+		<searchEngine>
+        <analyzer name="deault" type="Snowball" snowballType="Lovins">
+            <stopWords>
+                <stopWord value="no" />
+            </stopWords>
+        </analyzer>
+	    </searchEngine>-->
+		
 		<!-- <property name="classMappings">
 			<list>
 				<value>com.aavu.client.domain.generated.AbstractTopic</value>
@@ -136,6 +148,7 @@
 		<property name="transactionManager">
 			<ref local="txManager" />
 		</property>
+		
 	</bean>
 	<bean id="hibernateGpsDevice" class="org.compass.spring.device.hibernate.SpringHibernate3GpsDevice" abstract="false"
 		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">

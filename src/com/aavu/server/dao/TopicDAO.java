@@ -2,7 +2,7 @@ package com.aavu.server.dao;
 
 import java.util.List;
 
-import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
@@ -28,7 +28,7 @@ public interface TopicDAO {
 	
 	void tester();
 
-	List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user);
+	List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag,User user);
 
 	Topic getForID(User currentUser, long topicID);
 

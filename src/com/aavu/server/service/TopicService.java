@@ -2,6 +2,7 @@ package com.aavu.server.service;
 
 import java.util.List;
 
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
@@ -24,7 +25,7 @@ public interface TopicService {
 
 	Topic getForName(String string);
 
-	List<TopicIdentifier> getTopicIdsWithTag(Tag tag);
+	List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag);
 
 	Topic getForID(long topicID);
 

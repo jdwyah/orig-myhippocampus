@@ -10,11 +10,13 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicLink extends SimplePanel implements ClickListener {
 
+	private static final String HOVER_STYLE = "H-TopicLink-hover";
 	private static final int DEFAULT_MAX_STRING = 40;
 	private Label l;
 	protected long id;
@@ -32,19 +34,19 @@ public class TopicLink extends SimplePanel implements ClickListener {
 	}
 
 	public TopicLink(TopicIdentifier topic,PopupWindow popup) {
-		this(topic.getTopicTitle(), topic.getTopicID());
-		this.popup = popup;
+		this(topic.getTopicTitle(), topic.getTopicID(),DEFAULT_MAX_STRING,popup);	
 	}
 	private TopicLink(String title, final long id){
-		this(title,id,DEFAULT_MAX_STRING);
+		this(title,id,DEFAULT_MAX_STRING,null);
 	}
 	public TopicLink(TopicIdentifier topic, PopupWindow popup,int maxStringLength) {
-		this(topic.getTopicTitle(),topic.getTopicID(),maxStringLength);
-		this.popup = popup;
+		this(topic.getTopicTitle(),topic.getTopicID(),maxStringLength,popup);		
 	}
-
-	private TopicLink(String title, long id, int maxStringLength){
-		
+	public TopicLink(String title, long id, PopupWindow popup){
+		this(title,id,DEFAULT_MAX_STRING,popup);
+	}
+	public TopicLink(String title, long id, int maxStringLength,PopupWindow popup){
+		this.popup = popup;
 		
 		l = null;
 		if(title.length() > maxStringLength){
@@ -56,7 +58,15 @@ public class TopicLink extends SimplePanel implements ClickListener {
 		this.id = id;
 		l.addClickListener(this);
 
-
+		l.addMouseListener(new MouseListenerAdapter(){
+			public void onMouseEnter(Widget sender) {
+				l.addStyleName(HOVER_STYLE);
+			}
+			public void onMouseLeave(Widget sender) {
+				l.removeStyleName(HOVER_STYLE);
+			}	
+		});
+		
 		l.setStyleName("H-TopicLink");
 
 		add(l);

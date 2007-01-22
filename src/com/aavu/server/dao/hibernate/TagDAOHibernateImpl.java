@@ -26,6 +26,7 @@ import com.aavu.server.dao.TagDAO;
 
 public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	private static final Logger log = Logger.getLogger(TagDAOHibernateImpl.class);
+	private static final int DEFAULT_TAG_AUTOCOMPLETE_MAX = 7;
 	
 	public List<Tag> getAllTags(User user) {
 		DetachedCriteria crit  = TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
@@ -49,17 +50,22 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	}
 
 	public List<String> getTagsStarting(User user, String match) {
+		return getTagsStarting(user, match, DEFAULT_TAG_AUTOCOMPLETE_MAX);		
+	}
+	public List<String> getTagsStarting(User user, String match,int max) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)		
 		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),
 				Expression.or(
 				Expression.eq("user", user),Expression.eq("publicVisible", true))))
 		.setProjection(Property.forName("title"));				
 		log.debug("USER: "+user+" USER ID "+user.getId()+" NAME "+user.getUsername()+" MATCH|"+match+"|");
-		return getHibernateTemplate().findByCriteria(crit);
+		return getHibernateTemplate().findByCriteria(crit,0,max);
 	}
 
 	public void removeTag(User user, Tag selectedTag){		
 
+		throw new UnsupportedOperationException();
+		
 		//TODO re-implement
 		//but for now this is dangerous.. could be orphaning lots of things
 		

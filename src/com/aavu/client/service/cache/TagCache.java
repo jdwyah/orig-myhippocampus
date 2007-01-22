@@ -22,9 +22,9 @@ public class TagCache {
 		tagService.getTagAddIfNew(itemText, callback);
 	}
 
-	public void removeTag(Tag selectedTag, StdAsyncCallback callback) throws PermissionDeniedException {
-		tagService.removeTag(selectedTag, callback);		
-	}
+//	public void removeTag(Tag selectedTag, StdAsyncCallback callback) throws PermissionDeniedException {
+//		tagService.removeTag(selectedTag, callback);		
+//	}
 
 	public void saveTag(Tag selectedTag, StdAsyncCallback callback) {
 		tagService.saveTag(selectedTag, callback);		

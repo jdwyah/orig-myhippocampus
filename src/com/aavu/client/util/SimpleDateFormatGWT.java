@@ -145,10 +145,10 @@ SUPPORTED_DF_TOKENS.contains(thisChar) ? thisChar : "";
          switch (token.length())
          {
             case 1:
-               response = Integer.toString(date.getMonth());
+               response = Integer.toString(date.getMonth()+1);
                break;
             case 2:
-               response = twoCharDateField(date.getMonth());
+               response = Integer.toString(date.getMonth()+1);//twoCharDateField(date.getMonth());
                break;
             case 3:
                response = MONTH_SHORT[date.getMonth()];
@@ -219,7 +219,7 @@ SUPPORTED_DF_TOKENS.contains(thisChar) ? thisChar : "";
     */
    private String twoCharDateField(int num)
    {
-      String res = Integer.toString(num + 1900);
+      String res = Integer.toString(num + 100);
       res = res.substring(res.length() - 2);
       return res;
    }

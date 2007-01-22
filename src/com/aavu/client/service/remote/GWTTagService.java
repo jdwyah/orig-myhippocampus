@@ -12,7 +12,7 @@ public interface GWTTagService extends RemoteService {
 
 	Tag getTagAddIfNew(String tagName) throws HippoException;
 
-	void removeTag(Tag selectedTag) throws PermissionDeniedException;
+	//void removeTag(Tag selectedTag) throws PermissionDeniedException;
 
 	Tag[] getAllTags();
 	

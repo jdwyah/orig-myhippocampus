@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 public class DragHandler implements MouseListener {
+	private static final String DRAGGING_STYLE = "H-Dragging";
 	private Widget dragging;
 	private int dragStartX;
 	private int dragStartY;
@@ -61,6 +62,7 @@ public class DragHandler implements MouseListener {
 			absolutePanel.setWidgetPosition(dragging,
 					absX - dragStartX,
 					absY - dragStartY);
+			dragging.addStyleName(DRAGGING_STYLE);
 		}
 	}
 
@@ -68,6 +70,8 @@ public class DragHandler implements MouseListener {
 		System.out.println("got an up, cancel drag "+sender);
 		if(dragging != null){
 			DOM.releaseCapture(dragging.getElement());
+			
+			dragging.removeStyleName(DRAGGING_STYLE);
 			
 //			Widget buddy = (Widget) dragBuddy.get(sender);
 //			if(null != buddy){

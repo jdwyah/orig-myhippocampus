@@ -57,9 +57,9 @@ public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringCon
 		}
 	}
 
-	public void removeTag(Tag selectedTag) throws PermissionDeniedException {
-		tagService.removeTag(selectedTag);
-	}
+//	public void removeTag(Tag selectedTag) throws PermissionDeniedException {
+//		tagService.removeTag(selectedTag);
+//	}
 
 	public String[] match(String match) {
 		try{

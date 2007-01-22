@@ -1,5 +1,6 @@
 package com.aavu.client.domain;
 
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class TopicIdentifier implements IsSerializable, Comparable {
@@ -13,7 +14,7 @@ public class TopicIdentifier implements IsSerializable, Comparable {
 	public TopicIdentifier(long topicID, String topicTitle) {
 		super();
 		this.topicID = topicID;
-		this.topicTitle = topicTitle;
+		this.topicTitle = topicTitle;		
 	}
 	public long getTopicID() {
 		return topicID;

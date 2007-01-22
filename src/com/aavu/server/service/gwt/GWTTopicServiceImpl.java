@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
@@ -97,6 +98,16 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 		TopicIdentifier[] rtn = new TopicIdentifier[list.size()];
 		for(int i=0;i<list.size();i++){				
 			TopicIdentifier t = list.get(i);
+			rtn[i] = t;
+		}
+		return rtn;
+	}
+	private FullTopicIdentifier[] convertToArray(List<FullTopicIdentifier> list){
+
+		FullTopicIdentifier[] rtn = new FullTopicIdentifier[list.size()];
+		for(int i=0;i<list.size();i++){				
+			FullTopicIdentifier t = list.get(i);
+			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
 			rtn[i] = t;
 		}
 		return rtn;
@@ -355,7 +366,7 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 	 * @throws HippoException 
 	 * 
 	 */
-	public TopicIdentifier[] getTopicIdsWithTag(Tag tag) throws HippoException {
+	public FullTopicIdentifier[] getTopicIdsWithTag(Tag tag) throws HippoException {
 		try {
 
 			return convertToArray(topicService.getTopicIdsWithTag(tag));

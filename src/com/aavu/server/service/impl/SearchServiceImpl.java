@@ -40,6 +40,8 @@ import com.aavu.server.service.UserService;
 
 public class SearchServiceImpl implements SearchService, InitializingBean {
 	private static final Logger log = Logger.getLogger(SearchServiceImpl.class);
+
+	private static final int DEFAULT_MAX_SEARCH_RESULTS = 10;
 	
 	private CompassTemplate compassTemplate;
 	
@@ -79,9 +81,9 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 	}
 
 	public List<SearchResult> search(final String searchString){
-		return search(searchString,userService.getCurrentUser().getUsername(), 0, 400);
+		return search(searchString,userService.getCurrentUser().getUsername(), 0, DEFAULT_MAX_SEARCH_RESULTS);
 	}
-	private List<SearchResult> search(final String searchString,final String username,final int start, final int num){
+	private List<SearchResult> search(final String searchString,final String username,final int start, final int max_num_hits){
 
 		log.debug("-----"+searchString+"--------"+username+"-----");
 				
@@ -137,6 +139,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				//need to do this before we unattach the hits
 				//http://www.opensymphony.com/compass/versions/1.1M2/html/core-workingwithobjects.html#CompassHighlighter
 				//
+				//TODO add in start / max_num_hits
 				for (int i = 0; i < hits.length(); i++) {
 					try{
 						log.debug("HIT "+i+" T:"+hits.highlighter(i).fragment("text"));					
@@ -145,8 +148,8 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 					}catch(SearchEngineException see){
 						log.warn("Search Engine Exception: "+see+" search term "+searchString+" username "+username);
 					}
-				}				
-				return hits.detach(start,num);
+				}		
+				return hits.detach(start,max_num_hits);
 			}});
 		
 		log.debug("Search: "+searchString+"Results:\t" + hits.getLength());

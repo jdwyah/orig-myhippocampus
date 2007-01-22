@@ -180,6 +180,22 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		tagDAO.removeTag(u, t);
 
 		List<Tag> list = tagDAO.getAllTags(u);		
+		
+		for (Tag tag : list) {
+			if(tag.getName().equals(A)){
+				System.out.println("A");	
+			}
+			else if(tag.getName().equals(B)){
+				System.out.println("B");	
+			}
+			else if(tag.getName().equals(B2)){
+				System.out.println("B2");	
+			}
+			else{
+				System.out.println("Other "+tag.getName());
+			}
+		}
+		
 		assertEquals(2+publicTagNumber, list.size());
 	}
 

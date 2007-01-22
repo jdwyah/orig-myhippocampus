@@ -14,7 +14,6 @@ import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -25,11 +24,9 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import sun.security.jca.GetInstance;
-
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.HippoDate;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
@@ -46,6 +43,7 @@ import com.aavu.server.web.domain.UserPageBean;
 
 public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicDAO{
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImpl.class);
+	private static final int DEFAULT_AUTOCOMPLET_MAX = 7;
 
 	public static DetachedCriteria loadEmAll(DetachedCriteria crit){
 		return crit.setFetchMode("user", FetchMode.JOIN)		
@@ -153,6 +151,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * @see com.aavu.server.dao.TopicDAO#getTopicsStarting(com.aavu.client.domain.User, java.lang.String)
 	 */
 	public List<String> getTopicsStarting(User user, String match) {
+		return getTopicsStarting(user, match, DEFAULT_AUTOCOMPLET_MAX);		
+	}
+	public List<String> getTopicsStarting(User user, String match,int max) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)		
 		.add(Expression.eq("user", user))
 		.add(Expression.ilike("title", match, MatchMode.ANYWHERE))
@@ -161,10 +162,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.ne("class", "metadate"))
 		.add(Expression.ne("class", "text"))//this is correct, right?
 		.add(Expression.ne("class", "date"))
+		
 		.addOrder( Order.asc("title") )
+		
 		.setProjection(Property.forName("title"));	
 
-		return getHibernateTemplate().findByCriteria(crit);
+		return getHibernateTemplate().findByCriteria(crit,0,max);
 	}
 
 
@@ -375,22 +378,22 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return rtn;		
 	}
 
-	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {			
+	public List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {			
 
 		Object[] params = {tag.getId(),user};				
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select title, id from Topic top "+
+				"select title, id, lastUpdated from Topic top "+
 				"where top.types.id is ? "+
 				"and user is ? "
 				,params);
 
 
-		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+		List<FullTopicIdentifier> rtn = new ArrayList<FullTopicIdentifier>(list.size());
 
 		//TODO Genericize: http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
 		for (Object[] o : list){
-			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+			rtn.add(new FullTopicIdentifier((Long)o[1],(String)o[0],(Date) o[2]));			
 		}
 
 		return rtn;		 		

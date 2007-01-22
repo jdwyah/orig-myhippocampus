@@ -9,7 +9,7 @@ public interface GWTTagServiceAsync {
 
 	void getTagAddIfNew(String tagName, AsyncCallback callback);
 
-	void removeTag(Tag selectedTag, AsyncCallback callback) throws PermissionDeniedException;;
+	//void removeTag(Tag selectedTag, AsyncCallback callback) throws PermissionDeniedException;;
 
 	void getAllTags(AsyncCallback callback);
 

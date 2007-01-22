@@ -65,7 +65,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class EditableLabelExtension extends Composite implements HasWordWrap, HasText
 {
 
-    /**
+    protected static final String HOVER_STYLE = "H-editableLabel-label-hover";
+
+	/**
      * TextBox element to enable text to be changed if Label is not word wrapped
      */
     private TextBox changeText;
@@ -274,10 +276,10 @@ public class EditableLabelExtension extends Composite implements HasWordWrap, Ha
         });
         text.addMouseListener(new MouseListenerAdapter(){
 			public void onMouseEnter(Widget sender) {
-				text.addStyleName("editableLabel-label-hover");
+				text.addStyleName(HOVER_STYLE);
 			}
 			public void onMouseLeave(Widget sender) {
-				text.removeStyleName("editableLabel-label-hover");				
+				text.removeStyleName(HOVER_STYLE);				
 			}
 		});
 

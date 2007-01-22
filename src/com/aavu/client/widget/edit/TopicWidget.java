@@ -16,11 +16,14 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicWidget extends FocusPanel implements ClickListener {
 	
+	protected static final String HOVER_STYLE = "H-editableText-hover";
+
 	private FlowPanel textPanel = new FlowPanel();
 
 	private VerticalPanel panel = new VerticalPanel();
@@ -28,6 +31,8 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	public Topic topic;
 
 	private String data;
+
+//	private Timer removeHighlight;
 
 
 	
@@ -49,6 +54,28 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 		add(panel);
 		addClickListener(this);
+				
+		addStyleName("H-editableText");
+		
+		/*
+		 * This is essentially Effect.highlight, but more reliable.
+		 * we were getting stuck on various shades of yellow
+		 */
+//		removeHighlight = new Timer(){
+//			public void run() {
+//				removeStyleName("editableLabel-label-hover");		
+//			}};
+		addMouseListener(new MouseListenerAdapter(){
+			public void onMouseEnter(Widget sender) {
+				addStyleName(HOVER_STYLE);
+				
+				//removeHighlight.schedule(500);
+			}
+			public void onMouseLeave(Widget sender) {
+				removeStyleName(HOVER_STYLE);
+			}	
+			
+		});
 	}	
 
 	public void load(Topic topic){

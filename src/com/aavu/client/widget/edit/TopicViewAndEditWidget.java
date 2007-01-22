@@ -54,11 +54,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 	public void load(Topic topic){
 		this.topic = topic;
 		topicWidget = new TopicWidget(manager,topic);
-		topicWidget.addClickListener(this);
-		topicWidget.addMouseListener(new MouseListenerAdapter(){
-			public void onMouseEnter(Widget sender) {
-				Effect.highlight(topicWidget);	
-			}});
+		topicWidget.addClickListener(this);		
 		
 		topicEditWidget = new TopicEditWidget(this,manager,topic);
 		topicEditWidget.addChangeListener(this);
@@ -67,7 +63,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 		System.out.println("############################## "+topic.getTitle());
 		
 		
-		Effect.highlight(topicWidget);
+		//Effect.highlight(topicWidget);
 	}
 		
 	

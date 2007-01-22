@@ -8,6 +8,7 @@ import org.gwm.client.GInternalFrame;
 
 import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
@@ -176,7 +177,7 @@ public class Manager implements TopicSaveListener {
 		getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
-				TopicIdentifier[] topics = (TopicIdentifier[]) result;
+				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
 
 				IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);
 						

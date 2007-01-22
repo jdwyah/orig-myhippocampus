@@ -9,6 +9,7 @@ import org.springframework.test.AssertThrows;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaText;
@@ -25,10 +26,8 @@ import com.aavu.client.domain.mapper.MindTreeElement;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
-import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
-import com.aavu.server.service.gwt.BaseTestWithTransaction;
 import com.aavu.server.web.domain.UserPageBean;
 
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
@@ -101,7 +100,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//tag does not show up bc user not set
 		assertEquals(1, savedL.size());		
 
-		TopicIdentifier saved = savedL.get(1);
+		TopicIdentifier saved = savedL.get(0);
 
 		Topic savedTopic = topicDAO.getForID(u, saved.getTopicID());
 
@@ -234,12 +233,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println("after: "+t.getId());
 
-		List<TopicIdentifier> savedL = topicDAO.getTopicIdsWithTag(tag,u);
+		List<FullTopicIdentifier> savedL = topicDAO.getTopicIdsWithTag(tag,u);
 
 		System.out.println(savedL.get(0));
 		System.out.println("b: " +t.toPrettyString());
 
-		System.out.println(((TopicIdentifier)savedL.get(0)));
+		System.out.println(((FullTopicIdentifier)savedL.get(0)));
 
 
 		assertEquals(1, savedL.size());

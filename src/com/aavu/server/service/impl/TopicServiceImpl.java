@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
@@ -59,7 +60,7 @@ public class TopicServiceImpl implements TopicService {
 		}
 		return topicDAO.save(topic);
 	}
-	public List<TopicIdentifier> getTopicIdsWithTag(Tag tag) {
+	public List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag) {
 		return topicDAO.getTopicIdsWithTag(tag,userService.getCurrentUser());
 	}
 	public List<TopicIdentifier> getAllTopicIdentifiers() {

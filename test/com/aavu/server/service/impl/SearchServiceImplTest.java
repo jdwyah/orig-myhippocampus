@@ -80,10 +80,12 @@ public class SearchServiceImplTest extends BaseTestWithTransaction {
 
 		rtn = searchService.search("body");
 		//dbg("body",rtn);		
-		assertEquals(2, rtn.size());
+		assertEquals(3, rtn.size());
 		
+		
+		//now returns match with "seconds" since we're snowballing
 		rtn = searchService.search("crack second");
-		assertEquals(1, rtn.size());
+		assertEquals(2, rtn.size());
 	}
 	
 	private void dbg(String string, List<SearchResult> rtn) {

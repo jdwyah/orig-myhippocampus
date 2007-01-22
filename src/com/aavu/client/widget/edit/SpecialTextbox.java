@@ -171,8 +171,6 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		completePopup.setVisible(true);				
 		Effect.appear(completePopup);
 
-		//Effect.highlight(completePanel);
-
 		DeferredCommand.add(new Command(){
 			public void execute() {			
 				completer.setFocus(true);		
