@@ -3,6 +3,7 @@ package com.aavu.client.gui.dhtmlIslands;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -36,7 +37,7 @@ public class DragHandler implements MouseListener {
 	}
 
 	public void onMouseDown(Widget sender, int x, int y) {
-		System.out.println("got a down start drag "+sender);
+		Logger.debug("got a down start drag "+sender);
 		dragging=sender;
 		DOM.setCapture(sender.getElement());
 		
@@ -67,7 +68,7 @@ public class DragHandler implements MouseListener {
 	}
 
 	public void onMouseUp(Widget sender, int x, int y) {
-		System.out.println("got an up, cancel drag "+sender);
+		Logger.debug("got an up, cancel drag "+sender);
 		if(dragging != null){
 			DOM.releaseCapture(dragging.getElement());
 			

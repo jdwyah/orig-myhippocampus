@@ -1,6 +1,7 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
@@ -144,5 +145,9 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 
 	public void unFocus() {
 		throw new UnsupportedOperationException("Not Yet Implemented");		
+	}
+
+	public void showCloseup(long id, FullTopicIdentifier[] topics) {
+		throw new UnsupportedOperationException("Not Yet Implemented");
 	}
 }

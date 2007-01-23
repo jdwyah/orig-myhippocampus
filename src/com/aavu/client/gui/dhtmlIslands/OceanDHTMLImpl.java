@@ -12,6 +12,7 @@ import org.gwtwidgets.client.wrap.Effect;
 import org.gwtwidgets.client.wrap.EffectOption;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.TagStat;
@@ -60,7 +61,9 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 	private boolean focussed = false;
 
-	private Widget closeUp;	
+	private CloseUpIsland closeUp;
+
+	private FocusPanel focusBackdrop;	
 	
 	public OceanDHTMLImpl(Manager manager) {
 		super();
@@ -141,7 +144,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		addObject(new DashedBox(-1000,140,3000,60));
 		
 
-		FocusPanel focusBackdrop = new FocusPanel();
+		focusBackdrop = new FocusPanel();
 		focusBackdrop.setWidth("100%");
 		focusBackdrop.setHeight("100%");
 		focusBackdrop.addMouseListener(this);
@@ -192,19 +195,20 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	}
 
 	/**
-	 * clear &remove old islands
-	 *
+	 * clear & remove old islands
+	 * Actually, just set them to invisible
 	 */
 	private void clearIslands(){		
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Long e = (Long) iter.next();
-			remove((Widget) islands.get(e));					
+			
+			((Widget) islands.get(e)).setVisible(false);					
 		}
 	}
 	private void clearCloseup(){		
 		
 		remove(closeUp);					
-		
+		focusBackdrop.setVisible(true);
 	}
 
 	private void addIsland(TagInfo info,Island isle){			
@@ -213,7 +217,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		dragHandler.add(isle);
 		
 		//dragHandler.add(isle,isle,banner);		
-		add(isle.getWidget(),isle.getLeft(),isle.getTop());
+		add(isle,isle.getLeft(),isle.getTop());
 		//add(banner,isle.getLeft(),isle.getTop());
 		
 		GUIEffects.appear(isle,4000);
@@ -230,23 +234,23 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 						
 			Island island = (Island) islands.get(e);
 						
-			//TODO only for close
-			island.setBack();
-			
-			addIsland(island.getStat(), island);
-
+			island.setVisible(true);
+						
 		}
 	}
 	
-	public void showIsland(long id){
-		
+
+	public void showCloseup(long id, FullTopicIdentifier[] topics) {
+				
 		clearIslands();
 
+		focusBackdrop.setVisible(false);
+		
 		Island closeIsland = (Island) islands.get(new Long(id));
 			
-		closeUp = closeIsland.getCloseUp();
-		
-		add(closeUp);
+		closeUp = new CloseUpIsland(closeIsland.getStat(),topics,this,closeIsland.getRepr());
+				
+		add(closeUp,closeUp.getLeft(),closeUp.getTop());
 		
 		manager.setFocussed(true);		
 	}
@@ -284,7 +288,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 			showOcean();
 			focussed = false;
 		}else{
-			showIsland(tagId);
+			manager.showTopicsForTag(tagId);
 			focussed = true;
 		}
 		
@@ -374,5 +378,6 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	public void unFocus() {
 		showOcean();
 	}
+
 
 }

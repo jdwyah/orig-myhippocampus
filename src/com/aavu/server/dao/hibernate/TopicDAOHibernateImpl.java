@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -380,22 +381,40 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {			
 
-		Object[] params = {tag.getId(),user};				
+		Object[] params = {tag.getId(),user};		
+		
+//		List<Object[]> list = getHibernateTemplate().find(""+
+//				"select title, id, lastUpdated from Topic top "+
+//				"where top.types.id is ? "+
+//				"and user is ? "
+//				,params);
+
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select title, id, lastUpdated from Topic top "+
-				"where top.types.id is ? "+
+				"select title, id, lastUpdated, top.typesWithLocation.latitude, top.typesWithLocation.longitude from Topic top "+
+				"where top.typesWithLocation.id is ? "+
 				"and user is ? "
 				,params);
-
-
-		List<FullTopicIdentifier> rtn = new ArrayList<FullTopicIdentifier>(list.size());
-
+		
+		//test query to prove uniqueness
+//		List<Object[]> list = getHibernateTemplate().find(""+
+//				"select title, id, lastUpdated, top.typesWithLocation.latitude, top.typesWithLocation.longitude from Topic top "+
+//				"where top.typesWithLocation.id = 196 ");
+		
+		
+		Set<FullTopicIdentifier> unique = new HashSet<FullTopicIdentifier>();
+		
+		//TODO we could probably be a good bit more efficient.
 		//TODO Genericize: http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
-		for (Object[] o : list){
-			rtn.add(new FullTopicIdentifier((Long)o[1],(String)o[0],(Date) o[2]));			
+		for (Object[] o : list){			
+			FullTopicIdentifier ident = new FullTopicIdentifier((Long)o[1],(String)o[0],(Date) o[2],(Integer)o[3],(Integer)o[4]);
+			System.out.println(o[1]+" "+o[0]+"lat "+o[3]+" long "+o[4]);			
+			unique.add(ident);			
 		}
 
+		List<FullTopicIdentifier> rtn = new ArrayList<FullTopicIdentifier>(unique.size());		
+		rtn.addAll(unique);
+		
 		return rtn;		 		
 	}
 

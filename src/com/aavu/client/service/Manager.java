@@ -181,8 +181,14 @@ public class Manager implements TopicSaveListener {
 				super.onSuccess(result);
 				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
 
-				IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);
+				
+				
+				mainMap.showCloseup(tag.getId(),topics);
+				
+				
+				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);
 						
+								
 			}});				
 	}
 	
@@ -284,11 +290,9 @@ public class Manager implements TopicSaveListener {
 	 * GUI elements.
 	 *
 	 *
-	 * TODO HIGH we're running setup TWICE. once from the UserSuccessCallback & once 
-	 * from LoginWindow. semaphore? these are both valid paths.
 	 */
 	public void loginSuccess() {
-		setup();
+		setup("LOGIN SUCC");
 	}
 	
 	
@@ -321,11 +325,15 @@ public class Manager implements TopicSaveListener {
 	 * If it doesn't suceed it will bring up the login dialog.
 	 *
 	 */
-	public void setup() {
+	public void setup(final String caller) {
+		
+		System.out.println("setup() from "+caller);
+		
 		hippoCache.getUserService().getCurrentUser(new AsyncCallback(){
 			public void onSuccess(Object result) {
+				
 				user = (User) result;
-		
+		System.out.println("succ "+caller);
 				if(user != null){
 					System.out.println("found a user: "+user.getUsername());	
 					
@@ -334,9 +342,10 @@ public class Manager implements TopicSaveListener {
 					} catch (Exception e) {					
 						e.printStackTrace();
 					}
-					
+					System.out.println("LoadGUI "+caller);
 					loadGUI();
 				}else{
+					System.out.println("null user ELSE "+caller);
 					doLogin();
 				}
 			}
@@ -347,7 +356,9 @@ public class Manager implements TopicSaveListener {
 			 * (non-Javadoc)
 			 * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
 			 */
-			public void onFailure(Throwable caught) {							
+			public void onFailure(Throwable caught) {	
+				
+				System.out.println("failed for "+caller);
 				Logger.log("GetCurrentUser failed! "+caught+" \nEP:"+HippoTest.getRelativeURL(""));
 				doLogin();											
 			}						
@@ -378,6 +389,7 @@ public class Manager implements TopicSaveListener {
 		this.focussed = false;
 		mainMap.unFocus();
 	}
+	
 	
 		
 

@@ -2,57 +2,32 @@ package com.aavu.client.gui.dhtmlIslands;
 
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.User;
-import com.aavu.client.util.MiddleSquarePseudoRandom;
-import com.aavu.client.util.PsuedoRandom;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Island extends AbsolutePanel implements ClickListener, SourcesMouseEvents, RemembersPosition{
+public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, RemembersPosition{
 	
-		
 	
-	private static ImageHolder imgHolder = new ImageHolder();
 	
-	private static final int GRID = 100;
-
 	/**
 	 * All new or (0,0) islands will show up at (move_me,move_me) + static 30 * number of islands
 	 */
 	private static int move_me = 400;
 	
-	private int scale = 1;
+			
+	private MouseListenerCollection mouseListeners;	
 	
-	private int my_spacing;
-		
-	int max_x = 0;
-	int min_x = Integer.MAX_VALUE;
-	int max_y = 0;
-	int min_y = Integer.MAX_VALUE;
-	
-	private MouseListenerCollection mouseListeners;
-	
-	private PsuedoRandom pr;
-	
-	int[][] used = new int[GRID][GRID];
-	
-	private TagInfo tagStat;
+
 	private OceanDHTMLImpl ocean;
-	private int top;
-	private int left;
+
+	
 	private IslandBanner banner;
 
-	int bigs = 0;
-	int meds = 0;
-	int smalls = 0;
-	private int theSize;
 	private int height;
 
 	
@@ -62,13 +37,11 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		this.ocean = ocean;
 		
 		
-		long seed = user.getId()+tagStat.getTagId();
-		pr = new MiddleSquarePseudoRandom(seed,4);
-		
 		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS );	    
 					
 		setStyleName("H-Island");
 		
+		listener = this;
 		
 //		switch (pr.nextInt(4)) {
 //		case 0:
@@ -91,12 +64,11 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		theSize = tagStat.getNumberOfTopics()+1;
 		
 		
-		setType();			
+		setTypeAndSpacing();			
 		
 		situate(ocean);		
 		
-		//incr ie add a (no topic here) spot		
-		growInternal();	
+		repr = new IslandRepresentation(GRID,stat,user);
 				
 		
 		scale = 1;
@@ -120,7 +92,7 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 				
 		
-		System.out.println(tagStat.getTagName()+" SIZE "+tagStat.getNumberOfTopics()+" minx "+min_x+" max x "+max_x+" miny "+min_y+" maxy "+max_y);
+		System.out.println(tagStat.getTagName()+" SIZE "+tagStat.getNumberOfTopics()+" minx "+repr.min_x+" max x "+repr.max_x+" miny "+repr.min_y+" maxy "+repr.max_y);
 		System.out.println("Island top: "+top+" left "+left);		
 				
 		System.out.println("Island longi x "+tagStat.getLongitude());
@@ -142,79 +114,34 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		doIslandType(2);
 				
 	}
-	private void drawJustTheIsland(AbsolutePanel panel) {
-
-		panel.clear();
-		panel.add(banner,0,height/2);
-		
-		//need to re-loop after all the min/maxes are set
-		//				
-		//doIslandType(0);		
-		doIslandType(1,panel);
-		doIslandType(2,panel);				
-	}
 	
 
 
-	/**
-	 * 
-	 *
-	 */
-	private void setType() {
-		if(theSize >= 16){
-			my_spacing = Type.SPACING_30;//NOTE not using 100's			
-		}
-		else if(theSize >= 4){
-			my_spacing = Type.SPACING_30;
-		}
-		else{
-			my_spacing = Type.SPACING_30;
-		}
-		my_spacing *= scale;
-	}
-
-
-	private void clearUseArray() {
-		for (int i = 0; i < GRID; i++) {
-			for (int j = 0; j < GRID; j++) {
-				used[i][j] = -1;
-			}
-		}
-	}
 	
 
 	/*
 	 * Ocean will pull these from us when it adds us
 	 */	
 	private void doPositioning() {
-		doPositioning(false,this);
-	}
-	private void doPositioning(boolean closeUpPositioning,Panel panel) {			
-		if(closeUpPositioning){
-			top = 300;  
-			left = 300;									
-		}else{
-			top = tagStat.getLatitude();  
-			left = tagStat.getLongitude();
-		}
-		top -= gridToRelativeY(min_y,my_spacing);
-		left -= gridToRelativeX(min_x,my_spacing);	
-
+	
+		top = tagStat.getLatitude() - gridToRelativeY(repr.min_y,my_spacing); 
+		left = tagStat.getLongitude() - gridToRelativeX(repr.min_x,my_spacing);
+		
 		/*
 		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
 		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
 		 */
-		int width = (max_x + 1 - min_x) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
-		height = (max_y + 1 - min_y) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
+		int width = (repr.max_x + 1 - repr.min_x) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
+		height = (repr.max_y + 1 - repr.min_y) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
 		
 		int predicted = getPredictedBannerWidth();
 		System.out.println("Predicted Width "+predicted);
 		if(predicted > width){
-			DOM.setStyleAttribute(panel.getElement(), "width", predicted+"px");	
+			DOM.setStyleAttribute(getElement(), "width", predicted+"px");	
 		}else{
-			DOM.setStyleAttribute(panel.getElement(), "width", width+"px");	
+			DOM.setStyleAttribute(getElement(), "width", width+"px");	
 		}
-		DOM.setStyleAttribute(panel.getElement(), "height", height+"px");
+		DOM.setStyleAttribute(getElement(), "height", height+"px");
 		
 		//not working
 		banner.setWidth(width+"em");
@@ -235,22 +162,6 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		return (int) (tagStat.getTagName().length() * 9 * banner.getFontFor(tagStat.getNumberOfTopics()));
 	}
 
-
-	public int getLeft() {
-		return left;
-	}
-	public int getTop() {
-		return top;
-	}
-
-
-
-	private int gridToRelativeX(int gridValue,int spacing){		
-		return (gridValue - min_x)* spacing;		
-	}
-	private int gridToRelativeY(int gridValue,int spacing){				
-		return (gridValue - min_y)* spacing;		
-	}
 
 
 
@@ -282,212 +193,19 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 
 	public void grow() {
 		theSize++;
-		setType();
-		growInternal();
+		setTypeAndSpacing();
+		repr.growByOne();
 		
 		doPositioning();
 		//System.out.println("set to left "+left+" top "+top);
 		ocean.setWidgetPosition(this, left, top);		
 	}
 
-	/**
-	 * Creat an int[][] of the island's "used" graph. This is the framework upon
-	 * which we'll draw the island.
-	 * 
-	 * TODO will crash if things go beyond bounds of tag GRID
-	 * 
-	 * @param i
-	 */
-	private void growInternal() {
-
-		clearUseArray();
-		pr.reInit();	
-		
-		/*
-		 * calculate here
-		 */
-//		bigs = theSize /16;
-//		meds = (theSize %16)/4;
-//		smalls = theSize %4;
-		
-		/*
-		 * don't use 100's for now
-		 */		
-		bigs = 0;//theSize /16;
-		meds = theSize / 4;
-		smalls = theSize %4;
-		
-		bigs = 0;
-		meds = 0;
-		smalls = theSize;
-		
-		
-		System.out.println("grow "+theSize+" "+bigs+" "+meds+" "+smalls);
-		int x = GRID/2;			
-		int y = GRID/2;
-		
-		for (int j = 1; j < bigs + meds + smalls + 1; j++) {
-				
-			
-				
-//			x = GRID/2;			
-//			y = GRID/2;
-				
-			//TODO take this out.. only to prevent loops if Von Neuman PRG explodes
-			int c = 0;
-			while(-1 != used[x][y] && c < 200){
-				
-				if(tagStat.getTagName().equals("Person"))
-				System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
-				c++;
-				
-				int dx = pr.nextInt(3) - 1;
-				int dy = pr.nextInt(3) - 1;
-				x += dx;
-				y += dy;
-				//System.out.println("sw: "+sw);
-			}
-			System.out.println("FOUND: "+x+" "+y+" "+j);
-			used[x][y] = j;
-			
-			//update BOUNDS
-			if(x < min_x){
-				min_x = x;
-			}
-			if(x > max_x){
-				max_x = x;
-			}
-			if(y < min_y){
-				min_y = y;
-			}
-			if(y > max_y){
-				max_y = y;
-			}
-				
-		}
-				
-	}
 	
-	/**
-	 * used[][] will be an array with value of the order in which we "found"
-	 * this square. Idea is to have the big ones in the center, surrounded by med,
-	 * then small. 
-	 * 
-	 * Would like to make it a bit smarter about laying out new little guys.
-	 * 
-	 * @param style
-	 * @param panel 
-	 */
-	private void doIslandType(int style) {
-		doIslandType(style, this);
-	}
-	private void doIslandType(int style, AbsolutePanel panel) {
-		int x;
-		int count = 0;
-		AcreSize acreSize = null;
-		for (x = 0; x < GRID; x++) {
-			for (int j = 0; j < GRID; j++) {
-				if(used[x][j] > -1){
-					if(used[x][j] > bigs + meds){
-						acreSize = AcreSize.SIZE_30;												
-					}else if(used[x][j] > bigs){
-						acreSize = AcreSize.SIZE_60;												
-					}
-					else{
-						acreSize = AcreSize.SIZE_100;												
-					}
-					System.out.println("used "+x+" "+j+" "+used[x][j]+" Acre: "+acreSize.getSize());
-					count++;
-					
-					if(0 == style){
-						addShadow(x,j,acreSize,panel);
-					}
-					else if(1 == style){
-						addAcre(x,j,acreSize,panel);
-					}
-					else if(2 == style){
-						addInner(x,j,acreSize,panel);
-					}
-				}
-			}
-		}
-	}
-	
-	
-	/**
-	 * takes values from -50 -> 50 (GRID/2)
-	 * 
-	 * gridToRelative using my_type || type? 
-	 * 
-	 */
-	private void addAcre(int x, int y,AcreSize acreSize, AbsolutePanel panel){
-		
-		int corrected_x = gridToRelativeX(x,my_spacing);
-		int corrected_y = gridToRelativeY(y,my_spacing);		
-		
-		
-		System.out.println("x "+x+" cx "+corrected_x);
-		System.out.println("y "+y+" cy "+corrected_y);
-//		
-
-		panel.add(new Acre(this,x,y,acreSize),corrected_x,corrected_y);
-		
-	}
-
-	private void addShadow(int x, int y,AcreSize acreSize, AbsolutePanel panel){
-
-		int corrected_x = gridToRelativeX(x,my_spacing);
-		int corrected_y = gridToRelativeY(y,my_spacing);		
-
-		panel.add(new Shadow(x,y,acreSize),corrected_x,corrected_y);
-	}
-	private void addInner(int x, int y,AcreSize acreSize, AbsolutePanel panel){
-
-		int corrected_x = gridToRelativeX(x,my_spacing);
-		int corrected_y = gridToRelativeY(y,my_spacing);		
-
-		panel.add(new Inner(x,y,acreSize),corrected_x,corrected_y);
-	}
-	
-	
-
 	public void onClick(Widget sender) {			
 		ocean.islandClicked(tagStat.getTagId());
 	}
 	
-	private class Level extends AbsolutePanel {		
-		
-
-		public Level(ClickListener listener, int x, int y,AcreSize acreSize,String extension,String style){
-									
-			Image isle = imgHolder.getImage(acreSize,tagStat.getTagId(),x,y,extension);//new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
-			if(listener != null){
-				isle.addClickListener(listener);
-			}
-			isle.setStyleName(style);
-			isle.setPixelSize(acreSize.getSize()*scale, acreSize.getSize()*scale);
-			add(isle,0,0);
-						
-			DOM.setStyleAttribute(getElement(), "width", acreSize.getSize()*scale+"px");
-			DOM.setStyleAttribute(getElement(), "height", acreSize.getSize()*scale+"px");
-
-		}
-	}
-	private class Acre extends Level {
-		public Acre(ClickListener listener,int x, int y,AcreSize acreSize){
-			super(listener,x,y,acreSize,"I","Isle");			
-		}
-	}
-	private class Shadow extends Level {
-		public Shadow(int x, int y,AcreSize acreSize){
-			super(null,x,y,acreSize,"S","Overlay");			
-		}
-	}
-	private class Inner extends Level {
-		public Inner(int x, int y,AcreSize acreSize){
-			super(null,x,y,acreSize,"Inner","Overlay");			
-		}
-	}
 	
 
 
@@ -563,26 +281,10 @@ public class Island extends AbsolutePanel implements ClickListener, SourcesMouse
 		return this;
 	}
 
-	public void setBack(){
-
-		//TODO not ideal. need to separate the closeup and this. they shouldn't share top/left
-		doPositioning();
-}
 	
-	public Widget getCloseUp() {
-		
-		scale = 10;
-		
-		AbsolutePanel panel = new AbsolutePanel();
-		
-		drawJustTheIsland(panel);
-
-		doPositioning(true,panel);
-	
-		return panel;
+	public IslandRepresentation getRepr() {
+		return repr;
 	}
-	
-
 	public TagInfo getStat() {
 		return tagStat;
 	}

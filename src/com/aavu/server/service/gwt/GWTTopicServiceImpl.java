@@ -150,6 +150,9 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 
 		log.debug("t "+t.getTypes().getClass());				
 
+		//Never pass this
+		t.setTypesWithLocation(new HashSet());
+		
 		//
 		//new-ing it is essentially nulling it out, since we can't pass
 		//lazy stuff

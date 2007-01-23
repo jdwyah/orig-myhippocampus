@@ -1,5 +1,6 @@
 package com.aavu.client.gui;
 
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -19,5 +20,7 @@ public interface Ocean {
 	public void removeIsland(long id);
 
 	public void unFocus();
+
+	public void showCloseup(long id, FullTopicIdentifier[] topics);
 
 }

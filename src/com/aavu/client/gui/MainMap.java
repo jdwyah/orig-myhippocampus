@@ -1,5 +1,6 @@
 package com.aavu.client.gui;
 
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
@@ -97,6 +98,10 @@ public class MainMap extends Composite {
 
 	public void unFocus() {
 		ocean.unFocus();
+	}
+
+	public void showCloseup(long id, FullTopicIdentifier[] topics) {
+		ocean.showCloseup(id,topics);
 	}
 
 

@@ -50,6 +50,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(topicIdent.getTopicTitle());		
 	}
 
+	
 	public void addMetaValue(Meta meta, Topic metaValue) {
 
 		System.out.println("Topic.addMetaValue: "+metaValue);
