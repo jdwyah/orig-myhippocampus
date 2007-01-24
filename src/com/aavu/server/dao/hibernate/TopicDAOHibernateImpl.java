@@ -379,9 +379,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return rtn;		
 	}
 
-	public List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag,User user) {			
+	public List<FullTopicIdentifier> getTopicIdsWithTag(long tagid,User user) {			
 
-		Object[] params = {tag.getId(),user};		
+		Object[] params = {new Long(tagid),user};		
 		
 //		List<Object[]> list = getHibernateTemplate().find(""+
 //				"select title, id, lastUpdated from Topic top "+

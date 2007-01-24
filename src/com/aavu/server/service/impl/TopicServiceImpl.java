@@ -60,8 +60,8 @@ public class TopicServiceImpl implements TopicService {
 		}
 		return topicDAO.save(topic);
 	}
-	public List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag) {
-		return topicDAO.getTopicIdsWithTag(tag,userService.getCurrentUser());
+	public List<FullTopicIdentifier> getTopicIdsWithTag(long id) {
+		return topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
 	}
 	public List<TopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());

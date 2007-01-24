@@ -233,7 +233,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println("after: "+t.getId());
 
-		List<FullTopicIdentifier> savedL = topicDAO.getTopicIdsWithTag(tag,u);
+		List<FullTopicIdentifier> savedL = topicDAO.getTopicIdsWithTag(tag.getId(),u);
 
 		System.out.println(savedL.get(0));
 		System.out.println("b: " +t.toPrettyString());

@@ -70,6 +70,9 @@ public class IslandBanner extends AbsolutePanel{
 	public void addClickListener(ClickListener listener) {
 		reg.addClickListener(listener);
 	}
-	
+	public void setText(String text){
+		reg.setText(text);
+		shdw.setText(text);
+	}
 }
 

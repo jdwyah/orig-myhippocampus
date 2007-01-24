@@ -144,7 +144,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		assertEquals(1, book2.getInstances().size());
 		
 		//and another check
-		assertEquals(1,topicService.getTopicIdsWithTag(book).length);
+		assertEquals(1,topicService.getTopicIdsWithTag(book.getId()).length);
 		
 		
 	}

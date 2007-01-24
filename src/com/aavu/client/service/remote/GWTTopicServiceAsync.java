@@ -23,7 +23,7 @@ public interface GWTTopicServiceAsync {
 	void match(String match, AsyncCallback callback);	
 
 	void getTopicForName(String topicName, AsyncCallback callback);
-	void getTopicIdsWithTag(Tag tag, AsyncCallback callback);
+	void getTopicIdsWithTag(long id, AsyncCallback callback);
 	
 	/*
 	 * @Deprecated

@@ -135,7 +135,7 @@ a:visited {
 	z-index: 1;
 }
 
-.H-Ocean { /*background-color: #CCE6FF;*/
+.H-Ocean { /*background-color: #CCE6FF;*/	
 	background-repeat: repeat;
 	position: absolute;
 	left: 0px;
@@ -173,7 +173,7 @@ a:visited {
 }
 
 .H-Island {
-	background-color: transparent;
+	background-color: red;
 	cursor: -moz-grab;
 }
 

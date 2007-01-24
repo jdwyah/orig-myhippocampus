@@ -17,14 +17,16 @@ public class DragHandler implements MouseListener {
 	private int dragStartY;
 	private AbsolutePanel absolutePanel;
 	//private Map dragBuddy = new HashMap();
+	private DragFinishedListener dragFinishedListener;
 
 	public DragHandler(AbsolutePanel panel) {
 		this.absolutePanel = panel;
 		//RootPanel.get()
 	}
 
-	public void add(SourcesMouseEvents w) {
+	public void add(SourcesMouseEvents w,DragFinishedListener listener) {
 		w.addMouseListener(this);
+		this.dragFinishedListener = listener;
 	}
 	
 //	public void add(SourcesMouseEvents w,Widget draggable, Widget goWith) {
@@ -58,6 +60,7 @@ public class DragHandler implements MouseListener {
 
 	public void onMouseMove(Widget sender, int x, int y) {
 		if (dragging!=null) {
+			
 			int absX = x + dragging.getAbsoluteLeft();
 			int absY = y + dragging.getAbsoluteTop();
 			absolutePanel.setWidgetPosition(dragging,
@@ -73,6 +76,9 @@ public class DragHandler implements MouseListener {
 			DOM.releaseCapture(dragging.getElement());
 			
 			dragging.removeStyleName(DRAGGING_STYLE);
+			
+			if(dragFinishedListener != null)
+			dragFinishedListener.dragFinished(dragging);
 			
 //			Widget buddy = (Widget) dragBuddy.get(sender);
 //			if(null != buddy){

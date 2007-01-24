@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.gwtwidgets.client.ui.PNGImage;
-import org.gwtwidgets.client.wrap.Effect;
 import org.gwtwidgets.client.wrap.EffectOption;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -19,18 +18,23 @@ import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.Ocean;
 import com.aavu.client.gui.ext.GUIEffects;
+import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.service.Manager;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollListener;
+import com.google.gwt.user.client.ui.ScrollListenerCollection;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SourcesScrollEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListener {
+public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListener, DragFinishedListener, WheelListener {
 
 	static final String IMG_LOC = "img/simplicity/";
 	//static final String IMG_LOC = "img/oldmapStyle/";
@@ -63,7 +67,14 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 	private CloseUpIsland closeUp;
 
-	private FocusPanel focusBackdrop;	
+	private EventBackdrop focusBackdrop;
+
+	private double currentScale = 1;
+
+	private int curMouseX;
+
+	private int curMouseY;	
+	
 	
 	public OceanDHTMLImpl(Manager manager) {
 		super();
@@ -73,6 +84,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 		dragHandler = new DragHandler(this);
 
+		//sinkEvents(Event.ONSCROLL);
 
 		//Decorations that will be obcured by the focus panel
 		//
@@ -144,12 +156,11 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		addObject(new DashedBox(-1000,140,3000,60));
 		
 
-		focusBackdrop = new FocusPanel();
-		focusBackdrop.setWidth("100%");
-		focusBackdrop.setHeight("100%");
+		focusBackdrop = new EventBackdrop();
 		focusBackdrop.addMouseListener(this);
-		focusBackdrop.setStyleName("H-FocusBackDrop");		
+		focusBackdrop.addWheelistener(this);
 		add(focusBackdrop,0,0);
+				
 	}
 
 	private void addObject(RemembersPosition rp) {		
@@ -185,7 +196,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		for (int i = 0; i < tagStats.length; i++) {
 			TagStat stat = tagStats[i];
 
-			Island isle = new Island(stat,this,manager.getUser());
+			Island isle = new Island(stat,this,manager.getUser(),manager);
 
 			addIsland(stat, isle);
 
@@ -214,7 +225,7 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	private void addIsland(TagInfo info,Island isle){			
 		
 		
-		dragHandler.add(isle);
+		dragHandler.add(isle,this);
 		
 		//dragHandler.add(isle,isle,banner);		
 		add(isle,isle.getLeft(),isle.getTop());
@@ -240,26 +251,124 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	}
 	
 
+	private void zoomUp() {
+		System.out.println("zoom up from "+currentScale);
+		
+		double oldScale = currentScale;
+		if(currentScale <= 1){
+			currentScale /= 2;		
+		}else{
+			currentScale--;
+		}
+		
+		setIslandsToZoom();
+		
+		System.out.println("Back X "+backX+ " subt "+(1280/2)*currentScale);
+		System.out.println("Back Y "+backY+ " subt "+(1024/2)*currentScale);
+		
+		//backX += (1280/2);//*currentScale;
+		//backY += (1024/2);//*currentScale;
+		
+		reCenter(oldScale);
+		
+		System.out.println("RES "+backX+" "+backY);
+		
+		//scale all positions
+		moveByDelta(0,0);
+		//moveByDelta(200, 100);
+	}
+
+
+
+	private void zoomIn() {		
+		System.out.println("zoom in from "+currentScale);
+		
+		double oldScale = currentScale;
+		if(currentScale <= 1){
+			currentScale *= 2;		
+		}else{
+			currentScale++;
+		}
+		
+		
+		setIslandsToZoom();
+		
+		reCenter(oldScale);
+		
+		//scale all positions
+		moveByDelta(0,0);
+		//moveByDelta(-200, -100);
+	}
+
+	
+	private void reCenter(double oldScale) {
+		
+		int centerX = (int)((-curbackX + (Window.getClientWidth()/2))/oldScale);
+		int centerY = (int)((-curbackY + (Window.getClientHeight()/2))/oldScale);
+		
+		System.out.println("back X "+backX+"  backy "+backY);
+		System.out.println("center X "+centerX+"  cy "+centerY);
+		
+		int halfWidth = Window.getClientWidth()/2;
+		int halfHeight = Window.getClientHeight()/2;
+				
+		System.out.println("hw "+halfWidth+" hh "+halfHeight);
+		//backX = halfWidth - halfWidth/currentScale;
+		
+		int newCenterX = (int) (centerX * currentScale);
+		int newCenterY = (int) (centerY * currentScale);
+		
+		System.out.println("new center X "+newCenterX+" "+newCenterY);
+		
+		backX = -(newCenterX - halfWidth);
+		backY = -(newCenterY - halfHeight);
+		
+		System.out.println("Newback X "+backX+"  NEWbacky "+backY);
+			
+		
+	}
+	
+	
+	
+	private void setIslandsToZoom() {
+		
+		System.out.println("Setting all islands to zoom level "+currentScale);
+		
+		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
+			Long e = (Long) iter.next();
+						
+			Island island = (Island) islands.get(e);
+						
+			island.zoomToScale(currentScale);						
+		}
+		
+		
+	}
+
+	
+	
+	
+
 	public void showCloseup(long id, FullTopicIdentifier[] topics) {
 				
-		clearIslands();
-
-		focusBackdrop.setVisible(false);
-		
-		Island closeIsland = (Island) islands.get(new Long(id));
-			
-		closeUp = new CloseUpIsland(closeIsland.getStat(),topics,this,closeIsland.getRepr());
-				
-		add(closeUp,closeUp.getLeft(),closeUp.getTop());
-		
-		manager.setFocussed(true);		
+//		clearIslands();
+//
+//		focusBackdrop.setVisible(false);
+//		
+//		Island closeIsland = (Island) islands.get(new Long(id));
+//			
+//		closeUp = new CloseUpIsland(closeIsland.getStat(),topics,this,closeIsland.getRepr());
+//				
+//		add(closeUp,closeUp.getLeft(),closeUp.getTop());
+//		
+//		manager.setFocussed(true);		
 	}
 
 	public void growIsland(Tag tag) {
 		Island isle = (Island) islands.get(new Long(tag.getId()));
 		if(isle == null){
 
-			Island newIsle = new Island(tag,this,manager.getUser());		
+			Island newIsle = new Island(tag,this,manager.getUser(),manager);		
 			addIsland(tag, newIsle);
 
 		}else{
@@ -295,6 +404,16 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 		//manager.showTopicsForTag(tagId);
 	}
 
+
+	public void dragFinished(Widget dragging) {
+		Island island = (Island) dragging;
+		
+		island.youveBeenDraggedSetYourLeftAndTop();
+		
+		islandMoved(island.getStat().getTagId(), island.getLeft(), island.getTop());
+	}
+
+	
 	public void islandMoved(long islandID, final int longitude, final int latitude){
 
 		System.out.println("isleMovedTo "+longitude+" "+latitude+" ");			
@@ -314,10 +433,17 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 	
 
-	private void moveTo(int dx, int dy) {
+	private void moveByDelta(int dx, int dy) {
 		curbackX = dx + backX;
 		curbackY = dy + backY;
 		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX+"px "+curbackY+"px");	
+		
+//		System.out.println("cur "+curbackX+" "+curbackY);
+		
+		int centerX = (int)((-curbackX + (Window.getClientWidth()/2))/currentScale);
+		int centerY = (int)((-curbackY + (Window.getClientHeight()/2))/currentScale);
+		
+//		System.out.println("centerX "+centerX+" centerY "+centerY);
 		
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 			RemembersPosition rp = (RemembersPosition) iter.next();					
@@ -327,9 +453,8 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 //			System.out.println("Left "+isle.getLeft()+"  Top "+isle.getTop());
 //			System.out.println("cur "+curbackX+" cury "+curbackY);
 			
-			setWidgetPosition(rp.getWidget(),rp.getLeft()+curbackX, rp.getTop()+curbackY);	
-			
-			
+			//setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale), (int)((rp.getTop()+curbackY)*currentScale));				
+			setWidgetPosition(rp.getWidget(),(int)((rp.getLeft())*currentScale)+curbackX, (int)((rp.getTop())*currentScale)+curbackY);
 		}
 			
 	}
@@ -348,8 +473,11 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
+		curMouseX = x;
+		curMouseY = y;
+		
 		if (dragging) {			
-			moveTo(x - dragStartX, y - dragStartY);			
+			moveByDelta(x - dragStartX, y - dragStartY);			
 		}
 	}
 
@@ -377,6 +505,14 @@ public class OceanDHTMLImpl  extends AbsolutePanel implements Ocean, MouseListen
 
 	public void unFocus() {
 		showOcean();
+	}
+
+	public void onWheel(Widget widget, int delta) {
+		if(delta < 0){
+			zoomUp();
+		}else{
+			zoomIn();
+		}
 	}
 
 

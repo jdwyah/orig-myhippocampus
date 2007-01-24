@@ -25,7 +25,7 @@ public interface TopicService {
 
 	Topic getForName(String string);
 
-	List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag);
+	List<FullTopicIdentifier> getTopicIdsWithTag(long id);
 
 	Topic getForID(long topicID);
 

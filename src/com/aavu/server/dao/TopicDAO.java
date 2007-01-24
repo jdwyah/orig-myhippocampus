@@ -28,7 +28,7 @@ public interface TopicDAO {
 	
 	void tester();
 
-	List<FullTopicIdentifier> getTopicIdsWithTag(Tag tag,User user);
+	List<FullTopicIdentifier> getTopicIdsWithTag(long tagid,User user);
 
 	Topic getForID(User currentUser, long topicID);
 

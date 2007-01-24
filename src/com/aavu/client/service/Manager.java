@@ -80,7 +80,7 @@ public class Manager implements TopicSaveListener {
 	public void bringUpChart(Topic topic, boolean editMode) {
 		
 		if(topic instanceof Tag){
-			showTopicsForTag((Tag)topic);
+			showTopicsForTag(topic.getId());
 		}else{
 			TopicWindow tw = new TopicWindow(this,topic);		
 			if(editMode){
@@ -166,33 +166,24 @@ public class Manager implements TopicSaveListener {
 	 * 
 	 * Used By Flash Ocean
 	 */
-	public void showTopicsForTag(long id) {
+	public void showTopicsForTag(final long id) {
 		
-		getTopicCache().getTopicByIdA(id, new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				showTopicsForTag((Tag)result);		
-			}});		
-	}
-
-	public void showTopicsForTag(final Tag tag) {
-		getTopicCache().getTopicsWithTag(tag,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
+		getTopicCache().getTopicsWithTag(id,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
 
 				
 				
-				mainMap.showCloseup(tag.getId(),topics);
+				mainMap.showCloseup(id,topics);
 				
 				
 				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);
 						
 								
 			}});				
-	}
-	
-		
+	}	
+			
 
 	/**
 	 * we can goto a topic linked by either Name, or ID.

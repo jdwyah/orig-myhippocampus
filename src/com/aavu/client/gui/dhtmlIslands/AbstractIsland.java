@@ -1,11 +1,12 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.util.Logger;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Image;
 
 public class AbstractIsland extends AbsolutePanel {
 
@@ -13,7 +14,7 @@ public class AbstractIsland extends AbsolutePanel {
 	protected static final int GRID = 100;
 
 
-	protected int scale = 1;
+	protected double scale = 1;
 
 
 	protected IslandRepresentation repr;
@@ -27,6 +28,7 @@ public class AbstractIsland extends AbsolutePanel {
 	
 	protected int theSize;
 	
+	protected Map levels = new HashMap();
 
 
 	/**
@@ -102,6 +104,26 @@ public class AbstractIsland extends AbsolutePanel {
 	}
 
 
+	private void addLevel(Level level, int corrected_x, int corrected_y) {
+		
+		add(level,corrected_x,corrected_y);		
+		
+		levels.put(level,new Location(corrected_x,corrected_y));
+		
+	}
+	
+	private class Location {
+
+		int x;
+		int y;
+		
+		public Location(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+	}
+
 	/**
 	 * takes values from -50 -> 50 (GRID/2)
 	 * 
@@ -118,56 +140,41 @@ public class AbstractIsland extends AbsolutePanel {
 		Logger.debug("y "+y+" cy "+corrected_y);
 
 
-		add(new Acre(listener,x,y,acreSize),corrected_x,corrected_y);
+		addLevel(new Acre(listener,x,y,acreSize),corrected_x,corrected_y);
 
 	}
+
+
 
 	private void addShadow(int x, int y,AcreSize acreSize){
 
 		int corrected_x = gridToRelativeX(x,my_spacing);
 		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		add(new Shadow(x,y,acreSize),corrected_x,corrected_y);
+		addLevel(new Shadow(x,y,acreSize),corrected_x,corrected_y);
 	}
 	private void addInner(int x, int y,AcreSize acreSize){
 
 		int corrected_x = gridToRelativeX(x,my_spacing);
 		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		add(new Inner(x,y,acreSize),corrected_x,corrected_y);
+		addLevel(new Inner(x,y,acreSize),corrected_x,corrected_y);
 	}
 
-	private class Level extends AbsolutePanel {		
-
-
-		public Level(ClickListener listener, int x, int y,AcreSize acreSize,String extension,String style){
-
-			Image isle = imgHolder.getImage(acreSize,tagStat.getTagId(),x,y,extension);//new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
-			if(listener != null){
-				isle.addClickListener(listener);
-			}
-			isle.setStyleName(style);
-			isle.setPixelSize(acreSize.getSize()*scale, acreSize.getSize()*scale);
-			add(isle,0,0);
-
-			DOM.setStyleAttribute(getElement(), "width", acreSize.getSize()*scale+"px");
-			DOM.setStyleAttribute(getElement(), "height", acreSize.getSize()*scale+"px");
-
-		}
-	}
+	
 	private class Acre extends Level {
 		public Acre(ClickListener listener,int x, int y,AcreSize acreSize){
-			super(listener,x,y,acreSize,"I","Isle");			
+			super(imgHolder,tagStat,listener,x,y,acreSize,"I","Isle");			
 		}
 	}
 	private class Shadow extends Level {
 		public Shadow(int x, int y,AcreSize acreSize){
-			super(null,x,y,acreSize,"S","Overlay");			
+			super(imgHolder,tagStat,null,x,y,acreSize,"S","Overlay");			
 		}
 	}
 	private class Inner extends Level {
 		public Inner(int x, int y,AcreSize acreSize){
-			super(null,x,y,acreSize,"Inner","Overlay");			
+			super(imgHolder,tagStat,null,x,y,acreSize,"Inner","Overlay");			
 		}
 	}
 

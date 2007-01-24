@@ -203,11 +203,11 @@ public class TopicCache {
 
 	/**
 	 * callback for List<TopicIdentifier>
-	 * @param tag
+	 * @param id
 	 * @param callback
 	 */
-	public void getTopicsWithTag(Tag tag, StdAsyncCallback callback) {
-		topicService.getTopicIdsWithTag(tag,callback);
+	public void getTopicsWithTag(long id, StdAsyncCallback callback) {
+		topicService.getTopicIdsWithTag(id,callback);
 	}
 
 

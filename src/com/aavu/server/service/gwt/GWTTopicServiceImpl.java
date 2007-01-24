@@ -369,10 +369,10 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 	 * @throws HippoException 
 	 * 
 	 */
-	public FullTopicIdentifier[] getTopicIdsWithTag(Tag tag) throws HippoException {
+	public FullTopicIdentifier[] getTopicIdsWithTag(long id) throws HippoException {
 		try {
 
-			return convertToArray(topicService.getTopicIdsWithTag(tag));
+			return convertToArray(topicService.getTopicIdsWithTag(id));
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);

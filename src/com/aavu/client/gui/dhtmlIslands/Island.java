@@ -1,7 +1,12 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import java.util.Iterator;
+
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.User;
+import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -10,7 +15,7 @@ import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, RemembersPosition{
+public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, RemembersPosition, DragFinishedListener{
 	
 	
 	
@@ -24,24 +29,30 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	
 
 	private OceanDHTMLImpl ocean;
-
+	private Manager manager;
 	
 	private IslandBanner banner;
 
 	private int height;
 
+	private DragHandler dragHandler;
+
+	private boolean haveShownTopics = false;
 	
-	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user) {
+	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user,Manager manager) {
 		super();
 		this.tagStat = stat;
 		this.ocean = ocean;
-		
+		this.manager = manager;
 		
 		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS );	    
-					
+			
+		
 		setStyleName("H-Island");
 		
 		listener = this;
+		
+		dragHandler = new DragHandler(this);
 		
 //		switch (pr.nextInt(4)) {
 //		case 0:
@@ -131,11 +142,22 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
 		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
 		 */
-		int width = (repr.max_x + 1 - repr.min_x) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
-		height = (repr.max_y + 1 - repr.min_y) * my_spacing  + (Type.MAX_SIZE * scale) - my_spacing;
+		int width = (repr.max_x + 1 - repr.min_x) * my_spacing  + 30;
+		height = (repr.max_y + 1 - repr.min_y) * my_spacing  + 30;
+		
+		if(tagStat.getTagName().equals("People")){
+			System.out.println("People");
+			System.out.println("Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
+			System.out.println("Nx "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
+		}
+		if(tagStat.getTagName().equals("Coffee")){
+			System.out.println("Coffee");
+			System.out.println("Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
+			System.out.println("Nx "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
+		}
 		
 		int predicted = getPredictedBannerWidth();
-		System.out.println("Predicted Width "+predicted);
+		//System.out.println("Predicted Width "+predicted);
 		if(predicted > width){
 			DOM.setStyleAttribute(getElement(), "width", predicted+"px");	
 		}else{
@@ -146,7 +168,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		//not working
 		banner.setWidth(width+"em");
 		
-		System.out.println("Island width: "+width+" height "+height);
+		//System.out.println("Island width: "+width+" height "+height);
 	}
 
 	/*
@@ -157,8 +179,8 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	 *  (chars * 9) * fontSize
 	 */
 	private int getPredictedBannerWidth(){
-		System.out.println("FP "+tagStat.getTagName().length() * 9);
-		System.out.println("SP: "+banner.getFontFor(tagStat.getNumberOfTopics()));
+		//System.out.println("FP "+tagStat.getTagName().length() * 9);
+		//System.out.println("SP: "+banner.getFontFor(tagStat.getNumberOfTopics()));
 		return (int) (tagStat.getTagName().length() * 9 * banner.getFontFor(tagStat.getNumberOfTopics()));
 	}
 
@@ -203,6 +225,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 
 	
 	public void onClick(Widget sender) {			
+		
+		System.out.println("island onClick");
+		
 		ocean.islandClicked(tagStat.getTagId());
 	}
 	
@@ -223,11 +248,12 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		boolean wasMouseUp = false;
 
 	    switch (DOM.eventGetType(event)) {
-//	      case Event.ONCLICK: {
+	      case Event.ONCLICK: {
+	    	  onClick(this);
 //	        if (clickListeners != null)
 //	          clickListeners.fireClick(this);
 //	        break;
-//	      }
+	      }
 	    case Event.ONMOUSEUP:
 	    	wasMouseUp = true;
 	    case Event.ONMOUSEDOWN:
@@ -238,41 +264,59 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	    		mouseListeners.fireMouseEvent(this, event);
 	    	break;
 	    }
-
 	    }
-	    /*
-	     * detecting move requires subtracting out the possible shift of the ocean 
-	     */
-	    if(wasMouseUp){
-	    	int absLeft = getAbsoluteLeft();
-	    	int absTop = getAbsoluteTop();
-	    	int oceanLeft = ocean.getBackX();
-	    	int oceanTop = ocean.getBackY();
-	    	if(absLeft != left + oceanLeft
-	    			||
-	    			absTop != top + oceanTop){
-	    		int newLeft = absLeft - oceanLeft;
-	    		int newTop = absTop - oceanTop;
-	    		//System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!!");
-	    		ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
-	    		left = newLeft;
-	    		top = newTop;
-	    	}else{
-	    		/*
-	    		 * hmm...  
-	    		 * detecting here is good bc then we know if it was a drag, 
-	    		 * but the detection area is the whole island div.
-	    		 * Alternative #2 is listener on acres & banner, but then we need a 
-	    		 * new way to cancel if dragged. 
-	    		 */
-	    		onClick(this);
-	    	}
-	    	//System.out.println("Moved "+getAbsoluteLeft()+" "+left+" "+getAbsoluteTop()+" "+top);
-	    	//System.out.println("Ocean "+ocean.getAbsoluteLeft()+" top "+ocean.getAbsoluteTop()+" ");
-	    }
-	  }
+	}
+//
+//	    }
+//	    /*
+//	     * detecting move requires subtracting out the possible shift of the ocean 
+//	     */
+//	    if(wasMouseUp){
+//	    	int absLeft = getAbsoluteLeft();
+//	    	int absTop = getAbsoluteTop();
+//	    	int oceanLeft = ocean.getBackX();
+//	    	int oceanTop = ocean.getBackY();
+//	    	if(absLeft != left + oceanLeft
+//	    			||
+//	    			absTop != top + oceanTop){
+//	    		int newLeft = absLeft - oceanLeft;
+//	    		int newTop = absTop - oceanTop;
+//	    		//System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!!");
+//	    		ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
+//	    		left = newLeft;
+//	    		top = newTop;
+//	    	}else{
+//	    		/*
+//	    		 * hmm...  
+//	    		 * detecting here is good bc then we know if it was a drag, 
+//	    		 * but the detection area is the whole island div.
+//	    		 * Alternative #2 is listener on acres & banner, but then we need a 
+//	    		 * new way to cancel if dragged. 
+//	    		 */
+//	    		onClick(this);
+//	    	}
+//	    	//System.out.println("Moved "+getAbsoluteLeft()+" "+left+" "+getAbsoluteTop()+" "+top);
+//	    	//System.out.println("Ocean "+ocean.getAbsoluteLeft()+" top "+ocean.getAbsoluteTop()+" ");
+//	    }
+//	  }
 	
 
+	public void youveBeenDraggedSetYourLeftAndTop() {
+		int absLeft = getAbsoluteLeft();
+    	int absTop = getAbsoluteTop();
+    	int oceanLeft = ocean.getBackX();
+    	int oceanTop = ocean.getBackY();
+    	if(absLeft != left + oceanLeft
+    			||
+    			absTop != top + oceanTop){
+    		int newLeft = absLeft - oceanLeft;
+    		int newTop = absTop - oceanTop;
+    		System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!!");
+    		//ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
+    		left = newLeft;
+    		top = newTop;
+    	}
+	}
 	
 	
 	public Widget getWidget() {		
@@ -288,5 +332,72 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	public TagInfo getStat() {
 		return tagStat;
 	}
+
+
+	public void zoomToScale(double currentScale) {
+		scale = currentScale;
+		setTypeAndSpacing();			
+		
+		for (Iterator iter = levels.keySet().iterator(); iter.hasNext();) {
+			Level level = (Level) iter.next();
+			level.setToScale(currentScale);
+		}
+		
+		doPositioning();
+		
+		//banner.setText("X: "+left+" Y "+top+" * "+currentScale);
+		
+		if(currentScale > 4){						
+			System.out.println(" > 4 Top "+top+" LEFT "+left);
+			showTopics();
+		}
+		
+	}
+
+
+	private void showTopics() {
+		if(!haveShownTopics){
+			manager.getTopicCache().getTopicsWithTag(tagStat.getTagId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
+					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
+
+					addTopicLabels(topics);				
+				}		
+			});
+		}
+	}
+	private void addTopicLabels(FullTopicIdentifier[] topics) {
+		int x = 0;
+		int y = 0;
+		for (int i = 0; i < topics.length; i++) {
+			FullTopicIdentifier fti = topics[i];
+
+			x = fti.getLongitude() == -1 ? x + 40 : fti.getLongitude();
+			y = fti.getLatitude() == -1 ? y + 40: fti.getLatitude();
+
+			DraggableLabel l = new DraggableLabel(fti.getTopicTitle());
+
+			dragHandler.add(l,Island.this);
+
+			System.out.println("add label "+x+" "+y);
+			add(l,x,y);			
+		}
+		haveShownTopics = true;
+	}
+	
+	
+
+
+	public void dragFinished(Widget dragging) {
+		
+		DraggableLabel label = (DraggableLabel) dragging;
+		
+		System.out.println("finished dragging "+label.getText());
+		
+		
+		
+	}
+
 	
 }
