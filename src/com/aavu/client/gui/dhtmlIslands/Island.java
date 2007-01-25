@@ -1,6 +1,8 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.FullTopicIdentifier;
@@ -38,6 +40,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	private DragHandler dragHandler;
 
 	private boolean haveShownTopics = false;
+
+
+	private int width;
+
+	private List topicLabelList;
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user,Manager manager) {
 		super();
@@ -142,18 +149,18 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
 		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
 		 */
-		int width = (repr.max_x + 1 - repr.min_x) * my_spacing  + 30;
-		height = (repr.max_y + 1 - repr.min_y) * my_spacing  + 30;
+		width = (repr.max_x - repr.min_x) * my_spacing  + img_size;
+		height = (repr.max_y - repr.min_y) * my_spacing  + img_size;
 		
-		if(tagStat.getTagName().equals("People")){
+		if(tagStat.getTagName().equals("Person")){
 			System.out.println("People");
-			System.out.println("Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
-			System.out.println("Nx "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
+			System.out.println("width "+width+" Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" img_size "+img_size);
+			System.out.println("height "+height+" Ny "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" img_size "+img_size);
 		}
 		if(tagStat.getTagName().equals("Coffee")){
 			System.out.println("Coffee");
-			System.out.println("Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
-			System.out.println("Nx "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" foo "+((int)(Type.MAX_SIZE ) - my_spacing));
+			System.out.println("width "+width+" Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" img_size "+img_size);
+			System.out.println("height "+height+" Ny "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" img_size "+img_size);
 		}
 		
 		int predicted = getPredictedBannerWidth();
@@ -342,12 +349,12 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			Level level = (Level) iter.next();
 			level.setToScale(currentScale);
 			
-			PointLocation loc = (PointLocation) levels.get(level);
+			//PointLocation loc = (PointLocation) levels.get(level);
 			
-//			int corrected_x = gridToRelativeX(x,my_spacing);
-//			int corrected_y = gridToRelativeY(y,my_spacing);		
+			int corrected_x = gridToRelativeX(level.getX(),my_spacing);
+			int corrected_y = gridToRelativeY(level.getY(),my_spacing);		
 
-			//setWidgetPosition(level, height, getPredictedBannerWidth());
+			setWidgetPosition(level, corrected_x, corrected_y);
 		}
 		
 		doPositioning();
@@ -377,6 +384,17 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			showTopics();
 		}
 		
+		if(haveShownTopics){
+			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
+				DraggableLabel label = (DraggableLabel) iter.next();
+				
+				int x = (int) (label.getXPct() * width);
+				int y = (int) (label.getYPct() * height);
+				
+				setWidgetPosition(label, x,y);
+				
+			}
+		}
 	}
 
 
@@ -395,18 +413,34 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	private void addTopicLabels(FullTopicIdentifier[] topics) {
 		int x = 0;
 		int y = 0;
+
+		if(topicLabelList == null){
+			topicLabelList = new ArrayList();
+		}
+		topicLabelList .clear();
+
+		
 		for (int i = 0; i < topics.length; i++) {
 			FullTopicIdentifier fti = topics[i];
+			
+			if(fti.getLongitude() == -1){
+				fti.setLongitude(.5);
+			}
+			if(fti.getLatitude() == -1){
+				fti.setLatitude(.5);
+			}
 
-			x = fti.getLongitude() == -1 ? x + 40 : fti.getLongitude();
-			y = fti.getLatitude() == -1 ? y + 40: fti.getLatitude();
+			x = (int) (fti.getLongitude() * width);
+			y = (int) (fti.getLatitude() * height);
 
-			DraggableLabel l = new DraggableLabel(fti.getTopicTitle());
+			DraggableLabel l = new DraggableLabel(fti.getTopicTitle(),fti.getLongitude(),fti.getLatitude());
 
 			dragHandler.add(l,Island.this);
 
 			System.out.println("add label "+x+" "+y);
-			add(l,x,y);			
+			add(l,x,y);
+			
+			topicLabelList.add(l);
 		}
 		haveShownTopics = true;
 	}
@@ -418,9 +452,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		DraggableLabel label = (DraggableLabel) dragging;
 		
+		label.setXPct(getWidgetLeft(label) / (double)width);
+		label.setYPct(getWidgetTop(label) / (double)height);
+		
+		
 		System.out.println("finished dragging "+label.getText());
-		
-		
 		
 	}
 

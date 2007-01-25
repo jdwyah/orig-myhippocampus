@@ -54,10 +54,10 @@ public class CloseUpIsland extends AbstractIsland implements DragFinishedListene
 		for (int i = 0; i < topics.length; i++) {
 			FullTopicIdentifier fti = topics[i];
 
-			x = fti.getLongitude() == -1 ? x + 40 : fti.getLongitude();
-			y = fti.getLatitude() == -1 ? y + 40: fti.getLatitude();
+			x = 30;// fti.getLongitude() == -1 ? x + 40 : fti.getLongitude();
+			y = 30;//fti.getLatitude() == -1 ? y + 40: fti.getLatitude();
 
-			DraggableLabel l = new DraggableLabel(fti.getTopicTitle());
+			DraggableLabel l = new DraggableLabel(fti.getTopicTitle(),.5,.5);
 
 			dragHandler.add(l,this);
 
@@ -80,8 +80,8 @@ public class CloseUpIsland extends AbstractIsland implements DragFinishedListene
 		 * TODO clean this crud up. How do we size this DIV dynamically? Or take another look
 		 * at putting these elements in another div.. but then we need to sort out drag-your-buddy system.
 		 */
-		int width = (repr.max_x + 1 - repr.min_x) * my_spacing  + (int)(Type.MAX_SIZE * scale) - my_spacing;
-		height = (repr.max_y + 1 - repr.min_y) * my_spacing  + (int)(Type.MAX_SIZE * scale) - my_spacing;
+		int width = (repr.max_x + 1 - repr.min_x) * my_spacing  + img_size - my_spacing;
+		height = (repr.max_y + 1 - repr.min_y) * my_spacing  + img_size - my_spacing;
 
 		int predicted = getPredictedBannerWidth();
 		System.out.println("Predicted Width "+predicted);

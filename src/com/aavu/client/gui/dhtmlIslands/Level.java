@@ -11,9 +11,14 @@ public class Level extends AbsolutePanel {
 		
 		private Image isle;
 		private int baseSize;
+		private int y;
+		private int x;
 		
 		public Level(ImageHolder imgHolder, TagInfo tagStat,ClickListener listener, int x, int y,AcreSize acreSize,String extension,String style){
 
+			this.x = x;
+			this.y = y;
+			
 			isle = imgHolder.getImage(acreSize,tagStat.getTagId(),x,y,extension);//new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
 			if(listener != null){
 				isle.addClickListener(listener);
@@ -33,6 +38,14 @@ public class Level extends AbsolutePanel {
 			
 			DOM.setStyleAttribute(getElement(), "width", baseSize*scale+"px");
 			DOM.setStyleAttribute(getElement(), "height", baseSize*scale+"px");
+		}
+
+		public int getX() {
+			return x;
+		}
+
+		public int getY() {
+			return y;
 		}
 		
 	}

@@ -12,12 +12,18 @@ public class DraggableLabel extends Label  implements ClickListener, SourcesMous
 	
 	private int left;
 	private int top;
+	
+	private double xPct;
+	private double yPct;
 
-	public DraggableLabel(String text){
+	public DraggableLabel(String text, double xPct, double yPct){
 		super(text);
 
 		addClickListener(this);
 
+		this.xPct = xPct;
+		this.yPct = yPct;
+		
 		//sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS );	    
 
 		//	sinkEvents(Event.MOUSEEVENTS );
@@ -99,6 +105,20 @@ public class DraggableLabel extends Label  implements ClickListener, SourcesMous
 
 	public int getTop() {
 		return top;
+	}
+
+	public double getXPct() {
+		return xPct;
+	}
+	public void setXPct(double pct) {
+		xPct = pct;
+	}
+	public double getYPct() {
+		return yPct;
+	}
+
+	public void setYPct(double pct) {
+		yPct = pct;
 	}
 
 	public Widget getWidget() {

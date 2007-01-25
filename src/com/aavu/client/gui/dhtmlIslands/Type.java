@@ -2,8 +2,8 @@ package com.aavu.client.gui.dhtmlIslands;
 
 public class Type {
 	
-	public static final int MAX_SIZE = 60;
 	
+	public static int SIZE_30 = 30;
 	public static int SPACING_30 = 10;
 	public static int SPACING_60 = 18;
 	public static int SPACING_100 = 33;

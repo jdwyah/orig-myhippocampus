@@ -81,7 +81,7 @@
 		<set name="typesWithLocation" table="typetable">
         		<key column="from_id"/>
 		        <composite-element class="com.aavu.client.domain.TopicWithLocation">
-		            <property name="latitude"/>
+		            <property column="latitude" name="latitude"/>
         		    <property column="longitude" name="longitude"/>
 					<many-to-one name="topic" class="Topic" />
 		        </composite-element>

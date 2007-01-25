@@ -29,6 +29,7 @@ public class AbstractIsland extends AbsolutePanel {
 	protected int theSize;
 	
 	protected Map levels = new HashMap();
+	protected int img_size;
 
 
 	/**
@@ -37,14 +38,18 @@ public class AbstractIsland extends AbsolutePanel {
 	 */
 	protected void setTypeAndSpacing() {
 		if(theSize >= 16){
-			my_spacing = Type.SPACING_30;//NOTE not using 100's			
+			my_spacing = Type.SPACING_30;//NOTE not using 100's
+			img_size = Type.SIZE_30;
 		}
 		else if(theSize >= 4){
 			my_spacing = Type.SPACING_30;
+			img_size = Type.SIZE_30;
 		}
 		else{
 			my_spacing = Type.SPACING_30;
+			img_size = Type.SIZE_30;
 		}
+		img_size *= scale;
 		my_spacing *= scale;
 	}
 	
