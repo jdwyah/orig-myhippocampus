@@ -42,7 +42,11 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 	}
 
 
-	public Tag getTagAddIfNew(String tagName) throws HippoBusinessException {
+	/**
+	 * NOTE: remember we're applying "read-only" transactions to all "service.get*()"
+	 * 
+	 */
+	public Tag createTagIfNonExistent(String tagName) throws HippoBusinessException {
 		log.debug("load tag named: "+tagName);
 
 		Tag rt = tagDAO.getTag(userService.getCurrentUser(),tagName);

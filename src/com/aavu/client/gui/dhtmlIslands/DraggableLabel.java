@@ -1,14 +1,15 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 
 public class DraggableLabel extends Label  implements ClickListener, SourcesMouseEvents, RemembersPosition {
-	private MouseListenerCollection mouseListeners;
+	
 	private int left;
 	private int top;
 
@@ -22,7 +23,14 @@ public class DraggableLabel extends Label  implements ClickListener, SourcesMous
 		//	sinkEvents(Event.MOUSEEVENTS );
 	}
 
-//	public void onBrowserEvent(Event event) {
+	/**
+	 * cancel the event, or you can't have a draggable widget in a draggable widget. 
+	 * (ie label on island)
+	 */
+	public void onBrowserEvent(Event event) {
+		super.onBrowserEvent(event);		
+		DOM.eventCancelBubble(event, true);
+	}
 //	boolean wasMouseUp = false;
 
 //	switch (DOM.eventGetType(event)) {

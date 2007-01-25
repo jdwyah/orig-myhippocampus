@@ -17,7 +17,7 @@ public interface TagService {
 
 	void removeTag(Tag selectedTag) throws PermissionDeniedException;
 
-	Tag getTagAddIfNew(String tagName) throws HippoBusinessException;
+	Tag createTagIfNonExistent(String tagName) throws HippoBusinessException;
 
 	List<Tag> getAllTags();
 

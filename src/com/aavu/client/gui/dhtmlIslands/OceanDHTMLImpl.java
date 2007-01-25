@@ -255,68 +255,66 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		System.out.println("zoom up from "+currentScale);
 		
 		double oldScale = currentScale;
+		
 		if(currentScale <= 1){
 			currentScale /= 2;		
 		}else{
 			currentScale--;
 		}
 		
-		setIslandsToZoom();
-		
-		System.out.println("Back X "+backX+ " subt "+(1280/2)*currentScale);
-		System.out.println("Back Y "+backY+ " subt "+(1024/2)*currentScale);
-		
-		//backX += (1280/2);//*currentScale;
-		//backY += (1024/2);//*currentScale;
-		
-		reCenter(oldScale);
-		
-		System.out.println("RES "+backX+" "+backY);
-		
-		//scale all positions
-		moveByDelta(0,0);
-		//moveByDelta(200, 100);
+		finishZoom(oldScale);
 	}
 
 
 
 	private void zoomIn() {		
 		System.out.println("zoom in from "+currentScale);
-		
+				
 		double oldScale = currentScale;
+		
 		if(currentScale <= 1){
 			currentScale *= 2;		
 		}else{
 			currentScale++;
 		}
 		
+		finishZoom(oldScale);
+	}
+
+	private void finishZoom(double oldScale) {
+		int width = Window.getClientWidth();
+		int height = Window.getClientHeight();
 		
-		setIslandsToZoom();
+		int centerX = (int)((-curbackX + (width / 2)) / oldScale);
+		int centerY = (int)((-curbackY + (height / 2)) / oldScale);
 		
-		reCenter(oldScale);
+		int halfWidth = width/2;
+		int halfHeight = height/2;
+		reCenter(centerX,centerY,currentScale,halfWidth,halfHeight);
 		
-		//scale all positions
+		
+		setIslandsToZoom((int) (centerX - halfWidth/currentScale),
+				(int) (centerY - halfHeight/currentScale),
+				(int) (centerX + halfWidth/currentScale),
+				(int) (centerY + halfHeight/currentScale));
+						
+		//move all objects
 		moveByDelta(0,0);
-		//moveByDelta(-200, -100);
 	}
 
 	
-	private void reCenter(double oldScale) {
-		
-		int centerX = (int)((-curbackX + (Window.getClientWidth()/2))/oldScale);
-		int centerY = (int)((-curbackY + (Window.getClientHeight()/2))/oldScale);
-		
+	private void reCenter(int centerX, int centerY, double scale, int halfWidth, int halfHeight) {
+			
 		System.out.println("back X "+backX+"  backy "+backY);
 		System.out.println("center X "+centerX+"  cy "+centerY);
 		
-		int halfWidth = Window.getClientWidth()/2;
-		int halfHeight = Window.getClientHeight()/2;
+		
 				
 		System.out.println("hw "+halfWidth+" hh "+halfHeight);
 		//backX = halfWidth - halfWidth/currentScale;
 		
-		int newCenterX = (int) (centerX * currentScale);
-		int newCenterY = (int) (centerY * currentScale);
+		int newCenterX = (int) (centerX * scale);
+		int newCenterY = (int) (centerY * scale);
 		
 		System.out.println("new center X "+newCenterX+" "+newCenterY);
 		
@@ -330,7 +328,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	
 	
 	
-	private void setIslandsToZoom() {
+	private void setIslandsToZoom(int left, int top, int right, int bottom) {
 		
 		System.out.println("Setting all islands to zoom level "+currentScale);
 		
@@ -339,7 +337,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 						
 			Island island = (Island) islands.get(e);
 						
-			island.zoomToScale(currentScale);						
+			island.zoomToScale(currentScale,left,top,right,bottom);						
 		}
 		
 		
@@ -416,18 +414,19 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	
 	public void islandMoved(long islandID, final int longitude, final int latitude){
 
-		System.out.println("isleMovedTo "+longitude+" "+latitude+" ");			
-		manager.getTopicCache().getTopicByIdA(islandID, new StdAsyncCallback("GetTopicById"){
-
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				Topic t = (Topic) result;
-				t.setLatitude(latitude);
-				t.setLongitude(longitude);					
-				manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
-			}
-
-		});
+		System.out.println("isleMovedTo "+longitude+" "+latitude+" SAVING");	
+		
+//		manager.getTopicCache().getTopicByIdA(islandID, new StdAsyncCallback("GetTopicById"){
+//
+//			public void onSuccess(Object result) {
+//				super.onSuccess(result);
+//				Topic t = (Topic) result;
+//				t.setLatitude(latitude);
+//				t.setLongitude(longitude);					
+//				manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
+//			}
+//
+//		});
 
 	}
 

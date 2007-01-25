@@ -47,7 +47,7 @@ public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringCon
 
 	public Tag getTagAddIfNew(String tagName) throws HippoException {
 		try{
-			return convert(tagService.getTagAddIfNew(tagName));
+			return convert(tagService.createTagIfNonExistent(tagName));
 		}  catch (HippoException ex) {
 			throw ex;
 		}  catch (Exception e) {

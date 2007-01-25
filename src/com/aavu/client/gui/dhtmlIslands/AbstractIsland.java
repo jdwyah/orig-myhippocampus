@@ -108,21 +108,10 @@ public class AbstractIsland extends AbsolutePanel {
 		
 		add(level,corrected_x,corrected_y);		
 		
-		levels.put(level,new Location(corrected_x,corrected_y));
+		levels.put(level,new PointLocation(corrected_x,corrected_y));
 		
 	}
 	
-	private class Location {
-
-		int x;
-		int y;
-		
-		public Location(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-	}
 
 	/**
 	 * takes values from -50 -> 50 (GRID/2)

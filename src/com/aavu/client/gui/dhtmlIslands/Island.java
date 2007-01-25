@@ -334,21 +334,46 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	}
 
 
-	public void zoomToScale(double currentScale) {
+	public void zoomToScale(double currentScale, int winLeft, int winTop, int winRight, int winBottom) {
 		scale = currentScale;
 		setTypeAndSpacing();			
 		
 		for (Iterator iter = levels.keySet().iterator(); iter.hasNext();) {
 			Level level = (Level) iter.next();
 			level.setToScale(currentScale);
+			
+			PointLocation loc = (PointLocation) levels.get(level);
+			
+//			int corrected_x = gridToRelativeX(x,my_spacing);
+//			int corrected_y = gridToRelativeY(y,my_spacing);		
+
+			//setWidgetPosition(level, height, getPredictedBannerWidth());
 		}
 		
 		doPositioning();
 		
 		//banner.setText("X: "+left+" Y "+top+" * "+currentScale);
 		
-		if(currentScale > 4){						
-			System.out.println(" > 4 Top "+top+" LEFT "+left);
+		if(tagStat.getTagName().equals("Person")){
+			System.out.println("left: "+left+" top "+top);
+			System.out.println(" ("+winLeft+", "+winTop+")  ("+winRight+", "+winBottom+")");
+		}
+		
+		/*
+		 * only show topics if we're within the viewing rectangle. 
+		 * 
+		 */
+		if(currentScale >= 3
+				&&
+				left > winLeft
+				&&
+				left < winRight
+				&&
+				top > winTop
+				&&
+				top < winBottom)
+		{						
+			System.out.println(" >= 3 Top "+top+" LEFT "+left);
 			showTopics();
 		}
 		

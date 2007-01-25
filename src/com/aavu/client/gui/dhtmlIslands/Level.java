@@ -24,12 +24,12 @@ public class Level extends AbsolutePanel {
 			
 			setToScale(1);
 			
-		
+			add(isle,0,0);
 		}
 		
 		public void setToScale(double scale){
-			isle.setPixelSize((int)(baseSize*scale), (int)(baseSize*scale));
-			add(isle,0,0);
+		
+			isle.setPixelSize((int)(baseSize*scale), (int)(baseSize*scale));			
 			
 			DOM.setStyleAttribute(getElement(), "width", baseSize*scale+"px");
 			DOM.setStyleAttribute(getElement(), "height", baseSize*scale+"px");
