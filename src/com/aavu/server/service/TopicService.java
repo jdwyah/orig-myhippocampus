@@ -54,5 +54,7 @@ public interface TopicService {
 	UserPageBean getUserPageBean(User su);
 
 	void delete(Topic topic) throws HippoBusinessException;
+
+	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
 	
 }

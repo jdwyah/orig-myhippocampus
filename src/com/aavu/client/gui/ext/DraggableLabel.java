@@ -1,5 +1,6 @@
-package com.aavu.client.gui.dhtmlIslands;
+package com.aavu.client.gui.ext;
 
+import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -28,6 +29,7 @@ public class DraggableLabel extends Label  implements ClickListener, SourcesMous
 
 		//	sinkEvents(Event.MOUSEEVENTS );
 	}
+
 
 	/**
 	 * cancel the event, or you can't have a draggable widget in a draggable widget. 

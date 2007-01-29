@@ -20,7 +20,9 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 	//private MindMapBoard mindMapBoard;
 	private AllReferencesPanel referencesPanel;
 	
-
+	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded){
+		this(manager,saveNeeded,null);
+	}
 	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded,PopupWindow popWindow){
 		
 		

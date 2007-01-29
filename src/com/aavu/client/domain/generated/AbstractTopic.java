@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicWithLocation;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.subjects.Subject;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -49,18 +47,20 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
      private Set scopes = new HashSet();
+     
      /**
-      * @gwt.typeArgs <com.aavu.client.domain.Topic>
+      * @gwt.typeArgs <com.aavu.client.domain.TopicTypeConnector>
       */
      private Set instances = new HashSet();
+     
+//     /**
+//      * @gwt.typeArgs <com.aavu.client.domain.Topic>
+//      */
+//     private Set types = new HashSet();
      /**
-      * @gwt.typeArgs <com.aavu.client.domain.Topic>
+      * @gwt.typeArgs <com.aavu.client.domain.TopicTypeConnector>
       */
      private Set types = new HashSet();
-     /**
-      * @gwt.typeArgs <com.aavu.client.domain.TopicWithLocation>
-      */
-     private Set typesWithLocation = new HashSet();
      /**
       * @gwt.typeArgs <com.aavu.client.domain.Topic>
       */
@@ -82,22 +82,6 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
     public AbstractTopic(int latitude, int longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-    /** full constructor */
-    public AbstractTopic(User user, String title, int latitude, int longitude, Date lastUpdated, Date created, boolean publicVisible, Set scopes, Subject subject, Set instances, Set types, Set occurences, Set associations) {
-       this.user = user;
-       this.title = title;
-       this.latitude = latitude;
-       this.longitude = longitude;
-       this.lastUpdated = lastUpdated;
-       this.created = created;
-       this.publicVisible = publicVisible;
-       this.scopes = scopes;
-       this.subject = subject;
-       this.instances = instances;
-       this.types = types;
-       this.occurences = occurences;
-       this.associations = associations;
     }
     
    
@@ -190,7 +174,8 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
     public void setSubject(Subject subject) {
         this.subject = subject;
     }
-    public Set getInstances() {
+    //<TopicTypeConnector>
+    private Set getInstances() {
         return this.instances;
     }
     
@@ -199,19 +184,11 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
     }
     
     public Set getTypes() {
-        return this.types;
-    }
-    
-    public void setTypes(Set types) {
-        this.types = types;
-    }
-    
-    public Set getTypesWithLocation() {
-		return typesWithLocation;
+		return types;
 	}
 
-	public void setTypesWithLocation(Set typesWithLocation) {
-		this.typesWithLocation = typesWithLocation;
+	public void setTypes(Set types) {
+		this.types = types;
 	}
 
 	public Set getOccurences() {

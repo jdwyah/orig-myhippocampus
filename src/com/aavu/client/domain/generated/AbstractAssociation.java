@@ -29,11 +29,6 @@ public abstract class AbstractAssociation extends com.aavu.client.domain.Topic i
     }
 
 	
-    /** full constructor */
-    public AbstractAssociation(User user, String title, int latitude, int longitude, Date lastUpdated, Date created, boolean publicVisible, Set scopes, Subject subject, Set instances, Set types, Set occurences, Set associations, Set members) {
-        super(user, title, latitude, longitude, lastUpdated, created, publicVisible, scopes, subject, instances, types, occurences, associations);        
-       this.members = members;
-    }
     
    
     // Property accessors

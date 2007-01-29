@@ -117,9 +117,9 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		assertEquals(B, savedTopic.getLatestEntry().getData());
 		assertEquals(u, savedTopic.getUser());
 
-		assertEquals(1, savedTopic.getTypes().size());
+		assertEquals(1, savedTopic.getTypesAsTopics().size());
 
-		Topic savedTag = (Topic) savedTopic.getTypes().iterator().next();
+		Topic savedTag = (Topic) savedTopic.getTypesAsTopics().iterator().next();
 
 		assertEquals(D,	savedTag.getTitle());
 
@@ -180,8 +180,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		Topic savedPatriotGames = topicService.getForID(patriotGames.getId());
 		assertNotNull(savedPatriotGames);
 
-		assertEquals(1, savedPatriotGames.getTypes().size());		
-		Topic savedBookTag = (Topic) savedPatriotGames.getTypes().iterator().next();
+		assertEquals(1, savedPatriotGames.getTypesAsTopics().size());		
+		Topic savedBookTag = (Topic) savedPatriotGames.getTypesAsTopics().iterator().next();
 		assertEquals(D, savedBookTag.getTitle());
 		assertEquals(1, savedBookTag.getMetas().size());
 

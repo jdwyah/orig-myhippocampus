@@ -81,6 +81,12 @@ public class LinkDisplayWidget extends Composite {
 			EditLinkButton editB = new EditLinkButton(Manager.myConstants.editMe(),(WebLink) occ);							
 			lP.add(editB);				
 
+			
+			if(size %2 == 0){
+				lP.setStyleName(".H-LinkWidget");
+			}else{
+				lP.setStyleName("H-LinkWidget-Odd");	
+			}
 			linkPanel.add(lP);
 
 			size ++;

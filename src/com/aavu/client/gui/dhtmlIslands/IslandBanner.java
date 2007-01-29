@@ -8,10 +8,11 @@ import com.google.gwt.user.client.ui.Label;
 
 public class IslandBanner extends AbsolutePanel{
 	
-	private static final double MIN_EM = .8;
+	private static final double HALF_MIN_EM = .4;
 	private static final double SCALE_DIVISOR = 6;
 	private Label reg;
 	private Label shdw;
+	private int size;
 
 	/**
 	 * 
@@ -25,6 +26,7 @@ public class IslandBanner extends AbsolutePanel{
 	public IslandBanner(String text,int size){
 		
 		super();
+		this.size = size;
 		
 		double font_size = getFontFor(size);
 		System.out.println("FONT "+getFontFor(size)+" "+size);
@@ -48,11 +50,14 @@ public class IslandBanner extends AbsolutePanel{
 		
 	}
 
-	public double getFontFor(int size) {	
+	public double getFontFor(int size) {
+		return getFontFor(size,1);
+	}
+	public double getFontFor(int size,double zoom) {	
 		if(size <= 0 ){
 			size = 1;
 		}
-		double s = Math.log(size) / SCALE_DIVISOR + MIN_EM;
+		double s = (Math.log(size) / SCALE_DIVISOR + HALF_MIN_EM + (zoom *HALF_MIN_EM));
 		return s;
 	}
 
@@ -73,6 +78,20 @@ public class IslandBanner extends AbsolutePanel{
 	public void setText(String text){
 		reg.setText(text);
 		shdw.setText(text);
+	}
+
+	public void setToZoom(double currentScale) {
+		double font_size = getFontFor(size,currentScale);
+		DOM.setStyleAttribute(reg.getElement(), "fontSize", font_size+"em");
+		DOM.setStyleAttribute(shdw.getElement(), "fontSize", font_size+"em");
+	}
+
+	public void setSelected(boolean b) {
+		if(b){
+			shdw.addStyleName("Selected");
+		}else{
+			shdw.removeStyleName("Selected");
+		}
 	}
 }
 

@@ -7,7 +7,9 @@ import java.util.List;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.TagInfo;
+import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.gui.ext.DraggableLabel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -19,8 +21,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, RemembersPosition, DragFinishedListener{
 	
-	
-	
+		
+	private static final int MIN_HEIGHT = 15;
+
+
 	/**
 	 * All new or (0,0) islands will show up at (move_me,move_me) + static 30 * number of islands
 	 */
@@ -45,6 +49,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	private int width;
 
 	private List topicLabelList;
+
+
+	private boolean topicsInvisible;
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user,Manager manager) {
 		super();
@@ -152,16 +159,20 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		width = (repr.max_x - repr.min_x) * my_spacing  + img_size;
 		height = (repr.max_y - repr.min_y) * my_spacing  + img_size;
 		
-		if(tagStat.getTagName().equals("Person")){
-			System.out.println("People");
-			System.out.println("width "+width+" Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" img_size "+img_size);
-			System.out.println("height "+height+" Ny "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" img_size "+img_size);
-		}
-		if(tagStat.getTagName().equals("Coffee")){
-			System.out.println("Coffee");
-			System.out.println("width "+width+" Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" img_size "+img_size);
-			System.out.println("height "+height+" Ny "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" img_size "+img_size);
-		}
+		height = (height < MIN_HEIGHT) ? MIN_HEIGHT : height;
+		
+//		if(tagStat.getTagName().equals("Person")){
+//			System.out.println("People");
+//			System.out.println("width "+width+" Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" img_size "+img_size);
+//			System.out.println("height "+height+" Ny "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" img_size "+img_size);
+//		}
+//		if(tagStat.getTagName().equals("Coffee")){
+//			System.out.println("Coffee");
+//			System.out.println("width "+width+" Nx "+(repr.max_x + 1 - repr.min_x)+" Spacing "+my_spacing+" img_size "+img_size);
+//			System.out.println("height "+height+" Ny "+(repr.max_y + 1 - repr.min_y)+" Spacing "+my_spacing+" img_size "+img_size);
+//		}
+		
+		
 		
 		int predicted = getPredictedBannerWidth();
 		//System.out.println("Predicted Width "+predicted);
@@ -235,7 +246,8 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		System.out.println("island onClick");
 		
-		ocean.islandClicked(tagStat.getTagId());
+		ocean.islandClicked(tagStat.getTagId(),this);
+				
 	}
 	
 	
@@ -318,10 +330,13 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
     			absTop != top + oceanTop){
     		int newLeft = absLeft - oceanLeft;
     		int newTop = absTop - oceanTop;
-    		System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!!");
+    		System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!! Scale "+scale+" newLeft "+newLeft+" newTop "+newTop+" "+oceanLeft+" "+oceanTop);
     		//ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
-    		left = newLeft;
-    		top = newTop;
+    		left = (int) (newLeft / scale);
+    		top = (int) (newTop / scale);
+    		
+    		tagStat.setLongitude(left);
+    		tagStat.setLatitude(top);    		
     	}
 	}
 	
@@ -341,7 +356,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	}
 
 
-	public void zoomToScale(double currentScale, int winLeft, int winTop, int winRight, int winBottom) {
+	public void zoomToScale(double currentScale) {
 		scale = currentScale;
 		setTypeAndSpacing();			
 		
@@ -357,33 +372,17 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			setWidgetPosition(level, corrected_x, corrected_y);
 		}
 		
+		banner.setToZoom(currentScale);
+		
 		doPositioning();
 		
 		//banner.setText("X: "+left+" Y "+top+" * "+currentScale);
 		
-		if(tagStat.getTagName().equals("Person")){
-			System.out.println("left: "+left+" top "+top);
-			System.out.println(" ("+winLeft+", "+winTop+")  ("+winRight+", "+winBottom+")");
-		}
-		
-		/*
-		 * only show topics if we're within the viewing rectangle. 
-		 * 
-		 */
-		if(currentScale >= 3
-				&&
-				left > winLeft
-				&&
-				left < winRight
-				&&
-				top > winTop
-				&&
-				top < winBottom)
-		{						
-			System.out.println(" >= 3 Top "+top+" LEFT "+left);
-			showTopics();
-		}
-		
+//		if(tagStat.getTagName().equals("Person")){
+//			System.out.println("Person left: "+left+" top "+top);
+//			System.out.println(" ("+winLeft+", "+winTop+")  ("+winRight+", "+winBottom+")");
+//		}
+				
 		if(haveShownTopics){
 			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
 				DraggableLabel label = (DraggableLabel) iter.next();
@@ -397,17 +396,45 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		}
 	}
 
-
-	private void showTopics() {
+	public boolean isWithin(int winLeft, int winTop, int winRight, int winBottom){
+		return (left > winLeft
+		&&
+		left < winRight
+		&&
+		top > winTop
+		&&
+		top < winBottom);
+	}
+	
+	public void removeTopics(){
+		if(!topicsInvisible){
+			setTopicVisibility(false);
+		}
+	}
+	private void setTopicVisibility(boolean visible){
+		if(visible == topicsInvisible && topicLabelList != null){
+			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
+				DraggableTopicLabel label = (DraggableTopicLabel) iter.next();
+				label.setVisible(visible);			
+			}
+			topicsInvisible = !visible;
+		}
+	}
+	public void showTopics() {
 		if(!haveShownTopics){
 			manager.getTopicCache().getTopicsWithTag(tagStat.getTagId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
 					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
 
+					System.out.println("Show Topics results "+topics.length);
+					
 					addTopicLabels(topics);				
 				}		
 			});
+		}
+		if(topicsInvisible){
+			setTopicVisibility(true);
 		}
 	}
 	private void addTopicLabels(FullTopicIdentifier[] topics) {
@@ -417,27 +444,30 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		if(topicLabelList == null){
 			topicLabelList = new ArrayList();
 		}
-		topicLabelList .clear();
+		topicLabelList.clear();
 
 		
 		for (int i = 0; i < topics.length; i++) {
 			FullTopicIdentifier fti = topics[i];
 			
-			if(fti.getLongitude() == -1){
-				fti.setLongitude(.5);
+			System.out.println("fti: "+fti);
+			
+			if(fti.getLongitudeOnIsland() < 0){
+				//just try to space them out a bit if they don't have real values
+				fti.setLongitudeOnIsland(.4+(.05*x));
 			}
-			if(fti.getLatitude() == -1){
-				fti.setLatitude(.5);
+			if(fti.getLatitudeOnIsland() < 0){
+				fti.setLatitudeOnIsland(.4+(.05*x));
 			}
 
-			x = (int) (fti.getLongitude() * width);
-			y = (int) (fti.getLatitude() * height);
+			x = (int) (fti.getLongitudeOnIsland() * width);
+			y = (int) (fti.getLatitudeOnIsland() * height);
 
-			DraggableLabel l = new DraggableLabel(fti.getTopicTitle(),fti.getLongitude(),fti.getLatitude());
+			DraggableTopicLabel l = new DraggableTopicLabel(fti,this);
 
 			dragHandler.add(l,Island.this);
 
-			System.out.println("add label "+x+" "+y);
+			System.out.println("add label "+fti.getTopicTitle()+" "+x+" "+y);
 			add(l,x,y);
 			
 			topicLabelList.add(l);
@@ -456,8 +486,25 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		label.setYPct(getWidgetTop(label) / (double)height);
 		
 		
-		System.out.println("finished dragging "+label.getText());
+		System.out.println("finished dragging "+label.getText()+" "+label.getXPct()+" "+label.getYPct());
 		
+		topicMoved((DraggableTopicLabel) label);
+	}
+	
+	private void topicMoved(DraggableTopicLabel label){
+
+		manager.getTopicCache().saveTopicLocationA(tagStat.getTagId(),label.getTopicId(),label.getXPct(),label.getYPct(),
+				new StdAsyncCallback(Manager.myConstants.save_async()));
+	}
+
+
+	public void topicClicked(TopicIdentifier ident) {
+		manager.bringUpChart(ident);
+	}
+
+
+	public void setSelected(boolean b) {
+		banner.setSelected(b);
 	}
 
 	

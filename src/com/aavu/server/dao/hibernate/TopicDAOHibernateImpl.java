@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -27,14 +26,13 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
@@ -48,12 +46,17 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public static DetachedCriteria loadEmAll(DetachedCriteria crit){
 		return crit.setFetchMode("user", FetchMode.JOIN)		
-		.setFetchMode("instances", FetchMode.JOIN)
-		.setFetchMode("subject", FetchMode.JOIN)
+		//.setFetchMode("instances.topic", FetchMode.JOIN)
+		.setFetchMode("subject", FetchMode.JOIN)				
 		.setFetchMode("types", FetchMode.JOIN)
-		.setFetchMode("types.associations", FetchMode.JOIN)
-		.setFetchMode("types.associations.types", FetchMode.JOIN)
-		.setFetchMode("types.associations.members", FetchMode.JOIN)
+		.setFetchMode("types.type", FetchMode.JOIN)
+		.setFetchMode("types.type.associations", FetchMode.JOIN)
+		.setFetchMode("types.type.associations.types", FetchMode.JOIN)
+		.setFetchMode("types.type.associations.members", FetchMode.JOIN)		
+//		.setFetchMode("types", FetchMode.JOIN)
+//		.setFetchMode("types.associations", FetchMode.JOIN)
+//		.setFetchMode("types.associations.types", FetchMode.JOIN)
+//		.setFetchMode("types.associations.members", FetchMode.JOIN)
 		.setFetchMode("occurences", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN)
 		.setFetchMode("associations.members", FetchMode.JOIN)	
@@ -83,10 +86,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //		}});
 
 		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
-				"join top.associations  ass "+
-				"join ass.types  type "+
+				"join top.associations  ass "+				
+				"join ass.types  typeConn "+
 				"join ass.members metaValue "+
-		"where type.class = MetaDate and top.user = ?",user);
+		"where typeConn.type.class = MetaDate and top.user = ?",user);
 
 
 		for (Object topic : ll) {
@@ -255,23 +258,41 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
 			System.out.println("assocDetail "+assoc.getTitle()+" "+assoc.getId());
 
-			for (Iterator iterator = assoc.getTypes().iterator(); iterator.hasNext();) {
+			for (Iterator iterator = assoc.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic type = (Topic) iterator.next();
 				assoc.setUser(t.getUser());
+				System.out.println("type "+type.getTitle());
 				//Why singleton?
 				//See description and Test Code in TopicDAOHibernateImplTest.testToMakeSureWeDontCreateTooManyObjects()
 				if(type instanceof MetaSeeAlso){
 					MetaSeeAlso singleton = (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
 					if(singleton == null){
+						System.out.println("single == null");
+						
+						//saveTwo(type, assoc);
 						getHibernateTemplate().saveOrUpdate(type);
 					}else{
-						assoc.getTypes().remove(type);
-						assoc.getTypes().add(singleton);
+						System.out.println("single != null, rem/add");
+						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
+						assoc.removeType(type);
+						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
+						assoc.addType(singleton);
+						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
 					}
 				}else{
+					
+					System.out.println("TYPE "+type.toPrettyString());
+					
+					
+					//saveTwo(type, assoc);
 					getHibernateTemplate().saveOrUpdate(type);
+					
 				}
 			}
+			
+			System.out.println("----------------------------");
+			System.out.println("about to save "+assoc.toPrettyString());
+			
 			getHibernateTemplate().saveOrUpdate(assoc);			
 		}
 
@@ -280,8 +301,22 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		//and save me
 		//
 		
+//		System.out.println("iiiiiiiiii");
+//		for (TopicTypeConnector conn : (Set<TopicTypeConnector>)t.getInstances()) {
+//			System.out.println("INSTANCE "+conn.getTopic()+" "+conn.getType());
+//			getHibernateTemplate().save(conn);
+//		}
+		System.out.println("ttttttttt");
+		for (TopicTypeConnector conn : (Set<TopicTypeConnector>)t.getTypes()) {
+			System.out.println("TYPE "+conn.getTopic()+" "+conn.getType());
+			getHibernateTemplate().save(conn);
+		}
+		
 		getHibernateTemplate().saveOrUpdate(t);		
 
+		getHibernateTemplate().flush();
+		System.out.println("DONE");
+		
 		//call saveList() instead
 
 //		System.out.println("now TYPES "+t.getTypes().size());
@@ -334,6 +369,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return t;		
 	}
 
+	private void saveTwo(final Topic t,final Topic t2){
+		getHibernateTemplate().execute(new HibernateCallback(){
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				session.saveOrUpdate(t);
+				session.saveOrUpdate(t2);
+				return null;
+			}});
+	}
+	
 	public List<TopicIdentifier> getLinksTo(Topic topic,User user) {
 		Object[] params = {topic.getId(),user};
 		log.debug("----------getLinksTo-----------");
@@ -379,6 +423,24 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return rtn;		
 	}
 
+	public List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user) {
+		
+//		List<TopicTypeConnector> rtn = getHibernateTemplate().find("from Topic top left join top.types tagConn "+
+//				"where tagConn.type.id = ?",new Long(tagid));
+		
+		List<TopicTypeConnector> rtn = getHibernateTemplate().find("from TopicTypeConnector conn "+
+				"where conn.type.id = ?",new Long(tagid));
+				
+		for (TopicTypeConnector connector : rtn) {
+			System.out.println("DAO says "+connector.getId()+" "+connector.getLongitude()+" "+connector.getLatitude());
+		}
+		
+		return rtn;
+	}
+	
+	
+	
+	/*
 	public List<FullTopicIdentifier> getTopicIdsWithTag(long tagid,User user) {			
 
 		Object[] params = {new Long(tagid),user};		
@@ -388,17 +450,31 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //				"where top.types.id is ? "+
 //				"and user is ? "
 //				,params);
-
+		
+//		List<Object[]> list = getHibernateTemplate().find(""+
+//				"select title, id, lastUpdated, top.types.latitude, top.types.longitude from Topic top "+
+//				"where top.types.topic.id is ? "+
+//				"and user is ? "
+//				,params);
+		
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select title, id, lastUpdated, top.typesWithLocation.latitude, top.typesWithLocation.longitude from Topic top "+
-				"where top.typesWithLocation.id is ? "+
+				"select title, id, lastUpdated, top.types.latitude, top.types.longitude from Topic top "+
+				"where ? in elements(top.types) "+
 				"and user is ? "
 				,params);
 		
+		
+		List<Topic> topic = getHibernateTemplate().find("select inst.topic from Topic top "+
+				"left join top.instances inst "+
+				"where inst.type.id = 1041");
+		
+		
+		
+		
 		//test query to prove uniqueness
 //		List<Object[]> list = getHibernateTemplate().find(""+
-//				"select title, id, lastUpdated, top.typesWithLocation.latitude, top.typesWithLocation.longitude from Topic top "+
-//				"where top.typesWithLocation.id = 196 ");
+//				"select title, id, lastUpdated, top.types.latitude, top.types.longitude from Topic top "+
+//				"where top.types.id = 196 ");
 		
 		
 		Set<FullTopicIdentifier> unique = new HashSet<FullTopicIdentifier>();
@@ -406,9 +482,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		//TODO we could probably be a good bit more efficient.
 		//TODO Genericize: http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
+		log.debug("Found these topics on island: ");
 		for (Object[] o : list){			
-			FullTopicIdentifier ident = new FullTopicIdentifier((Long)o[1],(String)o[0],(Date) o[2],(Integer)o[3],(Integer)o[4]);
-			System.out.println(o[1]+" "+o[0]+"lat "+o[3]+" long "+o[4]);			
+			FullTopicIdentifier ident = new FullTopicIdentifier((Long)o[1],(String)o[0],(Date) o[2],(Double)o[3],(Double)o[4]);
+			log.debug(o[1]+" "+o[0]+"lat "+o[3]+" long "+o[4]);			
 			unique.add(ident);			
 		}
 
@@ -416,7 +493,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		rtn.addAll(unique);
 		
 		return rtn;		 		
-	}
+	}*/
 
 	/**
 	 * Utility to set the projection properties for TopicIdentifier
@@ -428,6 +505,50 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Property.forName("id"));
 	}
 
+	public void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude){
+				
+		log.debug("-------------SAVE TOPICS LOCATION---------------");
+		log.debug("-------------tag "+tagID+" topic "+topicID+"---------------");	
+		Topic t = (Topic) getHibernateTemplate().get(Topic.class, topicID);
+		
+		
+		
+		Set<TopicTypeConnector> types = t.getTypes();
+		
+		System.out.println(t.toPrettyString());
+		
+		log.debug("Types size "+t.getTypesAsTopics().size());
+		log.debug("TypesWith loc size "+types.size());
+		
+		for(TopicTypeConnector twl : types){
+		
+			System.out.println("Found "+twl.getTopic().getTitle()+" lat "+twl.getLatitude()+" long "+twl.getLongitude());
+			
+			if(twl.getTopic().getId() == topicID){
+				
+				System.out.println("updating "+topicID);
+				
+				twl.setLatitude(latitude);
+				twl.setLongitude(longitude);
+				
+				getHibernateTemplate().save(twl);
+				break;
+			}
+		}
+		
+		
+		
+//		List<Object[]> list = getHibernateTemplate().find(""+
+//				"select title, id, lastUpdated, top.types.latitude, top.types.longitude from Topic top "+
+//				"where top.types.id is ? "+
+//				"and user is ? "
+//				,params);
+//		
+//		Topic t = (Topic) getHibernateTemplate().get(Topic.class, topicID);
+//		t.getTypes().
+		
+	}
+	
 
 	/**
 	 * TODO replace hardcoded class discriminators with .class
@@ -463,6 +584,42 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	}
 
 	public Topic getForID(User user, long topicID) {
+		
+		
+//		System.out.println("GET0");
+//		List<TopicTypeConnector> ttc = getHibernateTemplate().find("from TopicTypeConnector");
+//		for (TopicTypeConnector connector : ttc) {
+//			System.out.println("conn "+connector.latitude+" "+connector.getLongitude()+" "+connector.getTopic().getId()+" "+connector.getType().getId());
+//		}
+//		List<Topic> topic = getHibernateTemplate().find("from Topic top where top.instances.size > 0");
+//		for (Topic topic2 : topic) {
+//			System.out.println("found "+topic2+" "+topic2.getId());
+//		}
+		
+		
+//		System.out.println("THIS WORKS");
+//		List<Topic> topic = getHibernateTemplate().find("select inst.topic from Topic top "+
+//		"left join top.instances inst "+
+//		"where inst.type.id = 1041");
+//		
+//		
+//		for (Topic topic2 : topic) {
+//			System.out.println("found "+topic2+" "+topic2.getId());	
+//		}
+		
+
+		
+		
+		
+//		System.out.println("FLUSH");
+//		getHibernateTemplate().flush();
+//		System.out.println("GETTING");
+//		Topic rtn = (Topic) getHibernateTemplate().get(Topic.class, topicID);		
+//		System.out.println("GOT");
+//		System.out.println(rtn.toPrettyString());
+//				
+//		return rtn;
+		
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
 				.add(Expression.eq("user", user))
 				.add(Expression.eq("id", topicID)));
@@ -607,19 +764,46 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				 */				
 				Topic topic  = (Topic) sess.get(Topic.class,todelete.getId());
 				
-				log.info("Instances: "+topic.getInstances().size());
-				for (Topic instance : (Set<Topic>)topic.getInstances()) {
-					log.info("Was a tag. Removing instances "+instance);
-					instance.getTypes().remove(topic);
-				}
-				topic.getInstances().clear();
 				
-				log.info("Types: "+topic.getTypes().size());
-				for (Topic type : (Set<Topic>)topic.getTypes()) {
-					log.info("Removing from type "+type);
-					type.getInstances().remove(topic);
-				}
+				
+//				log.info("Instances: "+topic.getInstances().size());
+//				
+//				for (TopicTypeConnector conn : (Set<TopicTypeConnector>)topic.getInstances()) {
+//					getHibernateTemplate().delete(conn);
+//				}
+				
+				/*
+				 * delete all type/instance references to this topic
+				 */
+				List<TopicTypeConnector> conns = sess.createCriteria(TopicTypeConnector.class, "conn")
+				.add(Expression.or((Expression.eq("conn.type", topic)),
+				Expression.eq("conn.topic", topic))).list();
+				
+				
+				System.out.println("found "+conns.size()+" connections.");
+				for (TopicTypeConnector connector : conns) {
+					//connector.getType()
+					System.out.println("Delete connection "+connector);
+					sess.delete(connector);
+				}				
 				topic.getTypes().clear();
+				
+				System.out.println("after clear "+topic.toPrettyString());
+				
+//				for (TopicTypeConnector conn : (Set<TopicTypeConnector>)topic.getTypes()) {
+//					log.info("Was a tag. Removing instances "+instance);
+//					topic.getTypes().clear();					
+//				}
+				//topic.getInstances().clear();
+//				
+//				log.info("Types: "+topic.getTypes().size());
+//				for (Topic type : (Set<Topic>)topic.getTypes()) {
+//					log.info("Removing from type "+type);
+//					type.getInstances().remove(topic);
+//				}
+//				topic.getTypes().clear();
+				
+				
 				
 				for (Occurrence occurence : (Set<Occurrence>)topic.getOccurences()) {
 					
@@ -640,6 +824,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				for (Topic assoc : (Set<Topic>)topic.getAssociations()) {
 					//TODO what here? any cascade?					
 				}
+				
+				
+				System.out.println("last gasp "+topic.toPrettyString());
 				
 				sess.delete(topic);				
 				return true;

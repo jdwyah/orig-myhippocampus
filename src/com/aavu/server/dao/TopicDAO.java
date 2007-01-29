@@ -2,13 +2,12 @@ package com.aavu.server.dao;
 
 import java.util.List;
 
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
@@ -28,7 +27,7 @@ public interface TopicDAO {
 	
 	void tester();
 
-	List<FullTopicIdentifier> getTopicIdsWithTag(long tagid,User user);
+	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
 
 	Topic getForID(User currentUser, long topicID);
 
@@ -48,5 +47,9 @@ public interface TopicDAO {
 	void populateUsageStats(UserPageBean rtn);
 
 	void delete(Topic topic);
+	
+	void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude);
+
+	
 
 }

@@ -30,10 +30,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(((JSONString)value.get("data")).stringValue());
 	}
 
-	public Topic(User user, String title,int latitude, int longitude, Date lastUpdated, Date created, boolean publicVisible, Set children, Subject subject,Set parents, Set metas, Set occurences, Set associations) {
-		super(user, title, latitude, longitude,lastUpdated, created, publicVisible, children, subject, parents, metas, occurences, associations);		
-	}
-
+	
 	public Topic(User u, String title) {
 		this();
 		setUser(u);
@@ -83,13 +80,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		assoc.setTitle(getTitle()+" to "+metaValue.getTitle());
 		
 		//redundant if we've already created
-		assoc.getTypes().add(meta);
+		assoc.addType(meta);
 		
 		assoc.getMembers().clear();
 		assoc.getMembers().add(metaValue);
 						
-		metaValue.getTypes().add(meta);
-		meta.getInstances().add(metaValue);
+		metaValue.addType(meta);
+		
+		//unecessary now that it's the same table
+		//meta.getInstances().add(metaValue);
+		
+		
 		
 		//redundant if we've already created
 		getAssociations().add(assoc);
@@ -119,7 +120,12 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 //		}
 //		Window.alert("this: "+toPrettyString());
 
-		tag.getInstances().add(this);
+		
+		
+		//NOTE! shoudl be unecessary
+		//tag.getInstances().add(this);
+		
+		
 		//Window.alert("FOO2");
 //		Window.alert("f: "+getTypes());
 
@@ -127,7 +133,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 //		Window.alert("pretty "+tag.toPrettyString());
 
 
-		return getTypes().add(tag);
+		return addType(tag);
+		
 //		Window.alert("FOO3");
 
 	}
@@ -139,9 +146,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		System.out.println("FROM-------------------");
 		System.out.println(toPrettyString());
 		
-		boolean b = tag.getInstances().remove(this);
+		boolean b = true;//tag.getInstances().remove(this);
 		
-		boolean b2 = getTypes().remove(tag);
+		boolean b2 = getTypesAsTopics().remove(tag);
 		
 		System.out.println("Remove Tag: "+b+" "+b2);
 		return b && b2;
@@ -212,12 +219,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	public Set getTags() {
-		return getTypes();
+		return getTypesAsTopics();
 	}	
 
-	public void setTags(HashSet tags) {
-		setTypes(tags);
-	}
+	
 
 	public TopicIdentifier getIdentifier() {
 		return new TopicIdentifier(getId(),getTitle());
@@ -226,9 +231,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 
 	public String toPrettyString() {
-		return toPrettyString("");
+		return toPrettyString("",this);
 	}
-	public String toPrettyString(String indent) {
+	public String toPrettyString(String indent, Topic prev) {
 		
 		StringBuffer tagsStr = new StringBuffer();
 		StringBuffer metaVStr = new StringBuffer();
@@ -237,7 +242,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 		try{			
 			tagsStr.append(indent+"Types: \n"+indent);
-			for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
+			for (Iterator iter = getTypesAsTopics().iterator(); iter.hasNext();) {
 				Topic element = (Topic) iter.next();				
 				tagsStr.append(element.getId()+" "+element.getTitle());
 				tagsStr.append("\n");
@@ -247,7 +252,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 					tagsStr.append("\n");
 				}
 				tagsStr.append(indent+"     -----Type-----");
-				tagsStr.append(element.toPrettyString("     "));
+				if(element == prev){
+					tagsStr.append("Found original. No recurse.");
+				}else{
+					tagsStr.append(element.toPrettyString("     ",this));
+				}
 				tagsStr.append("\n"+indent+"     -----End----");
 			}
 		}catch(Exception e){
@@ -260,7 +269,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 				
 				metaVStr.append("ASS: "+assoc.getTitle()+" "+assoc.getId()+"\n"+indent);
 				metaVStr.append("Types:\n"+indent);
-				for (Iterator iterator = assoc.getTypes().iterator(); iterator
+				for (Iterator iterator = assoc.getTypesAsTopics().iterator(); iterator
 						.hasNext();) {
 					Topic type = (Topic) iterator.next();
 					metaVStr.append("T: "+type.getTitle()+" "+type.getId()+"\n"+indent);
@@ -277,16 +286,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			metaVStr.append(indent+"Topic Pretty Association Errored");
 		}
 		
-		try{			
-			instanceStr.append(indent+"Instances:\n"+indent);
-			for (Iterator iter = getInstances().iterator(); iter.hasNext();) {
-				Topic instance = (Topic) iter.next();
-				
-				instanceStr.append("Instance: "+instance.getTitle()+" "+instance.getId()+"\n"+indent);							
-			}
-		}catch(Exception e){
-			instanceStr.append(indent+"Topic Pretty Instances Errored");
-		}
+//		try{			
+//			instanceStr.append(indent+"Instances:\n"+indent);
+//			for (Iterator iter = getInstances().iterator(); iter.hasNext();) {
+//				TopicTypeConnector conn = (TopicTypeConnector) iter.next();
+//				Topic instance = conn.getTopic();
+//				instanceStr.append("Instance: "+instance.getTitle()+" "+instance.getId()+"\n"+indent);							
+//			}
+//		}catch(Exception e){
+//			e.printStackTrace();
+//			instanceStr.append(indent+"Topic Pretty Instances Errored "+e);
+//		}
 		try{			
 			occurencesStr.append(indent+"Occurrences:\n"+indent);
 			for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
@@ -321,7 +331,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
-			for (Iterator iterator = association.getTypes().iterator(); iterator.hasNext();) {
+			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleSee = (Topic) iterator.next();
 				if (possibleSee instanceof MetaSeeAlso){
 					System.out.println("return existing assoc");
@@ -345,7 +355,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			
-			for (Iterator iterator = association.getTypes().iterator(); iterator.hasNext();) {
+			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
 				if (possibleMeta instanceof Meta
 						&& association.getMembers().size() == 0) {					
@@ -359,7 +369,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			
-			for (Iterator iterator = association.getTypes().iterator(); iterator.hasNext();) {
+			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possible = (Topic) iterator.next();
 				if (possible == meta) {	
 					return association;									
@@ -422,6 +432,97 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		getAssociations().add(cur);
 	}
 
+
+	/**
+	 * do we need to update both sides of this association? 
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public boolean addType(Topic type) {
+		TopicTypeConnector conn = new TopicTypeConnector(this,type,-1.0,-1.0);
+		//type.getInstances().add(conn);
+		return getTypes().add(conn);
+		//return getTypes().add(new Topic(topic,-1,-1));		
+	}
+	
+	/**
+	 * TODO please help me understand this. see commented function below. hashcode == and TTC == && .eq(),
+	 * but it won't remove it from the set. why???
+	 * 
+	 * Workaround here is to make a new set and add everything that shouldn't be deleted. 
+	 * 
+	 * @param topic
+	 */
+	public void removeType(Topic topic){
+		//System.out.println("Remove T size "+getTypes().size());
+		Set replacementSet = new HashSet();
+		
+		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
+			
+			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
+			
+			if(!twl.getType().equals(topic)){
+				replacementSet.add(twl);
+			}			
+		}
+		setTypes(replacementSet);
+				
+		//System.out.println("Remove T size "+getTypes().size());
+	}
+	
+//	public void removeType2(Topic topic){
+//		
+//		System.out.println("Remove T size "+getTypes().size());
+//		
+//		TopicTypeConnector ttc = null;
+//		
+//		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
+//			
+//			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
+//			
+//			System.out.println("remove "+topic+" Top "+twl.getTopic()+" type "+twl.getType());
+//			
+//			if(twl.getType().equals(topic)){
+//				System.out.println("eq, removing");
+//				
+//				System.out.println("twl.getHash "+twl.hashCode());
+//				ttc = twl;
+//				break;
+//			}			
+//		}
+//		
+//		System.out.println("2nd.getHash "+getTypes().iterator().next().hashCode());
+//		
+//	//	HashSet<E>k;
+//		System.out.println("rem res "+getTypes().remove(ttc));
+//		
+//		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
+//		
+//			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
+//			
+//			System.out.println("H"+(ttc.hashCode() == twl.hashCode()));
+//			System.out.println("=="+(twl == ttc));
+//			System.out.println("=="+twl.equals(ttc));
+//			
+//			System.out.println("rem twl "+getTypes().remove(twl));
+//			System.out.println("rem ttc "+getTypes().remove(ttc));
+//		}
+//		
+//		System.out.println("Remove T size "+getTypes().size());
+//	}
+	
+	public Set getTypesAsTopics(){
+		
+		Set rtn = new HashSet();
+		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
+			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
+			rtn.add(twl.getType());
+		}
+		return rtn;
+	}
+	
+	
 	/**
 	 * Overridable. 
 	 * 

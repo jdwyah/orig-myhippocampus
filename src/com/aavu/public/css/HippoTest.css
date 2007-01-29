@@ -51,6 +51,17 @@ a:visited {
 	border: 0px;
 }
 
+.H-RightInfo {
+	background: transparent;
+	margin-left: 600px;
+	top: 0px;
+	right: 0px;
+	border: 0px;
+	z-index: 1;
+	width: 300px;
+}
+
+
 .H-Dashboard {
 	bottom: 0px;
 	left: 40%;
@@ -196,6 +207,9 @@ a:visited {
 .H-IslandBanner .Shadow {
 	color: #F8F5F4;
 }
+.H-IslandBanner .Selected {
+	color: red;
+}
 
 .H-Island-Closeup {
 	background-color: transparent;
@@ -228,6 +242,15 @@ a:visited {
 
 .H-TopicLink-hover {
 	color: blue;
+}
+
+.H-LinkWidget {
+	font: .8em;
+	background-color: #FFFFFF;
+}
+.H-LinkWidget-Odd {
+	font: .8em;
+	background-color: #CCCC99
 }
 
 .H-editableText {

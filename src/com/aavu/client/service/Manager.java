@@ -162,28 +162,34 @@ public class Manager implements TopicSaveListener {
 	}
 
 	/*
-	 * TODO this works, but slow nested Async
 	 * 
-	 * Used By Flash Ocean
+	 * 
 	 */
 	public void showTopicsForTag(final long id) {
 		
-		getTopicCache().getTopicsWithTag(id,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
+//		getTopicCache().getTopicsWithTag(id,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
+//			public void onSuccess(Object result) {
+//				super.onSuccess(result);
+//				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
+//				mainMap.showCloseup(id,topics);													
+//			}});
+		
+		
+		System.out.println("show topic for tag!");
+		
+		
+		getTopicCache().getTopicByIdA(id,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
-				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
-
+				Tag tag = (Tag) result;		
+				mainMap.displayTopic(tag);
 				
-				
-				mainMap.showCloseup(id,topics);
-				
-				
-				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);
-						
-								
-			}});				
+				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);						
+			}});			
 	}	
-			
+	public void unselectIsland() {
+		mainMap.unselect();
+	}
 
 	/**
 	 * we can goto a topic linked by either Name, or ID.
@@ -380,6 +386,7 @@ public class Manager implements TopicSaveListener {
 		this.focussed = false;
 		mainMap.unFocus();
 	}
+	
 	
 	
 		

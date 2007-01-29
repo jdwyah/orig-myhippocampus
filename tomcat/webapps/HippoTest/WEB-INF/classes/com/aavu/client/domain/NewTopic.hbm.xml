@@ -64,28 +64,42 @@
 						
 	    </map>-->
 
- 		<set name="instances" table="instancetable" cascade="none">
+ 		<!-- <set name="instances" table="instancetable" cascade="none">
 			<key column="from_id" />
 			<many-to-many column="topic_id" class="Topic" />
+		</set>-->
+		
+		<!-- no cascade, no update. Only use this field in hibernate queries. -->
+		<set name="instances" inverse="true">
+			<key column="topic_id" />
+			<one-to-many class="TopicTypeConnector"/>
 		</set>
-		<set name="types" table="typetable" cascade="none">
+		
+		<set name="types" cascade="save-update" inverse="true">
+			<key column="from_id" />
+			<one-to-many class="TopicTypeConnector"/>
+		</set>
+		
+		
+		<!--<set name="types" table="typetable" cascade="none">
 			<key column="from_id" />
 			<many-to-many column="topic_id" class="Topic" />
 		</set>
 		
+		-->
 		<!-- This owes an explanation. Basically it's a dupe of the Types mapping
   			 above, but it also maps the latitude & longitude columns of that mapping.
   			 Melding everything into the above mapping was another option, but this 
   			 was easier. Currently only using this mapping in the getTopicsWithTag() call. 
   			 TODO how bad is this?-->		
-		<set name="typesWithLocation" table="typetable">
+		<!-- <set name="typesWithLocation" table="typetable">
         		<key column="from_id"/>
-		        <composite-element class="com.aavu.client.domain.TopicWithLocation">
+		        <composite-element class="TopicWithLocation">
 		            <property column="latitude" name="latitude"/>
         		    <property column="longitude" name="longitude"/>
 					<many-to-one name="topic" class="Topic" />
 		        </composite-element>
-	    </set>
+	    </set>-->
 		
 <!-- 
 		<set name="metas" table="topic_meta">
@@ -98,7 +112,8 @@
 			<many-to-many column="topic_id" class="Occurrence" />
 		</set>
 
-	    <set name="associations" table="topic_associations">
+		<!-- no cascade, we want to pre-process to make SeeAlso a singleton. -->
+	    <set name="associations" table="topic_associations" >
 			<key column="association_id"></key>			
 			<many-to-many column="topic_id" class="Association" />
 		</set>

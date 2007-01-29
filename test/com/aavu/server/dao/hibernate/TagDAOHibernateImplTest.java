@@ -67,19 +67,19 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t1.setName(A);
 		t1.setUser(u);
 
-		topicDAO.save(t1);
+		t1 = (Tag) topicDAO.save(t1);
 
 		Tag t2 = new Tag();
 		t2.setName(B);
 		t2.setUser(u);
 
-		topicDAO.save(t2);
+		t2 = (Tag) topicDAO.save(t2);
 
 		Tag t3 = new Tag();
 		t3.setName(B2);
 		t3.setUser(u);
 
-		topicDAO.save(t3);
+		t3 = (Tag) topicDAO.save(t3);
 		
 		return new Tag[] {t1,t2,t3};
 	}
@@ -108,10 +108,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Topic t1 = new Topic(u,"FOO");		
 		t1.tagTopic(tags[0]);		
-		topicDAO.save(t1);
-		
-		topicDAO.save(t1);
-		
+		topicDAO.save(t1);		
 		
 		List<Tag> list = tagDAO.getAllTags(u);
 		assertEquals(3 + publicTagNumber, list.size());
@@ -124,17 +121,17 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		Topic t3 = new Topic(u,"SHMEE");		
 		t3.tagTopic(tags[1]);		
-		topicDAO.save(t2);
+		topicDAO.save(t3);
 		
-		Topic t4 = new Topic();
+		Topic t4 = new Topic(u,"foobee");
 		t4.setUser(u);
 		t4.tagTopic(tags[1]);		
-		topicDAO.save(t2);
+		topicDAO.save(t4);
 		
-		Topic t5 = new Topic();
+		Topic t5 = new Topic(u,"fee");
 		t5.setUser(u);
 		t5.tagTopic(savedTag);		
-		topicDAO.save(t2);
+		topicDAO.save(t5);
 		
 		list = tagDAO.getAllTags(u);
 		assertEquals(3 + publicTagNumber, list.size());
@@ -266,7 +263,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t.setUser(u);
 		t.tagTopic(three[0]);
 					
-		topicDAO.save(t);
+		t = topicDAO.save(t);
 		
 		//test
 		//tag 0 should have one topic
@@ -289,11 +286,11 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setUser(u);				
 		t2.tagTopic(three[1]);				
 		t2.tagTopic(three[0]);
-		topicDAO.save(t2);
+		t2 = topicDAO.save(t2);
 		
 		//add tag 2 to topic 1
 		t.tagTopic(three[2]);
-		topicDAO.save(t);
+		t = topicDAO.save(t);
 		
 		//test 
 		//

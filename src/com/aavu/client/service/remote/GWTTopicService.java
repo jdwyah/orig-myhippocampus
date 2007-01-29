@@ -9,6 +9,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoException;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 
@@ -42,4 +43,6 @@ public interface GWTTopicService extends RemoteService {
 	MindTree saveTree(MindTree tree) throws HippoException;
 	
 	void delete(Topic topic) throws HippoException;
+	
+	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException;
 }

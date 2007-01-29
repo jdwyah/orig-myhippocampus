@@ -2,6 +2,7 @@ package com.aavu.client.gui.dhtmlIslands;
 
 import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.TagInfo;
+import com.aavu.client.gui.ext.DraggableLabel;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;

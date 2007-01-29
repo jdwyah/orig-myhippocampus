@@ -14,6 +14,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.mapper.MindTree;
@@ -61,7 +62,19 @@ public class TopicServiceImpl implements TopicService {
 		return topicDAO.save(topic);
 	}
 	public List<FullTopicIdentifier> getTopicIdsWithTag(long id) {
-		return topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
+		
+		List<TopicTypeConnector> conns = topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
+		
+		List<FullTopicIdentifier> rtn = new ArrayList<FullTopicIdentifier>(conns.size());
+		for (TopicTypeConnector conn : conns) {
+			rtn.add(new FullTopicIdentifier(conn));
+			
+			
+			log.debug("Topic on island Found "+conn.getId()+" "+conn.getLatitude()+" "+conn.getLongitude());
+			
+		}
+		return rtn;
+		//return topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
 	}
 	public List<TopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
@@ -137,6 +150,9 @@ public class TopicServiceImpl implements TopicService {
 		}else{
 			throw new HippoBusinessException("User "+userService.getCurrentUser().getUsername()+" can't delete this topic");
 		}
+	}
+	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) {
+		topicDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
 	}
 
 

@@ -38,19 +38,19 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	static final String IMG_LOC = "img/simplicity/";
 	//static final String IMG_LOC = "img/oldmapStyle/";
-	
+
 	private Manager manager;
 
 	private Map islands = new HashMap();	
 	private List objects = new ArrayList();
-	
+
 	private DragHandler dragHandler;
 
 	private int backY = 0;
 	private int backX = 0;
 	private int curbackX = 0;
 	private int curbackY = 0;
-	
+
 	private int dragStartX;
 
 	private int dragStartY;
@@ -59,8 +59,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private Panel rightCloud;
 
-	
-	
+
+
 	private Panel leftCloud;
 
 	private boolean focussed = false;
@@ -73,9 +73,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private int curMouseX;
 
-	private int curMouseY;	
-	
-	
+	private int curMouseY;
+
+	private Island selectedIsland;	
+
+
 	public OceanDHTMLImpl(Manager manager) {
 		super();
 		this.manager = manager;
@@ -89,9 +91,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		//Decorations that will be obcured by the focus panel
 		//
 		decorate();
-		
+
 		clouds();
-		
+
 		/*
 		 * override the AbsolutePanel position: relative
 		 * otherwise we got a left: 8px; top: 8px;
@@ -109,7 +111,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		lc.setWidth("100%");
 		lc.setHeight("100%");
 		leftCloud.add(lc);
-			
+
 		rightCloud = new SimplePanel();
 		PNGImage rc = new PNGImage(Manager.myConstants.clouds_src(),120,120);
 		rc.setStyleName("H-Clouds");
@@ -117,50 +119,50 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		rc.setWidth("100%");
 		rc.setHeight("100%");
 		rightCloud.add(rc);		
-		
+
 		leftCloud.setWidth("70%");
 		leftCloud.setHeight("100%");
-		
+
 		rightCloud.setWidth("70%");
 		rightCloud.setHeight("100%");
-				
+
 		add(leftCloud,-40,0);
 		add(rightCloud,400,0);
-		
+
 	}
 
 	private void clearClouds() {
-		
+
 		GUIEffects.move(leftCloud,new EffectOption[] {
-					new EffectOption("x",-1000),
-					new EffectOption("y",0),
-					new EffectOption("duration",5.0)
-			},-1000,0);
+				new EffectOption("x",-1000),
+				new EffectOption("y",0),
+				new EffectOption("duration",5.0)
+		},-1000,0);
 		GUIEffects.move(rightCloud,new EffectOption[] {
 				new EffectOption("x",1000),
 				new EffectOption("y",0),
 				new EffectOption("duration",5.0)
 		},1000,0);
-		
-	
-		
+
+
+
 		GUIEffects.removeInXMilSecs(leftCloud, 8000);
 		GUIEffects.removeInXMilSecs(rightCloud, 8000);
 	}
 
 
 	private void decorate() {
-		
+
 		addObject(new OceanLabel("Hippo<BR>Campus<BR>Ocean",300,300));
-		
+
 		addObject(new DashedBox(-1000,140,3000,60));
-		
+
 
 		focusBackdrop = new EventBackdrop();
 		focusBackdrop.addMouseListener(this);
 		focusBackdrop.addWheelistener(this);
 		add(focusBackdrop,0,0);
-				
+
 	}
 
 	private void addObject(RemembersPosition rp) {		
@@ -182,17 +184,17 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 	private void addAll(TagStat[] tagStats) {
-		
+
 		System.out.println("ADDALL");
-		
+
 		islands.clear();
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Entry e = (Entry) iter.next();
 			remove((Widget) e.getValue());
 			objects.remove(e.getValue());
-			
+
 		}
-		
+
 		for (int i = 0; i < tagStats.length; i++) {
 			TagStat stat = tagStats[i];
 
@@ -201,7 +203,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 			addIsland(stat, isle);
 
 		}
-		
+
 		clearClouds();
 	}
 
@@ -212,56 +214,56 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	private void clearIslands(){		
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Long e = (Long) iter.next();
-			
+
 			((Widget) islands.get(e)).setVisible(false);					
 		}
 	}
 	private void clearCloseup(){		
-		
+
 		remove(closeUp);					
 		focusBackdrop.setVisible(true);
 	}
 
 	private void addIsland(TagInfo info,Island isle){			
-		
-		
+
+
 		dragHandler.add(isle,this);
-		
+
 		//dragHandler.add(isle,isle,banner);		
 		add(isle,isle.getLeft(),isle.getTop());
 		//add(banner,isle.getLeft(),isle.getTop());
-		
+
 		GUIEffects.appear(isle,4000);
 		islands.put(new Long(info.getTagId()), isle);
 		objects.add(isle);
 	}
-	
+
 	private void showOcean(){
-		
+
 		clearCloseup();
-		
+
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Long e = (Long) iter.next();
-						
+
 			Island island = (Island) islands.get(e);
-						
+
 			island.setVisible(true);
-						
+
 		}
 	}
-	
+
 
 	private void zoomUp() {
 		System.out.println("zoom up from "+currentScale);
-		
+
 		double oldScale = currentScale;
-		
+
 		if(currentScale <= 1){
 			currentScale /= 2;		
 		}else{
 			currentScale--;
 		}
-		
+
 		finishZoom(oldScale);
 	}
 
@@ -269,117 +271,115 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private void zoomIn() {		
 		System.out.println("zoom in from "+currentScale);
-				
+
 		double oldScale = currentScale;
-		
+
 		if(currentScale <= 1){
 			currentScale *= 2;		
 		}else{
 			currentScale++;
 		}
-		
+
 		finishZoom(oldScale);
 	}
 
 	private void finishZoom(double oldScale) {
 		int width = Window.getClientWidth();
 		int height = Window.getClientHeight();
-		
+
 		int centerX = (int)((-curbackX + (width / 2)) / oldScale);
 		int centerY = (int)((-curbackY + (height / 2)) / oldScale);
-		
+
 		int halfWidth = width/2;
 		int halfHeight = height/2;
 		reCenter(centerX,centerY,currentScale,halfWidth,halfHeight);
-		
-		
-		setIslandsToZoom((int) (centerX - halfWidth/currentScale),
-				(int) (centerY - halfHeight/currentScale),
-				(int) (centerX + halfWidth/currentScale),
-				(int) (centerY + halfHeight/currentScale));
-						
+
+
+		setIslandsToZoom();
+
 		//move all objects
 		moveByDelta(0,0);
 	}
 
-	
+
 	private void reCenter(int centerX, int centerY, double scale, int halfWidth, int halfHeight) {
-			
+
 		System.out.println("back X "+backX+"  backy "+backY);
 		System.out.println("center X "+centerX+"  cy "+centerY);
-		
-		
-				
+
+
+
 		System.out.println("hw "+halfWidth+" hh "+halfHeight);
 		//backX = halfWidth - halfWidth/currentScale;
-		
+
 		int newCenterX = (int) (centerX * scale);
 		int newCenterY = (int) (centerY * scale);
-		
+
 		System.out.println("new center X "+newCenterX+" "+newCenterY);
-		
+
 		backX = -(newCenterX - halfWidth);
 		backY = -(newCenterY - halfHeight);
-		
+
 		System.out.println("Newback X "+backX+"  NEWbacky "+backY);
-			
-		
+
+
 	}
-	
-	
-	
-	private void setIslandsToZoom(int left, int top, int right, int bottom) {
-		
+
+
+
+	private void setIslandsToZoom() {
+
 		System.out.println("Setting all islands to zoom level "+currentScale);
-		
+
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Long e = (Long) iter.next();
-						
+
 			Island island = (Island) islands.get(e);
-						
-			island.zoomToScale(currentScale,left,top,right,bottom);						
+
+			island.zoomToScale(currentScale);		
+
 		}
-		
-		
+
+
 	}
 
-	
-	
-	
+
+
+
 
 	public void showCloseup(long id, FullTopicIdentifier[] topics) {
-				
+
 //		clearIslands();
-//
+
 //		focusBackdrop.setVisible(false);
-//		
+
 //		Island closeIsland = (Island) islands.get(new Long(id));
-//			
+
 //		closeUp = new CloseUpIsland(closeIsland.getStat(),topics,this,closeIsland.getRepr());
-//				
+
 //		add(closeUp,closeUp.getLeft(),closeUp.getTop());
-//		
+
 //		manager.setFocussed(true);		
 	}
 
 	public void growIsland(Tag tag) {
 		Island isle = (Island) islands.get(new Long(tag.getId()));
-		if(isle == null){
+//		if(isle == null){
 
-			Island newIsle = new Island(tag,this,manager.getUser(),manager);		
-			addIsland(tag, newIsle);
+//		Island newIsle = new Island(tag,this,manager.getUser(),manager);		
+//		addIsland(tag, newIsle);
 
-		}else{
-			isle.grow();
-		}
+//		}else{
+//		isle.grow();
+//		}
 	}
 	public void removeIsland(long id) {
 		Island isle = (Island) islands.get(new Long(id));
 		if(isle != null){
 
 			GUIEffects.fadeAndRemove(isle, 3000);
-			
-			
+
+
 		}
 	}
 
@@ -387,94 +387,138 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		return this;
 	}
 
-	public void islandClicked(long tagId) {
-		
+	public void islandClicked(long tagId, Island island) {
+
 		System.out.println("CLICKED focussed "+focussed+" ID  "+tagId);
+
+//		if(focussed){
+//			showOcean();
+//			focussed = false;
+//		}else{
+//			manager.showTopicsForTag(tagId);
+//			focussed = true;
+//		}
+
+		manager.showTopicsForTag(tagId);
 		
-		if(focussed){
-			showOcean();
-			focussed = false;
-		}else{
-			manager.showTopicsForTag(tagId);
-			focussed = true;
+		
+		if(selectedIsland != null){
+			selectedIsland.setSelected(false);
 		}
-		
-		//manager.showTopicsForTag(tagId);
+		island.setSelected(true);
+		selectedIsland = island;
 	}
+
+	private void unselect() {
+		if(selectedIsland != null){
+			selectedIsland.setSelected(false);
+		}
+		manager.unselectIsland();
+	}
+
 
 
 	public void dragFinished(Widget dragging) {
 		Island island = (Island) dragging;
-		
+
 		island.youveBeenDraggedSetYourLeftAndTop();
-		
+
 		islandMoved(island.getStat().getTagId(), island.getLeft(), island.getTop());
 	}
 
-	
+
 	public void islandMoved(long islandID, final int longitude, final int latitude){
 
 		System.out.println("isleMovedTo "+longitude+" "+latitude+" SAVING");	
-		
-//		manager.getTopicCache().getTopicByIdA(islandID, new StdAsyncCallback("GetTopicById"){
-//
-//			public void onSuccess(Object result) {
-//				super.onSuccess(result);
-//				Topic t = (Topic) result;
-//				t.setLatitude(latitude);
-//				t.setLongitude(longitude);					
-//				manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
-//			}
-//
-//		});
+
+		manager.getTopicCache().getTopicByIdA(islandID, new StdAsyncCallback("GetTopicById"){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				Topic t = (Topic) result;
+				t.setLatitude(latitude);
+				t.setLongitude(longitude);					
+				manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
+			}
+		});
 
 	}
 
-	
+
 
 	private void moveByDelta(int dx, int dy) {
 		curbackX = dx + backX;
 		curbackY = dy + backY;
 		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX+"px "+curbackY+"px");	
-		
+
+		int width = Window.getClientWidth();
+		int height = Window.getClientHeight();
+
+		int halfWidth = width/2;
+		int halfHeight = height/2;
+
 //		System.out.println("cur "+curbackX+" "+curbackY);
-		
-		int centerX = (int)((-curbackX + (Window.getClientWidth()/2))/currentScale);
-		int centerY = (int)((-curbackY + (Window.getClientHeight()/2))/currentScale);
-		
+
+		int centerX = (int)((-curbackX + halfWidth)/currentScale);
+		int centerY = (int)((-curbackY + halfHeight)/currentScale);
+
 //		System.out.println("centerX "+centerX+" centerY "+centerY);
-		
+
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
-			RemembersPosition rp = (RemembersPosition) iter.next();					
-			
+			Object o = iter.next();
+			RemembersPosition rp = (RemembersPosition) o;					
+
 			//System.out.println("found: "+GWT.getTypeName(rp));
-			
+
 //			System.out.println("Left "+isle.getLeft()+"  Top "+isle.getTop());
 //			System.out.println("cur "+curbackX+" cury "+curbackY);
-			
+
 			//setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale), (int)((rp.getTop()+curbackY)*currentScale));				
 			setWidgetPosition(rp.getWidget(),(int)((rp.getLeft())*currentScale)+curbackX, (int)((rp.getTop())*currentScale)+curbackY);
+
+
+			/*
+			 * All the islands need to check to see if they're in the visible 
+			 * window. If so, and we're zoomed in enough, show the topics. 
+			 * 
+			 * all others should turn topics off.
+			 * 
+			 */
+			if(o instanceof Island){
+				Island island = (Island) o;
+				int left = (int) (centerX - halfWidth/currentScale);
+				int top = (int) (centerY - halfHeight/currentScale);
+				int right = (int) (centerX + halfWidth/currentScale);
+				int bottom = (int) (centerY + halfHeight/currentScale);
+				if(island.isWithin(left,top,right,bottom) && currentScale >= 2 ){
+					island.showTopics();
+				}else{
+					island.removeTopics();
+				}
+
+			}
 		}
-			
+
 	}
-	
+
 	public void onMouseEnter(Widget sender) {}
 	public void onMouseLeave(Widget sender) {
 		endDrag();
 	}
-	
+
 
 
 	public void onMouseDown(Widget sender, int x, int y) {		
 		dragging = true;
 		dragStartX = x;
 		dragStartY = y;
+		
+		unselect();
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
 		curMouseX = x;
 		curMouseY = y;
-		
+
 		if (dragging) {			
 			moveByDelta(x - dragStartX, y - dragStartY);			
 		}
@@ -484,7 +528,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	public void onMouseUp(Widget sender, int x, int y) {	
 		endDrag();
 	}
-	
+
 	private void endDrag() {
 		if(dragging){
 //			System.out.println("(old)back x "+backX+" cur(new) "+curbackX);
@@ -494,7 +538,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		}
 		dragging = false;
 	}
-	
+
 	public int getBackX() {		
 		return backX;
 	} 

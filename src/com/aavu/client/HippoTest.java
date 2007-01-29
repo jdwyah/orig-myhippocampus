@@ -38,6 +38,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	
 	private HippoCache hippoCache;
 	private Manager manager;
+	private static boolean have_initted_semaphore = false;
 	
 
 	/**
@@ -124,7 +125,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		loadGUI(manager.getRootWidget());
 		
-		manager.setup();
+		manager.setup("ORIG");
 		
 	}
 
@@ -136,20 +137,40 @@ public class HippoTest implements EntryPoint, HistoryListener {
 
 	/**
 	 * This is the entry point method.
+	 * 
+	 * 
+	 * TODO HIGH we're running map setup TWICE. once 
+	 * from LoginWindow. secondly because onModuleLoad() is getting called 
+	 * right after the login. Why is this? It couldn't be the addition of the  
+	 * iframe code could it?
+	 * 
+	 * NOTE the semaphore code below is inefectual even with the var static.
+	 * have_initted is false both times.
+	 * It looks like we're re-initting the class. this reports different objectIDs
+	 * 
+	 * 
+	 * 
 	 */
 	public void onModuleLoad() {
 
 		try{
-			initServices();		
-			
-			System.out.println("Module load");
-			
-			String initToken = History.getToken();
-		    if (initToken.length() > 0){
-		      onHistoryChanged(initToken); 
-		    }
-		    
-		    History.addHistoryListener(this);
+			System.out.println("Module load "+have_initted_semaphore+" "+this);
+			if(!have_initted_semaphore){
+				
+				have_initted_semaphore = true;
+				System.out.println("set to "+have_initted_semaphore);
+				
+				initServices();		
+
+				String initToken = History.getToken();
+				if (initToken.length() > 0){
+					onHistoryChanged(initToken); 
+				}
+
+				History.addHistoryListener(this);
+				
+				
+			}
 		    
 		}catch(Exception e){
 			Logger.log("e: "+e);

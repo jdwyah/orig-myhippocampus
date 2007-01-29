@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.aavu.client.domain">
+
+	<class name="TopicTypeConnector" table="type_connector" >
+		<meta attribute="generated-class">com.aavu.client.domain.generated.AbstractTopicTypeConnector</meta>
+		<meta attribute="scope-class">public abstract</meta>
+
+		<!-- 
+		Hmm, change this?
+		
+		 My initial thought was to cascade everything but then I saw in the DTD that <key-many-to-one> should never be cascaded. 
+		
+		It would be good if Hibernate team could beef up the documentation of <key-many-to-one> and <key-property>.
+		I realize that these are semi-deprecated ideas that you don't want to encourage,
+		but both of these tags have listed attributes in the DTD that are neither documented nor have examples provided
+		for them in the manual or in the test source code that the manual recommends as a source for examples. 
+		
+		 --><!--
+	 	<composite-id>			
+			 TYPE 
+			<key-many-to-one name="type" column="topic_id" class="com.aavu.client.domain.Topic"></key-many-to-one>
+			 TOPIC 
+			<key-many-to-one name="topic" column="from_id" class="com.aavu.client.domain.Topic"></key-many-to-one>
+		</composite-id>
+		
+		-->
+		<id name="id" type="long" column="connector_id" unsaved-value="0">
+			<generator class="native"></generator>
+		</id>
+
+
+		<!-- TYPE -->
+		<many-to-one name="type" column="topic_id" class="com.aavu.client.domain.Topic" cascade="save-update"></many-to-one>
+		<!-- TOPIC -->
+		<many-to-one name="topic" column="from_id" class="com.aavu.client.domain.Topic" cascade="save-update"></many-to-one>
+	
+		<property name="latitude" type="double" column="latitude">
+			<meta attribute="use-in-equals">true</meta>		
+		</property>
+		<property name="longitude" type="double" column="longitude">
+			<meta attribute="use-in-equals">true</meta>		
+		</property>		
+	
+	</class>
+
+</hibernate-mapping>

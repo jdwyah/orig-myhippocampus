@@ -144,14 +144,13 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 	}
 	public static Topic convert(Topic t,int level,boolean hasMembers,boolean typesWithAssociations){	
 		log.debug("CONVERT Topic "+t+" level: "+level+"  members "+hasMembers);
-		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypes().getClass());
+		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypesAsTopics().getClass());
 
 
 
-		log.debug("t "+t.getTypes().getClass());				
-
-		//Never pass this
-		t.setTypesWithLocation(new HashSet());
+		log.debug("t "+t.getTypesAsTopics().getClass());				
+		
+		t.setInstances(new HashSet());
 		
 		//
 		//new-ing it is essentially nulling it out, since we can't pass
@@ -170,7 +169,7 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 			t.setSubject(null);
 
 			t.setScopes(new HashSet());			
-			t.setInstances(new HashSet());						
+			//t.setInstances(new HashSet());						
 			t.setOccurences(new HashSet());			
 			t.setAssociations(new HashSet());
 
@@ -180,8 +179,8 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 				Association ass = (Association) t;
 
 				log.debug("types ");
-				log.debug("size "+ass.getTypes().size());
-				ass.setTypes(converter(ass.getTypes(), level));
+				log.debug("size "+ass.getTypesAsTopics().size());
+				ass.setTypes(converter(ass.getTypesAsTopics(), level));
 
 				log.debug("members ");
 				log.debug("size "+ass.getMembers().size());
@@ -214,7 +213,7 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 
 
 			t.setScopes(new HashSet());						
-			t.setInstances(new HashSet());						
+			//t.setInstances(new HashSet());						
 			t.setOccurences(new HashSet());	
 			t.setSubject(null);
 
@@ -232,7 +231,7 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 				Association ass = (Association) t;
 
 				log.debug("types ");
-				t.setTypes(converter(t.getTypes(), level));
+				t.setTypes(converter(t.getTypesAsTopics(), level));
 
 				log.debug("members ");
 				ass.setMembers(converter(ass.getMembers(), level));				
@@ -253,12 +252,12 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 				t.setCreated(new Date(t.getCreated().getTime()));
 
 			log.debug("starting convert sets");
-			log.debug("SIZE: "+t.getTypes().size());
+			log.debug("SIZE: "+t.getTypesAsTopics().size());
 			t.setScopes(new HashSet());
-			t.setTypes(converter(t.getTypes(),level,false,true));
+			t.setTypes(converter(t.getTypesAsTopics(),level,false,true));
 
 			log.debug("starting convert sets-instances");
-			t.setInstances(converter(t.getInstances(),level));
+			//t.setInstances(converter(t.getInstances(),level));
 
 			log.debug("starting convert sets-occurrences");
 			t.setOccurences(converterOccurenceSet(t.getOccurences()));
@@ -272,7 +271,12 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 		}
 		log.debug("Finally: t "+t.getId()+" "+t.getUser());
 
-		log.debug("Scan turned up persistent: "+Converter.scan(t));
+		try{
+			log.debug("Scan turned up persistent: "+Converter.scan(t));
+		}catch(Exception e){
+			log.error("Scanning error "+e);
+			e.printStackTrace();
+		}
 
 		return t;
 	}
@@ -510,6 +514,9 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 			e.printStackTrace();
 			throw new HippoException(e.getMessage());
 		}
+	}
+	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException {
+		topicService.saveTopicLocation(tagId,topicId,xpct,ypct);		
 	}
 
 }

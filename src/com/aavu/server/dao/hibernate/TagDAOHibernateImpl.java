@@ -82,10 +82,20 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	public List<TagStat> getTagStats(User user) {
 						
 		List<Object[]> list = getHibernateTemplate().find(""+
-				"select tag.id, tag.title, tag.instances.size, tag.latitude, tag.longitude from Tag tag "+
-				//"left join topics "+
-				"where  user is ? or publicVisible = true"
+				"select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from Tag tag "+
+				"where  user is ? "
 				,user);
+		
+		//This is the query if we decide to get rid of the instances mapping again.
+		//
+//		List<Object[]> list = getHibernateTemplate().find(""+
+//				"select conn.type.id, count(conn.type), conn.type.title, conn.type.latitude, conn.type.longitude from TopicTypeConnector conn "+
+//				//"left join topic "+
+//				"where  conn.topic.user is ? and conn.type.class = Tag "+
+//				"group by conn.type"
+//				,user);
+		
+		
 		
 //		List<Object[]> subjectList = getHibernateTemplate().find(""+
 //				"select top.subject.class.id, top.subject.class, count(top.subject.class) from Topic top "+
@@ -111,9 +121,11 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		//
 		for (Object[] o : list){
 			if(log.isDebugEnabled()){
-				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);								 
+				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);	
+				log.debug("TagStat "+o[0].getClass()+" "+o[1].getClass()+" "+o[2].getClass()+" "+o[3].getClass()+" "+o[4].getClass());
 			}			
-			rtn.add(new TagStat((Long)o[0],(Integer)o[2],(String)o[1],(Integer) o[3],(Integer) o[4]));			
+			
+			rtn.add(new TagStat((Long)o[0],(Integer)o[1],(String)o[2],(Integer) o[3],(Integer) o[4]));			
 		}
 		
 		return rtn;		 				

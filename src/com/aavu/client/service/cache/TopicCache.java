@@ -367,4 +367,10 @@ public class TopicCache {
 
 
 
+	public void saveTopicLocationA(long tagId, long topicId, double xpct, double ypct, StdAsyncCallback callback) {
+		topicService.saveTopicLocation(tagId,topicId,xpct,ypct,callback);
+	}
+
+
+
 }

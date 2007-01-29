@@ -16,9 +16,10 @@ public class Association extends AbstractAssociation implements Serializable,IsS
 	}
 
 	public Association(Topic topic,Meta meta) {
-		getTypes().add(meta);
+		addType(meta);
 		setTitle(topic.getTitle()+" to "+meta.getTitle());
 	}
+
 
 	/**
 	 * Most associations will only be of one type. Their Meta. This is just
@@ -27,7 +28,7 @@ public class Association extends AbstractAssociation implements Serializable,IsS
 	 * @return
 	 */
 	public Topic getFirstType(){
-		return (Topic) getTypes().iterator().next();
+		return (Topic) getTypesAsTopics().iterator().next();
 	}
 
 }

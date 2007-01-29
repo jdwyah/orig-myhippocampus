@@ -6,7 +6,7 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public abstract class StdAsyncCallback implements AsyncCallback {
+public class StdAsyncCallback implements AsyncCallback {
 
 	private static Manager manager;
 	public static void setManager(Manager manager) {

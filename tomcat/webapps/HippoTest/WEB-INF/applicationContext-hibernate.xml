@@ -27,6 +27,7 @@
 				<value>com/aavu/client/domain/Occurrence.hbm.xml</value>				
 				<value>com/aavu/client/domain/Mapper.hbm.xml</value>
 				<value>com/aavu/client/domain/MailingList.hbm.xml</value>
+				<value>com/aavu/client/domain/TopicTypeConnector.hbm.xml</value>				
 			</list>
 		</property>
 		<property name="hibernateProperties">

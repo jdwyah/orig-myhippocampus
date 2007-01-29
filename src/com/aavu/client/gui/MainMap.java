@@ -4,11 +4,14 @@ import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
+import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.HippoCache;
+import com.aavu.client.widget.edit.TagBoard;
+import com.aavu.client.widget.edit.TopicDetailsTabBar;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -21,6 +24,7 @@ public class MainMap extends Composite {
 	private Ocean ocean;
 	private StatusPanel statusPanel;
 	private CompassRose compassRose;
+	private RightTopicDisplayer leftTopicDisplayer;
 	
 	public MainMap(Manager manager){
 		this.manager = manager;
@@ -47,6 +51,10 @@ public class MainMap extends Composite {
 		//mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
 		mainP.add(statusPanel);
+		
+		leftTopicDisplayer = new RightTopicDisplayer(manager);
+		
+		mainP.add(leftTopicDisplayer);
 		
 		//mainP.add(tagSearch);
 		
@@ -102,6 +110,21 @@ public class MainMap extends Composite {
 
 	public void showCloseup(long id, FullTopicIdentifier[] topics) {
 		ocean.showCloseup(id,topics);
+	}
+
+	
+	
+	
+	public void displayTopic(Tag tag) {
+		
+		leftTopicDisplayer.load(tag);
+		
+		
+		
+	}
+
+	public void unselect() {
+		leftTopicDisplayer.unload();
 	}
 
 
