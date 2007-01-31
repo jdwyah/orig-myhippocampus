@@ -8,7 +8,7 @@ import java.util.Map;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.ext.tabbars.TabHasWidgets;

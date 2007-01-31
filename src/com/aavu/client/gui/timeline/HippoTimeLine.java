@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.TimeLineObj;
+import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.timeline.SimileTimeline;
 import com.aavu.client.service.Manager;

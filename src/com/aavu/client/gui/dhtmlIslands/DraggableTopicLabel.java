@@ -1,6 +1,6 @@
 package com.aavu.client.gui.dhtmlIslands;
 
-import com.aavu.client.domain.FullTopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Widget;

@@ -1,5 +1,6 @@
-package com.aavu.client.domain;
+package com.aavu.client.domain.dto;
 
+import com.aavu.client.domain.TagInfo;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class TagStat implements IsSerializable, TagInfo {

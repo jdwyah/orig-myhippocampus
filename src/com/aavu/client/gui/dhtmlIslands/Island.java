@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.TagInfo;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
@@ -422,6 +422,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	}
 	public void showTopics() {
 		if(!haveShownTopics){
+			
+			//not exactly true, since the async hasn't suceeded yet,
+			//but otherwise we might keep trying to add if more req's come in
+			haveShownTopics = true;
+			
 			manager.getTopicCache().getTopicsWithTag(tagStat.getTagId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
@@ -430,7 +435,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 					System.out.println("Show Topics results "+topics.length);
 					
 					addTopicLabels(topics);				
-				}		
+				}	
+				public void onFailure(Throwable caught) {
+					super.onFailure(caught);
+					haveShownTopics = false;				
+				}	
 			});
 		}
 		if(topicsInvisible){

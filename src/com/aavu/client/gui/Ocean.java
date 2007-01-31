@@ -1,7 +1,7 @@
 package com.aavu.client.gui;
 
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface Ocean {

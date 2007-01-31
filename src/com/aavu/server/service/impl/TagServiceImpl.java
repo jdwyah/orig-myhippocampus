@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;

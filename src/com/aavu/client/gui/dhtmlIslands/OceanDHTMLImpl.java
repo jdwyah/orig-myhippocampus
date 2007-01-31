@@ -11,27 +11,21 @@ import org.gwtwidgets.client.ui.PNGImage;
 import org.gwtwidgets.client.wrap.EffectOption;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
-import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.gui.Ocean;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.ScrollListener;
-import com.google.gwt.user.client.ui.ScrollListenerCollection;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesScrollEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListener, DragFinishedListener, WheelListener {

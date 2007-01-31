@@ -29,11 +29,11 @@ import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
@@ -53,10 +53,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.setFetchMode("types.type.associations", FetchMode.JOIN)
 		.setFetchMode("types.type.associations.types", FetchMode.JOIN)
 		.setFetchMode("types.type.associations.members", FetchMode.JOIN)		
-//		.setFetchMode("types", FetchMode.JOIN)
-//		.setFetchMode("types.associations", FetchMode.JOIN)
-//		.setFetchMode("types.associations.types", FetchMode.JOIN)
-//		.setFetchMode("types.associations.members", FetchMode.JOIN)
 		.setFetchMode("occurences", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN)
 		.setFetchMode("associations.members", FetchMode.JOIN)	

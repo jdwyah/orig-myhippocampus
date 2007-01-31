@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 
 public class CacheUtils {
 

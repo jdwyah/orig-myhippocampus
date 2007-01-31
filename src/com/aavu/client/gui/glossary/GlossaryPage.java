@@ -1,6 +1,6 @@
 package com.aavu.client.gui.glossary;
 
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.TopicPreviewLink;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;

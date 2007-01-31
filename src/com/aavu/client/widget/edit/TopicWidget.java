@@ -24,13 +24,13 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	
 	protected static final String HOVER_STYLE = "H-editableText-hover";
 
-	private FlowPanel textPanel = new FlowPanel();
+	protected FlowPanel textPanel = new FlowPanel();
 
 	private VerticalPanel panel = new VerticalPanel();
 
 	public Topic topic;
 
-	private String data;
+	//protected String data;
 
 //	private Timer removeHighlight;
 
@@ -45,13 +45,11 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	 * 
 	 * @param topic
 	 */
-	public TopicWidget(Manager manager, Topic topic){
+	public TopicWidget(){
 			
 		panel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
 		panel.setWidth("100%");
 		
-		load(topic);
-
 		add(panel);
 		addClickListener(this);
 				
@@ -88,8 +86,9 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	public void setup(){
 
 		Entry entry = topic.getLatestEntry();
-		setText(entry.getData());
-
+		
+		setText(entry);
+		
 		panel.clear();
 
 		panel.add(textPanel);
@@ -104,18 +103,14 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 			panel.add(new Label(Manager.myConstants.topic_edit()));
 		}
 
-	}
-
-	public void setText(String data){
-		this.data = data;
-		textPanel.clear();		
-		textPanel.add(new TextDisplay(data));
 		
 	}
 
-	public String getText() {
-		return data;
+	public void setText(Entry entry){		
+		textPanel.clear();		
+		textPanel.add(new TextDisplay(entry.getData()));		
 	}
+
 
 
 	/**

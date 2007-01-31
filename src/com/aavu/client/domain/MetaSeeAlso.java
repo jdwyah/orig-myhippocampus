@@ -18,8 +18,10 @@ import com.google.gwt.user.client.ui.Widget;
 public class MetaSeeAlso extends Meta {
 
 	
+	public static final String UBER_TITLE = "SEEALSO UBER";
+
 	public MetaSeeAlso(){
-		setTitle("SEEALSO UBER");
+		setTitle(UBER_TITLE);
 	}
 
 	//@Override

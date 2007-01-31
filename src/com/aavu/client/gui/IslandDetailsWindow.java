@@ -2,10 +2,10 @@ package com.aavu.client.gui;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;

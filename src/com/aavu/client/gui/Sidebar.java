@@ -10,7 +10,7 @@ import org.gwtwidgets.client.ui.PNGImage;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.ext.tabbars.VertableTabPanel;
 import com.aavu.client.gui.glossary.Glossary;

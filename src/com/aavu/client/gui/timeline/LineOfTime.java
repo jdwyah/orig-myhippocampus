@@ -1,6 +1,6 @@
 package com.aavu.client.gui.timeline;
 
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;

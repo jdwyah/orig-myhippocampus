@@ -1,14 +1,9 @@
 package com.aavu.client.gui.dhtmlIslands;
 
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.TagInfo;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CloseUpIsland extends AbstractIsland implements DragFinishedListener {

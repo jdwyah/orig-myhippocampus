@@ -1,7 +1,8 @@
-package com.aavu.client.domain;
+package com.aavu.client.domain.dto;
 
 import java.util.Date;
 
+import com.aavu.client.domain.TopicTypeConnector;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class FullTopicIdentifier extends TopicIdentifier implements IsSerializable {

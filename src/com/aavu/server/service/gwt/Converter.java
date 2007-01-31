@@ -13,6 +13,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.generated.AbstractTopic;
+import com.aavu.client.domain.generated.AbstractTopicTypeConnector;
 
 public class Converter {
 	private static final Logger log = Logger.getLogger(Converter.class);
@@ -33,6 +34,11 @@ public class Converter {
 
 		String className = object.getClass().getName();
 		if(className.contains("Persistent")){
+			log.warn("Persistent");
+			return true;
+		}
+		if(className.contains("CGLIB")){
+			log.warn("CGLIB");
 			return true;
 		}
 		log.debug("classname "+className);
@@ -62,34 +68,50 @@ public class Converter {
 
 				//System.out.println("implement "+methodReturnType+"   "+implementsCollection(methodReturnType));			
 
-				Collection<AbstractTopic> sourceCollection = null;
+				Collection<Object> sourceCollection = null;
 				try {
 					sourceCollection = (Collection)method.invoke(object,null);
+				} catch(IllegalAccessException ee){
+					log.debug("Method: "+method.getName()+" is not accessible.");					
 				} catch (Exception e) {
-					e.printStackTrace();
+					e.printStackTrace();					
 				} 
 
-				//System.out.println("rtn: "+sourceCollection);
-				//System.out.println(sourceCollection.getClass());
+				if(sourceCollection != null){
 
-				if(sourceCollection.getClass().toString().contains("Persist")){
-					log.error("RETURNING A HIBERNATE CLASS!!!!!!!!!!");
-					b = true;
-				}
+					//System.out.println("rtn: "+sourceCollection);
+					//System.out.println(sourceCollection.getClass());
 
-				try{
-					for (AbstractTopic topic : sourceCollection) {
-						log.debug("INSIDE!!!!!!!!!!!!!!!!!!!!!! ");
-						if(scan(topic)){
-							log.warn("Field: "+method.getName()+" was Hibernate.");
-							b = true;
-						}	
+					if(sourceCollection.getClass().toString().contains("Persist")){
+						log.error(method.getName()+" is RETURNING A HIBERNATE CLASS!!!!!!!!!!");
+						b = true;
 					}
-				}catch(ClassCastException c){
-					//lazy code above, some of these will now be occurrence, not topics
-					log.debug("cast error: "+c);
-				}
 
+					try{
+						
+						for (Object obj : sourceCollection) {							
+							log.debug("moving into set____________");
+							if(obj instanceof AbstractTopic){
+								if(scan((AbstractTopic) obj)){
+									log.warn("Topic in "+method.getName()+" was Hibernate!!!!!!!!!!!!!!");
+									b = true;
+								}	
+							}
+							else if(obj instanceof AbstractTopicTypeConnector){
+								AbstractTopicTypeConnector conn = (AbstractTopicTypeConnector) obj;
+								if(scan(conn.getType())){
+									log.warn("Field: "+method.getName()+" was Hibernate!!!!!!!!!!!!");
+									b = true;
+								}	
+							}else {
+								log.warn("unknown "+obj.getClass());
+							}
+						}
+					}catch(ClassCastException c){
+						//lazy code above, some of these will now be occurrence, not topics
+						log.debug("cast error: "+c);
+					}
+				}
 			}
 		}
 

@@ -3,7 +3,7 @@ package com.aavu.client.widget.edit;
 import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.ModablePopupPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;

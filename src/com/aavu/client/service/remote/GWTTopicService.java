@@ -2,11 +2,11 @@ package com.aavu.client.service.remote;
 
 import java.util.List;
 
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.AsyncCallback;

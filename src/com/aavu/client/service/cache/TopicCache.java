@@ -12,7 +12,7 @@ import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.Manager;

@@ -6,9 +6,9 @@ import java.util.List;
 import org.compass.gps.device.hibernate.Hibernate3GpsDevice;
 import org.compass.spring.device.hibernate.SpringHibernate3GpsDevice;
 
-import com.aavu.client.domain.SearchResult;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.SearchResult;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;

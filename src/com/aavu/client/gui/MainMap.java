@@ -1,8 +1,8 @@
 package com.aavu.client.gui;
 
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.FlashContainer;
@@ -24,7 +24,7 @@ public class MainMap extends Composite {
 	private Ocean ocean;
 	private StatusPanel statusPanel;
 	private CompassRose compassRose;
-	private RightTopicDisplayer leftTopicDisplayer;
+	private RightTopicDisplayer topicDetailsDisplayer;
 	
 	public MainMap(Manager manager){
 		this.manager = manager;
@@ -52,9 +52,9 @@ public class MainMap extends Composite {
 		mainP.add(new Dashboard(manager));
 		mainP.add(statusPanel);
 		
-		leftTopicDisplayer = new RightTopicDisplayer(manager);
+		topicDetailsDisplayer = new RightTopicDisplayer(manager);
 		
-		mainP.add(leftTopicDisplayer);
+		mainP.add(topicDetailsDisplayer);
 		
 		//mainP.add(tagSearch);
 		
@@ -117,14 +117,14 @@ public class MainMap extends Composite {
 	
 	public void displayTopic(Tag tag) {
 		
-		leftTopicDisplayer.load(tag);
+		topicDetailsDisplayer.load(tag);
 		
 		
 		
 	}
 
 	public void unselect() {
-		leftTopicDisplayer.unload();
+		topicDetailsDisplayer.unload();
 	}
 
 

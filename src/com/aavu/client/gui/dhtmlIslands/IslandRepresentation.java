@@ -4,15 +4,6 @@ import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.User;
 import com.aavu.client.util.MiddleSquarePseudoRandom;
 import com.aavu.client.util.PsuedoRandom;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Class that holds the "used[][]" so that we can share it between Closeup

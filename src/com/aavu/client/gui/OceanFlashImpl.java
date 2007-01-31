@@ -1,11 +1,11 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
 

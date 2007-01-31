@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
@@ -328,12 +329,19 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * 
 	 */
 	public Association getSeeAlsoAssociation() {
-		
+
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
-				Topic possibleSee = (Topic) iterator.next();
-				if (possibleSee instanceof MetaSeeAlso){
+				
+				Topic possibleSee = (Topic) iterator.next();				
+				
+				//TODO why is the strcmp necessary? this used to work,
+				//but now the possibleSee is class com.aavu.client.domain.Topic$$EnhancerByCGLIB$$b0a3c443
+				//and not instanceof MetaSeeAlso
+				if (possibleSee instanceof MetaSeeAlso
+						||
+						possibleSee.getTitle().equals(MetaSeeAlso.UBER_TITLE)){
 					System.out.println("return existing assoc");
 					return association;
 				}				

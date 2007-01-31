@@ -1,7 +1,7 @@
 package com.aavu.client.widget;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.google.gwt.user.client.DOM;

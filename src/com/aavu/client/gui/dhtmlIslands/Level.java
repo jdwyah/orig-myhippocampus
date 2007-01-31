@@ -1,7 +1,6 @@
 package com.aavu.client.gui.dhtmlIslands;
 
 import com.aavu.client.domain.TagInfo;
-import com.aavu.client.domain.TagStat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;

@@ -8,11 +8,11 @@ import org.gwm.client.GInternalFrame;
 
 import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.IslandDetailsWindow;
 import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;

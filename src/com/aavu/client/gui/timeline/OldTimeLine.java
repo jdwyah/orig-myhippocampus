@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
-import com.aavu.client.domain.TimeLineObj;
+import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.VerticalPanel;

@@ -3,7 +3,7 @@ package com.aavu.client.gui;
 import java.util.Iterator;
 import java.util.List;
 
-import com.aavu.client.domain.SearchResult;
+import com.aavu.client.domain.dto.SearchResult;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.util.DecimalFormatSimple;

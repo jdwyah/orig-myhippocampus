@@ -45,7 +45,7 @@
 			
 				<prop key="hibernate.dialect">${db.dialect}</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.cglib.use_reflection_optimizer">false</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
 				
 				
 				<!-- configuration pool via c3p0-->

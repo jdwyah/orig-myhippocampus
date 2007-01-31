@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagService;

@@ -11,13 +11,13 @@ import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.Association;
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
@@ -136,174 +136,20 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 	 * @return
 	 */
 	public static Topic convert(Topic t){
-
-		return convert(t,0);	
-	}
-	public static Topic convert(Topic t,int level){
-		return convert(t,level,false,false);
-	}
-	public static Topic convert(Topic t,int level,boolean hasMembers,boolean typesWithAssociations){	
-		log.debug("CONVERT Topic "+t+" level: "+level+"  members "+hasMembers);
-		log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypesAsTopics().getClass());
-
-
-
-		log.debug("t "+t.getTypesAsTopics().getClass());				
+		log.debug("New Converter "+t.getId()+" "+t.getTitle());
 		
-		t.setInstances(new HashSet());
+		NewConverter.convertInPlace(t);
 		
-		//
-		//new-ing it is essentially nulling it out, since we can't pass
-		//lazy stuff
-		//
-		//L2 new it out
-		//L1 new everything expect metas we need this for topic's->tag's->metas
-		//
-		if(level >= 2){	
-			if(null == t){
-				return t;
-			}
-			System.out.println("setting nul_____________________________________________");
-			t.setLastUpdated(null);
-			t.setCreated(null);
-			t.setSubject(null);
-
-			t.setScopes(new HashSet());			
-			//t.setInstances(new HashSet());						
-			t.setOccurences(new HashSet());			
-			t.setAssociations(new HashSet());
-
-			if(hasMembers){		
-				log.debug("LEVEL 2 HAS MEMBERS");
-
-				Association ass = (Association) t;
-
-				log.debug("types ");
-				log.debug("size "+ass.getTypesAsTopics().size());
-				ass.setTypes(converter(ass.getTypesAsTopics(), level));
-
-				log.debug("members ");
-				log.debug("size "+ass.getMembers().size());
-				ass.setMembers(converter(ass.getMembers(), level));				
-			}else{
-				//is this necessary?
-				//
-				t.setTypes(new HashSet());				
-			}
-
-		}else if(level == 1){
-			if(null == t){
-				return t;
-			}
-			log.debug("l1 "+t);
-			log.debug("last: "+t.getLastUpdated());
-			log.debug("created: "+t.getCreated());
-
-			//didn't need to convert the postgres one, but mysql is
-			//returning java.sql.timestamp, which, surprise surprise 
-			//is another thing that breaks GWT serialization.
-			//
-			//hmm, I think these get nulled in Level 2 set -> client,
-			//then we error when the client passes this back. blech.
-			//
-			if(t.getLastUpdated() != null && t.getCreated() != null){
-				t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
-				t.setCreated(new Date(t.getCreated().getTime()));
-			}
-
-
-			t.setScopes(new HashSet());						
-			//t.setInstances(new HashSet());						
-			t.setOccurences(new HashSet());	
-			t.setSubject(null);
-
-			log.debug("has Members "+hasMembers);
-
-			if(typesWithAssociations){
-				log.debug("LEVEL 1 typesWithAssociations");
-				t.setAssociations(converter(t.getAssociations(), level,true));				
-			}else{
-				t.setAssociations(new HashSet());
-			}
-
-			//convert associations
-			if(hasMembers){				
-				Association ass = (Association) t;
-
-				log.debug("types ");
-				t.setTypes(converter(t.getTypesAsTopics(), level));
-
-				log.debug("members ");
-				ass.setMembers(converter(ass.getMembers(), level));				
-			}else{
-				t.setTypes(new HashSet());
-			}
-
-		}else{
-			//didn't need to convert the postgres one, but mysql is
-			//returning java.sql.timestamp, which, surprise surprise 
-			//is another thing that breaks GWT serialization.
-			//
-			log.debug("upd "+t.getLastUpdated());
-			log.debug("cre "+t.getCreated());
-			if(t.getLastUpdated() != null)
-				t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
-			if(t.getCreated() != null)
-				t.setCreated(new Date(t.getCreated().getTime()));
-
-			log.debug("starting convert sets");
-			log.debug("SIZE: "+t.getTypesAsTopics().size());
-			t.setScopes(new HashSet());
-			t.setTypes(converter(t.getTypesAsTopics(),level,false,true));
-
-			log.debug("starting convert sets-instances");
-			//t.setInstances(converter(t.getInstances(),level));
-
-			log.debug("starting convert sets-occurrences");
-			t.setOccurences(converterOccurenceSet(t.getOccurences()));
-
-			log.debug("starting convert sets-assocations");
-			t.setAssociations(converter(t.getAssociations(),level,true));
-
-			if(t.getSubject() != null){
-				t.getSubject().setTopics(new HashSet());
-			}
-		}
-		log.debug("Finally: t "+t.getId()+" "+t.getUser());
-
 		try{
 			log.debug("Scan turned up persistent: "+Converter.scan(t));
 		}catch(Exception e){
 			log.error("Scanning error "+e);
 			e.printStackTrace();
 		}
-
+		
 		return t;
 	}
 
-	public static Set converter(Set in,int level){
-		return converter(in, level,false);
-	}
-	public static Set converter(Set in,int level,boolean hasMembers){
-		return converter(in,level,hasMembers,false);
-	}
-	public static Set converter(Set in,int level,boolean hasMembers,boolean typesWithAssociations){
-		HashSet<Topic> rtn = new HashSet<Topic>();
-		try{
-			log.debug("converter "+in+" "+rtn+" level: "+level);
-			for (Iterator iter = in.iterator(); iter.hasNext();) {
-				Topic top = (Topic) iter.next();
-				log.debug("converter on "+top);
-				convert(top,level+1,hasMembers,typesWithAssociations);
-				log.debug("converted "+top);
-
-				rtn.add(top);
-			}
-		}catch(LazyInitializationException ex){
-			log.debug("caught lazy @ level "+level);
-		}
-		return rtn;		
-	}
 	/**
 	 * 1) Over-write dates
 	 * 2) Null out the lazy loaded MindTree for MindTreeOcc's 

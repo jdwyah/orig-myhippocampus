@@ -13,8 +13,8 @@ import org.db4ospring.support.Db4oDaoSupport;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.server.dao.TopicDAO;
 import com.db4o.query.Predicate;
 

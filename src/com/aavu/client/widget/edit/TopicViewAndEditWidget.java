@@ -43,6 +43,8 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 		
 		topicPanel = new VerticalPanel();
 		
+		topicWidget = new TopicWidget();
+		
 		mainPanel.add(topicPanel);		
 		
 		
@@ -53,7 +55,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 	
 	public void load(Topic topic){
 		this.topic = topic;
-		topicWidget = new TopicWidget(manager,topic);
+		topicWidget.load(topic);
 		topicWidget.addClickListener(this);		
 		
 		topicEditWidget = new TopicEditWidget(this,manager,topic);

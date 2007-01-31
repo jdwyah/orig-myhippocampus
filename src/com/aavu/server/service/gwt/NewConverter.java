@@ -1,0 +1,438 @@
+package com.aavu.server.service.gwt;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.hibernate.LazyInitializationException;
+import org.hibernate.collection.PersistentSet;
+
+import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicTypeConnector;
+
+public class NewConverter {
+	private static final Logger log = Logger.getLogger(NewConverter.class);
+	
+
+	/**
+	 * fixes hibernate.collection.persistentset, java.sql.date,
+	 * cglib enhanced stuff.
+	 * 
+	 * Reflection based. Old solution (commented at bottom) was a specific conversion
+	 * based on known fields. Moved to this solution to try to be less fragile, but this
+	 * isn't exactly graveful either. 
+	 *  
+	 * NOTE: Consider applying this with AOP, that would get rid of the entire GWTService layer. 
+	 * 
+	 * 
+	 * @param object
+	 */
+	public static void convertInPlace(Object object){
+		Class  objectClass = object.getClass();
+		Set<Object> convertList = new HashSet();
+		convertList.add(object);
+		try {
+			convertInPlace(object, objectClass,convertList,objectClass.getName());
+		} catch (CGLibNeedsCloning e) {
+			log.error("CGLib Null Error shouldn't trickle up.");
+		}
+	}
+	/**
+	 * This is the method that should be called for recursion, since it will protect us from
+	 * infinite topic recusion.
+	 * 
+	 * @param object
+	 * @param haveConverted
+	 * @throws CGLibNeedsCloning 
+	 */
+	public static void convertInPlace(Object object,Set onConvertList,String dbg) throws CGLibNeedsCloning{
+		Class  objectClass = object.getClass();
+		convertInPlace(object, objectClass,onConvertList,dbg);
+	}
+	public static void convertInPlace(Object object,Class objectClass, Set onConvertList,String dbg) throws CGLibNeedsCloning{
+
+		log.info("Doing "+object+" "+objectClass.getName());
+		
+		//CGLIB
+		// 
+		//ie com.aavu.client.domain.Topic$$EnhancerByCGLIB$$bdac6e52
+		if(objectClass.getName().contains("CGLIB")){
+			log.info(dbg+" Found CGLIB enhanced object. Null-ing");
+			throw new CGLibNeedsCloning();
+		}		
+
+		//we've got properties to convert
+		if(objectClass.getName().contains("Abstract")){
+			log.debug("Was abstract: "+objectClass.getName());
+			convertProperties(object,objectClass,onConvertList,dbg);		
+		}
+
+
+		//end of the road
+		if(objectClass.getName().contains("Object")){	
+			log.debug("Hit Object, done");
+			return;
+		}
+		//go to superclass
+		else {			
+			log.debug("Do Super");
+			log.debug("S "+objectClass.getSuperclass());
+
+			convertInPlace(object,objectClass.getSuperclass(),onConvertList,dbg);
+		}
+
+	}
+
+	private static Object convert(Object o, Set onConvertList, String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Convert the fields defined by this objectClass if they are:
+	 * 
+	 * 1) Date.  We need to convert all sql.Date to util.Date
+	 * 2) All sets need to go from hibernate.Collections.PersistantSet to HashSet
+	 * 3) TopicTypeConnectors need to be recursively done
+	 * 
+	 * 
+	 * @param object
+	 * @param objectClass
+	 * @param onConvertList
+	 */
+	private static void convertProperties(Object object, Class objectClass, Set onConvertList,String dbg) {
+		
+		log.debug("obj type "+objectClass.getName());
+		log.debug("NUM FIELDS "+objectClass.getDeclaredFields().length);
+		log.debug("NUM METHODS "+objectClass.getDeclaredMethods().length);
+
+		Method[] methods = objectClass.getDeclaredMethods();
+		for(int i=0;i<methods.length;i++){
+			try{
+				if(!methods[i].getName().startsWith("get"))
+					continue;
+
+
+				log.debug("DO METHOD: "+methods[i].getName());
+
+				//get return type of a method
+				Class methodReturnType=methods[i].getReturnType();
+
+				String methodName=methods[i].getName();
+				methodName="set"+methodName.substring(3);
+
+				Object[] res = new Object[1];
+
+				log.debug("method rtn "+methodReturnType.getName());
+
+				if(isDate(methodReturnType)){
+
+					log.debug("running date conversion");
+					
+					res[0] = methods[i].invoke(object, null);										
+					
+					if(res[0] != null){
+						Method setter = objectClass.getMethod(methodName, methodReturnType);
+						Date convertedDate = new Date(((Date)res[0]).getTime());
+						setter.invoke(object, convertedDate);
+					}
+
+				}
+				else if(isTopic(methodReturnType)){
+					log.info("Running nested Topic conversion: "+dbg+" "+methodReturnType.getName());
+					res[0] = methods[i].invoke(object, null);
+					
+					log.debug("isTopic res[0] "+res[0]);
+					
+					if(res[0] != null && !onConvertList.contains(res[0])){
+						Method setter = objectClass.getMethod(methodName, methodReturnType);						
+						
+						//add b4 conversion, otherwise it won't do any good
+						onConvertList.add(res[0]);
+						
+						Topic toSet;
+						log.info("T_CONV_1->"+res[0].getClass());
+						log.info("T_CONV_1->"+((Topic)res[0]).getTitle());
+						try {							
+							convertInPlace(res[0],onConvertList,dbg+"->"+methods[i].getName());
+							toSet = (Topic) res[0];
+							
+						} catch (CGLibNeedsCloning e) {
+							log.info("caught cglib, shallow cloning");
+							//Shallow Clone
+							Topic t = (Topic)res[0];
+							toSet = new Topic(t.getUser(),t.getTitle());
+							toSet.setId(t.getId());							
+						}
+						log.info("T_CONV_2->"+toSet.getClass());
+						setter.invoke(object,toSet);
+						
+					}else{
+						log.info("No recurse");
+					}
+				}
+				else if(isSet(methodReturnType)){
+
+					log.info("Runing collection "+dbg+" "+methodReturnType.getName());
+					
+					try{						
+						
+						res[0] = methods[i].invoke(object, null);
+
+												
+						log.debug("checking ");
+						
+						if (res[0] instanceof PersistentSet) {
+							
+							log.debug("Fixing Persistent ");
+							
+							PersistentSet persSet = (PersistentSet) res[0];
+							
+							if(!persSet.wasInitialized()){															
+								log.debug("un-initialized setting to new HashSet()");
+								res[0] = new HashSet();
+							}
+						}
+						
+						Set set = (Set) res[0];						
+						log.debug("size: "+set.size());
+						HashSet rtn = new HashSet();
+						log.debug("||||||||||||");
+						for (Iterator iter = ((Collection)res[0]).iterator(); iter.hasNext();) {
+							Object o = iter.next();							
+							log.info("--------------recursing into set "+o.getClass());
+							
+							if(o.getClass() == TopicTypeConnector.class){
+								TopicTypeConnector c = (TopicTypeConnector) o;
+								log.debug("TOPIC: "+c.getTopic().getClass());
+								log.debug("TYPE: "+c.getType().getClass());
+							}
+
+							convertInPlace(o,onConvertList,dbg+"->"+methods[i].getName());	
+
+							log.info("=============Just recursed. "+o+" "+o.getClass());
+							if(o.getClass() == TopicTypeConnector.class){
+								TopicTypeConnector c = (TopicTypeConnector) o;
+								log.debug("TOPIC: "+c.getTopic().getClass());
+								log.debug("TYPE: "+c.getType().getClass());
+							}
+							rtn.add(o);
+
+						}
+						log.debug("EEEEEEEEEEEEE");
+						res[0] = rtn;
+						
+						
+					}catch(LazyInitializationException lie){
+						log.warn("Caught Lazy. Unexpected.");
+						res[0] = new HashSet();
+					}				
+
+					
+					
+					log.info("invoke "+methodName+" setting with class "+res[0].getClass());
+					Method setter = objectClass.getMethod(methodName, methodReturnType);					
+					setter.invoke(object, res[0]);
+				}
+
+			}catch(Exception e){
+				log.error("Exception "+e);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	/**
+	 * Could replace this with a more generic "is not primitive"
+	 * 
+	 * @param methodReturnType
+	 * @return
+	 */
+	private static boolean isTopic(Class methodReturnType) {
+		//System.out.println("check "+methodReturnType);
+		return methodReturnType==Topic.class;
+	}
+	private static boolean isSet(Class methodReturnType) {		
+		return methodReturnType==Set.class;
+	}
+	private static boolean isDate(Class methodReturnType){
+		return methodReturnType == java.util.Date.class;
+	}	
+	
+	
+//	public static Topic convert(Topic t){
+	//
+//			return convert(t,0);	
+//		}
+//		public static Topic convert(Topic t,int level){
+//			return convert(t,level,false,false);
+//		}
+//		public static Topic convert(Topic t,int level,boolean hasMembers,boolean typesWithAssociations){	
+//			log.debug("CONVERT Topic "+t+" level: "+level+"  members "+hasMembers);
+//			log.debug("Topic : "+t.getId()+" "+t.getTitle()+" tags:"+t.getTypesAsTopics().getClass());
+	//
+	//
+	//
+//			log.debug("t "+t.getTypesAsTopics().getClass());				
+//			
+//			t.setInstances(new HashSet());
+//			
+//			//
+//			//new-ing it is essentially nulling it out, since we can't pass
+//			//lazy stuff
+//			//
+//			//L2 new it out
+//			//L1 new everything expect metas we need this for topic's->tag's->metas
+//			//
+//			if(level >= 2){	
+//				if(null == t){
+//					return t;
+//				}
+//				System.out.println("setting nul_____________________________________________");
+//				t.setLastUpdated(null);
+//				t.setCreated(null);
+//				t.setSubject(null);
+	//
+//				t.setScopes(new HashSet());			
+//				//t.setInstances(new HashSet());						
+//				t.setOccurences(new HashSet());			
+//				t.setAssociations(new HashSet());
+	//
+//				if(hasMembers){		
+//					log.debug("LEVEL 2 HAS MEMBERS");
+	//
+//					Association ass = (Association) t;
+	//
+//					log.debug("types ");
+//					log.debug("size "+ass.getTypes().size());
+//					ass.setTypes(converter(ass.getTypes(), level));
+	//
+//					log.debug("members ");
+//					log.debug("size "+ass.getMembers().size());
+//					ass.setMembers(converter(ass.getMembers(), level));				
+//				}else{
+//					//is this necessary?
+//					//
+//					t.setTypes(new HashSet());				
+//				}
+	//
+//			}else if(level == 1){
+//				if(null == t){
+//					return t;
+//				}
+//				log.debug("l1 "+t);
+//				log.debug("last: "+t.getLastUpdated());
+//				log.debug("created: "+t.getCreated());
+	//
+//				//didn't need to convert the postgres one, but mysql is
+//				//returning java.sql.timestamp, which, surprise surprise 
+//				//is another thing that breaks GWT serialization.
+//				//
+//				//hmm, I think these get nulled in Level 2 set -> client,
+//				//then we error when the client passes this back. blech.
+//				//
+//				if(t.getLastUpdated() != null && t.getCreated() != null){
+//					t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+//					t.setCreated(new Date(t.getCreated().getTime()));
+//				}
+	//
+	//
+//				t.setScopes(new HashSet());						
+//				//t.setInstances(new HashSet());						
+//				t.setOccurences(new HashSet());	
+//				t.setSubject(null);
+	//
+//				log.debug("has Members "+hasMembers);
+	//
+//				if(typesWithAssociations){
+//					log.debug("LEVEL 1 typesWithAssociations");
+//					t.setAssociations(converter(t.getAssociations(), level,true));				
+//				}else{
+//					t.setAssociations(new HashSet());
+//				}
+	//
+//				//convert associations
+//				if(hasMembers){				
+//					Association ass = (Association) t;
+	//
+//					log.debug("types ");
+//					t.setTypes(converter(t.getTypes(), level));
+	//
+//					log.debug("members ");
+//					ass.setMembers(converter(ass.getMembers(), level));				
+//				}else{
+//					t.setTypes(new HashSet());
+//				}
+	//
+//			}else{
+//				//didn't need to convert the postgres one, but mysql is
+//				//returning java.sql.timestamp, which, surprise surprise 
+//				//is another thing that breaks GWT serialization.
+//				//
+//				log.debug("upd "+t.getLastUpdated());
+//				log.debug("cre "+t.getCreated());
+//				if(t.getLastUpdated() != null)
+//					t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+//				if(t.getCreated() != null)
+//					t.setCreated(new Date(t.getCreated().getTime()));
+	//
+//				log.debug("starting convert sets");
+//				log.debug("SIZE: "+t.getTypes().size());
+//				t.setScopes(new HashSet());
+//				t.setTypes(converter(t.getTypes(),level,false,true));
+	//
+//				log.debug("starting convert sets-instances");
+//				//t.setInstances(converter(t.getInstances(),level));
+	//
+//				log.debug("starting convert sets-occurrences");
+//				t.setOccurences(converterOccurenceSet(t.getOccurences()));
+	//
+//				log.debug("starting convert sets-assocations");
+//				t.setAssociations(converter(t.getAssociations(),level,true));
+	//
+//				if(t.getSubject() != null){
+//					t.getSubject().setTopics(new HashSet());
+//				}
+//			}
+//			log.debug("Finally: t "+t.getId()+" "+t.getUser());
+	//
+//			try{
+//				log.debug("Scan turned up persistent: "+Converter.scan(t));
+//			}catch(Exception e){
+//				log.error("Scanning error "+e);
+//				e.printStackTrace();
+//			}
+	//
+//			return t;
+//		}
+	//
+//		public static Set converter(Set in,int level){
+//			return converter(in, level,false);
+//		}
+//		public static Set converter(Set in,int level,boolean hasMembers){
+//			return converter(in,level,hasMembers,false);
+//		}
+//		public static Set converter(Set in,int level,boolean hasMembers,boolean typesWithAssociations){
+//			HashSet<Topic> rtn = new HashSet<Topic>();
+//			try{
+//				log.debug("converter "+in+" "+rtn+" level: "+level);
+//				for (Iterator iter = in.iterator(); iter.hasNext();) {
+//					Topic top = (Topic) iter.next();
+//					log.debug("converter on "+top);
+//					convert(top,level+1,hasMembers,typesWithAssociations);
+//					log.debug("converted "+top);
+	//
+//					rtn.add(top);
+//				}
+//			}catch(LazyInitializationException ex){
+//				log.debug("caught lazy @ level "+level);
+//			}
+//			return rtn;		
+//		}
+	
+}

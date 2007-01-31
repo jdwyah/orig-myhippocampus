@@ -29,11 +29,11 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.SearchResult;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.SearchResult;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.UserService;

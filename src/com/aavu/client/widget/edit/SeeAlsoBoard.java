@@ -5,7 +5,7 @@ import java.util.Iterator;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;

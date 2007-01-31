@@ -1,4 +1,4 @@
-package com.aavu.client.domain;
+package com.aavu.client.domain.dto;
 
 import java.util.Date;
 

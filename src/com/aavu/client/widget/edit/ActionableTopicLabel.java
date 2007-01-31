@@ -2,7 +2,7 @@ package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.Window;

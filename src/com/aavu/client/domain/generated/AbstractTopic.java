@@ -175,7 +175,8 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
         this.subject = subject;
     }
     //<TopicTypeConnector>
-    private Set getInstances() {
+    //@Deprecated
+    public Set getInstances() {
         return this.instances;
     }
     

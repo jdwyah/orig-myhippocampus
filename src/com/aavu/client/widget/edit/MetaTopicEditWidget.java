@@ -3,7 +3,7 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.EnterInfoButton;
 import com.google.gwt.user.client.ui.ClickListener;

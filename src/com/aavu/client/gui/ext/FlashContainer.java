@@ -1,7 +1,7 @@
 package com.aavu.client.gui.ext;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.TagStat;
+import com.aavu.client.domain.dto.TagStat;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;

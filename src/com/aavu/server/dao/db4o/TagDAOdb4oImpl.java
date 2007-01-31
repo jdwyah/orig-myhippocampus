@@ -8,8 +8,8 @@ import org.db4ospring.support.Db4oDaoSupport;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TagStat;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.server.dao.TagDAO;
 import com.db4o.query.Predicate;
 import com.db4o.query.Query;

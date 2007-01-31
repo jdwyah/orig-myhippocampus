@@ -9,19 +9,19 @@ import org.springframework.test.AssertThrows;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.FullTopicIdentifier;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TimeLineObj;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicIdentifier;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.mapper.MindTreeElement;
 import com.aavu.client.domain.subjects.AmazonBook;
@@ -29,6 +29,8 @@ import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
+import com.aavu.server.service.gwt.Converter;
+import com.aavu.server.service.gwt.NewConverter;
 import com.aavu.server.web.domain.UserPageBean;
 
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
@@ -1001,6 +1003,40 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		System.out.println(bean);
 	}
 	
-	
+	public void testLazy(){
+		User uu = new User();
+		uu.setId(1);
+		Topic t = topicDAO.getForID(uu, 707);
+		
+		System.out.println(t.toPrettyString());
+		
+		assertEquals(1,t.getAssociations().size());
+		
+		Association seeAlsoP1 = (Association) t.getAssociations().iterator().next();
+		assertEquals(1, seeAlsoP1.getMembers().size());
+		assertEquals(1, seeAlsoP1.getTypes().size());
+				
+		Association seeAlsoPRE = t.getSeeAlsoAssociation();
+		
+		assertEquals(1, seeAlsoPRE.getMembers().size());
+		assertEquals(1, seeAlsoPRE.getTypes().size());
+		
+		System.out.println(t.toPrettyString());
+		
+		NewConverter.convertInPlace(t);
+		assertFalse(Converter.scan(t));
+		
+		
+		assertEquals(1,t.getAssociations().size());
+		
+		Association seeAlso = t.getSeeAlsoAssociation();
+		
+		assertEquals(1, seeAlso.getMembers().size());
+		assertEquals(1, seeAlso.getTypes().size());
+		
+		Topic seeAlsoUber = seeAlso.getFirstType();
+		
+		
+	}
 
 }
