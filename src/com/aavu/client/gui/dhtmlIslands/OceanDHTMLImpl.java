@@ -295,6 +295,10 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		GUIEffects.appear(isle,4000);
 		islands.put(new Long(info.getTagId()), isle);
 		objects.add(isle);
+		
+		//TODO a bit redundant, but otherwise the div sizes don't get set right
+		//and banners get clipped 
+		isle.zoomToScale(currentScale);
 	}
 
 	private void showOcean(){
@@ -312,6 +316,14 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 
+	public void zoomTo(double scale) {
+		double oldScale = currentScale;
+		
+		currentScale = scale;
+		
+		finishZoom(oldScale);
+		
+	}
 	private void zoomUp() {
 		System.out.println("zoom up from "+currentScale);
 
@@ -341,6 +353,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 		finishZoom(oldScale);
 	}
+	
+	
 
 	private void finishZoom(double oldScale) {
 		int width = Window.getClientWidth();
@@ -620,6 +634,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 			zoomIn();
 		}
 	}
+
 
 
 }

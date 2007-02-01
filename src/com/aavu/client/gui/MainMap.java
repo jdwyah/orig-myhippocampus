@@ -26,6 +26,8 @@ public class MainMap extends Composite {
 	private CompassRose compassRose;
 	private RightTopicDisplayer topicDetailsDisplayer;
 	
+	private Zoomer zoomer;
+	
 	public MainMap(Manager manager){
 		this.manager = manager;
 		manager.setMap(this);
@@ -51,6 +53,9 @@ public class MainMap extends Composite {
 		//mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
 		mainP.add(statusPanel);
+		
+		zoomer = new Zoomer(manager);
+		mainP.add(zoomer);
 		
 		topicDetailsDisplayer = new RightTopicDisplayer(manager);
 		
@@ -123,6 +128,10 @@ public class MainMap extends Composite {
 
 	public void unselect() {
 		topicDetailsDisplayer.unload();
+	}
+
+	public void zoomTo(double scale) {
+		ocean.zoomTo(scale);
 	}
 
 

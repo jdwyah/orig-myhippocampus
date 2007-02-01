@@ -150,4 +150,8 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 	public void showCloseup(long id, FullTopicIdentifier[] topics) {
 		throw new UnsupportedOperationException("Not Yet Implemented");
 	}
+
+	public void zoomTo(double scale) {
+		throw new UnsupportedOperationException("Not Yet Implemented");
+	}
 }

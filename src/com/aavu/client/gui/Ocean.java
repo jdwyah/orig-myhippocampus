@@ -23,4 +23,6 @@ public interface Ocean {
 
 	public void showCloseup(long id, FullTopicIdentifier[] topics);
 
+	public void zoomTo(double scale);
+
 }

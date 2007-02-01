@@ -146,6 +146,17 @@ a:visited {
 	z-index: 1;
 }
 
+.H-Zoomer {
+	position: absolute;
+	/*background-image: url("../img/zoomerBase.png");*/
+	border: none;
+	top: 20%;
+	left: 0px;
+	width: 24px;
+	height: 138px;
+	z-index: 1;
+}
+
 .H-Ocean { /*background-color: #CCE6FF;*/	
 	background-repeat: repeat;
 	position: absolute;
@@ -216,7 +227,8 @@ a:visited {
 	font-weight: bold;
 	padding: 0 6 0 6px;		
 }
-.H-TopicBanner .Selected {
+
+.H-TopicBanner.Selected {
 	color: yellow;
 }
 

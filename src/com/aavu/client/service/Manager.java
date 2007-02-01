@@ -398,10 +398,13 @@ public class Manager implements TopicSaveListener {
 	}
 	private class ProgressPopup extends PopupWindow{
 		public ProgressPopup(GInternalFrame frame, String title, ProgressBar progressBar) {
-			super(frame, title,250,150);
+			super(frame, title,200,100);
 			setContent(progressBar);
 			
 		}		
+	}
+	public void zoomTo(double scale) {
+		mainMap.zoomTo(scale);
 	}
 	
 	
