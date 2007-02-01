@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 public class AbstractIsland extends AbsolutePanel {
 
 	protected static ImageHolder imgHolder = new ImageHolder();
-	protected static final int GRID = 100;
+	protected static final int GRID = 30;
 
 
 	protected double scale = 1;

@@ -3,16 +3,22 @@ package com.aavu.server.service.gwt;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
 import org.hibernate.collection.PersistentSet;
 
+import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
+import com.aavu.client.domain.generated.AbstractTopic;
+import com.aavu.client.domain.subjects.Subject;
+import com.aavu.client.domain.subjects.generated.AbstractSubject;
 
 public class NewConverter {
 	private static final Logger log = Logger.getLogger(NewConverter.class);
@@ -28,13 +34,16 @@ public class NewConverter {
 	 *  
 	 * NOTE: Consider applying this with AOP, that would get rid of the entire GWTService layer. 
 	 * 
+	 * NOTE: this may null Topic->TypeConnectors->Type->TypeConnectors->Topic
+	 * (ie if yirgacheffe is tagged with coffee, coffee's link to yirgacheffe may be nulled)
+	 * This was done as part of the code to fix infinite recursion problems using the map convertList.
 	 * 
 	 * @param object
 	 */
 	public static void convertInPlace(Object object){
 		Class  objectClass = object.getClass();
-		Set<Object> convertList = new HashSet();
-		convertList.add(object);
+		Map<Object,Object> convertList = new HashMap();
+		convertList.put(object,null);
 		try {
 			convertInPlace(object, objectClass,convertList,objectClass.getName());
 		} catch (CGLibNeedsCloning e) {
@@ -49,13 +58,13 @@ public class NewConverter {
 	 * @param haveConverted
 	 * @throws CGLibNeedsCloning 
 	 */
-	public static void convertInPlace(Object object,Set onConvertList,String dbg) throws CGLibNeedsCloning{
+	public static void convertInPlace(Object object,Map onConvertList,String dbg) throws CGLibNeedsCloning{
 		Class  objectClass = object.getClass();
 		convertInPlace(object, objectClass,onConvertList,dbg);
 	}
-	public static void convertInPlace(Object object,Class objectClass, Set onConvertList,String dbg) throws CGLibNeedsCloning{
+	public static void convertInPlace(Object object,Class objectClass, Map onConvertList,String dbg) throws CGLibNeedsCloning{
 
-		log.info("Doing "+object+" "+objectClass.getName());
+		log.info("Doing "+object+" "+objectClass.getName()+" ");	
 		
 		//CGLIB
 		// 
@@ -104,19 +113,23 @@ public class NewConverter {
 	 * @param objectClass
 	 * @param onConvertList
 	 */
-	private static void convertProperties(Object object, Class objectClass, Set onConvertList,String dbg) {
+	private static void convertProperties(Object object, Class objectClass, Map onConvertList,String dbg) {
 		
 		log.debug("obj type "+objectClass.getName());
 		log.debug("NUM FIELDS "+objectClass.getDeclaredFields().length);
 		log.debug("NUM METHODS "+objectClass.getDeclaredMethods().length);
 
+		
+		
 		Method[] methods = objectClass.getDeclaredMethods();
 		for(int i=0;i<methods.length;i++){
 			try{
 				if(!methods[i].getName().startsWith("get"))
 					continue;
 
-
+				if(dbg.endsWith("!!")){
+					log.debug("\n\n\n");
+				}
 				log.debug("DO METHOD: "+methods[i].getName());
 
 				//get return type of a method
@@ -142,37 +155,61 @@ public class NewConverter {
 					}
 
 				}
-				else if(isTopic(methodReturnType)){
+				else if(needsRecurse(methodReturnType)){
 					log.info("Running nested Topic conversion: "+dbg+" "+methodReturnType.getName());
 					res[0] = methods[i].invoke(object, null);
 					
 					log.debug("isTopic res[0] "+res[0]);
 					
-					if(res[0] != null && !onConvertList.contains(res[0])){
-						Method setter = objectClass.getMethod(methodName, methodReturnType);						
-						
-						//add b4 conversion, otherwise it won't do any good
-						onConvertList.add(res[0]);
-						
-						Topic toSet;
-						log.info("T_CONV_1->"+res[0].getClass());
-						log.info("T_CONV_1->"+((Topic)res[0]).getTitle());
-						try {							
-							convertInPlace(res[0],onConvertList,dbg+"->"+methods[i].getName());
-							toSet = (Topic) res[0];
-							
-						} catch (CGLibNeedsCloning e) {
-							log.info("caught cglib, shallow cloning");
-							//Shallow Clone
-							Topic t = (Topic)res[0];
-							toSet = new Topic(t.getUser(),t.getTitle());
-							toSet.setId(t.getId());							
+					
+					Method setter = objectClass.getMethod(methodName, methodReturnType);
+					if(res[0] != null){
+						if(!onConvertList.containsKey(res[0])){
+
+							//add b4 conversion, otherwise it won't do any good
+							log.warn("FINISHING: "+res[0]+" "+dbg+"->"+methodName);
+							onConvertList.put(res[0],null);
+
+							Object toSet = null;
+							log.info("T_CONV_1->"+res[0].getClass());						
+							try {							
+								convertInPlace(res[0],onConvertList,dbg+"->"+methods[i].getName());
+								toSet = (Object) res[0];
+
+							} catch (CGLibNeedsCloning e) {
+								//TODO what if it's a CGLib Subject!
+								log.info("caught cglib, shallow cloning");
+
+								if(res[0] instanceof Topic){
+									//Shallow Clone
+									Topic t = (Topic)res[0];
+									toSet = new Topic(t.getUser(),t.getTitle());
+									((Topic)toSet).setId(t.getId());
+								}else if(res[0] instanceof Subject){
+									Subject s = (Subject) res[0];
+									toSet = s.clone();
+								}
+							}
+							if(toSet != null){
+								log.info("T_CONV_2->"+toSet.getClass());
+							}
+							setter.invoke(object,toSet);
+							onConvertList.put(res[0],toSet);
+
+						}else{
+							log.info("foooooooooooo");
+
+							Object fromList = onConvertList.get(res[0]);
+							log.warn("FINISHING: "+res[0]+" "+dbg+"->"+methodName+" with "+fromList);
+							//log.info(onConvertList.get(res[0]).getClass()+"");
+
+							if(fromList != null){							
+								log.info("No recurse. Using "+onConvertList.get(res[0])+" "+onConvertList.get(res[0]).getClass());
+							}else{
+								log.info("No recurse. Using NULL");
+							}
+							setter.invoke(object,fromList);
 						}
-						log.info("T_CONV_2->"+toSet.getClass());
-						setter.invoke(object,toSet);
-						
-					}else{
-						log.info("No recurse");
 					}
 				}
 				else if(isSet(methodReturnType)){
@@ -208,17 +245,24 @@ public class NewConverter {
 							
 							if(o.getClass() == TopicTypeConnector.class){
 								TopicTypeConnector c = (TopicTypeConnector) o;
-								log.debug("TOPIC: "+c.getTopic().getClass());
-								log.debug("TYPE: "+c.getType().getClass());
+								log.debug("-TOPIC: "+c.getTopic().getClass()+" "+c.getTopic());
+								log.debug("-TYPE: "+c.getType().getClass()+" "+c.getType());
 							}
 
-							convertInPlace(o,onConvertList,dbg+"->"+methods[i].getName());	
-
+							if(o.getClass() == TopicTypeConnector.class){
+								convertInPlace(o,onConvertList,dbg+"->"+methods[i].getName()+"!!");	
+							}else{
+								convertInPlace(o,onConvertList,dbg+"->"+methods[i].getName());
+							}
 							log.info("=============Just recursed. "+o+" "+o.getClass());
 							if(o.getClass() == TopicTypeConnector.class){
 								TopicTypeConnector c = (TopicTypeConnector) o;
-								log.debug("TOPIC: "+c.getTopic().getClass());
-								log.debug("TYPE: "+c.getType().getClass());
+								if(c.getTopic() != null){
+									log.debug("=TOPIC: "+c.getTopic().getClass()+" "+c.getTopic());
+								}
+								if(c.getType() != null){
+									log.debug("=TYPE: "+c.getType().getClass()+" "+c.getType());
+								}
 							}
 							rtn.add(o);
 
@@ -253,9 +297,9 @@ public class NewConverter {
 	 * @param methodReturnType
 	 * @return
 	 */
-	private static boolean isTopic(Class methodReturnType) {
+	private static boolean needsRecurse(Class methodReturnType) {
 		//System.out.println("check "+methodReturnType);
-		return methodReturnType==Topic.class;
+		return methodReturnType==Topic.class || methodReturnType==Subject.class;
 	}
 	private static boolean isSet(Class methodReturnType) {		
 		return methodReturnType==Set.class;
@@ -434,5 +478,93 @@ public class NewConverter {
 //			}
 //			return rtn;		
 //		}
+	
+	
+	
+	
+	public static AbstractTopic convertFull(AbstractTopic topic){
+		topic.setSubject(simple(topic.getSubject()));
+		
+		topic.setTypes(tags(topic.getTypes()));
+		topic.setAssociations(assocSet(topic.getAssociations()));
+		topic.setOccurences(simpleSet(topic.getOccurences()));
+		
+		return topic;
+	}	
+	
+	
+	private static Set assocSet(Set<Association> associations) {
+		Set<Association> rtn = new HashSet<Association>();
+		
+		for (Association association : associations) {			
+			association.setMembers(simpleSet(association.getMembers()));
+			association.setTypes(simpleTags(association.getTypes()));
+			rtn.add(association);
+		}
+		
+		return rtn;
+	}
+
+	private static Association assoc(Association assoc){
+	
+		return assoc;
+	}
+	
+	private static Set simpleSet(Set topics) {
+		HashSet<Topic> rtn = new HashSet<Topic>();
+		
+		return null;
+	}
+	
+	private static Set simpleTags(Set<TopicTypeConnector> types) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private static Set tags(Set<TopicTypeConnector> types) {
+		HashSet<TopicTypeConnector> rtn = new HashSet<TopicTypeConnector>();
+		for (TopicTypeConnector connector : rtn) {
+			//connector.setTopic(
+		//	connector.setType(type)
+		}
+		return rtn;
+	}
+	
+	
+	
+	
+	
+	
+	private static Subject simple(Subject s) {
+		s.setTopics(null);
+		return s;
+	}
+	private static Topic simple(Topic t) {
+		if(t.getLastUpdated() != null)
+			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+		if(t.getCreated() != null)
+			t.setCreated(new Date(t.getCreated().getTime()));
+				
+		t.setSubject(null);
+		t.setScopes(new HashSet());			
+		t.setInstances(new HashSet());						
+		t.setOccurences(new HashSet());			
+		t.setAssociations(new HashSet());
+		t.setTypes(new HashSet());
+		
+		return t;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

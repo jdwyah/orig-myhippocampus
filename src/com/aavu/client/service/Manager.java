@@ -5,6 +5,7 @@ import java.util.List;
 import org.gwm.client.FramesManager;
 import org.gwm.client.FramesManagerFactory;
 import org.gwm.client.GInternalFrame;
+import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.HippoTest;
 import com.aavu.client.async.StdAsyncCallback;
@@ -21,6 +22,7 @@ import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.TopicWindow;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.glossary.GlossaryWindow;
@@ -77,18 +79,31 @@ public class Manager implements TopicSaveListener {
 	public void bringUpChart(Topic topic) {
 		bringUpChart(topic, false);
 	}
-	public void bringUpChart(Topic topic, boolean editMode) {
+	public void bringUpChart(final Topic topic, boolean editMode) {
 		
 		if(topic instanceof Tag){
-			showTopicsForTag(topic.getId());
+			System.out.println("BRINGING UP TAG "+topic.toPrettyString());
+			System.out.println(" "+topic.getMetas());
+			System.out.println(" "+topic.getMetas().size());
+			getTopicCache().getTopicsWithTag(topic.getId(),new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
+					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
+					IslandDetailsWindow tcw = new IslandDetailsWindow((Tag) topic,topics,Manager.this);					
+				}});
+						
 		}else{
+			System.out.println("BRINGING UP TOPIC "+topic);
 			TopicWindow tw = new TopicWindow(this,topic);		
-			if(editMode){
-				//tw.setToEdit();
-			}
+//			if(editMode){
+//				//tw.setToEdit();
+//			}
+			
 		}
 	}
 
+	//public void show(Topic topic, boolean editMode) {
+	
 	public void newTopic() {
 		Topic blank = new Topic();
 		blank.setTitle(myConstants.topic_new_title());
@@ -165,23 +180,14 @@ public class Manager implements TopicSaveListener {
 	 * 
 	 * 
 	 */
-	public void showTopicsForTag(final long id) {
+	public void showPreviews(final long id) {
 		
-//		getTopicCache().getTopicsWithTag(id,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
-//			public void onSuccess(Object result) {
-//				super.onSuccess(result);
-//				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
-//				mainMap.showCloseup(id,topics);													
-//			}});
-		
-		
-		System.out.println("show topic for tag!");
-		
+		System.out.println("showPreviews "+id);
 		
 		getTopicCache().getTopicByIdA(id,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
-				Tag tag = (Tag) result;		
+				Topic tag = (Topic) result;		
 				mainMap.displayTopic(tag);
 				
 				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);						
@@ -334,11 +340,11 @@ public class Manager implements TopicSaveListener {
 				if(user != null){
 					System.out.println("found a user: "+user.getUsername());	
 					
-					try {
-						throw new Exception();
-					} catch (Exception e) {					
-						e.printStackTrace();
-					}
+//					try {
+//						throw new Exception();
+//					} catch (Exception e) {					
+//						e.printStackTrace();
+//					}
 					System.out.println("LoadGUI "+caller);
 					loadGUI();
 				}else{
@@ -386,7 +392,17 @@ public class Manager implements TopicSaveListener {
 		this.focussed = false;
 		mainMap.unFocus();
 	}
-	
+	public PopupWindow showProgressBar(ProgressBar progressBar) {		
+		ProgressPopup win = new ProgressPopup(framesManager.newFrame(),progressBar.getTitle(),progressBar);				
+		return win;
+	}
+	private class ProgressPopup extends PopupWindow{
+		public ProgressPopup(GInternalFrame frame, String title, ProgressBar progressBar) {
+			super(frame, title,250,150);
+			setContent(progressBar);
+			
+		}		
+	}
 	
 	
 		

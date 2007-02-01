@@ -41,7 +41,7 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 	
 	protected void callbackOverride(String command, int int0,final int int1,final int int2){
 		if(command.equals("islandClicked")){
-			manager.showTopicsForTag(int0);
+			manager.showPreviews(int0);
 		}
 		if(command.equals("isleMovedTo")){
 			System.out.println("isleMovedTo "+int0+" "+int1+" "+int2);			

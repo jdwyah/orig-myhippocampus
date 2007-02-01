@@ -7,16 +7,13 @@ import java.util.Set;
 
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
-import com.aavu.client.domain.mapper.MindTree;
-import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.user.client.ui.ComplexPanel;
 
-public class Topic extends AbstractTopic  implements Completable, IsSerializable{
+public class Topic extends AbstractTopic  implements Completable, IsSerializable, ReallyCloneable {
 
 
 	public Topic(){
@@ -48,6 +45,43 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setTitle(topicIdent.getTopicTitle());		
 	}
 
+	/**
+	 * TODO move these clones to their subclasses
+	 * 
+	 * Switch is needed to keep type information over serialization
+	 * 
+	 * 
+	 */
+	public Object clone() {		
+		Topic o = null;
+		if(this instanceof MetaText)
+			o = new MetaText();
+		else if(this instanceof MetaDate)
+			o = new MetaDate();		
+		else if(this instanceof MetaTopic)
+			o = new MetaTopic();
+		else if(this instanceof HippoDate)
+			o = new HippoDate();
+		else if(this instanceof HippoText)
+			o = new HippoText();
+		else if(this instanceof Association)
+			o = new Association();
+		else if(this instanceof Tag)
+			o = new Tag();
+		else {
+			o = new Topic();
+		}
+		
+		o.setId(getId());
+		o.setCreated(getCreated());
+		o.setUser(getUser());
+		o.setLastUpdated(getLastUpdated());
+		o.setLatitude(getLatitude());
+		o.setLongitude(getLongitude());
+		o.setTitle(getTitle());		
+		return o;
+	}
+	
 	
 	public void addMetaValue(Meta meta, Topic metaValue) {
 
@@ -365,8 +399,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
+			
 				if (possibleMeta instanceof Meta
-						&& association.getMembers().size() == 0) {					
+						&& association.getMembers().size() == 0) {							
 					metas.add(possibleMeta);				
 				}	
 			}			
@@ -379,7 +414,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possible = (Topic) iterator.next();
-				if (possible == meta) {	
+				
+				if (possible.getId() == meta.getId()) {	
 					return association;									
 				}	
 			}			

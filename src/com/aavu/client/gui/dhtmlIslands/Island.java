@@ -52,6 +52,8 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 
 
 	private boolean topicsInvisible;
+
+	private DraggableTopicLabel selectedTopic;
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user,Manager manager) {
 		super();
@@ -100,7 +102,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		drawInOcean();
 
-		doPositioning();
+		doPositioning(banner.setToZoom(1));
 	
 		
 		
@@ -118,10 +120,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 				
 		
 		System.out.println(tagStat.getTagName()+" SIZE "+tagStat.getNumberOfTopics()+" minx "+repr.min_x+" max x "+repr.max_x+" miny "+repr.min_y+" maxy "+repr.max_y);
-		System.out.println("Island top: "+top+" left "+left);		
-				
-		System.out.println("Island longi x "+tagStat.getLongitude());
-		System.out.println("Island lat y "+tagStat.getLatitude());
+//		System.out.println("Island top: "+top+" left "+left);						
+//		System.out.println("Island longi x "+tagStat.getLongitude());
+//		System.out.println("Island lat y "+tagStat.getLatitude());
 		
 		
 	}
@@ -147,7 +148,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	/*
 	 * Ocean will pull these from us when it adds us
 	 */	
-	private void doPositioning() {
+	private void doPositioning(int minWidth) {
 	
 		top = tagStat.getLatitude() - gridToRelativeY(repr.min_y,my_spacing); 
 		left = tagStat.getLongitude() - gridToRelativeX(repr.min_x,my_spacing);
@@ -174,21 +175,30 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		
 		
-		int predicted = getPredictedBannerWidth();
+		//int predicted = getPredictedBannerWidth();
 		//System.out.println("Predicted Width "+predicted);
-		if(predicted > width){
-			DOM.setStyleAttribute(getElement(), "width", predicted+"px");	
+		if(minWidth > width){
+			DOM.setStyleAttribute(getElement(), "width", minWidth+"px");	
 		}else{
 			DOM.setStyleAttribute(getElement(), "width", width+"px");	
 		}
+	
 		DOM.setStyleAttribute(getElement(), "height", height+"px");
 		
 		//not working
-		banner.setWidth(width+"em");
+		//banner.setWidth(width+"em");
 		
 		//System.out.println("Island width: "+width+" height "+height);
 	}
 
+	
+	public void ensureWidthOf(int i){
+		if(i > width){
+			DOM.setStyleAttribute(getElement(), "width", i+"px");
+		}
+	}
+	
+	
 	/*
 	 * 114px == 'Entrepreneurship at font .8, 16 chars
 	 * (114/.8) = 142
@@ -236,7 +246,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		setTypeAndSpacing();
 		repr.growByOne();
 		
-		doPositioning();
+		doPositioning(banner.setToZoom(scale));
 		//System.out.println("set to left "+left+" top "+top);
 		ocean.setWidgetPosition(this, left, top);		
 	}
@@ -246,7 +256,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		System.out.println("island onClick");
 		
-		ocean.islandClicked(tagStat.getTagId(),this);
+		ocean.islandClicked(tagStat.getTopicIdentifier(),this);
 				
 	}
 	
@@ -372,9 +382,12 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			setWidgetPosition(level, corrected_x, corrected_y);
 		}
 		
-		banner.setToZoom(currentScale);
+
+		int minWidth = banner.setToZoom(currentScale);
+
+		doPositioning(minWidth);
 		
-		doPositioning();
+		
 		
 		//banner.setText("X: "+left+" Y "+top+" * "+currentScale);
 		
@@ -383,7 +396,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 //			System.out.println(" ("+winLeft+", "+winTop+")  ("+winRight+", "+winBottom+")");
 //		}
 				
-		if(haveShownTopics){
+		if(haveShownTopics && topicLabelList != null){
 			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
 				DraggableLabel label = (DraggableLabel) iter.next();
 				
@@ -463,10 +476,10 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			
 			if(fti.getLongitudeOnIsland() < 0){
 				//just try to space them out a bit if they don't have real values
-				fti.setLongitudeOnIsland(.4+(.05*x));
+				fti.setLongitudeOnIsland(.5);
 			}
 			if(fti.getLatitudeOnIsland() < 0){
-				fti.setLatitudeOnIsland(.4+(.05*x));
+				fti.setLatitudeOnIsland(.5);
 			}
 
 			x = (int) (fti.getLongitudeOnIsland() * width);
@@ -507,12 +520,23 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	}
 
 
-	public void topicClicked(TopicIdentifier ident) {
-		manager.bringUpChart(ident);
+	public void topicClicked(TopicIdentifier ident,DraggableTopicLabel topic) {
+		
+		if(selectedTopic == topic){ 
+			manager.bringUpChart(ident);
+		}else{
+			manager.showPreviews(ident.getTopicID());
+		}
+		if(selectedTopic != null){
+			selectedTopic.setSelected(false);
+		}
+		selectedTopic = topic;
+		selectedTopic.setSelected(true);
 	}
 
 
 	public void setSelected(boolean b) {
+		selectedTopic = null;
 		banner.setSelected(b);
 	}
 

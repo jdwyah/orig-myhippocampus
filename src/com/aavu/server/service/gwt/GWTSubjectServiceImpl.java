@@ -10,8 +10,9 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTSubjectService;
 import com.aavu.server.service.ExternalServicesService;
+import com.aavu.server.util.gwt.GWTSpringControllerReplacement;
 
-public class GWTSubjectServiceImpl extends org.gwtwidgets.server.spring.GWTSpringController implements GWTSubjectService {
+public class GWTSubjectServiceImpl extends GWTSpringControllerReplacement implements GWTSubjectService {
 	private static final Logger log = Logger.getLogger(GWTSubjectServiceImpl.class);
 	
 	public ExternalServicesService externalServicesService;

@@ -35,9 +35,9 @@ public abstract class AbstractSubject  implements IsSerializable, java.io.Serial
        this.name = name;
        this.topics = topics;
     }
-    
    
-    // Property accessors
+
+	// Property accessors
     public long getId() {
         return this.id;
     }

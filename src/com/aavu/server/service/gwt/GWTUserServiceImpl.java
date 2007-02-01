@@ -6,8 +6,9 @@ import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.service.remote.GWTUserService;
 import com.aavu.server.service.UserService;
+import com.aavu.server.util.gwt.GWTSpringControllerReplacement;
 
-public class GWTUserServiceImpl extends org.gwtwidgets.server.spring.GWTSpringController implements GWTUserService{
+public class GWTUserServiceImpl extends GWTSpringControllerReplacement implements GWTUserService{
 	
 	private UserService userService;
 	

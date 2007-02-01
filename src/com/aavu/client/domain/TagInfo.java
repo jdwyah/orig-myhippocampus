@@ -1,5 +1,7 @@
 package com.aavu.client.domain;
 
+import com.aavu.client.domain.dto.TopicIdentifier;
+
 public interface TagInfo {
 
 	long getTagId();
@@ -16,4 +18,5 @@ public interface TagInfo {
 
 	void setLatitude(int i);
 
+	TopicIdentifier getTopicIdentifier();
 }

@@ -97,6 +97,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		 * shouldn't need the else, but if they enter just a <BR> then there's 
 		 * no place to click to edit.
 		 */
+		System.out.println("ENTRY is empty = "+entry.isEmpty());
 		if(entry.isEmpty()){
 			panel.add(new Label(Manager.myConstants.topic_blank()));
 		}else{
@@ -107,6 +108,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	}
 
 	public void setText(Entry entry){		
+		System.out.println("SUPER SET");
 		textPanel.clear();		
 		textPanel.add(new TextDisplay(entry.getData()));		
 	}

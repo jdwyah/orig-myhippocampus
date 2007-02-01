@@ -115,11 +115,9 @@ public class MainMap extends Composite {
 	
 	
 	
-	public void displayTopic(Tag tag) {
+	public void displayTopic(Topic topic) {
 		
-		topicDetailsDisplayer.load(tag);
-		
-		
+		topicDetailsDisplayer.load(topic);		
 		
 	}
 

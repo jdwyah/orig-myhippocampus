@@ -9,11 +9,11 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.exception.HippoException;
-import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.client.service.remote.GWTTagService;
 import com.aavu.server.service.TagService;
+import com.aavu.server.util.gwt.GWTSpringControllerReplacement;
 
-public class GWTTagServiceImpl extends org.gwtwidgets.server.spring.GWTSpringController implements GWTTagService {
+public class GWTTagServiceImpl extends GWTSpringControllerReplacement implements GWTTagService {
 
 	private static final Logger log = Logger.getLogger(GWTTagServiceImpl.class);
 

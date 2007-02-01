@@ -13,6 +13,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
+import com.aavu.client.util.Logger;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.core.client.GWT;
@@ -116,7 +117,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		
 		int rtnSize = 0;
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
-			Tag tag = (Tag) iter.next();
+			Tag tag = (Tag) iter.next();		
 			showTag(tag);
 			rtnSize++;			
 		}		
@@ -180,7 +181,6 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
 			Meta element = (Meta) iter.next();
-			GWT.log("displayMetas", null);
 		
 			Widget w = element.getEditorWidget(cur_topic,saveNeeded,manager);
 			tagPanel.add(w);

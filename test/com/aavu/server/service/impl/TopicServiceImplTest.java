@@ -21,6 +21,7 @@ import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestNoTransaction;
 import com.aavu.server.service.gwt.BaseTestWithTransaction;
+import com.aavu.server.service.gwt.Converter;
 
 import junit.framework.TestCase;
 
@@ -276,6 +277,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
+	
+	
 	/*
 	public void testGetForName() {
 		fail("Not yet implemented");

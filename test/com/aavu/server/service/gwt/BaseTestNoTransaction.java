@@ -43,15 +43,21 @@ public class BaseTestNoTransaction extends AbstractDependencyInjectionSpringCont
 	/**
 	 * Creates an Acegi SecureContext and stores it on the ContextHolder
 	 */
-	private static void createSecureContext() {
+	private void createSecureContext() {
 
-		TestingAuthenticationToken auth = new TestingAuthenticationToken("test-with-data", "test-with-data", new GrantedAuthority[] {
+		TestingAuthenticationToken auth = new TestingAuthenticationToken(getUName(), getPass(), new GrantedAuthority[] {
 				new GrantedAuthorityImpl("ROLE_TELLER"), new GrantedAuthorityImpl("ROLE_PERMISSION_LIST") });
 		
 		SecurityContext secureContext = new SecurityContextImpl();
 		secureContext.setAuthentication(auth);
 		SecurityContextHolder.setContext(secureContext);
 
+	}
+	protected String getUName(){
+		return "test-with-data";		
+	}
+	protected String getPass(){
+		return "test-with-data";		
 	}
 
 	/**

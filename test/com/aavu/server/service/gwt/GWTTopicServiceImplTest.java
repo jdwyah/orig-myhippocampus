@@ -208,5 +208,4 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 		
 	}
-	
 }

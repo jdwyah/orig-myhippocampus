@@ -66,6 +66,12 @@ public class TagStat implements IsSerializable, TagInfo {
 		this.longitude = longitude;
 	}
 
+
+
+	public TopicIdentifier getTopicIdentifier() {
+		return new TopicIdentifier(tagId,tagName);
+	}
+
 	
 	
 	

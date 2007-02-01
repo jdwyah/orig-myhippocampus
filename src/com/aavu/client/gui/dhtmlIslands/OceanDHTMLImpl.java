@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.gwm.client.GInternalFrame;
 import org.gwtwidgets.client.ui.PNGImage;
+import org.gwtwidgets.client.ui.ProgressBar;
 import org.gwtwidgets.client.wrap.EffectOption;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -16,11 +18,16 @@ import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.Ocean;
 import com.aavu.client.gui.ext.GUIEffects;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -32,6 +39,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	static final String IMG_LOC = "img/simplicity/";
 	//static final String IMG_LOC = "img/oldmapStyle/";
+
+	private static final int SHOW_TOPICS_AT_ZOOM = 3;
 
 	private Manager manager;
 
@@ -69,7 +78,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private int curMouseY;
 
-	private Island selectedIsland;	
+	private Island selectedIsland;
+	
+	private PopupWindow progressWindow;	
 
 
 	public OceanDHTMLImpl(Manager manager) {
@@ -177,10 +188,24 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		});
 	}
 
-	private void addAll(TagStat[] tagStats) {
+	
+	/**
+	 * turn the tag stats into Islands.
+	 * 
+	 * NOTE: this takes a while and will lead to "this script is running slowly"
+	 * warnings on IE if we're not careful. Avoid these by using Timers and doing 
+	 * it in pieces.
+	 * 
+	 * NOTE 2: doing it piecemeal also allows the progress bar to update. Before,
+	 * it would never get the work thread until it was all over.
+	 * 
+	 * @param tagStats
+	 */
+	private void addAll(final TagStat[] tagStats) {
 
-		System.out.println("ADDALL");
-
+		System.out.println("---------------------------------------------------------------------");
+		System.out.println(" ADDALL ");
+		
 		islands.clear();
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Entry e = (Entry) iter.next();
@@ -189,18 +214,58 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 		}
 
-		for (int i = 0; i < tagStats.length; i++) {
-			TagStat stat = tagStats[i];
+		 
+		final ProgressBar progressBar = new ProgressBar(10
+				,ProgressBar.SHOW_TEXT);
+		progressBar.setProgress(0);
+		
+		progressBar.setText(Manager.myConstants.loading_islands());
+	
+		progressWindow = manager.showProgressBar(progressBar);
+		
+		Timer t = new Timer(){
+			public void run() {
+				addFrom(tagStats,0,10,progressBar);
+				
+			}};
+			t.schedule(200);
+		
+	}
+
+	private void addFrom(final TagStat[] tagStats, final int start, final int num, final ProgressBar progressBar) {
+		TagStat stat = null;
+		int i;
+		System.out.println("AddFrom "+start+" to "+(start+num));
+		for (i = start; i < tagStats.length && i < start + num; i++) {
+			stat = tagStats[i];
 
 			Island isle = new Island(stat,this,manager.getUser(),manager);
 
 			addIsland(stat, isle);
 
 		}
-
+				
+		progressBar.setProgress((int) (100*i/(double)tagStats.length));
+		progressBar.setText(stat.getTagName());				
+		
+		if(i >= tagStats.length){
+			done();
+		}else{
+			Timer t = new Timer(){
+				public void run() {
+					addFrom(tagStats,start+num,num,progressBar);								
+				}};
+			t.schedule(100);
+		}
+		
+	}
+	private void done() {
+		progressWindow.close();
 		clearClouds();
 	}
 
+	
+	
 	/**
 	 * clear & remove old islands
 	 * Actually, just set them to invisible
@@ -381,9 +446,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		return this;
 	}
 
-	public void islandClicked(long tagId, Island island) {
+	public void islandClicked(TopicIdentifier ident, Island island) {
 
-		System.out.println("CLICKED focussed "+focussed+" ID  "+tagId);
+		System.out.println("CLICKED focussed "+focussed+" ID  "+ident);
 
 //		if(focussed){
 //			showOcean();
@@ -393,7 +458,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 //			focussed = true;
 //		}
 
-		manager.showTopicsForTag(tagId);
+		if(selectedIsland == island){
+			manager.bringUpChart(ident);
+		}else{
+			manager.showPreviews(ident.getTopicID());
+		}
 		
 		
 		if(selectedIsland != null){
@@ -483,7 +552,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 				int top = (int) (centerY - halfHeight/currentScale);
 				int right = (int) (centerX + halfWidth/currentScale);
 				int bottom = (int) (centerY + halfHeight/currentScale);
-				if(island.isWithin(left,top,right,bottom) && currentScale >= 2 ){
+				if(island.isWithin(left,top,right,bottom) && currentScale >= SHOW_TOPICS_AT_ZOOM ){
 					island.showTopics();
 				}else{
 					island.removeTopics();

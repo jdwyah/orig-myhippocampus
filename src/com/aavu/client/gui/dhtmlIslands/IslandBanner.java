@@ -10,9 +10,12 @@ public class IslandBanner extends AbsolutePanel{
 	
 	private static final double HALF_MIN_EM = .4;
 	private static final double SCALE_DIVISOR = 6;
+	public static final String BANNER_SELECTED = "Selected";
+	
 	private Label reg;
 	private Label shdw;
 	private int size;
+	
 
 	/**
 	 * 
@@ -27,7 +30,7 @@ public class IslandBanner extends AbsolutePanel{
 		
 		super();
 		this.size = size;
-		
+				
 		double font_size = getFontFor(size);
 		System.out.println("FONT "+getFontFor(size)+" "+size);
 		shdw = new Label(text,true);
@@ -43,17 +46,36 @@ public class IslandBanner extends AbsolutePanel{
 				
 		setStyleName("H-IslandBanner");
 		
+		
+		System.out.println("reg "+reg.getOffsetWidth()+" "+reg.getOffsetHeight());
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
-		DOM.setStyleAttribute(getElement(), "width", "200px");	
-		DOM.setStyleAttribute(getElement(), "height", "60px");
-				
 		
 	}
+	
+
+	//@Override
+	protected void onLoad() {		
+		super.onLoad();
+		setDimensions();
+	}
+	
+	private int setDimensions(){
+		int width = reg.getOffsetWidth();
+		if(shdw.getText().equals("Person")){
+			System.out.println("on load reg "+width+" ");
+		}
+		DOM.setStyleAttribute(getElement(), "width", width+"px");		
+		DOM.setStyleAttribute(getElement(), "height", reg.getOffsetHeight()+"px");		
+		
+		return width;
+	}
+
 
 	public double getFontFor(int size) {
 		return getFontFor(size,1);
 	}
 	public double getFontFor(int size,double zoom) {	
+		
 		if(size <= 0 ){
 			size = 1;
 		}
@@ -66,11 +88,11 @@ public class IslandBanner extends AbsolutePanel{
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#setWidth(java.lang.String)
 	 */
-	public void setWidth(String str) {
-		DOM.setStyleAttribute(getElement(), "width", str);
-		reg.setWidth(str);
-		shdw.setWidth(str);
-	}
+//	public void setWidth(String str) {
+//		DOM.setStyleAttribute(getElement(), "width", str);
+//		reg.setWidth(str);
+//		shdw.setWidth(str);
+//	}
 
 	public void addClickListener(ClickListener listener) {
 		reg.addClickListener(listener);
@@ -80,17 +102,18 @@ public class IslandBanner extends AbsolutePanel{
 		shdw.setText(text);
 	}
 
-	public void setToZoom(double currentScale) {
+	public int setToZoom(double currentScale) {
 		double font_size = getFontFor(size,currentScale);
 		DOM.setStyleAttribute(reg.getElement(), "fontSize", font_size+"em");
 		DOM.setStyleAttribute(shdw.getElement(), "fontSize", font_size+"em");
+		return setDimensions();
 	}
 
 	public void setSelected(boolean b) {
 		if(b){
-			shdw.addStyleName("Selected");
+			shdw.addStyleName(BANNER_SELECTED);
 		}else{
-			shdw.removeStyleName("Selected");
+			shdw.removeStyleName(BANNER_SELECTED);
 		}
 	}
 }

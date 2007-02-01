@@ -97,7 +97,7 @@ public class IslandRepresentation {
 		smalls = theSize;
 
 
-		System.out.println("grow "+theSize+" "+bigs+" "+meds+" "+smalls);
+		//System.out.println("grow "+theSize+" "+bigs+" "+meds+" "+smalls);
 		int x = gridSize/2;			
 		int y = gridSize/2;
 
@@ -120,7 +120,7 @@ public class IslandRepresentation {
 				y += dy;
 				//System.out.println("sw: "+sw);
 			}
-			System.out.println("FOUND: "+x+" "+y+" "+j);
+			//System.out.println("FOUND: "+x+" "+y+" "+j);
 			used[x][y] = j;
 
 			//update BOUNDS

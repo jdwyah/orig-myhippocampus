@@ -14,6 +14,8 @@ public class DraggableTopicLabel extends DraggableLabel {
 		super(fti.getTopicTitle(),fti.getLongitudeOnIsland(),fti.getLatitudeOnIsland());
 		this.fti = fti;
 		this.island = island;
+		
+		setStyleName("H-TopicBanner");
 	}
 
 	public long getTopicId() {
@@ -24,8 +26,15 @@ public class DraggableTopicLabel extends DraggableLabel {
 
 		System.out.println("clicked");
 
-		island.topicClicked(fti);
-		
+		island.topicClicked(fti,this);
+				
+	}
+	public void setSelected(boolean b){
+		if(b){
+			addStyleName(IslandBanner.BANNER_SELECTED);
+		}else{
+			removeStyleName(IslandBanner.BANNER_SELECTED);
+		}
 	}
 	
 }

@@ -10,10 +10,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
 
-import com.aavu.client.domain.Association;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
@@ -23,9 +21,11 @@ import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
+import com.aavu.server.util.gwt.GWTSpringControllerReplacement;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
-public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringController implements GWTTopicService {
+public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implements GWTTopicService {
 
 	private static final Logger log = Logger.getLogger(GWTTopicServiceImpl.class);
 
@@ -41,11 +41,12 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 
 
 	public Topic save(Topic topic) throws HippoException {
-
+RemoteServiceServlet r;
 		try {
 			log.debug("Save topics");
 			log.debug(topic.toPrettyString());
 
+			//GWTHandler
 			return convert(topicService.save(topic));
 		}  catch (HippoException ex) {
 			log.error("Throw Hippo Exception: "+ex);
@@ -138,7 +139,7 @@ public class GWTTopicServiceImpl extends org.gwtwidgets.server.spring.GWTSpringC
 	public static Topic convert(Topic t){
 		log.debug("New Converter "+t.getId()+" "+t.getTitle());
 		
-		NewConverter.convertInPlace(t);
+		//NewConverter.convertInPlace(t);
 		
 		try{
 			log.debug("Scan turned up persistent: "+Converter.scan(t));

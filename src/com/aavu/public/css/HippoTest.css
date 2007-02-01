@@ -208,7 +208,16 @@ a:visited {
 	color: #F8F5F4;
 }
 .H-IslandBanner .Selected {
-	color: red;
+	color: yellow;
+}
+.H-TopicBanner {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 0 6 0 6px;		
+}
+.H-TopicBanner .Selected {
+	color: yellow;
 }
 
 .H-Island-Closeup {

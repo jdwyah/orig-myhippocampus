@@ -166,6 +166,4 @@ public class NewConverterTest extends TestCase {
 	}
 	
 	
-	
-	
 }

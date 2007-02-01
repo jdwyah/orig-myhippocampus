@@ -80,6 +80,10 @@ var sc_security="2d3896c1";
 <script type="text/javascript" language="javascript" src="http://www.statcounter.com/counter/counter.js"></script><noscript><a href="http://www.statcounter.com/" target="_blank"><img  src="http://c20.statcounter.com/counter.php?sc_project=2098040&java=0&security=2d3896c1&invisible=1" alt="free stats" border="0"></a> </noscript>
 <!-- End of StatCounter Code -->
 
-<iframe src="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>" style="visibility: hidden;"><\/iframe>
+
+<!--Preloader.-->
+<!--
+<iframe src="<@spring.url "/com.aavu.HippoTest/HippoPreLoad.html"/>" style="visibility: hidden;"><\/iframe>
+-->
 </body>
 </html>
