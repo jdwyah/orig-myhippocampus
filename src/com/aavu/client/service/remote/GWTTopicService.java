@@ -5,9 +5,11 @@ import java.util.List;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -20,6 +22,9 @@ public interface GWTTopicService extends RemoteService {
 	
 	Topic save(Topic topic) throws HippoException;
 	Topic[] save(Topic[] l) throws HippoException;
+	
+	void saveCommand(AbstractSaveCommand command) throws HippoBusinessException;
+	Long createNew(String title,boolean isIsland) throws HippoBusinessException;
 	
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>

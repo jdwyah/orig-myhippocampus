@@ -106,7 +106,7 @@ public class TagPropertyPanel extends Composite {
 		
 		//Effect.dropOut(metaListPanel);
 		
-		manager.getTagCache().saveTag(tag, new StdAsyncCallback("tagService saveTag"){
+		manager.getTopicCache().save(tag, new StdAsyncCallback("tagService saveTag"){
 
 			public void onSuccess(Object result) {
 				super.onSuccess(result);

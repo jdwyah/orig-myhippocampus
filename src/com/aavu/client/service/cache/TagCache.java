@@ -19,15 +19,7 @@ public class TagCache {
 	
 
 	public void getTagAddIfNew(String itemText, AsyncCallback callback) {
-		tagService.getTagAddIfNew(itemText, callback);
-	}
-
-//	public void removeTag(Tag selectedTag, StdAsyncCallback callback) throws PermissionDeniedException {
-//		tagService.removeTag(selectedTag, callback);		
-//	}
-
-	public void saveTag(Tag selectedTag, StdAsyncCallback callback) {
-		tagService.saveTag(selectedTag, callback);		
+		tagService.createTagIfNonExistent(itemText, callback);
 	}
 
 	public void getAllTags(StdAsyncCallback callback) {

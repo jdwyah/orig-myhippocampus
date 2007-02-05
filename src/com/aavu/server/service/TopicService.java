@@ -8,6 +8,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -56,5 +57,7 @@ public interface TopicService {
 	void delete(Topic topic) throws HippoBusinessException;
 
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
+
+	void executeAndSaveCommand(AbstractSaveCommand command) throws HippoBusinessException;
 	
 }

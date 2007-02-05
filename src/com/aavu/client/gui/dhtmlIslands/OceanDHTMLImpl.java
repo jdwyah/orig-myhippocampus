@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.gwm.client.GInternalFrame;
 import org.gwtwidgets.client.ui.PNGImage;
 import org.gwtwidgets.client.ui.ProgressBar;
 import org.gwtwidgets.client.wrap.EffectOption;
@@ -24,9 +23,7 @@ import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.service.Manager;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -206,15 +203,15 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		System.out.println("---------------------------------------------------------------------");
 		System.out.println(" ADDALL ");
 		
-		islands.clear();
+		
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
 			Entry e = (Entry) iter.next();
 			remove((Widget) e.getValue());
 			objects.remove(e.getValue());
-
 		}
+		islands.clear();
 
-		 
+				
 		final ProgressBar progressBar = new ProgressBar(10
 				,ProgressBar.SHOW_TEXT);
 		progressBar.setProgress(0);
@@ -222,6 +219,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		progressBar.setText(Manager.myConstants.loading_islands());
 	
 		progressWindow = manager.showProgressBar(progressBar);
+		
+		
 		
 		Timer t = new Timer(){
 			public void run() {
@@ -234,7 +233,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private void addFrom(final TagStat[] tagStats, final int start, final int num, final ProgressBar progressBar) {
 		TagStat stat = null;
-		int i;
+		int i = 0;
 		System.out.println("AddFrom "+start+" to "+(start+num));
 		for (i = start; i < tagStats.length && i < start + num; i++) {
 			stat = tagStats[i];
@@ -243,11 +242,16 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 			addIsland(stat, isle);
 
-		}
-				
-		progressBar.setProgress((int) (100*i/(double)tagStats.length));
-		progressBar.setText(stat.getTagName());				
+		}				
 		
+		//could be null if tagStat.length == 0, ie new user
+		if(stat != null){
+			progressBar.setProgress((int) (100*i/(double)tagStats.length));
+			progressBar.setText(stat.getTagName());
+		}
+		
+		
+		System.out.println("i "+i+" "+tagStats.length);
 		if(i >= tagStats.length){
 			done();
 		}else{
@@ -259,7 +263,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		}
 		
 	}
-	private void done() {
+	private void done() {		
 		progressWindow.close();
 		clearClouds();
 	}
@@ -317,6 +321,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 
 	public void zoomTo(double scale) {
+		if(scale == currentScale){
+			return;
+		}
 		double oldScale = currentScale;
 		
 		currentScale = scale;
@@ -372,6 +379,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 		//move all objects
 		moveByDelta(0,0);
+		
+		manager.zoomTo(currentScale);
 	}
 
 
@@ -489,6 +498,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	private void unselect() {
 		if(selectedIsland != null){
 			selectedIsland.setSelected(false);
+			selectedIsland = null;
 		}
 		manager.unselectIsland();
 	}

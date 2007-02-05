@@ -12,16 +12,20 @@ import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.util.gwt.GWTSpringControllerReplacement;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
@@ -39,9 +43,27 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		this.searchService = searchService;
 	}
 
+	public Long createNew(String title, boolean isIsland) throws HippoBusinessException {
+		Topic t = null;
+		if(isIsland){
+			t = new Tag();
+		}else{
+			t = new Topic();
+		}
+		t.setTitle(title);
 
+		t = topicService.save(t);
+		return t.getId();
+	}
+	public void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
+		log.info("command "+command.getClass()+" "+command);		
+		topicService.executeAndSaveCommand(command);
+	}
+	
+	
+	
 	public Topic save(Topic topic) throws HippoException {
-RemoteServiceServlet r;
+
 		try {
 			log.debug("Save topics");
 			log.debug(topic.toPrettyString());
@@ -365,5 +387,7 @@ RemoteServiceServlet r;
 	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException {
 		topicService.saveTopicLocation(tagId,topicId,xpct,ypct);		
 	}
+
+	
 
 }

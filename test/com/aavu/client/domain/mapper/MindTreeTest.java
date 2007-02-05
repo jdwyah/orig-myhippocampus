@@ -1,5 +1,6 @@
 package com.aavu.client.domain.mapper;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -43,9 +44,11 @@ public class MindTreeTest extends TestCase {
 
 		tree.setFromNavigableTree(testMap());
 
-		Set<MindTreeElement> elements = tree.getLeftSide();
+		Set elements = tree.getLeftSide();
+		
+		for (Iterator iter = elements.iterator(); iter.hasNext();) {
+			MindTreeElement element = (MindTreeElement) iter.next();
 
-		for (MindTreeElement element : elements) {
 			System.out.println("Element "+element.getTitle()+" "+element.getLft()+" "+element.getRgt());
 			
 			if(element.getTitle().equals("l1")){

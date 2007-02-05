@@ -2,20 +2,20 @@ package com.aavu.client.widget.edit;
 
 import java.util.Iterator;
 
-import com.aavu.client.domain.Occurrence;
+import org.gwtwidgets.client.ui.ImageButton;
+import org.gwtwidgets.client.ui.PNGImage;
+
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.URI;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.service.Manager;
-import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.ExternalLink;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
 public class LinkDisplayWidget extends Composite {
 	
@@ -76,16 +76,18 @@ public class LinkDisplayWidget extends Composite {
 			WebLink occ = (WebLink) iter.next();			
 
 			HorizontalPanel lP = new HorizontalPanel();
+			lP.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+			
 			lP.add(new ExternalLink(occ));
 
-			EditLinkButton editB = new EditLinkButton(Manager.myConstants.editMe(),(WebLink) occ);							
-			lP.add(editB);				
+			EditLinkButton editB = new EditLinkButton((WebLink) occ);							
+			lP.add(editB);			
 
 			
 			if(size %2 == 0){
-				lP.setStyleName(".H-LinkWidget");
+				lP.addStyleName("H-LinkWidget");
 			}else{
-				lP.setStyleName("H-LinkWidget-Odd");	
+				lP.addStyleName("H-LinkWidget-Odd");	
 			}
 			linkPanel.add(lP);
 
@@ -94,18 +96,23 @@ public class LinkDisplayWidget extends Composite {
 		}
 	}
 
+	public int getSize() {
+		return size;
+	}
+	
 	/**
 	 * Button that remembers which Link to edit
 	 * @author Jeff Dwyer
 	 *
 	 */
-	private class EditLinkButton extends Button implements ClickListener{
+	private class EditLinkButton extends PNGImage implements ClickListener{
 		private WebLink link;
 
-		public EditLinkButton(String text, WebLink link){
-			super(text);
+		public EditLinkButton(WebLink link){
+			super("img/popupIcon.png", 15,15);
 			this.link = link;
 			addClickListener(this);
+			addStyleName("H-EditLink-Button");			
 		}
 
 		public void onClick(Widget sender) {
@@ -113,8 +120,5 @@ public class LinkDisplayWidget extends Composite {
 		}
 	}
 	
-	public int getSize() {
-		return size;
-	}
 
 }

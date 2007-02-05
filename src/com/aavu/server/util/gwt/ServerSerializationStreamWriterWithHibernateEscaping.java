@@ -30,6 +30,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.collection.PersistentSet;
 
 import com.aavu.client.domain.ReallyCloneable;
+import com.aavu.client.exception.CouldntFixCGLIBException;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.SerializationStreamWriter;
 import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter;
@@ -163,6 +164,7 @@ AbstractSerializationStreamWriter {
 					 System.out.println(value.getClass().getName()+" CGLIBBB!! Cloning "+value);						  
 					 writeObject(((ReallyCloneable)value).clone());
 				 }else{
+					 System.out.println("Uninitialized but doesn't implement ReallyCloneable"+value.getClass());
 					 throw new CouldntFixCGLIBException(value.getClass()+" must implement ReallyCloneable if we're to fix it.");
 				 }
 			 }else{

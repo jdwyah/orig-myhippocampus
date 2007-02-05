@@ -38,7 +38,7 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		sinkEvents(Event.ONCLICK);
 		sinkEvents(Event.MOUSEEVENTS);
 		
-		setStyleName("gwt-Hyperlink");
+		setStyleName("H-External-Hyperlink");
 	}
 
 	public void init(URI occ) {

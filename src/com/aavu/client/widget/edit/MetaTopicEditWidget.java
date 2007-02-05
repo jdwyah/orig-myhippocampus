@@ -5,6 +5,7 @@ import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
+import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -21,7 +22,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 	private EnterInfoButton enterB;
 	private SaveNeededListener saveNeeded;
 	
-	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic, SaveNeededListener saveNeeded) {
+	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic, SaveNeededListener saveNeeded,TopicCache topicCache) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 
@@ -29,7 +30,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 		this.meta = meta;
 		this.saveNeeded = saveNeeded;
 						
-		completer = new TopicCompleter();
+		completer = new TopicCompleter(topicCache);
 		completer.addListener(this);
 		
 	

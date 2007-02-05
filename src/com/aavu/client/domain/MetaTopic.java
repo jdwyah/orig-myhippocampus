@@ -30,7 +30,7 @@ public class MetaTopic extends Meta {
 	public Widget getEditorWidget(final Topic topic, SaveNeededListener saveNeeded,Manager manager) {
 		
 		
-		MetaTopicEditWidget mtw = new MetaTopicEditWidget(this,topic,saveNeeded);
+		MetaTopicEditWidget mtw = new MetaTopicEditWidget(this,topic,saveNeeded,manager.getTopicCache());
 	
 		return mtw;
 	}

@@ -8,6 +8,7 @@ import org.gwtwidgets.client.ui.ImageButton;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.TooltipListener;
@@ -243,6 +244,10 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	 * 
 	 */
 	public void onChange(Widget w){
+		if(w == titleBox){
+			manager.getTopicCache().save(new SaveTitleCommand(topic.getId(), titleBox.getText()),
+					new StdAsyncCallback(Manager.myConstants.save()){});
+		}
 		saveButton.setSaveNeeded();
 	}
 	

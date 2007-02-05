@@ -53,7 +53,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		HorizontalPanel mainPanel = new HorizontalPanel();		
 
 
-		completer = new TopicCompleter();
+		completer = new TopicCompleter(topicC);
 		completer.addKeyboardListener(new KeyboardListenerAdapter(){
 			public void onKeyUp(Widget sender, char keyCode, int modifiers) {
 				if(keyCode == KEY_ESCAPE){

@@ -45,7 +45,7 @@ public class GWTTagServiceImpl extends GWTSpringControllerReplacement implements
 		}
 	}
 
-	public Tag getTagAddIfNew(String tagName) throws HippoException {
+	public Tag createTagIfNonExistent(String tagName) throws HippoException {
 		try{
 			return convert(tagService.createTagIfNonExistent(tagName));
 		}  catch (HippoException ex) {
@@ -74,23 +74,6 @@ public class GWTTagServiceImpl extends GWTSpringControllerReplacement implements
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
 			return null;
-		}
-	}
-
-	public Tag saveTag(Tag selectedTag) throws HippoException {
-		try{
-			log.debug("saving tag:");
-			log.debug(selectedTag.toPrettyString());
-			
-			log.debug("saved tag: "+selectedTag);
-			
-			return convert(tagService.save(selectedTag));
-			
-			
-		}  catch (Exception ex) {
-			log.error("FAILURE: "+ex);
-			ex.printStackTrace();
-			throw new HippoException(ex);
 		}
 	}
 

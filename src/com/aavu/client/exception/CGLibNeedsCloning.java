@@ -1,4 +1,4 @@
-package com.aavu.server.service.gwt;
+package com.aavu.client.exception;
 
 public class CGLibNeedsCloning extends Exception {
 

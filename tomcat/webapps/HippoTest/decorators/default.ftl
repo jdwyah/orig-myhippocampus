@@ -82,8 +82,7 @@ var sc_security="2d3896c1";
 
 
 <!--Preloader.-->
-<!--
 <iframe src="<@spring.url "/com.aavu.HippoTest/HippoPreLoad.html"/>" style="visibility: hidden;"><\/iframe>
--->
+
 </body>
 </html>

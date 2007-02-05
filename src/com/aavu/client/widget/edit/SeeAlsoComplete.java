@@ -9,7 +9,13 @@ import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.widget.AutoCompleteTextBoxMultipleCompletes;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
 
-
+/**
+ * NOTE DEADWOOD!!!!!!!!
+ * 
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class SeeAlsoComplete extends AutoCompleteTextBoxMultipleCompletes {
 
 	private static final int LENGTH = 40;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Entry extends Occurrence implements Serializable,IsSerializable {
+public class Entry extends Occurrence implements Serializable,IsSerializable, ReallyCloneable {
 	
 	private static final String INIT_STR = "<BODY contentEditable=true>";
 	private static final String INIT_STR_END = "</BODY>";
@@ -25,5 +25,11 @@ public class Entry extends Occurrence implements Serializable,IsSerializable {
 		return getData() == null ||
 				(getData().length() == INIT_STR.length()+INIT_STR_END.length()); 
 	}
+	
+	//@Override
+	public Object clone() {				   		
+		return copyProps(new Entry());
+	}
+
 	
 }

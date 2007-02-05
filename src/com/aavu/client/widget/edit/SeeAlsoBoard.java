@@ -34,7 +34,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		this.popwindow = popwindow;
 		topicService = manager.getTopicCache();
 		
-		topicCompleter = new TopicCompleter();		
+		topicCompleter = new TopicCompleter(manager.getTopicCache());		
 		topicCompleter.addListener(this);
 
 		alsos = new SeeAlsoWidget();

@@ -4,7 +4,9 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.mapper.MindTree;
+import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface GWTTopicServiceAsync {
@@ -46,6 +48,9 @@ public interface GWTTopicServiceAsync {
 	void delete(Topic topic, AsyncCallback callback);
 
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct, AsyncCallback callback);
+
+	void saveCommand(AbstractSaveCommand command, AsyncCallback callback);
+	void createNew(String title,boolean isIsland, AsyncCallback callback);
 }
 
 

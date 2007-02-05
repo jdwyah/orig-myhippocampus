@@ -2,6 +2,8 @@ package com.aavu.client.domain.generated;
 // Generated Nov 6, 2006 10:20:40 AM by Hibernate Tools 3.1.0.beta5
 
 
+import com.aavu.client.domain.MindTreeOcc;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -28,6 +30,11 @@ public abstract class AbstractOccurrenceAbstractURI extends com.aavu.client.doma
        this.uri = uri;
     }
     
+    protected AbstractOccurrenceAbstractURI copyProps(AbstractOccurrenceAbstractURI o){
+    	AbstractOccurrenceAbstractURI m = (AbstractOccurrenceAbstractURI)super.copyProps(o);
+		m.setUri(getUri());
+		return m;
+	}
    
     // Property accessors
     public String getUri() {

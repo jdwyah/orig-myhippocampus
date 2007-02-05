@@ -31,7 +31,7 @@
 	<classpathentry kind="lib" path="lib/lucene-highlighter.jar"/>
 	<classpathentry kind="lib" path="lib/gwt-widgets-0.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/gwt-widgets-server-0.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/gwt-widgets-server-0.1.2.jar" sourcepath="C:/workspace/source/gwt-widgets-jar-source-0.1.2-src.zip"/>
 	<classpathentry kind="lib" path="lib/gwt-simile-timeline.jar"/>
 	<classpathentry kind="lib" path="tools/gwt/gwt-user-1.2.22.jar"/>
 	<classpathentry kind="lib" path="lib/gwm-1.0b.jar"/>
@@ -45,5 +45,6 @@
 	<classpathentry kind="lib" path="lib/spring-2.0.2.jar" sourcepath="C:/workspace/source/spring-2.0.2-src.zip"/>
 	<classpathentry kind="lib" path="lib/spring-mock-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-snowball.jar"/>
+	<classpathentry kind="lib" path="tools/gwt/gwt-dev-windows-1.2.22.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

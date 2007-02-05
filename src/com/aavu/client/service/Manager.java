@@ -104,7 +104,7 @@ public class Manager implements TopicSaveListener {
 
 	//public void show(Topic topic, boolean editMode) {
 	
-	public void newTopic() {
+	public void newTopic() {	
 		Topic blank = new Topic();
 		blank.setTitle(myConstants.topic_new_title());
 		bringUpChart(blank,true);		
@@ -115,16 +115,17 @@ public class Manager implements TopicSaveListener {
 	public void newIsland(){
 		NewTagNameWindow n = new NewTagNameWindow(this);	
 	}
-	public void createIsland(String name) {
-		final Tag newIsland = new Tag();
-		newIsland.setTitle(name);
-		getTopicCache().save(newIsland, new StdAsyncCallback(Manager.myConstants.save_async()){
+	public void createIsland(final String name) {
+
+		getTopicCache().createNew(name, true, new StdAsyncCallback(Manager.myConstants.save_async()){
 			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				Topic[] res = (Topic[]) result;
-				mainMap.growIsland((Tag) res[0]);					
-			}
-			
+				super.onSuccess(result);				
+				Long res = (Long) result;
+				Tag newIsland = new Tag();
+				newIsland.setId(res.longValue());
+				newIsland.setTitle(name);
+				mainMap.growIsland(newIsland);					
+			}			
 		});
 						
 	}
@@ -404,7 +405,7 @@ public class Manager implements TopicSaveListener {
 		}		
 	}
 	public void zoomTo(double scale) {
-		mainMap.zoomTo(scale);
+		mainMap.zoomTo(scale);	
 	}
 	
 	

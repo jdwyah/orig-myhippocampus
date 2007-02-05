@@ -8,16 +8,18 @@ import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
 public class TopicCompleter extends AutoCompleteTextBoxWithCompleteCallback {
 
 	private static final int LENGTH = 40;
+	private TopicCache topicService;
 
-	private static TopicCache topicService;
-		
-	public static void setTopicService(TopicCache topicService) {
-		TopicCompleter.topicService = topicService;
-	}
+//	private static TopicCache topicService;
+//		
+//	public static void setTopicService(TopicCache topicService) {
+//		TopicCompleter.topicService = topicService;
+//	}
 
 
 
-	public TopicCompleter() {
+	public TopicCompleter(TopicCache topicService) {
+		this.topicService = topicService;
 		setCompletionItems(new RemoteTopicAutoCompletionItems(topicService));
 		
 		//doesn't seem to work for formatting.. what prop do I want?

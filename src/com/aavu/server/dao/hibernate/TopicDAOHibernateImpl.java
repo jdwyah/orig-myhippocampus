@@ -170,8 +170,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return getHibernateTemplate().findByCriteria(crit,0,max);
 	}
 
-
-
+	public void saveSimple(Topic t){
+		getHibernateTemplate().save(t);
+	}
+	
+	
 	public Topic save(Topic t) throws HippoBusinessException {
 		System.out.println("SAVE "+t.getTitle());
 
@@ -829,6 +832,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}});
 	}
 
+	public Topic load(long topicID) {
+		return (Topic) getHibernateTemplate().load(Topic.class, topicID);
+	}
 
 
 }

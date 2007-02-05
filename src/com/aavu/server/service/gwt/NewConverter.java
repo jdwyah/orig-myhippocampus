@@ -19,6 +19,7 @@ import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.generated.AbstractSubject;
+import com.aavu.client.exception.CGLibNeedsCloning;
 
 public class NewConverter {
 	private static final Logger log = Logger.getLogger(NewConverter.class);

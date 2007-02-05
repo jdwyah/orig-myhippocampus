@@ -9,11 +9,11 @@ import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -153,6 +153,39 @@ public class TopicServiceImpl implements TopicService {
 	}
 	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) {
 		topicDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
+	}
+	
+	/**
+	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects.
+	 * 2) Execute. use the domain classes logic & the command to enact the change
+	 * 3) Save.
+	 */
+	public void executeAndSaveCommand(AbstractSaveCommand command) throws HippoBusinessException {
+		hydrateCommand(command);
+		command.executeCommand();		
+		saveCommand(command);	
+	}
+	private void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
+		if(command.getTopicID() > 0){
+			topicDAO.saveSimple(command.getTopic());
+		}
+		if(command.getId1() > 0){
+			topicDAO.saveSimple(command.getTopic1());
+		}
+		if(command.getId2() > 0){
+			topicDAO.saveSimple(command.getTopic2());
+		}
+	}
+	private void hydrateCommand(AbstractSaveCommand command) {
+		if(command.getTopicID() > 0){
+			command.setTopic(topicDAO.load(command.getTopicID()));
+		}
+		if(command.getId1() > 0){
+			command.setTopic1(topicDAO.load(command.getId1()));
+		}
+		if(command.getId2() > 0){
+			command.setTopic2(topicDAO.load(command.getId2()));
+		}
 	}
 
 

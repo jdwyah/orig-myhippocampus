@@ -15,6 +15,8 @@ import com.aavu.server.web.domain.UserPageBean;
 
 public interface TopicDAO {
 
+	void saveSimple(Topic t);
+	
 	Topic save(Topic t) throws HippoBusinessException;
 
 	List<TopicIdentifier> getAllTopicIdentifiers(User user);
@@ -49,6 +51,8 @@ public interface TopicDAO {
 	void delete(Topic topic);
 	
 	void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude);
+
+	Topic load(long topicID);
 
 	
 

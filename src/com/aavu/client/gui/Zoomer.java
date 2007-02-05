@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.service.Manager;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,13 +36,12 @@ public class Zoomer extends AbsolutePanel implements MouseListener {
 		add(sliderBase,0,0);
 		add(slider,SLIDER_LEFT,BASE);
 		
-		setToZoom(6);		
+		setToZoom(convertFromScale(1.0));		
 		
 	}
 
 	private void setToZoom(int i) {
-		
-		
+				
 		i = i < 0 ? 0 : i;
 		i = i > TOT_INCR ? TOT_INCR : i;
 		
@@ -51,6 +51,9 @@ public class Zoomer extends AbsolutePanel implements MouseListener {
 		System.out.println("top "+top);
 		setWidgetPosition(slider, SLIDER_LEFT, top);
 		
+	}
+	public void setToScale(double scale){
+		setToZoom(convertFromScale(scale));
 	}
 
 	public void onMouseDown(Widget sender, int x, int y) {
@@ -67,12 +70,13 @@ public class Zoomer extends AbsolutePanel implements MouseListener {
 		}
 		
 		
-		setToZoom(i);
+		//setToZoom(i);
 		
 		double scale = convertToScale(i);
-		System.out.println("i "+i+" scale "+scale);
-		manager.zoomTo(convertToScale(i));
 		
+		Logger.debug("ZOOOMER telling manager! i "+i+" scale "+scale);		
+		
+		manager.zoomTo(convertToScale(i));
 		
 	}
 
@@ -82,18 +86,27 @@ public class Zoomer extends AbsolutePanel implements MouseListener {
 	 * @param i
 	 * @return
 	 */
-	private double convertToScale(int i) {
+	public static double convertToScale(int i) {
 		
-		if((TOT_INCR - i) <= NUM_BELOW_1){
-			System.out.println("powing");
+		if((TOT_INCR - i) <= NUM_BELOW_1){			
 			double pow = Math.pow(2, (TOT_INCR - i) - NUM_BELOW_1);
 			return pow;
 		}else{
-			System.out.println("subtracting ");
-			return (TOT_INCR - i) - NUM_BELOW_1;
+			//add one, otherwise (6-5)^1 == (6-5) & two zoom levels are the same
+			return (TOT_INCR - i) - NUM_BELOW_1 + 1;
 		}
 		
 	}
+
+	public static int convertFromScale(double d) {
+		if(d <= 1){			
+			int pow =(int)(Math.log(d)/Math.log(2));					
+			return (TOT_INCR - pow) - NUM_BELOW_1;			
+		}else{			
+			return (int) (TOT_INCR - d) - NUM_BELOW_1 + 1;
+		}		
+	}
+
 
 	public void onMouseEnter(Widget sender) {}
 	public void onMouseLeave(Widget sender) {}

@@ -10,10 +10,11 @@ div.loading {
 	left: 45%;
 	border: 1px solid #1FF8F8;
 	background-color: #DCFFFF;
-	width: 65px;
-	height: 30px;
+	width: 8em;
+	height: 3em;
 	color: #FF9F6F;
-	padding: 5px;
+	text-align: center;
+	padding: 10px;	
 }
 
 code {
@@ -76,13 +77,13 @@ a:visited {
 
 .H-StatusPanel {
 	top: 0px;
-	left: 60%;
+	left: 40%;
 	width: 200px;
 	height: 40px;
 	background-color: transparent;
 	margin: 0 auto; /* align for good browsers */
 	text-align: left; /* counter the body center */
-	border: 2px solid #000;
+	border: 0px;		
 }
 
 .H-StatusLabels {
@@ -266,12 +267,20 @@ a:visited {
 }
 
 .H-LinkWidget {
-	font: .8em;
+	width: 100%;
+	
 	background-color: #FFFFFF;
 }
 .H-LinkWidget-Odd {
-	font: .8em;
+	width: 100%;
 	background-color: #CCCC99
+}
+
+.H-External-Hyperlink a{
+	font-size: .6em;	
+}
+.H-EditLink-Button{
+	font-size: .6em;	
 }
 
 .H-editableText {
@@ -346,7 +355,7 @@ a:visited {
 }
 
 .H-LinkDisplay {
-	
+	font-size: .7em;
 }
 
 .H-SearchResults {

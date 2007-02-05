@@ -2,6 +2,8 @@ package com.aavu.client.domain.generated;
 // Generated Nov 29, 2006 1:48:35 PM by Hibernate Tools 3.1.0.beta5
 
 
+import com.aavu.client.domain.MindTreeOcc;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.mapper.MindTree;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -39,7 +41,11 @@ public abstract class AbstractOccurrenceAbstractMindTreeOccurence extends com.aa
         this.MindTree = MindTree;
     }
 
-
+    protected MindTreeOcc copyProps(MindTreeOcc o){
+		MindTreeOcc m = (MindTreeOcc)super.copyProps(o);
+		m.setMindTree(getMindTree());
+		return m;
+	}
 
 
 }

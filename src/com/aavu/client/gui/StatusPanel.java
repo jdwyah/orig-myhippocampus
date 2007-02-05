@@ -3,27 +3,23 @@ package com.aavu.client.gui;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.gwtwidgets.client.wrap.Effect;
-import org.gwtwidgets.client.wrap.EffectOption;
-
 import com.aavu.client.gui.ext.GUIEffects;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.CellPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class StatusPanel extends SimplePanel {
 
 	private Map map = new HashMap();
 	
-	private VerticalPanel displayPanel = new VerticalPanel();
+	private CellPanel displayPanel = new HorizontalPanel();
 	
 	public StatusPanel(){
 		
 		displayPanel.setStyleName("H-StatusLabels");
 		
-		displayPanel.add(new Label("Messages:"));
+		//displayPanel.add(new Label("Messages:"));
 		
 		add(displayPanel);
 		
@@ -70,7 +66,7 @@ public class StatusPanel extends SimplePanel {
 	private class StatusLabel extends Label {
 		
 		public StatusLabel(String string, StatusCode statusCode) {
-			super(string);
+			super(" ");//string);
 			setCode(statusCode);	
 		}
 

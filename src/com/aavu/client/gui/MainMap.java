@@ -52,6 +52,7 @@ public class MainMap extends Composite {
 				
 		//mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
+		
 		mainP.add(statusPanel);
 		
 		zoomer = new Zoomer(manager);
@@ -130,8 +131,9 @@ public class MainMap extends Composite {
 		topicDetailsDisplayer.unload();
 	}
 
-	public void zoomTo(double scale) {
+	public void zoomTo(double scale) {		
 		ocean.zoomTo(scale);
+		zoomer.setToScale(scale);
 	}
 
 

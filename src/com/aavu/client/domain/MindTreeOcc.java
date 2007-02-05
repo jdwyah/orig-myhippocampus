@@ -6,7 +6,7 @@ import com.aavu.client.domain.generated.AbstractOccurrenceAbstractMindTreeOccure
 import com.aavu.client.domain.mapper.MindTree;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class MindTreeOcc extends AbstractOccurrenceAbstractMindTreeOccurence implements Serializable,IsSerializable {
+public class MindTreeOcc extends AbstractOccurrenceAbstractMindTreeOccurence implements Serializable,IsSerializable, ReallyCloneable {
 
 	public MindTreeOcc(){}
 	
@@ -14,5 +14,9 @@ public class MindTreeOcc extends AbstractOccurrenceAbstractMindTreeOccurence imp
 		setMindTree(new MindTree(topic));
 	}
 	
+	//@Override
+	public Object clone() {				   		
+		return copyProps(new MindTreeOcc());
+	}
 		
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class S3File extends URI implements Serializable,IsSerializable {
+public class S3File extends URI implements Serializable,IsSerializable, ReallyCloneable {
 	
 	public S3File(){}
 		
@@ -32,4 +32,10 @@ public class S3File extends URI implements Serializable,IsSerializable {
 		setData(filename);
 	}
 
+	//@Override
+	public Object clone() {				   		
+		return copyProps(new S3File());
+	}
+
+	
 }

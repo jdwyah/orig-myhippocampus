@@ -2,6 +2,7 @@ package com.aavu.client.gui.ext;
 
 import org.gwm.client.GInternalFrame;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -31,8 +32,16 @@ public class PopupWindow {
 		frame.setMaximizable(false);
 		frame.setDraggable(true);
 		
-		frame.showCenter(false);
+		int w = (Window.getClientWidth() - width) / 2;
+		int h = (Window.getClientHeight() - height) / 2;
+		w = (w < 100) ? 100 : w;
+		h = (h < 100) ? 100 : h;
+		frame.setLocation(w, h);
 		
+		frame.show(false);
+		
+		//This end up with windows where the title bar is hidden/undraggable
+		//frame.showCenter(false);		
 		
 		frame.setTitle(title);
 		

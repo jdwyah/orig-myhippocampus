@@ -63,24 +63,24 @@ public class BrowseView extends Composite {
 	}
 
 	
-	private class SearchP extends Composite{
-		public SearchP(){
-			HorizontalPanel panel = new HorizontalPanel();
-			
-			final TopicCompleter completer = new TopicCompleter(); 
-			
-			panel.add(completer);
-			Button addNew = new Button("Add");
-			addNew.addClickListener(new ClickListener(){
-
-				public void onClick(Widget sender) {
-					Topic t = new Topic();
-					t.setTitle(completer.getText());					
-					topicViewAndEditWidget.load(t);
-				}});
-			
-			panel.add(addNew);			
-			initWidget(panel);
-		}
-	}
+//	private class SearchP extends Composite{
+//		public SearchP(){
+//			HorizontalPanel panel = new HorizontalPanel();
+//			
+//			final TopicCompleter completer = new TopicCompleter(); 
+//			
+//			panel.add(completer);
+//			Button addNew = new Button("Add");
+//			addNew.addClickListener(new ClickListener(){
+//
+//				public void onClick(Widget sender) {
+//					Topic t = new Topic();
+//					t.setTitle(completer.getText());					
+//					topicViewAndEditWidget.load(t);
+//				}});
+//			
+//			panel.add(addNew);			
+//			initWidget(panel);
+//		}
+//	}
 }

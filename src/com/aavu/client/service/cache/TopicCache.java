@@ -7,16 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TopicCache {
@@ -123,6 +126,12 @@ public class TopicCache {
 	}
 
 
+	public void save(AbstractSaveCommand command, AsyncCallback callback) {
+
+		topicService.saveCommand(command,callback);
+		
+		//save(topic,null,callback);
+	}
 	
 	public void save(Topic topic, AsyncCallback callback) {
 		save(topic,null,callback);
@@ -149,18 +158,24 @@ public class TopicCache {
 			}
 			topicService.save(listToSave, new SaveCallback(callback));	
 		}
-		
 				
 	}
+	
 	private class SaveCallback implements AsyncCallback {
 		private AsyncCallback callback;
 		public SaveCallback(AsyncCallback callback) {
 			this.callback = callback;			
 		}
 		public void onFailure(Throwable caught) {
+			System.out.println("AAAAAAAAAAAAA");
+			Logger.log("SAVE CALLBACK FAILING");
+			Logger.log("caugt "+caught);
 			callback.onFailure(caught);
 		}
 		public void onSuccess(Object result) {
+			System.out.println("BBBBBBBBBBBBB");
+			Logger.log("SAVE CALLBACK SUCEEED");
+			Logger.log("rtn "+result);
 			Topic[] resA = (Topic[]) result;
 			
 			if(resA == null){
@@ -369,6 +384,12 @@ public class TopicCache {
 
 	public void saveTopicLocationA(long tagId, long topicId, double xpct, double ypct, StdAsyncCallback callback) {
 		topicService.saveTopicLocation(tagId,topicId,xpct,ypct,callback);
+	}
+
+
+
+	public void createNew(String title, boolean b, AsyncCallback callback) {
+		topicService.createNew(title, b, callback);		
 	}
 
 
