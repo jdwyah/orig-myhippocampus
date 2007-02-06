@@ -44,18 +44,18 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 			manager.showPreviews(int0);
 		}
 		if(command.equals("isleMovedTo")){
-			System.out.println("isleMovedTo "+int0+" "+int1+" "+int2);			
-			manager.getTopicCache().getTopicByIdA(int0, new StdAsyncCallback("GetTopicById"){
-
-				public void onSuccess(Object result) {
-					super.onSuccess(result);
-					Topic t = (Topic) result;
-					t.setLatitude(int2);
-					t.setLongitude(int1);					
-					manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
-				}
-				
-			});
+//			System.out.println("isleMovedTo "+int0+" "+int1+" "+int2);			
+//			manager.getTopicCache().getTopicByIdA(int0, new StdAsyncCallback("GetTopicById"){
+//
+//				public void onSuccess(Object result) {
+//					super.onSuccess(result);
+//					Topic t = (Topic) result;
+//					t.setLatitude(int2);
+//					t.setLongitude(int1);					
+//					manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
+//				}
+//				
+//			});
 		}
 		
 	}

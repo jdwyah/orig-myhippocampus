@@ -1,11 +1,14 @@
 package com.aavu.client.gui;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -22,20 +25,25 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 	private Topic topic;
 	private Manager manager;
 	
-	public RightTopicDisplayer(Manager manager){
+	public RightTopicDisplayer(final Manager manager){
 			
 		this.manager = manager;
 		
-		tagBoard = new TagBoard(manager,this);		
+		tagBoard = new TagBoard(manager);		
 		
-		topicDetails = new TopicDetailsTabBar(manager,this);		
+		topicDetails = new TopicDetailsTabBar(manager);		
 		
 		entryPreview = new EntryPreview();
 		
 		VerticalPanel mainPanel = new VerticalPanel();
 		
-		
-		titleBox = new EditableLabelExtension("",this);
+				
+		titleBox = new EditableLabelExtension("",new ChangeListener(){
+			public void onChange(Widget sender) {								
+				manager.getTopicCache().save(new SaveTitleCommand(topic.getId(), titleBox.getText()),
+						new StdAsyncCallback(Manager.myConstants.save()){});
+			}			
+		});
 		
 		mainPanel.add(titleBox);
 		mainPanel.add(tagBoard);
@@ -73,18 +81,17 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 	}
 
 
-	/**
-	 * saveNeeded
-	 */
-	public void onChange(Widget sender) {
-		
-	}
-
 
 	public void onClick(Widget sender) {
 		if(sender == entryPreview){
 			manager.bringUpChart(topic);
 		}
+	}
+
+
+	public void onChange(Widget sender) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

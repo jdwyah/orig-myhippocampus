@@ -1,16 +1,11 @@
 package com.aavu.client.domain;
 
-import org.gwtwidgets.client.ui.EditableLabel;
-
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.commands.SaveMetaTextCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.widget.TopicLink;
-import com.aavu.client.widget.edit.MetaTopicEditWidget;
-import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,7 +29,7 @@ public class MetaText extends Meta {
 	}
 
 
-	public Widget getEditorWidget(final Topic topic, final SaveNeededListener saveNeeded,Manager manager) {
+	public Widget getEditorWidget(final Topic topic, Manager manager) {
 		this.topic = topic;
 		this.topicCache = manager.getTopicCache();
 		
@@ -52,16 +47,25 @@ public class MetaText extends Meta {
 			 * Set "Save Needed" although it's actually only needed the first time round.
 			 */
 			public void onChange(final Widget sender) {
-				mv.setValue(editable.getText());			
-				topicCache.save(mv, new StdAsyncCallback(Manager.myConstants.meta_text_async_save()){
-					public void onSuccess(Object result) {
-						super.onSuccess(result);	
-						Topic[] res = (Topic[]) result;
-						mv = (HippoText) res[0];										
-						topic.addMetaValue(MetaText.this, mv);
-						saveNeeded.onChange(sender);
-					}					
-				});							
+				
+				
+				topicCache.save(new SaveMetaTextCommand(topic.getId(),getId(),
+						editable.getText()),
+						new StdAsyncCallback(Manager.myConstants.meta_text_async_save()){});
+				
+				mv = new HippoText(editable.getText());										
+				topic.addMetaValue(MetaText.this, mv);
+				
+//				mv.setValue(editable.getText());			
+//				topicCache.save(mv, new StdAsyncCallback(Manager.myConstants.meta_text_async_save()){
+//					public void onSuccess(Object result) {
+//						super.onSuccess(result);	
+//						Topic[] res = (Topic[]) result;
+//						mv = (HippoText) res[0];										
+//						topic.addMetaValue(MetaText.this, mv);
+//						saveNeeded.onChange(sender);
+//					}					
+//				});							
 			}			
 		});
 		

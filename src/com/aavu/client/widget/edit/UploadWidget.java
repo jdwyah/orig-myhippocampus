@@ -2,8 +2,11 @@ package com.aavu.client.widget.edit;
 
 import org.gwtwidgets.client.ui.ProgressBar;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveOccurrenceCommand;
+import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -92,7 +95,12 @@ public class UploadWidget extends Composite {
 					String key = event.getResults().trim();
 					
 					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),key);
-					topic.getOccurences().add(fileObj);
+					
+					manager.getTopicCache().save(new SaveOccurrenceCommand(topic.getId(), fileObj),
+							new StdAsyncCallback(Manager.myConstants.save()){});
+					
+					topic.getOccurences().add(fileObj);					
+					
 					board.addS3File(fileObj);
 				}
 				

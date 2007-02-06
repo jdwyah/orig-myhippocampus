@@ -6,11 +6,11 @@ import java.util.Date;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.datepicker.DateFormatter;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
-import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -37,7 +37,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	}
 	
 	//@Override
-	public Widget getEditorWidget(final Topic topic, final SaveNeededListener saveNeeded,Manager manager) {
+	public Widget getEditorWidget(final Topic topic, Manager manager) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 				
@@ -87,15 +87,10 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 						
 						System.out.println("Go to Save MV "+mv.getId()+" "+mv.getDate());
 						
-						topicService.save(mv, new StdAsyncCallback("Meta Date Save"){
-							public void onSuccess(Object result) {	
-								super.onSuccess(result);
-								Topic[] res = (Topic[]) result;
-								mv = (HippoDate) res[0];
-								topic.addMetaValue(MetaDate.this, mv);
-								saveNeeded.onChange(sender);
-							}});
-			    
+						topicService.save(new SaveMetaDateCommand(topic.getId(),getId(),
+								cDate.getTime()+""),
+								new StdAsyncCallback(Manager.myConstants.save()){});
+										
 					}});
 			
 			}	    	

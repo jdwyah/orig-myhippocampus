@@ -363,7 +363,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * 
 	 */
 	public Association getSeeAlsoAssociation() {
+		return getSeeAlsoAssociation(new MetaSeeAlso());	
+	}
 
+	private Association getSeeAlsoAssociation(MetaSeeAlso seeAlsoSingleton) {
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
@@ -382,7 +385,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			}
 		}		
 		System.out.println("getSeeAlsoAssociation: create new assoc");
-		return new Association(this,new MetaSeeAlso());				
+		return new Association(this,seeAlsoSingleton);				
 	}
 	/**
 	 * NOTE: calling getMetas().add() won't do anything. Use addMeta()
@@ -468,10 +471,32 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return sb.toString();
 	}
 
+	/**
+	 * This is the add see also called in the GWT client. It will not have the 
+	 * SeeAlsoSingleton.
+	 * 
+	 * @param identifier
+	 */
 	public void addSeeAlso(TopicIdentifier identifier) {
 		Association cur = getSeeAlsoAssociation();
 		
 		cur.getMembers().add(new Topic(identifier));
+		
+		getAssociations().add(cur);
+	}
+	
+	/**
+	 * called from SaveSeeAlsoCommand.
+	 * 
+	 * This is where we inject the SeeAlsoSingleton
+	 * 
+	 * @param otherTopic
+	 * @param seeAlsoSingleton
+	 */
+	public void addSeeAlso(Topic otherTopic, MetaSeeAlso seeAlsoSingleton) {
+		Association cur = getSeeAlsoAssociation(seeAlsoSingleton);
+				
+		cur.getMembers().add(otherTopic);
 		
 		getAssociations().add(cur);
 	}

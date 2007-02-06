@@ -32,8 +32,6 @@ public interface TopicService {
 
 	List<TimeLineObj> getTimelineObjs();
 
-	List<Topic> save(Topic[] topics) throws HippoBusinessException;
-
 	Occurrence save(Occurrence link);
 	
 	List<TopicIdentifier> getLinksTo(Topic topic);

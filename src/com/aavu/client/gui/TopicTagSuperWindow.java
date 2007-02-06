@@ -8,6 +8,7 @@ import org.gwtwidgets.client.ui.ImageButton;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveEntryTextCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.PopupWindow;
@@ -15,14 +16,13 @@ import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.util.SimpleDateFormatGWT;
 import com.aavu.client.widget.edit.SaveNeededListener;
-import com.aavu.client.widget.edit.SubjectBoard;
 import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
 import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -53,7 +53,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	protected void init(Topic topic, Manager manager) {
 		this.topic = topic;
 		this.manager = manager;
-		tagBoard = new TagBoard(manager,this);
+		tagBoard = new TagBoard(manager);
 		
 		VerticalPanel leftSide = getLeftPanel(topic);		
 		VerticalPanel rightSide = getRightPanel(topic,manager);		
@@ -132,7 +132,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		}
 		
 	
-		topicDetails = new TopicDetailsTabBar(manager,this,this);
+		topicDetails = new TopicDetailsTabBar(manager,this);
 		
 		rightPanel.add(topicDetails);
 		
@@ -150,7 +150,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		});
 	}
 	
-	protected VerticalPanel getLeftPanel(Topic topic) {
+	protected VerticalPanel getLeftPanel(final Topic topic) {
 		
 		
 		saveButton = new SaveStopLight();
@@ -158,7 +158,12 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		HorizontalPanel leftTopPanel = new HorizontalPanel();
 		leftTopPanel.setSpacing(5);
 		
-		titleBox = new EditableLabelExtension(topic.getTitle(),this);
+		titleBox = new EditableLabelExtension(topic.getTitle(),new ChangeListener(){
+			public void onChange(Widget sender) {								
+				manager.getTopicCache().save(new SaveTitleCommand(topic.getId(), titleBox.getText()),
+						new StdAsyncCallback(Manager.myConstants.save()){});
+			}			
+		});
 		
 		leftTopPanel.clear();
 		leftTopPanel.add(saveButton);
@@ -251,46 +256,14 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		saveButton.setSaveNeeded();
 	}
 	
-	public void save() {
-		
-		System.out.println("save() ");
-		String entryText = topicViewAndEditW.getEntryText();
-		System.out.println("Entry: "+entryText);
-		if(entryText != null){
-			topic.getLatestEntry().setData(entryText);
-		}
-		
-		topic.setTitle(titleBox.getText());
-						
-		tagBoard.saveThingsNowEvent(new StdAsyncCallback(Manager.myConstants.save_async()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);		
-				Set otherTopicsToSave = (Set) result;
-				save(topic,otherTopicsToSave);					
-			}});
-		
-	}
-	
-	private void save(Topic topic2, Set otherTopicsToSave) {
-
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!");
-		//TODO is this good or bad? a bit early.. 
-		//load(topic2);
-
-		manager.getTopicCache().save(topic2, otherTopicsToSave, new StdAsyncCallback("topicDetail save") {				
-
-			public void onSuccess(Object result) {		
-				super.onSuccess(result);
-				System.out.println("????????????????????");
-				//this should prevent double saves
-				Topic[] saved = (Topic[]) result;
-
-				load(saved[0]);
-				
-				saveButton.saveAccomplished();
-			}
-		});	
-	}
+	public void save() {		
+		manager.getTopicCache().save(new SaveEntryTextCommand(topic.getId(),topicViewAndEditW.getEntryText()),
+				new StdAsyncCallback(""){
+					public void onSuccess(Object result) {					
+						super.onSuccess(result);
+						saveButton.saveAccomplished();
+					}});		
+	}	
 	
 	private void delete() {
 		if(Window.confirm(Manager.myConstants.delete_warningS(topic.getTitle()))){

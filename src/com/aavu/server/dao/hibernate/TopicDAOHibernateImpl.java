@@ -177,24 +177,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	
 	public Topic save(Topic t) throws HippoBusinessException {
 		System.out.println("SAVE "+t.getTitle());
-
-		if(t.getTitle().equals("")){
-			log.info("Throw HBE exception for Empty Title");
-			throw new HippoBusinessException("Empty Title");
-		}	
-		if(t.mustHaveUniqueName()){
-			log.debug("Getting same named");
-			Object[] args = {t.getTitle(),t.getUser()};
-			Topic sameNamed = (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from Topic where title = ? and user = ?",args));
-			log.debug("Rec "+sameNamed);		
-
-			if(sameNamed != null && sameNamed.getId() != t.getId()){
-				log.info("Throw HBE exception for Duplicate Title");
-				throw new HippoBusinessException("Duplicate Name");
-			}
-			//need to evict or we'll get a NonUniqueException
-			getHibernateTemplate().evict(sameNamed);
-		}
 		
 		//
 		//Save the subject. If they've just added the subject it will be unsaved,
@@ -212,170 +194,63 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}
 		}
 
-//		//NOTE: Saving the user here. 
-//		//Where should the user really be getting saved? We're saving it to 
-//		//Topic in Service layer. 
-//		for (Iterator iter = t.getOccurences().iterator(); iter.hasNext();) {			
-//		Occurrence occur = (Occurrence) iter.next();
-//		if(occur.getUser() == null){
-//		occur.setUser(t.getUser());
+//		System.out.println("now set Associations : ");
+//		for (Iterator iter = t.getAssociations().iterator(); iter.hasNext();) {			
+//			Association assoc = (Association) iter.next();
+//			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
+//			System.out.println("assocDetail "+assoc.getTitle()+" "+assoc.getId());
+//
+//			for (Iterator iterator = assoc.getTypesAsTopics().iterator(); iterator.hasNext();) {
+//				Topic type = (Topic) iterator.next();
+//				assoc.setUser(t.getUser());
+//				System.out.println("type "+type.getTitle());
+//				//Why singleton?
+//				//See description and Test Code in TopicDAOHibernateImplTest.testToMakeSureWeDontCreateTooManyObjects()
+//				if(type instanceof MetaSeeAlso){
+//					MetaSeeAlso singleton = (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
+//					if(singleton == null){
+//						System.out.println("single == null");
+//						
+//						//saveTwo(type, assoc);
+//						getHibernateTemplate().saveOrUpdate(type);
+//					}else{
+//						System.out.println("single != null, rem/add");
+//						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
+//						assoc.removeType(type);
+//						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
+//						assoc.addType(singleton);
+//						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
+//					}
+//				}else{
+//					
+//					System.out.println("TYPE "+type.toPrettyString());
+//					
+//					
+//					//saveTwo(type, assoc);
+//					getHibernateTemplate().saveOrUpdate(type);
+//					
+//				}
+//			}
+//			
+//			System.out.println("----------------------------");
+//			System.out.println("about to save "+assoc.toPrettyString());
+//			
+//			getHibernateTemplate().saveOrUpdate(assoc);			
 //		}
-//		getHibernateTemplate().save(occur);
-//		}
-
-		//
-		//Bit of a chicken & egg thing here with TransientReferences..
-		//
 
 
 
-//		System.out.println("METAS "+t.getMetas().size());
-//		for (Iterator iter = t.getMetas().iterator(); iter.hasNext();) {
-//		Meta meta = (Meta) iter.next();
-//		log.debug("saving its metas ? "+meta.getTitle());		
-//		if(meta.getId() == 0){			
-//		log.debug("was unsaved. save"+meta.getTitle());
-//		getHibernateTemplate().saveOrUpdate(meta);
-//		}
-//		log.debug("done");
-//		}
-
-//		System.out.println("METAValues "+t.getMetaValues().entrySet().size());
-//		for (Iterator iter = t.getMetaValues().keySet().iterator(); iter.hasNext();) {
-//		Topic metaValue = (Topic) t.getMetaValues().get(iter.next());
-//		log.debug("saving its metavalue element ? "+metaValue.getTitle());		
-//		if(metaValue.getId() == 0){			
-//		log.debug("was unsaved. save"+metaValue.getTitle());
-//		getHibernateTemplate().saveOrUpdate(metaValue);
-//		}
-//		log.debug("done");
-//		}
-
-		System.out.println("now set Associations : ");
-		for (Iterator iter = t.getAssociations().iterator(); iter.hasNext();) {			
-			Association assoc = (Association) iter.next();
-			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
-			System.out.println("assocDetail "+assoc.getTitle()+" "+assoc.getId());
-
-			for (Iterator iterator = assoc.getTypesAsTopics().iterator(); iterator.hasNext();) {
-				Topic type = (Topic) iterator.next();
-				assoc.setUser(t.getUser());
-				System.out.println("type "+type.getTitle());
-				//Why singleton?
-				//See description and Test Code in TopicDAOHibernateImplTest.testToMakeSureWeDontCreateTooManyObjects()
-				if(type instanceof MetaSeeAlso){
-					MetaSeeAlso singleton = (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
-					if(singleton == null){
-						System.out.println("single == null");
-						
-						//saveTwo(type, assoc);
-						getHibernateTemplate().saveOrUpdate(type);
-					}else{
-						System.out.println("single != null, rem/add");
-						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
-						assoc.removeType(type);
-						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
-						assoc.addType(singleton);
-						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
-					}
-				}else{
-					
-					System.out.println("TYPE "+type.toPrettyString());
-					
-					
-					//saveTwo(type, assoc);
-					getHibernateTemplate().saveOrUpdate(type);
-					
-				}
-			}
-			
-			System.out.println("----------------------------");
-			System.out.println("about to save "+assoc.toPrettyString());
-			
-			getHibernateTemplate().saveOrUpdate(assoc);			
-		}
-
-
-		System.out.println("and middle Save me "+t.getTitle()+" type: "+t.getClass());
-		//and save me
-		//
-		
-//		System.out.println("iiiiiiiiii");
-//		for (TopicTypeConnector conn : (Set<TopicTypeConnector>)t.getInstances()) {
-//			System.out.println("INSTANCE "+conn.getTopic()+" "+conn.getType());
+//		for (TopicTypeConnector conn : (Set<TopicTypeConnector>)t.getTypes()) {
+//			System.out.println("TYPE "+conn.getTopic()+" "+conn.getType());
 //			getHibernateTemplate().save(conn);
 //		}
-		System.out.println("ttttttttt");
-		for (TopicTypeConnector conn : (Set<TopicTypeConnector>)t.getTypes()) {
-			System.out.println("TYPE "+conn.getTopic()+" "+conn.getType());
-			getHibernateTemplate().save(conn);
-		}
 		
+	
 		getHibernateTemplate().saveOrUpdate(t);		
-
-		getHibernateTemplate().flush();
-		System.out.println("DONE");
-		
-		//call saveList() instead
-
-//		System.out.println("now TYPES "+t.getTypes().size());
-//		for (Iterator iter = t.getTypes().iterator(); iter.hasNext();) {
-//		Topic type = (Topic) iter.next();
-//		log.debug("saving it's ? "+type.getTitle());
-
-//		//this let's us save a topic and make it's tag save too. 
-//		//needs to happen AFTER the save of the topic, or it will 
-//		//have a reference to the non-persisted topic.
-//		//
-//		//NOTE: having this after means, that all of a topic's tags
-//		//must be saved before this method is called or we'll get the 
-//		//reverse problem. This is different than metas which can be unsaved
-//		//and then will be saved above if new.
-//		//
-//		log.debug("save "+type.getTitle()+" "+type.getId());
-
-//		Topic prev = (Topic) getHibernateTemplate().get(Topic.class, type.getId());
-//		if(prev != null){
-//		//log.debug("prev "+prev+" instance size "+prev.getInstances().size());
-//		prev.getInstances().addAll(type.getInstances());
-//		}else{
-//		log.debug("no prev ");
-//		getHibernateTemplate().saveOrUpdate(type);
-//		}
-//		log.debug("done");
-//		}
-
-
-
-//		if (t instanceof Association) {			
-//		Association assoc = (Association) t;
-//		System.out.println("ASSOC ");
-//		//
-//		//key's aren't topic anymore. just "TO" "FROM" etc
-//		//
-//		for (Iterator iter = assoc.getMembers().values().iterator(); iter.hasNext();) {
-//		Topic e = (Topic) iter.next();
-//		System.out.println("e "+e);
-//		System.out.println("id "+e.getId());
-//		Topic realEntry = (Topic) getHibernateTemplate().get(Topic.class, e.getId());
-//		System.out.println("real "+realEntry);
-//		realEntry.getAssociations().add(assoc);				
-//		getHibernateTemplate().saveOrUpdate(realEntry);				
-//		}
-
-//		getHibernateTemplate().saveOrUpdate(assoc);
-//		}
+	
 		return t;		
 	}
-
-	private void saveTwo(final Topic t,final Topic t2){
-		getHibernateTemplate().execute(new HibernateCallback(){
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				session.saveOrUpdate(t);
-				session.saveOrUpdate(t2);
-				return null;
-			}});
-	}
+	
 	
 	public List<TopicIdentifier> getLinksTo(Topic topic,User user) {
 		Object[] params = {topic.getId(),user};
@@ -820,8 +695,32 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				}
 				topic.getOccurences().clear();
 				
-				for (Topic assoc : (Set<Topic>)topic.getAssociations()) {
-					//TODO what here? any cascade?					
+				
+				/*
+				 * Associations. 
+				 * First delete my associations.
+				 * Remember if Topic A has a seeAlso to Topic B
+				 * A has an association with B as a member & B.associations.size == 0 
+				 * So if we delete B, we need to go finding references in A. 
+				 */
+				topic.getAssociations().clear();
+				for (Association assoc : (Set<Association>)topic.getAssociations()) {					
+					sess.delete(assoc);					
+				}
+				
+				/*
+				 * next delete any references to me in other's associations. 
+				 *  
+				 */
+				List<Association> associationsWithThisMember = sess.createCriteria(Association.class, "assoc")
+				.createAlias("assoc.members", "mem")
+				.add(Expression.eq("mem.id", topic.getId())).list();
+				
+				
+				log.info("Associations With This Member: "+associationsWithThisMember.size());
+				for(Association assoc : associationsWithThisMember){
+					log.debug("removing "+topic+" from "+assoc);
+					assoc.getMembers().remove(topic);
 				}
 				
 				
@@ -834,6 +733,14 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public Topic load(long topicID) {
 		return (Topic) getHibernateTemplate().load(Topic.class, topicID);
+	}
+
+	public Topic get(long topicID) {
+		return (Topic) getHibernateTemplate().get(Topic.class, topicID);
+	}
+
+	public MetaSeeAlso getSeeAlsoSingleton() {
+		return (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
 	}
 
 

@@ -43,7 +43,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		this.searchService = searchService;
 	}
 
-	public Long createNew(String title, boolean isIsland) throws HippoBusinessException {
+	public TopicIdentifier createNew(String title, boolean isIsland) throws HippoBusinessException {
 		Topic t = null;
 		if(isIsland){
 			t = new Tag();
@@ -53,7 +53,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		t.setTitle(title);
 
 		t = topicService.save(t);
-		return t.getId();
+		return t.getIdentifier();
 	}
 	public void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
 		log.info("command "+command.getClass()+" "+command);		
@@ -293,25 +293,25 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 
-	public Topic[] save(Topic[] topics) throws HippoException {
-		try {
-			List<Topic> list = topicService.save(topics);
-			Topic[] rtn = new Topic[list.size()];
-			int i = 0;
-			for (Topic topic : list) {
-				log.debug("Converting "+topic.getId());
-				rtn[i++] = convert(topic);
-			}
-			log.debug("Save[] rtn "+Arrays.toString(rtn));
-			return rtn;
-		}  catch (HippoException ex) {
-			throw ex;
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			throw new HippoException(e);		
-		}
-	}
+//	public Topic[] save(Topic[] topics) throws HippoException {
+//		try {
+//			List<Topic> list = topicService.save(topics);
+//			Topic[] rtn = new Topic[list.size()];
+//			int i = 0;
+//			for (Topic topic : list) {
+//				log.debug("Converting "+topic.getId());
+//				rtn[i++] = convert(topic);
+//			}
+//			log.debug("Save[] rtn "+Arrays.toString(rtn));
+//			return rtn;
+//		}  catch (HippoException ex) {
+//			throw ex;
+//		} catch (Exception e) {
+//			log.error("FAILURE: "+e);
+//			e.printStackTrace();
+//			throw new HippoException(e);		
+//		}
+//	}
 
 
 	public List getLinksTo(Topic topic) throws HippoException {

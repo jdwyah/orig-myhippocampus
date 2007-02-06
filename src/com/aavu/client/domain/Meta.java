@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class Meta extends Topic implements IsSerializable,Serializable{
 
 
-	public abstract Widget getEditorWidget(Topic top, SaveNeededListener saveNeeded, Manager manager); 
+	public abstract Widget getEditorWidget(Topic top, Manager manager); 
 	
 	public abstract String getType();
 

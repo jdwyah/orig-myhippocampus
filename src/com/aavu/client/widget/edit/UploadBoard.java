@@ -8,7 +8,6 @@ import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ExternalLink;
-import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -23,12 +22,11 @@ public class UploadBoard extends Composite {
 	
 	private Manager manager;
 	private int size = 0;
-	private SaveNeededListener saveNeeded;
+	//private SaveNeededListener saveNeeded;
 
-	public UploadBoard(final Manager manager, SaveNeededListener _saveNeeded) {
+	public UploadBoard(final Manager manager) {
 		this.manager = manager;
-		this.saveNeeded = _saveNeeded;		
-			
+				
 		initWidget(mainPanel);
 	}
 	
@@ -44,8 +42,7 @@ public class UploadBoard extends Composite {
 
 			public void onClick(Widget sender) {
 				UploadWidget widg = new UploadWidget(manager,topic,UploadBoard.this,HippoTest.getRelativeURL(HippoTest.UPLOAD_PATH));		
-				mainPanel.add(widg);	
-				saveNeeded.onChange(UploadBoard.this);
+				mainPanel.add(widg);				
 			}});
 		rowOne.add(addOne);		
 		mainPanel.add(rowOne);				

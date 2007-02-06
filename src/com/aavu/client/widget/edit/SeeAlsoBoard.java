@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
@@ -26,11 +27,9 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 	private Topic myTopic;
 	
 	private SeeAlsoWidget alsos;
-	private SaveNeededListener saveNeeded;
 	private PopupWindow popwindow;
 	
-	public SeeAlsoBoard(Manager manager, SaveNeededListener saveNeeded,PopupWindow popwindow) {
-		this.saveNeeded = saveNeeded;
+	public SeeAlsoBoard(Manager manager, PopupWindow popwindow) {		
 		this.popwindow = popwindow;
 		topicService = manager.getTopicCache();
 		
@@ -85,7 +84,11 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 
 				alsos.add(to);
 				topicCompleter.setText("");
-				saveNeeded.onChange(SeeAlsoBoard.this);
+				
+				
+				topicService.save(new SaveSeeAlsoCommand(myTopic.getId(),to.getTopicID()),
+						new StdAsyncCallback(Manager.myConstants.save_async()){});
+				
 			}});
 		
 	}

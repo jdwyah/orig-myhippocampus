@@ -21,10 +21,9 @@ public interface GWTTopicService extends RemoteService {
 	TopicIdentifier[] getAllTopicIdentifiers() throws HippoException;
 	
 	Topic save(Topic topic) throws HippoException;
-	Topic[] save(Topic[] l) throws HippoException;
 	
 	void saveCommand(AbstractSaveCommand command) throws HippoBusinessException;
-	Long createNew(String title,boolean isIsland) throws HippoBusinessException;
+	TopicIdentifier createNew(String title,boolean isIsland) throws HippoBusinessException;
 	
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>

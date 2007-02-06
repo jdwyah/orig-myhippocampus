@@ -20,18 +20,18 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 	//private MindMapBoard mindMapBoard;
 	private AllReferencesPanel referencesPanel;
 	
-	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded){
-		this(manager,saveNeeded,null);
+	public TopicDetailsTabBar(Manager manager){
+		this(manager,null);
 	}
-	public TopicDetailsTabBar(Manager manager,SaveNeededListener saveNeeded,PopupWindow popWindow){
+	public TopicDetailsTabBar(Manager manager,PopupWindow popWindow){
 		
 		
 	
-		referencesPanel = new AllReferencesPanel(manager,saveNeeded,popWindow);
+		referencesPanel = new AllReferencesPanel(manager,popWindow);
 		add(referencesPanel,Manager.myConstants.references());		
 		
 		
-		uploadBoard = new UploadBoard(manager,saveNeeded);		
+		uploadBoard = new UploadBoard(manager);		
 		add(uploadBoard,Manager.myConstants.filesN(0));		
 		
 //		mindMapBoard = new MindMapBoard(manager,saveNeeded);

@@ -557,49 +557,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println("list "+list.size());
 	}
-	/**
-	 * Test duplicate entry and "" title checks.
-	 * 
-	 * @throws HippoBusinessException
-	 */
-	public void testSaveChecks() throws HippoBusinessException {
-
-		final Topic t = new Topic(u,"");
-
-		new AssertThrows(HippoBusinessException.class) {
-			public void test() throws HippoBusinessException {
-				topicDAO.save(t);
-			}
-		}.runTest();
-
-		final Topic t2 = new Topic(u,C);
-		final Topic t3 = new Topic(u,C);
-		topicDAO.save(t2);
-
-		new AssertThrows(HippoBusinessException.class) {
-			public void test() throws HippoBusinessException {
-				topicDAO.save(t3);
-			}
-		}.runTest();
-
-
-		//
-		//Dates are a different case. They should be able to have the same title
-		//
-		final HippoDate d2 = new HippoDate();
-		d2.setUser(u);
-		d2.setDate(new Date());
-		final HippoDate d3 = new HippoDate();
-		d3.setUser(u);
-		d3.setDate(new Date());
-
-		assertEquals(d2.getTitle(), d3.getTitle());
-
-		topicDAO.save(d2);
-		topicDAO.save(d3);
-
-
-	}
+	
 	public void testSubjectSave() throws HippoBusinessException {
 		Topic t = new Topic(u,B);
 

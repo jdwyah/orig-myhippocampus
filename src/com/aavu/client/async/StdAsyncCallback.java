@@ -36,9 +36,9 @@ public class StdAsyncCallback implements AsyncCallback {
 		
 		StackTraceElement[] str = caught.getStackTrace();
 		Logger.log("stack trace size "+str.length);
-		for (int i = 0; i < str.length; i++) {
-			Logger.log(str[i].toString());
-		}
+//		for (int i = 0; i < str.length; i++) {
+//			Logger.log(str[i].toString());
+//		}
 		
 		//TODO make the GWT AOP recast the UsernameNotFound Exception to a 
 		//HippoUserException

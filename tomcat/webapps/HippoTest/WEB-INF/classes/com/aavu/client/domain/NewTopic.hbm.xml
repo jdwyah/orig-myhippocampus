@@ -113,7 +113,7 @@
 		</set>
 
 		<!-- no cascade, we want to pre-process to make SeeAlso a singleton. -->
-	    <set name="associations" table="topic_associations" >
+	    <set name="associations" table="topic_associations" cascade="save-update">
 			<key column="association_id"></key>			
 			<many-to-many column="topic_id" class="Association" />
 		</set>

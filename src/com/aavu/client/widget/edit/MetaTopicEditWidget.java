@@ -3,6 +3,7 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveMetaTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
@@ -20,15 +21,15 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 	private TopicCompleter completer; 
 	private ActionableTopicLabel topicDisplayLink;
 	private EnterInfoButton enterB;
-	private SaveNeededListener saveNeeded;
-	
-	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic, SaveNeededListener saveNeeded,TopicCache topicCache) {
+	private TopicCache topicCache;
+		
+	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic, TopicCache topicCache) {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 
 		this.topic = topic;
 		this.meta = meta;
-		this.saveNeeded = saveNeeded;
+		this.topicCache = topicCache;
 						
 		completer = new TopicCompleter(topicCache);
 		completer.addListener(this);
@@ -77,14 +78,17 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 	/**
 	 * replaces the saveNowEvent
 	 * 
-	 * TODO Probably a race condition if they meta value-> then hit save before this returns.
+	 * Could replace this double Async with a single if we return the to of the created.
 	 * 
 	 */
 	public void completed(final String completeText) {
 		System.out.println("COMPLETED LISTENER!");
 		completer.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(Manager.myConstants.seeAlso_async()){
-			public void onSuccess(Object result) {
+			public void onSuccess(Object result) {				
 				super.onSuccess(result);
+				
+				
+				
 				System.out.println("GetTopicIdentForNameOrCreateNew: "+result);
 				TopicIdentifier to = (TopicIdentifier) result;
 				System.out.println("GetTopicIdentForNameOrCreateNewID: "+to);
@@ -92,7 +96,11 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 				topic.addMetaValue(meta, new Topic(to));
 				
 				setToShowMode(to);
-				saveNeeded.onChange(MetaTopicEditWidget.this);
+				
+				topicCache.save(new SaveMetaTopicCommand(topic.getId(),meta.getId(),
+						to.getTopicID()),
+						new StdAsyncCallback(Manager.myConstants.save()){});
+				
 			}});
 	}
 }

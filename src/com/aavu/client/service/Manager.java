@@ -120,10 +120,10 @@ public class Manager implements TopicSaveListener {
 		getTopicCache().createNew(name, true, new StdAsyncCallback(Manager.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);				
-				Long res = (Long) result;
+				TopicIdentifier res = (TopicIdentifier) result;				
 				Tag newIsland = new Tag();
-				newIsland.setId(res.longValue());
-				newIsland.setTitle(name);
+				newIsland.setId(res.getTopicID());
+				newIsland.setTitle(res.getTopicTitle());
 				mainMap.growIsland(newIsland);					
 			}			
 		});

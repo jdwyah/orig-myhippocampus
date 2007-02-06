@@ -35,7 +35,7 @@ public class AllReferencesPanel extends Composite {
 	 * @param manager
 	 * @param saveNeeded
 	 */
-	public AllReferencesPanel(Manager manager, SaveNeededListener saveNeeded,PopupWindow popwindow){
+	public AllReferencesPanel(Manager manager, PopupWindow popwindow){
 		this.popwindow = popwindow;
 		this.manager = manager;
 	
@@ -43,14 +43,14 @@ public class AllReferencesPanel extends Composite {
 		refPanel = new FlowPanel();
 		
 		
-		seeAlsoBoard = new SeeAlsoBoard(manager,saveNeeded,popwindow);		
+		seeAlsoBoard = new SeeAlsoBoard(manager,popwindow);		
 		mainPanel.add(seeAlsoBoard,Manager.myConstants.seeAlsosN(0));				
 		
 		
 		mainPanel.add(refPanel,Manager.myConstants.referencesToN(0));
 		
 		
-		linkDisplayW = new LinkDisplayWidget(manager,saveNeeded);
+		linkDisplayW = new LinkDisplayWidget(manager);
 		mainPanel.add(linkDisplayW,Manager.myConstants.occurrencesN(0));		
 				
 		initWidget(mainPanel);

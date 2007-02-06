@@ -2,6 +2,7 @@ package com.aavu.server.dao;
 
 import java.util.List;
 
+import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
@@ -53,6 +54,9 @@ public interface TopicDAO {
 	void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude);
 
 	Topic load(long topicID);
+	Topic get(long topicID);
+
+	MetaSeeAlso getSeeAlsoSingleton();
 
 	
 

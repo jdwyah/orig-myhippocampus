@@ -1,6 +1,7 @@
 package com.aavu.client.domain.commands;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public abstract class AbstractSaveCommand implements IsSerializable {
@@ -16,7 +17,7 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 	
 	public AbstractSaveCommand(){}
 
-	public abstract void executeCommand();
+	public abstract void executeCommand() throws HippoBusinessException;
 	
 	
 	public String getData() {

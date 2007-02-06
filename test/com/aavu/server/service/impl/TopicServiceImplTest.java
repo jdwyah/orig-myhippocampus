@@ -1,29 +1,26 @@
 package com.aavu.server.service.impl;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.test.AssertThrows;
 
+import com.aavu.client.domain.Association;
+import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
+import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
-import com.aavu.server.dao.TopicDAO;
-import com.aavu.server.dao.UserDAO;
-import com.aavu.server.dao.hibernate.HibernateTransactionalTest;
-import com.aavu.server.dao.hibernate.TopicDAOHibernateImplTest;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestNoTransaction;
-import com.aavu.server.service.gwt.BaseTestWithTransaction;
-import com.aavu.server.service.gwt.Converter;
-
-import junit.framework.TestCase;
 
 public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
@@ -88,6 +85,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	 * @throws HippoBusinessException
 	 */
 	public void testSaveTopic() throws HippoBusinessException {
+		clean();
+		
 		Topic t = new Topic();
 		t.getLatestEntry().setData(B);
 		t.setTitle(C);
@@ -126,9 +125,6 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		//Tag's user will not be initialized
 		assertEquals(u, savedTag.getUser());
-		
-		topicService.delete(savedTopic);
-		topicService.delete(savedTag);
 		
 				
 	}
@@ -253,13 +249,96 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		Topic secondSave = topicService.save(savedTopic);
 		
 		assertEquals(E, secondSave.getTitle());
+				
+	}
+	
+	
+	public void testCommands() throws HippoBusinessException {
+		
+		clean();
+		
+		Tag tag = new Tag(u,B);		
+		tag = (Tag) topicService.save(tag);
+		
+		System.out.println("SAVED TAG "+B);
 		
 		
-		//order matters. tag is not current.
-		topicService.delete(secondSave);
-		topicService.delete(tag);
+		Topic topic = new Topic(u,C);
+		topic = (Topic) topicService.save(topic);
+		
+		System.out.println("SAVED TOPIC "+C);				
+		topicService.executeAndSaveCommand(new SaveTagtoTopicCommand(topic.getId(),tag.getId()));
+		
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getTypes().size());
+		Tag tagRef = (Tag) topicS.getTypesAsTopics().iterator().next();
+		assertEquals(tag.getId(), tagRef.getId());
+		
+		
+		Topic t3 = new Topic(u,D);
+		t3 = (Topic) topicService.save(t3);	
+		topicService.executeAndSaveCommand(new SaveSeeAlsoCommand(topic.getId(),t3.getId()));		
+		
+		Topic t3s = topicService.getForID(t3.getId());
+		assertEquals(0, t3s.getAssociations().size());
+		
+		topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getAssociations().size());
+		
+		Association a = (Association) topicS.getAssociations().iterator().next();
+		assertEquals(1, a.getMembers().size());
+		
+		Topic s = (Topic) a.getMembers().iterator().next();		
+		assertEquals(t3.getId(), s.getId());
+		
 		
 	}
+	
+	/**
+	 * Test duplicate entry and "" title checks.
+	 * 
+	 * @throws HippoBusinessException
+	 */
+	public void testSaveChecks() throws HippoBusinessException {
+		clean();
+		
+		final Topic t = new Topic(u,"");
+
+		new AssertThrows(HippoBusinessException.class) {
+			public void test() throws HippoBusinessException {
+				topicService.save(t);
+			}
+		}.runTest();
+
+		final Topic t2 = new Topic(u,C);
+		final Topic t3 = new Topic(u,C);
+		topicService.save(t2);
+
+		new AssertThrows(HippoBusinessException.class) {
+			public void test() throws HippoBusinessException {
+				topicService.save(t3);
+			}
+		}.runTest();
+
+
+		//
+		//Dates are a different case. They should be able to have the same title
+		//
+		final HippoDate d2 = new HippoDate();
+		d2.setUser(u);
+		d2.setDate(new Date());
+		final HippoDate d3 = new HippoDate();
+		d3.setUser(u);
+		d3.setDate(new Date());
+
+		assertEquals(d2.getTitle(), d3.getTitle());
+
+		topicService.save(d2);
+		topicService.save(d3);
+
+
+	}
+	
 	
 	
 	private void clean() throws HippoBusinessException {

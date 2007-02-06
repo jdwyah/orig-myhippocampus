@@ -11,6 +11,9 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
+import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.util.Logger;
@@ -47,12 +50,12 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	
 	private Set tagsToSave = new HashSet();
 
-	private SaveNeededListener saveNeeded; 
+	//private SaveNeededListener saveNeeded; 
 
-	public TagBoard(Manager manager,SaveNeededListener saveNeeded) {
+	public TagBoard(Manager manager) {
 		this.manager = manager;
 		this.tagCache = manager.getTagCache();
-		this.saveNeeded = saveNeeded;
+		//this.saveNeeded = saveNeeded;
 
 		tagBox = new TagAutoCompleteBox(this,tagCache);
 
@@ -139,21 +142,17 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 */
 	public void remove(Tag tag,final Widget widgetToRemoveOnSuccess) {
 
-		manager.getTopicCache().getTopicByIdA(tag.getId(), new StdAsyncCallback(Manager.myConstants.topic_lookupAsync()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				Tag loadedTag = (Tag) result;
-				
-				boolean res = cur_topic.removeTag(loadedTag);
-				if(res){					
-					tagsToSave.add(loadedTag);
-					saveNeeded.onChange(TagBoard.this);
-					widgetToRemoveOnSuccess.removeFromParent();					
-				}else{
-					Window.alert("Problem Removing Tag");
-				}				
-			}			
-		});		
+		manager.getTopicCache().save(new RemoveTagFromTopicCommand(cur_topic.getId(),
+				tag.getId()),
+				new StdAsyncCallback(Manager.myConstants.delete_async()){
+					public void onFailure(Throwable caught) {
+						super.onFailure(caught);
+						Window.alert("Problem Removing Tag "+caught);
+					}
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+						widgetToRemoveOnSuccess.removeFromParent();
+					}});				
 	}
 	
 	/**
@@ -173,7 +172,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			manager.growIsland(tag);
 		}
 		tagsToSave.add(tag);
-		saveNeeded.onChange(this);
+		manager.getTopicCache().save(new SaveTagtoTopicCommand(cur_topic.getId(),tag.getId()), 
+				new StdAsyncCallback(Manager.myConstants.save()){});		
 	}
 	
 	private void displayMetas(Tag tag) {
@@ -182,7 +182,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
 			Meta element = (Meta) iter.next();
 		
-			Widget w = element.getEditorWidget(cur_topic,saveNeeded,manager);
+			Widget w = element.getEditorWidget(cur_topic,manager);
 			tagPanel.add(w);
 
 		}

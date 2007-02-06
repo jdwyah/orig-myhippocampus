@@ -2,8 +2,10 @@ package com.aavu.client.widget.edit;
 
 import org.gwm.client.GInternalFrame;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
@@ -22,7 +24,7 @@ public class AddLinkPopup extends PopupWindow {
 	private Label descReq;
 	private Label linkReq;
 
-	public AddLinkPopup(final LinkDisplayWidget widget, GInternalFrame frame, WebLink _link, final Topic myTopic, final SaveNeededListener saveNeeded) {
+	public AddLinkPopup(final LinkDisplayWidget widget, final Manager manager, GInternalFrame frame, WebLink _link, final Topic myTopic) {
 		super(frame, Manager.myConstants.link_add_title(),WIDTH,HEIGHT);
 
 		this.link = _link;
@@ -79,7 +81,9 @@ public class AddLinkPopup extends PopupWindow {
 					myTopic.getOccurences().add(link);
 				}
 				
-				saveNeeded.onChange(widget);
+				manager.getTopicCache().save(new SaveOccurrenceCommand(myTopic.getId(), link),						
+						new StdAsyncCallback(Manager.myConstants.save()){});
+				
 				widget.load(myTopic);
 				close();
 			}});

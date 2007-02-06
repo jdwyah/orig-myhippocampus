@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.support.DataAccessUtils;
 
+import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
@@ -14,6 +16,7 @@ import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -29,6 +32,8 @@ public class TopicServiceImpl implements TopicService {
 
 	private TopicDAO topicDAO;
 	private UserService userService;
+
+	private static MetaSeeAlso seealsoSingleton;
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -46,21 +51,73 @@ public class TopicServiceImpl implements TopicService {
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 
+	public MetaSeeAlso getSeeAlsoMetaSingleton() throws HippoBusinessException{		
+		if(seealsoSingleton == null){
+			log.info("seealso single == null. Finding... ");
+
+			seealsoSingleton = topicDAO.getSeeAlsoSingleton();
+			
+			if(seealsoSingleton == null){
+				log.info("seealso single == null. Creating. First time DB?");
+
+				seealsoSingleton =  new MetaSeeAlso();
+				seealsoSingleton = (MetaSeeAlso) topicDAO.save(seealsoSingleton);
+			}
+		}
+		return seealsoSingleton;
+	}
+	
 	/**
 	 * TODO I don't really like setting the user here, but it's tricky 
 	 * to give the Topic & Entry objects something that knows about users.
 	 * 
 	 */
 	public Topic save(Topic topic) throws HippoBusinessException {
-		System.out.println("Topic Save Setting User "+userService.getCurrentUser());
+		
 		topic.setLastUpdated(new Date());
 		topic.setUser(userService.getCurrentUser());
+		
+		
+		if(topic.getTitle().equals("")){
+			log.info("Throw HBE exception for Empty Title");
+			throw new HippoBusinessException("Empty Title");
+		}	
+		if(topic.mustHaveUniqueName()){
+			log.debug("Getting same named");
+			
+			Topic sameNamed = (Topic) topicDAO.getForName(topic.getUser(), topic.getTitle());
+			
+			log.debug("Rec "+sameNamed);		
+
+			if(sameNamed != null && sameNamed.getId() != topic.getId()){
+				log.info("Throw HBE exception for Duplicate Title");
+				throw new HippoBusinessException("Duplicate Name");
+			}
+			//need to evict or we'll get a NonUniqueException
+			//getHibernateTemplate().evict(sameNamed);
+		}
+		
+				
+		System.out.println("Topic Save Setting User "+userService.getCurrentUser());
+		
+		
 		Set<Occurrence> occs = topic.getOccurences();
 		for(Occurrence o : occs){
 			o.setUser(userService.getCurrentUser());
 		}
+		
+		
+		
+		
+		
 		return topicDAO.save(topic);
 	}
+	
+	
+	
+	
+	
+	
 	public List<FullTopicIdentifier> getTopicIdsWithTag(long id) {
 		
 		List<TopicTypeConnector> conns = topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
@@ -85,13 +142,7 @@ public class TopicServiceImpl implements TopicService {
 	public List<TimeLineObj> getTimelineObjs() {
 		return topicDAO.getTimeline(userService.getCurrentUser());
 	}
-	public List<Topic> save(Topic[] topics) throws HippoBusinessException {
-		List<Topic> rtn = new ArrayList<Topic>();
-		for (Topic topic : topics) {
-			rtn.add(save(topic));
-		}
-		return rtn;
-	}
+
 	public Occurrence save(Occurrence link) {
 		return topicDAO.save(link);
 	}
@@ -155,6 +206,11 @@ public class TopicServiceImpl implements TopicService {
 		topicDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
 	}
 	
+	
+	
+	
+	
+	
 	/**
 	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects.
 	 * 2) Execute. use the domain classes logic & the command to enact the change
@@ -175,16 +231,32 @@ public class TopicServiceImpl implements TopicService {
 		if(command.getId2() > 0){
 			topicDAO.saveSimple(command.getTopic2());
 		}
+		
 	}
-	private void hydrateCommand(AbstractSaveCommand command) {
+	
+	/**
+	 * PEND Would prefer to make these loads instead of gets, 
+	 * but Tag's won't instanceof Tag.class when we do that.
+	 * 
+	 * @param command
+	 * @throws HippoBusinessException 
+	 */
+	private void hydrateCommand(AbstractSaveCommand command) throws HippoBusinessException {
 		if(command.getTopicID() > 0){
-			command.setTopic(topicDAO.load(command.getTopicID()));
+			command.setTopic(topicDAO.get(command.getTopicID()));
 		}
 		if(command.getId1() > 0){
-			command.setTopic1(topicDAO.load(command.getId1()));
+			command.setTopic1(topicDAO.get(command.getId1()));
 		}
 		if(command.getId2() > 0){
-			command.setTopic2(topicDAO.load(command.getId2()));
+			command.setTopic2(topicDAO.get(command.getId2()));
+		}
+
+		//a bit messy, but it's tough to inject this otherwise, since we don't want the
+		//domain knowing about this service.
+		//
+		if(command instanceof SaveSeeAlsoCommand){
+			command.setTopic2(getSeeAlsoMetaSingleton());
 		}
 	}
 

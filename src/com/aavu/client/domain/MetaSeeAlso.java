@@ -25,7 +25,7 @@ public class MetaSeeAlso extends Meta {
 	}
 
 	//@Override
-	public Widget getEditorWidget(Topic top, SaveNeededListener saveNeeded,Manager manager) {
+	public Widget getEditorWidget(Topic top, Manager manager) {
 		//throw new OperationNotSupportedException()
 		return null;
 	}

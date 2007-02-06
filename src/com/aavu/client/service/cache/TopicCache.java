@@ -127,23 +127,22 @@ public class TopicCache {
 
 
 	public void save(AbstractSaveCommand command, AsyncCallback callback) {
-
-		topicService.saveCommand(command,callback);
-		
-		//save(topic,null,callback);
+		topicService.saveCommand(command,callback);		
 	}
 	
-	public void save(Topic topic, AsyncCallback callback) {
-		save(topic,null,callback);
+	
+	
+	public void save_OLD(Topic topic, AsyncCallback callback) {
+		save_OLD(topic,null,callback);
 	}
-	public void save(Topic topic, Set otherTopicsToSave, AsyncCallback callback) {
+	public void save_OLD(Topic topic, Set otherTopicsToSave, AsyncCallback callback) {
 		System.out.println("client saving "+topic.toPrettyString());
 		
 		if(otherTopicsToSave == null){
 			Topic[] listToSave = new Topic[1];
 			listToSave[0] = topic;			
 			System.out.println("saving single "+listToSave.length);
-			topicService.save(listToSave, new SaveCallback(callback));
+	//		topicService.save(listToSave, new SaveCallback(callback));
 		}else{
 			Topic[] listToSave = new Topic[otherTopicsToSave.size() + 1];
 			listToSave[0] = topic;
@@ -156,7 +155,7 @@ public class TopicCache {
 			for(int i = 0;i < listToSave.length; i++){			
 				System.out.println("i:"+i+" "+listToSave[i]);
 			}
-			topicService.save(listToSave, new SaveCallback(callback));	
+		//	topicService.save(listToSave, new SaveCallback(callback));	
 		}
 				
 	}
@@ -255,8 +254,10 @@ public class TopicCache {
 				Topic t = (Topic) result;
 				
 				System.out.println("rec "+t);
-				System.out.println("rec: "+t.toPrettyString());
-				System.out.println("single adding to cache title:"+t.getTitle());
+				if(t != null){
+					System.out.println("rec: "+t.toPrettyString());
+					System.out.println("single adding to cache title:"+t.getTitle());
+				}
 				//topicByName.put(t.getTitle(), t);
 				//topicByID.put(new Long(t.getId()), t);
 				
@@ -332,16 +333,8 @@ public class TopicCache {
 			}
 			else{
 				System.out.println("Create New! ");
-				Topic toSave = new Topic();
-				toSave.setTitle(linkTo);
-				save(toSave, new AsyncCallback(){
-					public void onSuccess(Object result) {
-						Topic[] saved = (Topic[]) result;
-						originalCallback.onSuccess(saved[0].getIdentifier());
-					}
-					public void onFailure(Throwable caught) {
-						originalCallback.onFailure(caught);
-					}});
+				createNew(linkTo, false, originalCallback);
+								
 			}
 		}
 		

@@ -27,10 +27,10 @@ public class MetaTopic extends Meta {
 		this.value = this.transientValue;
 	}
 
-	public Widget getEditorWidget(final Topic topic, SaveNeededListener saveNeeded,Manager manager) {
+	public Widget getEditorWidget(final Topic topic,Manager manager) {
 		
 		
-		MetaTopicEditWidget mtw = new MetaTopicEditWidget(this,topic,saveNeeded,manager.getTopicCache());
+		MetaTopicEditWidget mtw = new MetaTopicEditWidget(this,topic,manager.getTopicCache());
 	
 		return mtw;
 	}

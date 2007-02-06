@@ -96,10 +96,9 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		System.out.println("before: "+patriotGames.getId());
 
 		System.out.println(patriotGames.toPrettyString());
-		
-		Topic[] l = new Topic[]{patriotGames,savedBook};
 				
-		topicService.save(l);
+		topicService.save(patriotGames);
+		topicService.save(savedBook);
 	}
 
 	public void testGetATopic() throws HippoException {

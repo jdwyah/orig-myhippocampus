@@ -5,8 +5,10 @@ import java.util.Iterator;
 import org.gwtwidgets.client.ui.ImageButton;
 import org.gwtwidgets.client.ui.PNGImage;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ExternalLink;
 import com.google.gwt.user.client.ui.Button;
@@ -21,13 +23,11 @@ public class LinkDisplayWidget extends Composite {
 	
 	private int size = 0;
 	private VerticalPanel linkPanel;
-	private Topic myTopic;
-	private SaveNeededListener saveNeeded;
+	private Topic myTopic;	
 	private Manager manager;
 	
 	
-	public LinkDisplayWidget(Manager _manager,SaveNeededListener saveNeeded) {
-		this.saveNeeded = saveNeeded;
+	public LinkDisplayWidget(Manager _manager) {		
 		this.manager = _manager;
 		
 		VerticalPanel mainPanel = new VerticalPanel();
@@ -56,7 +56,7 @@ public class LinkDisplayWidget extends Composite {
 		editLink(newL);
 	}
 	private void editLink(WebLink link){
-		AddLinkPopup pop = new AddLinkPopup(this,manager.newFrame(),link,myTopic,saveNeeded);
+		AddLinkPopup pop = new AddLinkPopup(this,manager,manager.newFrame(),link,myTopic);
 	}
 	
 	private void add(String description, String linkStr, String notes){
@@ -65,7 +65,9 @@ public class LinkDisplayWidget extends Composite {
 		
 		myTopic.getOccurences().add(link);
 		
-		saveNeeded.onChange(this);
+		manager.getTopicCache().save(new SaveOccurrenceCommand(myTopic.getId(), link),
+				new StdAsyncCallback(Manager.myConstants.save()){});
+		
 	}
 	
 	public void load(Topic topic){

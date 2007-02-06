@@ -15,6 +15,8 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveLatLongCommand;
+import com.aavu.client.domain.commands.SaveMetaTextCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -523,8 +525,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 				super.onSuccess(result);
 				Topic t = (Topic) result;
 				t.setLatitude(latitude);
-				t.setLongitude(longitude);					
-				manager.getTopicCache().save(t, new StdAsyncCallback("SaveLatLong"){});
+				t.setLongitude(longitude);
+				
+				manager.getTopicCache().save(new SaveLatLongCommand(t.getId(),latitude,
+						longitude),
+						new StdAsyncCallback("SaveLatLong"){});								
 			}
 		});
 
