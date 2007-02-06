@@ -125,91 +125,89 @@ public class TopicCache {
 		}
 	}
 
-
 	public void save(AbstractSaveCommand command, AsyncCallback callback) {
 		topicService.saveCommand(command,callback);		
-	}
+	}	
 	
 	
+//	public void save_OLD(Topic topic, AsyncCallback callback) {
+//		save_OLD(topic,null,callback);
+//	}
+//	public void save_OLD(Topic topic, Set otherTopicsToSave, AsyncCallback callback) {
+//		System.out.println("client saving "+topic.toPrettyString());
+//		
+//		if(otherTopicsToSave == null){
+//			Topic[] listToSave = new Topic[1];
+//			listToSave[0] = topic;			
+//			System.out.println("saving single "+listToSave.length);
+//	//		topicService.save(listToSave, new SaveCallback(callback));
+//		}else{
+//			Topic[] listToSave = new Topic[otherTopicsToSave.size() + 1];
+//			listToSave[0] = topic;
+//			
+//			Iterator iter = otherTopicsToSave.iterator();
+//			for(int i = 1;i < listToSave.length; i++){			
+//				listToSave[i] = (Topic) iter.next();
+//			}
+//			System.out.println("Saving list ");
+//			for(int i = 0;i < listToSave.length; i++){			
+//				System.out.println("i:"+i+" "+listToSave[i]);
+//			}
+//		//	topicService.save(listToSave, new SaveCallback(callback));	
+//		}
+//				
+//	}
 	
-	public void save_OLD(Topic topic, AsyncCallback callback) {
-		save_OLD(topic,null,callback);
-	}
-	public void save_OLD(Topic topic, Set otherTopicsToSave, AsyncCallback callback) {
-		System.out.println("client saving "+topic.toPrettyString());
-		
-		if(otherTopicsToSave == null){
-			Topic[] listToSave = new Topic[1];
-			listToSave[0] = topic;			
-			System.out.println("saving single "+listToSave.length);
-	//		topicService.save(listToSave, new SaveCallback(callback));
-		}else{
-			Topic[] listToSave = new Topic[otherTopicsToSave.size() + 1];
-			listToSave[0] = topic;
-			
-			Iterator iter = otherTopicsToSave.iterator();
-			for(int i = 1;i < listToSave.length; i++){			
-				listToSave[i] = (Topic) iter.next();
-			}
-			System.out.println("Saving list ");
-			for(int i = 0;i < listToSave.length; i++){			
-				System.out.println("i:"+i+" "+listToSave[i]);
-			}
-		//	topicService.save(listToSave, new SaveCallback(callback));	
-		}
-				
-	}
-	
-	private class SaveCallback implements AsyncCallback {
-		private AsyncCallback callback;
-		public SaveCallback(AsyncCallback callback) {
-			this.callback = callback;			
-		}
-		public void onFailure(Throwable caught) {
-			System.out.println("AAAAAAAAAAAAA");
-			Logger.log("SAVE CALLBACK FAILING");
-			Logger.log("caugt "+caught);
-			callback.onFailure(caught);
-		}
-		public void onSuccess(Object result) {
-			System.out.println("BBBBBBBBBBBBB");
-			Logger.log("SAVE CALLBACK SUCEEED");
-			Logger.log("rtn "+result);
-			Topic[] resA = (Topic[]) result;
-			
-			if(resA == null){
-				callback.onFailure(new Throwable("Save Returned Null"));
-			}
-			
-			System.out.println("result length "+resA.length);
-			
-			for (int i = 0; i < resA.length; i++) {
-				Topic res = resA[i];
-
-				System.out.println("res "+res);
-				
-				if(res == null){
-					continue;
-				}
-				System.out.println("R/A "+res.getIdentifier());
-				
-				//TODO bogus, need to check!!
-				topicIdentifiers.remove(res.getIdentifier());
-				topicIdentifiers.put(res.getIdentifier(),null);
-				
-				//topicByName.put(res.getTitle(), res);
-				//topicByID.put(res.getId(), res);
-				
-				for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
-					TopicSaveListener listener = (TopicSaveListener) iter.next();
-					listener.topicSaved(res);
-				}			
-								
-			}
-			callback.onSuccess(result);
-		}
-
-	}
+//	private class SaveCallback implements AsyncCallback {
+//		private AsyncCallback callback;
+//		public SaveCallback(AsyncCallback callback) {
+//			this.callback = callback;			
+//		}
+//		public void onFailure(Throwable caught) {
+//			System.out.println("AAAAAAAAAAAAA");
+//			Logger.log("SAVE CALLBACK FAILING");
+//			Logger.log("caugt "+caught);
+//			callback.onFailure(caught);
+//		}
+//		public void onSuccess(Object result) {
+//			System.out.println("BBBBBBBBBBBBB");
+//			Logger.log("SAVE CALLBACK SUCEEED");
+//			Logger.log("rtn "+result);
+//			Topic[] resA = (Topic[]) result;
+//			
+//			if(resA == null){
+//				callback.onFailure(new Throwable("Save Returned Null"));
+//			}
+//			
+//			System.out.println("result length "+resA.length);
+//			
+//			for (int i = 0; i < resA.length; i++) {
+//				Topic res = resA[i];
+//
+//				System.out.println("res "+res);
+//				
+//				if(res == null){
+//					continue;
+//				}
+//				System.out.println("R/A "+res.getIdentifier());
+//				
+//				//TODO bogus, need to check!!
+//				topicIdentifiers.remove(res.getIdentifier());
+//				topicIdentifiers.put(res.getIdentifier(),null);
+//				
+//				//topicByName.put(res.getTitle(), res);
+//				//topicByID.put(res.getId(), res);
+//				
+//				for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
+//					TopicSaveListener listener = (TopicSaveListener) iter.next();
+//					listener.topicSaved(res);
+//				}			
+//								
+//			}
+//			callback.onSuccess(result);
+//		}
+//
+//	}
 
 	public void match(String match, AsyncCallback call) {
 		topicService.match(match, call);		

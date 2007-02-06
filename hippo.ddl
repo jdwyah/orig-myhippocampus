@@ -209,12 +209,28 @@
         scope_id bigint not null,
         primary key (topic_id, scope_id)
     ) type=InnoDB;
+	
 
-    create table typetable (
+   create table type_connector (
+        connector_id bigint not null auto_increment,
         from_id bigint not null,
         topic_id bigint not null,
-        primary key (from_id, topic_id)
+        `latitude` double NOT NULL default '-1',
+  		`longitude` double NOT NULL default '-1',
+        primary key (connector_id)
     ) type=InnoDB;
+    
+   alter table type_connector 
+        add index fromIdx (from_id), 
+        add constraint fromIdx 
+        foreign key (from_id) 
+        references Topics (topic_id);
+
+    alter table type_connector 
+        add index topicIdx (topic_id), 
+        add constraint topicIdx
+        foreign key (topic_id) 
+        references Topics (topic_id);
 
     alter table Topics 
         add index FK95A7C54424CD75BC (subject_id), 

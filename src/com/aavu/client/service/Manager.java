@@ -14,6 +14,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.EntryEditWindow;
 import com.aavu.client.gui.IslandDetailsWindow;
 import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
@@ -34,6 +35,7 @@ import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
+import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
@@ -406,6 +408,11 @@ public class Manager implements TopicSaveListener {
 	}
 	public void zoomTo(double scale) {
 		mainMap.zoomTo(scale);	
+	}
+	public void editEntry(Topic topic) {
+				
+		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());				
+		
 	}
 	
 	

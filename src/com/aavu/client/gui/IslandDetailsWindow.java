@@ -77,8 +77,9 @@ public class IslandDetailsWindow extends TopicTagSuperWindow {
 		VerticalPanel rightSideExtras = new VerticalPanel();		
 		rightSideExtras.add(new HeaderLabel(Manager.myConstants.island_property(),Manager.myConstants.island_property_help()));
 
-
-		rightSideExtras.add(new TagPropertyPanel(manager, (Tag) topic));
+		TagPropertyPanel tpp = new TagPropertyPanel(manager);
+		rightSideExtras.add(tpp);
+		tpp.load((Tag) topic);
 		panel.add(rightSideExtras);
 	}
 

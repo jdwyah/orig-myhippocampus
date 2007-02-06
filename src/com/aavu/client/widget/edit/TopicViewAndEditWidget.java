@@ -8,6 +8,8 @@ import org.gwtwidgets.client.wrap.Effect;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.SaveEntryTextCommand;
 import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
@@ -106,6 +108,11 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 
 	public void onChange(Widget sender) {
 		saveNeeded.onChange(this);
+	}
+
+
+	public AbstractSaveCommand getSaveCommand() {
+		return new SaveEntryTextCommand(topic.getId(),getEntryText());
 	}
 	
 	

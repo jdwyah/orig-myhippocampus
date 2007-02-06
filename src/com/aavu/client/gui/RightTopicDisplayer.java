@@ -1,6 +1,7 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class RightTopicDisplayer extends Composite implements SaveNeededListener, ClickListener {
 	
 	private TagBoard tagBoard;
+	private TagPropertyPanel tagProperties;
 	private TopicDetailsTabBar topicDetails;
 	private EditableLabelExtension titleBox;
 	
@@ -30,6 +32,7 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 		this.manager = manager;
 		
 		tagBoard = new TagBoard(manager);		
+		tagProperties = new TagPropertyPanel(manager);
 		
 		topicDetails = new TopicDetailsTabBar(manager);		
 		
@@ -46,7 +49,10 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 		});
 		
 		mainPanel.add(titleBox);
+		
 		mainPanel.add(tagBoard);
+		mainPanel.add(tagProperties);
+		
 		mainPanel.add(topicDetails);
 		mainPanel.add(entryPreview);
 		
@@ -69,7 +75,15 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 		setVisible(true);
 		
 		titleBox.setText(topic.getTitle());
+				
 		tagBoard.load(topic);
+		if(topic instanceof Tag){
+			tagProperties.load((Tag) topic);
+			tagProperties.setVisible(true);
+		}else{
+			tagProperties.setVisible(false);
+		}
+		
 		topicDetails.load(topic);
 		
 		entryPreview.load(topic);
@@ -84,7 +98,7 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 
 	public void onClick(Widget sender) {
 		if(sender == entryPreview){
-			manager.bringUpChart(topic);
+			manager.editEntry(topic);
 		}
 	}
 

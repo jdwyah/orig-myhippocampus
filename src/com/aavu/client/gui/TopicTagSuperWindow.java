@@ -151,9 +151,12 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	}
 	
 	protected VerticalPanel getLeftPanel(final Topic topic) {
-		
-		
-		saveButton = new SaveStopLight();
+				
+		saveButton = new SaveStopLight(new ClickListener(){
+			public void onClick(Widget sender) {
+				save();	
+			}			
+		});
 		
 		HorizontalPanel leftTopPanel = new HorizontalPanel();
 		leftTopPanel.setSpacing(5);
@@ -213,34 +216,6 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		return null;
 	}
 	
-	private class SaveStopLight extends Composite {
-		private ImageButton redLight;
-		private StackPanel sp;
-		
-		public SaveStopLight(){
-			sp = new StackPanel();
-			sp.removeStyleName("gwt-StackPanel");
-			sp.add(new ImageButton(Manager.myConstants.save_greenLight(),30,30));
-			
-			redLight = new ImageButton(Manager.myConstants.save_redLight(),30,30);
-			redLight.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
-					System.out.println("SAVE initiated");
-					save();					
-				}});
-			redLight.addMouseListener(new TooltipListener(Manager.myConstants.save()));
-			sp.add(redLight);
-			
-			initWidget(sp);
-		}
-		public void setSaveNeeded(){
-			sp.showStack(1);
-		}
-		public void saveAccomplished() {
-			sp.showStack(0);
-		}
-	}
-	
 	
 	
 	//implement ChangeListener
@@ -257,7 +232,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	}
 	
 	public void save() {		
-		manager.getTopicCache().save(new SaveEntryTextCommand(topic.getId(),topicViewAndEditW.getEntryText()),
+		manager.getTopicCache().save(topicViewAndEditW.getSaveCommand(),
 				new StdAsyncCallback(""){
 					public void onSuccess(Object result) {					
 						super.onSuccess(result);

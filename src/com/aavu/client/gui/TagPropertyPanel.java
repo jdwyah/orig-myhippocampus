@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.widget.tags.MetaChooser;
@@ -26,26 +28,15 @@ public class TagPropertyPanel extends Composite {
 	
 	private Tag tag;
 	private Manager manager;
+	private Button saveB;	
 	
-	public TagPropertyPanel(Manager _manager, Tag _tag){
-		this.tag = _tag;
+	public TagPropertyPanel(Manager _manager){
+		
 		this.manager = _manager;
 		
 		tagLocalService = _manager.getTagLocalService();
 		
-		metaListPanel.clear();			
-		metaChoosers.clear();
-		
-		if(tag.getMetas() != null){
-			for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
-				Meta element = (Meta) iter.next();
-				MetaChooser mc = new MetaChooser(tagLocalService);
-				mc.setMeta(element);								
-				showEditMetaWidget(mc);
-			}
-		}
-		
-		
+			
 		VerticalPanel mainPanel = new VerticalPanel();
 		
 		mainPanel.add(metaListPanel);
@@ -53,18 +44,41 @@ public class TagPropertyPanel extends Composite {
 		Button addB = new Button(Manager.myConstants.island_property_new());
 		addB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				showEditMetaWidget(new MetaChooser(tagLocalService));					
+				showEditMetaWidget(new MetaChooser(tagLocalService));	
+				saveB.setVisible(true);
 			}});
-		Button saveB = new Button(Manager.myConstants.island_property_save());
+		saveB = new Button(Manager.myConstants.island_property_save());
 		saveB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				saveProperties();				
 			}});
 		
-		mainPanel.add(addB);
-		mainPanel.add(saveB);
+		HorizontalPanel bP = new HorizontalPanel();
+		bP.add(addB);
+		bP.add(saveB);
+		mainPanel.add(bP);		
 		
 		initWidget(mainPanel);
+	}
+	
+	public void load(Tag tag){
+		this.tag = tag;
+
+		metaListPanel.clear();			
+		metaChoosers.clear();
+		saveB.setVisible(false);
+		
+		if(tag.getMetas() != null){
+			if(tag.getMetas().size() > 0){
+				saveB.setVisible(true);
+			}
+			for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
+				Meta element = (Meta) iter.next();
+				MetaChooser mc = new MetaChooser(tagLocalService);
+				mc.setMeta(element);								
+				showEditMetaWidget(mc);
+			}
+		}		
 	}
 	
 	private void showEditMetaWidget(final MetaChooser chooser){
@@ -89,11 +103,17 @@ public class TagPropertyPanel extends Composite {
 	private void saveProperties(){
 		//selectedTag.setTitle(tagName.getText());
 		
+		
+		Meta[] toSave = new Meta[metaChoosers.size()];
 		tag.getMetas().clear();
+		int i = 0;
 		for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {
 			MetaChooser mc = (MetaChooser) iter.next();
 			System.out.println("adding back mc "+mc.getMeta().getId()+" "+mc.getMeta().getType()+" "+mc.getMeta().getTitle());
-			tag.addMeta(mc.getMeta());
+			Meta meta = mc.getMeta();
+			tag.addMeta(meta);
+			toSave[i] = meta;
+			i++;
 		}
 		//selectedTag.setMetas(metaChoosers);
 		
@@ -106,14 +126,8 @@ public class TagPropertyPanel extends Composite {
 		
 		//Effect.dropOut(metaListPanel);
 		
-		manager.getTopicCache().save_OLD(tag, new StdAsyncCallback("tagService saveTag"){
-
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				System.out.println("success in saving tag " + tag.getName());					
-			}
-			
-		});
+		manager.getTopicCache().save(new SaveTagPropertiesCommand(tag.getId(),toSave),
+				new StdAsyncCallback("tagService saveTag"){});
 	}
 	
 }
