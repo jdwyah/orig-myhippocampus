@@ -80,13 +80,13 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 				super.onSuccess(result);
 				TopicIdentifier to = (TopicIdentifier) result;
 				
-				myTopic.addSeeAlso(to);
+				//myTopic.addSeeAlso(to);
 
 				alsos.add(to);
 				topicCompleter.setText("");
 				
 				
-				topicService.save(new SaveSeeAlsoCommand(myTopic.getId(),to.getTopicID()),
+				topicService.save(myTopic,new SaveSeeAlsoCommand(myTopic,new Topic(to)),
 						new StdAsyncCallback(Manager.myConstants.save_async()){});
 				
 			}});

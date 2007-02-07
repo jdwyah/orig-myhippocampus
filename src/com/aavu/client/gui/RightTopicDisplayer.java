@@ -1,11 +1,15 @@
 package com.aavu.client.gui;
 
+import org.gwtwidgets.client.ui.ImageButton;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
+import com.aavu.client.widget.edit.OnThisIslandBoard;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
@@ -26,6 +30,7 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 	
 	private Topic topic;
 	private Manager manager;
+	private OnThisIslandBoard onThisIslandBoard;
 	
 	public RightTopicDisplayer(final Manager manager){
 			
@@ -33,6 +38,8 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 		
 		tagBoard = new TagBoard(manager);		
 		tagProperties = new TagPropertyPanel(manager);
+		
+		onThisIslandBoard = new OnThisIslandBoard(manager);
 		
 		topicDetails = new TopicDetailsTabBar(manager);		
 		
@@ -43,15 +50,19 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 				
 		titleBox = new EditableLabelExtension("",new ChangeListener(){
 			public void onChange(Widget sender) {								
-				manager.getTopicCache().save(new SaveTitleCommand(topic.getId(), titleBox.getText()),
-						new StdAsyncCallback(Manager.myConstants.save()){});
+				manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
+						new StdAsyncCallback(Manager.myConstants.save()){});				
 			}			
 		});
 		
 		mainPanel.add(titleBox);
 		
+		
+		
 		mainPanel.add(tagBoard);
 		mainPanel.add(tagProperties);
+		
+		mainPanel.add(onThisIslandBoard);
 		
 		mainPanel.add(topicDetails);
 		mainPanel.add(entryPreview);
@@ -78,10 +89,16 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 				
 		tagBoard.load(topic);
 		if(topic instanceof Tag){
-			tagProperties.load((Tag) topic);
+			
+			tagProperties.load((Tag) topic);			
+			onThisIslandBoard.load((Tag) topic);			
+			
 			tagProperties.setVisible(true);
+			onThisIslandBoard.setVisible(true);
+			
 		}else{
 			tagProperties.setVisible(false);
+			onThisIslandBoard.setVisible(false);
 		}
 		
 		topicDetails.load(topic);

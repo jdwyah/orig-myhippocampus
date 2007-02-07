@@ -77,11 +77,11 @@ public class AddLinkPopup extends PopupWindow {
 				link.setNotes(notesT.getText());
 				link.setUri(urlT.getText());
 				
-				if(link.getId() == 0){
-					myTopic.getOccurences().add(link);
-				}
+//				if(link.getId() == 0){
+//					myTopic.getOccurences().add(link);
+//				}
 				
-				manager.getTopicCache().save(new SaveOccurrenceCommand(myTopic.getId(), link),						
+				manager.getTopicCache().save(myTopic,new SaveOccurrenceCommand(myTopic, link),						
 						new StdAsyncCallback(Manager.myConstants.save()){});
 				
 				widget.load(myTopic);

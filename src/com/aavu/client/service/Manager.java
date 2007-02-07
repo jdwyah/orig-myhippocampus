@@ -251,7 +251,7 @@ public class Manager implements TopicSaveListener {
 	 * TODO don't load the entire darn list/use the cache etc
 	 */
 	public void topicSaved(Topic t) {
-		map.updateSidebar(t);
+		map.update(t);
 	}
 	public void updateStatus(int i, String call, StatusCode send) {
 		map.updateStatusWindow(i, call, send);
@@ -262,8 +262,7 @@ public class Manager implements TopicSaveListener {
 	public void addDeliciousTags(String username, String password,AsyncCallback callback) {
 		hippoCache.getSubjectService().addDeliciousTags(username, password, callback);		
 	}
-	public void refreshAll(){
-		map.updateSidebar();
+	public void refreshAll(){		
 		map.refreshIslands();
 	}
 	public GInternalFrame newFrame() {

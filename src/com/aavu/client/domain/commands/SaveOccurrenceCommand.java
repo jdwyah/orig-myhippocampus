@@ -3,6 +3,7 @@ package com.aavu.client.domain.commands;
 import java.util.Iterator;
 
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSerializable {
@@ -11,8 +12,8 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 	
 	public SaveOccurrenceCommand(){};
 	
-	public SaveOccurrenceCommand(long id, Occurrence occurrence){
-		setTopicID(id);
+	public SaveOccurrenceCommand(Topic topic, Occurrence occurrence){
+		super(topic);
 		this.occurrence = occurrence;
 	}
 

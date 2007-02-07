@@ -1,5 +1,6 @@
 package com.aavu.client.domain.commands;
 
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveLatLongCommand extends AbstractSaveCommand implements IsSerializable {
@@ -9,8 +10,8 @@ public class SaveLatLongCommand extends AbstractSaveCommand implements IsSeriali
 	
 	public SaveLatLongCommand(){};
 		
-	public SaveLatLongCommand(long id, int latitude, int longitude) {
-		setTopicID(id);
+	public SaveLatLongCommand(Topic topic, int latitude, int longitude) {
+		super(topic);
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}

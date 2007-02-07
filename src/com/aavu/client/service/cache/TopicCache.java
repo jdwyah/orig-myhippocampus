@@ -14,8 +14,10 @@ import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
@@ -125,9 +127,48 @@ public class TopicCache {
 		}
 	}
 
-	public void save(AbstractSaveCommand command, AsyncCallback callback) {
+	/**
+	 * Ok, here's how this works. We don't want to serialize the whole topic, send it to the 
+	 * server and then hope/pray/hack that things get saved right with respect to all of the
+	 * lazy loading / persistent set / CGLIB etc munging that we did on the way to the client.
+	 * 
+	 * Instead we implement our logic in commands. 
+	 * 
+	 * These nuggets have everything they need to affect the changes. 
+	 * We'll run them here on the client, to update our local state, but then we'll serialize
+	 * them and send them over to the server where they will be hydrated, run and saved.
+	 * 
+	 * @param topic
+	 * @param command
+	 * @param callback
+	 */
+	public void save(Topic topic, AbstractSaveCommand command, AsyncCallback callback) {
+		
+		try {
+			command.executeCommand();
+		} catch (HippoBusinessException e) {
+			Logger.log("command execution problem: "+e);
+		}
+		
+		for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
+			TopicSaveListener listener = (TopicSaveListener) iter.next();
+			listener.topicSaved(topic);
+		}			
+
 		topicService.saveCommand(command,callback);		
 	}	
+
+//	public void saveNotifyListeners(Topic topic, SaveTitleCommand command, StdAsyncCallback callback) {
+//		if(command.updatesTitle()){
+//			for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
+//				TopicSaveListener listener = (TopicSaveListener) iter.next();
+//				listener.topicSaved(new TopicIdentifier(command.getTopicID(),command.getData()));
+//			}			
+//		}
+//		topicService.saveCommand(command,callback);		
+//	}
+
+
 	
 	
 //	public void save_OLD(Topic topic, AsyncCallback callback) {
@@ -382,6 +423,7 @@ public class TopicCache {
 	public void createNew(String title, boolean b, AsyncCallback callback) {
 		topicService.createNew(title, b, callback);		
 	}
+
 
 
 

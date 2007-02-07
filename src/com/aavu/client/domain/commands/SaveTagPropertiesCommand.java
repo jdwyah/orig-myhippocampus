@@ -1,6 +1,7 @@
 package com.aavu.client.domain.commands;
 
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveTagPropertiesCommand extends AbstractSaveCommand implements IsSerializable {
@@ -9,8 +10,8 @@ public class SaveTagPropertiesCommand extends AbstractSaveCommand implements IsS
 	
 	public SaveTagPropertiesCommand(){};
 	
-	public SaveTagPropertiesCommand(long id, Meta[] metas){
-		setTopicID(id);
+	public SaveTagPropertiesCommand(Topic topic, Meta[] metas){
+		super(topic);
 		this.metas = metas;		
 	}
 

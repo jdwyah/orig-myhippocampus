@@ -87,7 +87,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 						
 						System.out.println("Go to Save MV "+mv.getId()+" "+mv.getDate());
 						
-						topicService.save(new SaveMetaDateCommand(topic.getId(),getId(),
+						topicService.save(topic,new SaveMetaDateCommand(topic,MetaDate.this,
 								cDate.getTime()+""),
 								new StdAsyncCallback(Manager.myConstants.save()){});
 										

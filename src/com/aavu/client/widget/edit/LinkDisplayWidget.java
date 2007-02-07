@@ -63,9 +63,9 @@ public class LinkDisplayWidget extends Composite {
 		WebLink link = new WebLink(myTopic.getUser(),
 				description,linkStr,notes);
 		
-		myTopic.getOccurences().add(link);
+		//myTopic.getOccurences().add(link);
 		
-		manager.getTopicCache().save(new SaveOccurrenceCommand(myTopic.getId(), link),
+		manager.getTopicCache().save(myTopic,new SaveOccurrenceCommand(myTopic, link),
 				new StdAsyncCallback(Manager.myConstants.save()){});
 		
 	}

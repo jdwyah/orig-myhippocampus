@@ -527,7 +527,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 				t.setLatitude(latitude);
 				t.setLongitude(longitude);
 				
-				manager.getTopicCache().save(new SaveLatLongCommand(t.getId(),latitude,
+				manager.getTopicCache().save(t,new SaveLatLongCommand(t,latitude,
 						longitude),
 						new StdAsyncCallback("SaveLatLong"){});								
 			}
@@ -647,6 +647,13 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 			zoomUp();
 		}else{
 			zoomIn();
+		}
+	}
+
+	public void updateTitle(Topic t) {
+		Island isle = (Island) islands.get(new Long(t.getId()));
+		if(isle != null){
+			isle.setBannerTitle(t.getTitle());
 		}
 	}
 

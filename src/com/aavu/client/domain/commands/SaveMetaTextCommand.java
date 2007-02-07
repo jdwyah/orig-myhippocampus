@@ -2,15 +2,17 @@ package com.aavu.client.domain.commands;
 
 import com.aavu.client.domain.HippoText;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveMetaTextCommand extends AbstractSaveCommand implements IsSerializable {
 
 	public SaveMetaTextCommand(){};
 	
-	public SaveMetaTextCommand(long id, long metaid, String value){
-		setTopicID(id);
-		setId1(metaid);
+	
+	public SaveMetaTextCommand(Topic topic, Topic meta, String value){
+		super(topic,meta);
+		
 		setData(value);
 	}
 

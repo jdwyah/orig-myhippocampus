@@ -1,17 +1,15 @@
 package com.aavu.client.domain.commands;
 
-import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveMetaTopicCommand extends AbstractSaveCommand implements IsSerializable {
 
 	public SaveMetaTopicCommand(){};
-		
-	public SaveMetaTopicCommand(long id, long metaid, long topic2id){
-		setTopicID(id);
-		setId1(metaid);
-		setId2(topic2id);
+
+	public SaveMetaTopicCommand(Topic topic, Topic meta, Topic topic2){
+		super(topic,meta,topic2);		
 	}
 
 	//@Override

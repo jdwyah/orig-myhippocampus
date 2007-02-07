@@ -13,12 +13,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class HeaderLabel extends Composite {
 
+	private Label l;
+
 	public HeaderLabel(String string) {
 		this(string,null);
 	}
 
 	public HeaderLabel(String string, final String helpText) {
-		Label l = new Label(string);		
+		l = new Label(string);		
 		l.setStyleName("H-HeaderLabel");	
 		
 		if(null != helpText){
@@ -37,8 +39,10 @@ public class HeaderLabel extends Composite {
 			initWidget(hp);
 		}else{			
 			initWidget(l);	
-		}
-		
-		
+		}			
+	}
+	
+	public void setText(String text){
+		l.setText(text);
 	}
 }

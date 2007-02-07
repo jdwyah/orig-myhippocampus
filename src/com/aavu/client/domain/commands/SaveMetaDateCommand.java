@@ -2,15 +2,16 @@ package com.aavu.client.domain.commands;
 
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveMetaDateCommand extends AbstractSaveCommand implements IsSerializable {
 
 	public SaveMetaDateCommand(){};
 	
-	public SaveMetaDateCommand(long id, long metaid, String value){
-		setTopicID(id);
-		setId1(metaid);
+	public SaveMetaDateCommand(Topic topic, Topic meta, String value){
+		super(topic,meta);
+		
 		setData(value);
 	}
 

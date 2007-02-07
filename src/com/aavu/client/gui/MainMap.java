@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.FlashContainer;
@@ -92,12 +93,15 @@ public class MainMap extends Composite {
 		//TODO
 	}
 
-	public void updateSidebar() {
-		//sideBar.load();
+
+	public void update(Topic t) {
+
+		ocean.updateTitle(t);
+		
 	}
-	public void updateSidebar(Topic t) {
-		//sideBar.load(t);
-	}
+
+
+	
 	
 	//TODO shouldn't need null checks, but we do.
 	public void updateStatusWindow(int id, String string, StatusCode statusCode) {
@@ -135,7 +139,6 @@ public class MainMap extends Composite {
 		ocean.zoomTo(scale);
 		zoomer.setToScale(scale);
 	}
-
 
 
 }

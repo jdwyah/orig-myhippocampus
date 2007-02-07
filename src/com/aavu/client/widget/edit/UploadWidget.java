@@ -96,7 +96,7 @@ public class UploadWidget extends Composite {
 					
 					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),key);
 					
-					manager.getTopicCache().save(new SaveOccurrenceCommand(topic.getId(), fileObj),
+					manager.getTopicCache().save(topic,new SaveOccurrenceCommand(topic, fileObj),
 							new StdAsyncCallback(Manager.myConstants.save()){});
 					
 					topic.getOccurences().add(fileObj);					

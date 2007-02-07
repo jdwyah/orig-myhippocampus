@@ -49,7 +49,7 @@ public class MetaText extends Meta {
 			public void onChange(final Widget sender) {
 				
 				
-				topicCache.save(new SaveMetaTextCommand(topic.getId(),getId(),
+				topicCache.save(topic,new SaveMetaTextCommand(topic,MetaText.this,
 						editable.getText()),
 						new StdAsyncCallback(Manager.myConstants.meta_text_async_save()){});
 				

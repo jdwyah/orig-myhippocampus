@@ -93,12 +93,12 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 				TopicIdentifier to = (TopicIdentifier) result;
 				System.out.println("GetTopicIdentForNameOrCreateNewID: "+to);
 				
-				topic.addMetaValue(meta, new Topic(to));
+				//in command // topic.addMetaValue(meta, new Topic(to));
 				
 				setToShowMode(to);
 				
-				topicCache.save(new SaveMetaTopicCommand(topic.getId(),meta.getId(),
-						to.getTopicID()),
+				topicCache.save(topic,new SaveMetaTopicCommand(topic,meta,
+						new Topic(to)),
 						new StdAsyncCallback(Manager.myConstants.save()){});
 				
 			}});

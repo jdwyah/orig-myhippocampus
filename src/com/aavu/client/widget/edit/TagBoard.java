@@ -50,6 +50,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	
 	private Set tagsToSave = new HashSet();
 
+	private HeaderLabel header;
+
 	//private SaveNeededListener saveNeeded; 
 
 	public TagBoard(Manager manager) {
@@ -68,7 +70,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 		VerticalPanel mainPanel = new VerticalPanel();
 		
-		mainPanel.add(new HeaderLabel(Manager.myConstants.tags()));
+		header = new HeaderLabel(Manager.myConstants.tags(""));
+		mainPanel.add(header);
 		
 		HorizontalPanel tagBoxP = new HorizontalPanel();		
 		tagBoxP.add(new Label(Manager.myConstants.addTag()));
@@ -114,6 +117,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 */
 	public int load(Topic topic){
 		
+		header.setText(Manager.myConstants.tags(topic.getTitle()));
+		
 		tagPanel.clear();
 		
 		cur_topic = topic;
@@ -142,8 +147,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 */
 	public void remove(Tag tag,final Widget widgetToRemoveOnSuccess) {
 
-		manager.getTopicCache().save(new RemoveTagFromTopicCommand(cur_topic.getId(),
-				tag.getId()),
+		manager.getTopicCache().save(cur_topic,new RemoveTagFromTopicCommand(cur_topic,
+				tag),
 				new StdAsyncCallback(Manager.myConstants.delete_async()){
 					public void onFailure(Throwable caught) {
 						super.onFailure(caught);
@@ -171,8 +176,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			showTag(tag);
 			manager.growIsland(tag);
 		}
-		tagsToSave.add(tag);
-		manager.getTopicCache().save(new SaveTagtoTopicCommand(cur_topic.getId(),tag.getId()), 
+		//incommand tagsToSave.add(tag);
+		manager.getTopicCache().save(cur_topic,new SaveTagtoTopicCommand(cur_topic,tag), 
 				new StdAsyncCallback(Manager.myConstants.save()){});		
 	}
 	

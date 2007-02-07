@@ -1,13 +1,14 @@
 package com.aavu.client.domain.commands;
 
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveEntryTextCommand extends AbstractSaveCommand implements IsSerializable {
 
 	public SaveEntryTextCommand(){};
 	
-	public SaveEntryTextCommand(long id, String text){
-		setTopicID(id);
+	public SaveEntryTextCommand(Topic topic, String text){
+		super(topic);
 		setData(text);
 	}
 

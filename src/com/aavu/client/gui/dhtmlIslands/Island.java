@@ -540,5 +540,18 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		banner.setSelected(b);
 	}
 
+
+	/**
+	 * change this islands banner to this text
+	 * @param topicTitle
+	 */
+	public void setBannerTitle(String topicTitle) {
+		
+		banner.setText(topicTitle);
+		
+		//redraw
+		zoomToScale(scale);
+	}
+
 	
 }

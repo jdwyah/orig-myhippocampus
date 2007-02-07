@@ -6,6 +6,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
 
@@ -152,6 +153,10 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 	}
 
 	public void zoomTo(double scale) {
+		throw new UnsupportedOperationException("Not Yet Implemented");
+	}
+
+	public void updateTitle(Topic t) {
 		throw new UnsupportedOperationException("Not Yet Implemented");
 	}
 }

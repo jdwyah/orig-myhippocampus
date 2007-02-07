@@ -83,7 +83,7 @@ public interface Consts extends Messages {
 	String topic_preview();
 	String topic_getAllAsync();
 	
-	String tags();	
+	String tags(String s);	
 	String tag_upgradeS(String s);
 	String mapperSaveFirst();
 	String tag_topicIsA();
@@ -92,6 +92,7 @@ public interface Consts extends Messages {
 	String island_create();
 	String topic_new_image();
 	String island_new_image();
+	String island_addTo();
 	
 	String timeline();
 	String timeline_image();

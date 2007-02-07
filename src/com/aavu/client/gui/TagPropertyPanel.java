@@ -111,7 +111,9 @@ public class TagPropertyPanel extends Composite {
 			MetaChooser mc = (MetaChooser) iter.next();
 			System.out.println("adding back mc "+mc.getMeta().getId()+" "+mc.getMeta().getType()+" "+mc.getMeta().getTitle());
 			Meta meta = mc.getMeta();
-			tag.addMeta(meta);
+
+			
+			//in command tag.addMeta(meta);
 			toSave[i] = meta;
 			i++;
 		}
@@ -126,7 +128,7 @@ public class TagPropertyPanel extends Composite {
 		
 		//Effect.dropOut(metaListPanel);
 		
-		manager.getTopicCache().save(new SaveTagPropertiesCommand(tag.getId(),toSave),
+		manager.getTopicCache().save(tag,new SaveTagPropertiesCommand(tag,toSave),
 				new StdAsyncCallback("tagService saveTag"){});
 	}
 	

@@ -1,13 +1,14 @@
 package com.aavu.client.domain.commands;
 
+import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveTitleCommand extends AbstractSaveCommand implements IsSerializable {
 
 	public SaveTitleCommand(){};
 	
-	public SaveTitleCommand(long id, String title){
-		setTopicID(id);
+	public SaveTitleCommand(Topic topic, String title){
+		super(topic);
 		setData(title);
 	}
 
@@ -20,6 +21,13 @@ public class SaveTitleCommand extends AbstractSaveCommand implements IsSerializa
 	public String toString() {
 		return "SaveTitle ID "+getTopicID()+" "+getData();
 	}
+
+	//@Override
+	public boolean updatesTitle() {	
+		return true;
+	};
+	
+	
 	
 	
 	

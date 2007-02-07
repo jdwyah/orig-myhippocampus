@@ -4,6 +4,27 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * Ok, here's how this works. We don't want to serialize the whole topic, send it to the 
+ * server and then hope/pray/hack that things get saved right with respect to all of the
+ * lazy loading / persistent set / CGLIB etc munging that we did on the way to the client.
+ * 
+ * Instead we implement our logic in commands. 
+ * 
+ * These nuggets have everything they need to affect the changes. 
+ * We'll run them here on the client, to update our local state, but then we'll serialize
+ * them and send them over to the server where they will be hydrated, run and saved.
+ * 
+ * Contract for the server is that it will hypdrate the 3 transient topics (if necessary)
+ * with the id's in the three variables.
+ * 
+ * Again, this seems like a bunch of rigamorole, but it makes the object graph connecting/unconnecting
+ * a non-issue, which is really nice. It's also very easy on the network connection.
+ * 
+ * @param topic
+ * @param command
+ * @param callback
+ */
 public abstract class AbstractSaveCommand implements IsSerializable {
 
 	private long topicID;
@@ -17,9 +38,30 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 	
 	public AbstractSaveCommand(){}
 
+	public AbstractSaveCommand(Topic topic) {
+		this(topic,null,null);	
+	}
+	public AbstractSaveCommand(Topic topic, Topic topic1) {
+		this(topic,topic1,null);
+	}
+	public AbstractSaveCommand(Topic topic, Topic topic1,Topic topic2) {
+		this.topic = topic;
+		this.topic1 = topic1;
+		this.topic2 = topic2;
+		
+		if(topic != null){
+			setTopicID(topic.getId());
+		}
+		if(topic1 != null){
+			setId1(topic1.getId());
+		}
+		if(topic2 != null){
+			setId2(topic2.getId());
+		}
+	}
+
 	public abstract void executeCommand() throws HippoBusinessException;
-	
-	
+		
 	public String getData() {
 		return data;
 	}
@@ -74,8 +116,11 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 
 	public void setTopic2(Topic topic2) {
 		this.topic2 = topic2;
-	};
-	
+	}
+
+	public boolean updatesTitle() {	
+		return false;
+	}
 	
 	
 }

@@ -1,6 +1,7 @@
 package com.aavu.client.domain.commands;
 
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -8,9 +9,8 @@ public class RemoveTagFromTopicCommand extends AbstractSaveCommand implements Is
 
 	public RemoveTagFromTopicCommand(){};
 	
-	public RemoveTagFromTopicCommand(long id, long tagid){
-		setTopicID(id);
-		setId1(tagid);
+	public RemoveTagFromTopicCommand(Topic topic, Topic tag){
+		super(topic,tag);		
 	}
 
 	//@Override

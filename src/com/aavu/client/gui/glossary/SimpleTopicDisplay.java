@@ -42,7 +42,7 @@ public class SimpleTopicDisplay extends Composite {
 	}
 
 	private void doTags(Topic topic) {
-		mainP.add(new HeaderLabel(Manager.myConstants.tags()));
+		mainP.add(new HeaderLabel(Manager.myConstants.tags(topic.getTitle())));
 		if(topic.getTags().size() > 0){
 			for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 				Tag tag = (Tag) iter.next();

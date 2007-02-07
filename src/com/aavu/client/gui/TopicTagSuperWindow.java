@@ -163,7 +163,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		
 		titleBox = new EditableLabelExtension(topic.getTitle(),new ChangeListener(){
 			public void onChange(Widget sender) {								
-				manager.getTopicCache().save(new SaveTitleCommand(topic.getId(), titleBox.getText()),
+				manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
 						new StdAsyncCallback(Manager.myConstants.save()){});
 			}			
 		});
@@ -225,14 +225,15 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	 */
 	public void onChange(Widget w){
 		if(w == titleBox){
-			manager.getTopicCache().save(new SaveTitleCommand(topic.getId(), titleBox.getText()),
+			
+			manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
 					new StdAsyncCallback(Manager.myConstants.save()){});
 		}
 		saveButton.setSaveNeeded();
 	}
 	
 	public void save() {		
-		manager.getTopicCache().save(topicViewAndEditW.getSaveCommand(),
+		manager.getTopicCache().save(topic,topicViewAndEditW.getSaveCommand(),
 				new StdAsyncCallback(""){
 					public void onSuccess(Object result) {					
 						super.onSuccess(result);

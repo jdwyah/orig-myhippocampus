@@ -267,7 +267,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		topic = (Topic) topicService.save(topic);
 		
 		System.out.println("SAVED TOPIC "+C);				
-		topicService.executeAndSaveCommand(new SaveTagtoTopicCommand(topic.getId(),tag.getId()));
+		topicService.executeAndSaveCommand(new SaveTagtoTopicCommand(topic,tag));
 		
 		Topic topicS = topicService.getForID(topic.getId());
 		assertEquals(1, topicS.getTypes().size());
@@ -277,7 +277,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		Topic t3 = new Topic(u,D);
 		t3 = (Topic) topicService.save(t3);	
-		topicService.executeAndSaveCommand(new SaveSeeAlsoCommand(topic.getId(),t3.getId()));		
+		topicService.executeAndSaveCommand(new SaveSeeAlsoCommand(topic,t3));		
 		
 		Topic t3s = topicService.getForID(t3.getId());
 		assertEquals(0, t3s.getAssociations().size());

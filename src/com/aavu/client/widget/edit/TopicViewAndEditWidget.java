@@ -112,7 +112,12 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 
 
 	public AbstractSaveCommand getSaveCommand() {
-		return new SaveEntryTextCommand(topic.getId(),getEntryText());
+		return new SaveEntryTextCommand(topic,getEntryText());
+	}
+
+
+	public Topic getTopic() {
+		return topic;
 	}
 	
 	
