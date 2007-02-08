@@ -11,6 +11,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
+import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.tags.MetaChooser;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -38,6 +39,8 @@ public class TagPropertyPanel extends Composite {
 		
 			
 		VerticalPanel mainPanel = new VerticalPanel();
+		
+		mainPanel.add(new HeaderLabel(Manager.myConstants.island_property()));
 		
 		mainPanel.add(metaListPanel);
 		

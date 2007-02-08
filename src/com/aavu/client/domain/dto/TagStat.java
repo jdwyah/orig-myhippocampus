@@ -1,5 +1,6 @@
 package com.aavu.client.domain.dto;
 
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -13,7 +14,14 @@ public class TagStat implements IsSerializable, TagInfo {
 	
 	public TagStat(){}
 	
-	
+	public TagStat(Tag t){
+		super();
+		this.tagId = t.getId();
+		this.numberOfTopics = t.getTypes().size();
+		this.tagName = t.getName();
+		this.latitude = t.getLatitude();
+		this.longitude = t.getLongitude();
+	}
 
 	public TagStat(long tagId, int numberOfTopics, String tagName, int latitude, int longitude) {
 		super();

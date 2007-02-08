@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;
 import com.aavu.client.service.Manager;
@@ -51,7 +53,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	private List topicLabelList;
 
 
-	private boolean topicsInvisible;
+	private boolean topicsVisible = false;
 
 	private DraggableTopicLabel selectedTopic;
 	
@@ -420,17 +422,17 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	}
 	
 	public void removeTopics(){
-		if(!topicsInvisible){
+		if(topicsVisible){
 			setTopicVisibility(false);
 		}
 	}
 	private void setTopicVisibility(boolean visible){
-		if(visible == topicsInvisible && topicLabelList != null){
+		if(visible != topicsVisible && topicLabelList != null){
 			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
 				DraggableTopicLabel label = (DraggableTopicLabel) iter.next();
 				label.setVisible(visible);			
 			}
-			topicsInvisible = !visible;
+			topicsVisible = visible;
 		}
 	}
 	public void showTopics() {
@@ -439,6 +441,8 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			//not exactly true, since the async hasn't suceeded yet,
 			//but otherwise we might keep trying to add if more req's come in
 			haveShownTopics = true;
+			
+			System.out.println("firing topic lookup");
 			
 			manager.getTopicCache().getTopicsWithTag(tagStat.getTagId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {
@@ -455,16 +459,26 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 				}	
 			});
 		}
-		if(topicsInvisible){
+		if(!topicsVisible){
 			setTopicVisibility(true);
 		}
 	}
+	/**
+	 * Will take care of clearing.
+	 * 
+	 * @param topics
+	 */
 	private void addTopicLabels(FullTopicIdentifier[] topics) {
 		int x = 0;
 		int y = 0;
 
 		if(topicLabelList == null){
 			topicLabelList = new ArrayList();
+		}else{
+			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
+				DraggableTopicLabel label = (DraggableTopicLabel) iter.next();
+				remove(label);	
+			}
 		}
 		topicLabelList.clear();
 
@@ -476,10 +490,12 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			
 			if(fti.getLongitudeOnIsland() < 0){
 				//just try to space them out a bit if they don't have real values
-				fti.setLongitudeOnIsland(.5);
+				//magic numbers try to make sure it's not under the banner, but
+				//also not squished against the right side.
+				fti.setLongitudeOnIsland(Math.random()*.4+.2);
 			}
 			if(fti.getLatitudeOnIsland() < 0){
-				fti.setLatitudeOnIsland(.5);
+				fti.setLatitudeOnIsland(Math.random()*.4+.2);
 			}
 
 			x = (int) (fti.getLongitudeOnIsland() * width);
@@ -551,6 +567,30 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		//redraw
 		zoomToScale(scale);
+	}
+
+	/**
+	 * TODO this is getting called even for island moves!
+	 * 
+	 * @param t
+	 */
+	public void redraw(Tag t) {
+		
+		System.out.println("redraw");
+		
+		tagStat = new TagStat(t);
+
+		banner.setText(t.getTitle());
+	
+		/*
+		 * force a re-lookup of member topics. could introspect the command to see what's changed,
+		 * but let's just play it easy.
+		 */
+		haveShownTopics = false;
+		if(topicsVisible){
+			showTopics();
+		}
+		
 	}
 
 	

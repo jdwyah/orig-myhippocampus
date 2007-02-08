@@ -15,6 +15,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.commands.SaveLatLongCommand;
 import com.aavu.client.domain.commands.SaveMetaTextCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
@@ -388,23 +389,23 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private void reCenter(int centerX, int centerY, double scale, int halfWidth, int halfHeight) {
 
-		System.out.println("back X "+backX+"  backy "+backY);
-		System.out.println("center X "+centerX+"  cy "+centerY);
+		//System.out.println("back X "+backX+"  backy "+backY);
+		//System.out.println("center X "+centerX+"  cy "+centerY);
 
 
 
-		System.out.println("hw "+halfWidth+" hh "+halfHeight);
+		//System.out.println("hw "+halfWidth+" hh "+halfHeight);
 		//backX = halfWidth - halfWidth/currentScale;
 
 		int newCenterX = (int) (centerX * scale);
 		int newCenterY = (int) (centerY * scale);
 
-		System.out.println("new center X "+newCenterX+" "+newCenterY);
+		//System.out.println("new center X "+newCenterX+" "+newCenterY);
 
 		backX = -(newCenterX - halfWidth);
 		backY = -(newCenterY - halfHeight);
 
-		System.out.println("Newback X "+backX+"  NEWbacky "+backY);
+		//System.out.println("Newback X "+backX+"  NEWbacky "+backY);
 
 
 	}
@@ -650,10 +651,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		}
 	}
 
-	public void updateTitle(Topic t) {
+	public void update(Tag t, AbstractSaveCommand command) {
 		Island isle = (Island) islands.get(new Long(t.getId()));
+		System.out.println("Ocean.update "+isle.getTitle());
 		if(isle != null){
-			isle.setBannerTitle(t.getTitle());
+			isle.redraw(t);
 		}
 	}
 

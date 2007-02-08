@@ -21,10 +21,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class RightTopicDisplayer extends Composite implements SaveNeededListener, ClickListener {
 	
-	private TagBoard tagBoard;
 	private TagPropertyPanel tagProperties;
 	private TopicDetailsTabBar topicDetails;
-	private EditableLabelExtension titleBox;
 	
 	private EntryPreview entryPreview;
 	
@@ -36,7 +34,6 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 			
 		this.manager = manager;
 		
-		tagBoard = new TagBoard(manager);		
 		tagProperties = new TagPropertyPanel(manager);
 		
 		onThisIslandBoard = new OnThisIslandBoard(manager);
@@ -47,19 +44,7 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 		
 		VerticalPanel mainPanel = new VerticalPanel();
 		
-				
-		titleBox = new EditableLabelExtension("",new ChangeListener(){
-			public void onChange(Widget sender) {								
-				manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
-						new StdAsyncCallback(Manager.myConstants.save()){});				
-			}			
-		});
 		
-		mainPanel.add(titleBox);
-		
-		
-		
-		mainPanel.add(tagBoard);
 		mainPanel.add(tagProperties);
 		
 		mainPanel.add(onThisIslandBoard);
@@ -84,10 +69,7 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 		this.topic = topic;
 		
 		setVisible(true);
-		
-		titleBox.setText(topic.getTitle());
-				
-		tagBoard.load(topic);
+			
 		if(topic instanceof Tag){
 			
 			tagProperties.load((Tag) topic);			

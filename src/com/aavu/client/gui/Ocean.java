@@ -2,6 +2,7 @@ package com.aavu.client.gui;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,6 +27,6 @@ public interface Ocean {
 
 	public void zoomTo(double scale);
 
-	public void updateTitle(Topic t);
+	public void update(Tag t, AbstractSaveCommand command);
 
 }

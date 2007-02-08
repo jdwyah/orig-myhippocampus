@@ -2,6 +2,7 @@ package com.aavu.client.gui;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
@@ -21,11 +22,13 @@ public class MainMap extends Composite {
 
 	//private Sidebar sideBar;	
 	private Manager manager;
-	//private TagSearch tagSearch;	
+	//private TagSearch tagSearch;
+		
 	private Ocean ocean;
 	private StatusPanel statusPanel;
 	private CompassRose compassRose;
 	private RightTopicDisplayer topicDetailsDisplayer;
+	private CenterTopicDisplayer centerDisplayer;
 	
 	private Zoomer zoomer;
 	
@@ -57,7 +60,10 @@ public class MainMap extends Composite {
 		mainP.add(statusPanel);
 		
 		zoomer = new Zoomer(manager);
-		mainP.add(zoomer);
+		mainP.add(zoomer);		
+		
+		centerDisplayer = new CenterTopicDisplayer(manager);
+		mainP.add(centerDisplayer);
 		
 		topicDetailsDisplayer = new RightTopicDisplayer(manager);
 		
@@ -94,9 +100,17 @@ public class MainMap extends Composite {
 	}
 
 
-	public void update(Topic t) {
+	public void update(Topic t, AbstractSaveCommand command) {
 
-		ocean.updateTitle(t);
+		System.out.println("MainMap update "+t+" "+command);
+		
+		if(t instanceof Tag){
+			System.out.println("is tag ");
+			ocean.update((Tag) t,command);
+		}
+		if(command.affectedTag()){
+			ocean.update(command.getAffectedTag(), command);			
+		}
 		
 	}
 
@@ -127,11 +141,13 @@ public class MainMap extends Composite {
 	
 	public void displayTopic(Topic topic) {
 		
+		centerDisplayer.load(topic);
 		topicDetailsDisplayer.load(topic);		
 		
 	}
 
 	public void unselect() {
+		centerDisplayer.unload();
 		topicDetailsDisplayer.unload();
 	}
 

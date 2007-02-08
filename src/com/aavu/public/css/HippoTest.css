@@ -61,6 +61,23 @@ a:visited {
 	z-index: 1;
 	width: 300px;
 }
+.H-CenterInfo {
+	/*background-image: url("../img/blueFade.png");*/
+	background-color: #5E85EC;
+	border: solid #44526F 2px;
+	
+	margin-left: 30%;
+	top: 0px;
+	/*right: 0px;*/
+	z-index: 1;
+	/*width: 300px;*/
+	
+	/*filter: alpha(opacity =       40);
+	-moz-opacity: .40;
+	opacity: .40;
+	-khtml-opacity: .4;*/
+}
+
 
 
 .H-Dashboard {

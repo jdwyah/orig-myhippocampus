@@ -30,6 +30,13 @@ public class SaveTagtoTopicCommand extends AbstractSaveCommand implements IsSeri
 		return "SaveTagToTopic ID "+getTopicID()+" "+getId1();
 	}
 	
+	public boolean affectedTag() {
+		return true;
+	}
 	
-	
+	//@Override
+	public Tag getAffectedTag() {
+		return (Tag) super.topic1;
+	}
+
 }

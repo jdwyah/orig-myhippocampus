@@ -30,6 +30,16 @@ public class RemoveTagFromTopicCommand extends AbstractSaveCommand implements Is
 	public String toString() {
 		return "SaveTagToTopic ID "+getTopicID()+" "+getId1();
 	}
+
+	//@Override
+	public boolean affectedTag() {
+		return true;
+	}
+
+	//@Override
+	public Tag getAffectedTag() {
+		return (Tag) super.topic1;
+	}
 	
 	
 	

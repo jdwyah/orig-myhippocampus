@@ -1,10 +1,8 @@
 package com.aavu.client.widget.edit;
 
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -13,28 +11,21 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
-import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
-import com.aavu.client.util.Logger;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TagBoard extends Composite implements CompleteListener, RemoveListener {
 
-	private VerticalPanel tagPanel = new VerticalPanel();
+	private CellPanel tagPanel = new HorizontalPanel();
 	
 	//private TextBox tagBox = new TextBox();
 	private TagAutoCompleteBox tagBox = null;
@@ -68,23 +59,29 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			}
 		});
 
-		VerticalPanel mainPanel = new VerticalPanel();
+		CellPanel mainPanel = new HorizontalPanel();
 		
-		header = new HeaderLabel(Manager.myConstants.tags(""));
+		header = new HeaderLabel(Manager.myConstants.tags());
 		mainPanel.add(header);
 		
+		
+		
+//		
+//		CellPanel tagPanelS = new HorizontalPanel();		
+//		tagPanelS.add(tagPanel);
+		
+		mainPanel.add(tagPanel);
+				
 		HorizontalPanel tagBoxP = new HorizontalPanel();		
 		tagBoxP.add(new Label(Manager.myConstants.addTag()));
 		tagBoxP.add(tagBox);
 		tagBoxP.add(addTagButton);		
 		mainPanel.add(tagBoxP);
 		
+		initWidget(mainPanel);
 		
-		VerticalPanel tagPanelS = new VerticalPanel();		
-		tagPanelS.add(tagPanel);
-		mainPanel.add(tagPanelS);
-				
-		initWidget(mainPanel);				
+		addStyleName("H-TagBoard");		
+		
 	}
 
 	public void tagTopic(final String tagName){
@@ -117,7 +114,16 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 */
 	public int load(Topic topic){
 		
-		header.setText(Manager.myConstants.tags(topic.getTitle()));
+		//this isn't really true, and we may end up hiding information,
+		//but I think it's confusing that islands can be on islands.
+		//
+		if(topic instanceof Tag){
+			setVisible(false);
+		}else{
+			setVisible(true);
+		}
+		
+		header.setText(Manager.myConstants.tags());
 		
 		tagPanel.clear();
 		

@@ -1,5 +1,6 @@
 package com.aavu.client.domain.commands;
 
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -120,6 +121,13 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 
 	public boolean updatesTitle() {	
 		return false;
+	}
+
+	public boolean affectedTag() {
+		return false;		
+	}
+	public Tag getAffectedTag(){
+		return null;
 	}
 	
 	

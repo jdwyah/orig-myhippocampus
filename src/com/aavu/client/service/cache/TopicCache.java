@@ -150,13 +150,40 @@ public class TopicCache {
 			Logger.log("command execution problem: "+e);
 		}
 		
-		for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
-			TopicSaveListener listener = (TopicSaveListener) iter.next();
-			listener.topicSaved(topic);
-		}			
-
-		topicService.saveCommand(command,callback);		
+		topicService.saveCommand(command,new SaveCallbackWrapper(topic,command,callback));		
 	}	
+	
+	/**
+	 * Call the save listeners on success, then pass the results back to the original caller.
+	 * @author Jeff Dwyer
+	 *
+	 */
+	private class SaveCallbackWrapper implements AsyncCallback {
+		private AsyncCallback callback;
+		private Topic topic;
+		private AbstractSaveCommand command;
+		
+		public SaveCallbackWrapper(Topic topic, AbstractSaveCommand command, AsyncCallback callback) {
+			this.topic = topic;
+			this.command = command;
+			this.callback = callback;			
+		}
+		public void onFailure(Throwable caught) {			
+			Logger.log("caught "+caught);
+			callback.onFailure(caught);
+		}
+		public void onSuccess(Object result) {
+			Logger.log("Save callback rtn "+result);
+			
+			for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
+				TopicSaveListener listener = (TopicSaveListener) iter.next();
+				listener.topicSaved(topic,command);
+			}			
+			
+			callback.onSuccess(result);
+		}
+	}
+	
 
 //	public void saveNotifyListeners(Topic topic, SaveTitleCommand command, StdAsyncCallback callback) {
 //		if(command.updatesTitle()){
@@ -349,7 +376,9 @@ public class TopicCache {
 		}		
 	}
 	/**
-	 * This callback expects to be onSuccessed once the topicIdentifiers have been loaded 
+	 * This callback expects to be onSuccessed once the topicIdentifiers have been loaded
+	 * 
+	 *  onSuccess shoudl be called with null.
 	 */
 	private class TopicLookupOrNewCallback implements AsyncCallback {
 

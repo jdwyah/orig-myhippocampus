@@ -1,17 +1,17 @@
 package com.aavu.client.widget.edit;
 
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.service.Manager;
+import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.widget.TopicLink;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ActionableTopicLabel extends Composite {
@@ -24,6 +24,9 @@ public class ActionableTopicLabel extends Composite {
 	}
 
 	public ActionableTopicLabel(Topic topic, String actionTextStr) {
+		this(topic,actionTextStr,Orientation.VERTICAL);
+	}
+	public ActionableTopicLabel(Topic topic, String actionTextStr,Orientation orient) {
 		FocusPanel fp = new FocusPanel();
 		
 		
@@ -47,7 +50,13 @@ public class ActionableTopicLabel extends Composite {
 		actionText = new Label(actionTextStr);				
 		actionText.setVisible(false);
 		
-		HorizontalPanel hp = new HorizontalPanel();
+		CellPanel hp;
+		if(orient == Orientation.HORIZONTAL){
+			hp = new HorizontalPanel();
+		}
+		else{
+			hp = new VerticalPanel();
+		}
 		
 		hp.add(theLabel);
 		hp.add(actionText);

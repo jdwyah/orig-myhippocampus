@@ -12,6 +12,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.EntryEditWindow;
@@ -248,10 +249,13 @@ public class Manager implements TopicSaveListener {
 		map.growIsland(tag);
 	}
 	/**
-	 * TODO don't load the entire darn list/use the cache etc
+	 * Topic was saved with this command. 
+	 * 
+	 * Main responsibility is for the map to redraw everything involving these topics.
+	 * 
 	 */
-	public void topicSaved(Topic t) {
-		map.update(t);
+	public void topicSaved(Topic t,AbstractSaveCommand command) {
+		map.update(t,command);
 	}
 	public void updateStatus(int i, String call, StatusCode send) {
 		map.updateStatusWindow(i, call, send);
