@@ -50,7 +50,7 @@ public class Manager implements TopicSaveListener {
 	
 	private FramesManager framesManager;
 	private TagLocalService tagLocalService;
-	private MainMap mainMap;
+	//private MainMap mainMap;
 	private Glossary glossary; 
 
 	private boolean focussed = false;
@@ -64,7 +64,7 @@ public class Manager implements TopicSaveListener {
 		
 		framesManager = new FramesManagerFactory().createFramesManager(); 
 		
-		mainMap = new MainMap(this);
+		map = new MainMap(this);
 		
 	}
 	private void initConstants() {
@@ -82,28 +82,33 @@ public class Manager implements TopicSaveListener {
 	public void bringUpChart(Topic topic) {
 		bringUpChart(topic, false);
 	}
+	
 	public void bringUpChart(final Topic topic, boolean editMode) {
-		
-		if(topic instanceof Tag){
-			System.out.println("BRINGING UP TAG "+topic.toPrettyString());
-			System.out.println(" "+topic.getMetas());
-			System.out.println(" "+topic.getMetas().size());
-			getTopicCache().getTopicsWithTag(topic.getId(),new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
-				public void onSuccess(Object result) {
-					super.onSuccess(result);
-					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
-					IslandDetailsWindow tcw = new IslandDetailsWindow((Tag) topic,topics,Manager.this);					
-				}});
-						
-		}else{
-			System.out.println("BRINGING UP TOPIC "+topic);
-			TopicWindow tw = new TopicWindow(this,topic);		
-//			if(editMode){
-//				//tw.setToEdit();
-//			}
-			
-		}
+		map.displayTopic(topic);
+		map.centerOn(topic);
 	}
+//	public void bringUpChart(final Topic topic, boolean editMode) {
+//		
+//		if(topic instanceof Tag){
+//			System.out.println("BRINGING UP TAG "+topic.toPrettyString());
+//			System.out.println(" "+topic.getMetas());
+//			System.out.println(" "+topic.getMetas().size());
+//			getTopicCache().getTopicsWithTag(topic.getId(),new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
+//				public void onSuccess(Object result) {
+//					super.onSuccess(result);
+//					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
+//					IslandDetailsWindow tcw = new IslandDetailsWindow((Tag) topic,topics,Manager.this);					
+//				}});
+//						
+//		}else{
+//			System.out.println("BRINGING UP TOPIC "+topic);
+//			TopicWindow tw = new TopicWindow(this,topic);		
+////			if(editMode){
+////				//tw.setToEdit();
+////			}
+//			
+//		}
+//	}
 
 	//public void show(Topic topic, boolean editMode) {
 	
@@ -127,7 +132,7 @@ public class Manager implements TopicSaveListener {
 				Tag newIsland = new Tag();
 				newIsland.setId(res.getTopicID());
 				newIsland.setTitle(res.getTopicTitle());
-				mainMap.growIsland(newIsland);					
+				map.growIsland(newIsland);					
 			}			
 		});
 						
@@ -192,13 +197,13 @@ public class Manager implements TopicSaveListener {
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				Topic tag = (Topic) result;		
-				mainMap.displayTopic(tag);
+				map.displayTopic(tag);
 				
 				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);						
 			}});			
 	}	
 	public void unselectIsland() {
-		mainMap.unselect();
+		map.unselect();
 	}
 
 	/**
@@ -317,7 +322,7 @@ public class Manager implements TopicSaveListener {
 //		p.add(mainMap,0,0);
 //		
 //		return p;
-		return mainMap;
+		return map;
 	}
 	
 	/**
@@ -325,7 +330,7 @@ public class Manager implements TopicSaveListener {
 	 *
 	 */
 	private void loadGUI() {
-		mainMap.load();
+		map.load();
 	}
 	
 	/**
@@ -380,7 +385,7 @@ public class Manager implements TopicSaveListener {
 				callback.onSuccess(result);
 				
 				if(topic instanceof Tag){
-					mainMap.removeIsland(topic.getId());
+					map.removeIsland(topic.getId());
 				}
 				refreshAll();
 			}				
@@ -389,14 +394,14 @@ public class Manager implements TopicSaveListener {
 	
 	public void setFocussed(boolean focussed) {
 		this.focussed = focussed;
-		mainMap.showBackToOcean(focussed);
+		map.showBackToOcean(focussed);
 	}
 	public boolean isFocussed() {
 		return focussed;
 	}
 	public void unFocus() {
 		this.focussed = false;
-		mainMap.unFocus();
+		map.unFocus();
 	}
 	public PopupWindow showProgressBar(ProgressBar progressBar) {		
 		ProgressPopup win = new ProgressPopup(framesManager.newFrame(),progressBar.getTitle(),progressBar);				
@@ -410,7 +415,7 @@ public class Manager implements TopicSaveListener {
 		}		
 	}
 	public void zoomTo(double scale) {
-		mainMap.zoomTo(scale);	
+		map.zoomTo(scale);	
 	}
 	public void editEntry(Topic topic) {
 				

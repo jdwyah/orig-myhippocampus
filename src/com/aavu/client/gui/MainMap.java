@@ -1,5 +1,7 @@
 package com.aavu.client.gui;
 
+import java.util.Iterator;
+
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
@@ -108,9 +110,19 @@ public class MainMap extends Composite {
 			System.out.println("is tag ");
 			ocean.update((Tag) t,command);
 		}
-		if(command.affectedTag()){
-			ocean.update(command.getAffectedTag(), command);			
+		/*
+		 * affectedTag() is true if 
+		 */
+		//for(command.getAffectedTags())
+		
+		for (Iterator iter = command.getAffectedTags().iterator(); iter.hasNext();) {
+			Tag tag = (Tag) iter.next();
+			ocean.update(tag, command);
 		}
+		
+//		if(command.affectedTag()){
+//			ocean.update(command.getAffectedTag(), command);			
+//		}
 		
 	}
 
@@ -143,7 +155,11 @@ public class MainMap extends Composite {
 		
 		centerDisplayer.load(topic);
 		topicDetailsDisplayer.load(topic);		
-		
+				
+	}
+	
+	public void centerOn(Topic topic){
+		ocean.centerOn(topic);
 	}
 
 	public void unselect() {

@@ -1,5 +1,7 @@
 package com.aavu.client.domain.commands;
 
+import java.util.Set;
+
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -27,6 +29,15 @@ public class SaveTitleCommand extends AbstractSaveCommand implements IsSerializa
 		return true;
 	};
 	
+	
+
+	/**
+	 * update all tags that contain this topic 
+	 */
+	//@Override
+	public Set getAffectedTags() {		
+		return topic.getTypesAsTopics();
+	}
 	
 	
 	

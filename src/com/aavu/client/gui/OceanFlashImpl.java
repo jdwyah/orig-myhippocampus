@@ -160,4 +160,9 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 	public void update(Tag t, AbstractSaveCommand command) {
 		throw new UnsupportedOperationException("Not Yet Implemented");		
 	}
+
+	public void centerOn(Topic topic) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,5 +1,7 @@
 package com.aavu.client.domain.commands;
 
+import java.util.Set;
+
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
@@ -32,13 +34,10 @@ public class RemoveTagFromTopicCommand extends AbstractSaveCommand implements Is
 	}
 
 	//@Override
-	public boolean affectedTag() {
-		return true;
-	}
-
-	//@Override
-	public Tag getAffectedTag() {
-		return (Tag) super.topic1;
+	public Set getAffectedTags() {
+		Set s = super.getAffectedTags();
+		s.add(topic1);
+		return s;
 	}
 	
 	

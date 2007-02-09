@@ -1,5 +1,8 @@
 package com.aavu.client.domain.commands;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
@@ -123,11 +126,8 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 		return false;
 	}
 
-	public boolean affectedTag() {
-		return false;		
-	}
-	public Tag getAffectedTag(){
-		return null;
+	public Set getAffectedTags() {
+		return new HashSet();
 	}
 	
 	

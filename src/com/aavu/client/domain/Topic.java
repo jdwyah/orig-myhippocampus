@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
+import com.aavu.client.gui.dhtmlIslands.PointLocation;
 import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
@@ -612,6 +613,23 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			}
 		}
 		return rtn;
+	}
+
+	/**
+	 * Return the lat long of our center on the map or null if none exists.
+	 * 
+	 * Overridden by Tag
+	 * 
+	 * @return
+	 */
+	public PointLocation getCenter() {	
+		Set s = getTypesAsTopics();
+		if(s.size() > 0){
+			Tag firstTag = (Tag) s.iterator().next();			
+			return new PointLocation(firstTag.getLongitude(),firstTag.getLatitude());
+		}else{
+			return null;
+		}
 	}
 
 

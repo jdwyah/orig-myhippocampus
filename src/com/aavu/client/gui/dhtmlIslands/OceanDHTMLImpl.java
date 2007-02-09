@@ -537,10 +537,15 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 
-
+	/**
+	 * Takes dx, dy as SouthEast (+,+)  NW (-,-)
+	 * 
+	 * @param dx
+	 * @param dy
+	 */
 	private void moveByDelta(int dx, int dy) {
-		curbackX = dx + backX;
-		curbackY = dy + backY;
+		curbackX = -dx + backX;
+		curbackY = -dy + backY;
 		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX+"px "+curbackY+"px");	
 
 		int width = Window.getClientWidth();
@@ -613,7 +618,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		curMouseY = y;
 
 		if (dragging) {			
-			moveByDelta(x - dragStartX, y - dragStartY);			
+			moveByDelta(dragStartX - x, dragStartY - y);			
 		}
 	}
 
@@ -657,6 +662,45 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		if(isle != null){
 			isle.redraw(t);
 		}
+	}
+
+	/**
+	 * 	invert this equation to find the x for a given center
+		int centerX = (int)((-curbackX + halfWidth)/currentScale);
+		int centerY = (int)((-curbackY + halfHeight)/currentScale);		
+	 * 
+	 */
+	public void centerOn(Topic topic) {
+	
+		int width = Window.getClientWidth();
+		int height = Window.getClientHeight();
+
+		int halfWidth = width/2;
+		int halfHeight = height/2;
+	
+		PointLocation p = topic.getCenter();
+		
+		if(p != null){
+			int left = (int) ((p.x * currentScale) - halfWidth);
+			int top = (int) ((p.y * currentScale) - halfHeight);
+
+//			SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
+//			System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
+			
+			
+			//intuitively this is (left - curbackX) but things are reversed			
+			int dx = left + curbackX;
+			int dy = top + curbackY;
+			moveByDelta(dx, dy);
+						
+//			System.out.println("dx "+dx+" curbackX "+curbackX+" ");
+//			System.out.println("dy "+dy+" curbackY "+curbackY+" ");			
+			
+			//this was normally set in finishDrag()
+			backX = curbackX;
+			backY = curbackY;	
+		}
+		
 	}
 
 

@@ -3,7 +3,9 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Set;
 
+import com.aavu.client.gui.dhtmlIslands.PointLocation;
 import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -50,6 +52,9 @@ public class Tag extends Topic implements  Completable, IsSerializable, Serializ
 		return getTitle();
 	}
 
-
+	//@Override
+	public PointLocation getCenter() {						
+		return new PointLocation(getLongitude(),getLatitude());		
+	}
 
 }

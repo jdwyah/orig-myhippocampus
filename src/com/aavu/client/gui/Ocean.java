@@ -29,4 +29,6 @@ public interface Ocean {
 
 	public void update(Tag t, AbstractSaveCommand command);
 
+	public void centerOn(Topic topic);
+
 }
