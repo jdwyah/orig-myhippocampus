@@ -431,9 +431,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
 				DraggableTopicLabel label = (DraggableTopicLabel) iter.next();
 				label.setVisible(visible);			
-			}
-			topicsVisible = visible;
+			}			
 		}
+		topicsVisible = visible;
 	}
 	public void showTopics() {
 		if(!haveShownTopics){

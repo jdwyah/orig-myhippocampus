@@ -7,6 +7,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
@@ -35,7 +36,7 @@ public interface GWTTopicService extends RemoteService {
 		
 	FullTopicIdentifier[] getTopicIdsWithTag(long id) throws HippoException;
 	//List<TimeLineObj>
-	List getTimelineObjs() throws HippoException;
+	TimeLineObj[] getTimelineObjs() throws HippoException;
 
 	//List<TopicIdentifier> 
 	List getLinksTo(Topic topic) throws HippoException;

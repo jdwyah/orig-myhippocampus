@@ -9,7 +9,7 @@
 
 	 
 
-  <p class="subheading">Hi ${bean.user.username}, don't forget to install the Firefox plugin! (<A HREF="<@spring.url "/resources/myhippo.xpi"/>">click here</A>)</p>
+  <p class="subheading">Hi ${bean.user.username}, don't forget to install the Firefox plugin!  (<A HREF="<@spring.url "/resources/myhippo.xpi"/>">click here</A>) (v1.8 2/9/07)</p>
 
 
 	 <#if message?exists>

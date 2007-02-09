@@ -3,7 +3,6 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -12,6 +11,7 @@ import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class OnThisIslandBoard extends Composite implements CompleteListener {
 
+	private static final int MAX_TO_SHOW = 6;
 
 	private TopicCache topicService;
 	private TopicCompleter topicCompleter;
@@ -28,8 +29,11 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	private Manager manager;
 	private CellPanel onThisIslandPanel;
 
-	public OnThisIslandBoard(Manager manager) {		
-		this.manager = manager;
+	private FullTopicIdentifier[] topics;
+	
+	
+	public OnThisIslandBoard(Manager _manager) {		
+		this.manager = _manager;
 		
 		topicService = manager.getTopicCache();
 		
@@ -47,6 +51,14 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		});
 
 		
+		Button examineB = new Button("View Members");
+		examineB.addClickListener(new ClickListener(){
+			public void onClick(Widget sender){
+				manager.viewMembers(myTag,topics);
+			}
+		});
+		
+		
 		VerticalPanel mainP = new VerticalPanel();
 		
 		mainP.add(new HeaderLabel(Manager.myConstants.island_topics_on()));
@@ -57,8 +69,10 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		cp.add(enterInfoButton);
 		
 		onThisIslandPanel = new VerticalPanel();
-		mainP.add(onThisIslandPanel);
+		mainP.add(onThisIslandPanel);		
 		mainP.add(cp);
+		
+		mainP.add(examineB);
 		//mainP.add(alsos);
 		
 		
@@ -80,10 +94,15 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	}
 
 	protected void addTopicLabels(FullTopicIdentifier[] topics) {
+		this.topics = topics;
 		onThisIslandPanel.clear();
 		for (int i = 0; i < topics.length; i++) {
 			FullTopicIdentifier fti = topics[i];
 			onThisIslandPanel.add(new TopicLink(fti,null));
+			
+			if(i >= MAX_TO_SHOW){
+				
+			}
 		}		
 	}	
 	

@@ -449,21 +449,20 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	public void growIsland(Tag tag) {
 		Island isle = (Island) islands.get(new Long(tag.getId()));
-//		if(isle == null){
-
-//		Island newIsle = new Island(tag,this,manager.getUser(),manager);		
-//		addIsland(tag, newIsle);
-
-//		}else{
-//		isle.grow();
-//		}
+				
+		if(isle == null){
+			TagStat tagStat = new TagStat(tag);
+			Island newIsle = new Island(tagStat,this,manager.getUser(),manager);		
+			addIsland(tagStat, newIsle);
+		}else{
+			isle.grow();
+		}
 	}
 	public void removeIsland(long id) {
 		Island isle = (Island) islands.get(new Long(id));
 		if(isle != null){
 
 			GUIEffects.fadeAndRemove(isle, 3000);
-
 
 		}
 	}

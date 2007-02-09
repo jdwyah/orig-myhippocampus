@@ -24,9 +24,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Hibernate;
+import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
 
 import com.aavu.client.domain.ReallyCloneable;
@@ -105,8 +107,7 @@ AbstractSerializationStreamWriter {
 		stringTable.clear();
 	}
 
-	public void serializeValue(Object value, Class type) throws SerializationException {
-
+	public void serializeValue(Object value, Class type) throws SerializationException {		
 		if (type == boolean.class) {
 			writeBoolean(((Boolean) value).booleanValue());
 		} else if (type == byte.class) {
@@ -129,13 +130,17 @@ AbstractSerializationStreamWriter {
 		/*
 		 * make sure we dont return any java.sql.Timestamps
 		 */
-		 else if (type == java.util.Date.class) {				  
-			 writeObject(new java.util.Date(((java.util.Date)value).getTime()));
+		 else if (type == java.util.Date.class) {
+			 if(value != null){
+				 writeObject(new java.util.Date(((java.util.Date)value).getTime()));	 
+			 }else{
+				 writeObject(value);
+			 }			 
 		 } 
 		/*
 		 * convert org.collection.hibernate.PersistentSet to HashSet 
 		 */
-		 else if (type == java.util.Set.class) {
+		 else if (type == java.util.Set.class) {			 
 			 Set hashSet = new HashSet();
 			 if (value instanceof PersistentSet) {												
 				 PersistentSet persSet = (PersistentSet) value;						
@@ -147,6 +152,21 @@ AbstractSerializationStreamWriter {
 			 }
 			 writeObject(hashSet);
 		 } 
+//		 else if (type == java.util.List.class) {
+//			 System.out.println("convert list "+value);
+//			
+//			 if (value instanceof PersistentList) {												
+//				 List arrayList = new ArrayList();
+//				 PersistentList persSet = (PersistentList) value;						
+//				 if(persSet.wasInitialized()){																													
+//					 arrayList.addAll(persSet);
+//				 }
+//				 writeObject(arrayList);
+//			 } else{
+//				 System.out.println("write "+value);	 
+//				 writeObject(value);
+//			 }			 
+//		 } 
 		/*
 		 * if this is a CGLIB proxy object do a clone it.
 		 * Using 

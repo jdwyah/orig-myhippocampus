@@ -1,5 +1,6 @@
 package com.aavu.client.gui.glossary;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.aavu.client.gui.ext.tabbars.TabPanelExt;
 import com.aavu.client.gui.ext.tabbars.VertableTabPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -72,24 +74,38 @@ public class Glossary extends FocusPanel {
 	}
 
 	/**
-	 * TODO make this only load the referenced topic
+	 * Convert to list repr
+	 *  
 	 * @param t
 	 */
-	public void load(Topic t) {
-		load();
-	}
+	public void load(TopicIdentifier[] topics) {
+		List conv = new ArrayList();
+		for (int i = 0; i < topics.length; i++) {
+			conv.add(topics[i]);
+		}		
+		load(conv);
+	}	
+	
+	/**
+	 * Called with no parameter default behavior is to do a lookup for all topic identifiers
+	 *
+	 */
 	public void load(){		
 		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
 
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				List topics = (List) result;
-				alphabetizeTopics(topics);
-				dirty = false;
+				load(topics);
 			}
 		});
 	}
 
+	private void load(List topics) {
+		alphabetizeTopics(topics);
+		dirty = false;
+	}
+	
 	protected void alphabetizeTopics(List topics) {
 		//<String,Map<String,TopicIdentifier>>
 		Map allEntries = new GWTSortedMap();		
@@ -106,7 +122,7 @@ public class Glossary extends FocusPanel {
 		
 		TopicIdentifier topicIdent = null;		
 		for (Iterator ident = topics.iterator(); ident.hasNext();) {
-						
+									
 			topicIdent = (TopicIdentifier) ident.next();	
 			
 			char firstLetter = topicIdent.getTopicTitle().charAt(0);

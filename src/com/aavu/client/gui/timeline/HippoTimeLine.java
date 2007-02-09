@@ -15,82 +15,114 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Composite;
 
-public class HippoTimeLine extends PopupWindow {
+public class HippoTimeLine extends Composite {
 
+
+	private static final int WIDTH = 680;
 	private static final int HEIGHT = 400;
-	private static final int WIDTH = 600;
+		
 	private SimileTimeline timeline;
 	private TopicCache topicCache;
+	private TimeLineObj[] timeLinesObjs;
+	private static int counter = 0;
 
-
+	
+	
 	/**
+	 * NOTE: you can't put a timeline in a TabPanel. Weird JS problem from the timeline.js
 	 * 
 	 * @param timeLinesObjs
 	 */
-	public HippoTimeLine(Manager manager,List timeLinesObjs){
-		super(manager.newFrame(),manager.myConstants.timeline(),WIDTH,HEIGHT);
+	public HippoTimeLine(Manager manager,TimeLineObj[] timeLinesObjs){
+		this(manager,timeLinesObjs,WIDTH,HEIGHT);
+	}
+	public HippoTimeLine(Manager manager,TimeLineObj[] timeLinesObjs,int width,int height){
+		this.timeLinesObjs = timeLinesObjs;
 		this.topicCache = manager.getTopicCache();
 		
-		timeline = new SimileTimeline("foo");
 		
-		timeline.setPixelSize(WIDTH, HEIGHT);
+		
+		timeline = new SimileTimeline("foo_"+counter++);		
+				
+		timeline.setPixelSize(width, height);
 
-		setContent(timeline);			
+		initWidget(timeline);			
 		
-		//TODO BAD. we used to get the real onLoad() event, but GWM seems to have changed this.
+	
+	}
+
+
+	//@Override
+	protected void onLoad() {
+		super.onLoad();
+		//TODO BAD. we used to just process here, but GWM seems to have changed this.
 		//If the simile jscript isn't loaded... bad.
 		//3 second safety? hopefully that'll work.
 		Timer t = new Timer(){
 			public void run() {
-				onLoad();
+				delayedLoad(timeLinesObjs);
 			}};
 		t.schedule(3000);
 	}
 
 
 	//@Override
-	protected void onLoad() {		
+	protected void delayedLoad(final TimeLineObj[] timeLinesObjs) {		
 		
-		Logger.log("HippoTimeline: onLoad()");
+		Logger.log("HippoTimeline: onLoad()");		
 		
-		topicCache.getTimelineObjs(new StdAsyncCallback("GetTimelineObjs"){
+		if(timeLinesObjs != null){
+			
+			load(timeLinesObjs);
+			
+		}else{
 
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				List timelines = (List) result;
-				
-//				for (Iterator iter = timelines.iterator(); iter.hasNext();) {
+			topicCache.getTimelineObjs(new StdAsyncCallback("GetTimelineObjs"){
+
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
+					TimeLineObj[] timelines = (TimeLineObj[]) result;
+
+//					for (Iterator iter = timelines.iterator(); iter.hasNext();) {
 //					TimeLineObj tlo = (TimeLineObj) iter.next();
 //					System.out.println("Received tlo "+tlo);
-//				}
-				
-				
-				JSONObject jo = new JSONObject();
-				JSONArray events = new JSONArray();
+//					}
 
-				int i =0;
-				for (Iterator iter = timelines.iterator(); iter.hasNext();) {
-					TimeLineObj element = (TimeLineObj) iter.next();					
-					events.set(i, element.getJSONObj());
-					i++;
-				}							
-						
-				jo.put("events",events);
-				jo.put("dateTimeFormat", new JSONString("iso8601"));
-				
-				Logger.log("Sending to simile: "+jo.toString());
-				timeline.load(jo);
-				
-				if(timelines.isEmpty()){
-				Window.alert(Manager.myConstants.timeline_no_objs_msg());
-				}
-			}});
+					load(timelines);
 
-	
-
+				}});
+		}
 	}
 
+	protected void load(TimeLineObj[] timelines){
+		
+				
+		for (int i = 0; i < timelines.length; i++) {
+			TimeLineObj tlo = timelines[i];
+			System.out.println("Received tlo "+tlo);
+		}		
+		
+		JSONObject jo = new JSONObject();
+		JSONArray events = new JSONArray();
+		
+		for (int i = 0; i < timelines.length; i++) {
+			TimeLineObj tlo = timelines[i];			
+			//System.out.println("C "+tlo.getJSONObj());
+			events.set(i, tlo.getJSONObj());		
+		}							
+		
+		jo.put("events",events);		
+		jo.put("dateTimeFormat", new JSONString("iso8601"));
+		
+		Logger.log("Sending to simile: "+jo.toString());
+		timeline.load(jo);
+		
+		if(timelines.length == 0){
+			Window.alert(Manager.myConstants.timeline_no_objs_msg());
+		}
+	}
 	
 
 

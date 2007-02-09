@@ -32,6 +32,11 @@ public class SimileTimeline extends SimplePanel {
 	}	
 	
 	
+	public String getName() {
+		return name;
+	}
+
+
 	private native void nativeLoad(String name,String jsonString,String baseURL)/*-{
 	var jsonData = eval('(' + jsonString + ')')
 	 //alert("wnd"+$wnd);
@@ -41,33 +46,35 @@ public class SimileTimeline extends SimplePanel {
 	 var Timeline = $wnd.Timeline;	 
 	 //alert("timeline: "+Timeline);
 
-	//alert("json "+jsonData);
-	//alert("json.events "+jsonData.events);
-	//alert("json.date "+jsonData.dateTimeFormat);
+	 //alert("json "+jsonData);
+	 //alert("json.events "+jsonData.events);
+	 //alert("json.date "+jsonData.dateTimeFormat);
  	 var eventSource = new Timeline.DefaultEventSource();
-
+	 
 	 var bandInfos = [
 		    Timeline.createBandInfo({
 		        width:          "70%", 
 		        intervalUnit:   Timeline.DateTime.MONTH, 
 		        intervalPixels: 100,
 		        eventSource:    eventSource,
-        		date:           "Jun 28 2006 00:00:00 GMT"
+        		date:           "Jan 1 2007 00:00:00 GMT"
 		    }),
 		    Timeline.createBandInfo({
 		        width:          "30%", 
 		        intervalUnit:   Timeline.DateTime.YEAR, 
 		        intervalPixels: 200,
 		        eventSource:    eventSource,
-        		date:           "Jun 28 2006 00:00:00 GMT"
+        		date:           "Jan 1 2007 00:00:00 GMT"
 		    })
 		  ];		  
-		  
+    		  
 		  bandInfos[1].syncWith = 0;
 		  bandInfos[1].highlight = true;
+	
+		
 		  tl = Timeline.create($doc.getElementById(name), bandInfos);		  
-		  eventSource.loadJSON(jsonData, baseURL);
-		  
+ 	
+ 		  eventSource.loadJSON(jsonData, baseURL);    		  
 	}-*/;
 	
 	

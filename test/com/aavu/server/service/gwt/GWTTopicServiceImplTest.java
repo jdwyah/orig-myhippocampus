@@ -9,6 +9,7 @@ import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
@@ -56,12 +57,14 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		initDBTables();
 	}
 
-
+	/**
+	 * Implement a test HSQLDB 
+	 *
+	 */
 	private void initDBTables(){
 		
-		topicDAO.deleteAllTables();
+		//topicDAO.deleteAllTables();
 			
-		
 	}
 
 	private void doSomeInit() throws HippoException{
@@ -204,7 +207,20 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 	
 		Topic reloadedBook = topicService.getTopicForName(D);
 		//assertEquals(1, reloadedBook.getInstances().size());
-		
-		
+			
 	}
+	
+	public void testTimeline() throws HippoException{
+		
+		TimeLineObj[] rtn = topicService.getTimelineObjs();
+		
+		for (int i = 0; i < rtn.length; i++) {
+			TimeLineObj obj = rtn[i];
+			log.debug(obj);
+		}
+		
+		assertNotNull(rtn);
+	}
+	 
+	
 }

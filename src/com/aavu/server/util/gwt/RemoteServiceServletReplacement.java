@@ -376,6 +376,10 @@ public class RemoteServiceServletReplacement extends HttpServlet {
         stream.serializeValue(responseObj, responseType);
       } catch (SerializationException e) {
         responseObj = e;
+        
+        System.out.println("ERROR: "+e);
+        e.printStackTrace();
+        
         isException = true;
       }
     }

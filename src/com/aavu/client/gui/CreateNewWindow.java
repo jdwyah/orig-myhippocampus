@@ -15,24 +15,29 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class NewTagNameWindow extends PopupWindow {
+public class CreateNewWindow extends PopupWindow {
 	
 	private static final int HEIGHT = 60;
 	private static final int WIDTH = 290;
 	
 	private Manager manager;
 	private Label messageLabel;
-	private TextBox name;	
+	private TextBox name;
+	private boolean isIsland;	
 	
 	/**
 	 * Prevents multiple instances with a semaphore.
+	 * @param island 
 	 * 
 	 * @param manager
 	 */
-	public NewTagNameWindow(Manager _manager) {
-		super(_manager.newFrame(),Manager.myConstants.island_new(),WIDTH,HEIGHT);
-		this.manager = _manager;
+	public CreateNewWindow(Manager _manager, boolean isIsland) {
 		
+		super(_manager.newFrame(),
+				isIsland ? Manager.myConstants.island_new() : Manager.myConstants.topic_new(),
+				WIDTH,HEIGHT);
+		this.manager = _manager;
+		this.isIsland = isIsland;
 	
 		
 		HorizontalPanel panel = new HorizontalPanel();
@@ -62,7 +67,9 @@ public class NewTagNameWindow extends PopupWindow {
 	
 	private void clicked(){
 		if(!name.getText().equals("")){
-			manager.createIsland(name.getText());
+			
+			manager.createTopic(name.getText(),isIsland);
+			
 			close();
 		}else{
 			messageLabel.setText("Enter a name");

@@ -38,8 +38,6 @@ public interface TopicDAO {
 
 	List<Topic> getAllTopics();
 
-	void deleteAllTables();
-
 	Occurrence save(Occurrence link);
 
 	List<TopicIdentifier> getTopicForOccurrence(long id);

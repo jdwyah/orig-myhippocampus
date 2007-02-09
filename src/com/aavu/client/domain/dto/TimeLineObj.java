@@ -16,7 +16,7 @@ public class TimeLineObj implements IsSerializable {
 	private Date start;
 	private Date end;
 		
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private transient static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public TimeLineObj(){}
 	

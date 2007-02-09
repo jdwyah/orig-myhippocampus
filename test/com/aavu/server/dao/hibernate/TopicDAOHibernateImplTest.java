@@ -455,7 +455,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	 */
 	public void testToMakeSureWeDontCreateTooManyObjects() throws HippoBusinessException{
 
-		topicDAO.deleteAllTables();
+		//topicDAO.deleteAllTables();
 
 		Topic patriotGames = new Topic(u,C);
 		patriotGames.getLatestEntry().setData(B);

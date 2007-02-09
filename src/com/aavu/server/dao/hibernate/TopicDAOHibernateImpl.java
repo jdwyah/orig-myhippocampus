@@ -122,6 +122,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //		}
 		
 		if(log.isDebugEnabled()){
+			log.debug(rtn.getClass());
 			for (TimeLineObj obj : rtn) {
 				log.debug("TIMELINE ");
 				log.debug(obj);
@@ -525,26 +526,26 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * 
 	 */
 	public void deleteAllTables() {
-
-		getHibernateTemplate().execute(new HibernateCallback(){
-
-			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
-
-				Connection conn = sess.connection();
-				Statement statement = conn.createStatement();
-
-				boolean res = statement.execute("DELETE FROM topic_scopes");
-				res = statement.execute("DELETE FROM topic_associations");
-				res = statement.execute("DELETE FROM instancetable");
-				res = statement.execute("DELETE FROM member_topics");
-				res = statement.execute("DELETE FROM topic_occurences");
-				res = statement.execute("DELETE FROM occurrences");
-				res = statement.execute("DELETE FROM subjects");
-				res = statement.execute("DELETE FROM typetable");
-				res = statement.execute("DELETE FROM topics");				
-				return res;
-
-			}});
+		throw new UnsupportedOperationException();
+//		getHibernateTemplate().execute(new HibernateCallback(){
+//
+//			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+//
+//				Connection conn = sess.connection();
+//				Statement statement = conn.createStatement();
+//
+//				boolean res = statement.execute("DELETE FROM topic_scopes");
+//				res = statement.execute("DELETE FROM topic_associations");
+//				res = statement.execute("DELETE FROM instancetable");
+//				res = statement.execute("DELETE FROM member_topics");
+//				res = statement.execute("DELETE FROM topic_occurences");
+//				res = statement.execute("DELETE FROM occurrences");
+//				res = statement.execute("DELETE FROM subjects");
+//				res = statement.execute("DELETE FROM typetable");
+//				res = statement.execute("DELETE FROM topics");				
+//				return res;
+//
+//			}});
 
 	}
 

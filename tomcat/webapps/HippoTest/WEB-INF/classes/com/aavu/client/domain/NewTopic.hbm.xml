@@ -165,7 +165,7 @@
 				<!-- <map-key-many-to-many column="role_topic" class="Topic" ></map-key-many-to-many>-->
 <!-- 				<many-to-many column="implementing_topic" class="Topic"></many-to-many>						
 	    	</map>-->
-	      	<set name="members" table="member_topics">
+	      	<set name="members" table="member_topics" cascade="save-update">
 				<key column="member_topics_id"></key>			
 				<many-to-many column="member_id" class="Topic" />
   			</set>

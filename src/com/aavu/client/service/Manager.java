@@ -1,5 +1,6 @@
 package com.aavu.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.gwm.client.FramesManager;
@@ -14,21 +15,22 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.EntryEditWindow;
-import com.aavu.client.gui.IslandDetailsWindow;
 import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
-import com.aavu.client.gui.NewTagNameWindow;
+import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
-import com.aavu.client.gui.TopicWindow;
+import com.aavu.client.gui.ViewMemberWindow;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.glossary.GlossaryWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
+import com.aavu.client.gui.timeline.TimeLineWindow;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
@@ -36,7 +38,6 @@ import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
-import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
@@ -112,31 +113,40 @@ public class Manager implements TopicSaveListener {
 
 	//public void show(Topic topic, boolean editMode) {
 	
-	public void newTopic() {	
-		Topic blank = new Topic();
-		blank.setTitle(myConstants.topic_new_title());
-		bringUpChart(blank,true);		
+	public void newTopic() {			
+		CreateNewWindow n = new CreateNewWindow(this,false);			
 	}
 	/*
 	 * window will call createIsland
 	 */
 	public void newIsland(){
-		NewTagNameWindow n = new NewTagNameWindow(this);	
+		CreateNewWindow n = new CreateNewWindow(this,true);	
 	}
-	public void createIsland(final String name) {
+	public void createTopic(final String name,final boolean isIsland) {
 
-		getTopicCache().createNew(name, true, new StdAsyncCallback(Manager.myConstants.save_async()){
+		getTopicCache().createNew(name, isIsland, new StdAsyncCallback(Manager.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);				
 				TopicIdentifier res = (TopicIdentifier) result;				
-				Tag newIsland = new Tag();
-				newIsland.setId(res.getTopicID());
-				newIsland.setTitle(res.getTopicTitle());
-				map.growIsland(newIsland);					
+								
+				if(isIsland){
+					Tag newIsland = new Tag();
+					newIsland.setId(res.getTopicID());
+					newIsland.setTitle(res.getTopicTitle());
+					map.growIsland(newIsland);
+					
+					map.displayTopic(newIsland);
+					
+				}else{
+					Topic newTopic = new Topic();
+					newTopic.setId(res.getTopicID());
+					newTopic.setTitle(res.getTopicTitle());
+					bringUpChart(newTopic);
+				}				
 			}			
-		});
-						
+		});						
 	}
+	
 	public void showGlossary() {
 		if(glossary == null || glossary.isDirty()){
 			glossary = new Glossary(this,Orientation.HORIZONTAL);
@@ -181,7 +191,20 @@ public class Manager implements TopicSaveListener {
 //		tl.show();
 //		
 		
-		HippoTimeLine hippoTime = new HippoTimeLine(this,null);				
+//		TimeLineObj[] arr = new TimeLineObj[10];
+//		for(int i=0;i<10;i++){
+//			Date d = new Date(2005,i,22);
+//			Date e = null;
+//			if(i % 2 == 0){
+//				e = new Date(2006,i,22);
+//			}
+//			arr[i] = new TimeLineObj(new TopicIdentifier(4,"foo"),d,e);
+//		}
+		
+		
+		HippoTimeLine hippoTime = new HippoTimeLine(this,null);
+		TimeLineWindow hippoTimeW = new TimeLineWindow(hippoTime,newFrame());
+						
 		
 	}
 
@@ -420,6 +443,11 @@ public class Manager implements TopicSaveListener {
 	public void editEntry(Topic topic) {
 				
 		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());				
+		
+	}
+	public void viewMembers(Topic myTag, FullTopicIdentifier[] topics) {
+
+		ViewMemberWindow gw = new ViewMemberWindow(myTag, topics,this,newFrame());
 		
 	}
 	

@@ -17,11 +17,26 @@ import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter;
 public class Converter {
 	private static final Logger log = Logger.getLogger(Converter.class);
 
+	/**
+	 * NOTE!! this is a fragile thing. What if they have a topic named CGLIB!? 
+	 * 
+	 * Treat this as a useful diagnostic only!
+	 * 
+	 * @param object
+	 * @return
+	 */
 	public static boolean scan(Object object){
 		log.debug("scanning with hibernate support ");
 		String str = serializeWithHibernateSupport(object);
 		
-		log.info("CGLib: "+str.contains("CGLIB")+" Persistent "+str.contains("Persistent")+" Timestamp "+str.contains("java.sql.Timestamp"));
+		log.debug("scanning REGULAR");
+		serialize(object);
+		
+		
+		log.info("CGLib: "+str.contains("CGLIB")+
+				" Persistent "+str.contains("Persistent")+
+				" Timestamp "+str.contains("java.sql.Timestamp")+
+				" EX: "+str.contains("{EX}"));
 		
 		return str.contains("CGLIB")
 		||
@@ -49,7 +64,7 @@ public class Converter {
 			isException = true;
 		}
 		String bufferStr = (isException ? "{EX}" : "{OK}") + stream.toString();
-		System.out.println(" "+bufferStr);
+		System.out.println("REG "+bufferStr);
 		return bufferStr;
 	}
 	public static String serializeWithHibernateSupport(Object t){
@@ -65,13 +80,13 @@ public class Converter {
 		Object responseObj = t;
 		boolean isException = false;
 		try {
-			stream.serializeValue(responseObj, Topic.class);
+			stream.serializeValue(responseObj, t.getClass());
 		} catch (SerializationException e) {
 			responseObj = e;
 			isException = true;
 		}
 		String bufferStr = (isException ? "{EX}" : "{OK}") + stream.toString();
-		System.out.println(" "+bufferStr);
+		System.out.println("HIBSUPPORT "+bufferStr);
 		return bufferStr;
 	}
 
