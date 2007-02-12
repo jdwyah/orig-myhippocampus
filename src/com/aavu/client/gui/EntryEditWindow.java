@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 
 	private static final int WIDTH = 700;
-	private static final int HEIGHT = 460;
+	private static final int HEIGHT = 500;
 	private Manager manager;
 	private SaveStopLight saveButton;
 	private TopicViewAndEditWidget topicViewAndEditW;
@@ -48,7 +48,9 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 					public void onSuccess(Object result) {					
 						super.onSuccess(result);
 						saveButton.saveAccomplished();
-						topicViewAndEditW.activateMainView();
+						topicViewAndEditW.load(topicViewAndEditW.getTopic());
+						topicViewAndEditW.activateMainView();	
+						manager.bringUpChart(topicViewAndEditW.getTopic());
 					}});		
 	}			
 

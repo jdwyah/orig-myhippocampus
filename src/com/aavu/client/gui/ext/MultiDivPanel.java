@@ -12,7 +12,7 @@ public class MultiDivPanel extends ComplexPanel {
 	public MultiDivPanel(){
 		main = DOM.createDiv();
 		setElement(main);
-		
+		//addStyleName("H-MainMap");
 	}
 	public void add(Widget w) {
 		add(w, main);	   

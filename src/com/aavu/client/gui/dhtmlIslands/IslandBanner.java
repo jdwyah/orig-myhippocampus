@@ -4,6 +4,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 
 public class IslandBanner extends AbsolutePanel{
@@ -59,15 +60,17 @@ public class IslandBanner extends AbsolutePanel{
 		setDimensions();
 	}
 	
-	private int setDimensions(){
+	private Widget setDimensions(){
 		int width = reg.getOffsetWidth();
+		int height = reg.getOffsetHeight();
 		if(shdw.getText().equals("Person")){
 			System.out.println("on load reg "+width+" ");
 		}
 		DOM.setStyleAttribute(getElement(), "width", width+"px");		
-		DOM.setStyleAttribute(getElement(), "height", reg.getOffsetHeight()+"px");		
+		DOM.setStyleAttribute(getElement(), "height", height+"px");		
 		
-		return width;
+		
+		return reg;
 	}
 
 
@@ -102,7 +105,7 @@ public class IslandBanner extends AbsolutePanel{
 		shdw.setText(text);
 	}
 
-	public int setToZoom(double currentScale) {
+	public Widget setToZoom(double currentScale) {
 		double font_size = getFontFor(size,currentScale);
 		DOM.setStyleAttribute(reg.getElement(), "fontSize", font_size+"em");
 		DOM.setStyleAttribute(shdw.getElement(), "fontSize", font_size+"em");

@@ -63,6 +63,8 @@ public class ActionableTopicLabel extends Composite {
 		
 		fp.add(hp);
 		initWidget(fp);
+		
+		addStyleName("H-TopicLink");
 	}
 	public ActionableTopicLabel(Topic topic,String actionTextStr,ClickListener action) {
 		this(topic,actionTextStr);

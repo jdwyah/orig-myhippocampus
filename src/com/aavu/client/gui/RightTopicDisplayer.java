@@ -43,6 +43,7 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 		entryPreview = new EntryPreview();
 		
 		VerticalPanel mainPanel = new VerticalPanel();
+		mainPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 		
 		
 		mainPanel.add(tagProperties);

@@ -6,8 +6,14 @@ import com.aavu.client.wiki.TextDisplay;
 
 public class EntryPreview extends TopicWidget {
 
-	private static final int SIZE = 120;
+	private static final int NUM_CHARS = 120;
 
+	public EntryPreview(){
+		super();
+		addStyleName("H-Gadget");
+		addStyleName("H-EntryPreview");
+	}
+	
 	//@Override
 	public void setText(Entry entry) {		
 		
@@ -16,8 +22,8 @@ public class EntryPreview extends TopicWidget {
 		System.out.println("entry "+entry.getData());
 		
 		//TODO make sure we don't cut off in the middle of an HTML tag
-		if(entry.getData() != null && entry.getData().length() > SIZE){
-			String str = entry.getData().substring(0,SIZE)+"</body>";
+		if(entry.getData() != null && entry.getData().length() > NUM_CHARS){
+			String str = entry.getData().substring(0,NUM_CHARS)+"</body>";
 			System.out.println(str);
 			textPanel.add(new TextDisplay(str));
 		}else{

@@ -75,6 +75,7 @@ public class MainMap extends Composite {
 		
 		//mainP.addStyleName("");
 		initWidget(mainP);
+		
 	}
 	
 //	public Widget getOcean() {

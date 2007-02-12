@@ -38,6 +38,8 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 //		add(mindMapBoard,Manager.myConstants.mapperTitle());
 //		
 		
+		addStyleName("H-Gadget");
+		addStyleName("H-TopicDetails");
 	}
 
 	public void load(Topic topic) {

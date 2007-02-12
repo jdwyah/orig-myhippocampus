@@ -61,7 +61,7 @@ public class ViewMemberWindow extends PopupWindow implements ClickListener {
 			TimeLineObj tobj = new TimeLineObj(topics[i],topics[i].getLastUpdated(),null);	
 			timelines[i] = tobj;
 		}		
-		timeline = new HippoTimeLine(manager,timelines,HEIGHT,WIDTH - 30);
+		timeline = new HippoTimeLine(manager,timelines,WIDTH - 30,HEIGHT);
 				
 		timeB = new Button("Timeline");
 		timeB.addClickListener(this);
@@ -76,6 +76,10 @@ public class ViewMemberWindow extends PopupWindow implements ClickListener {
 		mainP.add(currentView);		
 		
 		setContent(mainP);
+		
+		//default to glossary
+		currentView.clear();
+		currentView.add(glossary);
 	}
 
 

@@ -6,9 +6,10 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Zoomer extends AbsolutePanel implements MouseListener {
+public class Zoomer extends SimplePanel implements MouseListener {
 
 	private static final int BASE = 22;
 	private static final int INCR = 8;
@@ -20,10 +21,18 @@ public class Zoomer extends AbsolutePanel implements MouseListener {
 	private PNGImage slider;
 	private int curLevel;
 
+	private AbsolutePanel absPanel = new AbsolutePanel();
+	
+	/**
+	 * It seems redundant to have this absPanel as a member instead of just extending
+	 * AbsolutePanel, but positioning things on the map absolutely seems to only really
+	 * work with SimplePanel's that have Style AbsolutePanel  
+	 * 
+	 * @param manager
+	 */
 	public Zoomer(Manager manager){		
 		this.manager = manager;
 		
-		addStyleName("H-Zoomer");
 		//addStyleName("H-AbsolutePanel");		
 		//setPixelSize(24, 138);
 		
@@ -33,10 +42,18 @@ public class Zoomer extends AbsolutePanel implements MouseListener {
 		
 		sliderBase.addMouseListener(this);
 		
-		add(sliderBase,0,0);
-		add(slider,SLIDER_LEFT,BASE);
+		absPanel.add(sliderBase,0,0);
+		absPanel.add(slider,SLIDER_LEFT,BASE);
 		
 		setToZoom(convertFromScale(1.0));		
+		
+		//interestingly, this is only necessary for FF
+		absPanel.setPixelSize(24,138);
+		
+		add(absPanel);
+		
+		addStyleName("H-AbsolutePanel");
+		addStyleName("H-Zoomer");	
 		
 	}
 
@@ -49,7 +66,7 @@ public class Zoomer extends AbsolutePanel implements MouseListener {
 		
 		int top = i*INCR + BASE; 
 		System.out.println("top "+top);
-		setWidgetPosition(slider, SLIDER_LEFT, top);
+		absPanel.setWidgetPosition(slider, SLIDER_LEFT, top);
 		
 	}
 	public void setToScale(double scale){

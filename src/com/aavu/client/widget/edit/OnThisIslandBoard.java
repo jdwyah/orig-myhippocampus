@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -27,7 +28,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	private TopicCompleter topicCompleter;
 	private Topic myTag;
 	private Manager manager;
-	private CellPanel onThisIslandPanel;
+	private VerticalPanel onThisIslandPanel;
 
 	private FullTopicIdentifier[] topics;
 	
@@ -64,7 +65,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		mainP.add(new HeaderLabel(Manager.myConstants.island_topics_on()));
 		
 		HorizontalPanel cp = new HorizontalPanel();
-		cp.add(new HeaderLabel(Manager.myConstants.island_addTo()));
+		cp.add(new Label(Manager.myConstants.addTo()));
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
 		
@@ -77,6 +78,8 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		
 		
 		initWidget(mainP);
+		addStyleName("H-Gadget");
+		addStyleName("H-OnThisIsland");
 	}
 	public void load(Tag topic) {
 		myTag = topic;	
@@ -101,7 +104,8 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 			onThisIslandPanel.add(new TopicLink(fti,null));
 			
 			if(i >= MAX_TO_SHOW){
-				
+				onThisIslandPanel.add(new Label(Manager.myConstants.on_this_island_more(topics.length - MAX_TO_SHOW)));
+				break;
 			}
 		}		
 	}	
@@ -124,7 +128,8 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 				
 				topicCompleter.setText("");
 
-				onThisIslandPanel.add(new TopicLink(newTopic));				
+				
+				onThisIslandPanel.insert(new TopicLink(newTopic),0);				
 				
 				topicService.save(newTopic, new SaveTagtoTopicCommand(newTopic,(Tag) myTag),
 						new StdAsyncCallback(Manager.myConstants.save_async()){});				

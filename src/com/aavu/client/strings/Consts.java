@@ -92,7 +92,8 @@ public interface Consts extends Messages {
 	String island_create();
 	String topic_new_image();
 	String island_new_image();
-	String island_addTo();
+	
+	String addTo();
 	
 	String timeline();
 	String timeline_image();
@@ -135,6 +136,7 @@ public interface Consts extends Messages {
 	String meta_text_async_save();
 	String back();
 	String loading_islands();
+	String on_this_island_more(int i);
 	
 	
 		

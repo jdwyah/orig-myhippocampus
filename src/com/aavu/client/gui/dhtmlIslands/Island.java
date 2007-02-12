@@ -150,7 +150,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	/*
 	 * Ocean will pull these from us when it adds us
 	 */	
-	private void doPositioning(int minWidth) {
+	private void doPositioning(Widget minimumWidget) {
 	
 		top = tagStat.getLatitude() - gridToRelativeY(repr.min_y,my_spacing); 
 		left = tagStat.getLongitude() - gridToRelativeX(repr.min_x,my_spacing);
@@ -179,14 +179,17 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		//int predicted = getPredictedBannerWidth();
 		//System.out.println("Predicted Width "+predicted);
-		if(minWidth > width){
-			DOM.setStyleAttribute(getElement(), "width", minWidth+"px");	
+		if(minimumWidget.getOffsetWidth() > width){
+			DOM.setStyleAttribute(getElement(), "width", minimumWidget.getOffsetWidth()+"px");	
 		}else{
 			DOM.setStyleAttribute(getElement(), "width", width+"px");	
 		}
-	
-		DOM.setStyleAttribute(getElement(), "height", height+"px");
-		
+		if(minimumWidget.getOffsetHeight() > height){
+			DOM.setStyleAttribute(getElement(), "height", minimumWidget.getOffsetHeight()+"px");	
+		}else{
+			DOM.setStyleAttribute(getElement(), "height", height+"px");	
+		}
+			
 		//not working
 		//banner.setWidth(width+"em");
 		
@@ -194,29 +197,6 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	}
 
 	
-	public void ensureWidthOf(int i){
-		if(i > width){
-			DOM.setStyleAttribute(getElement(), "width", i+"px");
-		}
-	}
-	
-	
-	/*
-	 * 114px == 'Entrepreneurship at font .8, 16 chars
-	 * (114/.8) = 142
-	 * 142/16 = 9
-	 * 
-	 *  (chars * 9) * fontSize
-	 */
-	private int getPredictedBannerWidth(){
-		//System.out.println("FP "+tagStat.getTagName().length() * 9);
-		//System.out.println("SP: "+banner.getFontFor(tagStat.getNumberOfTopics()));
-		return (int) (tagStat.getTagName().length() * 9 * banner.getFontFor(tagStat.getNumberOfTopics()));
-	}
-
-
-
-
 
 	private void situate(OceanDHTMLImpl o) {
 		System.out.println("Situate "+tagStat.getLongitude()+" "+tagStat.getLatitude());
@@ -385,9 +365,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		}
 		
 
-		int minWidth = banner.setToZoom(currentScale);
+		Widget minDimensionWidget = banner.setToZoom(currentScale);
 
-		doPositioning(minWidth);
+		doPositioning(minDimensionWidget);
 		
 		
 		

@@ -62,6 +62,8 @@ public class TagPropertyPanel extends Composite {
 		mainPanel.add(bP);		
 		
 		initWidget(mainPanel);
+		addStyleName("H-Gadget");
+		addStyleName("H-TagProperty");
 	}
 	
 	public void load(Tag tag){

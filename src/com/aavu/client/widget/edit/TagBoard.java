@@ -21,11 +21,12 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TagBoard extends Composite implements CompleteListener, RemoveListener {
 
-	private CellPanel tagPanel = new HorizontalPanel();
+	private CellPanel tagPanel = new VerticalPanel();
 	
 	//private TextBox tagBox = new TextBox();
 	private TagAutoCompleteBox tagBox = null;
@@ -59,12 +60,11 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			}
 		});
 
-		CellPanel mainPanel = new HorizontalPanel();
+		CellPanel mainPanel = new VerticalPanel();
 		
 		header = new HeaderLabel(Manager.myConstants.tags());
 		mainPanel.add(header);
-		
-		
+				
 		
 //		
 //		CellPanel tagPanelS = new HorizontalPanel();		
@@ -80,6 +80,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		
 		initWidget(mainPanel);
 		
+		addStyleName("H-Gadget");
 		addStyleName("H-TagBoard");		
 		
 	}
@@ -131,9 +132,16 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		
 		int rtnSize = 0;
 		for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
-			Tag tag = (Tag) iter.next();		
-			showTag(tag);
-			rtnSize++;			
+			
+			//TODO o will not be a Tag when we are a topic that is another 
+			//topic's MetaTopic value. capiche? 
+			//TODO make getTags deal with that.
+			Object o = iter.next();
+			if(o instanceof Tag){
+				Tag tag = (Tag) o;		
+				showTag(tag);
+				rtnSize++;	
+			}						
 		}		
 		return rtnSize;
 	}
@@ -142,9 +150,11 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		
 		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag,this);
 				
-		tagPanel.add(tagLabel);	
+		TagGadget tg = new TagGadget(tagLabel);
+					
+		displayMetas(tag,tg);
 		
-		displayMetas(tag);		
+		tagPanel.add(tg);
 	}
 
 	/**
@@ -187,14 +197,14 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 				new StdAsyncCallback(Manager.myConstants.save()){});		
 	}
 	
-	private void displayMetas(Tag tag) {
+	private void displayMetas(Tag tag, TagGadget tg) {
 		Set metas = tag.getMetas();
 		
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
 			Meta element = (Meta) iter.next();
 		
 			Widget w = element.getEditorWidget(cur_topic,manager);
-			tagPanel.add(w);
+			tg.add(w);
 
 		}
 
@@ -206,5 +216,26 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 							
 	}
 
+	
+	private class TagGadget extends Composite {
+
+		private CellPanel mainP;
+
+		public TagGadget(DeletableTopicLabel tagLabel) {
+			mainP = new VerticalPanel();
+			
+			add(tagLabel);
+			
+			initWidget(mainP);
+			
+			//addStyleName("H-Gadget");
+			//addStyleName("H-TagGadget");
+		}
+
+		public void add(Widget w) {
+			mainP.add(w);
+		}
+
+	}
 
 }

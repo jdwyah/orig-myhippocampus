@@ -11,12 +11,12 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
-import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -49,7 +49,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		VerticalPanel mainP = new VerticalPanel();
 		
 		HorizontalPanel cp = new HorizontalPanel();
-		cp.add(new HeaderLabel(Manager.myConstants.seeAlsos()));
+		cp.add(new Label(Manager.myConstants.addTo()));
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
 		

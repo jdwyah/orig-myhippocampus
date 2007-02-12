@@ -43,7 +43,10 @@ a:visited {
 	border: 2px solid #000;
 	z-index: 1;
 }
-
+/*.H-MainMap {
+	position: relative;
+	background: transparent;
+}*/
 .H-Sidebar {
 	background: transparent;
 	margin-left: 600px;
@@ -59,17 +62,77 @@ a:visited {
 	right: 0px;
 	border: 0px;
 	z-index: 1;
-	width: 300px;
+	width: 264px;
 }
+
+.H-Gadget {
+	background-image: url("../img/blueFade.png");
+	background-repeat: repeat-x;
+	/*background-color: #666699;*/
+	
+	background-color: #CFE0F5;
+	filter: alpha(opacity =       88);
+	-moz-opacity: .88;
+	opacity: .88;
+	-khtml-opacity: .88;
+	
+	/*background: red;*/
+	border: 4px solid #D8E3FD;	
+	border-style: ridge;
+	color: white;
+	
+	padding-top: 3px;
+	padding-right: 3px;	
+	padding-bottom: 3px;	
+	padding-left: 3px;
+}
+.H-Gadget .H-TopicLink {
+ 	color: white;
+	font-size: .7em;
+}
+.H-Gadget .H-HeaderLabel {
+	color: white;
+}
+.H-Gadget .gwt-Label {
+ 	color: white;
+	font-size: .7em;
+}
+.H-Gadget .gwt-HTML {
+ 	color: white;
+}
+.H-Gadget .gwt-StackPanelItem {
+ 	color: white;
+	font-size: .8em;
+}
+.H-Gadget .H-editableText {
+ 	color: white;
+	font-size: .8em;
+}
+.H-Gadget .gwt-StackPanel {
+	background-color:  #647CB5;
+}
+.H-OnThisIsland {
+	width: 100%;
+}
+.H-TopicDetails {
+	width: 100%;
+}
+.H-TagProperty {
+	width: 100%;
+}
+
+
 .H-CenterInfo {
 	/*background-image: url("../img/blueFade.png");*/
-	background-color: #5E85EC;
-	border: solid #44526F 2px;
 	
-	margin-left: 30%;
+	background-color: transparent;
+	border: 0px;
+	margin-left: 0%;
 	top: 0px;
-	/*right: 0px;*/
+	left: 0px;
 	z-index: 1;
+	
+	/*right: 0px;*/
 	/*width: 300px;*/
 	
 	/*filter: alpha(opacity =       40);
@@ -77,8 +140,6 @@ a:visited {
 	opacity: .40;
 	-khtml-opacity: .4;*/
 }
-
-
 
 .H-Dashboard {
 	bottom: 0px;
@@ -154,22 +215,22 @@ a:visited {
 }
 
 .H-CompassRose {
-	position: absolute;
+	bottom: 5px;
+	left: 15px;
+
 	background: transparent;
-	border: none;
-	top: 0px;
-	left: 0px;
+	border: none;	
 	width: 340px;
 	height: 120px;
 	z-index: 1;
 }
 
 .H-Zoomer {
-	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	background: transparent;
 	/*background-image: url("../img/zoomerBase.png");*/
 	border: none;
-	top: 20%;
-	left: 0px;
 	width: 24px;
 	height: 138px;
 	z-index: 1;
@@ -272,8 +333,8 @@ a:visited {
 
 .H-TopicLink {
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	color: black;
+	font-size: 1.0em;
+	/*color: black;*/
 	padding: 3px;
 	font-weight: bold;
 	cursor: pointer;
@@ -306,17 +367,17 @@ a:visited {
 	border-color: #ffffff;
 }
 .H-editableText-hover {
-	border-color: #ffffcc;
+	border-color: #6492FF;
 }
 
 .H-editableLabel-label-hover {
-	background-color: #ffffcc;
+	background-color: #6492FF;
 }
 
 .H-HeaderLabel {
-	font-family: cursive;
-	color: black;
-	font-size: small;
+	/*font-family: cursive;
+	color: black;*/
+	font-size: 1.2em;
 }
 
 .H-TimeLine {
@@ -414,88 +475,27 @@ a:visited {
 	border-top: thin dotted black;
 }
 
-.H-VertTabPanel {
-	clear: both;
-	margin: 0em 0em 1.5em 0em;
-	/*border-top: solid 0.1em rgb(175, 175, 175);
-	border-bottom: solid 0.1em rgb(175, 175, 175);*/
-	background-color: #FEFECA;
-	opacity: 0.7;
-	line-height: 2.0em;
-	height: 2.0em;
-	color: rgb(50, 50, 50);
-}
-
-.H-VertTabPanelBottom { /*width: 110;*/
-	
-}
-
-.H-VertTabBar {
-	margin: 0em;
-	padding: 0em;
-	list-style: none;
-	font-weight: bold;
-	font-size: 1em;
-	text-transform: uppercase;
-}
-
-.H-VertTabBar .H-VertTabBarFirst { /*display: block;
-	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: rgb(235, 235, 235);
-	text-decoration: none;
-	color: rgb(50, 50, 50);*/
-	width: 20px;
-	height: 20px;
-}
-
-.H-VertTabBar .H-VertTabBarRest { /*display: block;
-	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: rgb(235, 235, 235);
-	text-decoration: none;
-	color: rgb(50, 50, 50);*/
-	
-}
-
-.H-VertTabBar .H-VertTabBarItem { /*display: block;
-	padding: 0em 1.0em 0em 1.0em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: rgb(235, 235, 235);
-	text-decoration: none;
-	color: rgb(50, 50, 50);*/
-	
-}
-
-.H-VertTabBar .H-VertTabBarItem-selected {
-	background-image: url("../img/selectedTab.png");
-	width: 30px;
-	/*padding: 0em 0.5em 0em 0.5em;
-	border-right: solid 0.1em rgb(175, 175, 175);
-	background-color: #339900;
-	background-image: 
-	color: black;*/
-}
-
 .gwt-TabBar {
-	background-color: #CBD043;
+	background-color: #647CB5;
 	font-size: smaller;
 }
 
 .gwt-TabBar .gwt-TabBarFirst {
 	height: 100%;
-	border-bottom: 1px solid #43CBD0;
+	background-color: transparent;
+	/*border-bottom: 1px solid #43CBD0;*/
 	padding-left: 3px;
 }
 
 .gwt-TabBar .gwt-TabBarRest {
-	border-bottom: 1px solid #43CBD0;
+	background-color: transparent;
+	/*border-bottom: 1px solid #43CBD0;*/
 	padding-right: 8px;
 }
 
 .gwt-TabBar .gwt-TabBarItem {
-	border-top: 1px solid #C3D9FF;
-	border-bottom: 1px solid #43CBD0;
+	/*border-top: 1px solid #C3D9FF;
+	border-bottom: 1px solid #43CBD0;*/
 	padding: 8px;
 	cursor: pointer;
 	cursor: hand;
@@ -503,11 +503,11 @@ a:visited {
 
 .gwt-TabBar .gwt-TabBarItem-selected {
 	font-weight: bold;
-	background-color: #EAECB4;
-	border-top: 1px solid #43CBD0;
+	background-color: #B7CBF8;
+	/*border-top: 1px solid #43CBD0;
 	border-left: 1px solid #43CBD0;
 	border-right: 1px solid #43CBD0;
-	border-bottom: 1px solid #43CBD0;
+	border-bottom: 1px solid #43CBD0;*/
 	padding: 8px;
 	cursor: default;
 }
@@ -635,15 +635,16 @@ a:visited {
 }
 
 .gwt-StackPanel {
-	background-color: white;
+	/*background-color: white;
 	border: 1px solid #AAAAAA;
-	width: 15em;
+	width: 15em;*/
 }
 
 .gwt-StackPanel .gwt-StackPanelItem {
-	background-image: url("../img/gray_gradient.gif");
+	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
-	background-color: #EEEEEE;
+	background-position: 0px -12px;
+	/*background-color: #EEEEEE;*/
 	cursor: pointer;
 	cursor: hand;
 }
