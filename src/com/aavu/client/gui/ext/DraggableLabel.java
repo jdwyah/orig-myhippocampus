@@ -36,8 +36,8 @@ public class DraggableLabel extends Label  implements ClickListener, SourcesMous
 	 * (ie label on island)
 	 */
 	public void onBrowserEvent(Event event) {
-		super.onBrowserEvent(event);		
 		DOM.eventCancelBubble(event, true);
+		super.onBrowserEvent(event);				
 	}
 //	boolean wasMouseUp = false;
 

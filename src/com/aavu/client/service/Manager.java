@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.gwm.client.FramesManager;
 import org.gwm.client.FramesManagerFactory;
+import org.gwm.client.GDesktopPane;
 import org.gwm.client.GInternalFrame;
+import org.gwm.client.impl.DefaultGDesktopPane;
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.HippoTest;
@@ -40,6 +42,7 @@ import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Manager implements TopicSaveListener {
@@ -50,6 +53,8 @@ public class Manager implements TopicSaveListener {
 	private User user;
 	
 	private FramesManager framesManager;
+	//private GDesktopPane desktop;
+	
 	private TagLocalService tagLocalService;
 	//private MainMap mainMap;
 	private Glossary glossary; 
@@ -62,9 +67,17 @@ public class Manager implements TopicSaveListener {
 		hippoCache.getTopicCache().addSaveListener(this);
 		
 		
-		
+		//Note what is the purpose of "Desktop"? 
+		//If we implement that, note that it messed with our 
+		//theme application
+		//		
 		framesManager = new FramesManagerFactory().createFramesManager(); 
 		
+		//desktop = new DefaultGDesktopPane();	   
+		
+		
+	    //RootPanel.get().add((Widget) desktop);
+	    		
 		map = new MainMap(this);
 		
 	}
@@ -297,9 +310,19 @@ public class Manager implements TopicSaveListener {
 	public void refreshAll(){		
 		map.refreshIslands();
 	}
+	
 	public GInternalFrame newFrame() {
-		return framesManager.newFrame();
+		return newFrame("");
 	}
+	private GInternalFrame newFrame(String title) {
+		GInternalFrame frame = framesManager.newFrame("");
+//		frame.setSize(200, 200);
+//		frame.setTheme("alphacube");
+//		frame.setContent("foooooooo");
+//		desktop.addFrame(frame);
+		return frame;
+	}
+	
 	public TagLocalService getTagLocalService() {
 		if(tagLocalService == null){
 			tagLocalService = new TagLocalService();
@@ -427,9 +450,10 @@ public class Manager implements TopicSaveListener {
 		map.unFocus();
 	}
 	public PopupWindow showProgressBar(ProgressBar progressBar) {		
-		ProgressPopup win = new ProgressPopup(framesManager.newFrame(),progressBar.getTitle(),progressBar);				
+		ProgressPopup win = new ProgressPopup(newFrame(progressBar.getTitle()),progressBar.getTitle(),progressBar);				
 		return win;
 	}
+	
 	private class ProgressPopup extends PopupWindow{
 		public ProgressPopup(GInternalFrame frame, String title, ProgressBar progressBar) {
 			super(frame, title,200,100);

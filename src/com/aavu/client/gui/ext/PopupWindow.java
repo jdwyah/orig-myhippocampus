@@ -1,8 +1,10 @@
 package com.aavu.client.gui.ext;
 
 import org.gwm.client.GInternalFrame;
+import org.gwm.client.event.GInternalFrameListener;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -25,11 +27,13 @@ public class PopupWindow {
     	this.frame = frame;
 		
 		//This must be called before anything else.
-		frame.setStyle("mac_os_x");
+    	//NOTE: don't forget to add the css file to the html.
+		frame.setTheme("alphacube");
+    	
 		frame.setWidth(width);
 		frame.setHeight(height);
-		frame.setMinimizable(false);
-		frame.setMaximizable(false);
+		frame.setMinimizable(true);
+		frame.setMaximizable(true);
 		frame.setDraggable(true);
 		
 		int w = (Window.getClientWidth() - width) / 2;
@@ -38,35 +42,48 @@ public class PopupWindow {
 		h = (h < 100) ? 100 : h;
 		frame.setLocation(w, h);
 		
-		frame.show(false);
+		
+		frame.setVisible(true);
 		
 		//This end up with windows where the title bar is hidden/undraggable
 		//frame.showCenter(false);		
 		
-		frame.setTitle(title);
+		frame.setCaption(title);
 		
-		frame.setDestroyOnClose();
+		
+		//frame.setDestroyOnClose();
     }
 	
     public void setTitle(String title) {
-		frame.setTitle(title);
+		frame.setCaption(title);
 	}
 
 	protected void setContent(Widget w) {
-		frame.setContent(w);
+		HorizontalPanel hp = new HorizontalPanel();
+		hp.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+		hp.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
+		hp.addStyleName("H-FullSize");
+		hp.add(w);
+		setCenteredContent(hp);
+//		SimplePanel outerPanel = new SimplePanel();
+//		outerPanel.setStyleName("H-FullDiv");
+//		outerPanel.add(w);		
+//		setCenteredContent(outerPanel);		
 	}
 
-	protected void setCenteredContent(Widget panel) {
-		SimplePanel outerPanel = new SimplePanel();
-		outerPanel.setStyleName("H-CenterDiv");
-		outerPanel.add(panel);
-		setContent(outerPanel);
+	protected void setCenteredContent(Widget w) {
+		frame.setContent(w);		
 	}
 	
 	public void close(){
+//		try {
+//			throw new Exception();
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
 		System.out.println("PopupWindow close()");
 		try{
-			frame.destroy();
+			frame.close();			
 		}catch(Exception e){
 			System.out.println("CAUGHT frame.destroy() exception in PopupWindow.close()");
 		}
@@ -74,6 +91,9 @@ public class PopupWindow {
 	public void hide(){
 		System.out.println("PopupWindow hide()");
 		frame.minimize();
+	}
+	public void addInternalFrameListener(GInternalFrameListener listener){
+		frame.addInternalFrameListener(listener);
 	}
 
 } 

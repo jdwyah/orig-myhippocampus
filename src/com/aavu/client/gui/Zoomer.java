@@ -73,16 +73,20 @@ public class Zoomer extends SimplePanel implements MouseListener {
 		setToZoom(convertFromScale(scale));
 	}
 
-	public void onMouseDown(Widget sender, int x, int y) {
+	public void onMouseUp(Widget sender, int x, int y) {
 		y -= BASE;
 		
 		int i = (int) (TOT_INCR*(y/(138.0 - 2*BASE)));
 		
+		System.out.println("y "+(y+BASE)+" py "+y+" i "+i);
+		
 		//do the plus & minus buttons here
 		//
-		if(i < 0){
+		if(i <= 0){
+			System.out.println("-_-");
 			i = curLevel-1;
-		}if(i > TOT_INCR){
+		}if(i >= TOT_INCR){
+			System.out.println("+_+");
 			i = curLevel+1;
 		}
 		
@@ -128,6 +132,6 @@ public class Zoomer extends SimplePanel implements MouseListener {
 	public void onMouseEnter(Widget sender) {}
 	public void onMouseLeave(Widget sender) {}
 	public void onMouseMove(Widget sender, int x, int y) {}
-	public void onMouseUp(Widget sender, int x, int y) {}
+	public void onMouseDown(Widget sender, int x, int y) {}
 	
 }

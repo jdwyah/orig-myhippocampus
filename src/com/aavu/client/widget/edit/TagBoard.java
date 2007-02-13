@@ -204,6 +204,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			Meta element = (Meta) iter.next();
 		
 			Widget w = element.getEditorWidget(cur_topic,manager);
+			w.addStyleName("H-MetaEditorWidget");
 			tg.add(w);
 
 		}

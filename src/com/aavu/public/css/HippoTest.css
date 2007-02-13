@@ -29,8 +29,12 @@ a:visited {
 	color: darkblue;
 }
 
-.H-CenterDiv {
+/*.H-CenterDiv {
 	padding: 10px;
+}*/
+.H-FullSize {
+	width: 100%;
+	height: 100%;	
 }
 
 .H-Popup {
@@ -62,7 +66,8 @@ a:visited {
 	right: 0px;
 	border: 0px;
 	z-index: 1;
-	width: 264px;
+	/*width: 264px;*/
+	width: 200px;
 }
 
 .H-Gadget {
@@ -108,6 +113,10 @@ a:visited {
  	color: white;
 	font-size: .8em;
 }
+.H-Gadget .editableLabel-label {
+ 	color: white;
+	font-size: .8em;		
+}
 .H-Gadget .gwt-StackPanel {
 	background-color:  #647CB5;
 }
@@ -119,6 +128,9 @@ a:visited {
 }
 .H-TagProperty {
 	width: 100%;
+}
+.H-MetaEditorWidget {
+	margin-left: 5px;
 }
 
 
@@ -377,7 +389,7 @@ a:visited {
 .H-HeaderLabel {
 	/*font-family: cursive;
 	color: black;*/
-	font-size: 1.2em;
+	font-size: 1.1em;
 }
 
 .H-TimeLine {
@@ -413,8 +425,8 @@ a:visited {
 	border-color: black;
 }
 
-.H-SideBarKey { /*color: black;
-	font-size: 13px;
+.H-SideBarKey { color: white;
+	/*font-size: 13px;
 	background-image: url("../img/regTab.png");
 	font-family: arial, helvetica, sans-serif;
 	text-align: center;
@@ -424,7 +436,7 @@ a:visited {
 }
 
 .H-SideBarKeyNoElements { 
-	color: gray;
+	color: black;
 	/*background-image: url("../img/unselTab.png");
 	font-family: arial, helvetica, sans-serif;
 	text-align: center;
@@ -443,7 +455,7 @@ a:visited {
 }
 
 .H-SearchResults .H-Title {
-	font-size: 1.2em;
+	font-size: 1.0em;
 	background-color: #EAECB4;
 }
 
@@ -453,6 +465,7 @@ a:visited {
 }
 
 .H-SearchResults .H-Text {
+	font-size: .8em;
 	text-indent: 4em;
 }
 
@@ -476,6 +489,7 @@ a:visited {
 }
 
 .gwt-TabBar {
+	color: white;
 	background-color: #647CB5;
 	font-size: smaller;
 }
