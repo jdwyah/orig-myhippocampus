@@ -16,6 +16,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -297,6 +298,14 @@ public class Manager implements TopicSaveListener {
 	 */
 	public void topicSaved(Topic t,AbstractSaveCommand command) {
 		map.update(t,command);
+		
+		System.out.println("TOPIC SAVED");
+		if(command instanceof SaveTagtoTopicCommand){
+			System.out.println("TAG COMMAND");
+			Tag tag = (Tag) command.getTopic1();
+			System.out.println("GROW "+tag);
+			map.growIsland(tag);
+		}
 	}
 	public void updateStatus(int i, String call, StatusCode send) {
 		map.updateStatusWindow(i, call, send);

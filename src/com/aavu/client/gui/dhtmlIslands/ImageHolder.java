@@ -1,5 +1,6 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import com.aavu.client.util.PsuedoRandom;
 import com.google.gwt.user.client.ui.Image;
 
 public class ImageHolder {
@@ -16,7 +17,7 @@ public class ImageHolder {
 	private final Type TYPE_60_ORANGE = new Type(60,60,Type.SPACING_60,Type.SPACING_60,"60px_Orange",1);	
 	
 	
-	public Image getImage(AcreSize size,long id,int x, int y, String extension){
+	public Image getImage(AcreSize size,long id,PsuedoRandom random, String extension){
 		
 		Type type = null;
 		if(size == AcreSize.SIZE_30){
@@ -52,8 +53,9 @@ public class ImageHolder {
 		/*
 		 * avoid 50*50 = 0 by adding in id
 		 */		
-		return new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(id+(x-5)*y)%type.numImages)+"_"+extension+".png");
 		
+		//return new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(id+(x-5)*y)%type.numImages)+"_"+extension+".png");
+		return new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+random.nextInt(type.numImages))+"_"+extension+".png");
 	}
 
 

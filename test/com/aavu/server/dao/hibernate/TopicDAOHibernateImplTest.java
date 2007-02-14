@@ -260,6 +260,17 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		System.out.println("getting w/ id "+tag.getId());
 		List<TopicTypeConnector> savedL = topicDAO.getTopicIdsWithTag(tag.getId(),u);
 
+		Date lastUp = null;
+		for (TopicTypeConnector connector : savedL) {
+			Date last =  connector.getTopic().getLastUpdated();
+			System.out.println("last "+last);
+			if(lastUp != null){
+				assertTrue(lastUp.after(last));				
+			}
+			lastUp = last;
+			
+		}
+		
 		System.out.println(savedL.get(0));
 		System.out.println("b: " +t.toPrettyString());
 
@@ -274,6 +285,67 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(b.getTopic().getTitle(), t.getTitle());
 
 		System.out.println("A");
+	}
+
+	/**
+	 * test that they're returned in lastUpdated order
+	 * 
+	 * @throws HippoBusinessException
+	 * @throws InterruptedException 
+	 */
+	public void testGetTopicsWithTag2() throws HippoBusinessException, InterruptedException{
+
+		Topic t = new Topic();
+		t.getLatestEntry().setData(B);
+		t.setTitle(C);
+		t.setUser(u);
+
+		Topic t2 = new Topic();
+		t2.getLatestEntry().setData(C);
+		t2.setTitle(B);
+		t2.setUser(u);
+
+		Tag tag = new Tag();
+		tag.setName("testtagAAA");					
+
+		topicDAO.save(tag);
+
+		t.addType(tag);		
+		t.setLastUpdated(new Date());
+		topicDAO.save(t);
+		t2 = topicDAO.save(t2);
+		
+		System.out.println("before: "+t.getId());
+
+		//ensure that they get different times
+		Thread.sleep(2000);
+		
+		t2.addType(tag);
+		t2.setLastUpdated(new Date());
+		t2 = topicDAO.save(t2);
+		
+		System.out.println("after: "+t.getId());
+
+		System.out.println("getting w/ id "+tag.getId());
+		List<TopicTypeConnector> savedL = topicDAO.getTopicIdsWithTag(tag.getId(),u);
+
+
+		assertEquals(2, savedL.size());
+		
+		Date lastUp = null;
+		for (TopicTypeConnector connector : savedL) {
+			Date last =  connector.getTopic().getLastUpdated();
+			System.out.println("last "+last);
+			if(lastUp != null){		
+				assertTrue(lastUp.after(last));				
+			}
+			lastUp = last;
+			
+		}
+		
+
+
+
 	}
 	public void testGetAllTopicIdentifiers() throws HippoBusinessException{	
 

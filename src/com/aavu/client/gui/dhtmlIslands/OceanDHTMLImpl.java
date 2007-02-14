@@ -299,6 +299,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		add(isle,isle.getLeft(),isle.getTop());
 		//add(banner,isle.getLeft(),isle.getTop());
 
+		
 		GUIEffects.appear(isle,4000);
 		islands.put(new Long(info.getTagId()), isle);
 		objects.add(isle);
@@ -451,10 +452,29 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		Island isle = (Island) islands.get(new Long(tag.getId()));
 				
 		if(isle == null){
+			System.out.println("was null");
+
+			//center the island
+			int width = Window.getClientWidth();
+			int height = Window.getClientHeight();
+			int halfWidth = width/2;
+			int halfHeight = height/2;
+			int centerX = (int)((-curbackX + halfWidth)/currentScale);
+			int centerY = (int)((-curbackY + halfHeight)/currentScale);				
+			tag.setLatitude(centerY);
+			tag.setLongitude(centerX);
+			
 			TagStat tagStat = new TagStat(tag);
 			Island newIsle = new Island(tagStat,this,manager.getUser(),manager);		
 			addIsland(tagStat, newIsle);
+			
+			islandMoved(tag.getId(),tag.getLongitude(),tag.getLatitude());
+			
+				//forces redraw
+			moveByDelta(0,0);
+			
 		}else{
+			System.out.println(".grow()");
 			isle.grow();
 		}
 	}
@@ -515,7 +535,13 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		islandMoved(island.getStat().getTagId(), island.getLeft(), island.getTop());
 	}
 
-
+	/**
+	 * TODO double ASYNC!
+	 * 
+	 * @param islandID
+	 * @param longitude
+	 * @param latitude
+	 */
 	public void islandMoved(long islandID, final int longitude, final int latitude){
 
 		System.out.println("isleMovedTo "+longitude+" "+latitude+" SAVING");	

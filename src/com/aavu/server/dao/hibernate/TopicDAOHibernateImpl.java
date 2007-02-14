@@ -304,7 +304,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //				"where tagConn.type.id = ?",new Long(tagid));
 		
 		List<TopicTypeConnector> rtn = getHibernateTemplate().find("from TopicTypeConnector conn "+
-				"where conn.type.id = ?",new Long(tagid));
+				"where conn.type.id = ? order by conn.topic.lastUpdated DESC",new Long(tagid));
 				
 		for (TopicTypeConnector connector : rtn) {
 			System.out.println("DAO says "+connector.getId()+" "+connector.getLongitude()+" "+connector.getLatitude());

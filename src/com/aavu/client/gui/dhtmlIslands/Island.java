@@ -133,7 +133,8 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	private void drawInOcean() {
 
 		clear();
-		add(banner,0,height/2);
+		levels.clear();
+		add(banner,0,0);
 
 		//need to re-loop after all the min/maxes are set
 		//				
@@ -176,11 +177,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 //		}
 		
 		
+		//add 1 for the IslandBanner shadow offset
+		int minWidth = minimumWidget.getOffsetWidth() + 1;
 		
-		//int predicted = getPredictedBannerWidth();
-		//System.out.println("Predicted Width "+predicted);
-		if(minimumWidget.getOffsetWidth() > width){
-			DOM.setStyleAttribute(getElement(), "width", minimumWidget.getOffsetWidth()+"px");	
+		if(minWidth > width){
+			DOM.setStyleAttribute(getElement(), "width", minWidth+"px");	
 		}else{
 			DOM.setStyleAttribute(getElement(), "width", width+"px");	
 		}
@@ -223,14 +224,34 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 
 
 
+	/**
+	 * Make the island 1 unit bigger
+	 * 
+	 *
+	 */
 	public void grow() {
+		
 		theSize++;
 		setTypeAndSpacing();
-		repr.growByOne();
+		PointLocation lastDrawn = repr.growByOne();
 		
-		doPositioning(banner.setToZoom(scale));
+		//This isn't working because of draw order. 
+		//
+		//doIslandType(1,lastDrawn.x,lastDrawn.y);
+		//doIslandType(2,lastDrawn.x,lastDrawn.y);
+		
+		clear();
+		topicLabelList = null;//otherwise we'll find them and try to move them, but they've been cleared
+		levels.clear();
+		add(banner,0,0);
+		doIslandType(1);
+		doIslandType(2);		
+		
+		zoomToScale(scale);		
+		
+		//doPositioning(banner.setToZoom(scale));
 		//System.out.println("set to left "+left+" top "+top);
-		ocean.setWidgetPosition(this, left, top);		
+		//ocean.setWidgetPosition(this, left, top);		
 	}
 
 	
@@ -462,6 +483,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		}
 		topicLabelList.clear();
 
+		double unset_latitude = .35;
+		double latitude_budge = .09;
+		double unset_longitude = .1;
 		
 		for (int i = 0; i < topics.length; i++) {
 			FullTopicIdentifier fti = topics[i];
@@ -472,10 +496,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 				//just try to space them out a bit if they don't have real values
 				//magic numbers try to make sure it's not under the banner, but
 				//also not squished against the right side.
-				fti.setLongitudeOnIsland(Math.random()*.4+.2);
+				fti.setLongitudeOnIsland(unset_longitude);
 			}
 			if(fti.getLatitudeOnIsland() < 0){
-				fti.setLatitudeOnIsland(Math.random()*.4+.2);
+				fti.setLatitudeOnIsland(unset_latitude);
+				unset_latitude += latitude_budge;
 			}
 
 			x = (int) (fti.getLongitudeOnIsland() * width);

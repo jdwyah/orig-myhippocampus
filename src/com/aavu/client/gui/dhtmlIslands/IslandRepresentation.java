@@ -1,5 +1,7 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import org.gwtwidgets.client.util.Location;
+
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.User;
 import com.aavu.client.util.MiddleSquarePseudoRandom;
@@ -19,7 +21,7 @@ public class IslandRepresentation {
 	int max_y = 0;
 	int min_y = Integer.MAX_VALUE;
 
-	private PsuedoRandom pr;
+	private PsuedoRandom pseudoRandomGen;
 
 
 	private int gridSize;
@@ -42,7 +44,7 @@ public class IslandRepresentation {
 		used = new int[gridSize][gridSize];
 
 		long seed = user.getId()+tagStat.getTagId();
-		pr = new MiddleSquarePseudoRandom(seed,4);
+		pseudoRandomGen = new MiddleSquarePseudoRandom(seed,4);
 
 		theSize = tagStat.getNumberOfTopics()+1;
 
@@ -60,9 +62,9 @@ public class IslandRepresentation {
 
 
 
-	public void growByOne() {
+	public PointLocation growByOne() {
 		theSize++;			
-		doGrow();					
+		return doGrow();					
 	}
 
 	/**
@@ -73,10 +75,10 @@ public class IslandRepresentation {
 	 * 
 	 * @param i
 	 */
-	private void doGrow() {
+	private PointLocation doGrow() {
 
 		clearUseArray();
-		pr.reInit();	
+		pseudoRandomGen.reInit();	
 
 		/*
 		 * calculate here
@@ -114,8 +116,8 @@ public class IslandRepresentation {
 					System.out.println("check "+x+" "+y+" c "+c+" used "+used[x][y]);
 				c++;
 
-				int dx = pr.nextInt(3) - 1;
-				int dy = pr.nextInt(3) - 1;
+				int dx = pseudoRandomGen.nextInt(3) - 1;
+				int dy = pseudoRandomGen.nextInt(3) - 1;
 				x += dx;
 				y += dy;
 				//System.out.println("sw: "+sw);
@@ -138,7 +140,7 @@ public class IslandRepresentation {
 			}
 
 		}
-
+		return new PointLocation(x,y);
 	}
 
 
@@ -148,6 +150,10 @@ public class IslandRepresentation {
 
 	public int get(int x, int j) {
 		return used[x][j];
+	}
+
+	public PsuedoRandom getPseudoRandomGen() {
+		return pseudoRandomGen;
 	}
 
 }

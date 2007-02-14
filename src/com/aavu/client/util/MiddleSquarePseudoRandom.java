@@ -16,7 +16,7 @@ public class MiddleSquarePseudoRandom implements PsuedoRandom {
 	 * always repeatable. In our case, organic looking islands that are repeatable.
 	 * 
 	 * @param seed
-	 * @param size
+	 * @param size number of zeros (ie 4 -> 10000)
 	 */
 	public MiddleSquarePseudoRandom(long seed,int size){
 		this.curVal = seed;
@@ -25,6 +25,12 @@ public class MiddleSquarePseudoRandom implements PsuedoRandom {
 		this.seed = seed;		
 	}
 
+	/**
+	 * The weird padding and '00' detection are to prevent this fragile algorithm 
+	 * from getting stuck on 0's. Blame Von Neumann.
+	 * 
+	 * PEND MED probably some real speed improvements possible here. 
+	 */
 	public double nextDouble() {
 
 		//System.out.println("cur v"+curVal);
@@ -32,11 +38,12 @@ public class MiddleSquarePseudoRandom implements PsuedoRandom {
 		//System.out.println("sq "+curVal);
 		
 		Long l = new Long(curVal);
-		String s = l.toString();
-		while(s.length() < size){			
-			s += "7";
+		StringBuffer sb = new StringBuffer(l.toString());
+		while(sb.length() < size){			
+			sb.append("7");
 		}
-		int zeros = s.indexOf("00");		
+		int zeros = sb.indexOf("00");		
+		String s = sb.toString();
 		if(-1 != zeros){
 			s = s.replace('0', '3');		
 		}

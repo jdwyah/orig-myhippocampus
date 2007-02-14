@@ -75,43 +75,58 @@ public class AbstractIsland extends AbsolutePanel {
 	 */
 
 	protected void doIslandType(int style) {
-		int x;
-		int count = 0;
+		
+		for (int x = 0; x < GRID; x++) {
+			for (int j = 0; j < GRID; j++) {
+				doIslandType(style, x, j);
+			}
+		}
+	}
+	protected void doIslandType(int style,int x,int y) {
 		AcreSize acreSize = null;
 
-		for (x = 0; x < GRID; x++) {
-			for (int j = 0; j < GRID; j++) {
-				int value = repr.get(x,j);
-				if(value > -1){
-					if(value > repr.bigs + repr.meds){
-						acreSize = AcreSize.SIZE_30;												
-					}else if(value > repr.bigs){
-						acreSize = AcreSize.SIZE_60;												
-					}
-					else{
-						acreSize = AcreSize.SIZE_100;												
-					}
-					Logger.debug("used "+x+" "+j+" "+value+" Acre: "+acreSize.getSize());
-					count++;
+		int value = repr.get(x,y);
+		if(value > -1){
+			if(value > repr.bigs + repr.meds){
+				acreSize = AcreSize.SIZE_30;												
+			}else if(value > repr.bigs){
+				acreSize = AcreSize.SIZE_60;												
+			}
+			else{
+				acreSize = AcreSize.SIZE_100;												
+			}
+			Logger.debug("used "+x+" "+y+" "+value+" Acre: "+acreSize.getSize());
+			//count++;
 
-					if(0 == style){
-						addShadow(x,j,acreSize);
-					}
-					else if(1 == style){
-						addAcre(x,j,acreSize);
-					}
-					else if(2 == style){
-						addInner(x,j,acreSize);
-					}
-				}
+			if(0 == style){
+				addShadow(x,y,acreSize);
+			}
+			else if(1 == style){
+				addAcre(x,y,acreSize);
+			}
+			else if(2 == style){
+				addInner(x,y,acreSize);
 			}
 		}
 	}
 
-
-	private void addLevel(Level level, int corrected_x, int corrected_y) {
+	/**
+	 * 
+	 * 
+	 * @param level
+	 * @param corrected_x
+	 * @param corrected_y
+	 * @param doInsert this will determine whether we inert or add. insert if you want to be covered
+	 */
+	private void addLevel(Level level, int corrected_x, int corrected_y,boolean doInsert) {
 		
-		add(level,corrected_x,corrected_y);		
+		//TODO doesn't appear to have the affect we wanted
+		if(doInsert){
+			insert(level,getElement(),0);
+			setWidgetPosition(level, corrected_x, corrected_y);
+		}else{
+			add(level,corrected_x,corrected_y);
+		}
 		
 		levels.put(level,new PointLocation(corrected_x,corrected_y));
 		
@@ -134,7 +149,7 @@ public class AbstractIsland extends AbsolutePanel {
 		Logger.debug("y "+y+" cy "+corrected_y);
 
 
-		addLevel(new Acre(listener,x,y,acreSize),corrected_x,corrected_y);
+		addLevel(new Acre(listener,x,y,acreSize),corrected_x,corrected_y,true);
 
 	}
 
@@ -145,14 +160,14 @@ public class AbstractIsland extends AbsolutePanel {
 		int corrected_x = gridToRelativeX(x,my_spacing);
 		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		addLevel(new Shadow(x,y,acreSize),corrected_x,corrected_y);
+		addLevel(new Shadow(x,y,acreSize),corrected_x,corrected_y,true);
 	}
 	private void addInner(int x, int y,AcreSize acreSize){
 
 		int corrected_x = gridToRelativeX(x,my_spacing);
 		int corrected_y = gridToRelativeY(y,my_spacing);		
 
-		addLevel(new Inner(x,y,acreSize),corrected_x,corrected_y);
+		addLevel(new Inner(x,y,acreSize),corrected_x,corrected_y,false);
 	}
 
 	

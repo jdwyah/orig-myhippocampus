@@ -189,8 +189,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	private void addTag(final Tag tag) {
 
 		if(cur_topic.tagTopic(tag)){
-			showTag(tag);
-			manager.growIsland(tag);
+			showTag(tag);			
 		}
 		//incommand tagsToSave.add(tag);
 		manager.getTopicCache().save(cur_topic,new SaveTagtoTopicCommand(cur_topic,tag), 

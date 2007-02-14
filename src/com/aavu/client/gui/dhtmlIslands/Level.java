@@ -1,6 +1,8 @@
 package com.aavu.client.gui.dhtmlIslands;
 
 import com.aavu.client.domain.TagInfo;
+import com.aavu.client.util.MiddleSquarePseudoRandom;
+import com.aavu.client.util.PsuedoRandom;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -18,7 +20,9 @@ public class Level extends AbsolutePanel {
 			this.x = x;
 			this.y = y;
 			
-			isle = imgHolder.getImage(acreSize,tagStat.getTagId(),x,y,extension);//new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
+			PsuedoRandom randomGen = new MiddleSquarePseudoRandom(tagStat.getTagId(),4);
+			
+			isle = imgHolder.getImage(acreSize,tagStat.getTagId(),randomGen,extension);//new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(x*y)%type.numImages)+"_"+extension+".png");
 			if(listener != null){
 				isle.addClickListener(listener);
 			}
