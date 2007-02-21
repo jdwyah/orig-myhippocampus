@@ -1,8 +1,9 @@
 package com.aavu.client.gui;
 
+import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
-import org.gwm.client.event.GInternalFrameEvent;
-import org.gwm.client.event.GInternalFrameListener;
+import org.gwm.client.event.GFrameEvent;
+import org.gwm.client.event.GFrameListener;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
@@ -15,7 +16,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EntryEditWindow extends PopupWindow implements SaveNeededListener, GInternalFrameListener {
+public class EntryEditWindow extends PopupWindow implements SaveNeededListener, GFrameListener {
 
 	private static final int WIDTH = 700;
 	private static final int HEIGHT = 500;
@@ -45,7 +46,9 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener, 
 		
 		setContent(mainP);
 		
-		addInternalFrameListener(this);
+		frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
+		
+		frame.addFrameListener(this);
 	}
 	private void save() {
 		manager.getTopicCache().save(topicViewAndEditW.getTopic(),topicViewAndEditW.getSaveCommand(),
@@ -62,36 +65,46 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener, 
 	public void onChange(Widget sender) {
 		saveButton.setSaveNeeded();
 	}
-	public void frameClosed(GInternalFrameEvent evt) {
-		//Window.alert("closed");
-		//evt.
-	}
-	public void frameIconified(GInternalFrameEvent evt) {
+	public void frameClosed(GFrameEvent evt) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void frameMaximized(GInternalFrameEvent evt) {
+	public void frameClosing(GFrameEvent evt) {
+		if(saveButton.isSaveNeeded()){
+			if(Window.confirm(Manager.myConstants.close_without_saving())){
+				frame.close();
+			}			
+		}else{
+			frame.close();
+		}
+	}
+	public void frameIconified(GFrameEvent evt) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void frameMinimized(GInternalFrameEvent evt) {
+	public void frameMaximized(GFrameEvent evt) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void frameMoved(GInternalFrameEvent evt) {
+	public void frameMinimized(GFrameEvent evt) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void frameOpened(GInternalFrameEvent evt) {
+	public void frameMoved(GFrameEvent evt) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void frameResized(GInternalFrameEvent evt) {
+	public void frameOpened(GFrameEvent evt) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void frameRestored(GInternalFrameEvent evt) {
+	public void frameResized(GFrameEvent evt) {
 		// TODO Auto-generated method stub
 		
 	}
+	public void frameRestored(GFrameEvent evt) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

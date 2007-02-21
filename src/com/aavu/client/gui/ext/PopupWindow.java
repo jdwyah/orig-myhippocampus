@@ -1,11 +1,10 @@
 package com.aavu.client.gui.ext;
 
 import org.gwm.client.GInternalFrame;
-import org.gwm.client.event.GInternalFrameListener;
+import org.gwm.client.event.GFrameListener;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class PopupWindow {
@@ -14,7 +13,7 @@ public class PopupWindow {
 	private static final int HEIGHT = 400;
 	
 	
-	private GInternalFrame frame;
+	protected GInternalFrame frame;
     
     public PopupWindow(GInternalFrame frame, String title) {
     	this(frame,title,false,WIDTH,HEIGHT);
@@ -92,8 +91,8 @@ public class PopupWindow {
 		System.out.println("PopupWindow hide()");
 		frame.minimize();
 	}
-	public void addInternalFrameListener(GInternalFrameListener listener){
-		frame.addInternalFrameListener(listener);
+	public void addInternalFrameListener(GFrameListener listener){
+		frame.addFrameListener(listener);
 	}
 
 } 

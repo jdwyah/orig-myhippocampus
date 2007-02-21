@@ -312,15 +312,20 @@ a:visited {
 .H-IslandBanner .Selected {
 	color: yellow;
 }
+.H-IslandBanner-Hover {
+	text-decoration: underline;
+}
 .H-TopicBanner {
 	font-family: arial, helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 	padding: 0 6 0 6px;		
 }
-
+.H-TopicBanner-Hover {
+	text-decoration: underline;
+}
 .H-TopicBanner.Selected {
-	color: yellow;
+	color: purple;
 }
 
 .H-Island-Closeup {

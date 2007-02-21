@@ -165,4 +165,19 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void moveBy(int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void zoomIn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void zoomOut() {
+		// TODO Auto-generated method stub
+		
+	}
 }

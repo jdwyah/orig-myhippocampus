@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class SaveStopLight extends Composite {
 	private ImageButton redLight;
 	private StackPanel sp;
+	private boolean saveNeeded;
 
 	public SaveStopLight(final ClickListener saveNow){
 		sp = new StackPanel();
@@ -30,10 +31,15 @@ public class SaveStopLight extends Composite {
 		initWidget(sp);
 	}
 	public void setSaveNeeded(){
+		saveNeeded = true;
 		sp.showStack(1);
 	}
 	public void saveAccomplished() {
+		saveNeeded = false;
 		sp.showStack(0);
+	}
+	public boolean isSaveNeeded() {
+		return saveNeeded;
 	}
 }
 

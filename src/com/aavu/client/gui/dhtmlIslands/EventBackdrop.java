@@ -3,6 +3,8 @@ package com.aavu.client.gui.dhtmlIslands;
 import com.aavu.client.gui.ext.SourcesWheelEvents;
 import com.aavu.client.gui.ext.WheelListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Widget;
 
 public class EventBackdrop extends FocusPanel implements SourcesWheelEvents {
 
@@ -13,7 +15,7 @@ public class EventBackdrop extends FocusPanel implements SourcesWheelEvents {
 		setHeight("100%");
 		
 		setStyleName("H-FocusBackDrop");		
-				
+		
 		addWheelSupport();
 	}
 	
@@ -88,7 +90,6 @@ public class EventBackdrop extends FocusPanel implements SourcesWheelEvents {
     }
     
 }-*/;
-
 
 	
 }

@@ -412,12 +412,24 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		}
 	}
 
+	/**
+	 * return true if any point of our bounding DIV is within the parameters
+	 * 
+	 * @param winLeft
+	 * @param winTop
+	 * @param winRight
+	 * @param winBottom
+	 * @return
+	 */
 	public boolean isWithin(int winLeft, int winTop, int winRight, int winBottom){
-		return (left > winLeft
+		int scaledWidth = (int) (width/(2*scale));
+		int scaledHeight = (int) (height/(2*scale));		
+		
+		return (left + scaledWidth > winLeft
 		&&
 		left < winRight
 		&&
-		top > winTop
+		top + scaledHeight > winTop
 		&&
 		top < winBottom);
 	}
@@ -596,6 +608,21 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			showTopics();
 		}
 		
+	}
+
+
+	public IslandBanner getBanner() {
+		return banner;
+	}
+
+
+	public double getCenterYAtScale() {
+		return top+height/(2*scale);
+	}
+
+
+	public double getCenterXAtScale() {
+		return left+width/(2*scale);
 	}
 
 	

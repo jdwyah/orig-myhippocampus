@@ -137,6 +137,7 @@ public interface Consts extends Messages {
 	String back();
 	String loading_islands();
 	String on_this_island_more(int i);
+	String close_without_saving();
 	
 	
 		

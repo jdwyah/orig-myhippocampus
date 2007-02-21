@@ -618,15 +618,15 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	/**
 	 * Return the lat long of our center on the map or null if none exists.
 	 * 
-	 * Overridden by Tag
+	 * NOTE: Overridden by Tag
 	 * 
 	 * @return
 	 */
-	public PointLocation getCenter() {	
+	public Topic getCenter() {	
 		Set s = getTypesAsTopics();
 		if(s.size() > 0){
 			Tag firstTag = (Tag) s.iterator().next();			
-			return new PointLocation(firstTag.getLongitude(),firstTag.getLatitude());
+			return firstTag;
 		}else{
 			return null;
 		}

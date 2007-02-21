@@ -35,6 +35,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 	
 	public static final String LOCAL_HOST = "http://localhost:8080/";
 	public static final String REMOTE_HOST = "http://www.myhippocampus.com/";
+	public static final String MAIN_DIV = "slot1";
 	
 	private HippoCache hippoCache;
 	private Manager manager;
@@ -49,9 +50,12 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		if(GWT.isScript()){			
 			
+			Logger.log("ModuleBaseURL: "+GWT.getModuleBaseURL());
+			
 			//Use for Deployment to production server
 			//
 			realModuleBase = REMOTE_HOST;
+			//realModuleBase = REMOTE_HOST + "DEV/";
 					
 			//Use to test compiled browser locally
 			//
@@ -107,6 +111,15 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		
 		
 		//Window.alert("4");
+		if(topicService == null
+				||
+				tagService == null
+				|| 
+				userService == null
+				|| 
+				subjectService == null){
+			Logger.error("Service was null.");
+		}
 		
 		hippoCache = new HippoCache(topicService,tagService,userService,subjectService);
 		
@@ -117,7 +130,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 		//static service setters.
 		//hopefully replace with Spring DI
 		//
-		TopicCompleter.setTopicService(hippoCache.getTopicCache());
+		//TopicCompleter.setTopicService(hippoCache.getTopicCache());
 		MetaDate.setTopicService(hippoCache.getTopicCache());
 		StdAsyncCallback.setManager(manager);
 		
@@ -131,7 +144,7 @@ public class HippoTest implements EntryPoint, HistoryListener {
 
 	private void loadGUI(Widget widget) {
 		RootPanel.get("loading").setVisible(false);
-		RootPanel.get("slot1").add(widget);					
+		RootPanel.get(MAIN_DIV).add(widget);					
 	}
 
 

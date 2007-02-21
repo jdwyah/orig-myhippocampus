@@ -26,9 +26,13 @@ public interface Ocean {
 	public void showCloseup(long id, FullTopicIdentifier[] topics);
 
 	public void zoomTo(double scale);
+	public void zoomIn();
+	public void zoomOut();
 
 	public void update(Tag t, AbstractSaveCommand command);
 
 	public void centerOn(Topic topic);
+
+	public void moveBy(int i, int j);
 
 }

@@ -102,30 +102,25 @@ public class Zoomer extends SimplePanel implements MouseListener {
 	}
 
 	/**
-	 * it's exponential < 1
-	 * but ++ > 1
+	 *  Change, let's do powers of 2 the whole way
+	 *  
+	 * 
 	 * @param i
 	 * @return
 	 */
 	public static double convertToScale(int i) {
 		
-		if((TOT_INCR - i) <= NUM_BELOW_1){			
-			double pow = Math.pow(2, (TOT_INCR - i) - NUM_BELOW_1);
-			return pow;
-		}else{
-			//add one, otherwise (6-5)^1 == (6-5) & two zoom levels are the same
-			return (TOT_INCR - i) - NUM_BELOW_1 + 1;
-		}
+		double pow = Math.pow(2, (TOT_INCR - i) - NUM_BELOW_1);
+		return pow;
+		
 		
 	}
 
 	public static int convertFromScale(double d) {
-		if(d <= 1){			
-			int pow =(int)(Math.log(d)/Math.log(2));					
-			return (TOT_INCR - pow) - NUM_BELOW_1;			
-		}else{			
-			return (int) (TOT_INCR - d) - NUM_BELOW_1 + 1;
-		}		
+		
+		int pow =(int)(Math.log(d)/Math.log(2));					
+		return (TOT_INCR - pow) - NUM_BELOW_1;
+				
 	}
 
 

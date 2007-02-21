@@ -53,8 +53,8 @@ public class Tag extends Topic implements  Completable, IsSerializable, Serializ
 	}
 
 	//@Override
-	public PointLocation getCenter() {						
-		return new PointLocation(getLongitude(),getLatitude());		
+	public Topic getCenter() {						
+		return this;		
 	}
 
 }

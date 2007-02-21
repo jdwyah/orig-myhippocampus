@@ -45,6 +45,6 @@
 	<classpathentry kind="lib" path="lib/spring-mock-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-snowball.jar"/>
 	<classpathentry kind="lib" path="tools/gwt/gwt-dev-windows-1.2.22.jar"/>
-	<classpathentry kind="lib" path="lib/gwm-0.5.2.jar"/>
+	<classpathentry kind="lib" path="lib/gwm-hippo.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

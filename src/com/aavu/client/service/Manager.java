@@ -1,13 +1,11 @@
 package com.aavu.client.service;
 
-import java.util.Date;
 import java.util.List;
 
-import org.gwm.client.FramesManager;
-import org.gwm.client.FramesManagerFactory;
 import org.gwm.client.GDesktopPane;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGDesktopPane;
+import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.HippoTest;
@@ -18,16 +16,16 @@ import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
-import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.EntryEditWindow;
 import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
-import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.ViewMemberWindow;
+import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.glossary.Glossary;
@@ -53,8 +51,8 @@ public class Manager implements TopicSaveListener {
 	private MainMap map;
 	private User user;
 	
-	private FramesManager framesManager;
-	//private GDesktopPane desktop;
+	//private FramesManager framesManager;
+	//private DefaultGDesktopPane desktop;
 	
 	private TagLocalService tagLocalService;
 	//private MainMap mainMap;
@@ -72,14 +70,14 @@ public class Manager implements TopicSaveListener {
 		//If we implement that, note that it messed with our 
 		//theme application
 		//		
-		framesManager = new FramesManagerFactory().createFramesManager(); 
+		//framesManager = new FramesManagerFactory().createFramesManager(); 
 		
 		//desktop = new DefaultGDesktopPane();	   
-		
-		
-	    //RootPanel.get().add((Widget) desktop);
+				
+	    //RootPanel.get(HippoTest.MAIN_DIV).add((Widget) desktop);
 	    		
 		map = new MainMap(this);
+		
 		
 	}
 	private void initConstants() {
@@ -94,14 +92,17 @@ public class Manager implements TopicSaveListener {
 			}});
 
 	}
-	public void bringUpChart(Topic topic) {
-		bringUpChart(topic, false);
-	}
-	
-	public void bringUpChart(final Topic topic, boolean editMode) {
+	public void bringUpChart(Topic topic) {		
 		map.displayTopic(topic);
 		map.centerOn(topic);
+		map.zoomTo(4);
 	}
+	
+//	public void bringUpChart(final Topic topic, boolean editMode) {
+//		map.displayTopic(topic);
+//		map.centerOn(topic);
+//	}
+	
 //	public void bringUpChart(final Topic topic, boolean editMode) {
 //		
 //		if(topic instanceof Tag){
@@ -324,11 +325,11 @@ public class Manager implements TopicSaveListener {
 		return newFrame("");
 	}
 	private GInternalFrame newFrame(String title) {
-		GInternalFrame frame = framesManager.newFrame("");
-//		frame.setSize(200, 200);
-//		frame.setTheme("alphacube");
-//		frame.setContent("foooooooo");
-//		desktop.addFrame(frame);
+		
+		GInternalFrame frame = new DefaultGInternalFrameHippoExt("",map);
+
+		map.addFrame(frame);
+		
 		return frame;
 	}
 	

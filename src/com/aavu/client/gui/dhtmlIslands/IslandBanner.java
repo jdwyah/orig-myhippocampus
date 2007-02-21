@@ -1,13 +1,18 @@
 package com.aavu.client.gui.dhtmlIslands;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
+import com.google.gwt.user.client.ui.MouseListenerCollection;
+import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class IslandBanner extends AbsolutePanel{
+public class IslandBanner extends AbsolutePanel {
 	
 	private static final double HALF_MIN_EM = .4;
 	private static final double SCALE_DIVISOR = 6;
@@ -17,6 +22,11 @@ public class IslandBanner extends AbsolutePanel{
 	private Label shdw;
 	private int size;
 	
+	private static final String HOVER_STYLE = "H-IslandBanner-Hover";
+	
+	//private MouseListenerCollection mouseListeners;	
+	
+
 
 	/**
 	 * 
@@ -47,7 +57,17 @@ public class IslandBanner extends AbsolutePanel{
 				
 		setStyleName("H-IslandBanner");
 		
+		sinkEvents( Event.MOUSEEVENTS );	    
 		
+		reg.addMouseListener(new MouseListenerAdapter(){
+			public void onMouseEnter(Widget sender) {
+				addStyleName(HOVER_STYLE);
+			}
+			public void onMouseLeave(Widget sender) {
+				removeStyleName(HOVER_STYLE);
+			}	
+		});
+				
 		System.out.println("reg "+reg.getOffsetWidth()+" "+reg.getOffsetHeight());
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
 		
@@ -119,5 +139,32 @@ public class IslandBanner extends AbsolutePanel{
 			shdw.removeStyleName(BANNER_SELECTED);
 		}
 	}
+	
+	
+//	public void addMouseListener(MouseListener listener) {
+//		if (mouseListeners == null)
+//			mouseListeners = new MouseListenerCollection();
+//		mouseListeners.add(listener);
+//	}
+//
+//	public void removeMouseListener(MouseListener listener) {
+//		if (mouseListeners != null)
+//			mouseListeners.remove(listener);
+//	}
+//	public void onBrowserEvent(Event event) {
+//
+//	    switch (DOM.eventGetType(event)) {
+//	    case Event.ONCLICK: 
+//	    case Event.ONMOUSEUP:
+//	    case Event.ONMOUSEDOWN:
+//	    case Event.ONMOUSEMOVE:
+//	    case Event.ONMOUSEOVER:
+//	    case Event.ONMOUSEOUT: {
+//	    	if (mouseListeners != null)
+//	    		mouseListeners.fireMouseEvent(this, event);
+//	    	break;
+//	    }
+//	    }
+//	}
 }
 

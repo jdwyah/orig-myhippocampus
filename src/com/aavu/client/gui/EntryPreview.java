@@ -6,7 +6,7 @@ import com.aavu.client.wiki.TextDisplay;
 
 public class EntryPreview extends TopicWidget {
 
-	private static final int NUM_CHARS = 120;
+	private static final int NUM_CHARS = 240;
 
 	public EntryPreview(){
 		super();

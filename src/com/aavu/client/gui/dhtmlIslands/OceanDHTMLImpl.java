@@ -30,6 +30,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -74,10 +75,6 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private double currentScale = 1;
 
-	private int curMouseX;
-
-	private int curMouseY;
-
 	private Island selectedIsland;
 	
 	private PopupWindow progressWindow;	
@@ -99,6 +96,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 		clouds();
 
+		
+		
 		/*
 		 * override the AbsolutePanel position: relative
 		 * otherwise we got a left: 8px; top: 8px;
@@ -166,6 +165,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		focusBackdrop = new EventBackdrop();
 		focusBackdrop.addMouseListener(this);
 		focusBackdrop.addWheelistener(this);
+		focusBackdrop.addKeyboardListener(new OceanKeyBoardListener(this));
 		add(focusBackdrop,0,0);
 
 	}
@@ -335,32 +335,36 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		finishZoom(oldScale);
 		
 	}
-	private void zoomUp() {
+	public void zoomOut() {
 		System.out.println("zoom up from "+currentScale);
 
 		double oldScale = currentScale;
 
-		if(currentScale <= 1){
-			currentScale /= 2;		
-		}else{
-			currentScale--;
-		}
+		
+		currentScale /= 2;
+		
+//		if(currentScale <= 1){
+//			currentScale /= 2;		
+//		}else{
+//			currentScale--;
+//		}
 
 		finishZoom(oldScale);
 	}
 
 
 
-	private void zoomIn() {		
+	public void zoomIn() {		
 		System.out.println("zoom in from "+currentScale);
 
 		double oldScale = currentScale;
 
-		if(currentScale <= 1){
-			currentScale *= 2;		
-		}else{
-			currentScale++;
-		}
+		currentScale *= 2;
+//		if(currentScale <= 1){
+//			currentScale *= 2;		
+//		}else{
+//			currentScale++;
+//		}
 
 		finishZoom(oldScale);
 	}
@@ -561,8 +565,29 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	}
 
-
+	
 	/**
+	 * This moves the background and then sets the back position.
+	 * Call this when you want a move.
+	 * 
+	 * @param dx
+	 * @param dy
+	 */
+	public void moveBy(int dx, int dy) {
+		moveByDelta(dx, dy);
+
+		//this was normally set in finishDrag()
+		backX = curbackX;
+		backY = curbackY;
+	}
+	
+	
+	/**
+	 * Internal move method. Doesn't actually 'finish' the move. This helps
+	 * us make dragging smoother. 
+	 * 
+	 * Use moveBy() unless you'll finish yourself.
+	 * 
 	 * Takes dx, dy as SouthEast (+,+)  NW (-,-)
 	 * 
 	 * @param dx
@@ -639,9 +664,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
-		curMouseX = x;
-		curMouseY = y;
-
+		
 		if (dragging) {			
 			moveByDelta(dragStartX - x, dragStartY - y);			
 		}
@@ -675,7 +698,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	public void onWheel(Widget widget, int delta) {
 		if(delta < 0){
-			zoomUp();
+			zoomOut();
 		}else{
 			zoomIn();
 		}
@@ -703,11 +726,17 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		int halfWidth = width/2;
 		int halfHeight = height/2;
 	
-		PointLocation p = topic.getCenter();
+		Topic centerTopic = topic.getCenter();
 		
-		if(p != null){
-			int left = (int) ((p.x * currentScale) - halfWidth);
-			int top = (int) ((p.y * currentScale) - halfHeight);
+		Island isle = (Island) islands.get(new Long(centerTopic.getId()));
+		
+		if(isle != null){
+		
+			
+			
+			
+			int left = (int) ((isle.getCenterXAtScale() * currentScale) - halfWidth);
+			int top = (int) ((isle.getCenterYAtScale() * currentScale) - halfHeight);
 
 //			SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
 //			System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
@@ -716,14 +745,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 			//intuitively this is (left - curbackX) but things are reversed			
 			int dx = left + curbackX;
 			int dy = top + curbackY;
-			moveByDelta(dx, dy);
+			moveBy(dx, dy);
 						
 //			System.out.println("dx "+dx+" curbackX "+curbackX+" ");
 //			System.out.println("dy "+dy+" curbackY "+curbackY+" ");			
-			
-			//this was normally set in finishDrag()
-			backX = curbackX;
-			backY = curbackY;	
+				
 		}
 		
 	}

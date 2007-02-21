@@ -1,26 +1,28 @@
 package com.aavu.client.gui;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+import org.gwm.client.GDesktopPane;
+import org.gwm.client.GFrame;
+import org.gwm.client.GInternalFrame;
+import org.gwm.client.impl.DefaultGDesktopPane;
+import org.gwm.client.impl.DefaultGFrame;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
-import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
-import com.aavu.client.gui.ext.EditableLabelExtension;
-import com.aavu.client.gui.ext.FlashContainer;
+import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.MultiDivPanel;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
-import com.aavu.client.service.cache.HippoCache;
-import com.aavu.client.widget.edit.TagBoard;
-import com.aavu.client.widget.edit.TopicDetailsTabBar;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-public class MainMap extends Composite {
+public class MainMap extends Composite implements GDesktopPane {
 
 	//private Sidebar sideBar;	
 	private Manager manager;
@@ -33,12 +35,19 @@ public class MainMap extends Composite {
 	private CenterTopicDisplayer centerDisplayer;
 	
 	private Zoomer zoomer;
+	private List frames;
+
+	private MultiDivPanel mainP;
 	
 	public MainMap(Manager manager){
 		this.manager = manager;
+		
+		this.frames = new ArrayList();
+	    
 		manager.setMap(this);
 		
-		MultiDivPanel mainP = new MultiDivPanel();	
+		mainP = new MultiDivPanel();	
+		//mainP.setStyleName("H-AbsolutePanel");
 
 		//sideBar = new Sidebar(manager);
 		
@@ -46,16 +55,17 @@ public class MainMap extends Composite {
 		//tagSearch = new TagSearch(manager);
 		
 		
-		
 		//ocean = new OceanFlashImpl(manager);
 		ocean = new OceanDHTMLImpl(manager);
+		
+
 		
 		statusPanel = new StatusPanel();
 		
 		compassRose = new CompassRose(manager);
 		mainP.add(compassRose);
-		mainP.add(ocean.getWidget());
-				
+		mainP.add(ocean.getWidget());//,0,0);
+		
 		//mainP.add(sideBar);
 		mainP.add(new Dashboard(manager));
 		
@@ -72,6 +82,7 @@ public class MainMap extends Composite {
 		mainP.add(topicDetailsDisplayer);
 		
 		//mainP.add(tagSearch);
+		
 		
 		//mainP.addStyleName("");
 		initWidget(mainP);
@@ -160,7 +171,7 @@ public class MainMap extends Composite {
 	}
 	
 	public void centerOn(Topic topic){
-		ocean.centerOn(topic);
+		ocean.centerOn(topic);		
 	}
 
 	public void unselect() {
@@ -172,6 +183,47 @@ public class MainMap extends Composite {
 		ocean.zoomTo(scale);
 		zoomer.setToScale(scale);
 	}
+
+	
+	
+	
+	public void addFrame(GInternalFrame internalFrame) {
+		internalFrame.setDesktopPane(this);
+		
+		int spos = (frames.size() + 1) * 30;
+		
+		mainP.add((DefaultGFrame) internalFrame);		
+		
+		internalFrame.setLocation(mainP.getAbsoluteLeft() + spos,
+				mainP.getAbsoluteTop() + spos);
+		
+		
+		DOM.setStyleAttribute(((DefaultGInternalFrameHippoExt)internalFrame).getElement(), "position","absolute");
+				
+		frames.add(internalFrame);
+	}
+
+	public void closeAllFrames() {
+		// TODO Auto-generated method stub		
+	}
+	public void iconify(GFrame internalFrame) {
+		// TODO Auto-generated method stub		
+	}
+	public void deIconify(GFrame minimizedWindow) {
+		// TODO Auto-generated method stub		
+	}
+
+	public List getAllFrames() {
+		return frames;
+	}
+
+	public void setLocation(DefaultGInternalFrameHippoExt ext, int left, int top) {
+		
+		DOM.setStyleAttribute(ext.getElement(), "left", left+"px");
+		DOM.setStyleAttribute(ext.getElement(), "top", top+"px");
+		
+	}
+
 
 
 }
