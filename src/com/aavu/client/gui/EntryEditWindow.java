@@ -1,9 +1,13 @@
 package com.aavu.client.gui;
 
+import org.gwm.client.GDesktopPane;
+import org.gwm.client.GDialog;
 import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
+import org.gwm.client.event.GDialogChoiceListener;
 import org.gwm.client.event.GFrameEvent;
 import org.gwm.client.event.GFrameListener;
+import org.gwm.client.impl.DefaultGDialog;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
@@ -12,17 +16,20 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EntryEditWindow extends PopupWindow implements SaveNeededListener, GFrameListener {
 
-	private static final int WIDTH = 700;
+	private static final int WIDTH = 750;
 	private static final int HEIGHT = 500;
 	private Manager manager;
 	private SaveStopLight saveButton;
 	private TopicViewAndEditWidget topicViewAndEditW;
+	private HorizontalPanel mainP;
 	
 	public EntryEditWindow(Topic topic, Manager manager, GInternalFrame frame) {
 		super(frame,topic.getTitle(),WIDTH,HEIGHT);
@@ -37,9 +44,9 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener, 
 					save();	
 				}
 			});
-		VerticalPanel mainP = new VerticalPanel();
+		mainP = new HorizontalPanel();
 		
-		mainP.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+		mainP.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
 		
 		mainP.add(topicViewAndEditW);
 		mainP.add(saveButton);
@@ -71,9 +78,18 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener, 
 	}
 	public void frameClosing(GFrameEvent evt) {
 		if(saveButton.isSaveNeeded()){
+			
+//			DefaultGDialog.showConfirmDialog(mainP, Manager.myConstants.close_without_saving(), "", GDialog.OK_CANCEL_OPTION_TYPE, new GDialogChoiceListener(){
+//				public void onChoice(DefaultGDialog dialog) {
+//					 if (dialog.getSelectedOption() == DefaultGDialog.OK_OPTION) {
+//						 frame.close();
+//					 }
+//				}});
+			
 			if(Window.confirm(Manager.myConstants.close_without_saving())){
 				frame.close();
-			}			
+			}
+			
 		}else{
 			frame.close();
 		}

@@ -1,4 +1,4 @@
-package com.aavu.client.widget.edit;
+package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
 
@@ -8,6 +8,7 @@ import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ExternalLink;
+import com.aavu.client.widget.UploadWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;

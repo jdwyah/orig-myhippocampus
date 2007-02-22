@@ -1,4 +1,4 @@
-package com.aavu.client.gui;
+package com.aavu.client.gui.gadgets;
 
 import com.aavu.client.domain.Entry;
 import com.aavu.client.widget.edit.TopicWidget;

@@ -1,4 +1,4 @@
-package com.aavu.client.widget.edit;
+package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
 
@@ -11,6 +11,7 @@ import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ExternalLink;
+import com.aavu.client.widget.edit.AddLinkPopup;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;

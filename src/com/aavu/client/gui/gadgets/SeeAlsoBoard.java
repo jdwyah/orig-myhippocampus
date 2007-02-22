@@ -1,4 +1,4 @@
-package com.aavu.client.widget.edit;
+package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
 
@@ -12,6 +12,8 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.TopicLink;
+import com.aavu.client.widget.edit.CompleteListener;
+import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;

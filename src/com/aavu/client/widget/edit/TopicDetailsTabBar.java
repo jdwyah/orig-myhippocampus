@@ -3,6 +3,7 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.UpdateableTabPanel;
+import com.aavu.client.gui.gadgets.UploadBoard;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.AllReferencesPanel;
 import com.aavu.client.wiki.TextDisplay;

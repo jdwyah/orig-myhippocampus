@@ -1,4 +1,4 @@
-package com.aavu.client.gui;
+package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
 import java.util.Iterator;

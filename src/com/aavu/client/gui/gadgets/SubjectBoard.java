@@ -1,4 +1,4 @@
-package com.aavu.client.widget.edit;
+package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +16,7 @@ import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.ObjectListBox;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;

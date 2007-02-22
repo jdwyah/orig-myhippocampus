@@ -7,6 +7,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.gadgets.LinkDisplayWidget;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;

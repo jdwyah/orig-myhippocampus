@@ -1,4 +1,4 @@
-package com.aavu.client.widget.edit;
+package com.aavu.client.gui.gadgets;
 
 
 import java.util.HashSet;
@@ -15,6 +15,10 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.edit.CompleteListener;
+import com.aavu.client.widget.edit.DeletableTopicLabel;
+import com.aavu.client.widget.edit.RemoveListener;
+import com.aavu.client.widget.edit.TagAutoCompleteBox;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;

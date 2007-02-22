@@ -1,34 +1,33 @@
 package com.aavu.client.gui;
 
-import org.gwtwidgets.client.ui.ImageButton;
+import java.util.List;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveTitleCommand;
-import com.aavu.client.gui.ext.EditableLabelExtension;
-import com.aavu.client.gui.ext.TooltipListener;
+import com.aavu.client.gui.gadgets.EntryPreview;
+import com.aavu.client.gui.gadgets.TagPropertyPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.OnThisIslandBoard;
-import com.aavu.client.widget.edit.SaveNeededListener;
-import com.aavu.client.widget.edit.TagBoard;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RightTopicDisplayer extends Composite implements SaveNeededListener, ClickListener {
+public class RightTopicDisplayer extends Composite implements ClickListener {
+	
+	private List gadgets;
+	
 	
 	private TagPropertyPanel tagProperties;
-	private TopicDetailsTabBar topicDetails;
-	
+	private TopicDetailsTabBar topicDetails;	
 	private EntryPreview entryPreview;
+	private OnThisIslandBoard onThisIslandBoard;
+	
 	
 	private Topic topic;
 	private Manager manager;
-	private OnThisIslandBoard onThisIslandBoard;
+	
 	
 	public RightTopicDisplayer(final Manager manager){
 			
@@ -101,13 +100,4 @@ public class RightTopicDisplayer extends Composite implements SaveNeededListener
 			manager.editEntry(topic);
 		}
 	}
-
-
-	public void onChange(Widget sender) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	
 }

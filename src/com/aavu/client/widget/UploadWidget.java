@@ -1,4 +1,4 @@
-package com.aavu.client.widget.edit;
+package com.aavu.client.widget;
 
 import org.gwtwidgets.client.ui.ProgressBar;
 
@@ -7,6 +7,7 @@ import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
+import com.aavu.client.gui.gadgets.UploadBoard;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;

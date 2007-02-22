@@ -1,4 +1,4 @@
-package com.aavu.client.widget.edit;
+package com.aavu.client.gui.gadgets;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MindTreeOcc;
@@ -6,6 +6,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
+import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
