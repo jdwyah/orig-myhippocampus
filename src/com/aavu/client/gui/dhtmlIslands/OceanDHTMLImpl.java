@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.gwtwidgets.client.ui.PNGImage;
@@ -26,6 +27,7 @@ import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.service.Manager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -375,8 +377,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		int width = Window.getClientWidth();
 		int height = Window.getClientHeight();
 
-		int centerX = (int)((-curbackX + (width / 2)) / oldScale);
-		int centerY = (int)((-curbackY + (height / 2)) / oldScale);
+		int centerX = getCenterX(oldScale,width);
+		int centerY = getCenterY(oldScale,height);
 
 		int halfWidth = width/2;
 		int halfHeight = height/2;
@@ -457,16 +459,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 				
 		if(isle == null){
 			System.out.println("was null");
-
+			
 			//center the island
-			int width = Window.getClientWidth();
-			int height = Window.getClientHeight();
-			int halfWidth = width/2;
-			int halfHeight = height/2;
-			int centerX = (int)((-curbackX + halfWidth)/currentScale);
-			int centerY = (int)((-curbackY + halfHeight)/currentScale);				
-			tag.setLatitude(centerY);
-			tag.setLongitude(centerX);
+
+			tag.setLatitude(getCenterY());
+			tag.setLongitude(getCenterX());
 			
 			TagStat tagStat = new TagStat(tag);
 			Island newIsle = new Island(tagStat,this,manager.getUser(),manager);		
@@ -581,7 +578,22 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		backY = curbackY;
 	}
 	
-	
+	private int getCenterX(){
+		return getCenterX(currentScale,Window.getClientWidth());
+	}
+	private int getCenterX(double scaleToUse,int width){		
+		int halfWidth = width/2;		
+		int centerX = (int)((-curbackX + halfWidth)/scaleToUse);
+		return centerX;
+	}
+	private int getCenterY(){
+		return getCenterY(currentScale,Window.getClientHeight());
+	}
+	private int getCenterY(double scaleToUse,int height){		
+		int halfHeight = height/2;
+		int centerY = (int)((-curbackY + halfHeight)/scaleToUse);
+		return centerY;
+	}
 	/**
 	 * Internal move method. Doesn't actually 'finish' the move. This helps
 	 * us make dragging smoother. 
@@ -603,11 +615,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 		int halfWidth = width/2;
 		int halfHeight = height/2;
-
-//		System.out.println("cur "+curbackX+" "+curbackY);
-
-		int centerX = (int)((-curbackX + halfWidth)/currentScale);
-		int centerY = (int)((-curbackY + halfHeight)/currentScale);
+		
+		int centerX = getCenterX(currentScale,width);
+		int centerY = getCenterY(currentScale,height);
 
 //		System.out.println("centerX "+centerX+" centerY "+centerY);
 
@@ -716,9 +726,16 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 	/**
+	 * 
+	 * centerOn will move th map to center on the given topic.
+	 * If it's an island, that's easy.
+	 * If it's only a topic, loop through its islands and find the one closest
+	 * to out current center. Otherwise we'll jump all over the place.
+	 * 
+	 * 
 	 * 	invert this equation to find the x for a given center
-		int centerX = (int)((-curbackX + halfWidth)/currentScale);
-		int centerY = (int)((-curbackY + halfHeight)/currentScale);		
+	 *	int centerX = (int)((-curbackX + halfWidth)/currentScale);
+	 *  int centerY = (int)((-curbackY + halfHeight)/currentScale);		
 	 * 
 	 */
 	public void centerOn(Topic topic) {
@@ -729,7 +746,38 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		int halfWidth = width/2;
 		int halfHeight = height/2;
 	
-		Topic centerTopic = topic.getCenter();
+			
+		Topic centerTopic = null;		
+		if(topic instanceof Tag){
+			centerTopic = topic;
+		}else{
+					
+			//Loop through all tags and find the one closest to our
+			//current center
+			//
+			int centerX = getCenterX(currentScale,width);
+			int centerY = getCenterY(currentScale,height);
+				
+			double distance = Double.MAX_VALUE;
+			
+			Set s = topic.getTypesAsTopics();
+			for (Iterator iter = s.iterator(); iter.hasNext();) {
+				Topic tag = (Topic) iter.next();
+				
+				double dist = Math.pow(tag.getLatitude() - centerY,2);
+				dist += Math.pow(tag.getLongitude() - centerX,2);
+				dist = Math.sqrt(dist);
+				
+				if(dist < distance){
+					distance = dist;
+					centerTopic = tag;
+				}
+			}
+			
+		}
+		
+
+		
 		if(centerTopic != null){
 
 			Island isle = (Island) islands.get(new Long(centerTopic.getId()));
@@ -742,7 +790,6 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 //				SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
 //				System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
-
 
 				//intuitively this is (left - curbackX) but things are reversed			
 				int dx = left + curbackX;

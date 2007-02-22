@@ -52,9 +52,5 @@ public class Tag extends Topic implements  Completable, IsSerializable, Serializ
 		return getTitle();
 	}
 
-	//@Override
-	public Topic getCenter() {						
-		return this;		
-	}
 
 }
