@@ -35,6 +35,7 @@ public class TopicCache {
 
 	/**
 	 * map with null values. we just need something sortable.
+	 * Map<TopicIdentifiers,null>
 	 */
 	private GWTSortedMap topicIdentifiers = new GWTSortedMap();
 	
@@ -449,8 +450,19 @@ public class TopicCache {
 
 
 
-	public void createNew(String title, boolean b, AsyncCallback callback) {
-		topicService.createNew(title, b, callback);		
+	/**
+	 * All new topic creation shoudl route through here
+	 * 
+	 * @param title
+	 * @param isIsland
+	 * @param callback
+	 */
+	public void createNew(String title, boolean isIsland, AsyncCallback callback) {
+		
+		//TODO inefficient. We should wrap & insert instead of doing a full lookup
+		topicIdentifiersDirty = true;
+		
+		topicService.createNew(title, isIsland, callback);		
 	}
 
 

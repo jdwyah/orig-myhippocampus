@@ -194,58 +194,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				t.setSubject(saved);
 			}
 		}
-
-//		System.out.println("now set Associations : ");
-//		for (Iterator iter = t.getAssociations().iterator(); iter.hasNext();) {			
-//			Association assoc = (Association) iter.next();
-//			System.out.println("assoc "+assoc+" size: "+assoc.getMembers().size());
-//			System.out.println("assocDetail "+assoc.getTitle()+" "+assoc.getId());
-//
-//			for (Iterator iterator = assoc.getTypesAsTopics().iterator(); iterator.hasNext();) {
-//				Topic type = (Topic) iterator.next();
-//				assoc.setUser(t.getUser());
-//				System.out.println("type "+type.getTitle());
-//				//Why singleton?
-//				//See description and Test Code in TopicDAOHibernateImplTest.testToMakeSureWeDontCreateTooManyObjects()
-//				if(type instanceof MetaSeeAlso){
-//					MetaSeeAlso singleton = (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
-//					if(singleton == null){
-//						System.out.println("single == null");
-//						
-//						//saveTwo(type, assoc);
-//						getHibernateTemplate().saveOrUpdate(type);
-//					}else{
-//						System.out.println("single != null, rem/add");
-//						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
-//						assoc.removeType(type);
-//						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
-//						assoc.addType(singleton);
-//						System.out.println("assoc size "+assoc.getTypesAsTopics().size());
-//					}
-//				}else{
-//					
-//					System.out.println("TYPE "+type.toPrettyString());
-//					
-//					
-//					//saveTwo(type, assoc);
-//					getHibernateTemplate().saveOrUpdate(type);
-//					
-//				}
-//			}
-//			
-//			System.out.println("----------------------------");
-//			System.out.println("about to save "+assoc.toPrettyString());
-//			
-//			getHibernateTemplate().saveOrUpdate(assoc);			
-//		}
-
-
-
-//		for (TopicTypeConnector conn : (Set<TopicTypeConnector>)t.getTypes()) {
-//			System.out.println("TYPE "+conn.getTopic()+" "+conn.getType());
-//			getHibernateTemplate().save(conn);
-//		}
-		
 	
 		getHibernateTemplate().saveOrUpdate(t);		
 	

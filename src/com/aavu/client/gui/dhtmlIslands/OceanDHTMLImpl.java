@@ -706,9 +706,12 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	public void update(Tag t, AbstractSaveCommand command) {
 		Island isle = (Island) islands.get(new Long(t.getId()));
-		System.out.println("Ocean.update "+isle.getTitle());
+		
 		if(isle != null){
+			System.out.println("Ocean.update "+isle.getTitle());
 			isle.redraw(t);
+		}else{
+			growIsland(t);
 		}
 	}
 
@@ -727,29 +730,29 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		int halfHeight = height/2;
 	
 		Topic centerTopic = topic.getCenter();
-		
-		Island isle = (Island) islands.get(new Long(centerTopic.getId()));
-		
-		if(isle != null){
-		
-			
-			
-			
-			int left = (int) ((isle.getCenterXAtScale() * currentScale) - halfWidth);
-			int top = (int) ((isle.getCenterYAtScale() * currentScale) - halfHeight);
+		if(centerTopic != null){
 
-//			SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
-//			System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
-			
-			
-			//intuitively this is (left - curbackX) but things are reversed			
-			int dx = left + curbackX;
-			int dy = top + curbackY;
-			moveBy(dx, dy);
-						
-//			System.out.println("dx "+dx+" curbackX "+curbackX+" ");
-//			System.out.println("dy "+dy+" curbackY "+curbackY+" ");			
-				
+			Island isle = (Island) islands.get(new Long(centerTopic.getId()));
+
+			if(isle != null){
+
+
+				int left = (int) ((isle.getCenterXAtScale() * currentScale) - halfWidth);
+				int top = (int) ((isle.getCenterYAtScale() * currentScale) - halfHeight);
+
+//				SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
+//				System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
+
+
+				//intuitively this is (left - curbackX) but things are reversed			
+				int dx = left + curbackX;
+				int dy = top + curbackY;
+				moveBy(dx, dy);
+
+//				System.out.println("dx "+dx+" curbackX "+curbackX+" ");
+//				System.out.println("dy "+dy+" curbackY "+curbackY+" ");			
+
+			}
 		}
 		
 	}

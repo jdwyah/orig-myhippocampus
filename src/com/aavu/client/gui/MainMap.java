@@ -19,6 +19,7 @@ import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 
@@ -43,7 +44,9 @@ public class MainMap extends Composite implements GDesktopPane {
 		this.manager = manager;
 		
 		this.frames = new ArrayList();
-	    
+		
+		Window.enableScrolling(false);
+		
 		manager.setMap(this);
 		
 		mainP = new MultiDivPanel();	

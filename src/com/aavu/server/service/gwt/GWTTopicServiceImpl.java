@@ -44,6 +44,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 	public TopicIdentifier createNew(String title, boolean isIsland) throws HippoBusinessException {
+		
+		log.debug("create New: "+title);
+		
 		Topic t = null;
 		if(isIsland){
 			t = new Tag();
@@ -58,26 +61,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
 		log.info("command "+command.getClass()+" "+command);		
 		topicService.executeAndSaveCommand(command);
-	}
-	
-	
-	
-	public Topic save(Topic topic) throws HippoException {
-
-		try {
-			log.debug("Save topics");
-			log.debug(topic.toPrettyString());
-
-			//GWTHandler
-			return convert(topicService.save(topic));
-		}  catch (HippoException ex) {
-			log.error("Throw Hippo Exception: "+ex);
-			throw ex;
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 

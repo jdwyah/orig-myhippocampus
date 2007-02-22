@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
@@ -85,15 +85,20 @@ public class TopicServiceImpl implements TopicService {
 		if(topic.mustHaveUniqueName()){
 			log.debug("Getting same named");
 			
-			Topic sameNamed = (Topic) topicDAO.getForName(topic.getUser(), topic.getTitle());
-			
-			log.debug("Rec "+sameNamed);		
+			try {
+				Topic sameNamed = (Topic) topicDAO.getForName(topic.getUser(), topic.getTitle());
+				log.debug("Rec "+sameNamed);		
 
-			if(sameNamed != null && sameNamed.getId() != topic.getId()){
-				log.info("Throw HBE exception for Duplicate Title");
+				if(sameNamed != null && sameNamed.getId() != topic.getId()){
+					log.info("Throw HBE exception for Duplicate Title. ID: "+topic.getId()+" ID2:"+sameNamed.getId());
+					throw new HippoBusinessException("Duplicate Name");
+				}		
+			} catch (IncorrectResultSizeDataAccessException e) {
+				log.info(e.getMessage()+" Throw HBE exception for Duplicate Title. ID: "+topic.getId()+" "+topic.getTitle());
 				throw new HippoBusinessException("Duplicate Name");
 			}
-			//need to evict or we'll get a NonUniqueException
+			
+						//need to evict or we'll get a NonUniqueException
 			//getHibernateTemplate().evict(sameNamed);
 		}
 		
@@ -223,13 +228,13 @@ public class TopicServiceImpl implements TopicService {
 	}
 	private void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
 		if(command.getTopicID() > 0){
-			topicDAO.saveSimple(command.getTopic());
+			save(command.getTopic());
 		}
 		if(command.getId1() > 0){
-			topicDAO.saveSimple(command.getTopic1());
+			save(command.getTopic1());
 		}
 		if(command.getId2() > 0){
-			topicDAO.saveSimple(command.getTopic2());
+			save(command.getTopic2());
 		}
 		
 	}
@@ -242,6 +247,9 @@ public class TopicServiceImpl implements TopicService {
 	 * @throws HippoBusinessException 
 	 */
 	private void hydrateCommand(AbstractSaveCommand command) throws HippoBusinessException {
+		
+		log.debug("Hydrate: "+command);
+		
 		if(command.getTopicID() > 0){
 			command.setTopic(topicDAO.get(command.getTopicID()));
 		}
@@ -252,6 +260,8 @@ public class TopicServiceImpl implements TopicService {
 			command.setTopic2(topicDAO.get(command.getId2()));
 		}
 
+		log.debug("Hydrated. "+command.getTopic()+" "+command.getTopic1()+" "+command.getTopic2());
+		
 		//a bit messy, but it's tough to inject this otherwise, since we don't want the
 		//domain knowing about this service.
 		//

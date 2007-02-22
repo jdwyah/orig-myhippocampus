@@ -18,9 +18,6 @@ public interface GWTTopicServiceAsync {
 
 	void getAllTopicIdentifiers(AsyncCallback callback);
 
-	void save(Topic topic, AsyncCallback callback);
-
-	//void save(Topic[] topics, AsyncCallback callback);
 	
 	//void getTopicsStarting(String match, AsyncCallback callback);
 	void match(String match, AsyncCallback callback);	
