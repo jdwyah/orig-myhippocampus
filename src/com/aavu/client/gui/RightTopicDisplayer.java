@@ -1,59 +1,51 @@
 package com.aavu.client.gui;
 
+import java.util.Iterator;
 import java.util.List;
 
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.gui.gadgets.EntryPreview;
-import com.aavu.client.gui.gadgets.TagPropertyPanel;
+import com.aavu.client.gui.gadgets.Gadget;
+import com.aavu.client.gui.gadgets.GadgetPicker;
 import com.aavu.client.service.Manager;
-import com.aavu.client.widget.edit.OnThisIslandBoard;
-import com.aavu.client.widget.edit.TopicDetailsTabBar;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-public class RightTopicDisplayer extends Composite implements ClickListener {
+public class RightTopicDisplayer extends Composite {
 	
 	private List gadgets;
 	
 	
-	private TagPropertyPanel tagProperties;
-	private TopicDetailsTabBar topicDetails;	
-	private EntryPreview entryPreview;
-	private OnThisIslandBoard onThisIslandBoard;
+//	private TagPropertyPanel tagProperties;
+//	private TopicDetailsTabBar topicDetails;	
+//	private EntryPreview entryPreview;
+//	private OnThisIslandBoard onThisIslandBoard;
 	
 	
 	private Topic topic;
 	private Manager manager;
+
+
+	private VerticalPanel gadgetPanel;
+
+
+	private GadgetPicker gadgetPicker;
 	
 	
 	public RightTopicDisplayer(final Manager manager){
 			
 		this.manager = manager;
 		
-		tagProperties = new TagPropertyPanel(manager);
-		
-		onThisIslandBoard = new OnThisIslandBoard(manager);
-		
-		topicDetails = new TopicDetailsTabBar(manager);		
-		
-		entryPreview = new EntryPreview();
 		
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 		
+		gadgetPanel = new VerticalPanel();
+		gadgetPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);		
 		
-		mainPanel.add(tagProperties);
+		gadgetPicker = new GadgetPicker();
 		
-		mainPanel.add(onThisIslandBoard);
-		
-		mainPanel.add(topicDetails);
-		mainPanel.add(entryPreview);
-		
-		
-		entryPreview.addClickListener(this);
+		mainPanel.add(gadgetPicker);
+		mainPanel.add(gadgetPanel);
 		
 		initWidget(mainPanel);
 		
@@ -68,24 +60,37 @@ public class RightTopicDisplayer extends Composite implements ClickListener {
 		
 		this.topic = topic;
 		
-		setVisible(true);
+		gadgetPanel.clear();
+		
+				
+		gadgets = topic.getGadgets(manager);
+		
+		for (Iterator iter = gadgets.iterator(); iter.hasNext();) {
+			Gadget gadget = (Gadget) iter.next();
 			
-		if(topic instanceof Tag){
+			gadget.load(topic);
 			
-			tagProperties.load((Tag) topic);			
-			onThisIslandBoard.load((Tag) topic);			
-			
-			tagProperties.setVisible(true);
-			onThisIslandBoard.setVisible(true);
-			
-		}else{
-			tagProperties.setVisible(false);
-			onThisIslandBoard.setVisible(false);
+			gadgetPanel.add(gadget);			
 		}
 		
-		topicDetails.load(topic);
+		setVisible(true);
 		
-		entryPreview.load(topic);
+//		if(topic instanceof Tag){
+//			
+//			tagProperties.load((Tag) topic);			
+//			onThisIslandBoard.load((Tag) topic);			
+//			
+//			tagProperties.setVisible(true);
+//			onThisIslandBoard.setVisible(true);
+//			
+//		}else{
+//			tagProperties.setVisible(false);
+//			onThisIslandBoard.setVisible(false);
+//		}
+//		
+//		topicDetails.load(topic);
+//		
+//		entryPreview.load(topic);
 		
 	}
 
@@ -95,9 +100,9 @@ public class RightTopicDisplayer extends Composite implements ClickListener {
 
 
 
-	public void onClick(Widget sender) {
-		if(sender == entryPreview){
-			manager.editEntry(topic);
-		}
-	}
+//	public void onClick(Widget sender) {
+//		if(sender == entryPreview){
+//			manager.editEntry(topic);
+//		}
+//	}
 }

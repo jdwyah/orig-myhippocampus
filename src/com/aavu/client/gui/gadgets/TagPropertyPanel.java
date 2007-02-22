@@ -8,6 +8,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
@@ -20,7 +21,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TagPropertyPanel extends Composite {
+public class TagPropertyPanel extends Gadget {
 
 	private VerticalPanel metaListPanel = new VerticalPanel();
 	private List metaChoosers = new ArrayList();  //list of meta chooser objects of current tag
@@ -32,6 +33,8 @@ public class TagPropertyPanel extends Composite {
 	private Button saveB;	
 	
 	public TagPropertyPanel(Manager _manager){
+		
+		super();
 		
 		this.manager = _manager;
 		
@@ -62,12 +65,15 @@ public class TagPropertyPanel extends Composite {
 		mainPanel.add(bP);		
 		
 		initWidget(mainPanel);
-		addStyleName("H-Gadget");
+
 		addStyleName("H-TagProperty");
 	}
 	
-	public void load(Tag tag){
-		this.tag = tag;
+	public int load(Topic topic){
+		if(!(topic instanceof Tag)){
+			return -1;
+		}
+		this.tag = (Tag) topic;
 
 		metaListPanel.clear();			
 		metaChoosers.clear();
@@ -84,6 +90,7 @@ public class TagPropertyPanel extends Composite {
 				showEditMetaWidget(mc);
 			}
 		}		
+		return 0;
 	}
 	
 	private void showEditMetaWidget(final MetaChooser chooser){
@@ -136,5 +143,10 @@ public class TagPropertyPanel extends Composite {
 		manager.getTopicCache().save(tag,new SaveTagPropertiesCommand(tag,toSave),
 				new StdAsyncCallback("tagService saveTag"){});
 	}
+
+	public Widget getWidget() {	
+		return this;
+	}
+
 	
 }

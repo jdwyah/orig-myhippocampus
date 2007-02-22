@@ -32,7 +32,9 @@ public class TopicLink extends SimplePanel implements ClickListener {
 	public TopicLink(final Topic to) {
 		this(to.getTitle(),to.getId());
 	}
-
+	public TopicLink(TopicIdentifier topic) {
+		this(topic.getTopicTitle(), topic.getTopicID());	
+	}
 	public TopicLink(TopicIdentifier topic,PopupWindow popup) {
 		this(topic.getTopicTitle(), topic.getTopicID(),DEFAULT_MAX_STRING,popup);	
 	}

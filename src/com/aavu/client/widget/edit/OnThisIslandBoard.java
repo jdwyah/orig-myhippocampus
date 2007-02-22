@@ -6,6 +6,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
@@ -20,7 +21,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OnThisIslandBoard extends Composite implements CompleteListener {
+public class OnThisIslandBoard extends Gadget implements CompleteListener {
 
 	private static final int MAX_TO_SHOW = 6;
 
@@ -78,11 +79,15 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		
 		
 		initWidget(mainP);
-		addStyleName("H-Gadget");
+		
 		addStyleName("H-OnThisIsland");
 	}
-	public void load(Tag topic) {
-		myTag = topic;	
+	
+	public int load(Topic topic){
+		if(!(topic instanceof Tag)){
+			return -1;
+		}
+		this.myTag = (Tag) topic;
 		
 		manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
 			public void onSuccess(Object result) {
@@ -94,6 +99,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 				addTopicLabels(topics);				
 			}					
 		});
+		return 0;
 	}
 
 	protected void addTopicLabels(FullTopicIdentifier[] topics) {

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class UploadBoard extends Composite {
+public class UploadBoard extends Gadget {
 		
 	private VerticalPanel mainPanel = new VerticalPanel();
 	
@@ -29,9 +29,10 @@ public class UploadBoard extends Composite {
 		this.manager = manager;
 				
 		initWidget(mainPanel);
+		
 	}
 	
-	public void load(final Topic topic) {
+	public int load(final Topic topic) {
 		
 		mainPanel.clear();
 		
@@ -54,7 +55,7 @@ public class UploadBoard extends Composite {
 		if(topic.getId() == 0){
 			mainPanel.clear();
 			mainPanel.add(new Label(Manager.myConstants.upload_save_topic_first()));
-			return;
+			return 0;
 		}		
 		
 		size = 0;
@@ -65,6 +66,7 @@ public class UploadBoard extends Composite {
 				size++;
 			}
 		}		
+		return size;
 	}
 	
 	public void addS3File(S3File file){

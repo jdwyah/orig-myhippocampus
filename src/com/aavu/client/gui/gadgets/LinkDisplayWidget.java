@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
-public class LinkDisplayWidget extends Composite {
+public class LinkDisplayWidget extends Gadget {
 	
 	private int size = 0;
 	private VerticalPanel linkPanel;
@@ -47,6 +47,7 @@ public class LinkDisplayWidget extends Composite {
 		mainPanel.add(linkPanel);
 		
 		initWidget(mainPanel);
+		
 
 	}
 	
@@ -71,7 +72,7 @@ public class LinkDisplayWidget extends Composite {
 		
 	}
 	
-	public void load(Topic topic){
+	public int load(Topic topic){
 		myTopic = topic;
 		linkPanel.clear();
 		size = 0;
@@ -97,6 +98,7 @@ public class LinkDisplayWidget extends Composite {
 			size ++;
 
 		}
+		return size;
 	}
 
 	public int getSize() {

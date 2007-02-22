@@ -86,6 +86,8 @@ a:visited {
 	border-style: ridge;
 	color: white;
 	
+	width: 100%;
+	
 	padding-top: 3px;
 	padding-right: 3px;	
 	padding-bottom: 3px;	
@@ -120,7 +122,7 @@ a:visited {
 .H-Gadget .gwt-StackPanel {
 	background-color:  #647CB5;
 }
-.H-OnThisIsland {
+/*.H-OnThisIsland {
 	width: 100%;
 }
 .H-TopicDetails {
@@ -128,7 +130,7 @@ a:visited {
 }
 .H-TagProperty {
 	width: 100%;
-}
+}*/
 .H-MetaEditorWidget {
 	margin-left: 5px;
 }

@@ -1,37 +1,65 @@
 package com.aavu.client.gui.gadgets;
 
 import com.aavu.client.domain.Entry;
+import com.aavu.client.domain.Topic;
+import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.aavu.client.wiki.TextDisplay;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Widget;
 
-public class EntryPreview extends TopicWidget {
+public class EntryPreview extends Gadget {
 
 	private static final int NUM_CHARS = 240;
 
-	public EntryPreview(){
-		super();
-		addStyleName("H-Gadget");
-		addStyleName("H-EntryPreview");
+	private class EntryPreviewExt extends TopicWidget {
+		//@Override
+		public void setText(Entry entry) {		
+			
+			textPanel.clear();						
+			
+			System.out.println("entry "+entry.getData());
+			
+			//TODO make sure we don't cut off in the middle of an HTML tag
+			if(entry.getData() != null && entry.getData().length() > NUM_CHARS){
+				String str = entry.getData().substring(0,NUM_CHARS)+"</body>";
+				System.out.println(str);
+				textPanel.add(new TextDisplay(str));
+			}else{
+				textPanel.add(new TextDisplay(entry.getData()));
+			}		
+			
+			System.out.println("textPanel "+textPanel);
+		}
 	}
 	
-	//@Override
-	public void setText(Entry entry) {		
+	private EntryPreviewExt entryPrev;
+	private Topic topic;
+	
+	public EntryPreview(final Manager manager){		
 		
-		textPanel.clear();						
+		entryPrev = new EntryPreviewExt();
 		
-		System.out.println("entry "+entry.getData());
+		entryPrev.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.editEntry(topic);				
+			}});
+	
+		initWidget(entryPrev);
 		
-		//TODO make sure we don't cut off in the middle of an HTML tag
-		if(entry.getData() != null && entry.getData().length() > NUM_CHARS){
-			String str = entry.getData().substring(0,NUM_CHARS)+"</body>";
-			System.out.println(str);
-			textPanel.add(new TextDisplay(str));
-		}else{
-			textPanel.add(new TextDisplay(entry.getData()));
-		}		
 		
-		System.out.println("textPanel "+textPanel);
+		addStyleName("H-EntryPreview");		
+		
 	}
+
+	//@Override
+	public int load(Topic topic) {
+		this.topic = topic;
+		entryPrev.load(topic);
+		return 1;
+	}
+	
+	
 
 	
 

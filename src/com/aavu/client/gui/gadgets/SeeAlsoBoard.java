@@ -22,17 +22,16 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SeeAlsoBoard extends Composite implements CompleteListener {
+public class SeeAlsoBoard extends Gadget implements CompleteListener {
 
 	private TopicCompleter topicCompleter;
 	private TopicCache topicService;
 	private Topic myTopic;
 	
 	private SeeAlsoWidget alsos;
-	private PopupWindow popwindow;
 	
-	public SeeAlsoBoard(Manager manager, PopupWindow popwindow) {		
-		this.popwindow = popwindow;
+	public SeeAlsoBoard(Manager manager) {				
+		
 		topicService = manager.getTopicCache();
 		
 		topicCompleter = new TopicCompleter(manager.getTopicCache());		
@@ -60,6 +59,7 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 		
 		
 		initWidget(mainP);
+		
 	}
 
 	public int load(Topic topic) {
@@ -113,14 +113,14 @@ public class SeeAlsoBoard extends Composite implements CompleteListener {
 			seeAlsoPanel.clear();
 			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
-				seeAlsoPanel.add(new TopicLink(top.getIdentifier(),popwindow));
+				seeAlsoPanel.add(new TopicLink(top.getIdentifier()));
 				size++;
 			}
 			return size;
 		}
 
 		public void add(TopicIdentifier to2) {
-			seeAlsoPanel.add(new TopicLink(to2,popwindow));			
+			seeAlsoPanel.add(new TopicLink(to2));			
 		}		
 	}
 

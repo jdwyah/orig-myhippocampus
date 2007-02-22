@@ -21,14 +21,9 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 	//private MindMapBoard mindMapBoard;
 	private AllReferencesPanel referencesPanel;
 	
-	public TopicDetailsTabBar(Manager manager){
-		this(manager,null);
-	}
-	public TopicDetailsTabBar(Manager manager,PopupWindow popWindow){
-		
-		
+	public TopicDetailsTabBar(Manager manager){		
 	
-		referencesPanel = new AllReferencesPanel(manager,popWindow);
+		referencesPanel = new AllReferencesPanel(manager);
 		add(referencesPanel,Manager.myConstants.references());		
 		
 		

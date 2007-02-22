@@ -132,7 +132,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		}
 		
 	
-		topicDetails = new TopicDetailsTabBar(manager,this);
+		topicDetails = new TopicDetailsTabBar(manager);
 		
 		rightPanel.add(topicDetails);
 		
