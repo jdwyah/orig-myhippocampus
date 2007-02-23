@@ -13,7 +13,7 @@ import com.aavu.client.gui.gadgets.EntryPreview;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.LinkDisplayWidget;
 import com.aavu.client.gui.gadgets.ReferenceBoard;
-import com.aavu.client.gui.gadgets.SeeAlsoBoard;
+import com.aavu.client.gui.gadgets.Connections;
 import com.aavu.client.gui.gadgets.TagPropertyPanel;
 import com.aavu.client.gui.gadgets.UploadBoard;
 import com.aavu.client.service.Manager;
@@ -206,21 +206,29 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	
-	
-	public Entry getLatestEntry(){
-		Entry rtn = null;
+	public Set getEntries(){
+		Set rtn = new HashSet();
 		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
 			Occurrence occur = (Occurrence) iter.next();
 			if(occur instanceof Entry){
-				rtn = (Entry) occur;
+				rtn.add((Entry) occur);
 			}
 		}
-		if(rtn == null){
+		return rtn;
+	}
+	
+	public Entry getLatestEntry(){
+		
+		Set entries = getEntries();
+		
+		if(entries.isEmpty()){
 			Entry initialEntry = new Entry();
 			getOccurences().add(initialEntry);
 			return initialEntry;
+		}else{
+			return (Entry) entries.iterator().next();
 		}
-		return rtn;
+		
 	}
 
 	/**
@@ -625,31 +633,33 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		}
 		return rtn;
 	}
-
-	public List getGadgets(Manager manager) {
-		List gadgets = new ArrayList();
-		
-		TagPropertyPanel tagProperties = new TagPropertyPanel(manager);		
-		OnThisIslandBoard onThisIslandBoard = new OnThisIslandBoard(manager);		
-		//TopicDetailsTabBar topicDetails = new TopicDetailsTabBar(manager);				
-		EntryPreview entryPreview = new EntryPreview(manager);
-		
-		SeeAlsoBoard seeAlsoBoard = new SeeAlsoBoard(manager);
-		LinkDisplayWidget linkDisplayW = new LinkDisplayWidget(manager);	
-		UploadBoard uploadBoard = new UploadBoard(manager);
-		ReferenceBoard refBoard = new ReferenceBoard(manager);
-		
-		gadgets.add(tagProperties);
-		gadgets.add(onThisIslandBoard);
-		gadgets.add(uploadBoard);
-		gadgets.add(linkDisplayW);
-		gadgets.add(seeAlsoBoard);
-		gadgets.add(refBoard);
-		gadgets.add(entryPreview);
-		
-		
-		return gadgets;
+	public Set getFiles(){
+		Set rtn = new HashSet();
+		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+			Occurrence occ = (Occurrence) iter.next();
+			if(occ instanceof S3File){
+				rtn.add(occ);				
+			}
+		}		
+		return rtn;
 	}
+	
+	public boolean hasEntry(){
+		return !getEntries().isEmpty();
+	}
+	public boolean hasWebLinks(){
+		return !getWebLinks().isEmpty();
+	}
+	public boolean hasFiles(){
+		return !getFiles().isEmpty();
+	}
+	public boolean hasConnections(){
+		return true;
+	}
+	public boolean hasTagProperties(){
+		return (this instanceof Tag) && !getMetas().isEmpty();
+	}
+	
 
 	
 }

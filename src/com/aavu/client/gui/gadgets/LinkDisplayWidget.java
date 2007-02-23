@@ -9,6 +9,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.SaveOccurrenceCommand;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.edit.AddLinkPopup;
@@ -29,6 +30,9 @@ public class LinkDisplayWidget extends Gadget {
 	
 	
 	public LinkDisplayWidget(Manager _manager) {		
+		
+		super(Manager.myConstants.link_add_title());
+		
 		this.manager = _manager;
 		
 		VerticalPanel mainPanel = new VerticalPanel();
@@ -123,6 +127,13 @@ public class LinkDisplayWidget extends Gadget {
 		public void onClick(Widget sender) {
 			editLink(link);	
 		}
+	}
+
+	//@Override
+	public ImageButton getPickerButton() {		
+		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_link(),59,29);
+		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.link_add_title()));
+		return b;
 	}
 	
 

@@ -1,6 +1,9 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
+import java.util.List;
+
+import org.gwtwidgets.client.ui.ImageButton;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
@@ -8,6 +11,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
@@ -22,15 +26,21 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SeeAlsoBoard extends Gadget implements CompleteListener {
+public class Connections extends Gadget implements CompleteListener {
 
 	private TopicCompleter topicCompleter;
 	private TopicCache topicService;
 	private Topic myTopic;
 	
 	private SeeAlsoWidget alsos;
+	private Manager manager;
+	private VerticalPanel refPanel;
 	
-	public SeeAlsoBoard(Manager manager) {				
+	public Connections(Manager manager) {				
+		
+		super(Manager.myConstants.connections());
+		
+		this.manager = manager;
 		
 		topicService = manager.getTopicCache();
 		
@@ -54,9 +64,14 @@ public class SeeAlsoBoard extends Gadget implements CompleteListener {
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
 		
+		
+		refPanel = new VerticalPanel();
+		
 		mainP.add(cp);
 		mainP.add(alsos);
 		
+		mainP.add(new Label(Manager.myConstants.references()));
+		mainP.add(refPanel);
 		
 		initWidget(mainP);
 		
@@ -65,6 +80,30 @@ public class SeeAlsoBoard extends Gadget implements CompleteListener {
 	public int load(Topic topic) {
 		myTopic = topic;
 				
+	
+		
+		manager.getTopicCache().getLinksTo(topic,new StdAsyncCallback("GetLinksTo"){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				List list = (List) result;
+				
+				refPanel.clear();
+				
+				if(list.size() == 0){
+					refPanel.add(new Label(Manager.myConstants.references_none()));					
+				}
+				
+				for (Iterator iter = list.iterator(); iter.hasNext();) {
+					TopicIdentifier topicIdent = (TopicIdentifier) iter.next();
+					refPanel.add(new TopicLink(topicIdent));
+				}
+				
+				//updateTitle(refPanel,Manager.myConstants.referencesN(list.size()));				
+				//bar.updateTitle(AllReferencesPanel.this,Manager.myConstants.all_referencesN(totalSize + list.size()));
+			}
+			
+		});
+		
 		Association assoc = myTopic.getSeeAlsoAssociation();
 		if(assoc == null){
 			System.out.println("no see alsos");
@@ -122,6 +161,13 @@ public class SeeAlsoBoard extends Gadget implements CompleteListener {
 		public void add(TopicIdentifier to2) {
 			seeAlsoPanel.add(new TopicLink(to2));			
 		}		
+	}
+
+	//@Override
+	public ImageButton getPickerButton() {		
+		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_connections(),60,60);
+		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.connections()));
+		return b;
 	}
 
 }

@@ -14,7 +14,7 @@ div.loading {
 	height: 3em;
 	color: #FF9F6F;
 	text-align: center;
-	padding: 10px;	
+	padding: 10px;
 }
 
 code {
@@ -34,7 +34,7 @@ a:visited {
 }*/
 .H-FullSize {
 	width: 100%;
-	height: 100%;	
+	height: 100%;
 }
 
 .H-Popup {
@@ -47,6 +47,7 @@ a:visited {
 	border: 2px solid #000;
 	z-index: 1;
 }
+
 /*.H-MainMap {
 	position: relative;
 	background: transparent;
@@ -74,54 +75,59 @@ a:visited {
 	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
 	/*background-color: #666699;*/
-	
 	background-color: #CFE0F5;
-	filter: alpha(opacity =       88);
+	filter: alpha(opacity =         88);
 	-moz-opacity: .88;
 	opacity: .88;
 	-khtml-opacity: .88;
-	
 	/*background: red;*/
-	border: 4px solid #D8E3FD;	
+	border: 4px solid #D8E3FD;
 	border-style: ridge;
 	color: white;
-	
 	width: 100%;
-	
 	padding-top: 3px;
-	padding-right: 3px;	
-	padding-bottom: 3px;	
+	padding-right: 3px;
+	padding-bottom: 3px;
 	padding-left: 3px;
 }
+
 .H-Gadget .H-TopicLink {
- 	color: white;
+	color: white;
 	font-size: .7em;
 }
+
 .H-Gadget .H-HeaderLabel {
 	color: white;
 }
+
 .H-Gadget .gwt-Label {
- 	color: white;
+	color: white;
 	font-size: .7em;
 }
+
 .H-Gadget .gwt-HTML {
- 	color: white;
+	color: white;
 }
+
 .H-Gadget .gwt-StackPanelItem {
- 	color: white;
+	color: white;
 	font-size: .8em;
 }
+
 .H-Gadget .H-editableText {
- 	color: white;
+	color: white;
 	font-size: .8em;
 }
+
 .H-Gadget .editableLabel-label {
- 	color: white;
-	font-size: .8em;		
+	color: white;
+	font-size: .8em;
 }
+
 .H-Gadget .gwt-StackPanel {
-	background-color:  #647CB5;
+	background-color: #647CB5;
 }
+
 /*.H-OnThisIsland {
 	width: 100%;
 }
@@ -131,25 +137,24 @@ a:visited {
 .H-TagProperty {
 	width: 100%;
 }*/
+.H-GadgetPicker {
+	width: auto;
+	right: 0px;
+	padding: 4px;
+}
+
 .H-MetaEditorWidget {
 	margin-left: 5px;
 }
 
-
-.H-CenterInfo {
-	/*background-image: url("../img/blueFade.png");*/
-	
+.H-CenterInfo { /*background-image: url("../img/blueFade.png");*/
 	background-color: transparent;
 	border: 0px;
 	margin-left: 0%;
 	top: 0px;
 	left: 0px;
 	z-index: 1;
-	
-	/*right: 0px;*/
-	/*width: 300px;*/
-	
-	/*filter: alpha(opacity =       40);
+	/*right: 0px;*/ /*width: 300px;*/ /*filter: alpha(opacity =       40);
 	-moz-opacity: .40;
 	opacity: .40;
 	-khtml-opacity: .4;*/
@@ -175,11 +180,11 @@ a:visited {
 	background-color: transparent;
 	margin: 0 auto; /* align for good browsers */
 	text-align: left; /* counter the body center */
-	border: 0px;		
+	border: 0px;
 }
 
 .H-StatusLabels {
-	filter: alpha(opacity =       40);
+	filter: alpha(opacity =         40);
 	-moz-opacity: .40;
 	opacity: .40;
 	-khtml-opacity: .4;
@@ -231,9 +236,8 @@ a:visited {
 .H-CompassRose {
 	bottom: 5px;
 	left: 15px;
-
 	background: transparent;
-	border: none;	
+	border: none;
 	width: 340px;
 	height: 120px;
 	z-index: 1;
@@ -250,7 +254,7 @@ a:visited {
 	z-index: 1;
 }
 
-.H-Ocean { /*background-color: #CCE6FF;*/	
+.H-Ocean { /*background-color: #CCE6FF;*/
 	background-repeat: repeat;
 	position: absolute;
 	left: 0px;
@@ -311,22 +315,27 @@ a:visited {
 .H-IslandBanner .Shadow {
 	color: #F8F5F4;
 }
+
 .H-IslandBanner .Selected {
 	color: yellow;
 }
+
 .H-IslandBanner-Hover {
 	text-decoration: underline;
 }
+
 .H-TopicBanner {
 	font-family: arial, helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
-	padding: 0 6 0 6px;		
+	padding: 0 6 0 6px;
 }
+
 .H-TopicBanner-Hover {
 	text-decoration: underline;
 }
-.H-TopicBanner.Selected {
+
+.H-TopicBanner .Selected {
 	color: purple;
 }
 
@@ -365,19 +374,20 @@ a:visited {
 
 .H-LinkWidget {
 	width: 100%;
-	
 	background-color: #FFFFFF;
 }
+
 .H-LinkWidget-Odd {
 	width: 100%;
 	background-color: #CCCC99
 }
 
-.H-External-Hyperlink a{
-	font-size: .6em;	
+.H-External-Hyperlink a {
+	font-size: .6em;
 }
-.H-EditLink-Button{
-	font-size: .6em;	
+
+.H-EditLink-Button {
+	font-size: .6em;
 }
 
 .H-editableText {
@@ -385,6 +395,7 @@ a:visited {
 	border-width: 3px;
 	border-color: #ffffff;
 }
+
 .H-editableText-hover {
 	border-color: #6492FF;
 }
@@ -393,8 +404,7 @@ a:visited {
 	background-color: #6492FF;
 }
 
-.H-HeaderLabel {
-	/*font-family: cursive;
+.H-HeaderLabel { /*font-family: cursive;
 	color: black;*/
 	font-size: 1.1em;
 }
@@ -432,24 +442,23 @@ a:visited {
 	border-color: black;
 }
 
-.H-SideBarKey { color: white;
+.H-SideBarKey {
+	color: white;
 	/*font-size: 13px;
 	background-image: url("../img/regTab.png");
 	font-family: arial, helvetica, sans-serif;
 	text-align: center;
 	width: 20px;
 	height: 20px;*/
-	
 }
 
-.H-SideBarKeyNoElements { 
+.H-SideBarKeyNoElements {
 	color: black;
 	/*background-image: url("../img/unselTab.png");
 	font-family: arial, helvetica, sans-serif;
 	text-align: center;
 	width: 20px;
 	height: 20px;*/
-	
 }
 
 .H-LinkDisplay {
@@ -514,8 +523,7 @@ a:visited {
 	padding-right: 8px;
 }
 
-.gwt-TabBar .gwt-TabBarItem {
-	/*border-top: 1px solid #C3D9FF;
+.gwt-TabBar .gwt-TabBarItem { /*border-top: 1px solid #C3D9FF;
 	border-bottom: 1px solid #43CBD0;*/
 	padding: 8px;
 	cursor: pointer;
@@ -655,10 +663,10 @@ a:visited {
 	background-color: #C3D9FF;
 }
 
-.gwt-StackPanel {
-	/*background-color: white;
+.gwt-StackPanel { /*background-color: white;
 	border: 1px solid #AAAAAA;
 	width: 15em;*/
+	
 }
 
 .gwt-StackPanel .gwt-StackPanelItem {

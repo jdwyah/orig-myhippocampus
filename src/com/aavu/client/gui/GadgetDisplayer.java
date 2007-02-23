@@ -7,10 +7,11 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetPicker;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class RightTopicDisplayer extends Composite {
+public class GadgetDisplayer extends Composite {
 	
 	private List gadgets;
 	
@@ -21,7 +22,7 @@ public class RightTopicDisplayer extends Composite {
 //	private OnThisIslandBoard onThisIslandBoard;
 	
 	
-	private Topic topic;
+	//private Topic topic;
 	private Manager manager;
 
 
@@ -29,9 +30,12 @@ public class RightTopicDisplayer extends Composite {
 
 
 	private GadgetPicker gadgetPicker;
+
+
+	private Topic topic;
 	
 	
-	public RightTopicDisplayer(final Manager manager){
+	public GadgetDisplayer(final Manager manager){
 			
 		this.manager = manager;
 		
@@ -42,7 +46,8 @@ public class RightTopicDisplayer extends Composite {
 		gadgetPanel = new VerticalPanel();
 		gadgetPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);		
 		
-		gadgetPicker = new GadgetPicker();
+		gadgetPicker = new GadgetPicker(manager.getGadgetManager());
+		manager.getGadgetManager().setGadgetDisplayer(this);
 		
 		mainPanel.add(gadgetPicker);
 		mainPanel.add(gadgetPanel);
@@ -56,14 +61,12 @@ public class RightTopicDisplayer extends Composite {
 	}
 
 
-	public void load(Topic topic) {
+	public void load(Topic topic, List gadgets) {
 		
 		this.topic = topic;
 		
-		gadgetPanel.clear();
-		
+		gadgetPanel.clear();		
 				
-		gadgets = topic.getGadgets(manager);
 		
 		for (Iterator iter = gadgets.iterator(); iter.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
@@ -74,28 +77,21 @@ public class RightTopicDisplayer extends Composite {
 		}
 		
 		setVisible(true);
-		
-//		if(topic instanceof Tag){
-//			
-//			tagProperties.load((Tag) topic);			
-//			onThisIslandBoard.load((Tag) topic);			
-//			
-//			tagProperties.setVisible(true);
-//			onThisIslandBoard.setVisible(true);
-//			
-//		}else{
-//			tagProperties.setVisible(false);
-//			onThisIslandBoard.setVisible(false);
-//		}
-//		
-//		topicDetails.load(topic);
-//		
-//		entryPreview.load(topic);
-		
+				
 	}
 
 	public void unload() {
 		setVisible(false);
+	}
+
+
+	public void addGadget(Gadget gadget) {
+		if(gadgetPanel.getWidgetIndex(gadget) == -1){
+			gadget.load(topic);
+			gadgetPanel.add(gadget);
+		}else{			
+			Window.alert(Manager.myConstants.gadget_already_showing());
+		}
 	}
 
 

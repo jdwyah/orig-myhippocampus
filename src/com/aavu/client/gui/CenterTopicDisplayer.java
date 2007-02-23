@@ -7,6 +7,7 @@ import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.gadgets.TagBoard;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.edit.OnThisIslandBoard;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class CenterTopicDisplayer extends Composite {
 	
 	private TagBoard tagBoard;
+	private OnThisIslandBoard onThisIslandBoard;	
 	
 	private EditableLabelExtension titleBox;
 		
@@ -28,10 +30,9 @@ public class CenterTopicDisplayer extends Composite {
 		this.manager = manager;
 		
 		tagBoard = new TagBoard(manager);		
-				
-		VerticalPanel mainPanel = new VerticalPanel();
+		onThisIslandBoard  = new OnThisIslandBoard(manager);
 		
-				
+		VerticalPanel mainPanel = new VerticalPanel();
 		
 		titleBox = new EditableLabelExtension("",new ChangeListener(){
 			public void onChange(Widget sender) {								
@@ -49,6 +50,7 @@ public class CenterTopicDisplayer extends Composite {
 		
 				
 		mainPanel.add(tagBoard);
+		mainPanel.add(onThisIslandBoard);
 		
 		
 		initWidget(mainPanel);
@@ -69,6 +71,7 @@ public class CenterTopicDisplayer extends Composite {
 		titleBox.setText(topic.getTitle());
 				
 		tagBoard.load(topic);
+		onThisIslandBoard.load(topic);
 		
 	}
 

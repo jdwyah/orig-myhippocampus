@@ -35,4 +35,6 @@ public interface Ocean {
 
 	public void moveBy(int i, int j);
 
+	public double ensureZoomOfAtLeast(double scale);
+
 }

@@ -180,4 +180,9 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public double ensureZoomOfAtLeast(double scale) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

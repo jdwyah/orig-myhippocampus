@@ -37,6 +37,8 @@ public interface Consts extends Messages {
 	String subject_choose();
 	String subject_no_matches();
 	String magazine();
+	
+	String connections();
 	String references();
 	String referencesN(int size);
 	String referencesToN(int size);
@@ -62,6 +64,7 @@ public interface Consts extends Messages {
 	String upload_select_file();
 	String upload_save_topic_first();
 	
+	String files();
 	String filesN(int i);
 	String upload_add();
 	String mapperTitle();
@@ -119,6 +122,7 @@ public interface Consts extends Messages {
 	
 	String seeAlso_async();
 	String all_referencesN(int i);
+		
 	String link_add_title();
 	String link_description();
 	String link_url();
@@ -138,7 +142,13 @@ public interface Consts extends Messages {
 	String loading_islands();
 	String on_this_island_more(int i);
 	String close_without_saving();
-	
+	String img_gadget_file();
+	String img_gadget_entry();
+	String img_gadget_link();
+	String img_gadget_tagProperties();
+	String img_gadget_picker();
+	String img_gadget_connections();
+	String gadget_already_showing();
 	
 		
 	

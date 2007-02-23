@@ -2,10 +2,13 @@ package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
 
+import org.gwtwidgets.client.ui.ImageButton;
+
 import com.aavu.client.HippoTest;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.UploadWidget;
@@ -26,6 +29,9 @@ public class UploadBoard extends Gadget {
 	//private SaveNeededListener saveNeeded;
 
 	public UploadBoard(final Manager manager) {
+		
+		super(Manager.myConstants.files());
+		
 		this.manager = manager;
 				
 		initWidget(mainPanel);
@@ -59,12 +65,11 @@ public class UploadBoard extends Gadget {
 		}		
 		
 		size = 0;
-		for (Iterator iter = topic.getOccurences().iterator(); iter.hasNext();) {
-			Occurrence occ = (Occurrence) iter.next();
-			if(occ instanceof S3File){
-				addS3File((S3File) occ);
-				size++;
-			}
+		for (Iterator iter = topic.getFiles().iterator(); iter.hasNext();) {
+			S3File file = (S3File) iter.next();			
+			addS3File(file);
+			size++;
+			
 		}		
 		return size;
 	}
@@ -76,6 +81,13 @@ public class UploadBoard extends Gadget {
 	}
 	public int getSize() {
 		return size;
+	}
+
+	//@Override
+	public ImageButton getPickerButton() {
+		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_file(),36,50);
+		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.files()));
+		return b;
 	}
 	
 	

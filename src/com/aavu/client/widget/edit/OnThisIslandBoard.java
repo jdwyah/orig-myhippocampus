@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OnThisIslandBoard extends Gadget implements CompleteListener {
+public class OnThisIslandBoard extends Composite implements CompleteListener {
 
 	private static final int MAX_TO_SHOW = 6;
 
@@ -56,7 +56,7 @@ public class OnThisIslandBoard extends Gadget implements CompleteListener {
 		Button examineB = new Button("View Members");
 		examineB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
-				manager.viewMembers(myTag,topics);
+				viewMembers();				
 			}
 		});
 		
@@ -80,25 +80,36 @@ public class OnThisIslandBoard extends Gadget implements CompleteListener {
 		
 		initWidget(mainP);
 		
+		addStyleName("H-Gadget");
 		addStyleName("H-OnThisIsland");
 	}
 	
-	public int load(Topic topic){
-		if(!(topic instanceof Tag)){
-			return -1;
-		}
-		this.myTag = (Tag) topic;
-		
-		manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
 
-				System.out.println("Show Topics results "+topics.length);
-				
-				addTopicLabels(topics);				
-			}					
-		});
+	private void viewMembers() {
+		manager.viewMembers(myTag,topics);				
+	}
+	
+	public int load(Topic topic){
+
+		if(topic instanceof Tag){
+			setVisible(true);
+
+			this.myTag = (Tag) topic;
+
+			manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
+					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
+
+					System.out.println("Show Topics results "+topics.length);
+
+					addTopicLabels(topics);				
+				}					
+			});
+		}		
+		else{
+			setVisible(false);
+		}
 		return 0;
 	}
 
@@ -110,7 +121,12 @@ public class OnThisIslandBoard extends Gadget implements CompleteListener {
 			onThisIslandPanel.add(new TopicLink(fti,null));
 			
 			if(i >= MAX_TO_SHOW){
-				onThisIslandPanel.add(new Label(Manager.myConstants.on_this_island_more(topics.length - MAX_TO_SHOW)));
+				Label l = new Label(Manager.myConstants.on_this_island_more(topics.length - MAX_TO_SHOW));
+				l.addClickListener(new ClickListener(){
+					public void onClick(Widget sender) {
+						viewMembers();
+					}});
+				onThisIslandPanel.add(l);				
 				break;
 			}
 		}		

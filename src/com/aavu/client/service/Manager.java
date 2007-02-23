@@ -28,6 +28,7 @@ import com.aavu.client.gui.ViewMemberWindow;
 import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
+import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.glossary.GlossaryWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
@@ -59,12 +60,15 @@ public class Manager implements TopicSaveListener {
 	private Glossary glossary; 
 
 	private boolean focussed = false;
+
+	private GadgetManager gadgetManager;
 	
 	public Manager(HippoCache hippoCache){
 		this.hippoCache = hippoCache;
 		initConstants();
 		hippoCache.getTopicCache().addSaveListener(this);
 		
+		gadgetManager = new GadgetManager(this);
 		
 		//Note what is the purpose of "Desktop"? 
 		//If we implement that, note that it messed with our 
@@ -95,7 +99,7 @@ public class Manager implements TopicSaveListener {
 	public void bringUpChart(Topic topic) {		
 		map.displayTopic(topic);
 		map.centerOn(topic);
-		map.zoomTo(4);
+		map.ensureZoomOfAtLeast(4);
 	}
 	
 //	public void bringUpChart(final Topic topic, boolean editMode) {
@@ -484,8 +488,9 @@ public class Manager implements TopicSaveListener {
 		ViewMemberWindow gw = new ViewMemberWindow(myTag, topics,this,newFrame());
 		
 	}
-	
-	
+	public GadgetManager getGadgetManager() {
+		return gadgetManager;
+	}
 		
 
 

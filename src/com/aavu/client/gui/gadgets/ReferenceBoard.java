@@ -3,6 +3,8 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gwtwidgets.client.ui.ImageButton;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
@@ -31,6 +33,9 @@ public class ReferenceBoard extends Gadget {
 	private VerticalPanel refPanel;
 		
 	public ReferenceBoard(Manager manager) {				
+		
+		super(Manager.myConstants.references());
+		
 		this.manager = manager;
 	
 	
@@ -74,5 +79,11 @@ public class ReferenceBoard extends Gadget {
 		});
 		
 		return 0;
+	}
+
+	//@Override
+	public ImageButton getPickerButton() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

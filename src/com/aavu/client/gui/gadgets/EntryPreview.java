@@ -1,7 +1,10 @@
 package com.aavu.client.gui.gadgets;
 
+import org.gwtwidgets.client.ui.ImageButton;
+
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.aavu.client.wiki.TextDisplay;
@@ -38,6 +41,8 @@ public class EntryPreview extends Gadget {
 	
 	public EntryPreview(final Manager manager){		
 		
+		super(Manager.myConstants.entry());
+		
 		entryPrev = new EntryPreviewExt();
 		
 		entryPrev.addClickListener(new ClickListener(){
@@ -57,6 +62,13 @@ public class EntryPreview extends Gadget {
 		this.topic = topic;
 		entryPrev.load(topic);
 		return 1;
+	}
+
+	//@Override
+	public ImageButton getPickerButton() {		
+		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_entry(),60,47);
+		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.entry()));
+		return b;
 	}
 	
 	

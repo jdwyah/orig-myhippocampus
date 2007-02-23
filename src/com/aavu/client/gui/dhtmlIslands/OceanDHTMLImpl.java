@@ -805,5 +805,17 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 
+	/**
+	 * Make sure that we're zoomed to 'scale' or higher
+	 * 
+	 * return the value that we settle on
+	 */
+	public double ensureZoomOfAtLeast(double scale) {
+		if(scale > currentScale){
+			zoomTo(scale);
+		}
+		return currentScale;
+	}
+
 
 }

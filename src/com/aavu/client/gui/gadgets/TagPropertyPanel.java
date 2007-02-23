@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gwtwidgets.client.ui.ImageButton;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.widget.HeaderLabel;
@@ -34,7 +37,7 @@ public class TagPropertyPanel extends Gadget {
 	
 	public TagPropertyPanel(Manager _manager){
 		
-		super();
+		super(Manager.myConstants.island_property());
 		
 		this.manager = _manager;
 		
@@ -42,8 +45,6 @@ public class TagPropertyPanel extends Gadget {
 		
 			
 		VerticalPanel mainPanel = new VerticalPanel();
-		
-		mainPanel.add(new HeaderLabel(Manager.myConstants.island_property()));
 		
 		mainPanel.add(metaListPanel);
 		
@@ -144,8 +145,12 @@ public class TagPropertyPanel extends Gadget {
 				new StdAsyncCallback("tagService saveTag"){});
 	}
 
-	public Widget getWidget() {	
-		return this;
+
+	//@Override
+	public ImageButton getPickerButton() {		
+		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_tagProperties(),39,36);
+		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.island_property()));
+		return b;
 	}
 
 	

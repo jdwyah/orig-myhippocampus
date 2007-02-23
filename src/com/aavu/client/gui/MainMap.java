@@ -32,7 +32,7 @@ public class MainMap extends Composite implements GDesktopPane {
 	private Ocean ocean;
 	private StatusPanel statusPanel;
 	private CompassRose compassRose;
-	private RightTopicDisplayer topicDetailsDisplayer;
+	private GadgetDisplayer gadgetDisplayer;
 	private CenterTopicDisplayer centerDisplayer;
 	
 	private Zoomer zoomer;
@@ -80,9 +80,9 @@ public class MainMap extends Composite implements GDesktopPane {
 		centerDisplayer = new CenterTopicDisplayer(manager);
 		mainP.add(centerDisplayer);
 		
-		topicDetailsDisplayer = new RightTopicDisplayer(manager);
+		gadgetDisplayer = new GadgetDisplayer(manager);
 		
-		mainP.add(topicDetailsDisplayer);
+		mainP.add(gadgetDisplayer);
 		
 		//mainP.add(tagSearch);
 		
@@ -169,7 +169,7 @@ public class MainMap extends Composite implements GDesktopPane {
 	public void displayTopic(Topic topic) {
 		
 		centerDisplayer.load(topic);
-		topicDetailsDisplayer.load(topic);		
+		manager.getGadgetManager().load(topic);		
 				
 	}
 	
@@ -179,7 +179,7 @@ public class MainMap extends Composite implements GDesktopPane {
 
 	public void unselect() {
 		centerDisplayer.unload();
-		topicDetailsDisplayer.unload();
+		gadgetDisplayer.unload();
 	}
 
 	public void zoomTo(double scale) {		
@@ -187,6 +187,9 @@ public class MainMap extends Composite implements GDesktopPane {
 		zoomer.setToScale(scale);
 	}
 
+	public void ensureZoomOfAtLeast(double scale) {
+		zoomer.setToScale(ocean.ensureZoomOfAtLeast(scale));
+	}
 	
 	
 	
@@ -226,6 +229,7 @@ public class MainMap extends Composite implements GDesktopPane {
 		DOM.setStyleAttribute(ext.getElement(), "top", top+"px");
 		
 	}
+
 
 
 
