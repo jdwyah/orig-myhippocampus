@@ -13,7 +13,7 @@ import com.aavu.client.gui.gadgets.EntryPreview;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.LinkDisplayWidget;
 import com.aavu.client.gui.gadgets.ReferenceBoard;
-import com.aavu.client.gui.gadgets.Connections;
+import com.aavu.client.gui.gadgets.ConnectionBoard;
 import com.aavu.client.gui.gadgets.TagPropertyPanel;
 import com.aavu.client.gui.gadgets.UploadBoard;
 import com.aavu.client.service.Manager;
@@ -652,9 +652,6 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 	public boolean hasFiles(){
 		return !getFiles().isEmpty();
-	}
-	public boolean hasConnections(){
-		return true;
 	}
 	public boolean hasTagProperties(){
 		return (this instanceof Tag) && !getMetas().isEmpty();

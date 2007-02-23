@@ -15,6 +15,7 @@ import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.EnterInfoButton;
+import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.aavu.client.widget.edit.TopicCompleter;
@@ -26,7 +27,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Connections extends Gadget implements CompleteListener {
+public class ConnectionBoard extends Gadget implements CompleteListener {
 
 	private TopicCompleter topicCompleter;
 	private TopicCache topicService;
@@ -36,7 +37,13 @@ public class Connections extends Gadget implements CompleteListener {
 	private Manager manager;
 	private VerticalPanel refPanel;
 	
-	public Connections(Manager manager) {				
+	/**
+	 * Special Gadget. Is always added, but maintains own visibility, since we don't know at 
+	 * loadTime whether of not we'll have references.
+	 * 
+	 * @param manager
+	 */
+	public ConnectionBoard(Manager manager) {				
 		
 		super(Manager.myConstants.connections());
 		
@@ -70,7 +77,7 @@ public class Connections extends Gadget implements CompleteListener {
 		mainP.add(cp);
 		mainP.add(alsos);
 		
-		mainP.add(new Label(Manager.myConstants.references()));
+		mainP.add(new HeaderLabel(Manager.myConstants.references()));
 		mainP.add(refPanel);
 		
 		initWidget(mainP);
@@ -79,7 +86,8 @@ public class Connections extends Gadget implements CompleteListener {
 
 	public int load(Topic topic) {
 		myTopic = topic;
-				
+		
+		setVisible(false);
 	
 		
 		manager.getTopicCache().getLinksTo(topic,new StdAsyncCallback("GetLinksTo"){
@@ -91,6 +99,8 @@ public class Connections extends Gadget implements CompleteListener {
 				
 				if(list.size() == 0){
 					refPanel.add(new Label(Manager.myConstants.references_none()));					
+				}else{
+					setVisible(true);
 				}
 				
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
@@ -109,7 +119,11 @@ public class Connections extends Gadget implements CompleteListener {
 			System.out.println("no see alsos");
 			return 0;
 		}else{
-			return alsos.load(assoc);
+			int size = alsos.load(assoc);
+			if(size > 0){			
+				setVisible(true);
+			}
+			return size; 
 		}
 		
 	}
@@ -154,7 +168,7 @@ public class Connections extends Gadget implements CompleteListener {
 				Topic top = (Topic) iter.next();
 				seeAlsoPanel.add(new TopicLink(top.getIdentifier()));
 				size++;
-			}
+			}			
 			return size;
 		}
 

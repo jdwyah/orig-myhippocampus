@@ -16,6 +16,10 @@ public class IslandBanner extends AbsolutePanel {
 	
 	private static final double HALF_MIN_EM = .4;
 	private static final double SCALE_DIVISOR = 6;
+	
+	private static final double MAX_FONT = 4;
+	
+	
 	public static final String BANNER_SELECTED = "Selected";
 	
 	private Label reg;
@@ -23,6 +27,7 @@ public class IslandBanner extends AbsolutePanel {
 	private int size;
 	
 	private static final String HOVER_STYLE = "H-IslandBanner-Hover";
+	
 	
 	//private MouseListenerCollection mouseListeners;	
 	
@@ -103,6 +108,9 @@ public class IslandBanner extends AbsolutePanel {
 			size = 1;
 		}
 		double s = (Math.log(size) / SCALE_DIVISOR + HALF_MIN_EM + (zoom *HALF_MIN_EM));
+		
+		s = s > MAX_FONT ? MAX_FONT : s;
+		
 		return s;
 	}
 

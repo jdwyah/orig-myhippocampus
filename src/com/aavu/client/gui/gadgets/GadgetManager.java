@@ -14,7 +14,7 @@ public class GadgetManager {
 	private List allGadgets;
 	private UploadBoard uploadBoard;
 	private LinkDisplayWidget linkDisplayW;
-	private Connections connectionBoard;
+	private ConnectionBoard connectionBoard;
 	private EntryPreview entryPreview;
 	private TagPropertyPanel tagProperties;
 	
@@ -29,7 +29,7 @@ public class GadgetManager {
 		
 		tagProperties = new TagPropertyPanel(manager);					
 		entryPreview = new EntryPreview(manager);		
-		connectionBoard = new Connections(manager);
+		connectionBoard = new ConnectionBoard(manager);
 		linkDisplayW = new LinkDisplayWidget(manager);	
 		uploadBoard = new UploadBoard(manager);
 		
@@ -56,9 +56,10 @@ public class GadgetManager {
 	public void load(Topic topic) {
 		List gadgetsToUse = new ArrayList();
 		
-		if(topic.hasConnections()){
-			gadgetsToUse.add(connectionBoard);
-		}
+		//Special Gadget always add, but it will maintain its own visibility
+		//since we don't know at load time whether there are references
+		gadgetsToUse.add(connectionBoard);
+		
 		if(topic.hasEntry()){
 			gadgetsToUse.add(entryPreview);
 		}

@@ -8,7 +8,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.LinkDisplayWidget;
-import com.aavu.client.gui.gadgets.Connections;
+import com.aavu.client.gui.gadgets.ConnectionBoard;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class AllReferencesPanel extends Composite {
 
-	private Connections seeAlsoBoard;
+	private ConnectionBoard seeAlsoBoard;
 	private LinkDisplayWidget linkDisplayW;	
 	
 	private Manager manager;
@@ -42,7 +42,7 @@ public class AllReferencesPanel extends Composite {
 		refPanel = new FlowPanel();
 		
 		
-		seeAlsoBoard = new Connections(manager);		
+		seeAlsoBoard = new ConnectionBoard(manager);		
 		mainPanel.add(seeAlsoBoard,Manager.myConstants.seeAlsosN(0));				
 		
 		

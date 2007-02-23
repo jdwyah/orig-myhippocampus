@@ -12,25 +12,11 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class GadgetDisplayer extends Composite {
-	
-	private List gadgets;
-	
-	
-//	private TagPropertyPanel tagProperties;
-//	private TopicDetailsTabBar topicDetails;	
-//	private EntryPreview entryPreview;
-//	private OnThisIslandBoard onThisIslandBoard;
-	
-	
-	//private Topic topic;
+		
 	private Manager manager;
 
-
 	private VerticalPanel gadgetPanel;
-
-
 	private GadgetPicker gadgetPicker;
-
 
 	private Topic topic;
 	
@@ -89,8 +75,14 @@ public class GadgetDisplayer extends Composite {
 		if(gadgetPanel.getWidgetIndex(gadget) == -1){
 			gadget.load(topic);
 			gadgetPanel.add(gadget);
-		}else{			
-			Window.alert(Manager.myConstants.gadget_already_showing());
+		}else{		
+			if(gadget.isVisible()){
+				Window.alert(Manager.myConstants.gadget_already_showing());
+			}
+			else{
+				//This will force the ConnectionBoard to unhide itself 
+				gadget.setVisible(true);
+			}
 		}
 	}
 

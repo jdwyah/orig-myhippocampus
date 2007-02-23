@@ -1,5 +1,9 @@
 package com.aavu.client.gui;
 
+import org.gwm.client.event.GFrameAdapter;
+import org.gwm.client.event.GFrameEvent;
+import org.gwm.client.event.GFrameListener;
+
 import com.aavu.client.HippoTest;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
@@ -134,6 +138,10 @@ public class LoginWindow extends PopupWindow {
 			}
 		});
 
+		frame.addFrameListener(new GFrameAdapter(){
+			public void frameClosed(GFrameEvent evt) {
+				semaphore = false;
+			}});
 		
 		
 		form.setWidget(panel);

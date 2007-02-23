@@ -5,6 +5,7 @@ import org.gwm.client.GDialog;
 import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.event.GDialogChoiceListener;
+import org.gwm.client.event.GFrameAdapter;
 import org.gwm.client.event.GFrameEvent;
 import org.gwm.client.event.GFrameListener;
 import org.gwm.client.impl.DefaultGDialog;
@@ -22,7 +23,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EntryEditWindow extends PopupWindow implements SaveNeededListener, GFrameListener {
+public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 
 	private static final int WIDTH = 750;
 	private static final int HEIGHT = 500;
@@ -55,8 +56,32 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener, 
 		
 		frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
 		
-		frame.addFrameListener(this);
+		frame.addFrameListener(new GFrameAdapter(){
+			public void frameClosing(GFrameEvent evt) {
+				if(saveButton.isSaveNeeded()){
+					
+//					DefaultGDialog.showConfirmDialog(mainP, Manager.myConstants.close_without_saving(), "", GDialog.OK_CANCEL_OPTION_TYPE, new GDialogChoiceListener(){
+//						public void onChoice(DefaultGDialog dialog) {
+//							 if (dialog.getSelectedOption() == DefaultGDialog.OK_OPTION) {
+//								 frame.close();
+//							 }
+//						}});
+					
+					if(Window.confirm(Manager.myConstants.close_without_saving())){
+						getFrame().close();
+					}
+					
+				}else{
+					getFrame().close();
+				}
+			}
+		});
 	}
+	
+	public GFrame getFrame(){
+		return frame;
+	}
+	
 	private void save() {
 		manager.getTopicCache().save(topicViewAndEditW.getTopic(),topicViewAndEditW.getSaveCommand(),
 				new StdAsyncCallback(""){
@@ -71,56 +96,6 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener, 
 
 	public void onChange(Widget sender) {
 		saveButton.setSaveNeeded();
-	}
-	public void frameClosed(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void frameClosing(GFrameEvent evt) {
-		if(saveButton.isSaveNeeded()){
-			
-//			DefaultGDialog.showConfirmDialog(mainP, Manager.myConstants.close_without_saving(), "", GDialog.OK_CANCEL_OPTION_TYPE, new GDialogChoiceListener(){
-//				public void onChoice(DefaultGDialog dialog) {
-//					 if (dialog.getSelectedOption() == DefaultGDialog.OK_OPTION) {
-//						 frame.close();
-//					 }
-//				}});
-			
-			if(Window.confirm(Manager.myConstants.close_without_saving())){
-				frame.close();
-			}
-			
-		}else{
-			frame.close();
-		}
-	}
-	public void frameIconified(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void frameMaximized(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void frameMinimized(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void frameMoved(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void frameOpened(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void frameResized(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void frameRestored(GFrameEvent evt) {
-		// TODO Auto-generated method stub
-		
-	}
+	}	
 	
 }

@@ -16,6 +16,7 @@ import com.aavu.client.widget.edit.AddLinkPopup;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -80,28 +81,40 @@ public class LinkDisplayWidget extends Gadget {
 		myTopic = topic;
 		linkPanel.clear();
 		size = 0;
+		FlexTable table = new FlexTable();
+
 		for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
 			WebLink occ = (WebLink) iter.next();			
 
-			HorizontalPanel lP = new HorizontalPanel();
-			lP.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 			
-			lP.add(new ExternalLink(occ));
-
+					
+//			HorizontalPanel lP = new HorizontalPanel();
+//			lP.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+//			
+//			lP.add(new ExternalLink(occ));
+//
 			EditLinkButton editB = new EditLinkButton((WebLink) occ);							
-			lP.add(editB);			
+//			lP.add(editB);			
 
+			table.setWidget(size, 0, new ExternalLink(occ));
+			table.setWidget(size, 1, editB);
 			
+						
 			if(size %2 == 0){
-				lP.addStyleName("H-LinkWidget");
+//				lP.addStyleName("H-LinkWidget");
+				table.getFlexCellFormatter().addStyleName(size,0,"H-LinkWidget");
 			}else{
-				lP.addStyleName("H-LinkWidget-Odd");	
-			}
-			linkPanel.add(lP);
+//				lP.addStyleName("H-LinkWidget-Odd");	
+				table.getFlexCellFormatter().addStyleName(size,0,"H-LinkWidget-Odd");
+			}			
+			
+//			linkPanel.add(lP);
 
 			size ++;
 
 		}
+		
+		linkPanel.add(table);
 		return size;
 	}
 
@@ -114,11 +127,12 @@ public class LinkDisplayWidget extends Gadget {
 	 * @author Jeff Dwyer
 	 *
 	 */
-	private class EditLinkButton extends PNGImage implements ClickListener{
+	private class EditLinkButton extends Button implements ClickListener{
 		private WebLink link;
 
 		public EditLinkButton(WebLink link){
-			super("img/popupIcon.png", 15,15);
+			//super("img/popupIcon.png", 15,15);
+			super(Manager.myConstants.editMe());
 			this.link = link;
 			addClickListener(this);
 			addStyleName("H-EditLink-Button");			

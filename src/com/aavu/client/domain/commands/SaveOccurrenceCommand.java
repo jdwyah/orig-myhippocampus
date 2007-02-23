@@ -24,10 +24,15 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 			for (Iterator iter = topic.getOccurences().iterator(); iter.hasNext();) {
 				Occurrence occur = (Occurrence) iter.next();
 				if(occur.getId() == occurrence.getId()){
-					topic.getOccurences().remove(occur);					
+					
+					iter.remove();
+					
+					//ConcurrentModificationDanger
+					//topic.getOccurences().remove(occur);					
 				}
 			}
-		}
+		}		
+		
 		topic.getOccurences().add(occurrence);				
 	}
 

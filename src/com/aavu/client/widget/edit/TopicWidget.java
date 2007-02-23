@@ -48,7 +48,6 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	public TopicWidget(){
 			
 		panel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
-		panel.setWidth("100%");
 		
 		add(panel);
 		addClickListener(this);

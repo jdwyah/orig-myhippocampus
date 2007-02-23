@@ -19,12 +19,17 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TooltipListener extends MouseListenerAdapter {
 	
+	public static final int DYNAMIC_LEFT = 1;
+	
 	private int relx;
 	private int rely;
 	private String text;
 
 	private TooltipPopup tooltip;
 	private boolean useRelTop;
+
+	private boolean isDynamic;
+	private int dynamic;
 	
 	/**
 	 * 
@@ -44,11 +49,24 @@ public class TooltipListener extends MouseListenerAdapter {
 		this.useRelTop = false;
 	}
 
+	public TooltipListener(int dynamic, String text) {
+		this.text = text;
+		this.useRelTop = false;
+		this.isDynamic = true;
+		this.dynamic = dynamic;
+	}
+
 	public void onMouseEnter(Widget sender) {
 		if (tooltip != null) {
 			tooltip.hide();
 		}
-		tooltip = new TooltipPopup(sender, relx,rely, text, useRelTop);
+		if(isDynamic){
+			if(dynamic == DYNAMIC_LEFT){
+				tooltip = new TooltipPopup(sender, -sender.getOffsetWidth(),rely, text, useRelTop);
+			}			
+		}else{
+			tooltip = new TooltipPopup(sender, relx,rely, text, useRelTop);
+		}
 		tooltip.show();
 	}
 
