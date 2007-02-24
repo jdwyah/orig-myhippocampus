@@ -1,5 +1,6 @@
 package com.aavu.client.gui.ext;
 
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
@@ -62,9 +63,13 @@ public class TooltipListener extends MouseListenerAdapter {
 		}
 		if(isDynamic){
 			if(dynamic == DYNAMIC_LEFT){
+				Logger.debug("TT DL: -"+sender.getOffsetWidth()+" ");
 				tooltip = new TooltipPopup(sender, -sender.getOffsetWidth(),rely, text, useRelTop);
-			}			
+			}else{
+				Logger.error("Dynamic ?");
+			}
 		}else{
+			Logger.debug("TT REG : "+relx+" ");
 			tooltip = new TooltipPopup(sender, relx,rely, text, useRelTop);
 		}
 		tooltip.show();
@@ -134,6 +139,8 @@ public class TooltipListener extends MouseListenerAdapter {
 			int left = getPageScrollLeft() + sender.getAbsoluteLeft() + relLeft;
 			int top = getPageScrollTop() + sender.getAbsoluteTop();
 
+			Logger.debug(getPageScrollLeft()+" "+sender.getAbsoluteLeft()+" "+relLeft+" = "+left);
+			
 			if ( useRelTop ) {
 				top += relTop;
 			}

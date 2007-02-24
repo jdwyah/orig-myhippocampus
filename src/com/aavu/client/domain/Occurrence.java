@@ -22,7 +22,13 @@ public class Occurrence extends AbstractOccurrence implements Serializable,IsSer
 		return copyProps(new Occurrence());
 	}
 	
-	protected Occurrence copyProps(Occurrence o){
+	/**
+	 * copy properties of _this_ into the parameter
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public Occurrence copyProps(Occurrence o){
 		o.setId(getId());
 		o.setUser(getUser());
 		o.setTitle(getTitle());

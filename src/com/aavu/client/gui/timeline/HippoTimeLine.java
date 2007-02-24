@@ -64,7 +64,7 @@ public class HippoTimeLine extends Composite {
 			public void run() {
 				delayedLoad(timeLinesObjs);
 			}};
-		t.schedule(3000);
+		t.schedule(1000);
 	}
 
 

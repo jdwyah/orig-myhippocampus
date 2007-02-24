@@ -18,22 +18,42 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 	}
 
 	//@Override
+	/**
+	 * This is a bit sqirrley. We can't do a get() on the set, since 
+	 * .equals() compares the data & won't find the match. 
+	 * 
+	 * Use copyProps instead of remove/add to avoid 
+	 * 'Object with ID already associated with session' type errors.
+	 * 
+	 * PEND MED. Make this less ugly.
+	 */
 	public void executeCommand() {
 		
-		if(occurrence.getId() != 0){					
+		if(occurrence.getId() != 0){		
+			Occurrence existing = null;
 			for (Iterator iter = topic.getOccurences().iterator(); iter.hasNext();) {
 				Occurrence occur = (Occurrence) iter.next();
 				if(occur.getId() == occurrence.getId()){
+										
+					existing = occur;
+					break;
 					
-					iter.remove();
+					//iter.remove();					
 					
-					//ConcurrentModificationDanger
+					//NOTE don't use this, ConcurrentModificationDanger
 					//topic.getOccurences().remove(occur);					
 				}
+			}			
+			
+			if(existing != null){
+				occurrence.copyProps(existing);
+			}else{
+				topic.getOccurences().add(occurrence);
 			}
-		}		
-		
-		topic.getOccurences().add(occurrence);				
+			
+		}else{				
+			topic.getOccurences().add(occurrence);
+		}
 	}
 
 	//@Override

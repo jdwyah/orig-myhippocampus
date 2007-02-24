@@ -61,7 +61,7 @@
 
 
     <div id="footer">
-    
+    	©2007 MyHippocampus
 	</div>
 	
 	</td><!--end main panel-->
