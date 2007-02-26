@@ -128,6 +128,7 @@ public interface Consts extends Messages {
 	String link_url();
 	String link_notes();
 	String link_add();
+	String link_topics();	
 	String required();
 	String save_async();
 	

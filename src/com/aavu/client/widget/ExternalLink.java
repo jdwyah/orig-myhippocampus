@@ -4,6 +4,7 @@ import com.aavu.client.HippoTest;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.URI;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -42,27 +43,36 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 	}
 
 	public void init(URI occ) {
-					
-		setText(occ.getTitle());
-		setTarget(occ.getUri());
-
-		
-		if(null != occ.getData()){			
-			addMouseListener(new TooltipListener(TooltipListener.DYNAMIC_LEFT,occ.getUri()+"<BR>"+occ.getData()));
+							
+		if(null != occ.getData()){	
+			init(occ,occ.getUri()+"<BR>"+occ.getData(),true);			
 		}else{
-			addMouseListener(new TooltipListener(TooltipListener.DYNAMIC_LEFT,occ.getUri()));
+			init(occ,occ.getUri(),true);			
 		}
 	}
+	
+	
 	public void init(S3File file){
 		init((URI) file);	
-		
-		
+				
 		String link = HippoTest.getRelativeURL(HippoTest.FILE_PATH+urlEncode(file.getUri()));
 		
 		System.out.println("EXTERNAL LINK S3 PRE "+file.getUri());
 		System.out.println("EXTERNAL LINK FOR S3 "+link);
 		setTarget(link);		
 	}
+	
+	public void init(URI occ,String popupText,boolean left) {
+		setText(occ.getTitle());
+		setTarget(occ.getUri());
+		
+		if(left){
+			addMouseListener(new TooltipListener(TooltipListener.DYNAMIC_LEFT,popupText));
+		}else{
+			addMouseListener(new TooltipListener(popupText));
+		}
+	}
+	
 	public ExternalLink(Occurrence occ) {
 		this();
 		if(occ instanceof S3File){
@@ -72,6 +82,11 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		}else{
 			throw new UnsupportedOperationException();
 		}
+	}
+
+	public ExternalLink(WebLink occ, String popupText, boolean b) {
+		this();
+		init(occ,popupText,b);
 	}
 
 	private static native String urlEncode( String str )

@@ -34,8 +34,8 @@ public class SaveTagtoTopicCommand extends AbstractSaveCommand implements IsSeri
 	
 	
 	//@Override
-	public Set getAffectedTags() {
-		Set s = super.getAffectedTags();
+	public Set getAffectedTopics() {
+		Set s = super.getAffectedTopics();
 		s.add(topic1);
 		return s;
 	}

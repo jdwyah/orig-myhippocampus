@@ -3,8 +3,9 @@ package com.aavu.client.domain.generated;
 
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -19,7 +20,10 @@ public abstract class AbstractOccurrence  implements IsSerializable, java.io.Ser
      private User user;
      private String title;
      private String data;
-     //private Topic topic;
+     /**
+      * @gwt.typeArgs <com.aavu.client.domain.Topic>
+      */     
+     private Set topics = new HashSet();
      
      /**
       * Last updated
@@ -106,7 +110,18 @@ public abstract class AbstractOccurrence  implements IsSerializable, java.io.Ser
     }
 
 
-   public boolean equals(Object other) {
+    public Set getTopics() {
+		return topics;
+	}
+	public void setTopics(Set topics) {
+		this.topics = topics;
+	}
+
+	public String toString(){
+		return getId()+" "+getTitle();
+	}
+	
+public boolean equals(Object other) {
          if ( (this == other ) ) return true;
 		 if ( (other == null ) ) return false;
 		 if ( !(other instanceof AbstractOccurrence) ) return false;

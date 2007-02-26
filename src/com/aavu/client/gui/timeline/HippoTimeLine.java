@@ -1,12 +1,10 @@
 package com.aavu.client.gui.timeline;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.dto.TimeLineObj;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.timeline.SimileTimeline;
+import com.aavu.client.gui.timeline.renderers.HengerRender;
+import com.aavu.client.gui.timeline.renderers.HippoRender;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.util.Logger;
@@ -16,6 +14,8 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.netthreads.gwt.simile.timeline.client.ITimeLineRender;
+import com.netthreads.gwt.simile.timeline.client.TimeLineWidget;
 
 public class HippoTimeLine extends Composite {
 
@@ -23,11 +23,13 @@ public class HippoTimeLine extends Composite {
 	private static final int WIDTH = 680;
 	private static final int HEIGHT = 400;
 		
-	private SimileTimeline timeline;
+	private TimeLineWidget simileWidget;
+	
 	private TopicCache topicCache;
 	private TimeLineObj[] timeLinesObjs;
+	
+	
 	private static int counter = 0;
-
 	
 	
 	/**
@@ -44,12 +46,13 @@ public class HippoTimeLine extends Composite {
 		
 		
 		
-		timeline = new SimileTimeline("foo_"+counter++);		
-				
-		timeline.setPixelSize(width, height);
-
-		initWidget(timeline);			
+		//timeline = new SimileTimeline("foo_"+counter++);		
 		
+
+		ITimeLineRender render = new HippoRender();
+		simileWidget = new TimeLineWidget("100%", "100%", render);
+						
+		initWidget(simileWidget);
 	
 	}
 
@@ -60,11 +63,15 @@ public class HippoTimeLine extends Composite {
 		//TODO BAD. we used to just process here, but GWM seems to have changed this.
 		//If the simile jscript isn't loaded... bad.
 		//3 second safety? hopefully that'll work.
-		Timer t = new Timer(){
+		
+		delayedLoad(timeLinesObjs);
+		
+		
+		/*Timer t = new Timer(){
 			public void run() {
 				delayedLoad(timeLinesObjs);
 			}};
-		t.schedule(1000);
+		t.schedule(1000);*/
 	}
 
 
@@ -117,11 +124,21 @@ public class HippoTimeLine extends Composite {
 		jo.put("dateTimeFormat", new JSONString("iso8601"));
 		
 		Logger.log("Sending to simile: "+jo.toString());
-		timeline.load(jo);
+		//timeline.load(jo);
 		
 		if(timelines.length == 0){
 			Window.alert(Manager.myConstants.timeline_no_objs_msg());
 		}
+		
+		
+		
+		
+
+
+		//panel = new ScrollPanel();
+
+		simileWidget.loadJSON(jo.toString());
+		
 	}
 	
 

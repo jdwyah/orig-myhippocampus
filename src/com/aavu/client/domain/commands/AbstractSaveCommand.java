@@ -126,7 +126,7 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 		return false;
 	}
 
-	public Set getAffectedTags() {
+	public Set getAffectedTopics() {
 		return new HashSet();
 	}
 	

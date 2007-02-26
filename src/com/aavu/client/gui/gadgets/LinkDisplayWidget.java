@@ -96,7 +96,8 @@ public class LinkDisplayWidget extends Gadget {
 			EditLinkButton editB = new EditLinkButton((WebLink) occ);							
 //			lP.add(editB);			
 
-			table.setWidget(size, 0, new ExternalLink(occ));
+			
+			table.setWidget(size, 0, new ExternalLink(occ,getPopupString(occ),true));
 			table.setWidget(size, 1, editB);
 			
 						
@@ -116,6 +117,23 @@ public class LinkDisplayWidget extends Gadget {
 		
 		linkPanel.add(table);
 		return size;
+	}
+
+	private String getPopupString(WebLink occ) {
+		StringBuffer popupText = new StringBuffer();
+		popupText.append(occ.getUri());
+		if(occ.getData() != null){
+			popupText.append("<BR>");
+			popupText.append(occ.getData());
+		}							
+		for (Iterator topicIter = occ.getTopics().iterator(); topicIter.hasNext();) {
+			Topic top = (Topic) topicIter.next();
+			if(top != myTopic){
+				popupText.append("<BR>");
+				popupText.append(top.getTitle());
+			}
+		}
+		return popupText.toString();
 	}
 
 	public int getSize() {

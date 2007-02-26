@@ -79,7 +79,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private Island selectedIsland;
 	
-	private PopupWindow progressWindow;	
+	private PopupWindow progressWindow;
+
+	private int lasty;
+
+	private int lastx;	
 
 
 	public OceanDHTMLImpl(Manager manager) {
@@ -340,6 +344,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	public void zoomOut() {
 		System.out.println("zoom up from "+currentScale);
 
+	
+		
 		double oldScale = currentScale;
 
 		
@@ -359,6 +365,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	public void zoomIn() {		
 		System.out.println("zoom in from "+currentScale);
 
+		centerOnMouse();
+		
 		double oldScale = currentScale;
 
 		currentScale *= 2;
@@ -674,7 +682,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
-		
+		lastx = x;
+		lasty = y;
 		if (dragging) {			
 			moveByDelta(dragStartX - x, dragStartY - y);			
 		}
@@ -720,8 +729,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		if(isle != null){
 			System.out.println("Ocean.update "+isle.getTitle());
 			isle.redraw(t);
-		}else{
-			growIsland(t);
+		}else{			
+			growIsland(t);			
 		}
 	}
 
@@ -784,17 +793,20 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 			if(isle != null){
 
+				centerOn((int)isle.getCenterXAtScale(),(int)isle.getCenterYAtScale());
+				
+//				int left = (int) ((isle.getCenterXAtScale() * currentScale) - halfWidth);
+//				int top = (int) ((isle.getCenterYAtScale() * currentScale) - halfHeight);
 
-				int left = (int) ((isle.getCenterXAtScale() * currentScale) - halfWidth);
-				int top = (int) ((isle.getCenterYAtScale() * currentScale) - halfHeight);
-
-//				SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
-//				System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
 
 				//intuitively this is (left - curbackX) but things are reversed			
-				int dx = left + curbackX;
-				int dy = top + curbackY;
-				moveBy(dx, dy);
+//				int dx = left + curbackX;
+//				int dy = top + curbackY;
+//				moveBy(dx, dy);
+
+				
+//				SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
+//				System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
 
 //				System.out.println("dx "+dx+" curbackX "+curbackX+" ");
 //				System.out.println("dy "+dy+" curbackY "+curbackY+" ");			
@@ -805,6 +817,46 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	}
 
 
+
+	/**
+	 * TODO fix 
+	 *
+	 */
+	private void centerOnMouse() {
+				
+//		int mouseX = (int) (lastx/currentScale + curbackX);
+//		int mouseY = (int) (lasty/currentScale + curbackY);
+//		
+//		System.out.println("last x "+lastx+" mousex "+mouseX+" curbackx "+curbackX);
+//		System.out.println("last y "+lasty+" mousey "+mouseY+" curbacky "+curbackY);
+//		
+//		centerOn(mouseX,mouseY);
+		
+	}
+	
+	private void centerOn(int x, int y){
+
+		System.out.println("centering on "+x+" "+ y);
+		
+		int width = Window.getClientWidth();
+		int height = Window.getClientHeight();
+
+		int halfWidth = width/2;
+		int halfHeight = height/2;
+		
+		int left = (int) (x * currentScale) - halfWidth;
+		int top = (int) (y * currentScale) - halfHeight;
+
+//		SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
+		System.out.println("left "+left+" top "+top);
+
+		//intuitively this is (left - curbackX) but things are reversed			
+		int dx = left + curbackX;
+		int dy = top + curbackY;
+		moveBy(dx, dy);
+	}
+	
+	
 	/**
 	 * Make sure that we're zoomed to 'scale' or higher
 	 * 

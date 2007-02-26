@@ -35,7 +35,7 @@ public class SaveTitleCommand extends AbstractSaveCommand implements IsSerializa
 	 * update all tags that contain this topic 
 	 */
 	//@Override
-	public Set getAffectedTags() {		
+	public Set getAffectedTopics() {		
 		return topic.getTypesAsTopics();
 	}
 	

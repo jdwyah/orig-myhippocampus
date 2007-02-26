@@ -11,6 +11,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -165,7 +166,7 @@ public class TopicServiceImpl implements TopicService {
 				Topic t = getForName(clipped);			
 				if(null == t){
 					log.debug("was null, creating as Tag ");
-					t = new Topic();
+					t = new Tag();
 					t.setTitle(clipped);				
 					t.setUser(userService.getCurrentUser());							
 				}			
@@ -227,6 +228,7 @@ public class TopicServiceImpl implements TopicService {
 		saveCommand(command);	
 	}
 	private void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
+				
 		if(command.getTopicID() > 0){
 			save(command.getTopic());
 		}
@@ -237,6 +239,11 @@ public class TopicServiceImpl implements TopicService {
 			save(command.getTopic2());
 		}
 		
+//		//TODO replace code above & use only this 
+//		Set<Topic> toSave = command.getAffectedTopics();
+//		for(Topic t : toSave){
+//			save(t);
+//		}
 	}
 	
 	/**

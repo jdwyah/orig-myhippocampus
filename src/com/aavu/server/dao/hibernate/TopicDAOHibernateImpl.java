@@ -54,6 +54,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.setFetchMode("types.type.associations.types", FetchMode.JOIN)
 		.setFetchMode("types.type.associations.members", FetchMode.JOIN)		
 		.setFetchMode("occurences", FetchMode.JOIN)
+		.setFetchMode("occurences.topics", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN)
 		.setFetchMode("associations.members", FetchMode.JOIN)	
 		.setFetchMode("associations.types", FetchMode.JOIN);

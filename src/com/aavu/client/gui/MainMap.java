@@ -7,7 +7,6 @@ import java.util.List;
 import org.gwm.client.GDesktopPane;
 import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
-import org.gwm.client.impl.DefaultGDesktopPane;
 import org.gwm.client.impl.DefaultGFrame;
 
 import com.aavu.client.domain.Tag;
@@ -20,7 +19,6 @@ import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 
 public class MainMap extends Composite implements GDesktopPane {
@@ -130,9 +128,12 @@ public class MainMap extends Composite implements GDesktopPane {
 		 */
 		//for(command.getAffectedTags())
 		
-		for (Iterator iter = command.getAffectedTags().iterator(); iter.hasNext();) {
-			Tag tag = (Tag) iter.next();
-			ocean.update(tag, command);
+		for (Iterator iter = command.getAffectedTopics().iterator(); iter.hasNext();) {
+						
+			Topic top = (Topic) iter.next();
+			if(top instanceof Tag){
+				ocean.update((Tag) top, command);
+			}
 		}
 		
 //		if(command.affectedTag()){
