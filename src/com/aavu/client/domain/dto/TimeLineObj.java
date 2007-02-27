@@ -67,7 +67,7 @@ public class TimeLineObj implements IsSerializable {
 
 		jo.put("start", new JSONString(sdf.format(getStart())));
 		jo.put("title", new JSONString(topic.getTopicTitle()));
-		jo.put("description", new JSONString("blah blah"));
+		jo.put("description", new JSONString(getTopic().getTopicID()+""));
 		jo.put("link", new JSONString("HippoTest.html#"+getTopic().getTopicID()));
 
 		return jo;

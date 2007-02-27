@@ -61,7 +61,7 @@ public class ViewMemberWindow extends PopupWindow implements ClickListener {
 			TimeLineObj tobj = new TimeLineObj(topics[i],topics[i].getLastUpdated(),null);	
 			timelines[i] = tobj;
 		}		
-		timeline = new HippoTimeLine(manager,timelines,WIDTH - 30,HEIGHT);
+		timeline = new HippoTimeLine(manager,timelines,WIDTH - 30,HEIGHT,this);
 				
 		timeB = new Button("Timeline");
 		timeB.addClickListener(this);

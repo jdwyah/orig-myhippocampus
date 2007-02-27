@@ -107,12 +107,13 @@
 			<many-to-many column="topic_id" class="Topic" />
 		</set>-->
 		
+		<!-- backwards, names are switched -->		
 		<set name="occurences" table="topic_occurences" cascade="save-update">
 			<key column="occurrence_id"></key>
 			<many-to-many column="topic_id" class="Occurrence" />
 		</set>
 
-		<!-- no cascade, we want to pre-process to make SeeAlso a singleton. -->
+		<!-- backwards, names are switched -->		
 	    <set name="associations" table="topic_associations" cascade="save-update">
 			<key column="association_id"></key>			
 			<many-to-many column="topic_id" class="Association" />

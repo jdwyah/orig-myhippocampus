@@ -88,6 +88,14 @@ public class Manager implements TopicSaveListener {
 		myConstants = (Consts) GWT.create(Consts.class);
 	}	
 
+	
+	public void bringUpChart(long id) {
+		hippoCache.getTopicCache().getTopicByIdA(id,new StdAsyncCallback(myConstants.topic_lookupAsync()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				bringUpChart((Topic) result);				
+			}});
+	}
 	public void bringUpChart(TopicIdentifier ident) {
 		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback(myConstants.topic_lookupAsync()){
 			public void onSuccess(Object result) {
