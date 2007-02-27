@@ -8,6 +8,7 @@ import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -55,6 +56,8 @@ public interface TopicDAO {
 	Topic get(long topicID);
 
 	MetaSeeAlso getSeeAlsoSingleton();
+
+	WebLink getWebLinkForURI(String url, User currentUser);
 
 	
 

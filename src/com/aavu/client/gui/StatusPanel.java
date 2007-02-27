@@ -39,7 +39,7 @@ public class StatusPanel extends SimplePanel {
 		}
 		else if(statusCode == StatusCode.SUCCESS){
 			final StatusLabel sl = (StatusLabel) map.get(new Integer(id)); 
-			System.out.println("sl "+sl);
+			//System.out.println("sl "+sl);
 			if(sl != null){
 				sl.setCode(statusCode);								
 				GUIEffects.fadeAndRemove(sl,3000);				

@@ -276,6 +276,9 @@ public class TopicServiceImpl implements TopicService {
 			command.setTopic2(getSeeAlsoMetaSingleton());
 		}
 	}
+	public WebLink getWebLinkForURL(String url) {
+		return topicDAO.getWebLinkForURI(url,userService.getCurrentUser());		
+	}
 
 
 

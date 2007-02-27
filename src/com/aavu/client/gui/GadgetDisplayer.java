@@ -72,9 +72,13 @@ public class GadgetDisplayer extends Composite {
 
 
 	public void addGadget(Gadget gadget) {
+		/*
+		 * if this is a first time add
+		 */
 		if(gadgetPanel.getWidgetIndex(gadget) == -1){
 			gadget.load(topic);
 			gadgetPanel.add(gadget);
+			gadget.showForFirstTime();
 		}else{		
 			if(gadget.isVisible()){
 				Window.alert(Manager.myConstants.gadget_already_showing());

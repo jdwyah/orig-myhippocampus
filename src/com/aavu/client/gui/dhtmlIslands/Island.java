@@ -333,7 +333,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 //	  }
 	
 
-	public void youveBeenDraggedSetYourLeftAndTop() {
+	public boolean possibleMoveOccurred() {
 		int absLeft = getAbsoluteLeft();
     	int absTop = getAbsoluteTop();
     	int oceanLeft = ocean.getBackX();
@@ -349,7 +349,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
     		top = (int) (newTop / scale);
     		
     		tagStat.setLongitude(left);
-    		tagStat.setLatitude(top);    		
+    		tagStat.setLatitude(top);
+    		
+    		return true;
+    	}else{
+    		return false;
     	}
 	}
 	
@@ -537,13 +541,15 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		DraggableLabel label = (DraggableLabel) dragging;
 		
-		label.setXPct(getWidgetLeft(label) / (double)width);
-		label.setYPct(getWidgetTop(label) / (double)height);
+		double xPct = getWidgetLeft(label) / (double)width;
+		double yPct = getWidgetTop(label) / (double)height;
 		
-		
-		System.out.println("finished dragging "+label.getText()+" "+label.getXPct()+" "+label.getYPct());
-		
-		topicMoved((DraggableTopicLabel) label);
+		if(xPct != label.getXPct() || yPct != label.getYPct()){
+			label.setXPct(xPct);
+			label.setYPct(yPct);			
+			topicMoved((DraggableTopicLabel) label);
+		}
+		//System.out.println("finished dragging "+label.getText()+" "+label.getXPct()+" "+label.getYPct());
 	}
 	
 	private void topicMoved(DraggableTopicLabel label){

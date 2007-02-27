@@ -61,7 +61,7 @@
 
 
     <div id="footer">
-    	©2007 MyHippocampus
+    	©2007 <a href="<@spring.url "/site/index.html"/>"/>MyHippocampus</a> | <a href="<@spring.url "/site/contact.html"/>"/>Contact Us</a> | <a href="http://myhippocampus.blogspot.com/"/>Blog</a>
 	</div>
 	
 	</td><!--end main panel-->

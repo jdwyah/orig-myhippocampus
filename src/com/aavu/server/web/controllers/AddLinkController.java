@@ -10,6 +10,7 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.server.service.TopicService;
@@ -33,16 +34,32 @@ public class AddLinkController extends SimpleFormController {
 	@Override
 	protected Object formBackingObject(HttpServletRequest req) throws Exception {
 		log.debug("FormBackingObject");
+		
+		String url = req.getParameter("url");
+
 		AddLinkCommand command = new AddLinkCommand();
 		
-		command.setCommand_url(req.getParameter("url"));
+		WebLink link = topicService.getWebLinkForURL(url);
 		
-		command.setCommand_description(req.getParameter("description"));
+		if(url != null && url.length() > 0 && link != null){
+			
+			command.setCommand_url(url);
+
+			command.setCommand_description(link.getDescription());
+
+			command.setCommand_notes(link.getNotes());
+			
+		}else{
+
+			command.setCommand_url(url);
+
+			command.setCommand_description(req.getParameter("description"));
+
+			command.setCommand_notes(req.getParameter("notes"));
+
+		}
 		
-		command.setCommand_notes(req.getParameter("notes"));
-		
-		return command;
-		
+		return command;		
 	}
 
 

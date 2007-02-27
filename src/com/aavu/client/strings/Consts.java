@@ -150,6 +150,8 @@ public interface Consts extends Messages {
 	String img_gadget_picker();
 	String img_gadget_connections();
 	String gadget_already_showing();
+	String help_welcome();
+	String help_blank_start_1();
 	
 		
 	

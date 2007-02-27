@@ -1,11 +1,8 @@
 package com.aavu.server.dao.hibernate;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +29,7 @@ import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -691,6 +689,18 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public MetaSeeAlso getSeeAlsoSingleton() {
 		return (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
+	}
+
+	public WebLink getWebLinkForURI(String url, User user) {
+		log.debug("user "+user.getUsername()+" url "+url);
+
+		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(WebLink.class)
+				.add(Expression.eq("user", user))
+				.add(Expression.eq("uri", url)))
+				.setFetchMode("topics", FetchMode.JOIN);
+
+		return (WebLink) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+
 	}
 
 

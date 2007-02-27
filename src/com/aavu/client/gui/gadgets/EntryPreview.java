@@ -38,10 +38,13 @@ public class EntryPreview extends Gadget {
 	
 	private EntryPreviewExt entryPrev;
 	private Topic topic;
+	private Manager manager;
 	
-	public EntryPreview(final Manager manager){		
+	public EntryPreview(Manager _manager){		
 		
 		super(Manager.myConstants.entry());
+		
+		this.manager = _manager;
 		
 		entryPrev = new EntryPreviewExt();
 		
@@ -69,6 +72,12 @@ public class EntryPreview extends Gadget {
 		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_entry(),60,47);
 		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.entry()));
 		return b;
+	}
+
+	//@Override
+	public void showForFirstTime() {
+		super.showForFirstTime();
+		manager.editEntry(topic);
 	}
 	
 	

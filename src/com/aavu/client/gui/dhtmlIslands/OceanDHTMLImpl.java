@@ -45,6 +45,8 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private static final int SHOW_TOPICS_AT_ZOOM = 3;
 
+	private static final int CLOUD_REMOVE = 8000;
+
 	private Manager manager;
 
 	private Map islands = new HashMap();	
@@ -144,20 +146,20 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	private void clearClouds() {
 
 		GUIEffects.move(leftCloud,new EffectOption[] {
-				new EffectOption("x",-1000),
+				new EffectOption("x",-2000),
 				new EffectOption("y",0),
-				new EffectOption("duration",5.0)
+				new EffectOption("duration",7.0)
 		},-1000,0);
 		GUIEffects.move(rightCloud,new EffectOption[] {
-				new EffectOption("x",1000),
+				new EffectOption("x",2000),
 				new EffectOption("y",0),
-				new EffectOption("duration",5.0)
+				new EffectOption("duration",7.0)
 		},1000,0);
 
 
 
-		GUIEffects.removeInXMilSecs(leftCloud, 8000);
-		GUIEffects.removeInXMilSecs(rightCloud, 8000);
+		GUIEffects.removeInXMilSecs(leftCloud, CLOUD_REMOVE);
+		GUIEffects.removeInXMilSecs(rightCloud, CLOUD_REMOVE);
 	}
 
 
@@ -262,7 +264,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		
 		System.out.println("i "+i+" "+tagStats.length);
 		if(i >= tagStats.length){
-			done();
+			done(tagStats.length);
 		}else{
 			Timer t = new Timer(){
 				public void run() {
@@ -272,9 +274,14 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		}
 		
 	}
-	private void done() {		
+	private void done(final int size) {		
 		progressWindow.close();
 		clearClouds();
+		Timer t = new Timer(){
+			public void run() {
+				manager.fireOceanLoaded(size);		
+			}};
+		t.schedule(CLOUD_REMOVE);	
 	}
 
 	
@@ -539,9 +546,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	public void dragFinished(Widget dragging) {
 		Island island = (Island) dragging;
 
-		island.youveBeenDraggedSetYourLeftAndTop();
-
-		islandMoved(island.getStat().getTagId(), island.getLeft(), island.getTop());
+		if(island.possibleMoveOccurred()){
+			islandMoved(island.getStat().getTagId(), island.getLeft(), island.getTop());
+		}
 	}
 
 	/**

@@ -18,6 +18,10 @@
 		<property name="view" value="manifesto" />
 		<property name="userService" ref="userService" />
 	</bean>
+	<bean id="contactController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="contact" />
+		<property name="userService" ref="userService" />
+	</bean>
 	<bean id="addLinkController" class="com.aavu.server.web.controllers.AddLinkController">
 		<property name="formView" value="secure/addLink" />
 		<property name="successView" value="closeWindow" />
@@ -100,6 +104,7 @@
 				<prop key="/site/interested.html">mailingListController</prop>
 				<prop key="/site/signup.html">createUserController</prop>
 
+
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
 
 				<prop key="/site/secure/addLink.html">addLinkController</prop>
@@ -112,7 +117,7 @@
 				<prop key="/site/index.html">indexController</prop>
 				<prop key="/site/tour.html">tourController</prop>
 				<prop key="/site/manifesto.html">manifestoController</prop>
-				
+				<prop key="/site/contact.html">contactController</prop>				
 
 			</props>
 		</property>

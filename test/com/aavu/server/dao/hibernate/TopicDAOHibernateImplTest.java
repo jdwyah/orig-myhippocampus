@@ -1234,4 +1234,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertFalse(str.contains("java.sql.Timestamp"));
 	}
 	
+	public void testGetWebLinkForURI(){
+		
+		//System.out.println("u "+u.getUsername());
+		WebLink w = topicDAO.getWebLinkForURI("http://www.google.com/", u);
+		//assertNotNull(w);
+		
+	}
+	
 }

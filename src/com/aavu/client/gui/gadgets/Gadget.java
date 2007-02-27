@@ -29,5 +29,7 @@ public abstract class Gadget extends Composite {
 	public abstract int load(Topic topic);
 
 	public abstract ImageButton getPickerButton();
+
+	public void showForFirstTime() {};
 	
 }

@@ -57,5 +57,7 @@ public interface TopicService {
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
 
 	void executeAndSaveCommand(AbstractSaveCommand command) throws HippoBusinessException;
+
+	WebLink getWebLinkForURL(String url);
 	
 }

@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.Label;
@@ -38,31 +39,8 @@ public class CreateNewWindow extends PopupWindow {
 				WIDTH,HEIGHT);
 		this.manager = _manager;
 		this.isIsland = isIsland;
-	
 		
-		HorizontalPanel panel = new HorizontalPanel();
-		
-		
-		name = new TextBox();
-		name.addKeyboardListener(new KeyboardListenerAdapter(){
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-				if(keyCode == KEY_ENTER){
-					clicked();			
-				}
-			}});
-		
-		panel.add(name);
-		panel.add(new Button(Manager.myConstants.island_create(), new ClickListener() {
-			public void onClick(Widget sender) {
-				clicked();
-			}
-		}));
-		
-		messageLabel = new Label("");		
-		panel.add(messageLabel);
-		
-		setCenteredContent(panel);
-		
+		setCenteredContent(new NewWidget());		
 	}
 	
 	private void clicked(){
@@ -75,6 +53,42 @@ public class CreateNewWindow extends PopupWindow {
 			messageLabel.setText("Enter a name");
 		}
 	}
+	/**
+	 * private class so that we can override the onload() method
+	 * @author Jeff Dwyer
+	 *
+	 */
+	private class NewWidget extends Composite {
+		public NewWidget(){
+			
+			HorizontalPanel panel = new HorizontalPanel();			
+			
+			name = new TextBox();
+			name.addKeyboardListener(new KeyboardListenerAdapter(){
+				public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+					if(keyCode == KEY_ENTER){
+						clicked();			
+					}
+				}});
+			
+			panel.add(name);
+			panel.add(new Button(Manager.myConstants.island_create(), new ClickListener() {
+				public void onClick(Widget sender) {
+					clicked();
+				}
+			}));
+			
+			messageLabel = new Label("");		
+			panel.add(messageLabel);
+			
+			initWidget(panel);
+		}
 
+		//@Override
+		protected void onLoad() {		
+			super.onLoad();
+			name.setCursorPos(0);
+		}
+	}
 
 }

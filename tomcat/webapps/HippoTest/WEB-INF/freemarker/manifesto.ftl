@@ -9,7 +9,7 @@
   									
 	    <!-- Middle column full box -->
       <div class="middle-column-box-white">
-        <div class="middle-column-box-title-grey">Our Manifesto</div>
+        <div class="middle-column-box-title-green">Our Manifesto</div>
 		  <p class="subheading">Rant Part #1</p>					
 		  			<p>When you take a look at your life, you may find that the bits worth remembering are... worth remembering. You may also find that you're
 		  			forgetting them.

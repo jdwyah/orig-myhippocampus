@@ -33,6 +33,7 @@ import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.glossary.GlossaryWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.gui.timeline.TimeLineWindow;
+import com.aavu.client.help.UserHelper;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
@@ -62,6 +63,7 @@ public class Manager implements TopicSaveListener {
 	private boolean focussed = false;
 
 	private GadgetManager gadgetManager;
+	private UserActionListener userActionListener;
 	
 	public Manager(HippoCache hippoCache){
 		this.hippoCache = hippoCache;
@@ -69,6 +71,8 @@ public class Manager implements TopicSaveListener {
 		hippoCache.getTopicCache().addSaveListener(this);
 		
 		gadgetManager = new GadgetManager(this);
+		
+		userActionListener = new UserHelper(this,user);
 		
 		//Note what is the purpose of "Desktop"? 
 		//If we implement that, note that it messed with our 
@@ -164,11 +168,14 @@ public class Manager implements TopicSaveListener {
 					
 					map.displayTopic(newIsland);
 					
+					fireIslandCreated();
 				}else{
 					Topic newTopic = new Topic();
 					newTopic.setId(res.getTopicID());
 					newTopic.setTitle(res.getTopicTitle());
 					bringUpChart(newTopic);
+					
+					fireTopicCreated();
 				}				
 			}			
 		});						
@@ -499,7 +506,22 @@ public class Manager implements TopicSaveListener {
 	public GadgetManager getGadgetManager() {
 		return gadgetManager;
 	}
-		
+	
+	public void fireOceanLoaded(int num_islands) {		
+		if(userActionListener != null){
+			userActionListener.oceanLoaded(num_islands);
+		}
+	}
+	public void fireIslandCreated() {	
+		if(userActionListener != null){
+			userActionListener.islandCreated();
+		}
+	}
+	public void fireTopicCreated() {		
+		if(userActionListener != null){
+			userActionListener.topicCreated();
+		}
+	}	
 
 
 }

@@ -47,6 +47,7 @@ public class GadgetManager {
 
 	public void show(Gadget gadget) {
 		displayer.addGadget(gadget);
+		//gadget.
 	}
 
 	public void setGadgetDisplayer(GadgetDisplayer displayer) {
