@@ -42,11 +42,11 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 	 * 
 	 * @param timeLinesObjs
 	 */
-	public HippoTimeLine(Manager manager,TimeLineObj[] timeLinesObjs){
-		this(manager,timeLinesObjs,WIDTH,HEIGHT,null);
+	public HippoTimeLine(Manager manager){
+		this(manager,WIDTH,HEIGHT,null);
 	}
-	public HippoTimeLine(Manager manager,TimeLineObj[] timeLinesObjs,int width,int height, CloseListener close){
-		this.timeLinesObjs = timeLinesObjs;
+	public HippoTimeLine(Manager manager,int width,int height, CloseListener close){
+		
 		this.topicCache = manager.getTopicCache();		
 		this.manager = manager;
 		this.closeListener = close;
@@ -64,55 +64,59 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 
 
 	//@Override
-	protected void onLoad() {
-		super.onLoad();
-		//TODO BAD. we used to just process here, but GWM seems to have changed this.
-		//If the simile jscript isn't loaded... bad.
-		//3 second safety? hopefully that'll work.
-		
-		delayedLoad(timeLinesObjs);
-		
-		
-		/*Timer t = new Timer(){
-			public void run() {
-				delayedLoad(timeLinesObjs);
-			}};
-		t.schedule(1000);*/
-	}
+//	protected void onLoad() {
+//		super.onLoad();
+//		//TODO BAD. we used to just process here, but GWM seems to have changed this.
+//		//If the simile jscript isn't loaded... bad.
+//		//3 second safety? hopefully that'll work.
+//		
+//		delayedLoad(timeLinesObjs);
+//		
+//		
+//		/*Timer t = new Timer(){
+//			public void run() {
+//				delayedLoad(timeLinesObjs);
+//			}};
+//		t.schedule(1000);*/
+//	}
 
 
 	//@Override
-	protected void delayedLoad(final TimeLineObj[] timeLinesObjs) {		
-		
-		Logger.log("HippoTimeline: onLoad()");		
-		
-		if(timeLinesObjs != null){
-			
-			load(timeLinesObjs);
-			
-		}else{
-
-			topicCache.getTimelineObjs(new StdAsyncCallback("GetTimelineObjs"){
-
-				public void onSuccess(Object result) {
-					super.onSuccess(result);
-					TimeLineObj[] timelines = (TimeLineObj[]) result;
-
-//					for (Iterator iter = timelines.iterator(); iter.hasNext();) {
-//					TimeLineObj tlo = (TimeLineObj) iter.next();
-//					System.out.println("Received tlo "+tlo);
-//					}
-
-					load(timelines);
-
-				}});
-		}
-	}
+//	protected void delayedLoad(final TimeLineObj[] timeLinesObjs) {		
+//		
+//		Logger.log("HippoTimeline: onLoad()");		
+//		
+//		if(timeLinesObjs != null){
+//			
+//			load(timeLinesObjs);
+//			
+//		}else{
+//
+//			topicCache.getTimelineObjs(new StdAsyncCallback("GetTimelineObjs"){
+//
+//				public void onSuccess(Object result) {
+//					super.onSuccess(result);
+//					TimeLineObj[] timelines = (TimeLineObj[]) result;
+//
+////					for (Iterator iter = timelines.iterator(); iter.hasNext();) {
+////					TimeLineObj tlo = (TimeLineObj) iter.next();
+////					System.out.println("Received tlo "+tlo);
+////					}
+//
+//					load(timelines);
+//
+//				}});
+//		}
+//	}
 
 	public void load(TimeLineObj[] timelines){
-		
-		simileWidget.clearData();
 				
+		simileWidget.clearData();
+		
+		if(timelines == null){
+			return;	
+		}
+		
 		for (int i = 0; i < timelines.length; i++) {
 			TimeLineObj tlo = timelines[i];
 			System.out.println("Received tlo "+tlo);
@@ -138,12 +142,6 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		}
 		
 		
-		
-		
-
-
-		//panel = new ScrollPanel();
-
 		simileWidget.loadJSON(jo.toString());
 		
 		//simileWidget.getTimeLine() is null for a while, so just keep circling back until it isn't

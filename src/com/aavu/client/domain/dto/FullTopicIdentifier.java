@@ -5,9 +5,8 @@ import java.util.Date;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class FullTopicIdentifier extends TopicIdentifier implements IsSerializable {
+public class FullTopicIdentifier extends DatedTopicIdentifier implements IsSerializable {
 
-	private Date lastUpdated;
 	private double latitudeOnIsland;
 	private double longitudeOnIsland;
 	
@@ -23,26 +22,16 @@ public class FullTopicIdentifier extends TopicIdentifier implements IsSerializab
 	 * @param latitude
 	 * @param longitude
 	 */
-	public FullTopicIdentifier(long topicID, String topicTitle,Date lastUpdated, double latitude, double longitude) {
-		super(topicID,topicTitle);
-		this.lastUpdated = lastUpdated;
+	public FullTopicIdentifier(long topicID, String topicTitle, double latitude, double longitude) {
+		super(topicID,topicTitle);		
 		this.latitudeOnIsland = latitude;
 		this.longitudeOnIsland = longitude;
 	}
 
 	public FullTopicIdentifier(TopicTypeConnector conn) {
-		super(conn.getTopic().getId(),conn.getTopic().getTitle());
-		this.lastUpdated = conn.getTopic().getLastUpdated();
+		super(conn.getTopic().getId(),conn.getTopic().getTitle(),conn.getTopic().getCreated(),conn.getTopic().getLastUpdated());
 		this.latitudeOnIsland = conn.getLatitude();
 		this.longitudeOnIsland = conn.getLongitude();
-	}
-
-	public Date getLastUpdated() {
-		return lastUpdated;
-	}
-
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
 	}
 
 	public double getLatitudeOnIsland() {
@@ -71,7 +60,7 @@ public class FullTopicIdentifier extends TopicIdentifier implements IsSerializab
 	public int hashCode() {
 		final int PRIME = 31;
 		int result = super.hashCode();
-		result = PRIME * result + ((lastUpdated == null) ? 0 : lastUpdated.hashCode());		
+			
 		result = PRIME * result + (int) (latitudeOnIsland * 1000);		
 		result = PRIME * result + (int) (longitudeOnIsland * 1000);
 		return result;
@@ -85,12 +74,7 @@ public class FullTopicIdentifier extends TopicIdentifier implements IsSerializab
 			return false;
 		if (!(obj instanceof FullTopicIdentifier))
 			return false;
-		final FullTopicIdentifier other = (FullTopicIdentifier) obj;
-		if (lastUpdated == null) {
-			if (other.lastUpdated != null)
-				return false;
-		} else if (!lastUpdated.equals(other.lastUpdated))
-			return false;
+		final FullTopicIdentifier other = (FullTopicIdentifier) obj;		
 		if (latitudeOnIsland != other.latitudeOnIsland)
 			return false;
 		if (longitudeOnIsland != other.longitudeOnIsland)

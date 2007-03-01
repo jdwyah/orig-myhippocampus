@@ -71,26 +71,29 @@ public class TagPropertyPanel extends Gadget {
 	}
 	
 	public int load(Topic topic){
-		if(!(topic instanceof Tag)){
-			return -1;
-		}
-		this.tag = (Tag) topic;
+		if(topic instanceof Tag){
+			setVisible(true);
 
-		metaListPanel.clear();			
-		metaChoosers.clear();
-		saveB.setVisible(false);
-		
-		if(tag.getMetas() != null){
-			if(tag.getMetas().size() > 0){
-				saveB.setVisible(true);
+			this.tag = (Tag) topic;
+
+			metaListPanel.clear();			
+			metaChoosers.clear();
+			saveB.setVisible(false);
+
+			if(tag.getMetas() != null){
+				if(tag.getMetas().size() > 0){
+					saveB.setVisible(true);
+				}
+				for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
+					Meta element = (Meta) iter.next();
+					MetaChooser mc = new MetaChooser(tagLocalService);
+					mc.setMeta(element);								
+					showEditMetaWidget(mc);
+				}
 			}
-			for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
-				Meta element = (Meta) iter.next();
-				MetaChooser mc = new MetaChooser(tagLocalService);
-				mc.setMeta(element);								
-				showEditMetaWidget(mc);
-			}
-		}		
+		}else{
+			setVisible(false);
+		}
 		return 0;
 	}
 	

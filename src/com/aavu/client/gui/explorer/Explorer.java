@@ -54,7 +54,7 @@ public class Explorer extends Composite implements ClickListener {
 		glossary.load(topics);			
 				
 		
-		timeline = new TimeLineWrapper(manager,width,height,topics,close);
+		timeline = new TimeLineWrapper(manager,myTag,width,height,topics,close);
 				
 		timeB = new Button("Timeline");
 		timeB.addClickListener(this);

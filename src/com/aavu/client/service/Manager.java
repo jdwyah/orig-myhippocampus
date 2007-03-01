@@ -236,7 +236,7 @@ public class Manager implements TopicSaveListener {
 //		}
 		
 		
-		HippoTimeLine hippoTime = new HippoTimeLine(this,null);
+		HippoTimeLine hippoTime = new HippoTimeLine(this);
 		TimeLineWindow hippoTimeW = new TimeLineWindow(hippoTime,newFrame());
 						
 		

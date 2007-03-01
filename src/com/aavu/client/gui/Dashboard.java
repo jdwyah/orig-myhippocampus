@@ -101,7 +101,7 @@ public class Dashboard extends SimplePanel {
 		mainPanel.add(addNewIslandButton);
 		
 //		mainPanel.add(tagButton);		
-		mainPanel.add(timeLine);
+//		mainPanel.add(timeLine);
 //		mainPanel.add(addDeliciousTags);		
 		
 		mainPanel.add(glossaryButton);

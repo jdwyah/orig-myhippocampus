@@ -145,8 +145,8 @@ public class TopicServiceImpl implements TopicService {
 	public Topic getForID(long topicID) {
 		return topicDAO.getForID(userService.getCurrentUser(),topicID);
 	}
-	public List<TimeLineObj> getTimelineObjs() {
-		return topicDAO.getTimeline(userService.getCurrentUser());
+	public List<TimeLineObj> getTimelineObjs(long meta_id) {
+		return topicDAO.getTimeline(meta_id,userService.getCurrentUser());
 	}
 
 	public Occurrence save(Occurrence link) {

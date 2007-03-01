@@ -117,6 +117,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private void setBackground(){
 		int pix = (int) (currentScale * 100);
+		if(pix > 1600 || pix < 6){
+			return;
+		}			
 		if(pix > 400){
 			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean"+pix+".jpg)");
 		}

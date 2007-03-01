@@ -29,7 +29,7 @@ public interface GWTTopicServiceAsync {
 	 * @Deprecated
 	 */	
 	void getTopicByID(long topicID, AsyncCallback back);
-	void getTimelineObjs(AsyncCallback callback);	
+	void getTimelineObjs(long meta_id, AsyncCallback callback);	
 	
 	//List<TopicIdentifier> 
 	void getLinksTo(Topic topic, AsyncCallback callback);

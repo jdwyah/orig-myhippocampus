@@ -30,7 +30,7 @@ public interface TopicService {
 
 	Topic getForID(long topicID);
 
-	List<TimeLineObj> getTimelineObjs();
+	List<TimeLineObj> getTimelineObjs(long meta_id);
 
 	Occurrence save(Occurrence link);
 	

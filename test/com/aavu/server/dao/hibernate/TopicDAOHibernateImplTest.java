@@ -620,7 +620,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Tag tag = new Tag();
 		tag.setId(3);
 
-		List<TimeLineObj> list = topicDAO.getTimeline(u);
+		List<TimeLineObj> list = topicDAO.getTimeline(0,u);
 
 		for (TimeLineObj timeLine : list) {
 			System.out.println("timelineObj "+timeLine);

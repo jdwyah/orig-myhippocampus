@@ -35,7 +35,7 @@ public interface TopicDAO {
 
 	Topic getForID(User currentUser, long topicID);
 
-	List<TimeLineObj> getTimeline(User user);
+	List<TimeLineObj> getTimeline(long meta_id, User user);
 
 	List<Topic> getAllTopics();
 

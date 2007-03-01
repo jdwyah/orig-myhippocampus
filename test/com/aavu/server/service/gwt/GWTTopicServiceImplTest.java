@@ -212,7 +212,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 	
 	public void testTimeline() throws HippoException{
 		
-		TimeLineObj[] rtn = topicService.getTimelineObjs();
+		TimeLineObj[] rtn = topicService.getTimelineObjs(0);
 		
 		for (int i = 0; i < rtn.length; i++) {
 			TimeLineObj obj = rtn[i];

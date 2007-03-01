@@ -264,9 +264,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		}
 	}
 
-	public TimeLineObj[] getTimelineObjs() throws HippoException {
+	public TimeLineObj[] getTimelineObjs(long meta_id) throws HippoException {
 		try {
-			List<TimeLineObj> list = topicService.getTimelineObjs();
+			List<TimeLineObj> list = topicService.getTimelineObjs(meta_id);
 			
 			TimeLineObj[] rtn = convertToArray(list);
 			

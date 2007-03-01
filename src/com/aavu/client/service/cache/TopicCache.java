@@ -411,8 +411,8 @@ public class TopicCache {
 
 
 
-	public void getTimelineObjs(AsyncCallback callback) {
-		topicService.getTimelineObjs(callback);
+	public void getTimelineObjs(long meta_id, AsyncCallback callback) {
+		topicService.getTimelineObjs(meta_id,callback);
 	}
 
 	public void addSaveListener(TopicSaveListener l){

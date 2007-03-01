@@ -643,6 +643,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		}		
 		return rtn;
 	}
+
+	public Set getMetaDates() {
+		Set rtn = new HashSet();
+		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
+			Meta meta = (Meta) iter.next();
+			if(meta instanceof MetaDate){
+				rtn.add(meta);				
+			}
+		}		
+		return rtn;
+	}
 	
 	public boolean hasEntry(){
 		return !getEntries().isEmpty();
@@ -656,6 +667,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	public boolean hasTagProperties(){
 		return (this instanceof Tag) && !getMetas().isEmpty();
 	}
+
 	
 
 	

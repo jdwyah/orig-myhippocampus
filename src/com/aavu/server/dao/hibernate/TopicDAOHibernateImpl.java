@@ -66,9 +66,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 */
 	
 	public List<TimeLineObj> getTimeline(User user) {
-		return getTimeline(user,0);
+		return getTimeline(0,user);
 	}
-	public List<TimeLineObj> getTimeline(User user,long meta_id) {
+	public List<TimeLineObj> getTimeline(long meta_id,User user) {
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 
 //		List<Object> ll= null;
@@ -86,17 +86,17 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 
 		
-		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
-				"join top.associations  ass "+				
-				"join ass.types  typeConn "+
-				"join ass.members metaValue "+
-		"where typeConn.type.class = MetaDate and top.user = ?",user);
+//		List<Object[]> ll2 = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
+//				"join top.associations  ass "+				
+//				"join ass.types  typeConn "+
+//				"join ass.members metaValue "+
+//		"where typeConn.type.class = MetaDate and top.user = ?",user);
 
 		
 		Object[] params = new Object[2];
 		params[0] = new Long(meta_id);
 		params[1] = user;
-		List<Object[]> ll2 = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
+		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
 				"join top.associations  ass "+				
 				"join ass.types  typeConn "+
 				"join ass.members metaValue "+
