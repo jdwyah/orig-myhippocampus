@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import com.aavu.server.dao.MailingListDAO;
 import com.aavu.server.web.domain.MailingListCommand;
+import com.aavu.server.web.domain.validation.MailingListCommandValidator;
 
 public class MailingListController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(MailingListController.class);
@@ -19,6 +20,7 @@ public class MailingListController extends SimpleFormController {
 	
 	public MailingListController(){
 		setCommandClass(MailingListCommand.class);		
+		setValidator(new MailingListCommandValidator());
 	}
 	
 	@Override

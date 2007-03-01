@@ -22,7 +22,9 @@ import com.netthreads.gwt.simile.timeline.client.TimeLineWidget;
  */
 public class HippoRender implements ITimeLineRender
 {
-    /**
+    private static final int EVENT_LABEL_WIDTH = 200;
+
+	/**
      * Create timeline custom elements.
      * 
      *@param widget Timeline rendered into this widget.
@@ -35,7 +37,8 @@ public class HippoRender implements ITimeLineRender
     	EventSource eventSource = widget.getEventSource();
 
     	Theme theme = widget.getTheme();
-        theme.setEventLabelWidth(400);
+        theme.setEventLabelWidth(EVENT_LABEL_WIDTH);
+                
         
         // ---------------------------------------------------------------
         // HotZones, two events too close together so we are going to 
@@ -60,6 +63,7 @@ public class HippoRender implements ITimeLineRender
         topOpts.setWidth("70%");
         topOpts.setIntervalUnit(DateTime.MONTH());
         topOpts.setIntervalPixels(100);
+        
         topOpts.setShowEventText(true);
         topOpts.setEventSource(eventSource);
         topOpts.setTheme(theme);

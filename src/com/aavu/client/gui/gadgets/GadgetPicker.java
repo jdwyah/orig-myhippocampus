@@ -75,7 +75,7 @@ public class GadgetPicker extends Composite {
 		}
 	}
 	
-	private void close() {
+	public void close() {
 		open = false;
 		gadgetOptionsP.setVisible(false);
 	}

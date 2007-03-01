@@ -11,10 +11,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Zoomer extends SimplePanel implements MouseListener {
 
-	private static final int BASE = 22;
-	private static final int INCR = 8;
+	private static final int BASE = 24;
+	private static final int INCR = 11;
 	private static final int SLIDER_LEFT = 1;
-	private static final int TOT_INCR = 11;
+	private static final int TOT_INCR = 7;
 	private static final int NUM_BELOW_1 = 4;
 	
 	private Manager manager;
@@ -82,7 +82,7 @@ public class Zoomer extends SimplePanel implements MouseListener {
 		
 		//do the plus & minus buttons here
 		//
-		if(i <= 0){
+		if(i < 0){
 			System.out.println("-_-");
 			i = curLevel-1;
 		}if(i >= TOT_INCR){

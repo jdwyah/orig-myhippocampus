@@ -3,11 +3,12 @@ package com.aavu.client.gui.ext;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.event.GFrameListener;
 
+import com.aavu.client.gui.timeline.CloseListener;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class PopupWindow {
+public class PopupWindow implements CloseListener {
 
     private static final int WIDTH = 600;
 	private static final int HEIGHT = 400;
@@ -31,7 +32,7 @@ public class PopupWindow {
     	
 		frame.setWidth(width);
 		frame.setHeight(height);
-		frame.setMinimizable(true);
+		frame.setMinimizable(false);
 		frame.setMaximizable(true);
 		frame.setDraggable(true);
 		

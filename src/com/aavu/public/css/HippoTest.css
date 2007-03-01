@@ -233,7 +233,7 @@ a:visited {
 }
 
 .H-EnterInfoButton {
-	background-image: url("../img/bluecheck-bullet-14.gif");
+	background-image: url("../img/accept.png");
 	background-repeat: no-repeat;
 	height: 20px;
 	width: 20px;
@@ -307,7 +307,7 @@ a:visited {
 
 .H-Island {
 	background-color: transparent;
-	cursor: -moz-grab;
+	/*cursor: -moz-grab;*/
 }
 
 .H-Dragging {
@@ -316,6 +316,8 @@ a:visited {
 
 .H-IslandBanner {
 	z-index: 2;
+	cursor: pointer;
+	cursor: -moz-grab;	
 }
 
 .H-IslandBanner .gwt-Label {
@@ -331,6 +333,9 @@ a:visited {
 }
 
 .H-IslandBanner .Selected {
+	color: #CC6666;
+}
+.H-IslandBanner .ShdwSelected {
 	color: yellow;
 }
 
@@ -342,6 +347,8 @@ a:visited {
 	font-family: arial, helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
+	cursor: pointer;	
+	cursor: -moz-grab;	
 	padding: 0 6 0 6px;
 }
 
@@ -395,7 +402,10 @@ a:visited {
 	width: 100%;
 	background-color: #669999;
 }
-
+.H-FileLink {
+	width: 100%;
+	background-color: #669999;
+}
 .H-External-Hyperlink a {
 	font-size: .6em;
 }
@@ -652,7 +662,7 @@ a:visited {
 }
 
 .gwt-Hyperlink {
-	
+	text-decoration: underline;	
 }
 
 .gwt-Image {

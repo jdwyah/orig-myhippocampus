@@ -21,6 +21,7 @@ public class IslandBanner extends AbsolutePanel {
 	
 	
 	public static final String BANNER_SELECTED = "Selected";
+	public static final String BANNER_SHDW_SELECTED = "ShdwSelected";
 	
 	private Label reg;
 	private Label shdw;
@@ -66,10 +67,10 @@ public class IslandBanner extends AbsolutePanel {
 		
 		reg.addMouseListener(new MouseListenerAdapter(){
 			public void onMouseEnter(Widget sender) {
-				addStyleName(HOVER_STYLE);
+				reg.addStyleName(HOVER_STYLE);
 			}
 			public void onMouseLeave(Widget sender) {
-				removeStyleName(HOVER_STYLE);
+				reg.removeStyleName(HOVER_STYLE);
 			}	
 		});
 				
@@ -142,9 +143,11 @@ public class IslandBanner extends AbsolutePanel {
 
 	public void setSelected(boolean b) {
 		if(b){
-			shdw.addStyleName(BANNER_SELECTED);
+			reg.addStyleName(BANNER_SELECTED);
+			shdw.addStyleName(BANNER_SHDW_SELECTED);
 		}else{
-			shdw.removeStyleName(BANNER_SELECTED);
+			reg.removeStyleName(BANNER_SELECTED);
+			shdw.removeStyleName(BANNER_SHDW_SELECTED);
 		}
 	}
 	

@@ -12,6 +12,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class TimeLineObj implements IsSerializable {
 	
+	public static final int LAST_UPDATED = -2;
+	public static final int CREATED = -3;
+	
 	private TopicIdentifier topic;
 	private Date start;
 	private Date end;

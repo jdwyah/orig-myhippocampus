@@ -16,7 +16,7 @@ public class GadgetManager {
 	private LinkDisplayWidget linkDisplayW;
 	private ConnectionBoard connectionBoard;
 	private EntryPreview entryPreview;
-	private TagPropertyPanel tagProperties;
+	//private TagPropertyPanel tagProperties;
 	
 	
 	public GadgetManager(Manager manager){
@@ -27,14 +27,15 @@ public class GadgetManager {
 		
 		allGadgets = new ArrayList();		
 		
-		tagProperties = new TagPropertyPanel(manager);					
+		//tagProperties = new TagPropertyPanel(manager);					
 		entryPreview = new EntryPreview(manager);		
 		connectionBoard = new ConnectionBoard(manager);
 		linkDisplayW = new LinkDisplayWidget(manager);	
 		uploadBoard = new UploadBoard(manager);
 		
 		
-		allGadgets.add(tagProperties);	
+		//allGadgets.add(tagProperties);
+		
 		allGadgets.add(uploadBoard);
 		allGadgets.add(linkDisplayW);
 		allGadgets.add(connectionBoard);		
@@ -67,9 +68,9 @@ public class GadgetManager {
 		if(topic.hasFiles()){
 			gadgetsToUse.add(uploadBoard);
 		}
-		if(topic.hasTagProperties()){
-			gadgetsToUse.add(tagProperties);
-		}
+//		if(topic.hasTagProperties()){
+//			gadgetsToUse.add(tagProperties);
+//		}
 		if(topic.hasWebLinks()){
 			gadgetsToUse.add(linkDisplayW);
 		}

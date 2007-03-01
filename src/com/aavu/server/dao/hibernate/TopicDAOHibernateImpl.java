@@ -64,7 +64,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * RomanceBook extends Book, with Book's ReadDate
 	 * 
 	 */
+	
 	public List<TimeLineObj> getTimeline(User user) {
+		return getTimeline(user,0);
+	}
+	public List<TimeLineObj> getTimeline(User user,long meta_id) {
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 
 //		List<Object> ll= null;
@@ -80,12 +84,24 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 //		}});
 
+
+		
 		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
 				"join top.associations  ass "+				
 				"join ass.types  typeConn "+
 				"join ass.members metaValue "+
 		"where typeConn.type.class = MetaDate and top.user = ?",user);
 
+		
+		Object[] params = new Object[2];
+		params[0] = new Long(meta_id);
+		params[1] = user;
+		List<Object[]> ll2 = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
+				"join top.associations  ass "+				
+				"join ass.types  typeConn "+
+				"join ass.members metaValue "+
+		"where typeConn.type.id = ? and top.user = ?",params);
+		
 
 		for (Object topic : ll) {
 			Object[] oa = (Object[]) topic;
@@ -253,8 +269,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		List<TopicTypeConnector> rtn = getHibernateTemplate().find("from TopicTypeConnector conn "+
 				"where conn.type.id = ? order by conn.topic.lastUpdated DESC",new Long(tagid));
 				
-		for (TopicTypeConnector connector : rtn) {
-			System.out.println("DAO says "+connector.getId()+" "+connector.getLongitude()+" "+connector.getLatitude());
+		if(log.isDebugEnabled()){
+			for (TopicTypeConnector connector : rtn) {
+				log.debug("DAO says "+connector.getId()+" "+connector.getLongitude()+" "+connector.getLatitude());
+			}
 		}
 		
 		return rtn;

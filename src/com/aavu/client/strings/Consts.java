@@ -100,6 +100,9 @@ public interface Consts extends Messages {
 	
 	String timeline();
 	String timeline_image();
+	String timeline_lastUpdated();
+	String timeline_created();
+	
 	String timeline_no_objs_msg();
 	
 	String island_property();
@@ -153,6 +156,9 @@ public interface Consts extends Messages {
 	String help_welcome();
 	String help_blank_start_1();
 	
+	
+	
+	String enterInfo_image();
 		
 	
 	

@@ -126,6 +126,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 					public void onClick(Widget sender) {
 						viewMembers();
 					}});
+				l.addStyleName("gwt-Hyperlink");
 				onThisIslandPanel.add(l);				
 				break;
 			}

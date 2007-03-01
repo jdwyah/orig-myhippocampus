@@ -7,10 +7,13 @@ import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class GlossaryPage extends Composite {
+	
+	private static final String HEIGHT = "400px";
 	
 	private SimplePanel previewPanel;
 	private VerticalPanel listPanel;
@@ -28,7 +31,11 @@ public class GlossaryPage extends Composite {
 		
 		HorizontalPanel mainP = new HorizontalPanel();
 		
-		mainP.add(listPanel);
+		ScrollPanel scroll = new ScrollPanel(listPanel);
+		scroll.setHeight(HEIGHT);
+		
+		mainP.add(scroll);
+		
 		mainP.add(previewPanel);
 		mainP.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 		initWidget(mainP);

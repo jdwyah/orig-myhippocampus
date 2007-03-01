@@ -76,8 +76,9 @@ public class UploadBoard extends Gadget {
 	
 	public void addS3File(S3File file){
 		
-		
-		mainPanel.add(new ExternalLink(file));
+		ExternalLink link = new ExternalLink(file);
+		link.addStyleName("H-FileLink");
+		mainPanel.add(link);
 	}
 	public int getSize() {
 		return size;

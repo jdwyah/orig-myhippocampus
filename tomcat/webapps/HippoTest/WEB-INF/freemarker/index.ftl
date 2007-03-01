@@ -42,11 +42,14 @@
 	  	 	  
 	</#if>
 	
-
+	<#macro regError>
+		<font color="#FF0000"><@spring.showErrors"<br>"/></font>
+	</#macro>
     <div class="middle-column-box-title-green">No account, but want to know when we go live?</div>
 		<form action="<@spring.url "/site/interested.html"/>" method="POST">
 		      <table>
-        		<tr><td>Add your email:</td><td><input name="email" type="text"/></td></tr>
+
+        		<tr><td>Add your email:</td><td><@spring.formInput "command.email"/><@regError/></td></tr>
 
 		        <tr><td colspan='2'><input value="Let me know when i can signup!" type="submit"></td></tr>        		
 		      </table>

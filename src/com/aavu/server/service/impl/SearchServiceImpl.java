@@ -86,6 +86,13 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 	private List<SearchResult> search(final String searchString,final String username,final int start, final int max_num_hits){
 
 		log.debug("-----"+searchString+"--------"+username+"-----");
+		
+		//search for "" -> bad things
+		//org.compass.core.engine.SearchEngineQueryParseException: Failed to parse query [];
+		//nested exception is org.apache.lucene.queryParser.ParseException: Encountered "<EOF>" at line 1, column 0.		
+		if(searchString == null || searchString.equals("")){
+			 return new ArrayList<SearchResult>();
+		}
 				
 		//
 		//create search query 

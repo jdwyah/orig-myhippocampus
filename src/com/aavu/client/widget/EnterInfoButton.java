@@ -1,13 +1,17 @@
 package com.aavu.client.widget;
 
-import com.google.gwt.user.client.ui.Button;
+import org.gwtwidgets.client.style.BorderStyle;
+import org.gwtwidgets.client.ui.ImageButton;
+
+import com.aavu.client.service.Manager;
 
 
-public class EnterInfoButton extends Button {
+public class EnterInfoButton extends ImageButton {
 	
 	public EnterInfoButton(){
-		super();
-		setStyleName("H-EnterInfoButton");		
+		super(Manager.myConstants.enterInfo_image(),16,16);
+		setBorderOnStyle(BorderStyle.BORDER_STYLE_NONE);
+			
 	}
 
 }

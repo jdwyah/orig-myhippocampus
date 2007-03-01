@@ -31,7 +31,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 	private TopicCache topicCache;
 	private TimeLineObj[] timeLinesObjs;
 	private Manager manager;
-	private PopupWindow popupWindow;
+	private CloseListener closeListener;
 	
 	
 	private static int counter = 0;
@@ -45,11 +45,11 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 	public HippoTimeLine(Manager manager,TimeLineObj[] timeLinesObjs){
 		this(manager,timeLinesObjs,WIDTH,HEIGHT,null);
 	}
-	public HippoTimeLine(Manager manager,TimeLineObj[] timeLinesObjs,int width,int height, PopupWindow window){
+	public HippoTimeLine(Manager manager,TimeLineObj[] timeLinesObjs,int width,int height, CloseListener close){
 		this.timeLinesObjs = timeLinesObjs;
 		this.topicCache = manager.getTopicCache();		
 		this.manager = manager;
-		this.popupWindow = window;
+		this.closeListener = close;
 		
 		//timeline = new SimileTimeline("foo_"+counter++);		
 		
@@ -109,8 +109,9 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		}
 	}
 
-	protected void load(TimeLineObj[] timelines){
+	public void load(TimeLineObj[] timelines){
 		
+		simileWidget.clearData();
 				
 		for (int i = 0; i < timelines.length; i++) {
 			TimeLineObj tlo = timelines[i];
@@ -173,7 +174,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		System.out.println("HIPPO "+x+" "+y+" "+description);
 		long id = Long.parseLong(description);
 		
-		popupWindow.close();
+		closeListener.close();
 		
 		manager.bringUpChart(id);
 	}

@@ -67,6 +67,7 @@ public class GadgetDisplayer extends Composite {
 	}
 
 	public void unload() {
+		gadgetPicker.close();
 		setVisible(false);
 	}
 

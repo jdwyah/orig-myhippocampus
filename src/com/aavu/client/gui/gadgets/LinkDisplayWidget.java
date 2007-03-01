@@ -18,11 +18,15 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
 public class LinkDisplayWidget extends Gadget {
+	
+	private static final String HEIGHT = "200px";
+	private static final int USE_SCROLL_HEIGHT_CUTOFF = 6;
 	
 	private int size = 0;
 	private VerticalPanel linkPanel;
@@ -114,8 +118,13 @@ public class LinkDisplayWidget extends Gadget {
 			size ++;
 
 		}
-		
-		linkPanel.add(table);
+		//PEND awkward. we'd really like to set scroll.setMaxHeight(), 
+		//but that doesn't exist. setting it in all cases leads to excess space
+		ScrollPanel scroll = new ScrollPanel(table);
+		if(size > USE_SCROLL_HEIGHT_CUTOFF){			
+			scroll.setHeight(HEIGHT);					
+		}
+		linkPanel.add(scroll);
 		return size;
 	}
 

@@ -111,10 +111,20 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		 * otherwise we got a left: 8px; top: 8px;
 		 */		
 		DOM.setStyleAttribute(getElement(), "position", "absolute");	
-		DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean.png)");
+		setBackground();
 		//url("../img/bluecheck-bullet-14.gif");
 	}
 
+	private void setBackground(){
+		int pix = (int) (currentScale * 100);
+		if(pix > 400){
+			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean"+pix+".jpg)");
+		}
+		else{
+			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean"+pix+".png)");
+		}
+	}
+	
 	private void clouds() {
 		leftCloud = new SimplePanel();
 		PNGImage lc = new PNGImage(Manager.myConstants.clouds_src(),120,120);		
@@ -167,7 +177,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 		addObject(new OceanLabel("Hippo<BR>Campus<BR>Ocean",300,300));
 
-		addObject(new DashedBox(-1000,140,3000,60));
+		//addObject(new DashedBox(-1000,140,3000,60));
 
 
 		focusBackdrop = new EventBackdrop();
@@ -389,6 +399,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	
 
 	private void finishZoom(double oldScale) {
+		
+		setBackground();
+		
 		int width = Window.getClientWidth();
 		int height = Window.getClientHeight();
 
@@ -404,6 +417,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 		//move all objects
 		moveByDelta(0,0);
+		
 		
 		manager.zoomTo(currentScale);
 	}
