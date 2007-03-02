@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
 
 import com.aavu.client.domain.User;
 import com.aavu.server.service.UserService;
+import com.aavu.server.web.domain.MailingListCommand;
 
 public class BasicController extends AbstractController {
 	private static final Logger log = Logger.getLogger(BasicController.class);

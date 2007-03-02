@@ -53,6 +53,8 @@
 		  			
       </div>
       
+      <p>Hmm... this isn't really very clear, can I get an e.g.? <a href="<@spring.url "/site/manifesto2.html"/>"/>You sure can.</a></p>
+      
       <#macro regError>
 		<font color="#FF0000"><@spring.showErrors"<br>"/></font>
  	  </#macro>

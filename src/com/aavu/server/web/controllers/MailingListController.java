@@ -1,5 +1,8 @@
 package com.aavu.server.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,7 +42,11 @@ public class MailingListController extends SimpleFormController {
 				
 		String successStr = "Thanks "+comm.getEmail()+" we'll let you know when you can sign up for an account.";
 
-		return new ModelAndView(getSuccessView(),"message",successStr);
+		Map<String,Object> model = new HashMap<String,Object>();
+		model.put("message", successStr);
+		model.put("command", new MailingListCommand());
+		
+		return new ModelAndView(getSuccessView(),model);
 		
 	}
 

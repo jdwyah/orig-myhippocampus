@@ -14,10 +14,15 @@
 		<property name="view" value="tour" />
 		<property name="userService" ref="userService" />
 	</bean>
-	<bean id="manifestoController" class="com.aavu.server.web.controllers.BasicController">
+	<bean id="manifestoController" class="com.aavu.server.web.controllers.ManifestoController">
 		<property name="view" value="manifesto" />
 		<property name="userService" ref="userService" />
 	</bean>
+	<bean id="manifestoController2" class="com.aavu.server.web.controllers.ManifestoController">
+		<property name="view" value="manifesto2" />
+		<property name="userService" ref="userService" />
+	</bean>
+
 	<bean id="contactController" class="com.aavu.server.web.controllers.BasicController">
 		<property name="view" value="contact" />
 		<property name="userService" ref="userService" />
@@ -117,6 +122,7 @@
 				<prop key="/site/index.html">indexController</prop>
 				<prop key="/site/tour.html">tourController</prop>
 				<prop key="/site/manifesto.html">manifestoController</prop>
+				<prop key="/site/manifesto2.html">manifestoController2</prop>
 				<prop key="/site/contact.html">contactController</prop>				
 
 			</props>

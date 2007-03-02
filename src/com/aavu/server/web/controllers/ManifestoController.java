@@ -9,25 +9,21 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
 import com.aavu.client.domain.User;
-import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.MailingListCommand;
-import com.aavu.server.web.domain.UserPageBean;
 
-public class IndexController extends BasicController {
-	private static final Logger log = Logger.getLogger(IndexController.class);
-	
-	private String loggedInView;	
-	
-	private TopicService topicService;
+public class ManifestoController extends AbstractController {
+	private static final Logger log = Logger.getLogger(ManifestoController.class);
 
-	public void setLoggedInView(String loggedInView) {
-		this.loggedInView = loggedInView;
+	private String view;
+	protected UserService userService;	
+
+	public String getView() {
+		return view;
 	}
-	public void setTopicService(TopicService topicService) {
-		this.topicService = topicService;
+	public void setView(String view) {
+		this.view = view;
 	}
-
 
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest req,
@@ -38,11 +34,7 @@ public class IndexController extends BasicController {
 		User su = null;
 		try{
 			su = userService.getCurrentUser();	
-			
-			UserPageBean bean = topicService.getUserPageBean(su);
-		
-			
-			return new ModelAndView(loggedInView,"bean",bean);
+			return new ModelAndView(getView(),"user",su);
 		}catch(UsernameNotFoundException e){
 			log.debug("No user logged in.");
 		}
@@ -51,5 +43,8 @@ public class IndexController extends BasicController {
 		
 	}
 
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 }

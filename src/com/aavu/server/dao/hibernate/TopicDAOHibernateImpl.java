@@ -17,6 +17,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -717,8 +718,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				.add(Expression.eq("uri", url)))
 				.setFetchMode("topics", FetchMode.JOIN);
 
-		return (WebLink) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
-
+		List<WebLink> res = getHibernateTemplate().findByCriteria(crit);
+		
+		try {
+			return (WebLink) DataAccessUtils.uniqueResult(res);
+		} catch (IncorrectResultSizeDataAccessException e) {
+			log.warn(e.getMessage()+" URL "+url);
+			return res.get(0);
+		}
+		
 	}
 
 
