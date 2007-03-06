@@ -13,6 +13,7 @@ import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.edit.CompleteListener;
@@ -66,7 +67,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 		CellPanel mainPanel = new VerticalPanel();
 		
-		header = new HeaderLabel(Manager.myConstants.tags());
+		header = new HeaderLabel(ConstHolder.myConstants.tags());
 		mainPanel.add(header);
 				
 		
@@ -77,7 +78,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		mainPanel.add(tagPanel);
 				
 		HorizontalPanel tagBoxP = new HorizontalPanel();		
-		tagBoxP.add(new Label(Manager.myConstants.addTag()));
+		tagBoxP.add(new Label(ConstHolder.myConstants.addTag()));
 		tagBoxP.add(tagBox);
 		tagBoxP.add(addTagButton);		
 		mainPanel.add(tagBoxP);
@@ -128,7 +129,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			setVisible(true);
 		}
 		
-		header.setText(Manager.myConstants.tags());
+		header.setText(ConstHolder.myConstants.tags());
 		
 		tagPanel.clear();
 		
@@ -165,11 +166,11 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 * Remove the tag and add the tag to the list of things that need to be saved.
 	 * Need to do a load to make sure that we have all necessary Data.
 	 */
-	public void remove(Tag tag,final Widget widgetToRemoveOnSuccess) {
+	public void remove(Topic tag,final Widget widgetToRemoveOnSuccess) {
 
 		manager.getTopicCache().save(cur_topic,new RemoveTagFromTopicCommand(cur_topic,
 				tag),
-				new StdAsyncCallback(Manager.myConstants.delete_async()){
+				new StdAsyncCallback(ConstHolder.myConstants.delete_async()){
 					public void onFailure(Throwable caught) {
 						super.onFailure(caught);
 						Window.alert("Problem Removing Tag "+caught);
@@ -197,7 +198,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		}
 		//incommand tagsToSave.add(tag);
 		manager.getTopicCache().save(cur_topic,new SaveTagtoTopicCommand(cur_topic,tag), 
-				new StdAsyncCallback(Manager.myConstants.save()){});		
+				new StdAsyncCallback(ConstHolder.myConstants.save()){});		
 	}
 	
 	private void displayMetas(Tag tag, TagGadget tg) {

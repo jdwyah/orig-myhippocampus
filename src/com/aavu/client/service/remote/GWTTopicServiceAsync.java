@@ -4,9 +4,11 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface GWTTopicServiceAsync {
@@ -48,6 +50,9 @@ public interface GWTTopicServiceAsync {
 
 	void saveCommand(AbstractSaveCommand command, AsyncCallback callback);
 	void createNew(String title,boolean isIsland, AsyncCallback callback);
+	
+	//Weblink
+	void getWebLinkForURL(String url, AsyncCallback callback);
 }
 
 

@@ -16,6 +16,7 @@ import com.aavu.client.gui.ext.tabbars.TabHasWidgets;
 import com.aavu.client.gui.ext.tabbars.TabPanelExt;
 import com.aavu.client.gui.ext.tabbars.VertableTabPanel;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -91,7 +92,7 @@ public class Glossary extends FocusPanel {
 	 *
 	 */
 	public void load(){		
-		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
+		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
 
 			public void onSuccess(Object result) {
 				super.onSuccess(result);

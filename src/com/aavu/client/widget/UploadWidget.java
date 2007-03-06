@@ -6,9 +6,9 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveOccurrenceCommand;
-import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.gadgets.UploadBoard;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class UploadWidget extends Composite {
@@ -65,7 +64,7 @@ public class UploadWidget extends Composite {
 		panel.add(upload);
 		
 		// Add a 'submit' button.
-		panel.add(new Button(manager.myConstants.upload_submit(), new ClickListener() {
+		panel.add(new Button(ConstHolder.myConstants.upload_submit(), new ClickListener() {
 			public void onClick(Widget sender) {
 				form.submit();
 			}
@@ -85,7 +84,7 @@ public class UploadWidget extends Composite {
 				// we can get the result text here (see the FormPanel documentation for
 				// further explanation).
 				progressBar.setProgress(100);
-				progressBar.setText(manager.myConstants.upload_complete());
+				progressBar.setText(ConstHolder.myConstants.upload_complete());
 				
 				
 				
@@ -98,7 +97,7 @@ public class UploadWidget extends Composite {
 					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),key);
 					
 					manager.getTopicCache().save(topic,new SaveOccurrenceCommand(topic, fileObj),
-							new StdAsyncCallback(Manager.myConstants.save()){});
+							new StdAsyncCallback(ConstHolder.myConstants.save()){});
 					
 					topic.getOccurences().add(fileObj);					
 					
@@ -117,7 +116,7 @@ public class UploadWidget extends Composite {
 
 			public void onSubmit(FormSubmitEvent event) {
 				if (upload.getFilename().length() == 0) {
-					Window.alert(manager.myConstants.upload_select_file());
+					Window.alert(ConstHolder.myConstants.upload_select_file());
 					event.setCancelled(true);
 					return;
 				}
@@ -138,7 +137,7 @@ public class UploadWidget extends Composite {
 	
 	private void initProgressBar(){
 		progressBar.setProgress(0);
-		progressBar.setText(manager.myConstants.upload());
+		progressBar.setText(ConstHolder.myConstants.upload());
 		progressBar.setVisible(false);
 	}
 }

@@ -13,6 +13,7 @@ import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -461,7 +462,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			
 			System.out.println("firing topic lookup");
 			
-			manager.getTopicCache().getTopicsWithTag(tagStat.getTagId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
+			manager.getTopicCache().getTopicsWithTag(tagStat.getTagId(), new StdAsyncCallback(ConstHolder.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
 					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
@@ -555,7 +556,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	private void topicMoved(DraggableTopicLabel label){
 
 		manager.getTopicCache().saveTopicLocationA(tagStat.getTagId(),label.getTopicId(),label.getXPct(),label.getYPct(),
-				new StdAsyncCallback(Manager.myConstants.save_async()));
+				new StdAsyncCallback(ConstHolder.myConstants.save_async()));
 	}
 
 

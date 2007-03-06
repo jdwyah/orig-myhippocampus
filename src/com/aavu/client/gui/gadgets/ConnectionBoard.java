@@ -10,10 +10,10 @@ import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
@@ -45,7 +45,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	 */
 	public ConnectionBoard(Manager manager) {				
 		
-		super(Manager.myConstants.connections());
+		super(ConstHolder.myConstants.connections());
 		
 		this.manager = manager;
 		
@@ -67,7 +67,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		VerticalPanel mainP = new VerticalPanel();
 		
 		HorizontalPanel cp = new HorizontalPanel();
-		cp.add(new Label(Manager.myConstants.addTo()));
+		cp.add(new Label(ConstHolder.myConstants.addTo()));
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
 		
@@ -77,7 +77,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		mainP.add(cp);
 		mainP.add(alsos);
 		
-		mainP.add(new HeaderLabel(Manager.myConstants.references()));
+		mainP.add(new HeaderLabel(ConstHolder.myConstants.references()));
 		mainP.add(refPanel);
 		
 		initWidget(mainP);
@@ -98,7 +98,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 				refPanel.clear();
 				
 				if(list.size() == 0){
-					refPanel.add(new Label(Manager.myConstants.references_none()));					
+					refPanel.add(new Label(ConstHolder.myConstants.references_none()));					
 				}else{
 					setVisible(true);
 				}
@@ -108,8 +108,8 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 					refPanel.add(new TopicLink(topicIdent));
 				}
 				
-				//updateTitle(refPanel,Manager.myConstants.referencesN(list.size()));				
-				//bar.updateTitle(AllReferencesPanel.this,Manager.myConstants.all_referencesN(totalSize + list.size()));
+				//updateTitle(refPanel,ConstHolder.myConstants.referencesN(list.size()));				
+				//bar.updateTitle(AllReferencesPanel.this,ConstHolder.myConstants.all_referencesN(totalSize + list.size()));
 			}
 			
 		});
@@ -130,7 +130,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 	public void completed(String completeText) {
 		
-		topicService.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(Manager.myConstants.seeAlso_async()){
+		topicService.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.seeAlso_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				TopicIdentifier to = (TopicIdentifier) result;
@@ -141,7 +141,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 				topicCompleter.setText("");
 								
 				topicService.save(myTopic,new SaveSeeAlsoCommand(myTopic,new Topic(to)),
-						new StdAsyncCallback(Manager.myConstants.save_async()){});
+						new StdAsyncCallback(ConstHolder.myConstants.save_async()){});
 				
 			}});
 		
@@ -179,8 +179,8 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 	//@Override
 	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_connections(),60,60);
-		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.connections()));
+		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_connections(),60,60);
+		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.connections()));
 		return b;
 	}
 

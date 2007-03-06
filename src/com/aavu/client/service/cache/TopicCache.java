@@ -21,6 +21,7 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -109,7 +110,7 @@ public class TopicCache {
 		if(!topicIdentifiersDirty){
 			callback.onSuccess(topicIdentifiers.getKeyList());			
 		} else {
-			topicService.getAllTopicIdentifiers(new StdAsyncCallback(Manager.myConstants.topic_getAllAsync()){
+			topicService.getAllTopicIdentifiers(new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
 					TopicIdentifier[] topicIdents = (TopicIdentifier[]) result;

@@ -12,6 +12,7 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -37,8 +38,8 @@ public class TimeLineWrapper extends Composite {
 		this.topics = topics;
 		this.manager = manager;
 		
-		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineObj.LAST_UPDATED,Manager.myConstants.timeline_lastUpdated());
-		TimeLineSelector createdB = new TimeLineSelector(TimeLineObj.CREATED,Manager.myConstants.timeline_created());
+		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineObj.LAST_UPDATED,ConstHolder.myConstants.timeline_lastUpdated());
+		TimeLineSelector createdB = new TimeLineSelector(TimeLineObj.CREATED,ConstHolder.myConstants.timeline_created());
 		typeSelector.add(lastUpdatedB);
 		typeSelector.add(createdB);
 		

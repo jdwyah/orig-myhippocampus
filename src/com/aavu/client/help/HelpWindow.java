@@ -9,6 +9,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.SaveStopLight;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.user.client.Window;
@@ -26,7 +27,7 @@ public class HelpWindow extends PopupWindow {
 	private HorizontalPanel mainP;
 	
 	public HelpWindow(Manager manager, GInternalFrame frame) {
-		super(frame,Manager.myConstants.help_welcome(),WIDTH,HEIGHT);
+		super(frame,ConstHolder.myConstants.help_welcome(),WIDTH,HEIGHT);
 		this.manager = manager;
 
 		mainP = new HorizontalPanel();
@@ -34,7 +35,7 @@ public class HelpWindow extends PopupWindow {
 		mainP.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
 		
 		
-		mainP.add(new Label(Manager.myConstants.help_blank_start_1()));
+		mainP.add(new Label(ConstHolder.myConstants.help_blank_start_1()));
 				
 		setContent(mainP);
 		

@@ -6,14 +6,13 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -63,10 +62,10 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		
 		VerticalPanel mainP = new VerticalPanel();
 		
-		mainP.add(new HeaderLabel(Manager.myConstants.island_topics_on()));
+		mainP.add(new HeaderLabel(ConstHolder.myConstants.island_topics_on()));
 		
 		HorizontalPanel cp = new HorizontalPanel();
-		cp.add(new Label(Manager.myConstants.addTo()));
+		cp.add(new Label(ConstHolder.myConstants.addTo()));
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
 		
@@ -96,7 +95,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 
 			this.myTag = (Tag) topic;
 
-			manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(Manager.myConstants.tag_topicIsA()){
+			manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(ConstHolder.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
 					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
@@ -121,7 +120,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 			onThisIslandPanel.add(new TopicLink(fti,null));
 			
 			if(i >= MAX_TO_SHOW){
-				Label l = new Label(Manager.myConstants.on_this_island_more(topics.length - MAX_TO_SHOW));
+				Label l = new Label(ConstHolder.myConstants.on_this_island_more(topics.length - MAX_TO_SHOW));
 				l.addClickListener(new ClickListener(){
 					public void onClick(Widget sender) {
 						viewMembers();
@@ -140,7 +139,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	 */
 	public void completed(String completeText) {
 		
-		topicService.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(Manager.myConstants.save_async()){
+		topicService.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				TopicIdentifier to = (TopicIdentifier) result;
@@ -155,7 +154,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 				onThisIslandPanel.insert(new TopicLink(newTopic),0);				
 				
 				topicService.save(newTopic, new SaveTagtoTopicCommand(newTopic,(Tag) myTag),
-						new StdAsyncCallback(Manager.myConstants.save_async()){});				
+						new StdAsyncCallback(ConstHolder.myConstants.save_async()){});				
 			}});
 		
 	}

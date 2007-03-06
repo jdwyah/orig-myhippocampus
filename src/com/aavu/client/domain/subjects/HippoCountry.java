@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 
 public class HippoCountry extends HippoSubject {
 	
@@ -17,12 +18,12 @@ public class HippoCountry extends HippoSubject {
 	//@Override
 	public List getInfos() {
 		List subjectInfo = new ArrayList();
-		subjectInfo.add(new SubjectInfo(Manager.myConstants.country_name(),getName(),false));
+		subjectInfo.add(new SubjectInfo(ConstHolder.myConstants.country_name(),getName(),false));
 		return subjectInfo;
 	}
 	
 	//@Override
 	public String getTagName() {
-		return Manager.myConstants.country();
+		return ConstHolder.myConstants.country();
 	}
 }

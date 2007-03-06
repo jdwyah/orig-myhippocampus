@@ -3,7 +3,7 @@ package com.aavu.client.domain.subjects;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 
 public class AmazonBook extends Amazon {
 
@@ -42,14 +42,14 @@ public class AmazonBook extends Amazon {
 	//@Override
 	public List getInfos() {
 		List subjectInfo = new ArrayList();
-		subjectInfo.add(new SubjectInfo(Manager.myConstants.book_title(),getName(),false));
-		subjectInfo.add(new SubjectInfo(Manager.myConstants.book_author(),getAuthor(),true));
-		subjectInfo.add(new SubjectInfo(Manager.myConstants.book_publisher(),getManufacturer(),false));
+		subjectInfo.add(new SubjectInfo(ConstHolder.myConstants.book_title(),getName(),false));
+		subjectInfo.add(new SubjectInfo(ConstHolder.myConstants.book_author(),getAuthor(),true));
+		subjectInfo.add(new SubjectInfo(ConstHolder.myConstants.book_publisher(),getManufacturer(),false));
 		return subjectInfo;
 	}
 	
 	//@Override
 	public String getTagName() {
-		return Manager.myConstants.book();
+		return ConstHolder.myConstants.book();
 	}
 }

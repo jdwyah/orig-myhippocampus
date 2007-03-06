@@ -3,6 +3,7 @@ package com.aavu.client.widget.edit;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -16,19 +17,19 @@ import com.google.gwt.user.client.ui.Widget;
 public class DeletableTopicLabel extends ActionableTopicLabel implements ClickListener {
 
 	private RemoveListener remover;
-	private Tag tag;
+	private Topic topic;
 
 
-	public DeletableTopicLabel(final Tag tag, final RemoveListener remover) {
-		super(tag,Manager.myConstants.deleteMe());
+	public DeletableTopicLabel(final Topic topic, final RemoveListener remover) {
+		super(topic,ConstHolder.myConstants.deleteMe());
 		this.remover = remover;
-		this.tag = tag;
+		this.topic = topic;
 		addActionListener(this);
 	}
 
 
 	public void onClick(Widget sender) {
-		remover.remove(tag,this);
+		remover.remove(topic,this);
 	}
 
 }

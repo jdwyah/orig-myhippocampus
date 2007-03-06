@@ -8,6 +8,11 @@ public class Type {
 	public static int SPACING_60 = 18;
 	public static int SPACING_100 = 33;
 	
+	
+	public static int SIZE_120 = 30;
+	public static int SPACING_120 = 10;
+	
+	
 	public int img_width;
 	public int img_height;
 	public int img_spacing_w;

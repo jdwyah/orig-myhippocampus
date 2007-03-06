@@ -8,6 +8,7 @@ import org.gwm.client.GDesktopPane;
 import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGFrame;
+import org.gwm.client.impl.DefaultGInternalFrame;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -15,13 +16,14 @@ import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
+import com.aavu.client.gui.ext.LocationSetter;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
-public class MainMap extends Composite implements GDesktopPane {
+public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 
 	//private Sidebar sideBar;	
 	private Manager manager;
@@ -230,8 +232,6 @@ public class MainMap extends Composite implements GDesktopPane {
 		DOM.setStyleAttribute(ext.getElement(), "top", top+"px");
 		
 	}
-
-
 
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.aavu.client.domain.dto.SearchResult;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.DecimalFormatSimple;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.Composite;
@@ -21,7 +22,7 @@ public class SearchResultsWindow extends PopupWindow {
 	private final DecimalFormatSimple format = new DecimalFormatSimple(2);
 	
 	public SearchResultsWindow(Manager manager, List searchRes) {
-		super(manager.newFrame(),manager.myConstants.searchResultsTitle());
+		super(manager.newFrame(),ConstHolder.myConstants.searchResultsTitle());
 
 		mainPanel = new VerticalPanel();
 		
@@ -29,10 +30,10 @@ public class SearchResultsWindow extends PopupWindow {
 		
 		
 		if(searchRes == null || searchRes.size() == 0){
-			mainPanel.add(new Label(manager.myConstants.searchResultsNone()));
+			mainPanel.add(new Label(ConstHolder.myConstants.searchResultsNone()));
 		}
 		else{
-			mainPanel.add(new Label(Manager.myConstants.searchResultsN(searchRes.size())));
+			mainPanel.add(new Label(ConstHolder.myConstants.searchResultsN(searchRes.size())));
 			
 			for (Iterator iter = searchRes.iterator(); iter.hasNext();) {
 				SearchResult result = (SearchResult) iter.next();
@@ -67,13 +68,13 @@ public class SearchResultsWindow extends PopupWindow {
 			
 			if(result.getText() == null){
 				mainPanel.add(hp);							
-				//mainPanel.add(new Label(manager.myConstants.searchScore()+result.getScore()));				
+				//mainPanel.add(new Label(ConstHolder.myConstants.searchScore()+result.getScore()));				
 			}else{
 				mainPanel.add(hp);			
 				HTML h = new HTML(result.getText());
 				h.setStyleName("H-Text");
 				mainPanel.add(h);
-				//mainPanel.add(new Label(manager.myConstants.searchScore()+result.getScore()));				
+				//mainPanel.add(new Label(ConstHolder.myConstants.searchScore()+result.getScore()));				
 			}			
 			
 			initWidget(mainPanel);

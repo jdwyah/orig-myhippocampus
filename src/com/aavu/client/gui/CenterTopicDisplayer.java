@@ -7,6 +7,7 @@ import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.gadgets.TagBoard;
 import com.aavu.client.gui.gadgets.TagPropertyPanel;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.edit.OnThisIslandBoard;
 import com.google.gwt.user.client.ui.CellPanel;
@@ -40,12 +41,12 @@ public class CenterTopicDisplayer extends Composite {
 		titleBox = new EditableLabelExtension("",new ChangeListener(){
 			public void onChange(Widget sender) {								
 				manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
-						new StdAsyncCallback(Manager.myConstants.save()){});				
+						new StdAsyncCallback(ConstHolder.myConstants.save()){});				
 			}			
 		});
 		
 		CellPanel titleP = new HorizontalPanel();
-		titleP.add(new HeaderLabel(Manager.myConstants.title()));
+		titleP.add(new HeaderLabel(ConstHolder.myConstants.title()));
 		titleP.add(titleBox);
 		titleP.addStyleName("H-Gadget");
 		

@@ -1,20 +1,18 @@
 package com.aavu.client.gui;
 
-import java.util.Set;
-
 import org.gwm.client.GInternalFrame;
 import org.gwtwidgets.client.ui.ImageButton;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveEntryTextCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.gadgets.TagBoard;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.SimpleDateFormatGWT;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
@@ -24,11 +22,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -123,7 +119,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		 */
 		
 		if(!(topic instanceof Tag)){
-			Button islandButton = new Button(Manager.myConstants.tag_upgradeS(topic.getTitle()));
+			Button islandButton = new Button(ConstHolder.myConstants.tag_upgradeS(topic.getTitle()));
 			islandButton.addClickListener(new ClickListener(){
 				public void onClick(Widget sender) {
 					makeThisAnIsland();
@@ -140,7 +136,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	}	
 
 	private void makeThisAnIsland(){
-		manager.getTagCache().makeMeATag(topic,new StdAsyncCallback(Manager.myConstants.tag_upgradeAsync()){
+		manager.getTagCache().makeMeATag(topic,new StdAsyncCallback(ConstHolder.myConstants.tag_upgradeAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				Tag tag = (Tag) result;
@@ -164,18 +160,18 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		titleBox = new EditableLabelExtension(topic.getTitle(),new ChangeListener(){
 			public void onChange(Widget sender) {								
 				manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
-						new StdAsyncCallback(Manager.myConstants.save()){});
+						new StdAsyncCallback(ConstHolder.myConstants.save()){});
 			}			
 		});
 		
 		leftTopPanel.clear();
 		leftTopPanel.add(saveButton);
-		leftTopPanel.add(new Label(Manager.myConstants.title()));
+		leftTopPanel.add(new Label(ConstHolder.myConstants.title()));
 		leftTopPanel.add(titleBox);
-		leftTopPanel.add(new Label(Manager.myConstants.topic_updated()+formatDate(topic.getLastUpdated())));
+		leftTopPanel.add(new Label(ConstHolder.myConstants.topic_updated()+formatDate(topic.getLastUpdated())));
 
-		ImageButton delete = new ImageButton(Manager.myConstants.delete_image(),20,20);
-		delete.addMouseListener(new TooltipListener(Manager.myConstants.delete()));
+		ImageButton delete = new ImageButton(ConstHolder.myConstants.delete_image(),20,20);
+		delete.addMouseListener(new TooltipListener(ConstHolder.myConstants.delete()));
 		delete.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				delete();
@@ -227,7 +223,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 		if(w == titleBox){
 			
 			manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
-					new StdAsyncCallback(Manager.myConstants.save()){});
+					new StdAsyncCallback(ConstHolder.myConstants.save()){});
 		}
 		saveButton.setSaveNeeded();
 	}
@@ -242,7 +238,7 @@ public abstract class TopicTagSuperWindow extends PopupWindow implements SaveNee
 	}	
 	
 	private void delete() {
-		if(Window.confirm(Manager.myConstants.delete_warningS(topic.getTitle()))){
+		if(Window.confirm(ConstHolder.myConstants.delete_warningS(topic.getTitle()))){
 			manager.delete(topic,new StdAsyncCallback(""){				
 				public void onSuccess(Object result) {
 					close();					

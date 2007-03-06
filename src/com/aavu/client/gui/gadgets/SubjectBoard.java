@@ -4,17 +4,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.SubjectInfo;
 import com.aavu.client.domain.subjects.WikiSubject;
-import com.aavu.client.gui.TopicTagSuperWindow;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.ObjectListBox;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -22,10 +21,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -64,7 +60,7 @@ public class SubjectBoard extends Composite{
 
 		selectedPanel = new SelectedPanel();
 
-		editMe = new Label(Manager.myConstants.subject_edit());
+		editMe = new Label(ConstHolder.myConstants.subject_edit());
 		editMe.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				chooseSubject();
@@ -78,7 +74,7 @@ public class SubjectBoard extends Composite{
 
 			}});
 
-		mainPanel.add(new HeaderLabel(Manager.myConstants.subject()));
+		mainPanel.add(new HeaderLabel(ConstHolder.myConstants.subject()));
 		mainPanel.add(subjectTypeList);
 		mainPanel.add(selectedPanel);
 		mainPanel.add(editMe);
@@ -158,9 +154,9 @@ public class SubjectBoard extends Composite{
 			infoPanel.clear();
 
 			if(subjectList.size() > 0){
-				add(new Label(Manager.myConstants.subject_choose()));
+				add(new Label(ConstHolder.myConstants.subject_choose()));
 			}else{
-				add(new Label(Manager.myConstants.subject_no_matches()));
+				add(new Label(ConstHolder.myConstants.subject_no_matches()));
 			}
 
 			int i = 0;
@@ -197,7 +193,7 @@ public class SubjectBoard extends Composite{
 
 	private class SelectedPanel extends VerticalPanel{
 
-		private Label lab = new Label(Manager.myConstants.subject_none());
+		private Label lab = new Label(ConstHolder.myConstants.subject_none());
 
 		public SelectedPanel(){
 			setStyleName("H-SubjectSelectedPanel");
@@ -207,7 +203,7 @@ public class SubjectBoard extends Composite{
 
 		public void setSubject(Subject subject) {
 			if(subject == null){
-				lab.setText(Manager.myConstants.subject_none());
+				lab.setText(ConstHolder.myConstants.subject_none());
 			}else{
 				lab.setText(subject.getName());
 			}
@@ -251,10 +247,10 @@ public class SubjectBoard extends Composite{
 
 		public SubjectServicePicker(){
 			super();		
-			addItem(Manager.myConstants.subject_none(),null);
-			addItem(Manager.myConstants.book(),new AmazonBook());
-			addItem(Manager.myConstants.country(),new HippoCountry());	
-			addItem(Manager.myConstants.wiki(), new WikiSubject());
+			addItem(ConstHolder.myConstants.subject_none(),null);
+			addItem(ConstHolder.myConstants.book(),new AmazonBook());
+			addItem(ConstHolder.myConstants.country(),new HippoCountry());	
+			addItem(ConstHolder.myConstants.wiki(), new WikiSubject());
 		}
 
 

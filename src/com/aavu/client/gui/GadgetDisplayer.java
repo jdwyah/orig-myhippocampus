@@ -7,6 +7,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetPicker;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -82,7 +83,7 @@ public class GadgetDisplayer extends Composite {
 			gadget.showForFirstTime();
 		}else{		
 			if(gadget.isVisible()){
-				Window.alert(Manager.myConstants.gadget_already_showing());
+				Window.alert(ConstHolder.myConstants.gadget_already_showing());
 			}
 			else{
 				//This will force the ConnectionBoard to unhide itself 

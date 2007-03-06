@@ -2,13 +2,10 @@ package com.aavu.client.widget.edit;
 
 
 import org.gwtwidgets.client.util.WindowUtils;
-import org.gwtwidgets.client.wrap.Effect;
 
-import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
@@ -98,9 +95,9 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		 */
 		System.out.println("ENTRY is empty = "+entry.isEmpty());
 		if(entry.isEmpty()){
-			panel.add(new Label(Manager.myConstants.topic_blank()));
+			panel.add(new Label(ConstHolder.myConstants.topic_blank()));
 		}else{
-			panel.add(new Label(Manager.myConstants.topic_edit()));
+			panel.add(new Label(ConstHolder.myConstants.topic_edit()));
 		}
 
 		

@@ -8,6 +8,7 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.timeline.renderers.HippoRender;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -138,7 +139,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		//timeline.load(jo);
 		
 		if(timelines.length == 0){
-			Window.alert(Manager.myConstants.timeline_no_objs_msg());
+			Window.alert(ConstHolder.myConstants.timeline_no_objs_msg());
 		}
 		
 		

@@ -6,25 +6,14 @@ import com.aavu.client.gui.MainMap;
 
 public class DefaultGInternalFrameHippoExt extends DefaultGInternalFrame {
 
-	private MainMap map;
+	private LocationSetter map;
 
-	public DefaultGInternalFrameHippoExt(String caption,MainMap map) {
+	public DefaultGInternalFrameHippoExt(String caption,LocationSetter map) {
         super(caption);
         this.map = map;
     }
 
 	public void setLocation(int top, int left) {
-		
-		
-//		System.out.println("set location "+top+" "+left);		
-//		if(top > 0){
-//			try {
-//				throw new Exception();
-//			} catch (Exception e) {
-//			
-//				e.printStackTrace();
-//			}
-//		}
 		
 		if (map != null) {
 			if(top > 0){			

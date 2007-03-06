@@ -6,25 +6,14 @@ import java.util.List;
 import org.gwtwidgets.client.ui.ImageButton;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
-import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.widget.AllReferencesPanel;
-import com.aavu.client.widget.EnterInfoButton;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
-import com.aavu.client.widget.edit.CompleteListener;
-import com.aavu.client.widget.edit.TopicCompleter;
-import com.google.gwt.user.client.ui.CellPanel;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class ReferenceBoard extends Gadget {
 
@@ -34,7 +23,7 @@ public class ReferenceBoard extends Gadget {
 		
 	public ReferenceBoard(Manager manager) {				
 		
-		super(Manager.myConstants.references());
+		super(ConstHolder.myConstants.references());
 		
 		this.manager = manager;
 	
@@ -44,7 +33,7 @@ public class ReferenceBoard extends Gadget {
 		refPanel = new VerticalPanel();
 		
 		HorizontalPanel cp = new HorizontalPanel();
-		cp.add(new Label(Manager.myConstants.references()));
+		cp.add(new Label(ConstHolder.myConstants.references()));
 		
 		mainP.add(cp);
 		mainP.add(refPanel);
@@ -64,7 +53,7 @@ public class ReferenceBoard extends Gadget {
 				refPanel.clear();
 				
 				if(list.size() == 0){
-					refPanel.add(new Label(Manager.myConstants.references_none()));					
+					refPanel.add(new Label(ConstHolder.myConstants.references_none()));					
 				}
 				
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
@@ -72,8 +61,8 @@ public class ReferenceBoard extends Gadget {
 					refPanel.add(new TopicLink(topicIdent));
 				}
 				
-				//updateTitle(refPanel,Manager.myConstants.referencesN(list.size()));				
-				//bar.updateTitle(AllReferencesPanel.this,Manager.myConstants.all_referencesN(totalSize + list.size()));
+				//updateTitle(refPanel,ConstHolder.myConstants.referencesN(list.size()));				
+				//bar.updateTitle(AllReferencesPanel.this,ConstHolder.myConstants.all_referencesN(totalSize + list.size()));
 			}
 			
 		});

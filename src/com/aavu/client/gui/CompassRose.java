@@ -2,19 +2,13 @@ package com.aavu.client.gui;
 
 import org.gwtwidgets.client.ui.PNGImage;
 
-import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
-import com.google.gwt.user.client.DOM;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -22,7 +16,7 @@ public class CompassRose extends SimplePanel {
 	
 	private TextBox searchText = new TextBox();
 	private Manager manager;
-	Button backButton = new Button(manager.myConstants.back());
+	Button backButton = new Button(ConstHolder.myConstants.back());
 	
 	private AbsolutePanel absPanel = new AbsolutePanel();
 	
@@ -37,7 +31,7 @@ public class CompassRose extends SimplePanel {
 
 		PNGImage rose = new PNGImage("img/plaque.png",66,120);
 
-		Button searchB = new Button(manager.myConstants.search());
+		Button searchB = new Button(ConstHolder.myConstants.search());
 		searchB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				doSearch();				

@@ -3,7 +3,7 @@ package com.aavu.client.domain.subjects;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 
 public class WikiSubject extends Subject {
 
@@ -22,14 +22,14 @@ public class WikiSubject extends Subject {
 	//@Override
 	public List getInfos() {
 		List subjectInfo = new ArrayList();
-		subjectInfo.add(new SubjectInfo(Manager.myConstants.wiki_summary(),summary,false));
-		subjectInfo.add(new SubjectInfo(Manager.myConstants.wiki_url(),displayURL,false));	
+		subjectInfo.add(new SubjectInfo(ConstHolder.myConstants.wiki_summary(),summary,false));
+		subjectInfo.add(new SubjectInfo(ConstHolder.myConstants.wiki_url(),displayURL,false));	
 		return subjectInfo;
 	}
 
 	
 	//@Override
 	public String getTagName() {
-		return Manager.myConstants.wiki();
+		return ConstHolder.myConstants.wiki();
 	}
 }

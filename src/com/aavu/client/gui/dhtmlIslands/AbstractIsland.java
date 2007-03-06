@@ -49,6 +49,10 @@ public class AbstractIsland extends AbsolutePanel {
 			my_spacing = Type.SPACING_30;
 			img_size = Type.SIZE_30;
 		}
+		
+		my_spacing = Type.SPACING_120;
+		img_size = Type.SIZE_120;
+		
 		img_size *= scale;
 		my_spacing *= scale;
 	}
@@ -95,9 +99,14 @@ public class AbstractIsland extends AbsolutePanel {
 			else{
 				acreSize = AcreSize.SIZE_100;												
 			}
+			
+			//Override!
+			acreSize = AcreSize.SIZE_120;
+			
 			Logger.debug("used "+x+" "+y+" "+value+" Acre: "+acreSize.getSize());
 			//count++;
 
+			
 			if(0 == style){
 				addShadow(x,y,acreSize);
 			}

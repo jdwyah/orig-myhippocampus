@@ -1,17 +1,11 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.UpdateableTabPanel;
 import com.aavu.client.gui.gadgets.UploadBoard;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.AllReferencesPanel;
-import com.aavu.client.wiki.TextDisplay;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TopicDetailsTabBar extends UpdateableTabPanel {
 
@@ -24,14 +18,14 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 	public TopicDetailsTabBar(Manager manager){		
 	
 		referencesPanel = new AllReferencesPanel(manager);
-		add(referencesPanel,Manager.myConstants.references());		
+		add(referencesPanel,ConstHolder.myConstants.references());		
 		
 		
 		uploadBoard = new UploadBoard(manager);		
-		add(uploadBoard,Manager.myConstants.filesN(0));		
+		add(uploadBoard,ConstHolder.myConstants.filesN(0));		
 		
 //		mindMapBoard = new MindMapBoard(manager,saveNeeded);
-//		add(mindMapBoard,Manager.myConstants.mapperTitle());
+//		add(mindMapBoard,ConstHolder.myConstants.mapperTitle());
 //		
 		
 		addStyleName("H-Gadget");
@@ -44,7 +38,7 @@ public class TopicDetailsTabBar extends UpdateableTabPanel {
 
 			
 		uploadBoard.load(topic);
-		updateTitle(uploadBoard,Manager.myConstants.filesN(uploadBoard.getSize()));		
+		updateTitle(uploadBoard,ConstHolder.myConstants.filesN(uploadBoard.getSize()));		
 		
 		//mindMapBoard.load(topic);
 		

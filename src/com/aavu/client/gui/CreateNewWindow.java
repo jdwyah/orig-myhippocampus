@@ -2,17 +2,13 @@ package com.aavu.client.gui;
 
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
-import com.google.gwt.user.client.Timer;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -35,7 +31,7 @@ public class CreateNewWindow extends PopupWindow {
 	public CreateNewWindow(Manager _manager, boolean isIsland) {
 		
 		super(_manager.newFrame(),
-				isIsland ? Manager.myConstants.island_new() : Manager.myConstants.topic_new(),
+				isIsland ? ConstHolder.myConstants.island_new() : ConstHolder.myConstants.topic_new(),
 				WIDTH,HEIGHT);
 		this.manager = _manager;
 		this.isIsland = isIsland;
@@ -72,7 +68,7 @@ public class CreateNewWindow extends PopupWindow {
 				}});
 			
 			panel.add(name);
-			panel.add(new Button(Manager.myConstants.island_create(), new ClickListener() {
+			panel.add(new Button(ConstHolder.myConstants.island_create(), new ClickListener() {
 				public void onClick(Widget sender) {
 					clicked();
 				}

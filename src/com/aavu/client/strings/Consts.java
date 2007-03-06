@@ -131,7 +131,8 @@ public interface Consts extends Messages {
 	String link_url();
 	String link_notes();
 	String link_add();
-	String link_topics();	
+	String link_topics();
+	String link_please_pick();
 	String required();
 	String save_async();
 	
@@ -159,6 +160,8 @@ public interface Consts extends Messages {
 	
 	
 	String enterInfo_image();
+	
+	
 		
 	
 	

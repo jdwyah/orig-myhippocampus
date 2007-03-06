@@ -7,7 +7,7 @@ import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
@@ -33,23 +33,23 @@ public class SimpleTopicDisplay extends Composite {
 	
 	private void doEntry(Topic topic) {
 		Entry e = topic.getLatestEntry();
-		mainP.add(new HeaderLabel(Manager.myConstants.entry()));
+		mainP.add(new HeaderLabel(ConstHolder.myConstants.entry()));
 		if(e.isEmpty()){
-			mainP.add(new Label(Manager.myConstants.none()));
+			mainP.add(new Label(ConstHolder.myConstants.none()));
 		}else{
 			mainP.add(new TextDisplay(topic.getLatestEntry().getData()));	
 		}
 	}
 
 	private void doTags(Topic topic) {
-		mainP.add(new HeaderLabel(Manager.myConstants.tags()));
+		mainP.add(new HeaderLabel(ConstHolder.myConstants.tags()));
 		if(topic.getTags().size() > 0){
 			for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 				Tag tag = (Tag) iter.next();
 				showTag(tag);						
 			}		
 		}else{
-			mainP.add(new Label(Manager.myConstants.none()));
+			mainP.add(new Label(ConstHolder.myConstants.none()));
 		}
 	}
 
@@ -75,7 +75,7 @@ public class SimpleTopicDisplay extends Composite {
 	
 	
 	private void doLinks(Topic topic){
-		mainP.add(new HeaderLabel(Manager.myConstants.occurrences()));
+		mainP.add(new HeaderLabel(ConstHolder.myConstants.occurrences()));
 		for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
 			WebLink link = (WebLink) iter.next();
 			mainP.add(new ExternalLink(link));

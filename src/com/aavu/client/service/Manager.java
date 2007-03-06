@@ -2,10 +2,7 @@ package com.aavu.client.service;
 
 import java.util.List;
 
-import org.gwm.client.GDesktopPane;
 import org.gwm.client.GInternalFrame;
-import org.gwm.client.impl.DefaultGDesktopPane;
-import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.HippoTest;
@@ -19,7 +16,6 @@ import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.EntryEditWindow;
-import com.aavu.client.gui.LoginWindow;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
@@ -39,17 +35,16 @@ import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Manager implements TopicSaveListener {
+public class Manager implements TopicSaveListener, LoginListener {
 	
-	private HippoCache hippoCache;
-	public static Consts myConstants;
+	private HippoCache hippoCache;	
 	private MainMap map;
 	private User user;
 	
@@ -89,19 +84,19 @@ public class Manager implements TopicSaveListener {
 		
 	}
 	private void initConstants() {
-		myConstants = (Consts) GWT.create(Consts.class);
+		ConstHolder.myConstants = (Consts) GWT.create(Consts.class);
 	}	
 
 	
 	public void bringUpChart(long id) {
-		hippoCache.getTopicCache().getTopicByIdA(id,new StdAsyncCallback(myConstants.topic_lookupAsync()){
+		hippoCache.getTopicCache().getTopicByIdA(id,new StdAsyncCallback(ConstHolder.myConstants.topic_lookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				bringUpChart((Topic) result);				
 			}});
 	}
 	public void bringUpChart(TopicIdentifier ident) {
-		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback(myConstants.topic_lookupAsync()){
+		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback(ConstHolder.myConstants.topic_lookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				bringUpChart((Topic) result);				
@@ -125,7 +120,7 @@ public class Manager implements TopicSaveListener {
 //			System.out.println("BRINGING UP TAG "+topic.toPrettyString());
 //			System.out.println(" "+topic.getMetas());
 //			System.out.println(" "+topic.getMetas().size());
-//			getTopicCache().getTopicsWithTag(topic.getId(),new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
+//			getTopicCache().getTopicsWithTag(topic.getId(),new StdAsyncCallback(ConstHolder.myConstants.oceanIslandLookupAsync()){
 //				public void onSuccess(Object result) {
 //					super.onSuccess(result);
 //					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
@@ -155,7 +150,7 @@ public class Manager implements TopicSaveListener {
 	}
 	public void createTopic(final String name,final boolean isIsland) {
 
-		getTopicCache().createNew(name, isIsland, new StdAsyncCallback(Manager.myConstants.save_async()){
+		getTopicCache().createNew(name, isIsland, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);				
 				TopicIdentifier res = (TopicIdentifier) result;				
@@ -197,7 +192,7 @@ public class Manager implements TopicSaveListener {
 	
 	public void doSearch(String text) {
 		System.out.println("Search "+text);
-		hippoCache.getTopicCache().search(text,new StdAsyncCallback(myConstants.searchCallback()){
+		hippoCache.getTopicCache().search(text,new StdAsyncCallback(ConstHolder.myConstants.searchCallback()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				System.out.println("ssss");
@@ -250,7 +245,7 @@ public class Manager implements TopicSaveListener {
 		
 		System.out.println("showPreviews "+id);
 		
-		getTopicCache().getTopicByIdA(id,new StdAsyncCallback(myConstants.oceanIslandLookupAsync()){
+		getTopicCache().getTopicByIdA(id,new StdAsyncCallback(ConstHolder.myConstants.oceanIslandLookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				Topic tag = (Topic) result;		
@@ -364,14 +359,6 @@ public class Manager implements TopicSaveListener {
 	}
 	
 	
-	/**
-	 * Note: LoginWindow has a semaphore to prevent multiple instances
-	 * Will bring up a dialog that on success will call loginSuccess()
-	 * 
-	 */
-	public void doLogin() {
-		LoginWindow lw = new LoginWindow(this);
-	}
 	
 	
 	/**
@@ -422,7 +409,7 @@ public class Manager implements TopicSaveListener {
 			public void onSuccess(Object result) {
 				
 				user = (User) result;
-		System.out.println("succ "+caller);
+				System.out.println("succ "+caller);
 				if(user != null){
 					System.out.println("found a user: "+user.getUsername());	
 					
@@ -449,12 +436,15 @@ public class Manager implements TopicSaveListener {
 				
 				System.out.println("failed for "+caller);
 				Logger.log("GetCurrentUser failed! "+caught+" \nEP:"+HippoTest.getRelativeURL(""));
-				doLogin();											
+				doLogin();										
 			}						
 		});		
 	}
+	public void doLogin(){
+		LoginService.doLogin(newFrame(),Manager.this);
+	}
 	public void delete(final Topic topic,final AsyncCallback callback) {
-		getTopicCache().delete(topic,new StdAsyncCallback(Manager.myConstants.delete_async()){
+		getTopicCache().delete(topic,new StdAsyncCallback(ConstHolder.myConstants.delete_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				callback.onSuccess(result);

@@ -9,6 +9,7 @@ import org.gwtwidgets.client.util.SimpleDateFormat;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class OldTimeLine extends PopupWindow {
@@ -28,7 +29,7 @@ public class OldTimeLine extends PopupWindow {
 	 * @param timeLinesObjs
 	 */
 	public OldTimeLine(Manager manager,List timeLinesObjs){
-		super(manager.newFrame(),manager.myConstants.helloWorld());
+		super(manager.newFrame(),ConstHolder.myConstants.helloWorld());
 		
 		VerticalPanel times = new VerticalPanel();
 		

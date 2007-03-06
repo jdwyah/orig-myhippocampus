@@ -4,6 +4,7 @@ import org.gwtwidgets.client.ui.ImageButton;
 
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -27,7 +28,7 @@ public class HeaderLabel extends Composite {
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.add(l);
 			
-			ImageButton help = new ImageButton(Manager.myConstants.question_img_src(),13,13);
+			ImageButton help = new ImageButton(ConstHolder.myConstants.question_img_src(),13,13);
 			help.addMouseListener(new TooltipListener("Help me!"));
 			help.addClickListener(new ClickListener(){
 				public void onClick(Widget sender) {

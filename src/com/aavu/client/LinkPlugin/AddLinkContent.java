@@ -1,61 +1,66 @@
-package com.aavu.client.widget.edit;
-
-import java.util.Iterator;
-
-import org.gwm.client.GInternalFrame;
+package com.aavu.client.LinkPlugin;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.SaveOccurrenceCommand;
-import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.gadgets.LinkDisplayWidget;
-import com.aavu.client.service.Manager;
-import com.aavu.client.widget.EnterInfoButton;
+import com.aavu.client.gui.gadgets.TopicLoader;
+import com.aavu.client.gui.timeline.CloseListener;
+import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
+import com.aavu.client.widget.edit.CompleteListener;
+import com.aavu.client.widget.edit.TopicCompleter;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class AddLinkPopup extends PopupWindow implements CompleteListener {
+public class AddLinkContent extends Composite implements CompleteListener {
 
-	private static final int HEIGHT = 200;
-	private static final int WIDTH = 550;
 	private WebLink link;
 	private Label descRequired;
 	private Label linkRequired;
 	private TopicCompleter topicCompleter;
-	private Manager manager;
-	private HorizontalPanel onPanel;
+	private TopicCache topicCache;
+
 	private TextArea notesT;
 	private TextBox urlT;
 	private TextBox descriptionT;
+	private LinksTagsBoard tagsBoard;
+	
 
-	public AddLinkPopup(final LinkDisplayWidget widget, Manager _manager, GInternalFrame frame, WebLink _link, final Topic myTopic) {
-		super(frame, Manager.myConstants.link_add_title(),WIDTH,HEIGHT);
-		this.manager = _manager;
+	
+	//http://localhost:8888/com.aavu.AddLink/AddLink.html?url=http%3A%2F%2Fwww.resourcebundleeditor.com%2Fwiki%2FSupport&description=ResourceBundle%20Editor&notes=pport%20mechanisms%20are%20hosted%20on%20
+	//http://localhost:8888/com.aavu.AddLink/AddLink.html?url=http%3A%2F%2Fwww.google.com&description=ResourceBundle%20Editor&notes=pport%20mechanisms%20are%20hosted%20on%20
+
+	
+	public AddLinkContent(final TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener) {		
+		this.topicCache = _topicCache;
 		this.link = _link;
+		
 		
 		Grid mainPanel = new Grid(5,3);
 		
-		mainPanel.setWidget(0, 0, new Label(Manager.myConstants.link_description()));		
-		mainPanel.setWidget(1, 0, new Label(Manager.myConstants.link_url()));
-		mainPanel.setWidget(2, 0, new Label(Manager.myConstants.link_notes()));
+		mainPanel.setWidget(0, 0, new Label(ConstHolder.myConstants.link_description()));		
+		mainPanel.setWidget(1, 0, new Label(ConstHolder.myConstants.link_url()));
+		mainPanel.setWidget(2, 0, new Label(ConstHolder.myConstants.link_notes()));
 		
 		
 		/*
 		 * Add a panel showing which other topics this link is associated with 
 		 */
-		mainPanel.setWidget(3, 0, new Label(Manager.myConstants.link_topics()));
+		mainPanel.setWidget(3, 0, new Label(ConstHolder.myConstants.link_topics()));
 				
-		mainPanel.setWidget(3, 1, getOnPanel());
+		tagsBoard = new LinksTagsBoard(this,topicCache);
+		tagsBoard.load(link);
+		mainPanel.setWidget(3, 1, tagsBoard);
 				
 		
 		descRequired = new Label();
@@ -84,7 +89,7 @@ public class AddLinkPopup extends PopupWindow implements CompleteListener {
 		mainPanel.setWidget(1, 1, urlT);
 		mainPanel.setWidget(2, 1, notesT);
 		
-		Button submitB = new Button(Manager.myConstants.save());
+		Button submitB = new Button(ConstHolder.myConstants.save());
 		submitB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				
@@ -98,61 +103,53 @@ public class AddLinkPopup extends PopupWindow implements CompleteListener {
 //					myTopic.getOccurences().add(link);
 //				}
 				
-				manager.getTopicCache().save(myTopic,new SaveOccurrenceCommand(myTopic, link),						
-						new StdAsyncCallback(Manager.myConstants.save()){});
+							
+				if(myTopic != null){
+					topicCache.save(myTopic,new SaveOccurrenceCommand(myTopic, link),						
+							new StdAsyncCallback(ConstHolder.myConstants.save()){});
+					widget.load(myTopic);
+				} else {
+					System.out.println("SAVE WITH NO DEFAULT TOPIC");
+					
+					Topic first = tagsBoard.getFirst();
+					
+					if(first == null){
+						Window.alert(ConstHolder.myConstants.link_please_pick());
+						return;
+					}else{
+						System.out.println("Should be good to go just save to first");
+					}
+					
+					
+				}
 				
-				widget.load(myTopic);
-				close();
+				
+				closeListener.close();
 			}});
 		
 		mainPanel.setWidget(4, 0, submitB);
 		
-		setContent(mainPanel);
+		initWidget(mainPanel);
 	}
 
 	
 	
-	private Widget getOnPanel() {
-		onPanel = new HorizontalPanel();	
-		
-		HorizontalPanel rtnPanel = new HorizontalPanel();
-		
-		topicCompleter = new TopicCompleter(manager.getTopicCache());		
-		topicCompleter.addListener(this);
-
-		
-		EnterInfoButton enterInfoButton = new EnterInfoButton();		
-		enterInfoButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender){
-				completed(topicCompleter.getText());
-			}
-		});
-		
-		for (Iterator iter = link.getTopics().iterator(); iter.hasNext();) {
-			Topic top = (Topic) iter.next();			
-			onPanel.add(new TopicLink(top));
-		}
-		
-		rtnPanel.add(onPanel);
-		rtnPanel.add(topicCompleter);
-		rtnPanel.add(enterInfoButton);
-		
-		return rtnPanel;		
-	}
+	
 
 	public void completed(String completeText) {
-		manager.getTopicCache().getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(Manager.myConstants.seeAlso_async()){
+		topicCache.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.seeAlso_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 				TopicIdentifier to = (TopicIdentifier) result;
+								
+				tagsBoard.add(to,new TopicLink(to));
 				
-				onPanel.add(new TopicLink(to));
 				topicCompleter.setText("");
 				
 				prepareLink();
 				
-				manager.getTopicCache().save(new Topic(to),new SaveOccurrenceCommand(new Topic(to), link),						
-						new StdAsyncCallback(Manager.myConstants.save()){});								
+				topicCache.save(new Topic(to),new SaveOccurrenceCommand(new Topic(to), link),						
+						new StdAsyncCallback(ConstHolder.myConstants.save()){});								
 				
 			}});
 	}
@@ -169,11 +166,11 @@ public class AddLinkPopup extends PopupWindow implements CompleteListener {
 	 */
 	private boolean prepareLink() {
 		if(descriptionT.getText().length() == 0){
-			descRequired.setText(Manager.myConstants.required());
+			descRequired.setText(ConstHolder.myConstants.required());
 			return false;
 		}
 		if(urlT.getText().length() == 0){
-			linkRequired.setText(Manager.myConstants.required());
+			linkRequired.setText(ConstHolder.myConstants.required());
 			return false;
 		}
 		link.setDescription(descriptionT.getText());
@@ -182,7 +179,5 @@ public class AddLinkPopup extends PopupWindow implements CompleteListener {
 		
 		return true;
 	}
-
-	
 	
 }

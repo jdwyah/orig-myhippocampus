@@ -6,6 +6,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -52,7 +53,7 @@ public class MindMapBoard extends Composite {
 		treeOcc = topic.getMindTree();
 		
 		
-		Button mapB = new Button(manager.myConstants.mapperAddMap());
+		Button mapB = new Button(ConstHolder.myConstants.mapperAddMap());
 		mapB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {		
 				if(mapper == null){
@@ -65,7 +66,7 @@ public class MindMapBoard extends Composite {
 				 * so we need to fetch & save explicitly 
 				 */
 				if(treeOcc.getMindTree() == null){
-					manager.getTopicCache().getTreeFor(treeOcc,new StdAsyncCallback(manager.myConstants.mapperAsyncGet()){
+					manager.getTopicCache().getTreeFor(treeOcc,new StdAsyncCallback(ConstHolder.myConstants.mapperAsyncGet()){
 						public void onSuccess(Object result) {
 							super.onSuccess(result);
 							MindTree tree = (MindTree) result;
@@ -84,7 +85,7 @@ public class MindMapBoard extends Composite {
 		//mind map
 		//TODO get rid of this requirement
 		if(topic.getId() <= 0){
-			mainPanel.add(new Label(manager.myConstants.mapperSaveFirst()));			
+			mainPanel.add(new Label(ConstHolder.myConstants.mapperSaveFirst()));			
 		}else{
 			mainPanel.add(mapB);
 		}

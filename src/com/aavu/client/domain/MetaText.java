@@ -5,6 +5,7 @@ import com.aavu.client.domain.commands.SaveMetaTextCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -37,7 +38,7 @@ public class MetaText extends Meta {
 		
 		mv = (HippoText) topic.getSingleMetaValueFor(this);
 		if(mv == null || mv.isEmpty()){
-			mv = new HippoText(Manager.myConstants.editMe());
+			mv = new HippoText(ConstHolder.myConstants.editMe());
 		}
 				
 		editable = new EditableLabelExtension(mv.getValue(),new ChangeListener(){
@@ -51,7 +52,7 @@ public class MetaText extends Meta {
 				
 				topicCache.save(topic,new SaveMetaTextCommand(topic,MetaText.this,
 						editable.getText()),
-						new StdAsyncCallback(Manager.myConstants.meta_text_async_save()){});
+						new StdAsyncCallback(ConstHolder.myConstants.meta_text_async_save()){});
 				
 				mv = new HippoText(editable.getText());										
 				topic.addMetaValue(MetaText.this, mv);

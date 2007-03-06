@@ -14,6 +14,7 @@ import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
@@ -374,6 +375,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException {
 		topicService.saveTopicLocation(tagId,topicId,xpct,ypct);		
+	}
+	public WebLink getWebLinkForURL(String url) throws HippoException {
+		return topicService.getWebLinkForURL(url);
 	}
 
 	

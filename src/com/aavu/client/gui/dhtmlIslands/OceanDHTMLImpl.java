@@ -18,7 +18,6 @@ import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.commands.SaveLatLongCommand;
-import com.aavu.client.domain.commands.SaveMetaTextCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -27,12 +26,11 @@ import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.service.Manager;
-import com.google.gwt.core.client.GWT;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -40,7 +38,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListener, DragFinishedListener, WheelListener {
 
-	static final String IMG_LOC = "img/simplicity/";
+	
+	//static final String IMG_LOC = "img/simplicityHighRes/";
+	
+	static final String IMG_LOC = "img/simplicity/";	
 	//static final String IMG_LOC = "img/oldmapStyle/";
 
 	private static final int SHOW_TOPICS_AT_ZOOM = 3;
@@ -130,7 +131,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	
 	private void clouds() {
 		leftCloud = new SimplePanel();
-		PNGImage lc = new PNGImage(Manager.myConstants.clouds_src(),120,120);		
+		PNGImage lc = new PNGImage(ConstHolder.myConstants.clouds_src(),120,120);		
 		lc.setStyleName("H-Clouds");
 		leftCloud.setStyleName("H-Clouds");
 		lc.setWidth("100%");
@@ -138,7 +139,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		leftCloud.add(lc);
 
 		rightCloud = new SimplePanel();
-		PNGImage rc = new PNGImage(Manager.myConstants.clouds_src(),120,120);
+		PNGImage rc = new PNGImage(ConstHolder.myConstants.clouds_src(),120,120);
 		rc.setStyleName("H-Clouds");
 		rightCloud.setStyleName("H-Clouds");
 		rc.setWidth("100%");
@@ -240,7 +241,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 				,ProgressBar.SHOW_TEXT);
 		progressBar.setProgress(0);
 		
-		progressBar.setText(Manager.myConstants.loading_islands());
+		progressBar.setText(ConstHolder.myConstants.loading_islands());
 	
 		progressWindow = manager.showProgressBar(progressBar);
 		

@@ -17,7 +17,7 @@ public class IslandBanner extends AbsolutePanel {
 	private static final double HALF_MIN_EM = .4;
 	private static final double SCALE_DIVISOR = 6;
 	
-	private static final double MAX_FONT = 4;
+	private static final double MAX_FONT = 3;
 	
 	
 	public static final String BANNER_SELECTED = "Selected";
@@ -53,7 +53,7 @@ public class IslandBanner extends AbsolutePanel {
 		shdw = new Label(text,true);
 		DOM.setStyleAttribute(shdw.getElement(), "fontSize", font_size+"em");
 		shdw.addStyleName("Shadow");
-		add(shdw,1,1);
+		//add(shdw,1,1);
 		
 		reg = new Label(text,true);
 		DOM.setStyleAttribute(reg.getElement(), "fontSize", font_size+"em");
@@ -83,17 +83,27 @@ public class IslandBanner extends AbsolutePanel {
 	//@Override
 	protected void onLoad() {		
 		super.onLoad();
-		setDimensions();
+		setDimensions(1);
 	}
-	
-	private Widget setDimensions(){
-		int width = reg.getOffsetWidth();
-		int height = reg.getOffsetHeight();
+		
+	private Widget setDimensions(double currentScale) {
+			
+		double width = reg.getOffsetWidth();
+		double height = reg.getOffsetHeight();
+		
+		//Without this, long names like "Ways to Get to Europe" never
+		//resize as we zoom in. This solution is a bit hackish, but seems to work.
+		//we'd really like to pass in the island width, but that calc is waiting on 
+		//us, so it's a bit odd.
+		if(currentScale > 1){
+			width *= currentScale;
+			height *= currentScale;
+		}
 		if(shdw.getText().equals("Person")){
 			System.out.println("on load reg "+width+" ");
 		}
-		DOM.setStyleAttribute(getElement(), "width", width+"px");		
-		DOM.setStyleAttribute(getElement(), "height", height+"px");		
+		DOM.setStyleAttribute(getElement(), "width", (int)width+"px");		
+		DOM.setStyleAttribute(getElement(), "height", (int)height+"px");		
 		
 		
 		return reg;
@@ -138,8 +148,9 @@ public class IslandBanner extends AbsolutePanel {
 		double font_size = getFontFor(size,currentScale);
 		DOM.setStyleAttribute(reg.getElement(), "fontSize", font_size+"em");
 		DOM.setStyleAttribute(shdw.getElement(), "fontSize", font_size+"em");
-		return setDimensions();
+		return setDimensions(currentScale);
 	}
+
 
 	public void setSelected(boolean b) {
 		if(b){

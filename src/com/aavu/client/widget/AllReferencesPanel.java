@@ -7,10 +7,10 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.gadgets.LinkDisplayWidget;
 import com.aavu.client.gui.gadgets.ConnectionBoard;
+import com.aavu.client.gui.gadgets.LinkDisplayWidget;
 import com.aavu.client.service.Manager;
-import com.aavu.client.widget.edit.SaveNeededListener;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.TopicDetailsTabBar;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -43,14 +43,14 @@ public class AllReferencesPanel extends Composite {
 		
 		
 		seeAlsoBoard = new ConnectionBoard(manager);		
-		mainPanel.add(seeAlsoBoard,Manager.myConstants.seeAlsosN(0));				
+		mainPanel.add(seeAlsoBoard,ConstHolder.myConstants.seeAlsosN(0));				
 		
 		
-		mainPanel.add(refPanel,Manager.myConstants.referencesToN(0));
+		mainPanel.add(refPanel,ConstHolder.myConstants.referencesToN(0));
 		
 		
 		linkDisplayW = new LinkDisplayWidget(manager);
-		mainPanel.add(linkDisplayW,Manager.myConstants.occurrencesN(0));		
+		mainPanel.add(linkDisplayW,ConstHolder.myConstants.occurrencesN(0));		
 				
 		initWidget(mainPanel);
 	}
@@ -60,13 +60,13 @@ public class AllReferencesPanel extends Composite {
 		totalSize = 0;
 		
 		linkDisplayW.load(topic);
-		updateTitle(linkDisplayW,Manager.myConstants.occurrencesN(linkDisplayW.getSize()));
+		updateTitle(linkDisplayW,ConstHolder.myConstants.occurrencesN(linkDisplayW.getSize()));
 
 		totalSize += linkDisplayW.getSize();
 		
 		
 		int size = seeAlsoBoard.load(topic);		
-		updateTitle(seeAlsoBoard, Manager.myConstants.seeAlsosN(size));
+		updateTitle(seeAlsoBoard, ConstHolder.myConstants.seeAlsosN(size));
 		
 		totalSize += size;
 		
@@ -79,7 +79,7 @@ public class AllReferencesPanel extends Composite {
 				refPanel.clear();
 				
 				if(list.size() == 0){
-					refPanel.add(new Label(Manager.myConstants.references_none()));					
+					refPanel.add(new Label(ConstHolder.myConstants.references_none()));					
 				}
 				
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
@@ -87,9 +87,9 @@ public class AllReferencesPanel extends Composite {
 					refPanel.add(new TopicLink(topicIdent,popwindow));
 				}
 				
-				updateTitle(refPanel,Manager.myConstants.referencesN(list.size()));
+				updateTitle(refPanel,ConstHolder.myConstants.referencesN(list.size()));
 				
-				bar.updateTitle(AllReferencesPanel.this,Manager.myConstants.all_referencesN(totalSize + list.size()));
+				bar.updateTitle(AllReferencesPanel.this,ConstHolder.myConstants.all_referencesN(totalSize + list.size()));
 			}
 			
 		});

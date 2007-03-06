@@ -13,6 +13,7 @@ public class Level extends AbsolutePanel {
 		
 		private Image isle;
 		private int baseSize;
+		private int scalar;
 		private int y;
 		private int x;
 		
@@ -37,6 +38,7 @@ public class Level extends AbsolutePanel {
 			isle.setStyleName(style);
 			
 			baseSize = acreSize.getSize();
+			scalar = acreSize.getScalar();
 			
 			setToScale(1);
 			
@@ -62,10 +64,14 @@ public class Level extends AbsolutePanel {
 	  	}-*/;
 					
 
-		
+		/**
+		 * PEND /4 
+		 * 
+		 * @param scale
+		 */
 		public void setToScale(double scale){
 		
-			isle.setPixelSize((int)(baseSize*scale), (int)(baseSize*scale));			
+			isle.setPixelSize((int)(baseSize*scale/scalar), (int)(baseSize*scale/scalar));			
 			
 			DOM.setStyleAttribute(getElement(), "width", baseSize*scale+"px");
 			DOM.setStyleAttribute(getElement(), "height", baseSize*scale+"px");

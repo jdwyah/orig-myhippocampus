@@ -8,18 +8,16 @@ import org.gwtwidgets.client.ui.ImageButton;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
-import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.tags.MetaChooser;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,7 +35,7 @@ public class TagPropertyPanel extends Gadget {
 	
 	public TagPropertyPanel(Manager _manager){
 		
-		super(Manager.myConstants.island_property());
+		super(ConstHolder.myConstants.island_property());
 		
 		this.manager = _manager;
 		
@@ -48,13 +46,13 @@ public class TagPropertyPanel extends Gadget {
 		
 		mainPanel.add(metaListPanel);
 		
-		Button addB = new Button(Manager.myConstants.island_property_new());
+		Button addB = new Button(ConstHolder.myConstants.island_property_new());
 		addB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				showEditMetaWidget(new MetaChooser(tagLocalService));	
 				saveB.setVisible(true);
 			}});
-		saveB = new Button(Manager.myConstants.island_property_save());
+		saveB = new Button(ConstHolder.myConstants.island_property_save());
 		saveB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				saveProperties();				
@@ -151,8 +149,8 @@ public class TagPropertyPanel extends Gadget {
 
 	//@Override
 	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_tagProperties(),39,36);
-		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.island_property()));
+		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_tagProperties(),39,36);
+		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.island_property()));
 		return b;
 	}
 

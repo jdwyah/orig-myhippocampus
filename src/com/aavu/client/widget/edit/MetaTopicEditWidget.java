@@ -5,8 +5,8 @@ import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveMetaTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.EnterInfoButton;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,7 +41,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 				completed(completer.getText());	
 			}});
 		
-		topicDisplayLink = new ActionableTopicLabel(Manager.myConstants.editMe(),new ClickListener(){
+		topicDisplayLink = new ActionableTopicLabel(ConstHolder.myConstants.editMe(),new ClickListener(){
 			public void onClick(Widget sender) {
 				setToEditMode();
 			}});
@@ -83,7 +83,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 	 */
 	public void completed(final String completeText) {
 		System.out.println("COMPLETED LISTENER!");
-		completer.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(Manager.myConstants.seeAlso_async()){
+		completer.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.seeAlso_async()){
 			public void onSuccess(Object result) {				
 				super.onSuccess(result);
 				
@@ -99,7 +99,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 				
 				topicCache.save(topic,new SaveMetaTopicCommand(topic,meta,
 						new Topic(to)),
-						new StdAsyncCallback(Manager.myConstants.save()){});
+						new StdAsyncCallback(ConstHolder.myConstants.save()){});
 				
 			}});
 	}

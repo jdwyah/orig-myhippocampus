@@ -14,6 +14,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.user.client.Window;
@@ -67,7 +68,7 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 //							 }
 //						}});
 					
-					if(Window.confirm(Manager.myConstants.close_without_saving())){
+					if(Window.confirm(ConstHolder.myConstants.close_without_saving())){
 						getFrame().close();
 					}
 					

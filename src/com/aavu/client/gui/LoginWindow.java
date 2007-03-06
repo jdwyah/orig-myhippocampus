@@ -1,12 +1,14 @@
 package com.aavu.client.gui;
 
+import org.gwm.client.GInternalFrame;
 import org.gwm.client.event.GFrameAdapter;
 import org.gwm.client.event.GFrameEvent;
-import org.gwm.client.event.GFrameListener;
 
 import com.aavu.client.HippoTest;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.service.Manager;
+import com.aavu.client.service.LoginListener;
+import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
@@ -29,9 +31,10 @@ public class LoginWindow extends PopupWindow {
 	private static final int WIDTH = 300;
 	private static final String SECURITY_URL = "/site/j_acegi_security_check";
 	
-	private FormPanel form;
-	private Manager manager;
-	private Label messageLabel;	
+	private FormPanel form;	
+	private Label messageLabel;
+	private LoginListener listener;
+	
 
 	private static boolean semaphore = false;
 	
@@ -40,11 +43,14 @@ public class LoginWindow extends PopupWindow {
 	/**
 	 * Prevents multiple instances with a semaphore.
 	 * 
+	 * @param ConstHolder.myConstants  - NOTE: this is used by both AddLink & Hippo modules, so we
+	 * can't rely on Manager.ConstHolder.myConstants being initialized. 
+	 * 
 	 * @param manager
 	 */
-	public LoginWindow(Manager _manager) {
-		super(_manager.newFrame(),_manager.myConstants.loginTitle(),WIDTH,HEIGHT);
-		this.manager = _manager;
+	public LoginWindow(GInternalFrame frame, LoginListener listener) {
+		super(frame,ConstHolder.myConstants.loginTitle(),WIDTH,HEIGHT);
+		this.listener = listener;		
 		
 		if(semaphore == false){
 			System.out.println("CREATING");
@@ -81,11 +87,11 @@ public class LoginWindow extends PopupWindow {
 
 		HorizontalPanel uP = new HorizontalPanel();
 
-		uP.add(new Label(manager.myConstants.deliciousUsername()));
+		uP.add(new Label(ConstHolder.myConstants.deliciousUsername()));
 		uP.add(username);
 
 		HorizontalPanel pP = new HorizontalPanel();
-		pP.add(new Label(manager.myConstants.deliciousPassword()));
+		pP.add(new Label(ConstHolder.myConstants.deliciousPassword()));
 		pP.add(password);
 
 		panel.add(uP);
@@ -150,11 +156,11 @@ public class LoginWindow extends PopupWindow {
 	}
 
 	private void failure(){
-		messageLabel.setText(Manager.myConstants.login_failure());
+		messageLabel.setText(ConstHolder.myConstants.login_failure());
 	}
 	private void success(){
-		messageLabel.setText(Manager.myConstants.login_success());
-		manager.loginSuccess();
+		messageLabel.setText(ConstHolder.myConstants.login_success());
+		listener.loginSuccess();
 		
 		Timer t = new Timer() {
 		      public void run() {

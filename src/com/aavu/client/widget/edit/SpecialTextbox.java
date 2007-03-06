@@ -7,6 +7,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.ModablePopupPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.RichText2.HippoEditor;
 import com.aavu.client.widget.RichText2.KeyCodeEventListener;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -124,7 +125,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 		String linkTo = completer.getText();
 
-		topicCache.getTopicIdentForNameOrCreateNew(linkTo, new StdAsyncCallback(Manager.myConstants.topic_lookupAsync()){
+		topicCache.getTopicIdentForNameOrCreateNew(linkTo, new StdAsyncCallback(ConstHolder.myConstants.topic_lookupAsync()){
 
 			public void onSuccess(Object result) {
 				super.onSuccess(result);

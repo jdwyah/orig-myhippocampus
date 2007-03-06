@@ -9,6 +9,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.datepicker.DateFormatter;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
 import com.google.gwt.user.client.Command;
@@ -89,7 +90,7 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 						
 						topicService.save(topic,new SaveMetaDateCommand(topic,MetaDate.this,
 								cDate.getTime()+""),
-								new StdAsyncCallback(Manager.myConstants.save()){});
+								new StdAsyncCallback(ConstHolder.myConstants.save()){});
 										
 					}});
 			

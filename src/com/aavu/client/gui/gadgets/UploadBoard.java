@@ -5,16 +5,15 @@ import java.util.Iterator;
 import org.gwtwidgets.client.ui.ImageButton;
 
 import com.aavu.client.HippoTest;
-import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.UploadWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -30,7 +29,7 @@ public class UploadBoard extends Gadget {
 
 	public UploadBoard(final Manager manager) {
 		
-		super(Manager.myConstants.files());
+		super(ConstHolder.myConstants.files());
 		
 		this.manager = manager;
 				
@@ -44,7 +43,7 @@ public class UploadBoard extends Gadget {
 		
 		HorizontalPanel rowOne = new HorizontalPanel();
 		
-		Button addOne = new Button(Manager.myConstants.upload_add());
+		Button addOne = new Button(ConstHolder.myConstants.upload_add());
 		addOne.addClickListener(new ClickListener(){
 			
 
@@ -60,7 +59,7 @@ public class UploadBoard extends Gadget {
 		//to save to make this appear.
 		if(topic.getId() == 0){
 			mainPanel.clear();
-			mainPanel.add(new Label(Manager.myConstants.upload_save_topic_first()));
+			mainPanel.add(new Label(ConstHolder.myConstants.upload_save_topic_first()));
 			return 0;
 		}		
 		
@@ -86,8 +85,8 @@ public class UploadBoard extends Gadget {
 
 	//@Override
 	public ImageButton getPickerButton() {
-		ImageButton b = new ImageButton(Manager.myConstants.img_gadget_file(),36,50);
-		b.addMouseListener(new TooltipListener(0,40,Manager.myConstants.files()));
+		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_file(),36,50);
+		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.files()));
 		return b;
 	}
 	
