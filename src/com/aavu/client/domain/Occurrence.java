@@ -19,7 +19,7 @@ public class Occurrence extends AbstractOccurrence implements Serializable,IsSer
      */
 	//@Override
 	public Object clone() {				   		
-		return copyProps(new Occurrence());
+		return copyPropsIntoParam(new Occurrence());
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class Occurrence extends AbstractOccurrence implements Serializable,IsSer
 	 * @param o
 	 * @return
 	 */
-	public Occurrence copyProps(Occurrence o){
+	public Occurrence copyPropsIntoParam(Occurrence o){
 		o.setId(getId());
 		o.setUser(getUser());
 		o.setTitle(getTitle());

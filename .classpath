@@ -46,5 +46,6 @@
 	<classpathentry kind="lib" path="lib/lucene-snowball.jar"/>
 	<classpathentry kind="lib" path="tools/gwt/gwt-dev-windows-1.2.22.jar"/>
 	<classpathentry kind="lib" path="lib/gwm-hippo.jar"/>
+	<classpathentry kind="lib" path="lib/hessian-3.0.20.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

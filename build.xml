@@ -73,11 +73,23 @@
 			</classpath>
 			<arg value="-out" />
 			<arg value="${gwt.out}" />
-			<arg value="-style"/> 
-			<arg value="pretty"/>
+<!--		<arg value="-style"/> 
+			<arg value="pretty"/>-->
 			<arg value="${gwt.module}" />
 		</java>	
 
+		<java maxmemory="512M" failonerror="true" classname="com.google.gwt.dev.GWTCompiler" fork="true">
+					<classpath>
+						<pathelement path="${javacode}" />
+						<path refid="tool.and.lib" />
+						<path refid="gwt" />
+					</classpath>
+					<arg value="-out" />
+					<arg value="${gwt.out}" />
+		<!--		<arg value="-style"/> 
+					<arg value="pretty"/>-->
+					<arg value="${gwt.module2}" />
+				</java>	
 	</target>
 	
 	

@@ -60,23 +60,13 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 	private void newLink(){
 		WebLink newL = new WebLink();
 		newL.setUser(myTopic.getUser());
+		newL.getTopics().add(myTopic);
 		
 		editLink(newL);
 	}
 	private void editLink(WebLink link){
 		AddLinkPopup pop = new AddLinkPopup(this,manager,manager.newFrame(),link,myTopic);
-	}
-	
-	private void add(String description, String linkStr, String notes){
-		WebLink link = new WebLink(myTopic.getUser(),
-				description,linkStr,notes);
-		
-		//myTopic.getOccurences().add(link);
-		
-		manager.getTopicCache().save(myTopic,new SaveOccurrenceCommand(myTopic, link),
-				new StdAsyncCallback(ConstHolder.myConstants.save()){});
-		
-	}
+	}	
 	
 	public int load(Topic topic){
 		myTopic = topic;
@@ -84,6 +74,8 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 		size = 0;
 		FlexTable table = new FlexTable();
 
+		System.out.println("loading size "+topic.getWebLinks().size());
+		
 		for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
 			WebLink occ = (WebLink) iter.next();			
 
@@ -112,7 +104,7 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 			
 //			linkPanel.add(lP);
 
-			size ++;
+			size++;
 
 		}
 		//PEND awkward. we'd really like to set scroll.setMaxHeight(), 

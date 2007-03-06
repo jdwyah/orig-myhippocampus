@@ -31,7 +31,7 @@ public abstract class AbstractOccurrenceAbstractURI extends com.aavu.client.doma
     }
     
     protected AbstractOccurrenceAbstractURI copyProps(AbstractOccurrenceAbstractURI o){
-    	AbstractOccurrenceAbstractURI m = (AbstractOccurrenceAbstractURI)super.copyProps(o);
+    	AbstractOccurrenceAbstractURI m = (AbstractOccurrenceAbstractURI)super.copyPropsIntoParam(o);
 		m.setUri(getUri());
 		return m;
 	}

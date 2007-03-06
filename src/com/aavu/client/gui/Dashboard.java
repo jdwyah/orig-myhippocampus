@@ -53,7 +53,8 @@ public class Dashboard extends SimplePanel {
 			}});
 		addNewButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.topic_new()));
 		
-		ImageButton addNewIslandButton = new ImageButton(ConstHolder.myConstants.island_new_image(),60,41);
+		//ImageButton addNewIslandButton = new ImageButton(ConstHolder.myConstants.island_new_image(),60,41);
+		ImageButton addNewIslandButton = new ImageButton(ConstHolder.myConstants.island_new_image(),45,45);
 		addNewIslandButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.newIsland();

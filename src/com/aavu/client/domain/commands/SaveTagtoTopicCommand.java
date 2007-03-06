@@ -18,25 +18,25 @@ public class SaveTagtoTopicCommand extends AbstractSaveCommand implements IsSeri
 	//@Override
 	public void executeCommand() throws HippoBusinessException {
 				
-		if(!(topic1 instanceof Tag)){
-			throw new HippoBusinessException("Can't tag with nontag: "+topic1);
+		if(!(getTopic(1) instanceof Tag)){
+			throw new HippoBusinessException("Can't tag with nontag: "+getTopic(1));
 		}
 		
-		topic.tagTopic(getTopic1());		
+		getTopic(0).tagTopic(getTopic(1));		
 		
 			
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveTagToTopic ID "+getTopicID()+" "+getId1();
+		return "SaveTagToTopic ID "+getTopicID(0)+" "+getTopicID(1);
 	}
 	
 	
 	//@Override
 	public Set getAffectedTopics() {
 		Set s = super.getAffectedTopics();
-		s.add(topic1);
+		s.add(getTopic(1));
 		return s;
 	}
 	

@@ -18,13 +18,13 @@ public class SaveLatLongCommand extends AbstractSaveCommand implements IsSeriali
 
 	//@Override
 	public void executeCommand() {		
-		topic.setLatitude(latitude);
-		topic.setLongitude(longitude);
+		getTopic(0).setLatitude(latitude);
+		getTopic(0).setLongitude(longitude);
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveLatLong ID "+getTopicID()+" "+latitude+" "+longitude;
+		return "SaveLatLong ID "+getTopicID(0)+" "+latitude+" "+longitude;
 	}
 	
 	

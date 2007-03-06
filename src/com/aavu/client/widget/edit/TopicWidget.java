@@ -40,7 +40,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 	 * @param manager 
 	 * 
 	 * 
-	 * @param topic
+	 * @param testTopic
 	 */
 	public TopicWidget(){
 			

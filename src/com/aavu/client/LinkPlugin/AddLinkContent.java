@@ -1,5 +1,8 @@
 package com.aavu.client.LinkPlugin;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
@@ -11,7 +14,6 @@ import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
-import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -27,7 +29,6 @@ public class AddLinkContent extends Composite implements CompleteListener {
 	private WebLink link;
 	private Label descRequired;
 	private Label linkRequired;
-	private TopicCompleter topicCompleter;
 	private TopicCache topicCache;
 
 	private TextArea notesT;
@@ -55,11 +56,11 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		
 		/*
 		 * Add a panel showing which other topics this link is associated with 
-		 */
-		mainPanel.setWidget(3, 0, new Label(ConstHolder.myConstants.link_topics()));
-				
+		 */				
 		tagsBoard = new LinksTagsBoard(this,topicCache);
-		tagsBoard.load(link);
+		tagsBoard.load(link);		
+		
+		mainPanel.setWidget(3, 0, new Label(ConstHolder.myConstants.link_topics()));			
 		mainPanel.setWidget(3, 1, tagsBoard);
 				
 		
@@ -69,20 +70,24 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		mainPanel.setWidget(1, 2, linkRequired);
 		
 		descriptionT = new TextBox();
-		descriptionT.setSize("35em","2em");
-		if(link.getDescription() != null){
-			descriptionT.setText(link.getDescription());
-		}
+		descriptionT.setSize("35em","2em");		
+	
 		urlT = new TextBox();
-		urlT.setSize("35em","2em");		
-		if(link.getUri() != null){
-			urlT.setText(link.getUri());
-		}
+		urlT.setSize("35em","2em");				
 		
 		notesT = new TextArea();
-		notesT.setSize("30em", "7em");
-		if(link.getNotes() != null){
-			notesT.setText(link.getNotes());
+		notesT.setSize("30em", "7em");		
+		
+		if(link != null){
+			if(link.getDescription() != null){
+				descriptionT.setText(link.getDescription());
+			}
+			if(link.getUri() != null){
+				urlT.setText(link.getUri());
+			}
+			if(link.getNotes() != null){
+				notesT.setText(link.getNotes());
+			}
 		}
 		
 		mainPanel.setWidget(0, 1, descriptionT);
@@ -93,36 +98,35 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		submitB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				
-				
-				
 				if(!prepareLink()){
+					return;
+				}				
+				
+				List allTopics = tagsBoard.getAllTopics();
+				int removeNumber = tagsBoard.getRemoveNumber();
+							
+//				int i = 0;
+//				for (Iterator iter = allTopics.iterator(); iter.hasNext();) {
+//					Topic t = (Topic) iter.next();
+//					System.out.println("FOUND "+t+" "+i+" "+removeNumber);
+//					i++;
+//				}
+				SaveOccurrenceCommand comm = new SaveOccurrenceCommand(allTopics, link,removeNumber);
+				System.out.println("bef "+comm.getAddTopics().size()+" after "+comm.getRemoveItems().size());				
+				
+				if(comm.getAddTopics().size() < 1){
+					Window.alert(ConstHolder.myConstants.link_please_pick());
 					return;
 				}
 				
-//				if(link.getId() == 0){
-//					myTopic.getOccurences().add(link);
-//				}
+				topicCache.save(myTopic,comm,						
+						new StdAsyncCallback(ConstHolder.myConstants.save()){});
 				
-							
-				if(myTopic != null){
-					topicCache.save(myTopic,new SaveOccurrenceCommand(myTopic, link),						
-							new StdAsyncCallback(ConstHolder.myConstants.save()){});
+				myTopic.getOccurences().add(link);
+				System.out.println("WIDGET LOAD ");
+				if(widget != null){
 					widget.load(myTopic);
-				} else {
-					System.out.println("SAVE WITH NO DEFAULT TOPIC");
-					
-					Topic first = tagsBoard.getFirst();
-					
-					if(first == null){
-						Window.alert(ConstHolder.myConstants.link_please_pick());
-						return;
-					}else{
-						System.out.println("Should be good to go just save to first");
-					}
-					
-					
-				}
-				
+				}				
 				
 				closeListener.close();
 			}});
@@ -143,13 +147,7 @@ public class AddLinkContent extends Composite implements CompleteListener {
 				TopicIdentifier to = (TopicIdentifier) result;
 								
 				tagsBoard.add(to,new TopicLink(to));
-				
-				topicCompleter.setText("");
-				
-				prepareLink();
-				
-				topicCache.save(new Topic(to),new SaveOccurrenceCommand(new Topic(to), link),						
-						new StdAsyncCallback(ConstHolder.myConstants.save()){});								
+				tagsBoard.clearText();
 				
 			}});
 	}
@@ -176,6 +174,7 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		link.setDescription(descriptionT.getText());
 		link.setNotes(notesT.getText());
 		link.setUri(urlT.getText());
+		
 		
 		return true;
 	}

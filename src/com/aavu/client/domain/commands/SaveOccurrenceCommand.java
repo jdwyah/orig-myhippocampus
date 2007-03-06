@@ -1,7 +1,9 @@
 package com.aavu.client.domain.commands;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.aavu.client.domain.Occurrence;
@@ -11,15 +13,22 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSerializable {
 
 	private Occurrence occurrence;
+	private int removeStartNumber;
 	private transient Set affected = new HashSet();
 	
 	public SaveOccurrenceCommand(){};
 	
-	public SaveOccurrenceCommand(Topic topic, Occurrence occurrence){
-		super(topic);
-		this.occurrence = occurrence;
+	public SaveOccurrenceCommand(List topics, Occurrence occurrence){
+		this(topics,occurrence,-1);
 	}
-
+	
+	public SaveOccurrenceCommand(List topics, Occurrence occurrence,int removeStartNumber){
+		super(topics);
+		this.occurrence = occurrence;
+		this.removeStartNumber = removeStartNumber;
+	}
+	
+	
 	//@Override
 	/**
 	 * This is a bit sqirrley. We can't do a get() on the set, since 
@@ -34,29 +43,65 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 		
 		if(occurrence.getId() != 0){		
 			Occurrence existing = null;
-//			for (Iterator iter = topic.getOccurences().iterator(); iter.hasNext();) {
-//				Occurrence occur = (Occurrence) iter.next();
-//				if(occur.getId() == occurrence.getId()){
-//										
-//					existing = occur;
-//					break;
-//					
-//					//iter.remove();										
-//					//NOTE don't use this, ConcurrentModificationDanger
-//					//topic.getOccurences().remove(occur);					
-//				}
-//			}			
-			existing = (Occurrence) getFromSetById(topic.getOccurences(), occurrence.getId());
 			
-			if(existing != null){
-				occurrence.copyProps(existing);
-			}else{
-				topic.getOccurences().add(occurrence);
+			List newTopics = new ArrayList();
+			
+			for (Iterator iter = getAddTopics().iterator(); iter.hasNext();) {
+				Topic topic = (Topic) iter.next();
+				
+				//temp, make sure to set higher scoped 'existing'
+				Occurrence exhist = (Occurrence) getFromSetById(topic.getOccurences(), occurrence.getId());				
+				
+				if(exhist != null){
+					
+					existing = exhist;
+					
+					System.out.println("Exist "+topic);
+					occurrence.copyPropsIntoParam(existing);
+				}else{
+					//can't simply add here, because that will NonUnique (existing && occurence)
+					//add later, because something should have an existing
+					System.out.println("NoExisting "+topic);
+					newTopics.add(topic);					
+				}
+				
 			}
 			
-		}else{				
-			topic.getOccurences().add(occurrence);
+			//Add to topics that didn't already have it
+			//
+			if(!newTopics.isEmpty()){
+				for (Iterator iter = newTopics.iterator(); iter.hasNext();) {
+					Topic topic = (Topic) iter.next();
+					if(existing != null){
+						topic.getOccurences().add(existing);
+					}else{
+						System.out.println("SaveOccurrenceCommand WARN No existing occurrence");
+						topic.getOccurences().add(occurrence);
+					}
+					occurrence.getTopics().add(topic);
+				}
+			}
+			
+			
+			System.out.println("Do Remove");		
+			for (Iterator iter = getRemoveItems().iterator(); iter.hasNext();) {
+				Topic inLink = (Topic) iter.next();
+				System.out.println("still has link"+inLink);
+				Occurrence exist2 = (Occurrence) getFromSetById(inLink.getOccurences(), occurrence.getId());
+				inLink.getOccurences().remove(exist2);
+								
+				occurrence.getTopics().remove(inLink);
+			}
+			
+		}else{			
+			for (Iterator iter = getAddTopics().iterator(); iter.hasNext();) {
+				Topic topic = (Topic) iter.next();
+				topic.getOccurences().add(occurrence);	
+				
+				occurrence.getTopics().add(topic);
+			}			
 		}
+		
 		
 		//System.out.println("LOOPING over "+occurrence+" topics");
 		
@@ -81,7 +126,31 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 //			affected.add(topic);
 //		}		
 	}
+		
+	public List getRemoveItems() {		
+		if(removeStartNumber == -1){
+			return new ArrayList();
+		}
+		//return getTopics().subList(removeStartNumber, getTopics().size());
+		return subList(getTopics(), removeStartNumber, getTopics().size());
+	}
+
+	public List getAddTopics() {
+		if(removeStartNumber == -1){
+			return getTopics();
+		}
+		//return getTopics().subList(0, removeStartNumber);
+		return subList(getTopics(), 0, removeStartNumber);
+	}
+	private List subList(List l, int s, int e){
+		List rtn  = new ArrayList();
+		for(int i = s; i < e; i++){
+			rtn.add(l.get(i));
+		}
+		return rtn;
+	}
 	
+
 	private Object getFromSetById(Set topics,long id){
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
 			Object o = (Object) iter.next();
@@ -115,7 +184,11 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 	
 	//@Override
 	public String toString() {
-		return "SaveOccurrence ID "+getTopicID()+" "+occurrence;
+		return "SaveOccurrence ID "+getTopicID(0)+" "+occurrence;
+	}
+
+	public Occurrence getOccurrence() {
+		return occurrence;
 	}
 	
 	

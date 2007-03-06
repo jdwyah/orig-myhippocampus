@@ -1,9 +1,10 @@
 package com.aavu.client.LinkPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
@@ -25,10 +26,15 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 
 	private VerticalPanel mainPanel;
 	private Map topicM;
+	private List topics;
 	private HorizontalPanel onPanel;
 	private TopicCompleter topicCompleter;
+	private int removeNumber = 0;
 	
 	public LinksTagsBoard(final CompleteListener completer,TopicCache topicCache){
+		
+		topicM = new HashMap();
+		topics = new ArrayList();
 		
 		onPanel = new HorizontalPanel();	
 		mainPanel = new VerticalPanel();
@@ -56,8 +62,10 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 	}
 
 	public void load(WebLink w) {
+		removeNumber = 0;
 		
-		topicM = new HashMap();
+		topicM.clear();
+		topics.clear();
 		
 		if(w != null){
 			Logger.log("found "+w.getTopics().size()+" Tags for this link");
@@ -74,27 +82,47 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 
 
 	public void remove(Topic topic, Widget widgetToRemoveOnSuccess) {
-		Object o = topicM.get(topic);
+		Object o = topicM.get(topic.getIdentifier());
 		
 		if(o != null){
 			DeletableTopicLabel label = (DeletableTopicLabel) o;
 			onPanel.remove(label);
 			topicM.remove(topic);
+			
+			//append			
+			topics.remove(topic);
+			topics.add(topic);
+			removeNumber++;
 		}
 	}
 
 	public void add(TopicIdentifier to,Widget w) {
 		
+		//prepend
+		if(topics.size() > 0){
+			topics.add(new Topic(to));
+		}else{
+			topics.add(0,new Topic(to));
+		}
 		topicM.put(to, w);
 		
 		onPanel.add(w);
 	}
 
-	public Topic getFirst() {
-		if(topicM.size() < 1){
-			return null;
+
+	public List getAllTopics(){		
+		return topics;
+	}
+	
+	public void clearText() {
+		topicCompleter.setText("");
+	}
+
+	public int getRemoveNumber() {
+		if(removeNumber == 0){
+			return -1;
 		}
-		return (Topic) ((Entry)topicM.entrySet().iterator().next()).getValue();
+		return topics.size() - removeNumber;
 	}
 	
 	

@@ -1,9 +1,11 @@
 package com.aavu.client.domain.commands;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -25,20 +27,16 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Again, this seems like a bunch of rigamorole, but it makes the object graph connecting/unconnecting
  * a non-issue, which is really nice. It's also very easy on the network connection.
  * 
- * @param topic
+ * @param testTopic
  * @param command
  * @param callback
  */
 public abstract class AbstractSaveCommand implements IsSerializable {
-
-	private long topicID;
-	private long id1;
-	private long id2;	
-	private String data;
 	
-	protected transient Topic topic;
-	protected transient Topic topic1;
-	protected transient Topic topic2;
+	private List topicIDs = new ArrayList();
+	private transient List topics= new ArrayList();
+	
+	private String data;
 	
 	public AbstractSaveCommand(){}
 
@@ -48,22 +46,33 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 	public AbstractSaveCommand(Topic topic, Topic topic1) {
 		this(topic,topic1,null);
 	}
-	public AbstractSaveCommand(Topic topic, Topic topic1,Topic topic2) {
-		this.topic = topic;
-		this.topic1 = topic1;
-		this.topic2 = topic2;
+	
+	
+	public AbstractSaveCommand(Topic topic, Topic topic1,Topic topic2) {		
 		
-		if(topic != null){
-			setTopicID(topic.getId());
+		if(topic != null){		
+			topicIDs.add(new Long(topic.getId()));
+			topics.add(topic);
 		}
 		if(topic1 != null){
-			setId1(topic1.getId());
+			topicIDs.add(new Long(topic1.getId()));
+			topics.add(topic1);
 		}
 		if(topic2 != null){
-			setId2(topic2.getId());
+			topicIDs.add(new Long(topic2.getId()));
+			topics.add(topic2);
 		}
 	}
-
+	
+	public AbstractSaveCommand(List _topics) {		
+		this.topics = _topics;
+		
+		for (Iterator iter = _topics.iterator(); iter.hasNext();) {
+			Topic topic = (Topic) iter.next();
+			topicIDs.add(new Long(topic.getId()));
+		}
+	}
+	
 	public abstract void executeCommand() throws HippoBusinessException;
 		
 	public String getData() {
@@ -74,52 +83,43 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 		this.data = data;
 	}
 
-	public long getId1() {
-		return id1;
+
+	public Topic getTopic(int i) {	
+		if(topics.size() > i){
+			return (Topic) topics.get(i);
+		}else{
+			return null;
+		}
+	}
+	public void setTopic(int i,Topic t) {
+		System.out.println("topics.size "+topics.size()+" setting "+i);
+		if(topics.size() > i){
+			topics.set(i, t);
+		}else if(i == topics.size()){
+			topics.add(t);
+		}else{
+			throw new IndexOutOfBoundsException();
+		}
 	}
 
-	public void setId1(long id1) {
-		this.id1 = id1;
+	protected long getTopicID(int i) {
+		if(topicIDs.size() >= i){
+			return ((Long) topicIDs.get(i)).longValue();
+		}else{
+			return -1;
+		}
 	}
 
-	public long getId2() {
-		return id2;
+	
+	
+	public List getTopicIDs() {
+		return topicIDs;
 	}
-
-	public void setId2(long id2) {
-		this.id2 = id2;
+	public List getTopics() {
+		return topics;
 	}
-
-	public long getTopicID() {
-		return topicID;
-	}
-
-	public void setTopicID(long topicID) {
-		this.topicID = topicID;
-	}
-
-	public Topic getTopic() {
-		return topic;
-	}
-
-	public void setTopic(Topic topic) {
-		this.topic = topic;
-	}
-
-	public Topic getTopic1() {
-		return topic1;
-	}
-
-	public void setTopic1(Topic topic1) {
-		this.topic1 = topic1;
-	}
-
-	public Topic getTopic2() {
-		return topic2;
-	}
-
-	public void setTopic2(Topic topic2) {
-		this.topic2 = topic2;
+	public void setTopics(List topics) {
+		this.topics = topics;
 	}
 
 	public boolean updatesTitle() {	
@@ -129,6 +129,8 @@ public abstract class AbstractSaveCommand implements IsSerializable {
 	public Set getAffectedTopics() {
 		return new HashSet();
 	}
+
+	
 	
 	
 }

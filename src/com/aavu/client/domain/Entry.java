@@ -28,7 +28,7 @@ public class Entry extends Occurrence implements Serializable,IsSerializable, Re
 	
 	//@Override
 	public Object clone() {				   		
-		return copyProps(new Entry());
+		return copyPropsIntoParam(new Entry());
 	}
 
 	

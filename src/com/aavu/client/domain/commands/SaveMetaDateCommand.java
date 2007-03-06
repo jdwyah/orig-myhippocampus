@@ -17,18 +17,18 @@ public class SaveMetaDateCommand extends AbstractSaveCommand implements IsSerial
 
 	//@Override
 	public void executeCommand() {
-		HippoDate mv = (HippoDate) topic.getSingleMetaValueFor((Meta) getTopic1());
+		HippoDate mv = (HippoDate) getTopic(0).getSingleMetaValueFor((Meta) getTopic(1));
 		if(mv == null){
-			mv = new HippoDate(topic.getUser(),getData());
+			mv = new HippoDate(getTopic(0).getUser(),getData());
 		}else{
 			mv.setTitle(getData());
 		}
-		topic.addMetaValue((Meta) getTopic1(), mv);		
+		getTopic(0).addMetaValue((Meta) getTopic(1), mv);		
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveDate ID "+getTopicID()+" "+getData();
+		return "SaveDate ID "+getTopicID(0)+" "+getData();
 	}
 	
 	

@@ -317,7 +317,7 @@ public class Manager implements TopicSaveListener, LoginListener {
 		System.out.println("TOPIC SAVED");
 		if(command instanceof SaveTagtoTopicCommand){
 			System.out.println("TAG COMMAND");
-			Tag tag = (Tag) command.getTopic1();
+			Tag tag = (Tag) command.getTopic(1);
 			System.out.println("GROW "+tag);
 			map.growIsland(tag);
 		}

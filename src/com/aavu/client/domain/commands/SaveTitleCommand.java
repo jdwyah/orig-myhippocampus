@@ -16,12 +16,12 @@ public class SaveTitleCommand extends AbstractSaveCommand implements IsSerializa
 
 	//@Override
 	public void executeCommand() {
-		topic.setTitle(getData());
+		getTopic(0).setTitle(getData());
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveTitle ID "+getTopicID()+" "+getData();
+		return "SaveTitle ID "+getTopicID(0)+" "+getData();
 	}
 
 	//@Override
@@ -36,7 +36,7 @@ public class SaveTitleCommand extends AbstractSaveCommand implements IsSerializa
 	 */
 	//@Override
 	public Set getAffectedTopics() {		
-		return topic.getTypesAsTopics();
+		return getTopic(0).getTypesAsTopics();
 	}
 	
 	

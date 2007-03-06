@@ -20,20 +20,20 @@ public class SaveMetaTextCommand extends AbstractSaveCommand implements IsSerial
 	//@Override
 	public void executeCommand() {
 
-		HippoText mv = (HippoText) topic.getSingleMetaValueFor((Meta) getTopic1());
+		HippoText mv = (HippoText) getTopic(0).getSingleMetaValueFor((Meta) getTopic(1));
 		if(mv == null){
 			mv = new HippoText(getData());
 		}else{
 			mv.setTitle(getData());
 		}
 		
-		topic.addMetaValue((Meta) getTopic1(), mv);		
+		getTopic(0).addMetaValue((Meta) getTopic(1), mv);		
 
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveText ID "+getTopicID()+" M:"+getId1()+" "+getData();
+		return "SaveText ID "+getTopicID(0)+" M:"+getTopicID(1)+" "+getData();
 	}
 	
 	

@@ -8,7 +8,7 @@ public class Comment extends Entry implements Serializable,IsSerializable, Reall
 
 	//@Override
 	public Object clone() {				   		
-		return copyProps(new Comment());
+		return copyPropsIntoParam(new Comment());
 	}
 
 }

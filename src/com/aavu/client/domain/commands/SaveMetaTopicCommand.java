@@ -14,12 +14,12 @@ public class SaveMetaTopicCommand extends AbstractSaveCommand implements IsSeria
 
 	//@Override
 	public void executeCommand() {		
-		topic.addMetaValue((Meta) getTopic1(), getTopic2());
+		getTopic(0).addMetaValue((Meta) getTopic(1), getTopic(2));
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveMetaTopic ID "+getTopicID()+" "+getId1()+" "+getId2();
+		return "SaveMetaTopic ID "+getTopicID(0)+" "+getTopicID(1)+" "+getTopicID(2);
 	}
 	
 	

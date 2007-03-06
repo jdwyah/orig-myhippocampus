@@ -42,7 +42,7 @@ public abstract class AbstractOccurrenceAbstractMindTreeOccurence extends com.aa
     }
 
     protected MindTreeOcc copyProps(MindTreeOcc o){
-		MindTreeOcc m = (MindTreeOcc)super.copyProps(o);
+		MindTreeOcc m = (MindTreeOcc)super.copyPropsIntoParam(o);
 		m.setMindTree(getMindTree());
 		return m;
 	}

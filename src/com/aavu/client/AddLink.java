@@ -52,36 +52,7 @@ public class AddLink implements EntryPoint {
 	
 	private User user;
 
-	/**
-	 * Switch between localhost for testing & 
-	 */
-	public static String getRelativeURL(String url) {
-		String realModuleBase;
-		
-		if(GWT.isScript()){			
-			
-			Logger.log("ModuleBaseURL: "+GWT.getModuleBaseURL());
-			
-			//Use for Deployment to production server
-			//
-			realModuleBase = REMOTE_HOST;
-			//realModuleBase = REMOTE_HOST + "DEV/";
-					
-			//Use to test compiled browser locally
-			//
-			realModuleBase = LOCAL_HOST;
-			
-		}else{
-			//realModuleBase = GWT.getModuleBaseURL();
-			
-			//This is the URL for GWT Hosted mode 
-			//
-			realModuleBase = LOCAL_HOST;
-		}
-		
-		return realModuleBase+url;
-	}
-
+	
 
 	private GWTTopicServiceAsync topicService;
 	private GWTTagServiceAsync tagService;
@@ -109,7 +80,7 @@ public class AddLink implements EntryPoint {
 		
 		//realModuleBase = "";
 	
-		String pre = getRelativeURL("service/");
+		String pre = HippoTest.getRelativeURL("service/");
 		
 		//Window.alert("3");
 		

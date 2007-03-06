@@ -18,11 +18,11 @@ public class RemoveTagFromTopicCommand extends AbstractSaveCommand implements Is
 	//@Override
 	public void executeCommand() throws HippoBusinessException {
 		
-		if(!(topic1 instanceof Tag)){
-			throw new HippoBusinessException("Can't remove nontag: "+topic1);
+		if(!(getTopic(1) instanceof Tag)){
+			throw new HippoBusinessException("Can't remove nontag: "+getTopic(1));
 		}
 		
-		boolean res = topic.removeTag((Tag) topic1);
+		boolean res = getTopic(0).removeTag((Tag) getTopic(1));
 		if(!res){								
 			throw new HippoBusinessException("Error Removing Tag");
 		}				
@@ -30,13 +30,14 @@ public class RemoveTagFromTopicCommand extends AbstractSaveCommand implements Is
 
 	//@Override
 	public String toString() {
-		return "SaveTagToTopic ID "+getTopicID()+" "+getId1();
+		return "SaveTagToTopic ID "+getTopicID(0)+" "+getTopicID(1);
 	}
+
 
 	//@Override
 	public Set getAffectedTopics() {
 		Set s = super.getAffectedTopics();
-		s.add(topic1);
+		s.add(getTopic(1));
 		return s;
 	}
 	

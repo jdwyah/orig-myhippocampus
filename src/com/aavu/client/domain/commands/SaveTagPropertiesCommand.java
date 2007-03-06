@@ -18,16 +18,16 @@ public class SaveTagPropertiesCommand extends AbstractSaveCommand implements IsS
 	//@Override
 	public void executeCommand() {
 				
-		topic.getMetas().clear();
+		getTopic(0).getMetas().clear();
 		for (int i = 0; i < metas.length; i++) {
-			topic.addMeta(metas[i]);			
+			getTopic(0).addMeta(metas[i]);			
 		}
 				
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveTagProperties ID "+getTopicID()+" "+getData();
+		return "SaveTagProperties ID "+getTopicID(0)+" "+getData();
 	}
 	
 	

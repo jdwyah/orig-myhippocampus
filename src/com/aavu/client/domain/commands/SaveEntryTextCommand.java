@@ -13,13 +13,13 @@ public class SaveEntryTextCommand extends AbstractSaveCommand implements IsSeria
 	}
 
 	//@Override
-	public void executeCommand() {					
-		topic.getLatestEntry().setData(getData());		
+	public void executeCommand() {				
+		getTopic(0).getLatestEntry().setData(getData());		
 	}
 
 	//@Override
 	public String toString() {
-		return "SaveText ID "+getTopicID()+" "+getData();
+		return "SaveText ID "+getTopicID(0)+" "+getData();
 	}
 	
 	

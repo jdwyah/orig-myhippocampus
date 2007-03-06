@@ -24,7 +24,7 @@ public class ActionableTopicLabel extends Composite {
 	}
 
 	public ActionableTopicLabel(Topic topic, String actionTextStr) {
-		this(topic,actionTextStr,Orientation.VERTICAL);
+		this(topic,actionTextStr,Orientation.HORIZONTAL);
 	}
 	public ActionableTopicLabel(Topic topic, String actionTextStr,Orientation orient) {
 		FocusPanel fp = new FocusPanel();

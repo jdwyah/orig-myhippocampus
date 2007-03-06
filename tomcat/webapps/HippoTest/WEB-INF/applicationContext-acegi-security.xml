@@ -99,6 +99,7 @@
 <!--  				/service/**=IS_AUTHENTICATED_REMEMBERED--><!-- need to put login service under diff path -->
 				/site/secure/**=IS_AUTHENTICATED_REMEMBERED
 <!-- 				/com.aavu.hippotest/**=IS_AUTHENTICATED_REMEMBERED-->
+				/com.aavu.addlink/**=IS_AUTHENTICATED_REMEMBERED
 				/**=IS_AUTHENTICATED_ANONYMOUSLY
 			</value>
 		</property>

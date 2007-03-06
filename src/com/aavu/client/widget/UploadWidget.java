@@ -1,5 +1,8 @@
 package com.aavu.client.widget;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -35,7 +38,7 @@ public class UploadWidget extends Composite {
 	 * 
 	 * @param manager
 	 * @param board 
-	 * @param topic
+	 * @param testTopic
 	 * @param path
 	 */
 	public UploadWidget(final Manager manager,Topic _topic,final UploadBoard board, String path){
@@ -95,8 +98,10 @@ public class UploadWidget extends Composite {
 					String key = event.getResults().trim();
 					
 					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),key);
-					
-					manager.getTopicCache().save(topic,new SaveOccurrenceCommand(topic, fileObj),
+										
+					List topics = new ArrayList();
+					topics.add(topic);
+					manager.getTopicCache().save(topic,new SaveOccurrenceCommand(topics, fileObj),
 							new StdAsyncCallback(ConstHolder.myConstants.save()){});
 					
 					topic.getOccurences().add(fileObj);					

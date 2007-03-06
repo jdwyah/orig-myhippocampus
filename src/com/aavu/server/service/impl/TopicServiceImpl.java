@@ -2,6 +2,7 @@ package com.aavu.server.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -229,21 +230,12 @@ public class TopicServiceImpl implements TopicService {
 	}
 	private void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
 				
-		if(command.getTopicID() > 0){
-			save(command.getTopic());
-		}
-		if(command.getId1() > 0){
-			save(command.getTopic1());
-		}
-		if(command.getId2() > 0){
-			save(command.getTopic2());
+		List topics = command.getTopics();
+		for (Iterator iter = topics.iterator(); iter.hasNext();) {
+			Topic topic = (Topic) iter.next();
+			save(topic);
 		}
 		
-//		//TODO replace code above & use only this 
-//		Set<Topic> toSave = command.getAffectedTopics();
-//		for(Topic t : toSave){
-//			save(t);
-//		}
 	}
 	
 	/**
@@ -257,23 +249,21 @@ public class TopicServiceImpl implements TopicService {
 		
 		log.debug("Hydrate: "+command);
 		
-		if(command.getTopicID() > 0){
-			command.setTopic(topicDAO.get(command.getTopicID()));
+		List ids = command.getTopicIDs();
+		int i = 0;
+		for (Iterator iter = ids.iterator(); iter.hasNext();) {
+			Long id = (Long) iter.next();
+			command.setTopic(i, topicDAO.get(id));
+			i++;
 		}
-		if(command.getId1() > 0){
-			command.setTopic1(topicDAO.get(command.getId1()));
-		}
-		if(command.getId2() > 0){
-			command.setTopic2(topicDAO.get(command.getId2()));
-		}
-
-		log.debug("Hydrated. "+command.getTopic()+" "+command.getTopic1()+" "+command.getTopic2());
+		
+		log.debug("Hydrated. "+command.getTopic(0)+" "+command.getTopic(1)+" "+command.getTopic(2));
 		
 		//a bit messy, but it's tough to inject this otherwise, since we don't want the
 		//domain knowing about this service.
 		//
 		if(command instanceof SaveSeeAlsoCommand){
-			command.setTopic2(getSeeAlsoMetaSingleton());
+			command.setTopic(2,getSeeAlsoMetaSingleton());
 		}
 	}
 	public WebLink getWebLinkForURL(String url) {
