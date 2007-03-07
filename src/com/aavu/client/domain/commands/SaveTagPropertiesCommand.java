@@ -20,7 +20,12 @@ public class SaveTagPropertiesCommand extends AbstractSaveCommand implements IsS
 				
 		getTopic(0).getMetas().clear();
 		for (int i = 0; i < metas.length; i++) {
-			getTopic(0).addMeta(metas[i]);			
+			if(metas[i].getTitle() != null 
+					&&
+			   !metas[i].getTitle().equals("")){
+			
+				getTopic(0).addMeta(metas[i]);
+			}						
 		}
 				
 	}

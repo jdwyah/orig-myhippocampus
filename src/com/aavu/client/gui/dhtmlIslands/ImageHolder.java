@@ -9,7 +9,7 @@ public class ImageHolder {
 	private final Type TYPE_30_PURPLE = new Type(30,30,Type.SPACING_30,Type.SPACING_30,"30px_Purple",4);
 	private final Type TYPE_60_PURPLE = new Type(60,60,Type.SPACING_60,Type.SPACING_60,"60px_Purple",1);	
 	private final Type TYPE_100_PURPLE =  new Type(100,100,Type.SPACING_100,Type.SPACING_100,"100px_Purple",2);
-	private final Type TYPE_120_PURPLE =  new Type(120,120,Type.SPACING_120,Type.SPACING_120,"120px_Purple",2);
+	private final Type TYPE_120_PURPLE =  new Type(120,120,Type.SPACING_120,Type.SPACING_120,"120px_Purple",3);
 
 	private final Type TYPE_30_GREEN = new Type(30,30,Type.SPACING_30,Type.SPACING_30,"30px_Green",3);
 	private final Type TYPE_60_GREEN = new Type(60,60,Type.SPACING_60,Type.SPACING_60,"60px_Green",4);	

@@ -21,7 +21,6 @@ public class StdAsyncCallback implements AsyncCallback {
 	public StdAsyncCallback(String call){
 		this.call = call;
 		myNum = callNum++;
-		System.out.println("manager "+manager);
 		
 		//TODO shouldn't need null checks, but we do.
 		if(manager != null)
@@ -63,6 +62,10 @@ public class StdAsyncCallback implements AsyncCallback {
 	public void onSuccess(Object result) {
 		if(manager != null)
 			manager.updateStatus(myNum, call, StatusCode.SUCCESS);
+	}
+
+	public void setCall(String call) {
+		this.call = call;
 	}
 
 }

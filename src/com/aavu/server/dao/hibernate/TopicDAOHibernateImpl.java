@@ -27,6 +27,7 @@ import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -729,5 +730,32 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		
 	}
 
+	/**
+	 * PEND MED a bit fragile. Note the capitalization. Is there another way to do this?
+	 * 
+	 * @param t
+	 * @param toIsland
+	 */
+	public void changeState(final Topic t,final boolean toIsland) {
+		int res = (Integer) getHibernateTemplate().execute(new HibernateCallback(){
+			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+				String newType = "Topic";
+				if(toIsland){
+					newType = "tag";
+				}								
+				String hqlUpdate = "update Topic set discriminator = :newType where topic_id = :id";				
+				int updatedEntities = sess.createQuery( hqlUpdate )
+				.setString("newType", newType)
+				.setLong( "id", t.getId() )	                            
+				.executeUpdate();				
+				return updatedEntities;				
+			}});
+		log.debug("res: "+res+" Changed t:"+t.getId()+" Now an island "+toIsland);
+		
+		getHibernateTemplate().evict(t);
+		
+		
+	}
+	
 
 }

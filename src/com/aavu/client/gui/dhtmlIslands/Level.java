@@ -1,10 +1,10 @@
 package com.aavu.client.gui.dhtmlIslands;
 
 import com.aavu.client.domain.TagInfo;
+import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.util.MiddleSquarePseudoRandom;
 import com.aavu.client.util.PsuedoRandom;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
@@ -44,24 +44,12 @@ public class Level extends AbsolutePanel {
 			
 			add(isle,0,0);
 			
-			disableSelect(isle.getElement());
+			//Only the 'firefox route' is required. Without it, dragging topics on 
+			//island is a mess because it tries to highligh the acre images.
+			JSUtil.disableSelect(isle.getElement());
 		}
 		
-		/**
-		 * Only the 'firefox route' is required. Without it, dragging topics on 
-		 * island is a mess because it tries to highligh the acre images.
-		 * 
-		 * @param target
-		 */
-		public native void disableSelect(Element target) /*-{
-	   		if (typeof target.onselectstart!="undefined") //IE route
-				target.onselectstart=function(){return false}
-			else if (typeof target.style.MozUserSelect!="undefined") //Firefox route
-				target.style.MozUserSelect="none"
-			else //All other route (ie: Opera)
-				target.onmousedown=function(){return false}
-			//target.style.cursor = "default"			
-	  	}-*/;
+	
 					
 
 		/**

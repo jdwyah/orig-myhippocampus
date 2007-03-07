@@ -161,6 +161,14 @@ public interface Consts extends Messages {
 	
 	String enterInfo_image();
 	
+	String topic_picker_topic_image();
+	String topic_picker_island_image();
+	String topic_picker_delete_image();
+	
+	String topic_picker_topic_tooltip();
+	String topic_picker_island_tooltip();
+	String topic_picker_delete_tooltip();
+	
 	
 		
 	

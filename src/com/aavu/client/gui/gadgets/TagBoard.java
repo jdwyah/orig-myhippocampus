@@ -215,12 +215,6 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 	}
 
-	public void saveThingsNowEvent(StdAsyncCallback callback) {
-		
-		callback.onSuccess(tagsToSave);
-							
-	}
-
 	
 	private class TagGadget extends Composite {
 

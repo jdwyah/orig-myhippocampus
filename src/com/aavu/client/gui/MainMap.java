@@ -154,20 +154,6 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		}
 	}
 
-	public void showBackToOcean(boolean focussed) {
-		compassRose.showBackToOcean(focussed);
-	}
-
-	public void unFocus() {
-		ocean.unFocus();
-	}
-
-	public void showCloseup(long id, FullTopicIdentifier[] topics) {
-		ocean.showCloseup(id,topics);
-	}
-
-	
-	
 	
 	public void displayTopic(Topic topic) {
 		
@@ -176,8 +162,8 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 				
 	}
 	
-	public void centerOn(Topic topic){
-		ocean.centerOn(topic);		
+	public boolean centerOn(Topic topic){
+		return ocean.centerOn(topic);		
 	}
 
 	public void unselect() {

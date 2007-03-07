@@ -21,9 +21,6 @@ public interface Ocean {
 
 	public void removeIsland(long id);
 
-	public void unFocus();
-
-	public void showCloseup(long id, FullTopicIdentifier[] topics);
 
 	public void zoomTo(double scale);
 	public void zoomIn();
@@ -31,7 +28,12 @@ public interface Ocean {
 
 	public void update(Tag t, AbstractSaveCommand command);
 
-	public void centerOn(Topic topic);
+	/**
+	 * 
+	 * @param topic
+	 * @return - should return true if it finds a good thing to center on
+	 */
+	public boolean centerOn(Topic topic);
 
 	public void moveBy(int i, int j);
 

@@ -323,7 +323,7 @@ public class TopicCache {
 				
 				System.out.println("rec "+t);
 				if(t != null){
-					System.out.println("rec: "+t.toPrettyString());
+					//Logger.debug("rec: "+t.toPrettyString());
 					System.out.println("single adding to cache title:"+t.getTitle());
 				}
 				//topicByName.put(t.getTitle(), t);
@@ -464,6 +464,12 @@ public class TopicCache {
 		topicIdentifiersDirty = true;
 		
 		topicService.createNew(title, isIsland, callback);		
+	}
+
+
+
+	public void changeState(long id, boolean b, AsyncCallback callback) {
+		topicService.changeState(id, b, callback);
 	}
 
 

@@ -161,9 +161,9 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 		throw new UnsupportedOperationException("Not Yet Implemented");		
 	}
 
-	public void centerOn(Topic topic) {
+	public boolean centerOn(Topic topic) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	public void moveBy(int i, int j) {

@@ -53,6 +53,8 @@ public interface GWTTopicServiceAsync {
 	
 	//Weblink
 	void getWebLinkForURL(String url, AsyncCallback callback);
+	
+	void changeState(long topicID, boolean toIsland,AsyncCallback callback);
 }
 
 

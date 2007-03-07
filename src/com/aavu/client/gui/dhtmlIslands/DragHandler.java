@@ -21,6 +21,7 @@ public class DragHandler implements MouseListener {
 	
 	private int panelOffsetX;
 	private int panelOffsetY;
+	private boolean islandDrag = true;
 
 
 	/**
@@ -49,6 +50,10 @@ public class DragHandler implements MouseListener {
 
 	public void onMouseDown(Widget sender, int x, int y) {
 		
+		if(!islandDrag){
+			//panel.
+			return;
+		}
 		
 		Logger.debug("got a down start drag "+GWT.getTypeName(sender));
 		
@@ -96,7 +101,7 @@ public class DragHandler implements MouseListener {
 			int absY = y + dragging.getAbsoluteTop();
 			
 			
-//			System.out.println("drag.absolLeft() "+dragging.getAbsoluteLeft()+" dag.abslTop() "+dragging.getAbsoluteTop());
+			//System.out.println("drag.absolLeft() "+dragging.getAbsoluteLeft()+" dag.abslTop() "+dragging.getAbsoluteTop());
 			
 //			System.out.println("mouse x "+mouseX+" mouse y "+mouseY);
 			
@@ -131,5 +136,9 @@ public class DragHandler implements MouseListener {
 //			}
 		}
 		dragging = null;
-	} 
+	}
+
+	public void setIslandDrag(boolean islandDrag) {
+		this.islandDrag = islandDrag;
+	}
 }

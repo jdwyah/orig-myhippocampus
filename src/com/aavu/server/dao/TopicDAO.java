@@ -59,6 +59,6 @@ public interface TopicDAO {
 
 	WebLink getWebLinkForURI(String url, User currentUser);
 
-	
+	void changeState(Topic t, boolean toIsland);
 
 }

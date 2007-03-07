@@ -15,8 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class CompassRose extends SimplePanel {
 	
 	private TextBox searchText = new TextBox();
-	private Manager manager;
-	Button backButton = new Button(ConstHolder.myConstants.back());
+	private Manager manager;	
 	
 	private AbsolutePanel absPanel = new AbsolutePanel();
 	
@@ -43,21 +42,16 @@ public class CompassRose extends SimplePanel {
 				}
 			}});
 		
-		backButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				manager.unFocus();	
-				backButton.setVisible(false);
-			}});
-		backButton.setVisible(false);
+		
 		
 		int DOWN = 100;
 		absPanel.add(rose,0,0);		
 		absPanel.add(searchText,70,DOWN);
 		absPanel.add(searchB,210,DOWN);
-		absPanel.add(backButton,270,DOWN);
+		
 		
 		//interestingly, this is only necessary for FF
-		absPanel.setPixelSize(340,120);
+		absPanel.setPixelSize(300,120);
 
 		/*
 		 * override the AbsolutePanel position: relative
@@ -75,8 +69,6 @@ public class CompassRose extends SimplePanel {
 		System.out.println("click "+searchText.getText());
 		manager.doSearch(searchText.getText());
 	}
-	public void showBackToOcean(boolean focussed) {
-		backButton.setVisible(focussed);
-	}
+	
 
 }

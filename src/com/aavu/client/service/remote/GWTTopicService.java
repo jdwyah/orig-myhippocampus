@@ -51,6 +51,7 @@ public interface GWTTopicService extends RemoteService {
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException;
 
 	WebLink getWebLinkForURL(String url) throws HippoException;
+	void changeState(long topicID, boolean toIsland) throws HippoException;
 }
 
 

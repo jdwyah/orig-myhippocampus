@@ -132,6 +132,13 @@ a:visited {
 .H-Gadget .gwt-StackPanel {
 	background-color: #647CB5;
 }
+.H-Gadget .H-StatusPicker {	
+	margin-left: 18px;
+}
+.H-Gadget .H-StatusPickerOptions {	
+	border: 1px solid #D8E3FD;
+	border-style: ridge;
+}
 
 /*.H-OnThisIsland {
 	width: 100%;
@@ -145,7 +152,7 @@ a:visited {
 .H-GadgetPicker {
 	width: auto;
 	right: 0px;
-	padding: 4px;
+	padding: 4px;	
 }
 
 .H-MetaEditorWidget {

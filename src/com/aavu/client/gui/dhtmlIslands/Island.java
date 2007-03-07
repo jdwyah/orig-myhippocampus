@@ -17,12 +17,15 @@ import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.KeyboardListenerCollection;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
+import com.google.gwt.user.client.ui.SourcesKeyboardEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, RemembersPosition, DragFinishedListener{
+public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, SourcesKeyboardEvents, RemembersPosition, DragFinishedListener {
 	
 		
 	private static final int MIN_HEIGHT = 15;
@@ -57,6 +60,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	private boolean topicsVisible = false;
 
 	private DraggableTopicLabel selectedTopic;
+
+
+	private KeyboardListenerCollection keyboardListeners;
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user,Manager manager) {
 		super();
@@ -64,7 +70,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		this.ocean = ocean;
 		this.manager = manager;
 		
-		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS );	    
+		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS | Event.ONDBLCLICK | Event.KEYEVENTS);	    
 			
 		
 		setStyleName("H-Island");
@@ -256,48 +262,55 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	}
 
 	
-	public void onClick(Widget sender) {			
-		
-		System.out.println("island onClick");
-		
-		ocean.islandClicked(tagStat.getTopicIdentifier(),this);
+	public void onClick(Widget sender) {		
+		onClick(sender,1);
+	}
+	public void onClick(Widget sender, int num_clicks) {			
+				
+		ocean.islandClicked(tagStat.getTopicIdentifier(),num_clicks,this);
 				
 	}
 	
 	
 
 
-	public void addMouseListener(MouseListener listener) {
-		if (mouseListeners == null)
-			mouseListeners = new MouseListenerCollection();
-		mouseListeners.add(listener);
-	}
-
-	public void removeMouseListener(MouseListener listener) {
-		if (mouseListeners != null)
-			mouseListeners.remove(listener);
-	}
+	
 	public void onBrowserEvent(Event event) {
 		boolean wasMouseUp = false;
 
-	    switch (DOM.eventGetType(event)) {
-	      case Event.ONCLICK: {
-	    	  onClick(this);
-//	        if (clickListeners != null)
-//	          clickListeners.fireClick(this);
-//	        break;
-	      }
-	    case Event.ONMOUSEUP:
-	    	wasMouseUp = true;
-	    case Event.ONMOUSEDOWN:
-	    case Event.ONMOUSEMOVE:
-	    case Event.ONMOUSEOVER:
-	    case Event.ONMOUSEOUT: {
-	    	if (mouseListeners != null)
-	    		mouseListeners.fireMouseEvent(this, event);
-	    	break;
-	    }
-	    }
+		//System.out.println("island event");		
+		
+		switch (DOM.eventGetType(event)) {
+		case Event.ONDBLCLICK: {
+			onClick(this,2);
+			break;
+		}
+		case Event.ONCLICK: {
+			onClick(this);
+			break;
+		}
+
+
+		case Event.ONMOUSEUP:
+			wasMouseUp = true;	    	
+		case Event.ONMOUSEDOWN:
+		case Event.ONMOUSEMOVE:
+		case Event.ONMOUSEOVER:
+		case Event.ONMOUSEOUT: {
+			if (mouseListeners != null){
+				//System.out.println("island fire");//this stops firing on zoomed drags... why?		
+				mouseListeners.fireMouseEvent(this, event);
+			}
+			break;
+		}
+		case Event.ONKEYDOWN:
+		case Event.ONKEYUP:
+		case Event.ONKEYPRESS:
+			if (keyboardListeners != null)
+				keyboardListeners.fireKeyboardEvent(this, event);
+			break;
+		}
+		
 	}
 //
 //	    }
@@ -500,9 +513,12 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		}
 		topicLabelList.clear();
 
-		double unset_latitude = .35;
+		double unset_latitude_start = .25;
+		double max_unset_lat = .95;
+		double unset_latitude = unset_latitude_start;
 		double latitude_budge = .09;
-		double unset_longitude = .1;
+		double longitude_budge = .30;
+		double unset_longitude = .02;
 		
 		for (int i = 0; i < topics.length; i++) {
 			FullTopicIdentifier fti = topics[i];
@@ -518,6 +534,10 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			if(fti.getLatitudeOnIsland() < 0){
 				fti.setLatitudeOnIsland(unset_latitude);
 				unset_latitude += latitude_budge;
+				if(unset_latitude > max_unset_lat){
+					unset_latitude = unset_latitude_start + latitude_budge/2;
+					unset_longitude += longitude_budge;
+				}
 			}
 
 			x = (int) (fti.getLongitudeOnIsland() * width);
@@ -632,5 +652,27 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		return left+width/(2*scale);
 	}
 
+
+	public void addKeyboardListener(KeyboardListener listener) {
+		if (keyboardListeners == null)
+			keyboardListeners = new KeyboardListenerCollection();		
+		keyboardListeners.add(listener);
+	}
+
+
+	public void removeKeyboardListener(KeyboardListener listener) {
+		if (keyboardListeners != null)
+			keyboardListeners.remove(listener);
+	}
+	public void addMouseListener(MouseListener listener) {
+		if (mouseListeners == null)
+			mouseListeners = new MouseListenerCollection();
+		mouseListeners.add(listener);
+	}
+
+	public void removeMouseListener(MouseListener listener) {
+		if (mouseListeners != null)
+			mouseListeners.remove(listener);
+	}
 	
 }

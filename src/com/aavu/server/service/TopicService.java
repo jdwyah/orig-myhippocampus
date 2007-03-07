@@ -14,6 +14,7 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoPermissionException;
 import com.aavu.server.web.domain.UserPageBean;
 
 public interface TopicService {
@@ -60,4 +61,5 @@ public interface TopicService {
 
 	WebLink getWebLinkForURL(String url);
 	
+	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 }

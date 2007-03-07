@@ -1,21 +1,12 @@
 package com.aavu.client.gui;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveTitleCommand;
-import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.gadgets.TagBoard;
 import com.aavu.client.gui.gadgets.TagPropertyPanel;
 import com.aavu.client.service.Manager;
-import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.edit.OnThisIslandBoard;
-import com.google.gwt.user.client.ui.CellPanel;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class CenterTopicDisplayer extends Composite {
 	
@@ -23,10 +14,10 @@ public class CenterTopicDisplayer extends Composite {
 	private OnThisIslandBoard onThisIslandBoard;	
 	private TagPropertyPanel tagProperties;
 	
-	private EditableLabelExtension titleBox;
 		
 	private Topic topic;
 	private Manager manager;
+	private TitleGadget titleG;
 	
 	public CenterTopicDisplayer(final Manager manager){
 			
@@ -38,19 +29,12 @@ public class CenterTopicDisplayer extends Composite {
 		
 		VerticalPanel mainPanel = new VerticalPanel();
 		
-		titleBox = new EditableLabelExtension("",new ChangeListener(){
-			public void onChange(Widget sender) {								
-				manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
-						new StdAsyncCallback(ConstHolder.myConstants.save()){});				
-			}			
-		});
 		
-		CellPanel titleP = new HorizontalPanel();
-		titleP.add(new HeaderLabel(ConstHolder.myConstants.title()));
-		titleP.add(titleBox);
-		titleP.addStyleName("H-Gadget");
 		
-		mainPanel.add(titleP);
+	
+		titleG = new TitleGadget(manager);
+		
+		mainPanel.add(titleG);
 		
 				
 		mainPanel.add(tagBoard);
@@ -72,7 +56,7 @@ public class CenterTopicDisplayer extends Composite {
 		
 		setVisible(true);
 		
-		titleBox.setText(topic.getTitle());
+		titleG.load(topic);
 				
 		tagBoard.load(topic);
 		onThisIslandBoard.load(topic);

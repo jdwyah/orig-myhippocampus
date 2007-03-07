@@ -90,10 +90,12 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	
 	public int load(Topic topic){
 
+		//System.out.println("\n\n\nLOAD "+(topic instanceof Tag)+"  "+topic.getTypes().size());
+				
 		if(topic instanceof Tag){
 			setVisible(true);
 
-			this.myTag = (Tag) topic;
+			this.myTag = (Topic) topic;
 
 			manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(ConstHolder.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {

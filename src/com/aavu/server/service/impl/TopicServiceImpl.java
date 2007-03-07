@@ -24,6 +24,7 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoPermissionException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
@@ -268,6 +269,18 @@ public class TopicServiceImpl implements TopicService {
 	}
 	public WebLink getWebLinkForURL(String url) {
 		return topicDAO.getWebLinkForURI(url,userService.getCurrentUser());		
+	}
+	
+	/**
+	 * 
+	 * @throws HippoPermissionException 
+	 */
+	public void changeState(long topicID, boolean toIsland) throws HippoPermissionException {
+		Topic t = topicDAO.get(topicID);
+		if(t.getUser() != userService.getCurrentUser()){
+			throw new HippoPermissionException();
+		}
+		topicDAO.changeState(t, toIsland);
 	}
 
 

@@ -379,6 +379,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public WebLink getWebLinkForURL(String url) throws HippoException {
 		return topicService.getWebLinkForURL(url);
 	}
+	public void changeState(long topicID, boolean toIsland) throws HippoException {
+		topicService.changeState(topicID, toIsland);		
+	}
 
 	
 

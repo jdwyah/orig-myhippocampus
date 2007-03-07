@@ -84,14 +84,24 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			o = new Topic();
 		}
 		
+		copyPropsIntoParam(o);
+//		o.setId(getId());
+//		o.setCreated(getCreated());
+//		o.setUser(getUser());
+//		o.setLastUpdated(getLastUpdated());
+//		o.setLatitude(getLatitude());
+//		o.setLongitude(getLongitude());
+//		o.setTitle(getTitle());		
+		return o;
+	}
+	public void copyPropsIntoParam(Topic o){
 		o.setId(getId());
 		o.setCreated(getCreated());
 		o.setUser(getUser());
 		o.setLastUpdated(getLastUpdated());
 		o.setLatitude(getLatitude());
 		o.setLongitude(getLongitude());
-		o.setTitle(getTitle());		
-		return o;
+		o.setTitle(getTitle());
 	}
 	
 	

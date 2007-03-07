@@ -105,8 +105,11 @@ public class Manager implements TopicSaveListener, LoginListener {
 	}
 	public void bringUpChart(Topic topic) {		
 		map.displayTopic(topic);
-		map.centerOn(topic);
-		map.ensureZoomOfAtLeast(4);
+		
+		//only zoom if we find something good to center on
+		if(map.centerOn(topic)){
+			map.ensureZoomOfAtLeast(4);
+		}
 	}
 	
 //	public void bringUpChart(final Topic topic, boolean editMode) {
@@ -254,7 +257,7 @@ public class Manager implements TopicSaveListener, LoginListener {
 				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);						
 			}});			
 	}	
-	public void unselectIsland() {
+	public void unselect() {
 		map.unselect();
 	}
 
@@ -452,22 +455,13 @@ public class Manager implements TopicSaveListener, LoginListener {
 				if(topic instanceof Tag){
 					map.removeIsland(topic.getId());
 				}
+				unselect();
 				refreshAll();
 			}				
 		});
 	}
 	
-	public void setFocussed(boolean focussed) {
-		this.focussed = focussed;
-		map.showBackToOcean(focussed);
-	}
-	public boolean isFocussed() {
-		return focussed;
-	}
-	public void unFocus() {
-		this.focussed = false;
-		map.unFocus();
-	}
+	
 	public PopupWindow showProgressBar(ProgressBar progressBar) {		
 		ProgressPopup win = new ProgressPopup(newFrame(progressBar.getTitle()),progressBar.getTitle(),progressBar);				
 		return win;
@@ -511,6 +505,36 @@ public class Manager implements TopicSaveListener, LoginListener {
 		if(userActionListener != null){
 			userActionListener.topicCreated();
 		}
+	}
+	public void changeState(final Topic topic, final boolean toIsland, final StdAsyncCallback callback) {
+
+		AsyncCallback wrapper = new AsyncCallback(){
+			public void onFailure(Throwable caught) {				
+				callback.onFailure(caught);
+			}
+
+			public void onSuccess(Object result) {				
+				callback.onSuccess(result);
+				
+				if(toIsland){
+					Tag newIsland = new Tag();
+					topic.copyPropsIntoParam(newIsland);					
+					growIsland(newIsland);
+					
+					map.displayTopic(newIsland);						
+				}else{
+					map.removeIsland(topic.getId());
+					
+					//change type to topic 
+					Topic notAnIsland = new Topic();
+					topic.copyPropsIntoParam(notAnIsland);
+					map.displayTopic(notAnIsland);						
+				}
+				
+				
+			}};
+		
+		getTopicCache().changeState(topic.getId(), toIsland, wrapper);	
 	}	
 
 
