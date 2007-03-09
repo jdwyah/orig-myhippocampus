@@ -1305,4 +1305,36 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 	
+	public void testDeleteOccurrence() throws HippoBusinessException{
+		
+		Topic t = new Topic();		
+		t.setTitle(C);
+		t.setUser(u);
+		
+		t = topicDAO.save(t);
+		
+		Topic savedTopic = topicDAO.getForID(u, t.getId());
+
+		assertEquals(C, savedTopic.getTitle());
+		assertEquals(u, savedTopic.getUser());		
+		
+		savedTopic.getLatestEntry().setData(B);
+		savedTopic = topicDAO.save(savedTopic);
+		
+		Topic savedTopic2 = topicDAO.getForID(u, t.getId());
+		assertEquals(B, savedTopic2.getLatestEntry().getData());
+		System.out.println("SAVED 2: "+savedTopic2.getLatestEntry().getData());
+		System.out.println("SAVED 2: "+savedTopic2.getLatestEntry().getId());
+		System.out.println("SAVED 2: "+savedTopic2.getLatestEntry().getTopics());
+		System.out.println("SAVED 2: "+savedTopic2.getLatestEntry().getTopics().size());
+		System.out.println("saved "+savedTopic2.getOccurences().size());
+		
+		topicDAO.deleteOccurrence(savedTopic2.getLatestEntry());
+		
+
+		Topic savedTopic3 = topicDAO.getForID(u, t.getId());
+		assertTrue(savedTopic3.getLatestEntry().isEmpty());
+
+	}
+	
 }

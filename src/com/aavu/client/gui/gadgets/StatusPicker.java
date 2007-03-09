@@ -21,8 +21,7 @@ public class StatusPicker extends Composite {
 	public static final int CHANGE_TO_ISLAND_ACTION = 1; 
 	public static final int CHANGE_TO_TOPIC_ACTION = 2;
 	public static final int DELETE_ACTION = 3;
-	
-	private PNGImage currentW;
+		
 	private HorizontalPanel optionsP;
 	private SimplePanel currentP;
 	private ClickListener editListener;

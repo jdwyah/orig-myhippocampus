@@ -22,7 +22,9 @@ public interface Consts extends Messages {
 	String delete();
 	String delete_image();
 	String delete_async();
+	String delete_occ_async();	
 	String delete_warningS(String topic);
+	String delete_occ_warning();
 	
 	
 	String book();
@@ -168,7 +170,6 @@ public interface Consts extends Messages {
 	String topic_picker_topic_tooltip();
 	String topic_picker_island_tooltip();
 	String topic_picker_delete_tooltip();
-	
 	
 		
 	

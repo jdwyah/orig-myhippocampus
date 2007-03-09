@@ -61,4 +61,8 @@ public interface TopicDAO {
 
 	void changeState(Topic t, boolean toIsland);
 
+	Occurrence getOccurrrence(long id);
+
+	void deleteOccurrence(Occurrence o);
+
 }

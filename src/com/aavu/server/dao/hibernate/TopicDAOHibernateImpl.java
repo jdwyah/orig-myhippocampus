@@ -3,6 +3,7 @@ package com.aavu.server.dao.hibernate;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,7 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
+import com.aavu.client.domain.util.SetUtils;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.web.domain.UserPageBean;
@@ -756,6 +758,39 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		getHibernateTemplate().evict(t);
 		
 		
+	}
+
+	public void deleteOccurrence(final Occurrence toDelete) {
+		
+		getHibernateTemplate().execute(new HibernateCallback(){
+			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+		
+				Occurrence o  = (Occurrence) sess.get(Occurrence.class,toDelete.getId());
+				
+				log.debug("going to delete "+o+" "+o.getId()+" "+o.getData());
+				
+				Set<Topic> topics = o.getTopics();				
+				for (Topic t : topics) {
+					log.debug("remove "+t);
+
+					boolean fnd = SetUtils.removeFromSetById(t.getOccurences(), o.getId());	
+					
+					if(!fnd){
+						log.error("Problem removing occ "+o.getId()+" from "+t.getId());
+					}
+					
+				}
+				sess.delete(o);
+				return null;
+			}});
+		
+	}
+
+	public Occurrence getOccurrrence(long id) {
+		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Occurrence.class)				
+				.add(Expression.eq("id", id)));
+
+		return (Occurrence) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));				
 	}
 	
 

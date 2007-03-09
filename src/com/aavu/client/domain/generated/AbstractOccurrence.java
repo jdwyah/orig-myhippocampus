@@ -121,7 +121,9 @@ public abstract class AbstractOccurrence  implements IsSerializable, java.io.Ser
 		return getId()+" "+getTitle();
 	}
 	
+
 public boolean equals(Object other) {
+	
          if ( (this == other ) ) return true;
 		 if ( (other == null ) ) return false;
 		 if ( !(other instanceof AbstractOccurrence) ) return false;
@@ -134,14 +136,21 @@ public boolean equals(Object other) {
    }
    
    public int hashCode() {
+	  
          int result = 17;
          
          
          result = 37 * result + ( getUser() == null ? 0 : this.getUser().hashCode() );
          result = 37 * result + ( getTitle() == null ? 0 : this.getTitle().hashCode() );
-         result = 37 * result + ( getData() == null ? 0 : this.getData().hashCode() );
+
+         //?????????????
+         //this screws up removing the occurrence from a set EVEN if the int returned is the 
+         //same. I dunno.
+         //result = 37 * result + ( getData() == null ? 0 : this.getData().hashCode() );
          
          result = 37 * result + ( getCreated() == null ? 0 : this.getCreated().hashCode() );
+         
+         //System.out.println("HC |"+result+"|");
          return result;
    }   
 

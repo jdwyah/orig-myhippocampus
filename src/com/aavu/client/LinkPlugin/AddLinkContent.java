@@ -35,6 +35,9 @@ public class AddLinkContent extends Composite implements CompleteListener {
 	private TextBox urlT;
 	private TextBox descriptionT;
 	private LinksTagsBoard tagsBoard;
+	private TopicLoader loader;
+	private Topic myTopic;
+	private CloseListener closeListener;
 	
 
 	
@@ -42,9 +45,15 @@ public class AddLinkContent extends Composite implements CompleteListener {
 	//http://localhost:8888/com.aavu.AddLink/AddLink.html?url=http%3A%2F%2Fwww.google.com&description=ResourceBundle%20Editor&notes=pport%20mechanisms%20are%20hosted%20on%20
 
 	
-	public AddLinkContent(final TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener) {		
+	public AddLinkContent(final TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener) {
+		this(widget,_topicCache,_link,myTopic,closeListener,false);
+	}
+	public AddLinkContent(TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener,boolean showDelete) {		
 		this.topicCache = _topicCache;
 		this.link = _link;
+		this.loader = widget;
+		this.myTopic = myTopic;
+		this.closeListener = closeListener;
 		
 		
 		Grid mainPanel = new Grid(5,3);
@@ -124,19 +133,44 @@ public class AddLinkContent extends Composite implements CompleteListener {
 				
 				myTopic.getOccurences().add(link);
 				System.out.println("WIDGET LOAD ");
-				if(widget != null){
-					widget.load(myTopic);
+				if(loader != null){
+					loader.load(myTopic);
 				}				
 				
 				closeListener.close();
 			}});
 		
-		mainPanel.setWidget(4, 0, submitB);
+		
+		
+		Button delButton = new Button(ConstHolder.myConstants.delete());
+		delButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {			
+				if(Window.confirm(ConstHolder.myConstants.delete_occ_warning())){
+					delete();
+				}			
+			}});
+		
+		if(showDelete){
+			mainPanel.setWidget(4, 1, submitB);
+			mainPanel.setWidget(4, 0, delButton);
+		}else{
+			mainPanel.setWidget(4, 0, submitB);			
+		}
 		
 		initWidget(mainPanel);
 	}
 
-	
+	private void delete() {
+		topicCache.deleteOccurrence(link, new StdAsyncCallback(ConstHolder.myConstants.delete_occ_async()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				if(loader != null){
+					loader.load(myTopic);
+				}
+				closeListener.close();									
+			}
+		});
+	}
 	
 	
 

@@ -21,7 +21,7 @@ public class AddLinkPopup extends PopupWindow {
 		this.manager = _manager;
 		this.link = _link;
 		
-		AddLinkContent addLinkContent = new AddLinkContent(widget,manager.getTopicCache(),link,myTopic,this);
+		AddLinkContent addLinkContent = new AddLinkContent(widget,manager.getTopicCache(),link,myTopic,this,true);
 		
 		setContent(addLinkContent);
 		

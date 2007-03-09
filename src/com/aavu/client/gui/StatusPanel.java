@@ -7,7 +7,9 @@ import com.aavu.client.gui.ext.GUIEffects;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class StatusPanel extends SimplePanel {
 
@@ -63,17 +65,30 @@ public class StatusPanel extends SimplePanel {
 	 * @author Jeff Dwyer
 	 *
 	 */
-	private class StatusLabel extends Label {
-		
+	private class StatusLabel extends Label implements MouseListener {		
+		private String string;
 		public StatusLabel(String string, StatusCode statusCode) {
-			super(" ");//string);
+			super(" ");
+			this.string = string;
 			setCode(statusCode);	
+			addMouseListener(this);
 		}
 
 		private void setCode(StatusCode statusCode) {			
 			setStyleName(statusCode.getCode());			
 		}
+
 		
+		public void onMouseEnter(Widget sender) {
+			setText(string);
+		}
+
+		public void onMouseLeave(Widget sender) {
+			setText("");
+		}
+		public void onMouseDown(Widget sender, int x, int y) {}
+		public void onMouseMove(Widget sender, int x, int y) {}
+		public void onMouseUp(Widget sender, int x, int y) {}
 	}
 	
 	

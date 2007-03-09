@@ -13,6 +13,7 @@ import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -470,6 +471,12 @@ public class TopicCache {
 
 	public void changeState(long id, boolean b, AsyncCallback callback) {
 		topicService.changeState(id, b, callback);
+	}
+
+
+
+	public void deleteOccurrence(WebLink link, AsyncCallback callback) {
+		topicService.deleteOccurrence(link.getId(), callback);		
 	}
 
 

@@ -62,4 +62,6 @@ public interface TopicService {
 	WebLink getWebLinkForURL(String url);
 	
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
+
+	void deleteOccurrence(long id) throws HippoPermissionException;
 }

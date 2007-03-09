@@ -282,6 +282,13 @@ public class TopicServiceImpl implements TopicService {
 		}
 		topicDAO.changeState(t, toIsland);
 	}
+	public void deleteOccurrence(long id) throws HippoPermissionException {
+		Occurrence o = topicDAO.getOccurrrence(id);
+		if(o.getUser() != userService.getCurrentUser()){
+			throw new HippoPermissionException();
+		}
+		topicDAO.deleteOccurrence(o);
+	}
 
 
 

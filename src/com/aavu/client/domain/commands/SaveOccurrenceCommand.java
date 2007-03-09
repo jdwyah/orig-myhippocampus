@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.util.SetUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSerializable {
@@ -50,7 +51,7 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 				Topic topic = (Topic) iter.next();
 				
 				//temp, make sure to set higher scoped 'existing'
-				Occurrence exhist = (Occurrence) getFromSetById(topic.getOccurences(), occurrence.getId());				
+				Occurrence exhist = (Occurrence) SetUtils.getFromSetById(topic.getOccurences(), occurrence.getId());				
 				
 				if(exhist != null){
 					
@@ -87,10 +88,12 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 			for (Iterator iter = getRemoveItems().iterator(); iter.hasNext();) {
 				Topic inLink = (Topic) iter.next();
 				System.out.println("still has link"+inLink);
-				Occurrence exist2 = (Occurrence) getFromSetById(inLink.getOccurences(), occurrence.getId());
-				inLink.getOccurences().remove(exist2);
-								
-				occurrence.getTopics().remove(inLink);
+				Occurrence exist2 = (Occurrence) SetUtils.getFromSetById(inLink.getOccurences(), occurrence.getId());
+				boolean r1 = inLink.getOccurences().remove(exist2);								
+				boolean r2 = occurrence.getTopics().remove(inLink);
+				if(!(r1 && r2)){
+					System.out.println("WARN SaveOccurrence Not Removing "+r1+" "+r2);
+				}
 			}
 			
 		}else{			
@@ -150,25 +153,6 @@ public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSeri
 		return rtn;
 	}
 	
-
-	private Object getFromSetById(Set topics,long id){
-		for (Iterator iter = topics.iterator(); iter.hasNext();) {
-			Object o = (Object) iter.next();
-			if (o instanceof Occurrence) {
-				Occurrence occ = (Occurrence) o;
-				if(occ.getId() == id){
-					return occ;
-				}
-			}
-			if (o instanceof Topic) {
-				Topic top = (Topic) o;
-				if(top.getId() == id){
-					return top;
-				}
-			}			
-		}			
-		return null;
-	}
 	
 	/**
 	 * make sure we save the other topics that we may have added ourselves to,

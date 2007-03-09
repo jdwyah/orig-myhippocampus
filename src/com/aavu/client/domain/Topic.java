@@ -234,6 +234,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		if(entries.isEmpty()){
 			Entry initialEntry = new Entry();
 			getOccurences().add(initialEntry);
+			initialEntry.getTopics().add(this);
 			return initialEntry;
 		}else{
 			return (Entry) entries.iterator().next();

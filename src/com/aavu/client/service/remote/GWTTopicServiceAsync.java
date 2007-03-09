@@ -55,6 +55,9 @@ public interface GWTTopicServiceAsync {
 	void getWebLinkForURL(String url, AsyncCallback callback);
 	
 	void changeState(long topicID, boolean toIsland,AsyncCallback callback);
+
+
+	void deleteOccurrence(long id, AsyncCallback callback);
 }
 
 

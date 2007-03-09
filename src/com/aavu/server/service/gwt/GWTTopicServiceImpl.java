@@ -382,6 +382,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public void changeState(long topicID, boolean toIsland) throws HippoException {
 		topicService.changeState(topicID, toIsland);		
 	}
+	public void deleteOccurrence(long id) throws HippoException {
+		topicService.deleteOccurrence(id);
+	}
 
 	
 
