@@ -37,7 +37,7 @@ public interface TopicDAO {
 
 	List<TimeLineObj> getTimeline(long meta_id, User user);
 
-	List<Topic> getAllTopics();
+	List<Topic> getAllTopics(User u);
 
 	Occurrence save(Occurrence link);
 

@@ -481,8 +481,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * for when you really want the whole DB
 	 * 
 	 */
-	public List<Topic> getAllTopics() {		
-		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class));
+	public List<Topic> getAllTopics(User u) {		
+		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
+				.add(Expression.eq("user", u)));
 		return getHibernateTemplate().findByCriteria(crit);
 	}
 	/**
@@ -595,7 +596,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 */
 	public void delete(final Topic todelete) {
 		
-	log.info("Deleting: "+todelete);
+	log.info("Deleting: "+todelete +" "+todelete.getId());
 		getHibernateTemplate().execute(new HibernateCallback(){
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 
@@ -624,8 +625,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				
 				System.out.println("found "+conns.size()+" connections.");
 				for (TopicTypeConnector connector : conns) {
-					//connector.getType()
-					System.out.println("Delete connection "+connector);
+					connector.getTopic().getTypes().remove(connector);					
+					System.out.println("Delete connection "+connector+" "+connector.getId()+" "+connector.getTopic().getId()+" to "+connector.getType().getId());
 					sess.delete(connector);
 				}				
 				topic.getTypes().clear();

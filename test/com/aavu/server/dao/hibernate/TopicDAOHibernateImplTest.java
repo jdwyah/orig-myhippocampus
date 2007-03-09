@@ -11,6 +11,7 @@ import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.MindTreeOcc;
@@ -354,7 +355,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t.setTitle(C);
 		t.setUser(u);
 
-		topicDAO.save(t);
+		t = topicDAO.save(t);
 
 		List<TopicIdentifier> list = topicDAO.getAllTopicIdentifiers(u);
 
@@ -364,9 +365,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			assertEquals(tident.getTopicTitle(),C);
 		}
 
+				
 		Topic t2 = new Topic(u,D);
-		t2.addSeeAlso(t.getIdentifier());
-		topicDAO.save(t2);
+		t2.addSeeAlso(t,new MetaSeeAlso());
+		t2 = topicDAO.save(t2);
 
 
 		list = topicDAO.getAllTopicIdentifiers(u);
@@ -388,14 +390,15 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Topic author = new Topic(u,B);
 
-
+		MetaSeeAlso metaseealso = new MetaSeeAlso();
+		
 		author = topicDAO.save(author);
 
 		Topic patGames = new Topic(u,C);		
 
 		patGames = topicDAO.save(patGames);
 
-		author.addSeeAlso(patGames.getIdentifier());
+		author.addSeeAlso(patGames,metaseealso);
 
 		System.out.println("_________________");
 
@@ -459,7 +462,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//
 		Topic bullcrap = new Topic(u,D);		
 		bullcrap = topicDAO.save(bullcrap);		
-		author.addSeeAlso(bullcrap.getIdentifier());		
+		author.addSeeAlso(bullcrap,metaseealso);		
 		topicDAO.save(author);
 
 //		topicDAO.evict(bullcrap);
@@ -521,6 +524,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	 * Another alternative could be a topicService.addSeeAlso() call, but this starts 
 	 * really taking things out of the Domain. Good and bad aspects to that I suppose.
 	 * 
+	 * 
 	 * Only functions properly with clean DB bc it uses getAllTopics to sweep for accidental
 	 * null user topics.
 	 * @throws HippoBusinessException 
@@ -560,53 +564,56 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//System.out.println(savedPat.toPrettyString());		
 		//System.out.println(savedClancy.toPrettyString());
 
-		List<Topic> allTopics = topicDAO.getAllTopics();		
-		//should be six. PatGames, Book, Author, Book->Author, TomClancy, PatGames->TomClancy 
+		List<Topic> allTopics = topicDAO.getAllTopics(u);
+		//should be six. PatGames, Book, Author, TomClancy. and the two associations
 		assertEquals(6,allTopics.size());
 
 		Topic recommender = new Topic(u,F);
 		recommender = topicDAO.save(recommender);
 
-		savedPat.addSeeAlso(recommender.getIdentifier());		
+		MetaSeeAlso metaSeeAlso = new MetaSeeAlso();
+		
+		savedPat.addSeeAlso(recommender,metaSeeAlso);		
 		Topic savedPat2 = topicDAO.save(savedPat);
 
-		allTopics = topicDAO.getAllTopics();
+		allTopics = topicDAO.getAllTopics(u);
 		for (Topic topic : allTopics) {
 			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		//should be nine. 6 from before plus:  Recommender, Patriot->Recommender, and SeeAlso, 
+		////should be nine. 6 from before plus:  Recommender, Patriot->Recommender, and SeeAlso, 
 		assertEquals(9,allTopics.size());
 
 
 		Topic anotherBook = new Topic(u,G);
 		topicDAO.save(anotherBook);
 
-		savedPat2.addSeeAlso(anotherBook.getIdentifier());
+		savedPat2.addSeeAlso(anotherBook,metaSeeAlso);
 
 		Topic savedPat3 = topicDAO.save(savedPat2);
 
 		assertEquals(2,savedPat3.getSeeAlsoAssociation().getMembers().size());
 
-		allTopics = topicDAO.getAllTopics();
+		allTopics = topicDAO.getAllTopics(u);
 		for (Topic topic : allTopics) {
-			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass()+" user "+topic.getUser());
+			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		//should be just 10. 9 from before plus: Another 
+		////should be just 10. 9 from before plus: Another 
+		//
 		assertEquals(10,allTopics.size());
 
 
 		Topic anotherRecommender = new Topic(u,H);
 		topicDAO.save(anotherRecommender);
 
-		anotherRecommender.addSeeAlso(savedPat3.getIdentifier());
+		anotherRecommender.addSeeAlso(savedPat3,metaSeeAlso);
 		topicDAO.save(anotherRecommender);
 
 
-		allTopics = topicDAO.getAllTopics();
+		allTopics = topicDAO.getAllTopics(u);
 		for (Topic topic : allTopics) {
-			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass()+" user "+topic.getUser());
+			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		//should be just 12. 10 from before plus: AnotherRecommender & AnotherRecomender's Association 
+		////should be just 12. 10 from before plus: AnotherRecommender & AnotherRecomender's Association 
 		assertEquals(12,allTopics.size());
 	}
 
@@ -967,6 +974,62 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
+	public void testDeleteTag() throws HippoBusinessException{
+		Topic patriotGames = new Topic();
+		patriotGames.getLatestEntry().setData(B);
+		patriotGames.setTitle(C);
+		patriotGames.setUser(u);
+
+		Tag book = new Tag(u,D);		
+
+		MetaTopic author = new MetaTopic();
+		author.setTitle(B);
+		author.setUser(u);
+		book.addMeta(author);
+
+		topicDAO.save(book);
+
+		Topic tomClancy = new Topic();
+		tomClancy.setTitle(E);
+		topicDAO.save(tomClancy);
+
+		patriotGames.tagTopic(book);
+		patriotGames.addMetaValue(author, tomClancy);
+
+		System.out.println("before: "+patriotGames.getId());
+
+				
+		topicDAO.save(patriotGames);
+
+		Entry lastEntry = patriotGames.getLatestEntry();
+		
+		System.out.println("after: "+patriotGames.getId());
+
+		System.out.println(patriotGames.toPrettyString());
+
+		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+
+		assertEquals(3, savedL.size());
+		
+		
+		book = (Tag) topicDAO.getForName(u, D);
+		//assertEquals(1,book.getInstances().size());
+		
+		topicDAO.delete(book);
+		
+		savedL = topicDAO.getAllTopicIdentifiers(u);
+		assertEquals(2, savedL.size());
+		
+		//assert that Book is no longer there
+		for (TopicIdentifier identifier : savedL) {
+			assertNotSame(D, identifier.getTopicTitle());
+		}
+		
+		patriotGames = (Topic) topicDAO.getForName(u, C);
+		assertEquals(0,patriotGames.getTypes().size());
+		
+	}
+	
 	
 	public void testSaveTopicsLocation() throws HippoBusinessException{
 		
