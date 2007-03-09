@@ -56,6 +56,11 @@ public class TitleGadget extends Gadget {
 		picker.load(topic);
 		return 0;
 	}
+
+	//@Override
+	public boolean isOnForTopic(Topic topic) {
+		return true;
+	}
 	
 	
 	

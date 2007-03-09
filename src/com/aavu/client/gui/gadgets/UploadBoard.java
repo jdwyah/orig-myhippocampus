@@ -89,6 +89,11 @@ public class UploadBoard extends Gadget {
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.files()));
 		return b;
 	}
+
+	//@Override
+	public boolean isOnForTopic(Topic topic) {
+		return topic.hasFiles();
+	}
 	
 	
 }

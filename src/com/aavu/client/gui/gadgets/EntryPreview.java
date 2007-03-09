@@ -80,6 +80,11 @@ public class EntryPreview extends Gadget {
 		super.showForFirstTime();
 		manager.editEntry(topic);
 	}
+
+	//@Override
+	public boolean isOnForTopic(Topic topic) {
+		return topic.hasEntry();
+	}
 	
 	
 

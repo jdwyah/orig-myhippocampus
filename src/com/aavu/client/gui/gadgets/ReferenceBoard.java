@@ -75,4 +75,10 @@ public class ReferenceBoard extends Gadget {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	//@Override
+	public boolean isOnForTopic(Topic topic) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

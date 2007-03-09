@@ -165,6 +165,11 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.link_add_title()));
 		return b;
 	}
+
+	//@Override
+	public boolean isOnForTopic(Topic topic) {
+		return topic.hasWebLinks();
+	}
 	
 
 }

@@ -1,25 +1,13 @@
 package com.aavu.client.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
-import com.aavu.client.gui.gadgets.EntryPreview;
-import com.aavu.client.gui.gadgets.Gadget;
-import com.aavu.client.gui.gadgets.LinkDisplayWidget;
-import com.aavu.client.gui.gadgets.ReferenceBoard;
-import com.aavu.client.gui.gadgets.ConnectionBoard;
-import com.aavu.client.gui.gadgets.TagPropertyPanel;
-import com.aavu.client.gui.gadgets.UploadBoard;
-import com.aavu.client.service.Manager;
 import com.aavu.client.widget.autocompletion.Completable;
-import com.aavu.client.widget.edit.OnThisIslandBoard;
-import com.aavu.client.widget.edit.TopicDetailsTabBar;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -655,6 +643,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return rtn;
 	}
 
+	/**
+	 * Return the set of all Meta Dates that this topic has. 
+	 * ie Movie will return 'Date Seen' & 'DateDue'
+	 * @return
+	 */
 	public Set getMetaDates() {
 		Set rtn = new HashSet();
 		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
@@ -677,6 +670,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 	public boolean hasTagProperties(){
 		return (this instanceof Tag) && !getMetas().isEmpty();
+	}
+
+	public boolean hasTimeMetas() {		
+		return false;
 	}
 
 	

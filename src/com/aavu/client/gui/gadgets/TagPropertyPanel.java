@@ -154,5 +154,10 @@ public class TagPropertyPanel extends Gadget {
 		return b;
 	}
 
+	//@Override
+	public boolean isOnForTopic(Topic topic) {
+		return topic.hasTagProperties();
+	}
+
 	
 }

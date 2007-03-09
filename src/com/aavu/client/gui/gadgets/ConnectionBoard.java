@@ -184,4 +184,13 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		return b;
 	}
 
+	//@Override
+	/**
+	 * Special Gadget always add, but it will maintain its own visibility
+	 * since we don't know at load time whether there are references
+	 */
+	public boolean isOnForTopic(Topic topic) {
+		return true;
+	}
+
 }

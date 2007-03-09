@@ -1,6 +1,7 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
@@ -16,6 +17,7 @@ public class GadgetManager {
 	private LinkDisplayWidget linkDisplayW;
 	private ConnectionBoard connectionBoard;
 	private EntryPreview entryPreview;
+	private TimeGadget timeGadget;
 	//private TagPropertyPanel tagProperties;
 	
 	
@@ -32,6 +34,7 @@ public class GadgetManager {
 		connectionBoard = new ConnectionBoard(manager);
 		linkDisplayW = new LinkDisplayWidget(manager);	
 		uploadBoard = new UploadBoard(manager);
+		timeGadget = new TimeGadget(manager);
 		
 		
 		//allGadgets.add(tagProperties);
@@ -40,7 +43,7 @@ public class GadgetManager {
 		allGadgets.add(linkDisplayW);
 		allGadgets.add(connectionBoard);		
 		allGadgets.add(entryPreview);
-		
+		//allGadgets.add(timeGadget);
 		
 		
 		return allGadgets;		
@@ -57,22 +60,12 @@ public class GadgetManager {
 
 	public void load(Topic topic) {
 		List gadgetsToUse = new ArrayList();
-		
-		//Special Gadget always add, but it will maintain its own visibility
-		//since we don't know at load time whether there are references
-		gadgetsToUse.add(connectionBoard);
-		
-		if(topic.hasEntry()){
-			gadgetsToUse.add(entryPreview);
-		}
-		if(topic.hasFiles()){
-			gadgetsToUse.add(uploadBoard);
-		}
-//		if(topic.hasTagProperties()){
-//			gadgetsToUse.add(tagProperties);
-//		}
-		if(topic.hasWebLinks()){
-			gadgetsToUse.add(linkDisplayW);
+				
+		for (Iterator iter = allGadgets.iterator(); iter.hasNext();) {
+			Gadget gadget = (Gadget) iter.next();
+			if(gadget.isOnForTopic(topic)){
+				gadgetsToUse.add(gadget);
+			}
 		}
 		
 		if(displayer != null){

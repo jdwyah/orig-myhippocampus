@@ -155,6 +155,8 @@ public interface Consts extends Messages {
 	String img_gadget_tagProperties();
 	String img_gadget_picker();
 	String img_gadget_connections();
+	String img_gadget_time();
+	
 	String gadget_already_showing();
 	String help_welcome();
 	String help_blank_start_1();
@@ -170,6 +172,9 @@ public interface Consts extends Messages {
 	String topic_picker_topic_tooltip();
 	String topic_picker_island_tooltip();
 	String topic_picker_delete_tooltip();
+	
+	
+	String gadget_time_title();
 	
 		
 	

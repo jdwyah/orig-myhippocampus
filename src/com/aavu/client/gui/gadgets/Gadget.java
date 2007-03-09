@@ -30,6 +30,8 @@ public abstract class Gadget extends Composite {
 
 	public abstract ImageButton getPickerButton();
 
-	public void showForFirstTime() {};
+	public void showForFirstTime() {}
+
+	public abstract boolean isOnForTopic(Topic topic);
 	
 }
