@@ -52,14 +52,19 @@ public class HippoTest implements EntryPoint, HistoryListener {
 			
 			Logger.log("ModuleBaseURL: "+GWT.getModuleBaseURL());
 			
+			String moduleBase = GWT.getModuleBaseURL();
+			
 			//Use for Deployment to production server
 			//
 			realModuleBase = REMOTE_HOST;
-			//realModuleBase = REMOTE_HOST + "DEV/";
 					
 			//Use to test compiled browser locally
 			//
-			//realModuleBase = LOCAL_HOST;
+			if(moduleBase.indexOf("myhippocampus.com") == -1){	
+				Logger.log("Testing. Using Localhost");
+				realModuleBase = LOCAL_HOST;
+			}
+			
 			
 		}else{
 			//realModuleBase = GWT.getModuleBaseURL();

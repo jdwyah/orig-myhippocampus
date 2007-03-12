@@ -178,6 +178,9 @@ public interface Consts extends Messages {
 	String link_add_fail();
 	String link_add_succ();
 	
+	String meta_add_edit();
+	String meta_title();
+	
 		
 	
 	

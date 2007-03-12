@@ -184,6 +184,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	}
 
+	/**
+	 * 
+	 * @param tag
+	 * @return
+	 */
 	public boolean removeTag(Tag tag) {
 
 		System.out.println("REMOVE-------------------");
@@ -191,16 +196,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		System.out.println("FROM-------------------");
 		System.out.println(toPrettyString());
 		
-		boolean b = true;//tag.getInstances().remove(this);
+		//boolean b = true;//tag.getInstances().remove(this);
 		
-		boolean b2 = getTypesAsTopics().remove(tag);
+		return removeType(tag);
 		
-		System.out.println("Remove Tag: "+b+" "+b2);
-		return b && b2;
-		
-//		return tag.getInstances().remove(this)
-//		&&
-//		getTypes().remove(tag);
 	}
 
 	
@@ -538,13 +537,16 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * TODO please help me understand this. see commented function below. hashcode == and TTC == && .eq(),
 	 * but it won't remove it from the set. why???
 	 * 
+	 * more issues with our .equals() and remove() not guaranteeing removal if underlying objects mutate.
+	 * 
 	 * Workaround here is to make a new set and add everything that shouldn't be deleted. 
 	 * 
 	 * @param topic
 	 */
-	public void removeType(Topic topic){
+	public boolean removeType(Topic topic){
 		//System.out.println("Remove T size "+getTypes().size());
 		Set replacementSet = new HashSet();
+		boolean found = false;
 		
 		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
 			
@@ -552,10 +554,13 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			
 			if(!twl.getType().equals(topic)){
 				replacementSet.add(twl);
-			}			
+			}else{
+				found = true;
+			}
 		}
 		setTypes(replacementSet);
 				
+		return found;
 		//System.out.println("Remove T size "+getTypes().size());
 	}
 	

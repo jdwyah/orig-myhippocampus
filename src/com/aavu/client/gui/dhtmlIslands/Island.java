@@ -14,6 +14,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -547,7 +548,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 
 			dragHandler.add(l,Island.this);
 
-			System.out.println("add label "+fti.getTopicTitle()+" "+x+" "+y);
+			Logger.debug("add label "+fti.getTopicTitle()+" "+x+" "+y);
 			add(l,x,y);
 			
 			topicLabelList.add(l);

@@ -15,6 +15,7 @@ import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.CreateNewWindow;
+import com.aavu.client.gui.EditMetaWindow;
 import com.aavu.client.gui.EntryEditWindow;
 import com.aavu.client.gui.MainMap;
 import com.aavu.client.gui.SearchResultsWindow;
@@ -27,6 +28,7 @@ import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.glossary.GlossaryWindow;
+import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.gui.timeline.TimeLineWindow;
 import com.aavu.client.help.UserHelper;
@@ -477,11 +479,14 @@ public class Manager implements TopicSaveListener, LoginListener {
 	public void zoomTo(double scale) {
 		map.zoomTo(scale);	
 	}
-	public void editEntry(Topic topic) {
-				
-		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());				
-		
+	public void editEntry(Topic topic) {				
+		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());						
 	}
+
+	public void editMetas(CloseListener listener) {
+		EditMetaWindow ew = new EditMetaWindow(getTopicCache(),newFrame(),listener);
+	}	
+	
 	public void viewMembers(Topic myTag, FullTopicIdentifier[] topics) {
 
 		ViewMemberWindow gw = new ViewMemberWindow(myTag, topics,this,newFrame());
@@ -535,7 +540,8 @@ public class Manager implements TopicSaveListener, LoginListener {
 			}};
 		
 		getTopicCache().changeState(topic.getId(), toIsland, wrapper);	
-	}	
+	}
+
 
 
 }

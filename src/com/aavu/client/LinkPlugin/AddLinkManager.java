@@ -1,16 +1,12 @@
 package com.aavu.client.LinkPlugin;
 
-import org.gwtwidgets.client.util.WindowUtils;
-
-import com.aavu.client.AddLink;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
-import com.aavu.client.strings.ConstHolder;
-import com.google.gwt.user.client.Window;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class AddLinkManager implements CloseListener {
@@ -45,8 +41,21 @@ public class AddLinkManager implements CloseListener {
 			}
 
 			public void onSuccess(Object result) {
-				System.out.println("ALM succ "+result);
+				Logger.debug("ALM succ "+result);
 				weblink = (WebLink) result;
+				
+				if(weblink == null){
+					weblink = new WebLink();
+					weblink.setUri(url);
+				}				
+				if(weblink.getDescription() == null || weblink.getDescription().length() < 1){
+					weblink.setDescription(description);	
+				}				
+				if(weblink.getNotes() == null){
+					weblink.setNotes(notes);
+				}else{
+					weblink.setNotes(notes + " " + weblink.getNotes());
+				}
 				
 				//panel = new AddLinkPanel(AddLinkManager.this,weblink,url,notes,description);
 				

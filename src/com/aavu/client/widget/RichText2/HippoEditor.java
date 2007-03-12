@@ -1,9 +1,7 @@
 package com.aavu.client.widget.RichText2;
 
-import com.aavu.client.gui.TopicWindow;
+import com.aavu.client.gui.EntryEditWindow;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 
 public class HippoEditor extends Editor {
 
@@ -12,7 +10,7 @@ public class HippoEditor extends Editor {
 	public HippoEditor(ClickListener linkClickListener){
 		super();
 		this.linkClickListener = linkClickListener;
-		setTextSize((TopicWindow.WIDTH - 120)+"px", "400px");
+		setTextSize((EntryEditWindow.WIDTH - 120)+"px", "400px");
 	}
 
 	//@Override

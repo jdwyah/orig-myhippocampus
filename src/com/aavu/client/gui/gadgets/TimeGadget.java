@@ -2,22 +2,23 @@ package com.aavu.client.gui.gadgets;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
-import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.TooltipListener;
+import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.edit.TopicWidget;
-import com.aavu.client.wiki.TextDisplay;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TimeGadget extends Gadget {
+public class TimeGadget extends Gadget implements CloseListener {
 
 
 	private Topic topic;
 	private Manager manager;
+	private VerticalPanel metasPanel;
+	private VerticalPanel mainPanel;
 	
 	public TimeGadget(Manager _manager){		
 		
@@ -26,10 +27,20 @@ public class TimeGadget extends Gadget {
 		this.manager = _manager;
 		
 		
-		Label l = new Label("d");
+		metasPanel = new VerticalPanel();		
 		
-	
-		initWidget(l);		
+		mainPanel = new VerticalPanel();
+		
+		Button addEditButton = new Button(ConstHolder.myConstants.meta_add_edit());
+		addEditButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.editMetas(TimeGadget.this);
+			}});
+		
+		mainPanel.add(metasPanel);		
+		mainPanel.add(addEditButton);		
+		
+		initWidget(mainPanel);		
 		
 		addStyleName("H-TimeGadget");		
 		
@@ -53,6 +64,11 @@ public class TimeGadget extends Gadget {
 	//@Override
 	public boolean isOnForTopic(Topic topic) {
 		return topic.hasTimeMetas();
+	}
+
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

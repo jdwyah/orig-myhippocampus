@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 
-	private static final int WIDTH = 750;
+	public static final int WIDTH = 750;
 	private static final int HEIGHT = 500;
 	private Manager manager;
 	private SaveStopLight saveButton;

@@ -95,9 +95,12 @@ public class IslandBanner extends AbsolutePanel {
 		//resize as we zoom in. This solution is a bit hackish, but seems to work.
 		//we'd really like to pass in the island width, but that calc is waiting on 
 		//us, so it's a bit odd.
+		//
+		//WARN!! the height *= was making us unable to roll over the topic labels
+		//in firefox! not sure why it only affects FF
 		if(currentScale > 1){
 			width *= currentScale;
-			height *= currentScale;
+			//height *= currentScale;
 		}
 		if(shdw.getText().equals("Person")){
 			System.out.println("on load reg "+width+" ");

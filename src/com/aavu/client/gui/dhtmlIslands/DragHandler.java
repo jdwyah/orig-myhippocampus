@@ -51,7 +51,7 @@ public class DragHandler implements MouseListener {
 	public void onMouseDown(Widget sender, int x, int y) {
 		
 		if(!islandDrag){
-			//panel.
+			Logger.debug("!islandDrag, cancel down");
 			return;
 		}
 		
@@ -87,7 +87,8 @@ public class DragHandler implements MouseListener {
 
 	public void onMouseMove(Widget sender, int x, int y) {
 		
-		Logger.debug("mouseMove "+GWT.getTypeName(sender)+" x "+x+" y "+y);
+		//Logger.debug("mouseMove "+GWT.getTypeName(sender)+" x "+x+" y "+y);
+		
 //		if(GWT.getTypeName(sender).equals("com.aavu.client.gui.dhtmlIslands.DraggableLabel")){
 //			System.out.println("dragStartX "+dragStartX+" dragStartY "+dragStartY+" absX "+absX+" absY "+absY);
 //		}		

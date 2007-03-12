@@ -61,8 +61,8 @@ public class Level extends AbsolutePanel {
 		
 			isle.setPixelSize((int)(baseSize*scale/scalar), (int)(baseSize*scale/scalar));			
 			
-			DOM.setStyleAttribute(getElement(), "width", baseSize*scale+"px");
-			DOM.setStyleAttribute(getElement(), "height", baseSize*scale+"px");
+			DOM.setStyleAttribute(getElement(), "width", (int)(baseSize*scale/scalar)+"px");
+			DOM.setStyleAttribute(getElement(), "height", (int)(baseSize*scale/scalar)+"px");
 		}
 
 		public int getX() {

@@ -1,24 +1,15 @@
 package com.aavu.client.widget.edit;
 
 
-import java.util.Set;
-
-import org.gwtwidgets.client.wrap.Effect;
-
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractSaveCommand;
 import com.aavu.client.domain.commands.SaveEntryTextCommand;
-import com.aavu.client.gui.TopicWindow;
 import com.aavu.client.service.Manager;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
