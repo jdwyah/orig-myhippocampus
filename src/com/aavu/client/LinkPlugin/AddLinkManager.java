@@ -4,6 +4,7 @@ import org.gwtwidgets.client.util.WindowUtils;
 
 import com.aavu.client.AddLink;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTTagServiceAsync;
@@ -49,7 +50,7 @@ public class AddLinkManager implements CloseListener {
 				
 				//panel = new AddLinkPanel(AddLinkManager.this,weblink,url,notes,description);
 				
-				panel = new AddLinkContent(null,topicCache,weblink,null,AddLinkManager.this);
+				panel = new AddLinkContent(topicCache,weblink,AddLinkManager.this);
 				
 				loadGUICallback.onSuccess(panel);
 			}});
@@ -63,7 +64,8 @@ public class AddLinkManager implements CloseListener {
 
 
 	public void close() {
-		
+		GUIEffects.close();
 	}
+	
 	
 }

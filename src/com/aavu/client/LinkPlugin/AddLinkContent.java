@@ -14,6 +14,7 @@ import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -38,16 +39,16 @@ public class AddLinkContent extends Composite implements CompleteListener {
 	private TopicLoader loader;
 	private Topic myTopic;
 	private CloseListener closeListener;
+	private Label notificationLabel;
 	
 
 	
 	//http://localhost:8888/com.aavu.AddLink/AddLink.html?url=http%3A%2F%2Fwww.resourcebundleeditor.com%2Fwiki%2FSupport&description=ResourceBundle%20Editor&notes=pport%20mechanisms%20are%20hosted%20on%20
 	//http://localhost:8888/com.aavu.AddLink/AddLink.html?url=http%3A%2F%2Fwww.google.com&description=ResourceBundle%20Editor&notes=pport%20mechanisms%20are%20hosted%20on%20
 
-	
-	public AddLinkContent(final TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener) {
-		this(widget,_topicCache,_link,myTopic,closeListener,false);
-	}
+	public AddLinkContent(TopicCache topicCache, WebLink weblink, AddLinkManager manager) {
+		this(null,topicCache,weblink,null,manager,false);
+	}	
 	public AddLinkContent(TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener,boolean showDelete) {		
 		this.topicCache = _topicCache;
 		this.link = _link;
@@ -106,38 +107,7 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		Button submitB = new Button(ConstHolder.myConstants.save());
 		submitB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				
-				if(!prepareLink()){
-					return;
-				}				
-				
-				List allTopics = tagsBoard.getAllTopics();
-				int removeNumber = tagsBoard.getRemoveNumber();
-							
-//				int i = 0;
-//				for (Iterator iter = allTopics.iterator(); iter.hasNext();) {
-//					Topic t = (Topic) iter.next();
-//					System.out.println("FOUND "+t+" "+i+" "+removeNumber);
-//					i++;
-//				}
-				SaveOccurrenceCommand comm = new SaveOccurrenceCommand(allTopics, link,removeNumber);
-				System.out.println("bef "+comm.getAddTopics().size()+" after "+comm.getRemoveItems().size());				
-				
-				if(comm.getAddTopics().size() < 1){
-					Window.alert(ConstHolder.myConstants.link_please_pick());
-					return;
-				}
-				
-				topicCache.save(myTopic,comm,						
-						new StdAsyncCallback(ConstHolder.myConstants.save()){});
-				
-				myTopic.getOccurences().add(link);
-				System.out.println("WIDGET LOAD ");
-				if(loader != null){
-					loader.load(myTopic);
-				}				
-				
-				closeListener.close();
+				submit();				
 			}});
 		
 		
@@ -157,9 +127,69 @@ public class AddLinkContent extends Composite implements CompleteListener {
 			mainPanel.setWidget(4, 0, submitB);			
 		}
 		
+		notificationLabel = new Label();
+		notificationLabel.setVisible(false);
+		mainPanel.setWidget(4,2, notificationLabel);
+		
 		initWidget(mainPanel);
 	}
 
+	
+	private void submit() {
+		if(!prepareLink()){
+			return;
+		}				
+		
+		List allTopics = tagsBoard.getAllTopics();
+		int removeNumber = tagsBoard.getRemoveNumber();
+					
+//		int i = 0;
+//		for (Iterator iter = allTopics.iterator(); iter.hasNext();) {
+//			Topic t = (Topic) iter.next();
+//			System.out.println("FOUND "+t+" "+i+" "+removeNumber);
+//			i++;
+//		}
+		SaveOccurrenceCommand comm = new SaveOccurrenceCommand(allTopics, link,removeNumber);
+		System.out.println("bef "+comm.getAddTopics().size()+" after "+comm.getRemoveItems().size());				
+		
+		if(comm.getAddTopics().size() < 1){
+			Window.alert(ConstHolder.myConstants.link_please_pick());
+			return;
+		}
+		
+		topicCache.save(myTopic,comm,						
+				new StdAsyncCallback(ConstHolder.myConstants.save()){
+					//@Override
+					public void onFailure(Throwable caught) {
+						super.onFailure(caught);
+						notificationLabel.setText(ConstHolder.myConstants.link_add_fail());
+						notificationLabel.setVisible(true);
+					}
+					//@Override
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+						
+						notificationLabel.setText(ConstHolder.myConstants.link_add_succ());
+						notificationLabel.setVisible(true);
+						
+						
+						if(loader != null && myTopic != null){
+							myTopic.getOccurences().add(link);
+							System.out.println("WIDGET LOAD ");
+							loader.load(myTopic);
+						}				
+						
+						Timer t = new Timer(){
+							public void run() {
+								closeListener.close();		
+							}};
+						t.schedule(500);
+						
+					}});
+		
+		
+	}
+	
 	private void delete() {
 		topicCache.deleteOccurrence(link, new StdAsyncCallback(ConstHolder.myConstants.delete_occ_async()){
 			public void onSuccess(Object result) {

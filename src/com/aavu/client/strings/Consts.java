@@ -175,6 +175,8 @@ public interface Consts extends Messages {
 	
 	
 	String gadget_time_title();
+	String link_add_fail();
+	String link_add_succ();
 	
 		
 	

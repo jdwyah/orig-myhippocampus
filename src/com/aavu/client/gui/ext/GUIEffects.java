@@ -90,5 +90,8 @@ public class GUIEffects {
 			Effect.appear(toAppear);
 		}
 	}
-	
+
+	public static native void close() /*-{
+		$wnd.close();
+	}-*/; 
 }
