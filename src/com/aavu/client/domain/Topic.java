@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
+import com.aavu.client.domain.util.SetUtils;
 import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
@@ -201,6 +202,24 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return removeType(tag);
 		
 	}
+	
+	/**
+	 * wack the association.
+	 * 
+	 * definitely don't wack the meta.
+	 * TODO would like to wack the associations, members... but only if they're
+	 * not referenced by anybody else. 
+	 * 
+	 * @param meta
+	 * @return
+	 */
+	public boolean removeMeta(Meta meta) {		
+		Association assoc = getAssociationForMetaOrNull(meta);
+		if(assoc == null){
+			return false;
+		}		
+		return SetUtils.removeFromSetById(getAssociations(), assoc.getId());		
+	}
 
 	
 	public Set getEntries(){
@@ -230,7 +249,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	/**
-	 * limitted to just 1 for now
+	 * limitted to just 1 for now.
 	 * 
 	 * @return
 	 */
@@ -259,10 +278,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	/**
-	 * Create an Association of type Meta
+	 * Create an Association of type Meta.
 	 * @param meta
 	 */
-	public void addMeta(Meta meta) {		
+	public void addTagProperty(Meta meta) {		
 		Association a = new Association(this,meta);		
 		getAssociations().add(a);		
 	}
@@ -299,7 +318,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 				Topic element = (Topic) iter.next();				
 				tagsStr.append(element.getId()+" "+element.getTitle());
 				tagsStr.append("\n");
-				for (Iterator iterator = element.getMetas().iterator(); iterator.hasNext();) {
+				for (Iterator iterator = element.getTagProperties().iterator(); iterator.hasNext();) {
 					Meta meta = (Meta) iterator.next();
 					tagsStr.append(indent+"Meta: "+meta.getId()+" "+meta.getName());
 					tagsStr.append("\n");
@@ -406,23 +425,46 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return new Association(this,seeAlsoSingleton);				
 	}
 	/**
-	 * NOTE: calling getMetas().add() won't do anything. Use addMeta()
+	 * NOTE: calling getTagProperties().add() won't do anything. Use addMeta()
 	 * 
-	 * This was returning MetaValue associations as well, until we added members.size() == 0 
-	 * is this an ok fix?
+	 * //old comment
+	 * //This was returning MetaValue associations as well, until we added members.size() == 0 
+	 * //is this an ok fix?
+	 * 
+	 * @return
+	 */
+	public Set getTagProperties() {
+		Set metas = new HashSet();
+		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
+			Association association = (Association) iter.next();
+									
+			for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
+				Topic possibleMeta = (Topic) iterator.next();
+			
+				if (possibleMeta instanceof Meta) {							
+					metas.add(possibleMeta);				
+				}	
+			}			
+			
+		}
+		return metas;		
+	}
+	/**
 	 * 
 	 * @return
 	 */
 	public Set getMetas() {
 		Set metas = new HashSet();
+		System.out.println("getMetas "+getAssociations().size());
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
+			
+			System.out.println("assoc "+association);
 			
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
 			
-				if (possibleMeta instanceof Meta
-						&& association.getMembers().size() == 0) {							
+				if (possibleMeta instanceof Meta) {							
 					metas.add(possibleMeta);				
 				}	
 			}			
@@ -653,14 +695,35 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * ie Movie will return 'Date Seen' & 'DateDue'
 	 * @return
 	 */
-	public Set getMetaDates() {
+	public Set getTagPropertyDates() {
 		Set rtn = new HashSet();
-		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
+		for (Iterator iter = getTagProperties().iterator(); iter.hasNext();) {
 			Meta meta = (Meta) iter.next();
 			if(meta instanceof MetaDate){
 				rtn.add(meta);				
 			}
 		}		
+		return rtn;
+	}
+
+	/**
+	 * Return all actual meta dates that the topic has. 
+	 * ie 
+	 * Movie will return nothing, 
+	 * but Crimson Tide will return a Date Seen. 
+	 * @return
+	 */
+	public Set getMetaDates() {
+		Set rtn = new HashSet();
+		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
+			Meta meta = (Meta) iter.next();
+			System.out.println("fff "+meta);
+			if(meta instanceof MetaDate){
+				System.out.println("add");
+				rtn.add(meta);				
+			}
+		}		
+		System.out.println("getmeta dates rtn "+rtn.size());
 		return rtn;
 	}
 	
@@ -674,13 +737,16 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return !getFiles().isEmpty();
 	}
 	public boolean hasTagProperties(){
-		return (this instanceof Tag) && !getMetas().isEmpty();
+		return (this instanceof Tag) && !getTagProperties().isEmpty();
 	}
 
 	public boolean hasTimeMetas() {		
-		return false;
+		System.out.println("HAS TIME");
+		System.out.println(toPrettyString());
+		return !getMetaDates().isEmpty();
 	}
 
+	
 	
 
 	

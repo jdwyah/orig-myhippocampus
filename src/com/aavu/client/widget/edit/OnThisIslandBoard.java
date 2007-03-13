@@ -155,7 +155,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 				
 				onThisIslandPanel.insert(new TopicLink(newTopic),0);				
 				
-				topicService.save(newTopic, new SaveTagtoTopicCommand(newTopic,(Tag) myTag),
+				topicService.executeCommand(newTopic, new SaveTagtoTopicCommand(newTopic,(Tag) myTag),
 						new StdAsyncCallback(ConstHolder.myConstants.save_async()){});				
 			}});
 		

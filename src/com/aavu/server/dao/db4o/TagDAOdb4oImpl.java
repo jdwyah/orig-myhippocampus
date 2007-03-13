@@ -21,7 +21,7 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport {
 		List<Tag> rtn = getDb4oTemplate().get(Tag.class);
 
 		for(Tag tag : rtn){
-			tag.getMetas();
+			tag.getTagProperties();
 		}
 
 		return rtn;
@@ -74,7 +74,7 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport {
 
 		System.out.println("SAVE Tag: " + tag.getId()+" "+tag.getName());
 		System.out.println("metas: ");
-		for (Object meta : tag.getMetas()){
+		for (Object meta : tag.getTagProperties()){
 			Meta metaCast = (Meta)meta;
 			System.out.println(metaCast+" "+metaCast.getName()+" "+metaCast.getId());
 		}
@@ -84,7 +84,7 @@ public class TagDAOdb4oImpl extends Db4oDaoSupport {
 		//could replace with deleting all, then re-adding...
 		//cascade w/ bind? Stateless is an unfortunate bedfellow
 		//
-		for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
+		for (Iterator iter = tag.getTagProperties().iterator(); iter.hasNext();) {
 			Meta m = (Meta) iter.next();
 			if(m.getId() == 0){
 				getDb4oTemplate().set(m);

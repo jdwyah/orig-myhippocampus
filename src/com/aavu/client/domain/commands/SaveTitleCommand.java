@@ -5,7 +5,7 @@ import java.util.Set;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveTitleCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveTitleCommand extends AbstractCommand implements IsSerializable {
 
 	public SaveTitleCommand(){};
 	

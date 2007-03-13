@@ -97,7 +97,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 				
 				setToShowMode(to);
 				
-				topicCache.save(topic,new SaveMetaTopicCommand(topic,meta,
+				topicCache.executeCommand(topic,new SaveMetaTopicCommand(topic,meta,
 						new Topic(to)),
 						new StdAsyncCallback(ConstHolder.myConstants.save()){});
 				

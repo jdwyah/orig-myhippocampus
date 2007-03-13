@@ -157,7 +157,7 @@ public class AddLinkContent extends Composite implements CompleteListener {
 			return;
 		}
 		
-		topicCache.save(myTopic,comm,						
+		topicCache.executeCommand(myTopic,comm,						
 				new StdAsyncCallback(ConstHolder.myConstants.save()){
 					//@Override
 					public void onFailure(Throwable caught) {

@@ -12,7 +12,7 @@ import org.gwm.client.impl.DefaultGInternalFrame;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
@@ -117,7 +117,7 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 	}
 
 
-	public void update(Topic t, AbstractSaveCommand command) {
+	public void update(Topic t, AbstractCommand command) {
 
 		System.out.println("MainMap update "+t+" "+command);
 		

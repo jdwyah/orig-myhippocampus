@@ -46,7 +46,7 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport{// implements TopicDAO{
 			
 			System.out.println("tag save "+tag.getId()+" "+tag.getName());
 			
-			for (Iterator iterM = tag.getMetas().iterator(); iter.hasNext();) {
+			for (Iterator iterM = tag.getTagProperties().iterator(); iter.hasNext();) {
 				
 				Meta m = (Meta) iterM.next();
 				
@@ -198,10 +198,10 @@ public class TopicDAOdb4oImpl extends Db4oDaoSupport{// implements TopicDAO{
 		List<Tag> list = getDb4oTemplate().get(Tag.class);
 		for(Tag t : list){
 			System.out.println("name: "+t.getName()+" "+t.getId());
-			System.out.println("meta: "+t.getMetas());
+			System.out.println("meta: "+t.getTagProperties());
 
-			if(t.getMetas() != null)
-				for (Iterator iter = t.getMetas().iterator(); iter.hasNext();) {
+			if(t.getTagProperties() != null)
+				for (Iterator iter = t.getTagProperties().iterator(); iter.hasNext();) {
 					Meta element = (Meta) iter.next();
 					System.out.println("meta "+element.getName()+" "+element.getType()+" "+element.getId());
 				}

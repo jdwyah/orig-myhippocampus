@@ -64,24 +64,19 @@ public class AutoCompleteTextBoxAsync extends TextBox implements KeyboardListene
 	 * Handle events that happen when keys are pressed.
 	 */
 	public void onKeyDown(Widget arg0, char arg1, int arg2) {
-		if(arg1 == KEY_ENTER)
-		{
+		if(arg1 == KEY_ENTER) {
 			enterKey(arg0, arg1, arg2);
 		}
-		else if(arg1 == KEY_TAB)
-		{
+		else if(arg1 == KEY_TAB) {
 			tabKey(arg0, arg1, arg2);
 		}
-		else if(arg1 == KEY_DOWN)
-		{
+		else if(arg1 == KEY_DOWN) {
 			downKey(arg0, arg1, arg2);
 		}
-		else if(arg1 == KEY_UP)
-		{
+		else if(arg1 == KEY_UP) {
 			upKey(arg0, arg1, arg2);
 		}
-		else if(arg1 == KEY_ESCAPE)
-		{
+		else if(arg1 == KEY_ESCAPE){
 			escapeKey(arg0, arg1, arg2);
 		}
 	}

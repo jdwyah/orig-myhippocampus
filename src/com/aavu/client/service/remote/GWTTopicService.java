@@ -6,7 +6,7 @@ import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -22,7 +22,7 @@ public interface GWTTopicService extends RemoteService {
 
 	TopicIdentifier[] getAllTopicIdentifiers() throws HippoException;
 		
-	void saveCommand(AbstractSaveCommand command) throws HippoBusinessException;
+	void saveCommand(AbstractCommand command) throws HippoBusinessException;
 	TopicIdentifier createNew(String title,boolean isIsland) throws HippoBusinessException;
 	
 	//List getTopicsStarting(String match);//List<String>
@@ -54,6 +54,8 @@ public interface GWTTopicService extends RemoteService {
 	void changeState(long topicID, boolean toIsland) throws HippoException;
 	
 	void deleteOccurrence(long id) throws HippoException;
+	
+	List getAllMetas() throws HippoException;
 }
 
 

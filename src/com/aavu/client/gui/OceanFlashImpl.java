@@ -4,7 +4,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -157,7 +157,7 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 		throw new UnsupportedOperationException("Not Yet Implemented");
 	}	
 
-	public void update(Tag t, AbstractSaveCommand command) {
+	public void update(Tag t, AbstractCommand command) {
 		throw new UnsupportedOperationException("Not Yet Implemented");		
 	}
 

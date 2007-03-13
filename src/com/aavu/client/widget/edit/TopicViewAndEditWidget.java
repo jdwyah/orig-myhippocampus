@@ -3,7 +3,7 @@ package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveEntryTextCommand;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -102,7 +102,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 	}
 
 
-	public AbstractSaveCommand getSaveCommand() {
+	public AbstractCommand getSaveCommand() {
 		return new SaveEntryTextCommand(topic,getEntryText());
 	}
 

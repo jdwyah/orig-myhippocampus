@@ -17,7 +17,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
@@ -224,12 +224,12 @@ public class TopicServiceImpl implements TopicService {
 	 * 2) Execute. use the domain classes logic & the command to enact the change
 	 * 3) Save.
 	 */
-	public void executeAndSaveCommand(AbstractSaveCommand command) throws HippoBusinessException {
+	public void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException {
 		hydrateCommand(command);
 		command.executeCommand();		
 		saveCommand(command);	
 	}
-	private void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
+	private void saveCommand(AbstractCommand command) throws HippoBusinessException {
 				
 		List topics = command.getTopics();
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
@@ -246,7 +246,7 @@ public class TopicServiceImpl implements TopicService {
 	 * @param command
 	 * @throws HippoBusinessException 
 	 */
-	private void hydrateCommand(AbstractSaveCommand command) throws HippoBusinessException {
+	private void hydrateCommand(AbstractCommand command) throws HippoBusinessException {
 		
 		log.debug("Hydrate: "+command);
 		
@@ -288,6 +288,9 @@ public class TopicServiceImpl implements TopicService {
 			throw new HippoPermissionException();
 		}
 		topicDAO.deleteOccurrence(o);
+	}
+	public List getAllMetas() {		
+		return topicDAO.getAllMetas(userService.getCurrentUser());
 	}
 
 

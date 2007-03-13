@@ -3,7 +3,7 @@ package com.aavu.client.domain.commands;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveLatLongCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveLatLongCommand extends AbstractCommand implements IsSerializable {
 
 	private int latitude;
 	private int longitude;

@@ -207,7 +207,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		Meta meta = new MetaTopic();
 		meta.setTitle(name);
 
-		t2.addMeta(meta);
+		t2.addTagProperty(meta);
 
 
 		System.out.println("before: "+t2.getId());
@@ -221,9 +221,9 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Tag saved = tagDAO.getTag(u, B);
 
-		assertEquals(1,saved.getMetas().size());
+		assertEquals(1,saved.getTagProperties().size());
 
-		Meta savedM = (Meta) saved.getMetas().iterator().next();
+		Meta savedM = (Meta) saved.getTagProperties().iterator().next();
 
 		assertEquals(name, savedM.getName());
 
@@ -234,14 +234,14 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		Meta meta2 = new MetaTopic();
 		meta2.setTitle(name2);
 
-		saved.addMeta(meta2);
+		saved.addTagProperty(meta2);
 
 		topicDAO.save(saved);
 
 		tagL = tagDAO.getAllTags(u);
 
 		Tag savedNumber2 = tagL.get(0);
-		assertEquals(2,savedNumber2.getMetas().size());
+		assertEquals(2,savedNumber2.getTagProperties().size());
 
 	}
 

@@ -42,6 +42,11 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.web.domain.UserPageBean;
 
+/**
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicDAO{
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImpl.class);
 	private static final int DEFAULT_AUTOCOMPLET_MAX = 7;
@@ -72,7 +77,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	public List<TimeLineObj> getTimeline(User user) {
 		return getTimeline(0,user);
 	}
-	public List<TimeLineObj> getTimeline(long meta_id,User user) {
+	public List<TimeLineObj> getTimeline(long metaId,User user) {
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 
 //		List<Object> ll= null;
@@ -98,7 +103,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		
 		Object[] params = new Object[2];
-		params[0] = new Long(meta_id);
+		params[0] = new Long(metaId);
 		params[1] = user;
 		List<Object[]> ll = getHibernateTemplate().find("select top.id, top.title, metaValue.title from Topic top "+
 				"join top.associations  ass "+				
@@ -114,13 +119,13 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				System.out.println(" "+i+" "+object+" "+object.getClass());
 			}
 			//?BigInteger topic_id = (BigInteger) oa[0];
-			Long topic_id = (Long) oa[0];
+			Long topicId = (Long) oa[0];
 			
 			String dateStr = (String) oa[2];
 			Date date = new Date(Long.parseLong(dateStr));			
 			
 			//add metaDate
-			rtn.add(new TimeLineObj(new TopicIdentifier(topic_id.longValue(),(String)oa[1]),date,null));						
+			rtn.add(new TimeLineObj(new TopicIdentifier(topicId.longValue(),(String)oa[1]),date,null));						
 		}
 	
 		//add created
@@ -340,7 +345,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	}*/
 
 	/**
-	 * Utility to set the projection properties for TopicIdentifier
+	 * Utility to set the projection properties for TopicIdentifier.
 	 * @return
 	 */
 	private Projection getTopicIdentifier(){
@@ -395,7 +400,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	
 
 	/**
-	 * TODO replace hardcoded class discriminators with .class
+	 * TODO replace hardcoded class discriminators with .class.
 	 */	
 	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
 
@@ -548,7 +553,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	
 	/**
-	 * Note don't sysout fullocc since it's User is not loaded and that LazyLEx's
+	 * Note don't sysout fullocc since it's User is not loaded and that LazyLEx's.
 	 * 
 	 */
 	public MindTree getTree(MindTreeOcc occ) {		
@@ -568,7 +573,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	}
 
 	/**
-	 * update the parameter
+	 * update the parameter.
 	 * 
 	 */
 	public void populateUsageStats(UserPageBean rtn) {
@@ -791,6 +796,12 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				.add(Expression.eq("id", id)));
 
 		return (Occurrence) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));				
+	}
+
+	public List getAllMetas(User user) {
+		List<Object[]> ll2 = getHibernateTemplate().find("from Meta meta "+				
+		"where meta.user = ?",user);
+		return ll2;
 	}
 	
 

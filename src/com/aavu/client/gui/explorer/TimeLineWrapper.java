@@ -43,7 +43,7 @@ public class TimeLineWrapper extends Composite {
 		typeSelector.add(lastUpdatedB);
 		typeSelector.add(createdB);
 		
-		Set metaDatesForTag = myTag.getMetaDates();
+		Set metaDatesForTag = myTag.getTagPropertyDates();
 		for (Iterator iter = metaDatesForTag.iterator(); iter.hasNext();) {
 			MetaDate datemeta = (MetaDate) iter.next();
 			TimeLineSelector metaButton = new TimeLineSelector(datemeta.getId(),datemeta.getTitle());

@@ -43,7 +43,7 @@ public class GadgetManager {
 		allGadgets.add(linkDisplayW);
 		allGadgets.add(connectionBoard);		
 		allGadgets.add(entryPreview);
-		//allGadgets.add(timeGadget);
+		allGadgets.add(timeGadget);
 		
 		
 		return allGadgets;		

@@ -180,6 +180,8 @@ public interface Consts extends Messages {
 	
 	String meta_add_edit();
 	String meta_title();
+	String meta_lookup_async();
+	String meta_new();
 	
 		
 	

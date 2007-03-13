@@ -84,7 +84,7 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 	}
 	
 	private void save() {
-		manager.getTopicCache().save(topicViewAndEditW.getTopic(),topicViewAndEditW.getSaveCommand(),
+		manager.getTopicCache().executeCommand(topicViewAndEditW.getTopic(),topicViewAndEditW.getSaveCommand(),
 				new StdAsyncCallback(""){
 					public void onSuccess(Object result) {					
 						super.onSuccess(result);

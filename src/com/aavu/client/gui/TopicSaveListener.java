@@ -1,8 +1,8 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 
 public interface TopicSaveListener {
-	void topicSaved(Topic topic, AbstractSaveCommand command);
+	void topicSaved(Topic topic, AbstractCommand command);
 }

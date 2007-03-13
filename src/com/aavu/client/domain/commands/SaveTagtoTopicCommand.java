@@ -7,7 +7,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveTagtoTopicCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveTagtoTopicCommand extends AbstractCommand implements IsSerializable {
 
 	public SaveTagtoTopicCommand(){};
 	

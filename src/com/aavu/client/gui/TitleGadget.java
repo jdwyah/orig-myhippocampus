@@ -28,7 +28,7 @@ public class TitleGadget extends Gadget {
 		
 		titleBox = new EditableLabelExtension("",new ChangeListener(){
 			public void onChange(Widget sender) {								
-				manager.getTopicCache().save(topic,new SaveTitleCommand(topic, titleBox.getText()),
+				manager.getTopicCache().executeCommand(topic,new SaveTitleCommand(topic, titleBox.getText()),
 						new StdAsyncCallback(ConstHolder.myConstants.save()){});				
 			}			
 		});

@@ -8,15 +8,26 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Association extends AbstractAssociation implements Serializable,IsSerializable{
 	
 	/**
-	 * user set in DAO
+	 * user set in DAO.
 	 *
 	 */
 	public Association(){
 		
 	}
 
+	/**
+	 * used to add a tagProperty as a type of the association,
+	 * but it should really be the member of an association of type TagProperty
+	 * for now, we'll assume (dangerous?) that association w/ no type, but member 
+	 * of type Meta is a TagPropertyAssociation.
+	 * 
+	 * @param topic
+	 * @param meta
+	 */
 	public Association(Topic topic,Meta meta) {
-		addType(meta);
+		
+		getMembers().add(meta);
+		
 		setTitle(topic.getTitle()+" to "+meta.getTitle());
 	}
 

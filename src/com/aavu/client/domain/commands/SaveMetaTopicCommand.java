@@ -4,7 +4,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveMetaTopicCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveMetaTopicCommand extends AbstractCommand implements IsSerializable {
 
 	public SaveMetaTopicCommand(){};
 

@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -20,7 +21,7 @@ public class CreateNewWindow extends PopupWindow {
 	private Manager manager;
 	private Label messageLabel;
 	private TextBox name;
-	private boolean isIsland;	
+	private AsyncCallback after;
 	
 	/**
 	 * Prevents multiple instances with a semaphore.
@@ -28,21 +29,21 @@ public class CreateNewWindow extends PopupWindow {
 	 * 
 	 * @param manager
 	 */
-	public CreateNewWindow(Manager _manager, boolean isIsland) {
+	public CreateNewWindow(Manager _manager, String title, AsyncCallback after) {
 		
 		super(_manager.newFrame(),
-				isIsland ? ConstHolder.myConstants.island_new() : ConstHolder.myConstants.topic_new(),
+				title,
 				WIDTH,HEIGHT);
 		this.manager = _manager;
-		this.isIsland = isIsland;
+		this.after = after;
 		
 		setCenteredContent(new NewWidget());		
 	}
 	
 	private void clicked(){
 		if(!name.getText().equals("")){
-			
-			manager.createTopic(name.getText(),isIsland);
+	
+			after.onSuccess(name.getText());
 			
 			close();
 		}else{

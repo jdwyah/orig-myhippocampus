@@ -44,7 +44,7 @@ public class OceanKeyBoardListener implements KeyboardListener {
 		tracking  = true;
 	}
 	private void stopTrack() {		
-		stopTrack(0);
+		stopTrack(1);
 	}
 	private void stopTrack(int sec) {
 		Logger.debug("stop track in "+sec);

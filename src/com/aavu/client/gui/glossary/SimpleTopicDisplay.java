@@ -62,7 +62,7 @@ public class SimpleTopicDisplay extends Composite {
 		
 	}
 	private void displayMetas(Tag tag) {
-		Set metas = tag.getMetas();		
+		Set metas = tag.getTagProperties();		
 //		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
 //			Meta element = (Meta) iter.next();
 //			GWT.log("displayMetas", null);

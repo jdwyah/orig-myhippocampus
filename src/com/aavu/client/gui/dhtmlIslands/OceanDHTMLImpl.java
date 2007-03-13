@@ -16,7 +16,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveLatLongCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
@@ -49,6 +49,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	private static final int SHOW_TOPICS_AT_ZOOM = 3;
 
 	private static final int CLOUD_REMOVE = 8000;
+
+	private static final int CLOUD_MOVE_PX = 2000;
+	private static final double CLOUD_MOVE_SEC = 7.0;	
 
 	private Manager manager;
 
@@ -164,15 +167,15 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	private void clearClouds() {
 
 		GUIEffects.move(leftCloud,new EffectOption[] {
-				new EffectOption("x",-2000),
+				new EffectOption("x",-CLOUD_MOVE_PX),
 				new EffectOption("y",0),
-				new EffectOption("duration",7.0)
-		},-1000,0);
+				new EffectOption("duration",CLOUD_MOVE_SEC)
+		},-CLOUD_MOVE_PX,0);
 		GUIEffects.move(rightCloud,new EffectOption[] {
-				new EffectOption("x",2000),
+				new EffectOption("x",CLOUD_MOVE_PX),
 				new EffectOption("y",0),
-				new EffectOption("duration",7.0)
-		},1000,0);
+				new EffectOption("duration",CLOUD_MOVE_SEC)
+		},CLOUD_MOVE_PX,0);
 
 
 
@@ -570,7 +573,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 				t.setLatitude(latitude);
 				t.setLongitude(longitude);
 				
-				manager.getTopicCache().save(t,new SaveLatLongCommand(t,latitude,
+				manager.getTopicCache().executeCommand(t,new SaveLatLongCommand(t,latitude,
 						longitude),
 						new StdAsyncCallback("SaveLatLong"){});								
 			}
@@ -734,7 +737,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		}
 	}
 
-	public void update(Tag t, AbstractSaveCommand command) {
+	public void update(Tag t, AbstractCommand command) {
 		Island isle = (Island) islands.get(new Long(t.getId()));
 		
 		if(isle != null){

@@ -3,7 +3,7 @@ package com.aavu.client.domain.commands;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveEntryTextCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveEntryTextCommand extends AbstractCommand implements IsSerializable {
 
 	public SaveEntryTextCommand(){};
 	

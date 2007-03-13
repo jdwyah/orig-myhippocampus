@@ -4,7 +4,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveTagPropertiesCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveTagPropertiesCommand extends AbstractCommand implements IsSerializable {
 
 	private Meta[] metas;
 	
@@ -18,13 +18,15 @@ public class SaveTagPropertiesCommand extends AbstractSaveCommand implements IsS
 	//@Override
 	public void executeCommand() {
 				
-		getTopic(0).getMetas().clear();
+		//TODO BOGUS
+		getTopic(0).getTagProperties().clear();
+		
 		for (int i = 0; i < metas.length; i++) {
 			if(metas[i].getTitle() != null 
 					&&
 			   !metas[i].getTitle().equals("")){
 			
-				getTopic(0).addMeta(metas[i]);
+				getTopic(0).addTagProperty(metas[i]);
 			}						
 		}
 				

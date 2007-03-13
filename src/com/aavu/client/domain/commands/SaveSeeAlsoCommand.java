@@ -4,7 +4,7 @@ import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveSeeAlsoCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveSeeAlsoCommand extends AbstractCommand implements IsSerializable {
 
 	public SaveSeeAlsoCommand(){};
 	

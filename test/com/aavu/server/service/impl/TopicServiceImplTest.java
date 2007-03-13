@@ -143,7 +143,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		author.setTitle(B);
 		author.setUser(u);
-		book.addMeta(author);
+		book.addTagProperty(author);
 
 		topicService.save(book);
 
@@ -180,10 +180,10 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		assertEquals(1, savedPatriotGames.getTypesAsTopics().size());		
 		Topic savedBookTag = (Topic) savedPatriotGames.getTypesAsTopics().iterator().next();
 		assertEquals(D, savedBookTag.getTitle());
-		assertEquals(1, savedBookTag.getMetas().size());
+		assertEquals(1, savedBookTag.getTagProperties().size());
 
 		assertEquals(1, savedPatriotGames.getMetaValuesFor(author).size());
-		assertEquals(0, savedPatriotGames.getMetas().size());
+		assertEquals(0, savedPatriotGames.getTagProperties().size());
 
 
 

@@ -65,4 +65,6 @@ public interface TopicDAO {
 
 	void deleteOccurrence(Occurrence o);
 
+	List getAllMetas(User currentUser);
+
 }

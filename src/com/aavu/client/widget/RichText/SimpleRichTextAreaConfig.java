@@ -187,7 +187,7 @@ public class SimpleRichTextAreaConfig implements RichTextAreaConfig {
 	public Set getCustomToolButtons(){
 		return customToolButtons;
 	}
-	public ToolButton getCustomToolButton(String id){
+	public ToolButton getCustomToolButton(final String id){
 		for(Iterator it = customToolButtons.iterator(); it.hasNext(); ){
 			ToolButton btn = (ToolButton) it.next();
 			if(btn.getId().equalsIgnoreCase(id)){

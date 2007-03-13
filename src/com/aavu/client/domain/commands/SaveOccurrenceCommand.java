@@ -11,7 +11,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.util.SetUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveOccurrenceCommand extends AbstractSaveCommand implements IsSerializable {
+public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializable {
 
 	private Occurrence occurrence;
 	private int removeStartNumber;

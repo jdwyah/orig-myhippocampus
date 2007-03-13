@@ -32,7 +32,7 @@ public class FontToolButton extends DropDownToolButton {
 				cfg.getMenuItemMouseOverBackgroundColor(), 
 				cfg.getMenuItemMouseOverBorderColor());
 
-		for(Iterator it = fonts.iterator(); it.hasNext(); ){
+		for(Iterator it = fonts.iterator(); it.hasNext();){
 			String f = (String) it.next();
 //Window.alert("Font tool button onload add " + f);			
 			fontPanel.addMenuItem(f, "<font face=\"" + f + "\">" + f + "</font>");

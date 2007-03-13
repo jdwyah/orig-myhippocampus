@@ -10,6 +10,7 @@ import org.springframework.test.AssertThrows;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MetaText;
@@ -159,7 +160,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		author.setTitle(B);
 		author.setUser(u);
-		book.addMeta(author);
+		book.addTagProperty(author);
 
 		topicDAO.save(book);
 
@@ -196,10 +197,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(1, savedPatriotGames.getTypesAsTopics().size());		
 		Topic savedBookTag = (Topic) savedPatriotGames.getTypesAsTopics().iterator().next();
 		assertEquals(D, savedBookTag.getTitle());
-		assertEquals(1, savedBookTag.getMetas().size());
+		assertEquals(1, savedBookTag.getTagProperties().size());
 
 		assertEquals(1, savedPatriotGames.getMetaValuesFor(author).size());
-		assertEquals(0, savedPatriotGames.getMetas().size());
+		assertEquals(0, savedPatriotGames.getTagProperties().size());
 
 
 
@@ -542,7 +543,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		author.setTitle(B);
 		author.setUser(u);
 
-		book.addMeta(author);
+		book.addTagProperty(author);
 
 		topicDAO.save(book);
 
@@ -873,7 +874,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
 		author.setUser(u);
-		book.addMeta(author);
+		book.addTagProperty(author);
 
 		topicDAO.save(book);
 
@@ -929,7 +930,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
 		author.setUser(u);
-		book.addMeta(author);
+		book.addTagProperty(author);
 
 		topicDAO.save(book);
 
@@ -985,7 +986,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
 		author.setUser(u);
-		book.addMeta(author);
+		book.addTagProperty(author);
 
 		topicDAO.save(book);
 
@@ -1335,6 +1336,54 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic savedTopic3 = topicDAO.getForID(u, t.getId());
 		assertTrue(savedTopic3.getLatestEntry().isEmpty());
 
+	}
+	
+	public void testGetAllMetas() throws HippoBusinessException {
+		
+		Topic patriotGames = new Topic();
+		patriotGames.getLatestEntry().setData(B);
+		patriotGames.setTitle(C);
+		patriotGames.setUser(u);
+
+		Tag book = new Tag(u,D);		
+
+		MetaText ss = new MetaText();
+		MetaTopic author = new MetaTopic();
+		MetaDate read = new MetaDate();
+		
+		author.setTitle(B);
+		author.setUser(u);
+		book.addTagProperty(author);
+		
+		ss.setTitle("F");
+		ss.setUser(u);
+		book.addTagProperty(ss);
+		
+		read.setTitle("Read");
+		read.setUser(u);
+		book.addTagProperty(read);
+
+		topicDAO.save(book);
+
+		Topic tomClancy = new Topic();
+		tomClancy.setTitle(E);
+		topicDAO.save(tomClancy);
+
+		patriotGames.tagTopic(book);
+		patriotGames.addMetaValue(author, tomClancy);
+
+		System.out.println("before: "+patriotGames.getId());
+
+		topicDAO.save(patriotGames);
+		
+		
+		
+		List<Meta> allMetas = topicDAO.getAllMetas(u);
+		assertEquals(3, allMetas.size());
+		for (Meta meta : allMetas) {
+			
+		}
+		
 	}
 	
 }

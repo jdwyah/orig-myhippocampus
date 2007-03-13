@@ -28,7 +28,7 @@ public abstract class CommandTestCase extends TestCase {
 	 * @param command
 	 * @throws HippoBusinessException 
 	 */
-	protected void hydrateCommand(AbstractSaveCommand command) throws HippoBusinessException {
+	protected void hydrateCommand(AbstractCommand command) throws HippoBusinessException {
 		
 		//log.debug("Hydrate: "+command);
 		
@@ -53,7 +53,7 @@ public abstract class CommandTestCase extends TestCase {
 		
 	}
 	
-	protected void goOverWire(AbstractSaveCommand command) {
+	protected void goOverWire(AbstractCommand command) {
 		command.setTopics(new ArrayList());
 	}
 	

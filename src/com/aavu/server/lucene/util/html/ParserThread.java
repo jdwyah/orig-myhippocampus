@@ -34,10 +34,10 @@ class ParserThread extends Thread {
       } catch (TokenMgrError e) {
         System.out.println("Parse Aborted: " + e.getMessage());
       } finally {
-        parser.pipeOut.close();
+        parser.getPipeOut().close();
         synchronized (parser) {
 	      parser.summary.setLength(HTMLParser.SUMMARY_LENGTH);
-	      parser.titleComplete = true;
+	      parser.setTitleComplete(true);
 	      parser.notifyAll();
 	    }
       }

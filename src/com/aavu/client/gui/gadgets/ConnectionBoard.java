@@ -140,7 +140,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 				alsos.add(to);
 				topicCompleter.setText("");
 								
-				topicService.save(myTopic,new SaveSeeAlsoCommand(myTopic,new Topic(to)),
+				topicService.executeCommand(myTopic,new SaveSeeAlsoCommand(myTopic,new Topic(to)),
 						new StdAsyncCallback(ConstHolder.myConstants.save_async()){});
 				
 			}});

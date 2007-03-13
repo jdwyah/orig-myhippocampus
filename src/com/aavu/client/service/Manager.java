@@ -6,11 +6,13 @@ import org.gwm.client.GInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.HippoTest;
+import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -28,7 +30,6 @@ import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.glossary.GlossaryWindow;
-import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.gui.timeline.TimeLineWindow;
 import com.aavu.client.help.UserHelper;
@@ -145,14 +146,26 @@ public class Manager implements TopicSaveListener, LoginListener {
 	//public void show(Topic topic, boolean editMode) {
 	
 	public void newTopic() {			
-		CreateNewWindow n = new CreateNewWindow(this,false);			
+		
+		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.topic_new(), new EZCallback(){
+			public void onSuccess(Object result) {
+				createTopic((String) result, false);
+			}});			
 	}
 	/*
 	 * window will call createIsland
 	 */
 	public void newIsland(){
-		CreateNewWindow n = new CreateNewWindow(this,true);	
+		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.island_new(), new EZCallback(){
+			public void onSuccess(Object result) {
+				createTopic((String) result, true);
+			}});			
 	}
+	public void newMeta(AsyncCallback callback) {
+		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.meta_new(), callback);
+	}
+
+	
 	public void createTopic(final String name,final boolean isIsland) {
 
 		getTopicCache().createNew(name, isIsland, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
@@ -316,7 +329,7 @@ public class Manager implements TopicSaveListener, LoginListener {
 	 * Main responsibility is for the map to redraw everything involving these topics.
 	 * 
 	 */
-	public void topicSaved(Topic t,AbstractSaveCommand command) {
+	public void topicSaved(Topic t,AbstractCommand command) {
 		map.update(t,command);
 		
 		System.out.println("TOPIC SAVED");
@@ -483,8 +496,8 @@ public class Manager implements TopicSaveListener, LoginListener {
 		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());						
 	}
 
-	public void editMetas(CloseListener listener) {
-		EditMetaWindow ew = new EditMetaWindow(getTopicCache(),newFrame(),listener);
+	public void editMetas(StdAsyncCallback callback,final Meta type) {
+		EditMetaWindow ew = new EditMetaWindow(this,newFrame(),type, callback);
 	}	
 	
 	public void viewMembers(Topic myTag, FullTopicIdentifier[] topics) {
@@ -541,7 +554,7 @@ public class Manager implements TopicSaveListener, LoginListener {
 		
 		getTopicCache().changeState(topic.getId(), toIsland, wrapper);	
 	}
-
+	
 
 
 }

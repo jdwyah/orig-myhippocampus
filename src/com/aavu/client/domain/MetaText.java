@@ -50,7 +50,7 @@ public class MetaText extends Meta {
 			public void onChange(final Widget sender) {
 				
 				
-				topicCache.save(topic,new SaveMetaTextCommand(topic,MetaText.this,
+				topicCache.executeCommand(topic,new SaveMetaTextCommand(topic,MetaText.this,
 						editable.getText()),
 						new StdAsyncCallback(ConstHolder.myConstants.meta_text_async_save()){});
 				
@@ -92,7 +92,7 @@ public class MetaText extends Meta {
 			if ( (this == other ) ) return true;
 			if ( (other == null ) ) return false;
 			if ( !(other instanceof MetaText) ) return false;
-			MetaText castOther = ( MetaText ) other; 
+			MetaText castOther = (MetaText) other; 
 
 			return ( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) );
 		}

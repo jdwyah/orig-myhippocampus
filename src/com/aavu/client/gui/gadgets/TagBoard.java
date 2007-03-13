@@ -157,7 +157,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 				
 		TagGadget tg = new TagGadget(tagLabel);
 					
-		displayMetas(tag,tg);
+		//displayMetas(tag,tg);
 		
 		tagPanel.add(tg);
 	}
@@ -168,7 +168,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 */
 	public void remove(Topic tag,final Widget widgetToRemoveOnSuccess) {
 
-		manager.getTopicCache().save(cur_topic,new RemoveTagFromTopicCommand(cur_topic,
+		manager.getTopicCache().executeCommand(cur_topic,new RemoveTagFromTopicCommand(cur_topic,
 				tag),
 				new StdAsyncCallback(ConstHolder.myConstants.delete_async()){
 					public void onFailure(Throwable caught) {
@@ -197,23 +197,23 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			showTag(tag);			
 		}
 		//incommand tagsToSave.add(tag);
-		manager.getTopicCache().save(cur_topic,new SaveTagtoTopicCommand(cur_topic,tag), 
+		manager.getTopicCache().executeCommand(cur_topic,new SaveTagtoTopicCommand(cur_topic,tag), 
 				new StdAsyncCallback(ConstHolder.myConstants.save()){});		
 	}
 	
-	private void displayMetas(Tag tag, TagGadget tg) {
-		Set metas = tag.getMetas();
-		
-		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
-			Meta element = (Meta) iter.next();
-		
-			Widget w = element.getEditorWidget(cur_topic,manager);
-			w.addStyleName("H-MetaEditorWidget");
-			tg.add(w);
-
-		}
-
-	}
+//	private void displayMetas(Tag tag, TagGadget tg) {
+//		Set metas = tag.getTagProperties();
+//		
+//		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
+//			Meta element = (Meta) iter.next();
+//		
+//			Widget w = element.getEditorWidget(cur_topic,manager);
+//			w.addStyleName("H-MetaEditorWidget");
+//			tg.add(w);
+//
+//		}
+//
+//	}
 
 	
 	private class TagGadget extends Composite {

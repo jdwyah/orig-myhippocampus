@@ -10,11 +10,12 @@ import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -145,7 +146,7 @@ public class TopicCache {
 	 * @param command
 	 * @param callback
 	 */
-	public void save(Topic topic, AbstractSaveCommand command, AsyncCallback callback) {
+	public void executeCommand(Topic topic, AbstractCommand command, AsyncCallback callback) {
 		
 		try {
 			command.executeCommand();
@@ -164,9 +165,9 @@ public class TopicCache {
 	private class SaveCallbackWrapper implements AsyncCallback {
 		private AsyncCallback callback;
 		private Topic topic;
-		private AbstractSaveCommand command;
+		private AbstractCommand command;
 		
-		public SaveCallbackWrapper(Topic topic, AbstractSaveCommand command, AsyncCallback callback) {
+		public SaveCallbackWrapper(Topic topic, AbstractCommand command, AsyncCallback callback) {
 			this.topic = topic;
 			this.command = command;
 			this.callback = callback;			
@@ -477,6 +478,12 @@ public class TopicCache {
 
 	public void deleteOccurrence(WebLink link, AsyncCallback callback) {
 		topicService.deleteOccurrence(link.getId(), callback);		
+	}
+
+
+
+	public void getAllMetasOfType(Meta type, AsyncCallback callback) {		
+		topicService.getAllMetas(callback);
 	}
 
 

@@ -22,8 +22,7 @@ public class DraggableTopicLabel extends DraggableLabel {
 		setStyleName(REG_STYLE);		
 		
 		addMouseListener(new MouseListenerAdapter(){
-			public void onMouseEnter(Widget sender) {
-				System.out.println("MOUSE ENTER topicLabel");
+			public void onMouseEnter(Widget sender) {				
 				addStyleName(HOVER_STYLE);
 			}
 			public void onMouseLeave(Widget sender) {

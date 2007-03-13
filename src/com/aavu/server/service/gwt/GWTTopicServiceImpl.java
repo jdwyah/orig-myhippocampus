@@ -15,7 +15,7 @@ import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -59,7 +59,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		t = topicService.save(t);
 		return t.getIdentifier();
 	}
-	public void saveCommand(AbstractSaveCommand command) throws HippoBusinessException {
+	public void saveCommand(AbstractCommand command) throws HippoBusinessException {
 		log.info("command "+command.getClass()+" "+command);		
 		topicService.executeAndSaveCommand(command);
 	}
@@ -384,6 +384,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 	public void deleteOccurrence(long id) throws HippoException {
 		topicService.deleteOccurrence(id);
+	}
+	public List getAllMetas() throws HippoException {
+		return topicService.getAllMetas();
 	}
 
 	

@@ -1,11 +1,13 @@
 package com.aavu.client.service.remote;
 
+import java.util.List;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.domain.commands.AbstractSaveCommand;
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
@@ -48,7 +50,7 @@ public interface GWTTopicServiceAsync {
 
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct, AsyncCallback callback);
 
-	void saveCommand(AbstractSaveCommand command, AsyncCallback callback);
+	void saveCommand(AbstractCommand command, AsyncCallback callback);
 	void createNew(String title,boolean isIsland, AsyncCallback callback);
 	
 	//Weblink
@@ -58,6 +60,8 @@ public interface GWTTopicServiceAsync {
 
 
 	void deleteOccurrence(long id, AsyncCallback callback);
+
+	void getAllMetas(AsyncCallback callback);
 }
 
 

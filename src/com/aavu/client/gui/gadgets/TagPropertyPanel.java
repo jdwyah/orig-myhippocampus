@@ -15,7 +15,7 @@ import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.tags.MetaChooser;
+import com.aavu.client.widget.tags.MetaTypeChooser;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -49,7 +49,7 @@ public class TagPropertyPanel extends Gadget {
 		Button addB = new Button(ConstHolder.myConstants.island_property_new());
 		addB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				showEditMetaWidget(new MetaChooser(tagLocalService));	
+				showEditMetaWidget(new MetaTypeChooser(tagLocalService));	
 				saveB.setVisible(true);
 			}});
 		saveB = new Button(ConstHolder.myConstants.island_property_save());
@@ -78,13 +78,13 @@ public class TagPropertyPanel extends Gadget {
 			metaChoosers.clear();
 			saveB.setVisible(false);
 
-			if(tag.getMetas() != null){
-				if(tag.getMetas().size() > 0){
+			if(tag.getTagProperties() != null){
+				if(tag.getTagProperties().size() > 0){
 					saveB.setVisible(true);
 				}
-				for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
+				for (Iterator iter = tag.getTagProperties().iterator(); iter.hasNext();) {
 					Meta element = (Meta) iter.next();
-					MetaChooser mc = new MetaChooser(tagLocalService);
+					MetaTypeChooser mc = new MetaTypeChooser(tagLocalService);
 					mc.setMeta(element);								
 					showEditMetaWidget(mc);
 				}
@@ -95,7 +95,7 @@ public class TagPropertyPanel extends Gadget {
 		return 0;
 	}
 	
-	private void showEditMetaWidget(final MetaChooser chooser){
+	private void showEditMetaWidget(final MetaTypeChooser chooser){
 		final HorizontalPanel panel = new HorizontalPanel();
 		Button deleteButton = new Button("X");
 
@@ -119,10 +119,10 @@ public class TagPropertyPanel extends Gadget {
 		
 		
 		Meta[] toSave = new Meta[metaChoosers.size()];
-		tag.getMetas().clear();
+		tag.getTagProperties().clear();
 		int i = 0;
 		for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {
-			MetaChooser mc = (MetaChooser) iter.next();
+			MetaTypeChooser mc = (MetaTypeChooser) iter.next();
 			System.out.println("adding back mc "+mc.getMeta().getId()+" "+mc.getMeta().getType()+" "+mc.getMeta().getTitle());
 			Meta meta = mc.getMeta();
 
@@ -134,15 +134,15 @@ public class TagPropertyPanel extends Gadget {
 		//selectedTag.setMetas(metaChoosers);
 		
 		System.out.println("Tag: " + tag.getName());
-		System.out.println("metas: "+tag.getMetas().size());
-		for (Iterator iter = tag.getMetas().iterator(); iter.hasNext();) {
+		System.out.println("metas: "+tag.getTagProperties().size());
+		for (Iterator iter = tag.getTagProperties().iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
 			System.out.println(element.getName());
 		}
 		
 		//Effect.dropOut(metaListPanel);
 		
-		manager.getTopicCache().save(tag,new SaveTagPropertiesCommand(tag,toSave),
+		manager.getTopicCache().executeCommand(tag,new SaveTagPropertiesCommand(tag,toSave),
 				new StdAsyncCallback("tagService saveTag"){});
 	}
 

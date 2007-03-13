@@ -25,11 +25,11 @@ public class DecimalFormatSimple {
 
 	private int decimals;
 
-	public DecimalFormatSimple(int decimals){
+	public DecimalFormatSimple(final int decimals){
 		this.decimals = decimals;	
 	}
 	
-	public String format(double d){
+	public String format(final double d){
 				
 		if(Double.toString(d).indexOf('E') != -1){
 			return Double.toString(d);

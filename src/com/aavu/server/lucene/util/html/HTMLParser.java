@@ -5,23 +5,23 @@ import java.io.*;
 import java.util.Properties;
 
 public class HTMLParser implements HTMLParserConstants {
-  public static int SUMMARY_LENGTH = 200;
+  public static  int SUMMARY_LENGTH = 200;
 
-  StringBuffer title = new StringBuffer(SUMMARY_LENGTH);
-  StringBuffer summary = new StringBuffer(SUMMARY_LENGTH * 2);
-  Properties metaTags=new Properties();
-  String currentMetaTag=null;
-  String currentMetaContent=null;
-  int length = 0;
-  boolean titleComplete = false;
-  boolean inTitle = false;
-  boolean inMetaTag = false;
-  boolean inStyle = false;
-  boolean afterTag = false;
-  boolean afterSpace = false;
-  String eol = System.getProperty("line.separator");
-  Reader pipeIn = null;
-  Writer pipeOut;
+  private StringBuffer title = new StringBuffer(SUMMARY_LENGTH);
+  public StringBuffer summary = new StringBuffer(SUMMARY_LENGTH * 2);
+  private Properties metaTags=new Properties();
+  private String currentMetaTag=null;
+  private String currentMetaContent=null;
+  private int length = 0;
+  private boolean titleComplete = false;
+  private boolean inTitle = false;
+  private boolean inMetaTag = false;
+  private boolean inStyle = false;
+  private boolean afterTag = false;
+  private boolean afterSpace = false;
+  private String eol = System.getProperty("line.separator");
+  private Reader pipeIn = null;
+  private Writer pipeOut;
   private MyPipedInputStream pipeInStream = null;
   private PipedOutputStream pipeOutStream = null;
 
@@ -266,9 +266,9 @@ InterruptedException {
                 addMetaTag();
                 }
         }
-        if(inMetaTag && t1.image.equalsIgnoreCase("content") && t2 !=
-null)
-        {
+        if(inMetaTag && t1.image.equalsIgnoreCase("content")
+        		&& 
+        		t2 != null) {
                 currentMetaContent=t2.image.toLowerCase();
                 if(currentMetaTag != null && currentMetaContent != null) {
                 addMetaTag();
@@ -718,6 +718,19 @@ null)
     int arg;
     JJCalls next;
   }
+
+
+public Writer getPipeOut() {
+	return pipeOut;
+}
+
+public boolean isTitleComplete() {
+	return titleComplete;
+}
+
+public void setTitleComplete(boolean titleComplete) {
+	this.titleComplete = titleComplete;
+}
 
 //    void handleException(Exception e) {
 //      System.out.println(e.toString());  // print the error message
