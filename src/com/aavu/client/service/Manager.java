@@ -161,10 +161,25 @@ public class Manager implements TopicSaveListener, LoginListener {
 				createTopic((String) result, true);
 			}});			
 	}
-	public void newMeta(AsyncCallback callback) {
-		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.meta_new(), callback);
+	/**
+	 * pass the type of meta you'd like created and. 
+	 * 1) we'll put up the create window box.
+	 * 2) we'll go create it.
+	 * 3) we'll call your AsyncCallback which will receive the TopicIdentifier of the newly created Meta.
+	 * @param meta
+	 * @param callback
+	 */
+	public void newMeta(final Meta meta,final AsyncCallback callback) {
+		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.meta_new(), new EZCallback(){
+				public void onSuccess(Object result) {
+					getTopicCache().createNew((String)result, meta, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
+						public void onSuccess(Object result) {
+							super.onSuccess(result);				
+							callback.onSuccess(result);										
+						}});
+				}});
 	}
-
+	
 	
 	public void createTopic(final String name,final boolean isIsland) {
 
@@ -496,7 +511,7 @@ public class Manager implements TopicSaveListener, LoginListener {
 		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());						
 	}
 
-	public void editMetas(StdAsyncCallback callback,final Meta type) {
+	public void editMetas(AsyncCallback callback,final Meta type) {
 		EditMetaWindow ew = new EditMetaWindow(this,newFrame(),type, callback);
 	}	
 	

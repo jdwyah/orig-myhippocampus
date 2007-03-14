@@ -1,20 +1,23 @@
 package com.aavu.client.gui;
 
 import org.gwm.client.GInternalFrame;
-import org.gwm.client.event.GFrameAdapter;
-import org.gwm.client.event.GFrameEvent;
 
 import com.aavu.client.async.EZCallback;
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MetaText;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.tags.ChooseMetaW;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -25,53 +28,100 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class EditMetaWindow extends PopupWindow {
+public class EditMetaWindow extends PopupWindow implements ChangeListener {
 
 	public static final int WIDTH = 350;
 	private static final int HEIGHT = 250;
 	
-	private HorizontalPanel mainP;
+	private Grid mainP;
 	
 	private Meta selected;
-	private ChooseMetaW chooser;
+	private ChooseMetaW dateChooser;
+	private ChooseMetaW textChooser;
+	
+	private SimplePanel editP;
 
-	public EditMetaWindow(final Manager manager, final GInternalFrame frame, final Meta type,final StdAsyncCallback callback) {	
+	public EditMetaWindow(final Manager manager, final GInternalFrame frame, final Meta type,final AsyncCallback callback) {	
 		super(frame,ConstHolder.myConstants.meta_title(),WIDTH,HEIGHT);
 		
 	
-		mainP = new HorizontalPanel();
+		//CHECKSTYLE:OFF
+		mainP = new Grid(4,3);
+		//CHECKSTYLE:ON				
 		
-		mainP.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
 		
-		chooser = new ChooseMetaW(manager,type);
+		if(type == null || type instanceof MetaDate){
+			dateChooser = new ChooseMetaW(manager,new MetaDate());
+			dateChooser.addChangeListener(this);
+			
+			mainP.setWidget(0, 0, new Label(ConstHolder.myConstants.meta_date()));
+			mainP.setWidget(1, 0, dateChooser);
+			
+			Button newDateB = new Button(ConstHolder.myConstants.meta_new());		
+			newDateB.addClickListener(new ClickListener(){
+				public void onClick(Widget sender) {
+					manager.newMeta(new MetaDate(),new EZCallback(){
+						public void onSuccess(Object result) {
+							TopicIdentifier res = (TopicIdentifier) result;						
+							
+							Meta newM = new MetaDate();
+							newM.setId(res.getTopicID());
+							newM.setTitle(res.getTopicTitle());
+							
+							dateChooser.add(newM);
+						}});			
+				}});
+			mainP.setWidget(2,0,newDateB);
+		}
+		if(type == null || type instanceof MetaText){
+			textChooser = new ChooseMetaW(manager,new MetaText());
+			textChooser.addChangeListener(this);
+			
+			mainP.setWidget(0, 1, new Label(ConstHolder.myConstants.meta_text()));
+			mainP.setWidget(1, 1, textChooser);
+			
+			Button newTextB = new Button(ConstHolder.myConstants.meta_new());		
+			newTextB.addClickListener(new ClickListener(){
+				public void onClick(Widget sender) {
+					manager.newMeta(new MetaText(),new EZCallback(){
+						public void onSuccess(Object result) {
+							TopicIdentifier res = (TopicIdentifier) result;						
+							
+							Meta newM = new MetaText();
+							newM.setId(res.getTopicID());
+							newM.setTitle(res.getTopicTitle());
+							
+							textChooser.add(newM);
+						}});			
+				}});
+			mainP.setWidget(2,1,newTextB);
+		}
 		
-		mainP.add(chooser);
 		
-		Button selectB = new Button("Select");		
+		Button selectB = new Button(ConstHolder.myConstants.meta_select());		
 		selectB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				selected = chooser.getSelectedMeta();
 				callback.onSuccess(selected);
 				close();
 			}});
-		mainP.add(selectB);
+		mainP.setWidget(1,2,selectB);
 		
-		Button newB = new Button("New");		
-		newB.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				manager.newMeta(new EZCallback(){
-					public void onSuccess(Object result) {
-						Meta newM = new MetaDate();
-						newM.setTitle((String) result);
-						
-						//manager.createMeta(newM);
-						
-						chooser.add(newM);
-					}});			
-			}});
-		mainP.add(newB);
+		
+		
+		
+		editP = new SimplePanel();
+		mainP.setWidget(2, 2, editP);
 		
 		setContent(mainP);		
+	}
+
+	public void onChange(Widget sender) {		
+		if(sender == dateChooser){		
+			selected = dateChooser.getSelectedMeta();			
+		}else if (sender == textChooser){
+			selected = textChooser.getSelectedMeta();
+		}
+		editP.setWidget(new Label(selected.getTitle()));
 	}
 	
 	

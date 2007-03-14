@@ -44,20 +44,14 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		this.searchService = searchService;
 	}
 
-	public TopicIdentifier createNew(String title, boolean isIsland) throws HippoBusinessException {
+	public TopicIdentifier createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
 		
-		log.debug("create New: "+title);
+		log.debug("create New: "+title+" "+topicOrTagOrMeta.getClass());
 		
-		Topic t = null;
-		if(isIsland){
-			t = new Tag();
-		}else{
-			t = new Topic();
-		}
-		t.setTitle(title);
+		topicOrTagOrMeta.setTitle(title);
 
-		t = topicService.save(t);
-		return t.getIdentifier();
+		topicOrTagOrMeta = topicService.save(topicOrTagOrMeta);
+		return topicOrTagOrMeta.getIdentifier();
 	}
 	public void saveCommand(AbstractCommand command) throws HippoBusinessException {
 		log.info("command "+command.getClass()+" "+command);		

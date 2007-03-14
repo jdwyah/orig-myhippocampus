@@ -14,6 +14,12 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * The base storable db object. superclass of associations & metas.
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class Topic extends AbstractTopic  implements Completable, IsSerializable, ReallyCloneable {
 
 
@@ -422,9 +428,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			}
 		}		
 		System.out.println("getSeeAlsoAssociation: create new assoc");
-		return new Association(this,seeAlsoSingleton);				
+		
+		Association rtn = new Association();
+		rtn.setTitle(this.getTitle()+" to SeeAlsoUber");
+		rtn.addType(seeAlsoSingleton);
+		return rtn;
 	}
 	/**
+	 * Return all properties that this topic imposes upon child topics.
+	 * 
+	 * Use getPropertiesDueToTags() if you want the reverse of this.
+	 * 
 	 * NOTE: calling getTagProperties().add() won't do anything. Use addMeta()
 	 * 
 	 * //old comment
@@ -447,6 +461,30 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			}			
 			
 		}
+		return metas;		
+	}
+	/**
+	 * Inverse of getTagProperties(). 
+	 * 
+	 * @return
+	 */
+	public Set getPropertiesDueToTags() {
+		Set metas = new HashSet();
+		for (Iterator tagIter = getTypesAsTopics().iterator(); tagIter.hasNext();) {
+			Topic myTag = (Topic) tagIter.next();
+			for (Iterator iter = myTag.getAssociations().iterator(); iter.hasNext();) {
+				Association association = (Association) iter.next();
+										
+				for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
+					Topic possibleMeta = (Topic) iterator.next();
+				
+					if (possibleMeta instanceof Meta) {							
+						metas.add(possibleMeta);				
+					}	
+				}							
+			}
+		}
+		
 		return metas;		
 	}
 	/**
@@ -710,22 +748,71 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * Return all actual meta dates that the topic has. 
 	 * ie 
 	 * Movie will return nothing, 
-	 * but Crimson Tide will return a Date Seen. 
+	 * but Crimson Tide will return a Date Seen.
+	 *  
 	 * @return
 	 */
 	public Set getMetaDates() {
+		return getOnlyMetaOfType(getMetas(),true);
+	}	
+	/**
+	 * Return all meta dates in use && metas due to tag properties.
+	 * 
+	 * @return
+	 */
+	public Set getAllMetaDates() {
+		Set s = getMetaDates();
+		s.addAll(getOnlyMetaOfType(getPropertiesDueToTags(),true));
+		return s;
+	}
+	
+	
+	/**
+	 * get all in-use meta text for topic.
+	 * @return
+	 */
+	public Set getMetaTexts() {
+		return getOnlyMetaOfType(getMetas(),false);
+	}
+	/**
+	 * include properties due to tags
+	 * @return
+	 */
+	public Set getAllMetaTexts() {
+		Set s = getMetaTexts();
+		s.addAll(getOnlyMetaOfType(getPropertiesDueToTags(),false));
+		return s;
+	}
+	
+	/**
+	 * blech. can't use .getClass bc no GWT reflection. Ugly even with that.
+	 * 
+	 * NOTE: won't work for MetaTopics 
+	 *  
+	 * @param fromSet
+	 * @param date
+	 * @return
+	 */
+	public Set getOnlyMetaOfType(Set fromSet,boolean date) {
 		Set rtn = new HashSet();
-		for (Iterator iter = getMetas().iterator(); iter.hasNext();) {
+		for (Iterator iter = fromSet.iterator(); iter.hasNext();) {
 			Meta meta = (Meta) iter.next();
-			System.out.println("fff "+meta);
-			if(meta instanceof MetaDate){
-				System.out.println("add");
-				rtn.add(meta);				
+
+			if(date){
+				if(meta instanceof MetaDate){
+					rtn.add(meta);
+				}
 			}
+			else{
+				if(meta instanceof MetaText){
+					rtn.add(meta);
+				}	
+			}			
 		}		
-		System.out.println("getmeta dates rtn "+rtn.size());
 		return rtn;
 	}
+	
+
 	
 	public boolean hasEntry(){
 		return !getEntries().isEmpty();
@@ -741,12 +828,16 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	public boolean hasTimeMetas() {		
-		System.out.println("HAS TIME");
-		System.out.println(toPrettyString());
-		return !getMetaDates().isEmpty();
+//		System.out.println("HAS TIME");
+//		System.out.println(toPrettyString());
+		return !getAllMetaDates().isEmpty();
 	}
 
-	
+	public boolean hasTextMetas() {
+		return !getAllMetaTexts().isEmpty();		
+	}
+
+		
 	
 
 	

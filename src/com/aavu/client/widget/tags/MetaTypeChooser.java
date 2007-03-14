@@ -14,8 +14,7 @@ import com.google.gwt.user.client.ui.TextBox;
  *
  */
 public class MetaTypeChooser extends Composite {
-
-		
+	
 	private TextBox metaName;
 	private MetaTypeListBox metaType;
 	private Meta metaElement;
@@ -28,7 +27,7 @@ public class MetaTypeChooser extends Composite {
 		metaName.setText("");
 
 		metaType = new MetaTypeListBox();
-		
+				
 		metaType.addItems(tagLocalService.getAllMetaTypes());
 
 		mainP.add(metaName);

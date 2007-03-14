@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
+import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
@@ -19,15 +21,15 @@ import com.aavu.client.widget.tags.MetaTypeChooser;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TagPropertyPanel extends Gadget {
 
 	private VerticalPanel metaListPanel = new VerticalPanel();
-	private List metaChoosers = new ArrayList();  //list of meta chooser objects of current tag
+	private List metas = new ArrayList();  //list of meta chooser objects of current tag
 	
-	private TagLocalService tagLocalService;
 	
 	private Tag tag;
 	private Manager manager;
@@ -38,9 +40,6 @@ public class TagPropertyPanel extends Gadget {
 		super(ConstHolder.myConstants.island_property());
 		
 		this.manager = _manager;
-		
-		tagLocalService = _manager.getTagLocalService();
-		
 			
 		VerticalPanel mainPanel = new VerticalPanel();
 		
@@ -48,9 +47,8 @@ public class TagPropertyPanel extends Gadget {
 		
 		Button addB = new Button(ConstHolder.myConstants.island_property_new());
 		addB.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				showEditMetaWidget(new MetaTypeChooser(tagLocalService));	
-				saveB.setVisible(true);
+			public void onClick(Widget sender) {				
+				addEditClick();				
 			}});
 		saveB = new Button(ConstHolder.myConstants.island_property_save());
 		saveB.addClickListener(new ClickListener(){
@@ -67,6 +65,33 @@ public class TagPropertyPanel extends Gadget {
 
 		addStyleName("H-TagProperty");
 	}
+	private void addEditClick(){		
+		manager.editMetas(new EZCallback(){
+			public void onSuccess(Object result) {			
+				Meta m = (Meta) result;
+				if(m != null){
+					addMWidg(m);
+					saveB.setVisible(true);
+				}
+			}			
+		},
+		null);		
+	}
+	private void addMWidg(final Meta meta) {
+		final HorizontalPanel hp = new HorizontalPanel();
+		hp.add(new Label(meta.getTitle()));
+		
+		Button deleteButton = new Button("X");
+		deleteButton.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {			
+				metas.remove(meta);
+			}
+		});
+		hp.add(deleteButton);
+		metaListPanel.add(hp);
+		
+		metas.add(meta);
+	}
 	
 	public int load(Topic topic){
 		if(topic instanceof Tag){
@@ -75,7 +100,7 @@ public class TagPropertyPanel extends Gadget {
 			this.tag = (Tag) topic;
 
 			metaListPanel.clear();			
-			metaChoosers.clear();
+			metas.clear();
 			saveB.setVisible(false);
 
 			if(tag.getTagProperties() != null){
@@ -84,9 +109,7 @@ public class TagPropertyPanel extends Gadget {
 				}
 				for (Iterator iter = tag.getTagProperties().iterator(); iter.hasNext();) {
 					Meta element = (Meta) iter.next();
-					MetaTypeChooser mc = new MetaTypeChooser(tagLocalService);
-					mc.setMeta(element);								
-					showEditMetaWidget(mc);
+					addMWidg(element);					
 				}
 			}
 		}else{
@@ -94,38 +117,16 @@ public class TagPropertyPanel extends Gadget {
 		}
 		return 0;
 	}
-	
-	private void showEditMetaWidget(final MetaTypeChooser chooser){
-		final HorizontalPanel panel = new HorizontalPanel();
-		Button deleteButton = new Button("X");
-
-		panel.add(chooser);
-		panel.add(deleteButton);
-
-		deleteButton.addClickListener(new ClickListener() {
-			public void onClick(Widget sender){
-				metaChoosers.remove(chooser);
-				metaListPanel.remove(panel);
-			}
-		});
-
-		metaChoosers.add(chooser);
-		metaListPanel.add(panel);
-
-	}
-	
+		
 	private void saveProperties(){
 		//selectedTag.setTitle(tagName.getText());
 		
 		
-		Meta[] toSave = new Meta[metaChoosers.size()];
+		Meta[] toSave = new Meta[metas.size()];
 		tag.getTagProperties().clear();
 		int i = 0;
-		for (Iterator iter = metaChoosers.iterator(); iter.hasNext();) {
-			MetaTypeChooser mc = (MetaTypeChooser) iter.next();
-			System.out.println("adding back mc "+mc.getMeta().getId()+" "+mc.getMeta().getType()+" "+mc.getMeta().getTitle());
-			Meta meta = mc.getMeta();
-
+		for (Iterator iter = metas.iterator(); iter.hasNext();) {			
+			Meta meta = (Meta) iter.next();
 			
 			//in command tag.addMeta(meta);
 			toSave[i] = meta;

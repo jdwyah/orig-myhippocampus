@@ -51,7 +51,7 @@ public interface GWTTopicServiceAsync {
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct, AsyncCallback callback);
 
 	void saveCommand(AbstractCommand command, AsyncCallback callback);
-	void createNew(String title,boolean isIsland, AsyncCallback callback);
+	void createNew(String title,Topic topicOrTagOrMeta, AsyncCallback callback);
 	
 	//Weblink
 	void getWebLinkForURL(String url, AsyncCallback callback);

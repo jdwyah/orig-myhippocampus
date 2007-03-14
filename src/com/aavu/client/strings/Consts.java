@@ -156,6 +156,9 @@ public interface Consts extends Messages {
 	String img_gadget_picker();
 	String img_gadget_connections();
 	String img_gadget_time();
+	String img_gadget_text();
+	
+	
 	
 	String gadget_already_showing();
 	String help_welcome();
@@ -182,7 +185,9 @@ public interface Consts extends Messages {
 	String meta_title();
 	String meta_lookup_async();
 	String meta_new();
-	
+	String meta_remove_async();
+	String meta_select();
+	String gadget_text_title();
 		
 	
 	

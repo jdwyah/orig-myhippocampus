@@ -18,6 +18,7 @@ public class GadgetManager {
 	private ConnectionBoard connectionBoard;
 	private EntryPreview entryPreview;
 	private TimeGadget timeGadget;
+	private TextMetaGadget textMetaGadget;
 	//private TagPropertyPanel tagProperties;
 	
 	
@@ -35,7 +36,7 @@ public class GadgetManager {
 		linkDisplayW = new LinkDisplayWidget(manager);	
 		uploadBoard = new UploadBoard(manager);
 		timeGadget = new TimeGadget(manager);
-		
+		textMetaGadget = new TextMetaGadget(manager);
 		
 		//allGadgets.add(tagProperties);
 		
@@ -44,6 +45,7 @@ public class GadgetManager {
 		allGadgets.add(connectionBoard);		
 		allGadgets.add(entryPreview);
 		allGadgets.add(timeGadget);
+		allGadgets.add(textMetaGadget);
 		
 		
 		return allGadgets;		

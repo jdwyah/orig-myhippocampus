@@ -23,7 +23,7 @@ public interface GWTTopicService extends RemoteService {
 	TopicIdentifier[] getAllTopicIdentifiers() throws HippoException;
 		
 	void saveCommand(AbstractCommand command) throws HippoBusinessException;
-	TopicIdentifier createNew(String title,boolean isIsland) throws HippoBusinessException;
+	TopicIdentifier createNew(String title,Topic topicOrTagOrMeta) throws HippoBusinessException;
 	
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>

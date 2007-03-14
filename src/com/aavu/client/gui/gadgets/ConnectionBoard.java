@@ -114,11 +114,18 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 			
 		});
 		
+		
 		Association assoc = myTopic.getSeeAlsoAssociation();
-		if(assoc == null){
-			System.out.println("no see alsos");
+		if(assoc == null || assoc.getMembers().isEmpty()){		
 			return 0;
 		}else{
+			System.out.println("found see also");
+			System.out.println("1 "+myTopic.toPrettyString());
+			
+			System.out.println("2 "+assoc.getMembers().size());
+			
+			System.out.println("3 "+assoc.getMembers().iterator().next());
+			
 			int size = alsos.load(assoc);
 			if(size > 0){			
 				setVisible(true);

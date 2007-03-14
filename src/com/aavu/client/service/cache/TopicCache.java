@@ -461,11 +461,18 @@ public class TopicCache {
 	 * @param callback
 	 */
 	public void createNew(String title, boolean isIsland, AsyncCallback callback) {
-		
 		//TODO inefficient. We should wrap & insert instead of doing a full lookup
 		topicIdentifiersDirty = true;
 		
-		topicService.createNew(title, isIsland, callback);		
+		if(isIsland){
+			createNew(title, new Tag(),callback);
+		}else{
+			createNew(title, new Topic(),callback);
+		}
+	}
+	public void createNew(String title, Topic topicOrTagOrMeta, AsyncCallback callback) {
+				
+		topicService.createNew(title, topicOrTagOrMeta, callback);		
 	}
 
 
