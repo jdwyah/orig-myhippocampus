@@ -1,6 +1,5 @@
 package com.aavu.client.LinkPlugin;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -13,6 +12,7 @@ import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
+import com.aavu.client.widget.datepicker.HDatePicker;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -58,6 +59,8 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		
 		
 		Grid mainPanel = new Grid(5,3);
+		
+		//mainPanel.setWidget(0,0, new HDatePicker(HorizontalPanel.ALIGN_RIGHT));
 		
 		mainPanel.setWidget(0, 0, new Label(ConstHolder.myConstants.link_description()));		
 		mainPanel.setWidget(1, 0, new Label(ConstHolder.myConstants.link_url()));

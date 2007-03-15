@@ -26,18 +26,17 @@ import java.util.Date;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-/*
+/**
  * TodayPanel extends AbsolyePanel and is extemely simple panel.
  * All it shows is a link which displays today's date in the 
  * textbox 
  */
-public class TodayPanel extends AbsolutePanel implements ClickListener {
+public class TodayPanel extends SimplePanel implements ClickListener {
 
-	DatePicker datePicker;
-	// Holds the date format needed to be displayed
-	private DateFormatter dateFormatter = new DateFormatter(DateFormatter.DATE_FORMAT_MMDDYYYY);
+	private DatePicker datePicker;
 	
 	/*
 	 * Default Constructor 
@@ -54,35 +53,14 @@ public class TodayPanel extends AbsolutePanel implements ClickListener {
 	 * children widgets 
 	 */
 	public void init(){
-		Label todayLink = new Label("Today");
-		todayLink.setStyleName("todayLink");
+		Label todayLink = new Label("Today");		
 		todayLink.addClickListener(this);
 		this.add(todayLink);
-		this.setWidth(165 + "px");
+		this.setWidth(100 + "%");
 		this.setHeight(16+"px");
 		this.setStyleName("todayPanel");		
 	}
-	
-	/*
-	 * setDateFormatter
-	 * Getter method for DateFormat
-	 * 
-	 * @return DateFormat
-	 */
-	public DateFormatter getDateFormatter() {
-		return dateFormatter;
-	}
-	
-	/*
-	 * setDateFormatter
-	 * Setter method for DateFormat
-	 * 
-	 * @param DateFormat
-	 */
-	public void setDateFormatter(DateFormatter dateFormatter) {
-		this.dateFormatter = dateFormatter;
-	}
-
+		
 	/*
 	 * onClick
 	 * 
@@ -92,8 +70,13 @@ public class TodayPanel extends AbsolutePanel implements ClickListener {
 	 */
 	public void onClick(Widget sender) {
         //this.datePicker.setText(DateFormatter.formatDate(new Date(), DateFormatter.MMDDYYYY));
-		this.datePicker.setText(this.dateFormatter.formatDate(new Date()));
-        this.datePicker.hide();
+		
+		//this.datePicker.setText(this.dateFormatter.formatDate(new Date()));
+       
+		datePicker.setSelectedDate(new Date());
+		datePicker.setCurrentDate(new Date());
+		datePicker.redrawCalendar();
+		this.datePicker.hide();
 	}
 
 }

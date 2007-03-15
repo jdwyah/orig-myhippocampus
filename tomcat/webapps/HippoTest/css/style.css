@@ -34,6 +34,7 @@
 
 .splash-word {
 	font-size: 4em;
+
 	line-height: 1em;
 	position: relative;
 	left: 20px;
@@ -49,7 +50,9 @@
 	margin-top: .4em;
 	left: 40px;
 }
-
+.tip-question {
+	font-weight: bold;
+}
 .hid {
 	color: rgb(90, 90, 90);
 	text-decoration: none;

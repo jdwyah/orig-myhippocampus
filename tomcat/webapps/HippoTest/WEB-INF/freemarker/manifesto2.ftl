@@ -27,6 +27,7 @@
       <#macro regError>
 		<font color="#FF0000"><@spring.showErrors"<br>"/></font>
  	  </#macro>
+ 	  <#if !user?exists>
       <div class="middle-column-box-title-green">Interested? Want to know when we go live?</div>
 		<form action="<@spring.url "/site/interested.html"/>" method="POST">
 		      <table>
@@ -35,6 +36,7 @@
 		        <tr><td colspan='2'><input value="Let me know when i can signup!" type="submit"></td></tr>        		
 		      </table>
 	    </form>		
+	   </#if>
 	   <p>
 	   Back to the <a href="<@spring.url "/site/index.html"/>"/>main page.</a>
     </div>

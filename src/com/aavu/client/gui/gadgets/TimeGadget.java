@@ -39,8 +39,12 @@ public class TimeGadget extends MetaGadget  {
 	}
 
 	//@Override
-	protected Set getMetasFor(Topic topic) {
+	protected Set getAllMetasFor(Topic topic) {
 		return topic.getAllMetaDates();
+	}
+	//@Override
+	protected Set getTagBasedMetasFor(Topic topic) {
+		return topic.getTagPropertyBasedMetaDates();
 	}
 
 

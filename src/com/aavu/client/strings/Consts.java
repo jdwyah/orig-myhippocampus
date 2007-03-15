@@ -188,6 +188,9 @@ public interface Consts extends Messages {
 	String meta_remove_async();
 	String meta_select();
 	String gadget_text_title();
+	String delete_tooltip();
+	String img_delete();
+	String img_add();
 		
 	
 	

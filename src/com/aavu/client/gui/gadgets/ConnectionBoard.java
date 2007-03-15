@@ -76,8 +76,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		
 		mainP.add(cp);
 		mainP.add(alsos);
-		
-		mainP.add(new HeaderLabel(ConstHolder.myConstants.references()));
+				
 		mainP.add(refPanel);
 		
 		initWidget(mainP);
@@ -97,9 +96,10 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 				
 				refPanel.clear();
 				
-				if(list.size() == 0){
-					refPanel.add(new Label(ConstHolder.myConstants.references_none()));					
+				if(list.size() == 0){					
+					//refPanel.add(new Label(ConstHolder.myConstants.references_none()));					
 				}else{
+					refPanel.add(new HeaderLabel(ConstHolder.myConstants.references()));
 					setVisible(true);
 				}
 				
@@ -116,22 +116,20 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		
 		
 		Association assoc = myTopic.getSeeAlsoAssociation();
-		if(assoc == null || assoc.getMembers().isEmpty()){		
-			return 0;
-		}else{
-			System.out.println("found see also");
-			System.out.println("1 "+myTopic.toPrettyString());
-			
-			System.out.println("2 "+assoc.getMembers().size());
-			
-			System.out.println("3 "+assoc.getMembers().iterator().next());
-			
-			int size = alsos.load(assoc);
-			if(size > 0){			
-				setVisible(true);
-			}
-			return size; 
+		
+//		System.out.println("found see also");
+//		System.out.println("1 "+myTopic.toPrettyString());
+
+//		System.out.println("2 "+assoc.getMembers().size());
+
+//		System.out.println("3 "+assoc.getMembers().iterator().next());
+
+		int size = alsos.load(assoc);
+		if(size > 0){			
+			setVisible(true);
 		}
+		return size; 
+
 		
 	}
 

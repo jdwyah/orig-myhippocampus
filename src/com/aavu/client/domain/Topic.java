@@ -1,5 +1,6 @@
 package com.aavu.client.domain;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -754,7 +755,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public Set getMetaDates() {
 		return getOnlyMetaOfType(getMetas(),true);
-	}	
+	}
+	public Set getTagPropertyBasedMetaDates() {
+		return getOnlyMetaOfType(getPropertiesDueToTags(),true);
+	}
 	/**
 	 * Return all meta dates in use && metas due to tag properties.
 	 * 
@@ -762,11 +766,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public Set getAllMetaDates() {
 		Set s = getMetaDates();
-		s.addAll(getOnlyMetaOfType(getPropertiesDueToTags(),true));
+		s.addAll(getTagPropertyBasedMetaDates());
 		return s;
 	}
 	
-	
+
 	/**
 	 * get all in-use meta text for topic.
 	 * @return
@@ -774,16 +778,20 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	public Set getMetaTexts() {
 		return getOnlyMetaOfType(getMetas(),false);
 	}
+	public Set getTagPropertyBasedMetaTexts() {
+		return getOnlyMetaOfType(getPropertiesDueToTags(),false);
+	}
 	/**
 	 * include properties due to tags
 	 * @return
 	 */
 	public Set getAllMetaTexts() {
 		Set s = getMetaTexts();
-		s.addAll(getOnlyMetaOfType(getPropertiesDueToTags(),false));
+		s.addAll(getTagPropertyBasedMetaTexts());
 		return s;
 	}
 	
+
 	/**
 	 * blech. can't use .getClass bc no GWT reflection. Ugly even with that.
 	 * 

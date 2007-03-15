@@ -62,11 +62,11 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		setTarget(link);		
 	}
 	
-	public void init(URI occ,String popupText,boolean left) {
+	public void init(URI occ,String popupText,boolean right) {
 		setText(occ.getTitle());
 		setTarget(occ.getUri());
 		
-		if(left){
+		if(right){
 			addMouseListener(new TooltipListener(TooltipListener.DYNAMIC_LEFT,popupText));
 		}else{
 			addMouseListener(new TooltipListener(popupText));
@@ -84,9 +84,9 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		}
 	}
 
-	public ExternalLink(WebLink occ, String popupText, boolean b) {
+	public ExternalLink(WebLink occ, String popupText, boolean alignRight) {
 		this();
-		init(occ,popupText,b);
+		init(occ,popupText,alignRight);
 	}
 
 	private static native String urlEncode( String str )

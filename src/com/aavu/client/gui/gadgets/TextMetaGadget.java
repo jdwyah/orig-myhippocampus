@@ -39,8 +39,13 @@ public class TextMetaGadget extends MetaGadget  {
 	}
 
 	//@Override
-	protected Set getMetasFor(Topic topic) {
+	protected Set getAllMetasFor(Topic topic) {
 		return topic.getAllMetaTexts();
+	}
+
+	//@Override
+	protected Set getTagBasedMetasFor(Topic topic) {
+		return topic.getTagPropertyBasedMetaTexts();
 	}
 
 

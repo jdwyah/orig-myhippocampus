@@ -17,6 +17,7 @@ import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.DeleteButton;
 import com.aavu.client.widget.tags.MetaTypeChooser;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -81,7 +82,7 @@ public class TagPropertyPanel extends Gadget {
 		final HorizontalPanel hp = new HorizontalPanel();
 		hp.add(new Label(meta.getTitle()));
 		
-		Button deleteButton = new Button("X");
+		DeleteButton deleteButton = new DeleteButton();
 		deleteButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {			
 				metas.remove(meta);

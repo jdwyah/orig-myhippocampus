@@ -65,7 +65,7 @@ public class CalendarPanel extends AbsolutePanel {
 	 * children widgets
 	 */
 	private void init(){
-		this.setHeight(118+"px");
+		this.setHeight("100%");
 		this.setStyleName("calendarPanel");
 		currentMonth.addTableListener(new DateClickListener(this));
 		this.add(this.drawCalendar());
@@ -77,7 +77,7 @@ public class CalendarPanel extends AbsolutePanel {
 	 * Shows new dates per the month or year selected by the user
 	 */
 	public void redrawCalendar(){
-		System.out.println("REDRAWING");
+		//System.out.println("REDRAWING");
 		this.clearCalendar(this.currentMonth);
 		
 		//JD		
@@ -117,13 +117,13 @@ public class CalendarPanel extends AbsolutePanel {
 	 * days of the week spelled out
 	 */
 	protected void buildMonthHeader(FlexTable monthHeader){
-		monthHeader.setHTML(0, 0, "<font class='holidayWeek'>Sun</font>");
+		monthHeader.setHTML(0, 0, "<font class='monthHeaderHoliday'>Sun</font>");
 		monthHeader.setHTML(0, 1, "<font class='monthHeader'>Mon</font>");
 		monthHeader.setHTML(0, 2, "<font class='monthHeader'>Tue</font>");
 		monthHeader.setHTML(0, 3, "<font class='monthHeader'>Wed</font>");
 		monthHeader.setHTML(0, 4, "<font class='monthHeader'>Thu</font>");
 		monthHeader.setHTML(0, 5, "<font class='monthHeader'>Fri</font>");
-		monthHeader.setHTML(0, 6, "<font class='holidayWeek'>Sat</font>");
+		monthHeader.setHTML(0, 6, "<font class='monthHeaderHoliday'>Sat</font>");
 		
 	}
 	
@@ -149,7 +149,7 @@ public class CalendarPanel extends AbsolutePanel {
 						cellValues[row][col] = selectedDate +"";
 						if(col == 0 || col == 6){
 							if(true == isSelectedDate(date, selectedDate)){
-								monthBody.setHTML(row, col, "<font class='currentDate'>" + selectedDate + "</font>");
+								monthBody.setHTML(row, col, "<font class='selectedDate'>" + selectedDate + "</font>");
 							}else{
 								if(this.isWeekendSelectable()){
 									monthBody.setHTML(row, col, "<font class='holidaySelectable'>" + selectedDate + "</font>");
@@ -159,7 +159,7 @@ public class CalendarPanel extends AbsolutePanel {
 							}
 						}else{
 							if(true == isSelectedDate(date, selectedDate)){
-								monthBody.setHTML(row, col, "<font class='currentDate'>" + selectedDate+"<font>");
+								monthBody.setHTML(row, col, "<font class='selectedDate'>" + selectedDate+"<font>");
 							}else{
 								monthBody.setHTML(row, col, "<font class='calendarDate'>" + selectedDate+"<font>");
 							}

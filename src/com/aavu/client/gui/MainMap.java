@@ -189,6 +189,8 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		
 		mainP.add((DefaultGFrame) internalFrame);		
 		
+		//System.out.println("add at spos "+spos+" "+(mainP.getAbsoluteLeft() + spos)+" "+(mainP.getAbsoluteTop() + spos));
+		
 		internalFrame.setLocation(mainP.getAbsoluteLeft() + spos,
 				mainP.getAbsoluteTop() + spos);
 		

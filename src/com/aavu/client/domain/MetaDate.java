@@ -11,6 +11,8 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.datepicker.DateFormatter;
+import com.aavu.client.widget.datepicker.DatePicker;
+import com.aavu.client.widget.datepicker.HDatePicker;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -42,7 +44,8 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 		
 		HorizontalPanel widget = new HorizontalPanel();
 				
-		SimpleDatePicker datePicker = new SimpleDatePicker("mydate");
+		
+		DatePicker datePicker = new HDatePicker(HorizontalPanel.ALIGN_RIGHT);
 	    
 	    // Set whether or not you want the weekends selectable
 	    datePicker.setWeekendSelectable(true);

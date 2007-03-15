@@ -78,7 +78,7 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * 
 	 * Does the initialization to the textbox
 	 */
-	private void init(){
+	protected void init(){
 		this.setWidth(80+"px");
 		this.setStyleName("txtbox");
 		addClickListener(this);
@@ -96,10 +96,11 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * 
 	 * @param DatePicker
 	 */
-	private void addCalendar(DatePicker datePicker){
+	protected void addCalendar(DatePicker datePicker){
 		vertPanel.add(calendarTraversalPanel);
 		vertPanel.add(calendarPanel);
 		vertPanel.add(todayPanel);
+		vertPanel.addStyleName("date_DisplayPanel");	
 		calendarPopup.add(vertPanel);
 	}
 
@@ -108,12 +109,11 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * 
 	 * Displays the popup calendar panel
 	 */
-	private void showCalendar(){
+	protected void showCalendar(){
 		calendarPopup.show();
 		calendarPopup.setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop() + this.getOffsetHeight()+4);
 		calendarPopup.setHeight(120+"px");
-		calendarPopup.setWidth(165 + "px");
-		calendarPopup.setStyleName("popupPanel");		
+		calendarPopup.setWidth(165 + "px");			
 	}
 
 	/*
@@ -192,6 +192,5 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	public void setDateFormat(DateFormat dateFormat) {
 		super.setDateFormat(dateFormat);
 		this.calendarPanel.setDateFormatter(this.getDateFormatter());
-		this.todayPanel.setDateFormatter(this.getDateFormatter());
 	}
 }
