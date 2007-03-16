@@ -101,6 +101,7 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 		vertPanel.add(calendarPanel);
 		vertPanel.add(todayPanel);
 		vertPanel.addStyleName("date_DisplayPanel");	
+		calendarPanel.addStyleName("date_popupPanel");
 		calendarPopup.add(vertPanel);
 	}
 

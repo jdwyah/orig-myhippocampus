@@ -18,6 +18,7 @@ import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -30,9 +31,11 @@ public abstract class MetaGadget extends Gadget  {
 
 	private Topic topic;
 	private Manager manager;
-	private VerticalPanel metasPanel;
 	private VerticalPanel mainPanel;
-	private Meta type;
+	
+	protected VerticalPanel metasPanel;	
+	protected Meta type;
+	protected SimplePanel extraPanel;
 	
 	public MetaGadget(Manager _manager,String title,Meta type){		
 		
@@ -44,7 +47,8 @@ public abstract class MetaGadget extends Gadget  {
 		
 		metasPanel = new VerticalPanel();		
 		
-		mainPanel = new VerticalPanel();		
+		mainPanel = new VerticalPanel();	
+		extraPanel = new SimplePanel();
 		
 		PNGImage addEditButton = new PNGImage(ConstHolder.myConstants.img_add(),16,16);
 		addEditButton.addMouseListener(new TooltipListener(ConstHolder.myConstants.meta_add_edit()));
@@ -62,10 +66,9 @@ public abstract class MetaGadget extends Gadget  {
 		mainPanel.add(headerP);
 		
 		mainPanel.add(metasPanel);		
-				
-		
-		initWidget(mainPanel);		
-			
+		mainPanel.add(extraPanel);
+						
+		initWidget(mainPanel);					
 		
 	}
 
@@ -91,7 +94,7 @@ public abstract class MetaGadget extends Gadget  {
 		metasPanel.clear();
 		
 		Set tagBased = getTagBasedMetasFor(topic);
-		
+		int size = 0;
 		for (Iterator iter = getAllMetasFor(topic).iterator(); iter.hasNext();) {
 			Meta meta = (Meta) iter.next();		
 			if(tagBased.contains(meta)){
@@ -99,16 +102,23 @@ public abstract class MetaGadget extends Gadget  {
 			}else{
 				addMWidg(meta);
 			}
+			size++;
 		}		
-		return 1;
+		return size;
 	}	
-	protected abstract Set getAllMetasFor(Topic topic);
-	protected abstract Set getTagBasedMetasFor(Topic topic);
-
+	private Set getAllMetasFor(Topic topic){
+		return topic.getAllMetas(type);
+	}
+	private Set getTagBasedMetasFor(Topic topic){
+		return topic.getTagPropertyBasedMetas(type);
+	}
+	public boolean isOnForTopic(Topic topic) {
+		return topic.hasMetas(type);
+	}
 	private void addMWidg(final Meta meta) {
 		addMWidg(meta, true);
 	}
-	private void addMWidg(final Meta meta,boolean showDelete) {
+	protected void addMWidg(final Meta meta,boolean showDelete) {
 		final HorizontalPanel hp = new HorizontalPanel();
 		hp.add(meta.getEditorWidget(topic, manager));
 		
@@ -124,7 +134,7 @@ public abstract class MetaGadget extends Gadget  {
 		metasPanel.add(hp);
 	}
 	
-	private void removeMeta(Meta meta, Topic topic, final Widget displayW) {
+	protected void removeMeta(Meta meta, Topic topic, final Widget displayW) {
 		manager.getTopicCache().executeCommand(topic, 
 				new RemoveMetaFromTopicCommand(topic,meta),
 				new StdAsyncCallback(ConstHolder.myConstants.meta_remove_async()){

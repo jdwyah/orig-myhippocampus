@@ -39,7 +39,9 @@ TABLE.longRange TD {
 	border-left: 1px solid gray;
 	border-top:1px solid gray;
  }
- 
+.date_popupPanel {
+	z-index: 9999;
+}
 .todayPanel	{
 	font-family:tahoma,sans-serif;font-size:11px;
 	/*float: right;*/

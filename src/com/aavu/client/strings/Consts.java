@@ -191,6 +191,10 @@ public interface Consts extends Messages {
 	String delete_tooltip();
 	String img_delete();
 	String img_add();
+	
+	String img_gadget_map();
+	String gadget_map_title();
+	String meta_location();
 		
 	
 	

@@ -133,6 +133,10 @@
 		<subclass name="HippoText" discriminator-value="text">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 		</subclass>
+		<!-- meaningless from DB perspective. only usefull for differentiation -->
+		<subclass name="HippoLocation" discriminator-value="location">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
+		</subclass>
 
 		<!-- also meaningless from DB -->
 		<subclass name="Meta" discriminator-value="meta">
@@ -150,7 +154,9 @@
 			<subclass name="MetaSeeAlso" discriminator-value="seealso">
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
-
+			<subclass name="MetaLocation" discriminator-value="metalocation">
+				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
+			</subclass>
 		</subclass>
 		
 		<!-- a real class has members -->

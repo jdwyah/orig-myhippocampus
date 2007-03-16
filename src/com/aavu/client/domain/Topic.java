@@ -1,6 +1,5 @@
 package com.aavu.client.domain;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -102,7 +101,21 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	
 	
 	public void addMetaValue(Meta meta, Topic metaValue) {
-
+		addMetaValue(meta, metaValue,true);
+	}
+	/**
+	 * some meta values really only want 1 meta value per meta, so they'll ask us to clear the members
+	 * set before adding the new one. This currently results in a db-leak though.
+	 * 
+	 * If you don't want it to clear (multiple mv's ie MetaLocation) you need to use clear == false;
+	 * 
+	 * @param meta
+	 * @param metaValue
+	 * @param clear
+	 */
+	public void addMetaValue(Meta meta, Topic metaValue,boolean clear) {
+			
+		
 		System.out.println("Topic.addMetaValue: "+metaValue);
 		
 //		Topic cur_val = getSingleMetaValueFor(meta);
@@ -135,7 +148,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		//redundant if we've already created
 		assoc.addType(meta);
 		
-		assoc.getMembers().clear();
+		if(clear){
+			assoc.getMembers().clear();
+		}
 		assoc.getMembers().add(metaValue);
 						
 		metaValue.addType(meta);
@@ -745,55 +760,39 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return rtn;
 	}
 
+	
+
 	/**
 	 * Return all actual meta dates that the topic has. 
 	 * ie 
 	 * Movie will return nothing, 
 	 * but Crimson Tide will return a Date Seen.
+	 * 
+	 * Important, Crimson Tide will rtn a Date Seen even if it doesn't have an 
+	 * entry for it, (if its movie tag has a Date Seen tag property)
 	 *  
 	 * @return
 	 */
-	public Set getMetaDates() {
-		return getOnlyMetaOfType(getMetas(),true);
-	}
-	public Set getTagPropertyBasedMetaDates() {
-		return getOnlyMetaOfType(getPropertiesDueToTags(),true);
+	public Set getAllMetas(Meta type) {		
+		Set s = getOnlyMetaOfType(getMetas(),type);
+		s.addAll(getOnlyMetaOfType(getPropertiesDueToTags(),type));
+		return s;
 	}
 	/**
-	 * Return all meta dates in use && metas due to tag properties.
+	 * Return all meta dates in that are due to tag properties.
+	 * 
 	 * 
 	 * @return
 	 */
-	public Set getAllMetaDates() {
-		Set s = getMetaDates();
-		s.addAll(getTagPropertyBasedMetaDates());
-		return s;
-	}
-	
-
-	/**
-	 * get all in-use meta text for topic.
-	 * @return
-	 */
-	public Set getMetaTexts() {
-		return getOnlyMetaOfType(getMetas(),false);
-	}
-	public Set getTagPropertyBasedMetaTexts() {
-		return getOnlyMetaOfType(getPropertiesDueToTags(),false);
-	}
-	/**
-	 * include properties due to tags
-	 * @return
-	 */
-	public Set getAllMetaTexts() {
-		Set s = getMetaTexts();
-		s.addAll(getTagPropertyBasedMetaTexts());
-		return s;
+	public Set getTagPropertyBasedMetas(Meta type) {
+		return getOnlyMetaOfType(getPropertiesDueToTags(),type);
 	}
 	
 
 	/**
 	 * blech. can't use .getClass bc no GWT reflection. Ugly even with that.
+	 * 
+	 * now using the must-be-unique getType() and strcmp. still not super pretty
 	 * 
 	 * NOTE: won't work for MetaTopics 
 	 *  
@@ -801,20 +800,13 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * @param date
 	 * @return
 	 */
-	public Set getOnlyMetaOfType(Set fromSet,boolean date) {
+	public Set getOnlyMetaOfType(Set fromSet,Meta type) {
 		Set rtn = new HashSet();
 		for (Iterator iter = fromSet.iterator(); iter.hasNext();) {
 			Meta meta = (Meta) iter.next();
 
-			if(date){
-				if(meta instanceof MetaDate){
-					rtn.add(meta);
-				}
-			}
-			else{
-				if(meta instanceof MetaText){
-					rtn.add(meta);
-				}	
+			if(meta.getType().equals(type.getType())){
+				rtn.add(meta);
 			}			
 		}		
 		return rtn;
@@ -835,17 +827,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return (this instanceof Tag) && !getTagProperties().isEmpty();
 	}
 
-	public boolean hasTimeMetas() {		
-//		System.out.println("HAS TIME");
-//		System.out.println(toPrettyString());
-		return !getAllMetaDates().isEmpty();
+	public boolean hasMetas(Meta type) {		
+		return !getAllMetas(type).isEmpty();
 	}
-
-	public boolean hasTextMetas() {
-		return !getAllMetaTexts().isEmpty();		
-	}
-
-		
 	
 
 	

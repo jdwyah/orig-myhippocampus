@@ -66,7 +66,7 @@ public class HDatePicker extends SimpleDatePicker {
 			//found native method below on forum, but it returns the same thing
 			//
 			//int left = this.getAbsoluteLeft() - WIDTH;
-			int left = Window.getClientWidth() - WIDTH - 210;
+			int left = Window.getClientWidth() - WIDTH;
 			
 			//make sure it doesn't go too low
 			int top = this.getAbsoluteTop() + this.getOffsetHeight()+4;
@@ -80,12 +80,12 @@ public class HDatePicker extends SimpleDatePicker {
 			
 			calendarPopup.setHeight(120+"px");
 			calendarPopup.setWidth(165 + "px");
-			calendarPopup.setStyleName("popupPanel");
+			calendarPopup.setStyleName("date_popupPanel");
 		}else{
 			calendarPopup.setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop() + this.getOffsetHeight()+4);
 			calendarPopup.setHeight(120+"px");
 			calendarPopup.setWidth(165 + "px");
-			calendarPopup.setStyleName("popupPanel");
+			calendarPopup.setStyleName("date_popupPanel");
 		}
 	}
 //	public native int getAbsoluteLeft(Element elem) /*-{
