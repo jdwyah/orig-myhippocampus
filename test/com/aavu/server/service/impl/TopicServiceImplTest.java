@@ -1,19 +1,28 @@
 package com.aavu.server.service.impl;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.test.AssertThrows;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.HippoDate;
+import com.aavu.client.domain.HippoLocation;
+import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.commands.SaveMetaDateCommand;
+import com.aavu.client.domain.commands.SaveMetaLocationCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -39,6 +48,9 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	private static final String F = "Recommender";
 	private static final String G = "AnotherBook";
 	private static final String H = "AnotherRecommender";
+	
+	private static final String J = "DateRead";
+	private static final String K = "LocationMeta";
 
 	private TopicService topicService;
 	
@@ -291,6 +303,105 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		Topic s = (Topic) a.getMembers().iterator().next();		
 		assertEquals(t3.getId(), s.getId());
 		
+		
+	}
+	public void testLocationCommand() throws HippoBusinessException {
+		
+		clean();
+		
+		Tag tag = new Tag(u,B);		
+		tag = (Tag) topicService.save(tag);
+		
+		System.out.println("SAVED TAG "+B);
+		
+		
+		Topic topic = new Topic(u,C);
+		topic = (Topic) topicService.save(topic);
+		
+		MetaLocation metaL = new MetaLocation();
+		metaL.setTitle(K);
+		metaL = (MetaLocation) topicService.save(metaL);
+		
+		MetaLocation savedMeta1 = (MetaLocation) topicService.getForID(metaL.getId());
+		assertNotSame(0, savedMeta1.getId());
+		System.out.println("saved meta1 "+savedMeta1);
+		assertTrue(savedMeta1 instanceof MetaLocation);
+		
+		String LAT_LONG = "25.3,45.3";
+				
+		HippoLocation loc1 = new HippoLocation();
+		loc1.setTitle(LAT_LONG);
+		
+		Set locs = new HashSet();
+		locs.add(loc1);
+		
+		AbstractCommand comm = new SaveMetaLocationCommand(topic,savedMeta1,locs);
+		
+				
+		topicService.executeAndSaveCommand(comm);
+		
+		System.out.println("FINISHED SAVE");		
+		
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());
+		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		Meta savedMeta = (Meta) topicS.getMetas().iterator().next();
+		assertNotNull(savedMeta);
+		assertEquals(K, savedMeta.getTitle());
+		
+		HippoLocation savedLoc = (HippoLocation) topicS.getSingleMetaValueFor(savedMeta);
+		assertNotNull(savedLoc);
+		assertEquals(LAT_LONG, savedLoc.getTitle());
+	
+		
+	}
+	public void testMetaDateCommand() throws HippoBusinessException {
+		
+		clean();
+		
+	
+		
+		Topic topic = new Topic(u,C);
+		topic = (Topic) topicService.save(topic);
+		
+		MetaDate metaL = new MetaDate();
+		metaL.setTitle(J);
+		metaL = (MetaDate) topicService.save(metaL);
+		
+		Topic savedMeta1 = topicService.getForID(metaL.getId());
+		assertNotSame(0, savedMeta1.getId());
+		System.out.println("saved meta1 "+savedMeta1);
+		assertTrue(savedMeta1 instanceof MetaDate);
+		
+				
+		HippoDate date = new HippoDate();
+		date.setDate(new Date());
+		
+		
+		AbstractCommand comm = new SaveMetaDateCommand(topic,savedMeta1,date.getTitle());
+		
+				
+		topicService.executeAndSaveCommand(comm);
+		
+		System.out.println("FINISHED SAVE");		
+		
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());
+		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		Meta savedMeta = (Meta) topicS.getMetas().iterator().next();
+		assertNotNull(savedMeta);
+		
+		
+		assertEquals(J, savedMeta.getTitle());
+		
+		HippoDate savedLoc = (HippoDate) topicS.getSingleMetaValueFor(savedMeta);
+		assertNotNull(savedLoc);
+		assertEquals(date.getTitle(), savedLoc.getTitle());
+	
 		
 	}
 	

@@ -18,29 +18,33 @@ import com.mapitz.gwt.googleMaps.client.GLatLng;
 
 public class HippoLocation extends MetaValue implements IsSerializable, Serializable{
 	
+	private static final int SIGNIFICANT_DIGITS = 100000;
+	
 	public HippoLocation(){
 		setPublicVisible(false);
 	}	
-
-	public HippoLocation(User u, String d) {		
-		super(u,d);
-		setPublicVisible(false);
-	}
-
-	public GLatLng getLocation(){		
-		String[] locs = getTitle().split(",");		
-		double lat = Double.parseDouble(locs[0]);
-		double longi = Double.parseDouble(locs[1]);
-		return new GLatLng(lat,longi);    
+	
+	public GLatLng getLocation(){				
+		return new GLatLng((double)getLatitude()/SIGNIFICANT_DIGITS,
+				(double)getLongitude()/SIGNIFICANT_DIGITS);    
 	}
 	public void setLocation(GLatLng point){
-		setTitle(point.toUrlValue());
+		if(getTitle() == null){
+			setTitle(point.toUrlValue());
+		}
+		setLatitude((int) (point.lat()*SIGNIFICANT_DIGITS));
+		setLongitude((int) (point.lng()*SIGNIFICANT_DIGITS));
 	}
 
 	public boolean mustHaveUniqueName() {
 		return false;
 	}
-
+	
+	public String getValue(){
+		return getTitle();
+	}
+	
+	
 	public String toShortString() {		
 		return getLocation().toString();
 	}

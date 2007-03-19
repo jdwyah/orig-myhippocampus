@@ -35,7 +35,7 @@ public interface GWTTopicService extends RemoteService {
 		
 	FullTopicIdentifier[] getTopicIdsWithTag(long id) throws HippoException;
 	//List<TimeLineObj>
-	TimeLineObj[] getTimelineObjs(long meta_id) throws HippoException;
+	List getTimelineObjs(long meta_id) throws HippoException;
 
 	//List<TopicIdentifier> 
 	List getLinksTo(Topic topic) throws HippoException;

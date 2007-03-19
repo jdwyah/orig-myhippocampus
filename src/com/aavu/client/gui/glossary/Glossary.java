@@ -106,6 +106,11 @@ public class Glossary extends FocusPanel {
 		alphabetizeTopics(topics);
 		dirty = false;
 	}
+
+	public void load(Map tagToIdentifierMap) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	protected void alphabetizeTopics(List topics) {
 		//<String,Map<String,TopicIdentifier>>
@@ -187,6 +192,7 @@ public class Glossary extends FocusPanel {
 	public boolean isDirty() {
 		return dirty;
 	}
+
 
 
 	

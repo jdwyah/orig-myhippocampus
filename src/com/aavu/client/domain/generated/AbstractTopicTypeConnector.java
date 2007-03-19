@@ -109,7 +109,7 @@ public class AbstractTopicTypeConnector implements Serializable, IsSerializable 
 			return false;
 		}
 		
-		System.out.println("rtn tru!!!!!");
+		System.out.println("TopicType .eq rtn true");
 		return true;
 	}
 	

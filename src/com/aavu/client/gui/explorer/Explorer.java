@@ -1,12 +1,13 @@
 package com.aavu.client.gui.explorer;
 
-import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
-import com.aavu.client.domain.dto.TimeLineObj;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.aavu.client.gui.blog.BlogView;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.glossary.Glossary;
+import com.aavu.client.gui.maps.BigMap;
 import com.aavu.client.gui.timeline.CloseListener;
-import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
@@ -23,11 +24,26 @@ public class Explorer extends Composite implements ClickListener {
 	private SimplePanel currentView;
 	private TimeLineWrapper timeline;
 	private Glossary glossary;
+	private BlogView blogView;
+	private BigMap bigMap;
+	
 	private Button azB;
 	private Button timeB;
+	private Button recentB;
+	private Button mapB;
+	
 	private Manager manager;
 	
+	//<Tag,FullTopicIdentifier>
+	private Map tagToIdentifierMap;
+	private TagChooser tagChooser;
 	
+
+
+	public Explorer(Manager manager, int width, int height, CloseListener close) {
+		this(new HashMap(),manager,width,height,close);
+	}
+
 	
 	/**
 	 * NOTE: you can't put a timeline in a TabPanel. Weird JS problem from the timeline.js
@@ -39,9 +55,10 @@ public class Explorer extends Composite implements ClickListener {
 	 * @param width 
 	 * @param frame
 	 */
-	public Explorer(Topic myTag, FullTopicIdentifier[] topics, Manager manager, int width, int height, CloseListener close) {
+	public Explorer(Map defaultMap, Manager manager, int width, int height, CloseListener close) {
 		
 		this.manager = manager;
+		this.tagToIdentifierMap = defaultMap;
 		
 		CellPanel mainP = new HorizontalPanel();				
 		
@@ -51,21 +68,42 @@ public class Explorer extends Composite implements ClickListener {
 		
 		
 		glossary = new Glossary(manager,Orientation.HORIZONTAL);
-		glossary.load(topics);			
-				
 		
-		timeline = new TimeLineWrapper(manager,myTag,width,height,topics,close);
+		glossary.load(tagToIdentifierMap);
+						
+		timeline = new TimeLineWrapper(manager,tagToIdentifierMap,width,height,close);
 				
+		blogView = new BlogView(manager,tagToIdentifierMap);
+		
+		bigMap = new BigMap(manager,tagToIdentifierMap);
+		
+		
 		timeB = new Button("Timeline");
 		timeB.addClickListener(this);
 		
 		azB = new Button("A-Z");
 		azB.addClickListener(this);		
 		
+		recentB = new Button("Recent");
+		recentB.addClickListener(this);		
+		
+		mapB = new Button("Map");
+		mapB.addClickListener(this);
+				
 		optionsPanel.add(timeB);
 		optionsPanel.add(azB);
+		optionsPanel.add(recentB);
+		optionsPanel.add(mapB);
 		
-		mainP.add(optionsPanel);
+		tagChooser = new TagChooser(defaultMap,manager);
+		
+		
+		CellPanel leftPanel = new VerticalPanel();
+		leftPanel.add(optionsPanel);
+		
+		leftPanel.add(tagChooser);
+		
+		mainP.add(leftPanel);
 		mainP.add(currentView);		
 		
 		initWidget(mainP);
@@ -84,6 +122,12 @@ public class Explorer extends Composite implements ClickListener {
 		}else if(sender == azB){
 			currentView.clear();
 			currentView.add(glossary);			
+		}else if(sender == recentB){
+			currentView.clear();
+			currentView.add(blogView);			
+		}else if(sender == mapB){
+			currentView.clear();
+			currentView.add(bigMap);			
 		}
 	}
 	

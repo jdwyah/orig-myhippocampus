@@ -1,6 +1,7 @@
 package com.aavu.server.service.gwt;
 
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -212,12 +213,12 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 	
 	public void testTimeline() throws HippoException{
 		
-		TimeLineObj[] rtn = topicService.getTimelineObjs(0);
+		List rtn = topicService.getTimelineObjs(0);
 		
-		for (int i = 0; i < rtn.length; i++) {
-			TimeLineObj obj = rtn[i];
+		for (Iterator iter = rtn.iterator(); iter.hasNext();) {
+			TimeLineObj obj = (TimeLineObj) iter.next();
 			log.debug(obj);
-		}
+		}		
 		
 		assertNotNull(rtn);
 	}

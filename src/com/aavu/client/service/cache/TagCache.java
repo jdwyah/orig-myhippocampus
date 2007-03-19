@@ -41,7 +41,4 @@ public class TagCache {
 		tagService.getTagStats(callback);
 	}
 
-	public void makeMeATag(Topic topic, AsyncCallback callback) {
-		tagService.makeMeATag(topic,callback);
-	}
 }

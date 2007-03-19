@@ -1,10 +1,9 @@
 package com.aavu.client.gui.timeline;
 
-import com.aavu.client.async.StdAsyncCallback;
+import java.util.Iterator;
+import java.util.List;
+
 import com.aavu.client.domain.dto.TimeLineObj;
-import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.ViewMemberWindow;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.timeline.renderers.HippoRender;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
@@ -110,7 +109,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 //		}
 //	}
 
-	public void load(TimeLineObj[] timelines){
+	public void load(List timelines){
 				
 		simileWidget.clearData();
 		
@@ -118,19 +117,19 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 			return;	
 		}
 		
-		for (int i = 0; i < timelines.length; i++) {
-			TimeLineObj tlo = timelines[i];
-			System.out.println("Received tlo "+tlo);
-		}		
+		
 		
 		JSONObject jo = new JSONObject();
 		JSONArray events = new JSONArray();
 		
-		for (int i = 0; i < timelines.length; i++) {
-			TimeLineObj tlo = timelines[i];			
-			//System.out.println("C "+tlo.getJSONObj());
-			events.set(i, tlo.getJSONObj());		
-		}							
+		int i = 0;
+		for (Iterator iter = timelines.iterator(); iter.hasNext();) {
+			TimeLineObj tlo = (TimeLineObj) iter.next();
+//			System.out.println("C "+tlo.getJSONObj());
+			events.set(i, tlo.getJSONObj());	
+			i++;
+		}
+					
 		
 		jo.put("events",events);		
 		jo.put("dateTimeFormat", new JSONString("iso8601"));
@@ -138,7 +137,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		Logger.log("Sending to simile: "+jo.toString());
 		//timeline.load(jo);
 		
-		if(timelines.length == 0){
+		if(timelines.size() == 0){
 			Window.alert(ConstHolder.myConstants.timeline_no_objs_msg());
 		}
 		

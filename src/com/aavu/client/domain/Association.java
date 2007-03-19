@@ -25,12 +25,16 @@ public class Association extends AbstractAssociation implements Serializable,IsS
 	 * @param meta
 	 */
 	public Association(Topic topic,Meta meta) {
-		
+		setUser(topic.getUser());
 		getMembers().add(meta);
 		
 		setTitle(topic.getTitle()+" to "+meta.getTitle());
 	}
 
+
+	public Association(Topic topic) {
+		setUser(topic.getUser());
+	}
 
 	/**
 	 * Most associations will only be of one type. Their Meta. This is just

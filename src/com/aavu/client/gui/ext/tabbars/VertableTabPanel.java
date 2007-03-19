@@ -254,17 +254,13 @@ SourcesTabEvents, TabHasWidgets, IndexedPanel {
 	public void selectTab(int index) {
 		vertableTabBar.selectTab(index);
 	}
-//	 private native static void appear (Element element, JavaScriptObject opts) /*-{
-//     $wnd._nativeExtensions = false;
-//     new $wnd.Effect.Appear(element, opts);
-// 	}-*/;
+
 	
 	public void showDeck() {			
 		//System.out.println("SHOW: "+getDeckPanel().isVisible()+" "+getDeckPanel().getElement().toString().substring(0, 300));		
 	
 		//appear(getDeckPanel(),)
 		
-		//Effect.appear(deckWrapper);
 		//getDeckPanel().showWidget(de)getVisibleWidget()
 		
 		deckWrapper.setVisible(true);
@@ -274,7 +270,7 @@ SourcesTabEvents, TabHasWidgets, IndexedPanel {
 	}
 	public void hideDeck() {
 		//System.out.println("HIDE: "+getDeckPanel().isVisible()+" "+getDeckPanel().getElement().toString().substring(0, 300));
-		//Effect.squish(deckWrapper);	
+
 		
 		deckWrapper.setVisible(false);
 		//getDeckPanel().setVisible(false);

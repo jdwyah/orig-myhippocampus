@@ -5,10 +5,14 @@ import java.util.Set;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveMetaDateCommand;
+import com.aavu.client.domain.commands.SaveMetaLocationCommand;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.maps.HippoMapWidget;
 import com.aavu.client.service.Manager;
@@ -91,14 +95,12 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 		
 		metasPanel.add(metaWidge);
 		
+		selectedMeta = meta;
 		
 		//HippoLocation mv = (HippoLocation) myTopic.getSingleMetaValueFor(meta);
 		
 	}
 	
-	private void addOne(){
-		
-	}
 
 	private void makeVisible() {
 		mapWidget.setSize(200);
@@ -177,7 +179,7 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 			HippoLocation newLoc = new HippoLocation();
 			newLoc.setLocation(point);
 			
-			myTopic.addMetaValue(selectedMeta, newLoc,false);
+			saveLocation(selectedMeta,newLoc);
 			
 			return newLoc;
 		}else{
@@ -185,9 +187,40 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 		}
 	}
 
+	private void saveLocation(Meta theSelectedMeta, HippoLocation newLoc) {
+
+		System.out.println("Save "+newLoc);
+		
+		Set locations = myTopic.getAllMetas(theSelectedMeta);
+		locations.add(newLoc);
+		
+		System.out.println("size "+locations.size());
+		
+		manager.getTopicCache().executeCommand(myTopic,new SaveMetaLocationCommand(myTopic,theSelectedMeta,locations),
+				new StdAsyncCallback(ConstHolder.myConstants.save()){});
+
+	
+	}
+
+
+
 	public void userSelected(HippoLocation selected) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	public void update(HippoLocation dragged) {
+		System.out.println("Update "+dragged+" selectedMeta "+selectedMeta);
+		Set locations = myTopic.getMetaValuesFor(selectedMeta);		
+		locations.add(dragged);
+		
+		System.out.println("size "+locations.size());
+		
+		manager.getTopicCache().executeCommand(myTopic,new SaveMetaLocationCommand(myTopic,selectedMeta,locations),
+				new StdAsyncCallback(ConstHolder.myConstants.save()){});
+
 	}
 
 

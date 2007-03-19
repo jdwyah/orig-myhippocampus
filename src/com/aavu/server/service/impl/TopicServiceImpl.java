@@ -30,6 +30,11 @@ import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.UserPageBean;
 
+/**
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class TopicServiceImpl implements TopicService {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 
@@ -96,17 +101,20 @@ public class TopicServiceImpl implements TopicService {
 					log.info("Throw HBE exception for Duplicate Title. ID: "+topic.getId()+" ID2:"+sameNamed.getId());
 					throw new HippoBusinessException("Duplicate Name");
 				}		
+				//need to evict or we'll get a NonUniqueException
+				//topicDAO.evict(sameNamed);
+				
 			} catch (IncorrectResultSizeDataAccessException e) {
 				log.info(e.getMessage()+" Throw HBE exception for Duplicate Title. ID: "+topic.getId()+" "+topic.getTitle());
 				throw new HippoBusinessException("Duplicate Name");
 			}
 			
-						//need to evict or we'll get a NonUniqueException
-			//getHibernateTemplate().evict(sameNamed);
+
 		}
 		
+		//log.debug("save "+topic.toPrettyString());
 				
-		System.out.println("Topic Save Setting User "+userService.getCurrentUser());
+		log.debug("Topic Save Setting User "+userService.getCurrentUser());
 		
 		
 		Set<Occurrence> occs = topic.getOccurences();

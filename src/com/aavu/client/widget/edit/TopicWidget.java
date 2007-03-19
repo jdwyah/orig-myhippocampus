@@ -49,16 +49,8 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		add(panel);
 		addClickListener(this);
 				
-		addStyleName("H-editableText");
-		
-		/*
-		 * This is essentially Effect.highlight, but more reliable.
-		 * we were getting stuck on various shades of yellow
-		 */
-//		removeHighlight = new Timer(){
-//			public void run() {
-//				removeStyleName("editableLabel-label-hover");		
-//			}};
+		addStyleName("H-editableText");	
+
 		addMouseListener(new MouseListenerAdapter(){
 			public void onMouseEnter(Widget sender) {
 				addStyleName(HOVER_STYLE);

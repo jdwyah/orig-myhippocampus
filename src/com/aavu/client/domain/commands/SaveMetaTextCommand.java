@@ -22,7 +22,7 @@ public class SaveMetaTextCommand extends AbstractCommand implements IsSerializab
 
 		HippoText mv = (HippoText) getTopic(0).getSingleMetaValueFor((Meta) getTopic(1));
 		if(mv == null){
-			mv = new HippoText(getData());
+			mv = new HippoText(getTopic(0).getUser(),getData());
 		}else{
 			mv.setTitle(getData());
 		}

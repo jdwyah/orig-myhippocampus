@@ -195,6 +195,12 @@ public interface Consts extends Messages {
 	String img_gadget_map();
 	String gadget_map_title();
 	String meta_location();
+	
+	String chooser_showing();
+	String chooser_add();
+	String chooser_tagSelectTitle();
+	String chooser_lookup_async();
+	String chooser_lookup_select();
 		
 	
 	

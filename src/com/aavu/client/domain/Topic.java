@@ -67,10 +67,14 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			o = new MetaDate();		
 		else if(this instanceof MetaTopic)
 			o = new MetaTopic();
+		else if(this instanceof MetaLocation)
+			o = new MetaLocation();
 		else if(this instanceof HippoDate)
 			o = new HippoDate();
 		else if(this instanceof HippoText)
 			o = new HippoText();
+		else if(this instanceof HippoLocation)
+			o = new HippoLocation();		
 		else if(this instanceof Association)
 			o = new Association();
 		else if(this instanceof Tag)
@@ -116,7 +120,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	public void addMetaValue(Meta meta, Topic metaValue,boolean clear) {
 			
 		
-		System.out.println("Topic.addMetaValue: "+metaValue);
+		System.out.println("Topic.addMetaValue: "+meta+" "+metaValue);
 		
 //		Topic cur_val = getSingleMetaValueFor(meta);
 //		if(cur_val != null){
@@ -126,7 +130,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		Association assoc = getAssociationForMetaOrNull(meta);
 		if(assoc == null){
 			System.out.println("addMetaValue: create new assoc");
-			assoc = new Association();
+			assoc = new Association(this);
 			
 			
 			
@@ -445,7 +449,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		}		
 		System.out.println("getSeeAlsoAssociation: create new assoc");
 		
-		Association rtn = new Association();
+		Association rtn = new Association(this);
 		rtn.setTitle(this.getTitle()+" to SeeAlsoUber");
 		rtn.addType(seeAlsoSingleton);
 		return rtn;
@@ -509,15 +513,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public Set getMetas() {
 		Set metas = new HashSet();
-		System.out.println("getMetas "+getAssociations().size());
+		System.out.println("getMetas() assoc size"+getAssociations().size());
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			
-			System.out.println("assoc "+association);
+			System.out.println("getMetas() assoc "+association);
 			
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
 			
+				System.out.println("getMetas() possible meta "+possibleMeta+" "+(possibleMeta instanceof Meta)+" "+possibleMeta.getId());
+				
 				if (possibleMeta instanceof Meta) {							
 					metas.add(possibleMeta);				
 				}	

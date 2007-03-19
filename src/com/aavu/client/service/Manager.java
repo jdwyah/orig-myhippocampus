@@ -210,13 +210,12 @@ public class Manager implements TopicSaveListener, LoginListener {
 	}
 	
 	public void showGlossary() {
-		if(glossary == null || glossary.isDirty()){
-			glossary = new Glossary(this,Orientation.HORIZONTAL);
-			glossary.load();
-		}
-		GlossaryWindow gw = new GlossaryWindow(glossary,newFrame());
+		ViewMemberWindow gw = new ViewMemberWindow(this,newFrame());
 	}
 
+
+
+	
 //	public void showTagBoard() {
 //
 //		TagEditorWindow tw = new TagEditorWindow(hippoCache,newFrame());

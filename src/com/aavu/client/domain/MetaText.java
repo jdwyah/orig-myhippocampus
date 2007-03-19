@@ -38,7 +38,7 @@ public class MetaText extends Meta {
 		
 		mv = (HippoText) topic.getSingleMetaValueFor(this);
 		if(mv == null || mv.isEmpty()){
-			mv = new HippoText(ConstHolder.myConstants.editMe());
+			mv = new HippoText(topic.getUser(),ConstHolder.myConstants.editMe());
 		}
 				
 		editable = new EditableLabelExtension(mv.getValue(),new ChangeListener(){
@@ -54,7 +54,7 @@ public class MetaText extends Meta {
 						editable.getText()),
 						new StdAsyncCallback(ConstHolder.myConstants.meta_text_async_save()){});
 				
-				mv = new HippoText(editable.getText());										
+				mv = new HippoText(topic.getUser(),editable.getText());										
 				topic.addMetaValue(MetaText.this, mv);
 				
 //				mv.setValue(editable.getText());			

@@ -15,6 +15,7 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.tags.ChooseMetaW;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -162,7 +163,7 @@ public class EditMetaWindow extends PopupWindow implements ChangeListener {
 
 	public void onChange(Widget sender) {		
 		selected = ((ChooseMetaW)sender).getSelectedMeta();		
-		editP.setWidget(new Label(selected.getTitle()));
+		editP.setWidget(new Label(selected.getTitle()));	
 	}
 	
 	

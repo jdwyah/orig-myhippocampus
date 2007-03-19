@@ -17,6 +17,4 @@ public interface GWTTagServiceAsync {
 	
 	void getTagStats(AsyncCallback callback);
 
-	//Tag
-	void makeMeATag(Topic topic, AsyncCallback callback);
 }

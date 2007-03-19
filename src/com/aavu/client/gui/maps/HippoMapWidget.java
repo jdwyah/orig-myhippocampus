@@ -106,15 +106,17 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	}
 	
 
-	private GMarker createPoint(GLatLng point) {
+	private GMarker createPoint(HippoLocation location) {
 		
 		//moveableMarkerOps.setTitle("Drag me to where you want to search.");
 		
-		GMarker m = new GMarker(point,moveableMarkerOps);
+		GMarker m = new GMarker(location.getLocation(),moveableMarkerOps);
 		markerEventManager.addOnDragEndListener(m, this);
 		
 		m.enableDragging();		
 		gmaps.addOverlay(m);
+		
+		markerToLocation.put(m, location);
 		return m;
 	}
 
@@ -128,9 +130,9 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		HippoLocation newLoc = gadget.getNewLocationForPoint(point);
 		
 		if(newLoc != null){		
-			GMarker marker = createPoint(newLoc.getLocation());
+			GMarker marker = createPoint(newLoc);
 			
-			markerToLocation.put(marker, newLoc);
+		
 		}
 		
 		
@@ -146,7 +148,7 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	}
 		
 	public void add(Meta meta, HippoLocation mv) {
-		createPoint(mv.getLocation());		
+		createPoint(mv);		
 	}
 
 	
@@ -166,7 +168,12 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	
 	
 	public void onDragEnd(GMarker marker) {
-		// TODO Auto-generated method stub
+		HippoLocation dragged = (HippoLocation) markerToLocation.get(marker);
+		System.out.println("drag ended ");
+		if(dragged != null){
+			dragged.setLocation(marker.getPoint());
+			gadget.update(dragged);
+		}
 		
 	}
 	public void onDragStart(GMarker marker) {

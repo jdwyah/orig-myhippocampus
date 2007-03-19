@@ -18,7 +18,6 @@ import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveLatLongCommand;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.Ocean;
@@ -38,6 +37,12 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * DHTML impl of the island interface.
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListener, DragFinishedListener, WheelListener {
 
 	
@@ -51,7 +56,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	private static final int CLOUD_REMOVE = 8000;
 
 	private static final int CLOUD_MOVE_PX = 2000;
-	private static final double CLOUD_MOVE_SEC = 7.0;	
+	private static final int CLOUD_MOVE_MSEC = 7000;
+
+	private static final double NO_ISLAND_DRAG_AT_THIS_ZOOM = 8;	
 
 	private Manager manager;
 
@@ -166,16 +173,9 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 
 	private void clearClouds() {
 
-		GUIEffects.move(leftCloud,new EffectOption[] {
-				new EffectOption("x",-CLOUD_MOVE_PX),
-				new EffectOption("y",0),
-				new EffectOption("duration",CLOUD_MOVE_SEC)
-		},-CLOUD_MOVE_PX,0);
-		GUIEffects.move(rightCloud,new EffectOption[] {
-				new EffectOption("x",CLOUD_MOVE_PX),
-				new EffectOption("y",0),
-				new EffectOption("duration",CLOUD_MOVE_SEC)
-		},CLOUD_MOVE_PX,0);
+		
+		GUIEffects.move(leftCloud,-CLOUD_MOVE_PX,0,CLOUD_MOVE_MSEC);
+		GUIEffects.move(rightCloud,CLOUD_MOVE_PX,0,CLOUD_MOVE_MSEC);
 
 
 
@@ -337,7 +337,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		//add(banner,isle.getLeft(),isle.getTop());
 
 		
-		GUIEffects.appear(isle,4000);
+		//GUIEffects.appear(isle,4000);
 		islands.put(new Long(info.getTagId()), isle);
 		objects.add(isle);
 		
@@ -418,7 +418,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		//move all objects
 		moveByDelta(0,0);
 		
-		if(currentScale >= 4){
+		if(currentScale >= NO_ISLAND_DRAG_AT_THIS_ZOOM){
 			islandDrag = false;
 						
 		}else{			

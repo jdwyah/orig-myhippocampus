@@ -20,5 +20,4 @@ public interface GWTTagService extends RemoteService {
 	
 	TagStat[] getTagStats() throws HippoException;
 	
-	Tag makeMeATag(Topic topic) throws HippoException;
 }

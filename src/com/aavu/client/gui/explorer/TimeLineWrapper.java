@@ -1,12 +1,16 @@
 package com.aavu.client.gui.explorer;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaDate;
-import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.timeline.CloseListener;
@@ -27,28 +31,34 @@ import com.google.gwt.user.client.ui.Widget;
 public class TimeLineWrapper extends Composite {
 
 	private HippoTimeLine timeline;
-	private FullTopicIdentifier[] topics;
+	private Map tagToIdentifierMap;
 	private Manager manager;
 
-	public TimeLineWrapper(Manager manager, Topic myTag, int width, int height, FullTopicIdentifier[] topics, CloseListener close) {
+
+	public TimeLineWrapper(Manager manager, Map tagToIdentifierMap, int width, int height, CloseListener close) {
 		
 		VerticalPanel mainP = new VerticalPanel();
 		HorizontalPanel typeSelector = new HorizontalPanel();
 		
-		this.topics = topics;
+		this.tagToIdentifierMap = tagToIdentifierMap;
 		this.manager = manager;
 		
 		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineObj.LAST_UPDATED,ConstHolder.myConstants.timeline_lastUpdated());
 		TimeLineSelector createdB = new TimeLineSelector(TimeLineObj.CREATED,ConstHolder.myConstants.timeline_created());
 		typeSelector.add(lastUpdatedB);
 		typeSelector.add(createdB);
+
 		
-		Set metaDatesForTag = myTag.getTagPropertyDates();
-		for (Iterator iter = metaDatesForTag.iterator(); iter.hasNext();) {
-			MetaDate datemeta = (MetaDate) iter.next();
-			TimeLineSelector metaButton = new TimeLineSelector(datemeta.getId(),datemeta.getTitle());
-			typeSelector.add(metaButton);
+		for (Iterator iter = tagToIdentifierMap.keySet().iterator(); iter.hasNext();) {
+			Tag tag = (Tag) iter.next();
+			Set metaDatesForTag = tag.getTagPropertyDates();
+			for (Iterator iter2 = metaDatesForTag.iterator(); iter2.hasNext();) {
+				MetaDate datemeta = (MetaDate) iter2.next();
+				TimeLineSelector metaButton = new TimeLineSelector(datemeta.getId(),datemeta.getTitle());
+				typeSelector.add(metaButton);
+			}	
 		}
+		
 		
 		
 			
@@ -63,9 +73,10 @@ public class TimeLineWrapper extends Composite {
 		initWidget(mainP);
 	}
 	
+
 	/**
 	 * We're storing last updated & created already, but if they want date seen, 
-	 * we'l need to go async.
+	 * we'll need to go async.
 	 * 
 	 * @param style_or_meta
 	 * @return
@@ -79,22 +90,31 @@ public class TimeLineWrapper extends Composite {
 			manager.getTopicCache().getTimelineObjs(style_or_meta,callback);
 		}else{
 
-			TimeLineObj[] timelines = new TimeLineObj[topics.length];
-			for (int i = 0; i < topics.length; i++) {
+			List timelineList = new ArrayList();
+			for (Iterator iter = tagToIdentifierMap.entrySet().iterator(); iter.hasNext();) {
+				
+				Entry entry = (Entry) iter.next();
+				
+				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) entry.getValue();
 
-				Date date = null;
-				if(TimeLineObj.CREATED == style_or_meta){
-					date = topics[i].getCreated();
-				}
-				else if(TimeLineObj.LAST_UPDATED == style_or_meta){
-					date = topics[i].getLastUpdated();
-				}
 
-				TimeLineObj tobj = new TimeLineObj(topics[i],date,null);	
-				timelines[i] = tobj;
+				for (int i = 0; i < topics.length; i++) {
+
+					Date date = null;
+					if(TimeLineObj.CREATED == style_or_meta){
+						date = topics[i].getCreated();
+					}
+					else if(TimeLineObj.LAST_UPDATED == style_or_meta){
+						date = topics[i].getLastUpdated();
+					}
+
+					TimeLineObj tobj = new TimeLineObj(topics[i],date,null);	
+					//timelines[i] = tobj;
+					timelineList.add(tobj);
+				}
 			}
-			
-			callback.onSuccess(timelines);			
+			//TimeLineObj[] timelines = new TimeLineObj[timelineList.size()];
+			callback.onSuccess(timelineList);			
 		}
 	}
 	
@@ -125,7 +145,7 @@ public class TimeLineWrapper extends Composite {
 		//@Override
 		public void onSuccess(Object result) {
 			super.onSuccess(result);
-			timeline.load((TimeLineObj[]) result);
+			timeline.load((List) result);
 		}
 		
 	}

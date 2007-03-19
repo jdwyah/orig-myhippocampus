@@ -803,6 +803,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		"where meta.user = ?",user);
 		return ll2;
 	}
-	
+
 
 }

@@ -4,6 +4,7 @@ import org.gwtwidgets.client.wrap.Effect;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.ModablePopupPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
@@ -144,7 +145,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 	private void hideLinker() {
 		//must "hide()" too, because it's modal.
-		Effect.dropOut(completePopup);							
+		GUIEffects.dropOut(completePopup);							
 		completePopup.hide();
 
 		textArea.setFocus(true);
@@ -170,7 +171,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 		completePopup.show();			
 		completePopup.setVisible(true);				
-		Effect.appear(completePopup);
+		GUIEffects.appear(completePopup, 1);
 
 		DeferredCommand.add(new Command(){
 			public void execute() {			

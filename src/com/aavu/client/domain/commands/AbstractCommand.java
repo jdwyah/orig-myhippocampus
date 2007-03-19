@@ -34,7 +34,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public abstract class AbstractCommand implements IsSerializable {
 	
 	private List topicIDs = new ArrayList();
-	private transient List topics= new ArrayList();
+	protected transient List topics= new ArrayList();
 	
 	private String data;
 	

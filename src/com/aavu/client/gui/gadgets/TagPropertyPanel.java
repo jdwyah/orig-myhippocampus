@@ -142,7 +142,6 @@ public class TagPropertyPanel extends Gadget {
 			System.out.println(element.getName());
 		}
 		
-		//Effect.dropOut(metaListPanel);
 		
 		manager.getTopicCache().executeCommand(tag,new SaveTagPropertiesCommand(tag,toSave),
 				new StdAsyncCallback("tagService saveTag"){});

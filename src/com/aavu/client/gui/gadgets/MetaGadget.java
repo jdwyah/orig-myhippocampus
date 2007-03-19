@@ -13,6 +13,7 @@ import com.aavu.client.domain.commands.RemoveMetaFromTopicCommand;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.AddButton;
 import com.aavu.client.widget.DeleteButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Button;
@@ -49,9 +50,8 @@ public abstract class MetaGadget extends Gadget  {
 		
 		mainPanel = new VerticalPanel();	
 		extraPanel = new SimplePanel();
-		
-		PNGImage addEditButton = new PNGImage(ConstHolder.myConstants.img_add(),16,16);
-		addEditButton.addMouseListener(new TooltipListener(ConstHolder.myConstants.meta_add_edit()));
+				
+		AddButton addEditButton = new AddButton(ConstHolder.myConstants.meta_add_edit());
 		
 		addEditButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {

@@ -12,6 +12,7 @@ import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
@@ -1384,6 +1385,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			
 		}
 		
+	}
+	
+	public void testT (){
+		Topic t = topicDAO.get(2457);
+	
+		assertTrue(t instanceof MetaLocation);
 	}
 	
 }
