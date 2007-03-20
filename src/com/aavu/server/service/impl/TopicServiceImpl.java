@@ -3,6 +3,7 @@ package com.aavu.server.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -149,6 +150,24 @@ public class TopicServiceImpl implements TopicService {
 		return rtn;
 		//return topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
 	}
+
+	
+	public List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList) {
+		
+		List<List<FullTopicIdentifier>> rtn = new ArrayList<List<FullTopicIdentifier>>(shoppingList.size());
+		
+			
+		for (TopicIdentifier tag : shoppingList) {
+			rtn.add(getTopicIdsWithTag(tag.getTopicID()));
+		}
+		
+		return rtn;
+	}
+
+
+
+	
+	
 	public List<TopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
 	}
@@ -300,8 +319,6 @@ public class TopicServiceImpl implements TopicService {
 	public List getAllMetas() {		
 		return topicDAO.getAllMetas(userService.getCurrentUser());
 	}
-
-
-
+	
 
 }

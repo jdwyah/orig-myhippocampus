@@ -13,6 +13,7 @@ import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.service.Manager;
@@ -28,19 +29,23 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 
-public class TimeLineWrapper extends Composite {
+public class TimeLineWrapper extends FTICachingExplorerPanel {
 
 	private HippoTimeLine timeline;
-	private Map tagToIdentifierMap;
+	
 	private Manager manager;
 
+	private HorizontalPanel typeSelector;
 
-	public TimeLineWrapper(Manager manager, Map tagToIdentifierMap, int width, int height, CloseListener close) {
+	private List lastLoadedftis;
+
+
+	public TimeLineWrapper(Manager manager, Map defaultMap, int width, int height, CloseListener close) {
+		super(manager, defaultMap);
 		
 		VerticalPanel mainP = new VerticalPanel();
-		HorizontalPanel typeSelector = new HorizontalPanel();
+		typeSelector = new HorizontalPanel();
 		
-		this.tagToIdentifierMap = tagToIdentifierMap;
 		this.manager = manager;
 		
 		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineObj.LAST_UPDATED,ConstHolder.myConstants.timeline_lastUpdated());
@@ -49,23 +54,9 @@ public class TimeLineWrapper extends Composite {
 		typeSelector.add(createdB);
 
 		
-		for (Iterator iter = tagToIdentifierMap.keySet().iterator(); iter.hasNext();) {
-			Tag tag = (Tag) iter.next();
-			Set metaDatesForTag = tag.getTagPropertyDates();
-			for (Iterator iter2 = metaDatesForTag.iterator(); iter2.hasNext();) {
-				MetaDate datemeta = (MetaDate) iter2.next();
-				TimeLineSelector metaButton = new TimeLineSelector(datemeta.getId(),datemeta.getTitle());
-				typeSelector.add(metaButton);
-			}	
-		}
-		
-		
-		
-			
 		
 		timeline = new HippoTimeLine(manager,width - 30,height,close);		
 		
-		getTimeLinesOfStyle(TimeLineObj.LAST_UPDATED,new TimeLineLookup());
 		
 		mainP.add(typeSelector);
 		mainP.add(timeline);		
@@ -79,9 +70,10 @@ public class TimeLineWrapper extends Composite {
 	 * we'll need to go async.
 	 * 
 	 * @param style_or_meta
+	 * @param allIdentifiers 
 	 * @return
 	 */
-	private void getTimeLinesOfStyle(long style_or_meta,AsyncCallback callback) {
+	private void getTimeLinesOfStyle(long style_or_meta,AsyncCallback callback, List allIdentifiers) {
 		
 		//not a created || updated, do async lookup of the meta id
 		if(style_or_meta != TimeLineObj.CREATED 
@@ -91,29 +83,25 @@ public class TimeLineWrapper extends Composite {
 		}else{
 
 			List timelineList = new ArrayList();
-			for (Iterator iter = tagToIdentifierMap.entrySet().iterator(); iter.hasNext();) {
-				
-				Entry entry = (Entry) iter.next();
-				
-				FullTopicIdentifier[] topics = (FullTopicIdentifier[]) entry.getValue();
+			
+			for (Iterator iter = allIdentifiers.iterator(); iter.hasNext();) {
+			
+				FullTopicIdentifier fti = (FullTopicIdentifier) iter.next();
 
-
-				for (int i = 0; i < topics.length; i++) {
-
-					Date date = null;
-					if(TimeLineObj.CREATED == style_or_meta){
-						date = topics[i].getCreated();
-					}
-					else if(TimeLineObj.LAST_UPDATED == style_or_meta){
-						date = topics[i].getLastUpdated();
-					}
-
-					TimeLineObj tobj = new TimeLineObj(topics[i],date,null);	
-					//timelines[i] = tobj;
-					timelineList.add(tobj);
+				Date date = null;
+				if(TimeLineObj.CREATED == style_or_meta){
+					date = fti.getCreated();
 				}
+				else if(TimeLineObj.LAST_UPDATED == style_or_meta){
+					date = fti.getLastUpdated();
+				}
+
+				TimeLineObj tobj = new TimeLineObj(fti,date,null);	
+				//timelines[i] = tobj;
+				timelineList.add(tobj);
+				
 			}
-			//TimeLineObj[] timelines = new TimeLineObj[timelineList.size()];
+			
 			callback.onSuccess(timelineList);			
 		}
 	}
@@ -134,7 +122,7 @@ public class TimeLineWrapper extends Composite {
 		}
 
 		public void onClick(Widget sender) {					
-			getTimeLinesOfStyle(style_or_meta,new TimeLineLookup());
+			getTimeLinesOfStyle(style_or_meta,new TimeLineLookup(),lastLoadedftis);
 		}
 	}
 	
@@ -148,6 +136,46 @@ public class TimeLineWrapper extends Composite {
 			timeline.load((List) result);
 		}
 		
+	}
+
+	public Widget getWidget() {
+		return this;
+	}
+
+//
+//	public void load(Set tags) {
+//		
+////		
+////		for (Iterator iter = tags.iterator(); iter.hasNext();) {
+////			TopicIdentifier tagIdent = (TopicIdentifier) iter.next();
+////			Set metaDatesForTag = tag.getTagPropertyDates();
+////			for (Iterator iter2 = metaDatesForTag.iterator(); iter2.hasNext();) {
+////				MetaDate datemeta = (MetaDate) iter2.next();
+////				TimeLineSelector metaButton = new TimeLineSelector(datemeta.getId(),datemeta.getTitle());
+////				typeSelector.add(metaButton);
+////			}	
+////		}
+//		
+//		
+//		
+//	}
+
+	//@Override
+//	protected void draw(Set tags) {
+//		List all = new ArrayList();
+//		
+//		for (Iterator iter = tags.iterator(); iter.hasNext();) {			
+//			TopicIdentifier tag = (TopicIdentifier) iter.next();
+//			all.addAll(getFTI(tag));
+//		}
+//		draw(all);
+//	} 
+
+
+	//@Override
+	protected void draw(List ftis) {
+		this.lastLoadedftis = ftis;
+		getTimeLinesOfStyle(TimeLineObj.LAST_UPDATED,new TimeLineLookup(),ftis);		
 	}
 
 }

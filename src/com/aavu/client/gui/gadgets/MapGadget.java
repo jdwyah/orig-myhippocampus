@@ -18,6 +18,7 @@ import com.aavu.client.gui.maps.HippoMapWidget;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.DeleteButton;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -183,6 +184,7 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 			
 			return newLoc;
 		}else{
+			Window.alert("Click the green + to add a location type");
 			return null;
 		}
 	}

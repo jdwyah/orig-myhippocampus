@@ -12,6 +12,7 @@ import org.gwm.client.GInternalFrame;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -31,9 +32,10 @@ public class TagChooser extends Composite {
 	private VerticalPanel mainP;
 	private Manager manager;
 	private VerticalPanel tagP;
+	private Explorer explorer;
 
-	public TagChooser(final Map defaultMap, Manager manager){
-
+	public TagChooser(final Map defaultMap, Manager manager, Explorer explorer){
+		this.explorer = explorer;
 		this.manager = manager;
 		
 		mainP = new VerticalPanel();
@@ -42,10 +44,8 @@ public class TagChooser extends Composite {
 		
 		
 		tagP = new VerticalPanel();
-		for (Iterator iter = defaultMap.keySet().iterator(); iter.hasNext();) {
-			Tag tag = (Tag) iter.next();			
-			tagP.add(new TopicLink(tag));
-		}
+		showTags(defaultMap.keySet());
+	
 		mainP.add(tagP);
 		
 		AddButton addEditButton = new AddButton(ConstHolder.myConstants.chooser_add());
@@ -60,6 +60,22 @@ public class TagChooser extends Composite {
 		initWidget(mainP);
 	}
 
+
+	//Set<TagStat>
+	public void showTags(Set tags) {
+		tagP.clear();
+		for (Iterator iter = tags.iterator(); iter.hasNext();) {
+			TopicIdentifier tag = (TopicIdentifier) iter.next();			
+			tagP.add(new TopicLink(tag));
+		}
+	}
+	
+	//Set<TagStat>
+	public void loadTags(Set tags) {
+		showTags(tags);
+		explorer.load(tags);
+	}
+	
 	protected void addEditClick(Set tags) {
 		TagSelectPopup tp = new TagSelectPopup(manager.newFrame(),tags,this);		
 	}
@@ -97,12 +113,11 @@ public class TagChooser extends Composite {
 						
 						Picker p = new Picker(stat);						
 						for (Iterator iter = tags.iterator(); iter.hasNext();) {
-							Tag t = (Tag) iter.next();
-							if(t.getId() == stat.getTagId()){
+							TopicIdentifier t = (TopicIdentifier) iter.next();
+							if(t.getTopicID() == stat.getTagId()){
 								p.setChecked(true);
 							}
 						}
-						System.out.println("row "+row+" col "+col);
 						
 						grid.setWidget(row, col, p);
 						pickers.add(p);
@@ -131,10 +146,11 @@ public class TagChooser extends Composite {
 			for (Iterator iter = pickers.iterator(); iter.hasNext();) {
 				Picker p = (Picker) iter.next();
 				if(p.isChecked()){
-					tags.add(p.getStat());
-				}
-				chooser.loadTags(tags);
+					System.out.println("adding checked ");
+					tags.add(p.getIdentifier());
+				}				
 			}
+			chooser.loadTags(tags);
 			close();
 		}
 		
@@ -149,15 +165,10 @@ public class TagChooser extends Composite {
 			this.stat = stat;		
 		}
 
-		public TagStat getStat() {
-			return stat;
+		public TopicIdentifier getIdentifier() {
+			return stat.getTopicIdentifier();
 		}
 		
 	}
 
-	public void loadTags(Set tags) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

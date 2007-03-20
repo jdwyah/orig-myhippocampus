@@ -66,4 +66,6 @@ public interface TopicService {
 	void deleteOccurrence(long id) throws HippoPermissionException;
 
 	List getAllMetas();
+
+	List getTopicIdsWithTags(List<TopicIdentifier> shoppingList);
 }

@@ -10,6 +10,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.explorer.ExplorerPanel;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.ext.tabbars.TabHasWidgets;
@@ -44,7 +45,7 @@ public class Glossary extends FocusPanel {
 			return o.toLowerCase().compareTo(o.toLowerCase());
 		}};
 
-	private Manager manager;
+	protected Manager manager;
 
 	
 	//protected VertableTabPanel tabPanel;
@@ -102,14 +103,13 @@ public class Glossary extends FocusPanel {
 		});
 	}
 
-	private void load(List topics) {
-		alphabetizeTopics(topics);
+	/**
+	 * List<TopicIdentifier>
+	 * @param topicIdents
+	 */
+	public void load(List topicIdents) {
+		alphabetizeTopics(topicIdents);
 		dirty = false;
-	}
-
-	public void load(Map tagToIdentifierMap) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	protected void alphabetizeTopics(List topics) {

@@ -514,7 +514,7 @@ public class Manager implements TopicSaveListener, LoginListener {
 		EditMetaWindow ew = new EditMetaWindow(this,newFrame(),type, callback);
 	}	
 	
-	public void viewMembers(Topic myTag, FullTopicIdentifier[] topics) {
+	public void viewMembers(Topic myTag, List topics) {
 
 		ViewMemberWindow gw = new ViewMemberWindow(myTag, topics,this,newFrame());
 		

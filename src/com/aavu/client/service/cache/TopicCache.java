@@ -296,6 +296,16 @@ public class TopicCache {
 
 
 	/**
+	 * returns List<List<FullTopicIdentifier>>
+	 * @param shoppingList
+	 * @param callback
+	 */
+	public void getTopicsWithTag(List shoppingList, StdAsyncCallback callback) {
+		topicService.getTopicsWithTags(shoppingList,callback);
+	}
+
+
+	/**
 	 * a callback that wraps the real callback, but caches the returned topic
 	 * 
 	 * you know, closures/first order functions could make this wayyy cooler.
@@ -492,6 +502,7 @@ public class TopicCache {
 	public void getAllMetasOfType(Meta type, AsyncCallback callback) {		
 		topicService.getAllMetas(callback);
 	}
+
 
 
 

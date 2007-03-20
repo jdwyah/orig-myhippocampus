@@ -59,7 +59,7 @@ a:visited {
 }*/
 .H-Sidebar {
 	background: transparent;
-	margin-left: 600px;
+	margin-left: 600px;/*careful of this, can wreak havoc on getabsoluteleft*/
 	top: 0px;
 	right: 0px;
 	border: 0px;
@@ -67,7 +67,6 @@ a:visited {
 
 .H-RightInfo {
 	background: transparent;
-	margin-left: 600px;
 	top: 0px;
 	right: 0px;
 	border: 0px;

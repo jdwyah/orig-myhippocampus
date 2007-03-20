@@ -20,7 +20,6 @@ public interface Consts extends Messages {
 	String editMe();
 	
 	String delete();
-	String delete_image();
 	String delete_async();
 	String delete_occ_async();	
 	String delete_warningS(String topic);
@@ -201,6 +200,11 @@ public interface Consts extends Messages {
 	String chooser_tagSelectTitle();
 	String chooser_lookup_async();
 	String chooser_lookup_select();
+	String explorer_timeline();
+	String explorer_atoz();
+	String explorer_recent();
+	String explorer_map();
+	String explorer_lostFound();
 		
 	
 	

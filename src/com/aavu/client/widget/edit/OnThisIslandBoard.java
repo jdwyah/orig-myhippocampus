@@ -1,5 +1,8 @@
 package com.aavu.client.widget.edit;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -30,7 +33,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	private Manager manager;
 	private VerticalPanel onThisIslandPanel;
 
-	private FullTopicIdentifier[] topics;
+	private List topics;
 	
 	
 	public OnThisIslandBoard(Manager _manager) {		
@@ -100,9 +103,9 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 			manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(ConstHolder.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
-					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
+					List topics = (List) result;
 
-					System.out.println("Show Topics results "+topics.length);
+					System.out.println("Show Topics results "+topics.size());
 
 					addTopicLabels(topics);				
 				}					
@@ -114,15 +117,18 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		return 0;
 	}
 
-	protected void addTopicLabels(FullTopicIdentifier[] topics) {
+	protected void addTopicLabels(List topics) {
 		this.topics = topics;
 		onThisIslandPanel.clear();
-		for (int i = 0; i < topics.length; i++) {
-			FullTopicIdentifier fti = topics[i];
+		
+		int i = 0;
+		for (Iterator iter = topics.iterator(); iter.hasNext();) {
+			FullTopicIdentifier fti = (FullTopicIdentifier) iter.next();
+			
 			onThisIslandPanel.add(new TopicLink(fti,null));
 			
 			if(i >= MAX_TO_SHOW){
-				Label l = new Label(ConstHolder.myConstants.on_this_island_more(topics.length - MAX_TO_SHOW));
+				Label l = new Label(ConstHolder.myConstants.on_this_island_more(topics.size() - MAX_TO_SHOW));
 				l.addClickListener(new ClickListener(){
 					public void onClick(Widget sender) {
 						viewMembers();
@@ -131,6 +137,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 				onThisIslandPanel.add(l);				
 				break;
 			}
+			i++;
 		}		
 	}	
 	

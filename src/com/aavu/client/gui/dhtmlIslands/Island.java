@@ -479,9 +479,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			manager.getTopicCache().getTopicsWithTag(tagStat.getTagId(), new StdAsyncCallback(ConstHolder.myConstants.tag_topicIsA()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
-					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
+					List topics = (List) result;
 
-					System.out.println("Show Topics results "+topics.length);
+					System.out.println("Show Topics results "+topics.size());
 					
 					addTopicLabels(topics);				
 				}	
@@ -500,7 +500,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	 * 
 	 * @param topics
 	 */
-	private void addTopicLabels(FullTopicIdentifier[] topics) {
+	private void addTopicLabels(List topics) {
 		int x = 0;
 		int y = 0;
 
@@ -521,8 +521,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		double longitude_budge = .30;
 		double unset_longitude = .02;
 		
-		for (int i = 0; i < topics.length; i++) {
-			FullTopicIdentifier fti = topics[i];
+		
+		for (Iterator iter = topics.iterator(); iter.hasNext();) {
+			FullTopicIdentifier fti = (FullTopicIdentifier) iter.next();	
 			
 			System.out.println("fti: "+fti);
 			

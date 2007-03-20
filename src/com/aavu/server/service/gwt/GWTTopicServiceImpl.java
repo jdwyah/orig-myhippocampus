@@ -220,10 +220,10 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * @throws HippoException 
 	 * 
 	 */
-	public FullTopicIdentifier[] getTopicIdsWithTag(long id) throws HippoException {
+	public List getTopicIdsWithTag(long id) throws HippoException {
 		try {
 
-			return convertToArray(topicService.getTopicIdsWithTag(id));
+			return topicService.getTopicIdsWithTag(id);
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -231,6 +231,11 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e);		
 		}
 	}
+	
+	public List getTopicsWithTags(List shoppingList) throws HippoException {
+		return topicService.getTopicIdsWithTags(shoppingList);
+	}
+	
 
 	/**
 	 * this conversion is just list -> array
@@ -381,6 +386,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public List getAllMetas() throws HippoException {
 		return topicService.getAllMetas();
 	}
+	
 
 	
 

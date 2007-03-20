@@ -64,6 +64,9 @@ public interface GWTTopicServiceAsync {
 	void deleteOccurrence(long id, AsyncCallback callback);
 
 	void getAllMetas(AsyncCallback callback);
+
+	//List<TopicIdentifier>
+	void getTopicsWithTags(List shoppingList, AsyncCallback callback);
 }
 
 
