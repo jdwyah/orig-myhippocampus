@@ -25,6 +25,11 @@ public class MetaSeeAlso extends Meta {
 	}
 
 	//@Override
+	public void accept(TopicVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	//@Override
 	public Widget getEditorWidget(Topic top, Manager manager) {
 		//throw new OperationNotSupportedException()
 		return null;

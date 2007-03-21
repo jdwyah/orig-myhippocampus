@@ -20,6 +20,7 @@ import com.aavu.server.web.domain.UserPageBean;
 public interface TopicService {
 
 	List<TopicIdentifier> getAllTopicIdentifiers();
+	List<TopicIdentifier> getAllTopicIdentifiers(boolean all);
 
 	Topic save(Topic topic) throws HippoBusinessException;
 

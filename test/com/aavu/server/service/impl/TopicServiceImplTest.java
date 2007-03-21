@@ -52,6 +52,11 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	private static final String J = "DateRead";
 	private static final String K = "LocationMeta";
 
+	private static final int LAT1 = 213123;
+	private static final int LONG1 = 12332;
+	private static final int LAT2 = 223;
+	private static final int LONG2 = 2334;
+	
 	private TopicService topicService;
 	
 	private UserService userService;
@@ -357,6 +362,81 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
 		
 	}
+	public void testMultipleLocationCommand() throws HippoBusinessException {
+		
+		clean();
+		
+		Tag tag = new Tag(u,B);		
+		tag = (Tag) topicService.save(tag);
+		
+		System.out.println("SAVED TAG "+B);
+		
+		
+		Topic topic = new Topic(u,C);
+		topic = (Topic) topicService.save(topic);
+		
+		MetaLocation metaL = new MetaLocation();
+		metaL.setTitle(K);
+		metaL = (MetaLocation) topicService.save(metaL);
+		
+		MetaLocation savedMeta1 = (MetaLocation) topicService.getForID(metaL.getId());
+		assertNotSame(0, savedMeta1.getId());
+		System.out.println("saved meta1 "+savedMeta1);
+		assertTrue(savedMeta1 instanceof MetaLocation);
+		
+		
+				
+		
+		HippoLocation loc1 = new HippoLocation();
+		loc1.setTitle(E);
+		loc1.setLatitude(LAT1);
+		loc1.setLongitude(LONG1);
+		
+		HippoLocation loc2 = new HippoLocation();
+		loc2.setTitle(D);
+		loc2.setLatitude(LAT2);
+		loc2.setLongitude(LONG2);
+		
+		
+		Set locs = new HashSet();
+		locs.add(loc1);
+		locs.add(loc2);
+		
+		AbstractCommand comm = new SaveMetaLocationCommand(topic,savedMeta1,locs);
+		
+				
+		topicService.executeAndSaveCommand(comm);
+		
+		System.out.println("FINISHED SAVE");		
+		
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());
+		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		Meta savedMeta = (Meta) topicS.getMetas().iterator().next();
+		assertNotNull(savedMeta);
+		assertEquals(K, savedMeta.getTitle());
+		
+		
+		Set members = topicS.getMetaValuesFor(savedMeta);			
+		assertEquals(2, members.size());		
+		
+		for (Iterator iter = members.iterator(); iter.hasNext();) {
+			HippoLocation l = (HippoLocation) iter.next();
+			if(l.getTitle().equals(D)){
+				assertEquals(LAT2, l.getLatitude());
+				assertEquals(LONG2, l.getLongitude());
+			}else if(l.getTitle().equals(E)){
+				assertEquals(LAT1, l.getLatitude());
+				assertEquals(LONG1, l.getLongitude());
+			}else{
+				fail("Wrong Title "+l.getTitle());
+			}
+		}		
+			
+	}
+	
 	public void testMetaDateCommand() throws HippoBusinessException {
 		
 		clean();
@@ -372,7 +452,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		Topic savedMeta1 = topicService.getForID(metaL.getId());
 		assertNotSame(0, savedMeta1.getId());
-		System.out.println("saved meta1 "+savedMeta1);
+		System.out.println("||| metaL "+metaL+" "+metaL.getClass());
+		System.out.println("||| savedMeta1 "+savedMeta1+" "+savedMeta1.getClass());
 		assertTrue(savedMeta1 instanceof MetaDate);
 		
 				
@@ -387,8 +468,12 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		System.out.println("FINISHED SAVE");		
 		
+		
 		Topic topicS = topicService.getForID(topic.getId());
 		assertEquals(0, topicS.getTypes().size());
+		
+		System.out.println(topicS.toPrettyString());
+		
 		
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
@@ -453,7 +538,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
 	
 	private void clean() throws HippoBusinessException {
-		List<TopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
+		List<TopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
 
 		for (TopicIdentifier identifier : savedL) {
 			log.debug("Clean: "+identifier.getTopicTitle());

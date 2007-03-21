@@ -22,6 +22,7 @@ public interface TopicDAO {
 	Topic save(Topic t) throws HippoBusinessException;
 
 	List<TopicIdentifier> getAllTopicIdentifiers(User user);
+	List<TopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
 
 	List<String> getTopicsStarting(User user,String match);
 

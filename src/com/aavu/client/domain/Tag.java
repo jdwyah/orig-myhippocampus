@@ -28,6 +28,11 @@ public class Tag extends Topic implements  Completable, IsSerializable, Serializ
 		setPublicVisible(false);
 	}
 
+	//@Override
+	public void accept(TopicVisitor visitor) {
+		visitor.visit(this);
+	}
+	
 	public String getName(){
 		return getTitle();
 	}

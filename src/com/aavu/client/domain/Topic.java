@@ -17,6 +17,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 /**
  * The base storable db object. superclass of associations & metas.
  * 
+ * 
+ * NOTE that you may need to use the visitor pattern and TopicVisitor to get reliable results
+ * when examining subclasses. See TopicVisitor and http://www.hibernate.org/280.html. This is not 
+ * an issue in the GWT client bc the clone (below) used by the serializer gets rid of the proxies. 
+ * 
  * @author Jeff Dwyer
  *
  */
@@ -103,6 +108,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		o.setTitle(getTitle());
 	}
 	
+	public void accept(TopicVisitor visitor) {
+		visitor.visit(this);
+	}
+	
 	
 	public void addMetaValue(Meta meta, Topic metaValue) {
 		addMetaValue(meta, metaValue,true);
@@ -153,6 +162,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		assoc.addType(meta);
 		
 		if(clear){
+			System.out.println("clearing");
 			assoc.getMembers().clear();
 		}
 		assoc.getMembers().add(metaValue);
@@ -163,9 +173,31 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		//meta.getInstances().add(metaValue);
 		
 		
+		System.out.println("bf assoc "+getAssociations().size()+" ");
 		
-		//redundant if we've already created
-		getAssociations().add(assoc);
+		boolean contains = false;
+		if(getAssociations().size() == 1){
+			Association cur1 = (Association) getAssociations().iterator().next();
+			System.out.println("CMP "+cur1.compare(assoc));
+			
+			for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
+				Association cur = (Association) iter.next();
+				
+				System.out.println("cmp 2 "+cur.compare(assoc));
+				if(cur.equals(assoc)){
+					contains = true;
+				}
+			}
+		}
+		
+		//redundant if we've already created, which would be ok except for the fact that 
+		//set.add(assoc) will add it even if it loop, set.eq() says it contains it 
+		if(!contains){
+			getAssociations().add(assoc);
+		}
+		
+		System.out.println("after assoc "+getAssociations().size());
+		
 		
 		//System.out.println(topic+"size "+topic.getMetaValues());
 	}
@@ -430,21 +462,28 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	private Association getSeeAlsoAssociation(MetaSeeAlso seeAlsoSingleton) {
+		
+		final Set found = new HashSet();
+		
+		TopicVisitor visitor = new TopicVisitorAdapter() {
+			public void visit(MetaSeeAlso meta) {
+				found.add(meta);
+			}			
+		};
+		
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				
 				Topic possibleSee = (Topic) iterator.next();				
 				
-				//TODO why is the strcmp necessary? this used to work,
-				//but now the possibleSee is class com.aavu.client.domain.Topic$$EnhancerByCGLIB$$b0a3c443
-				//and not instanceof MetaSeeAlso
-				if (possibleSee instanceof MetaSeeAlso
-						||
-						possibleSee.getTitle().equals(MetaSeeAlso.UBER_TITLE)){
-					System.out.println("return existing assoc");
+				
+				possibleSee.accept(visitor);
+				
+				if(!found.isEmpty()){
 					return association;
 				}				
+				
 			}
 		}		
 		System.out.println("getSeeAlsoAssociation: create new assoc");
@@ -469,6 +508,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public Set getTagProperties() {
 		Set metas = new HashSet();
+		
+		
+		
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 									
@@ -512,7 +554,20 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * @return
 	 */
 	public Set getMetas() {
-		Set metas = new HashSet();
+		final Set metas = new HashSet();
+		
+		TopicVisitor visitor = new TopicVisitorAdapter(){
+			//@Override
+			public void visit(Meta meta) {
+				metas.add(meta);
+			}
+
+			//@Override
+			public void visit(MetaSeeAlso meta) {
+				metas.add(meta);	
+			}			
+		};
+		
 		System.out.println("getMetas() assoc size"+getAssociations().size());
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
@@ -522,11 +577,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
 			
-				System.out.println("getMetas() possible meta "+possibleMeta+" "+(possibleMeta instanceof Meta)+" "+possibleMeta.getId());
+				//System.out.println("getMetas() possible meta "+possibleMeta+" "+(possibleMeta instanceof Meta)+" "+possibleMeta.getId());
+				//System.out.println("poss "+possibleMeta.getClass());
+								
+				possibleMeta.accept(visitor);
 				
-				if (possibleMeta instanceof Meta) {							
-					metas.add(possibleMeta);				
-				}	
 			}			
 		}
 		return metas;		
@@ -799,6 +854,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * blech. can't use .getClass bc no GWT reflection. Ugly even with that.
 	 * 
 	 * now using the must-be-unique getType() and strcmp. still not super pretty
+	 * 
+	 * visitor pattern here?
 	 * 
 	 * NOTE: won't work for MetaTopics 
 	 *  

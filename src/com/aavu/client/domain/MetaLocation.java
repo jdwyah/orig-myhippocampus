@@ -27,6 +27,7 @@ public class MetaLocation extends Meta implements IsSerializable,Serializable {
 	private static final String TYPE = "Location";
 		
 	
+	
 	//@Override
 	public String getType() {
 		return TYPE;

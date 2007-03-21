@@ -32,31 +32,31 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 	//@Override
 	public void executeCommand() {
 
-		HippoLocation mv = (HippoLocation) getTopic(0).getSingleMetaValueFor((Meta) getTopic(1));
-
-		HippoLocation incoming = (HippoLocation)values.iterator().next();
-		if(mv == null){
-			mv = new HippoLocation();		
-		}
-		mv.setUser(getTopic(0).getUser());
-		mv.setTitle(incoming.getTitle());
-		mv.setLatitude(incoming.getLatitude());
-		mv.setLongitude(incoming.getLongitude());
-		
-		getTopic(0).addMetaValue((Meta) getTopic(1), mv);		
+//		HippoLocation mv = (HippoLocation) getTopic(0).getSingleMetaValueFor((Meta) getTopic(1));
+//
+//		HippoLocation incoming = (HippoLocation)values.iterator().next();
+//		if(mv == null){
+//			mv = new HippoLocation();		
+//		}
+//		mv.setUser(getTopic(0).getUser());
+//		mv.setTitle(incoming.getTitle());
+//		mv.setLatitude(incoming.getLatitude());
+//		mv.setLongitude(incoming.getLongitude());
+//		
+//		getTopic(0).addMetaValue((Meta) getTopic(1), mv);		
 		
 //		org.hibernate.NonUniqueObjectException: a different object with the same identifier value was already associated
 //		with the session: [com.aavu.client.domain.MetaLocation#2457]
 		//over-write all locations
 		//clear on first iteration, then don't clear
-//		boolean clear = true;
-//		for (Iterator iter = values.iterator(); iter.hasNext();) {
-//			HippoLocation location = (HippoLocation) iter.next();
-//			location.setUser(getTopic(0).getUser());
-//			getTopic(0).addMetaValue((Meta) getTopic(1), location,clear);	
-//			
-//			clear = false;
-//		}
+		boolean clear = true;
+		for (Iterator iter = values.iterator(); iter.hasNext();) {
+			HippoLocation location = (HippoLocation) iter.next();
+			location.setUser(getTopic(0).getUser());
+			getTopic(0).addMetaValue((Meta) getTopic(1), location,clear);	
+			
+			clear = false;
+		}
 		
 		System.out.println("topic assoc "+getTopic(0).getAssociations().size());
 		System.out.println("topic metas "+getTopic(0).getMetas().size());

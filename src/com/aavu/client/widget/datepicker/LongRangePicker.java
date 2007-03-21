@@ -98,22 +98,22 @@ public class LongRangePicker extends Composite implements TableListener {
 //		Date newDate = new Date(	currentDate.getYear(), 
 //				currentDate.getMonth(), 
 //				1900);
-				
+
 		if(range.getWidget(row, col) instanceof Clicker){
-			
+
 		}else{
 			RangeLabel rangeL = (RangeLabel) range.getWidget(row, col);
 			userPicks(rangeL.getDate());
 		}
-		
-		
-		
+
+
+
 		//Integer.parseInt(this.calPanel.cellValues[row][col])
-		
+
 //		datePicker.setSelectedDate(newDate);
 //		datePicker.hide();
-		
-		
+
+
 	}
 	
 	private int getYear(Date d){

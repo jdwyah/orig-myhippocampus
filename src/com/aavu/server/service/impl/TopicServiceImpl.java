@@ -171,6 +171,9 @@ public class TopicServiceImpl implements TopicService {
 	public List<TopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
 	}
+	public List<TopicIdentifier> getAllTopicIdentifiers(boolean all) {
+		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
+	}
 	public Topic getForID(long topicID) {
 		return topicDAO.getForID(userService.getCurrentUser(),topicID);
 	}

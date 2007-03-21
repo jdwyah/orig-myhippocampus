@@ -403,22 +403,39 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * TODO replace hardcoded class discriminators with .class.
 	 */	
 	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
+		return getAllTopicIdentifiers(user, false);
+	}
+	/**
+	 * user by some unit tests to help wipe a user's account.
+	 * 
+	 */
+	public List<TopicIdentifier> getAllTopicIdentifiers(User user,boolean all) {
 
-		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
-		.add(Expression.eq("user", user))
-		.add(Expression.ne("class", "association"))
-		.add(Expression.ne("class", "seealso"))
-		.add(Expression.ne("class", "metadate"))
-		.add(Expression.ne("class", "date"))
-		.add(Expression.ne("class", "text"))
-		.addOrder( Order.asc("title").ignoreCase() )
+		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class);
+
+		crit.add(Expression.eq("user", user))
+		//never add seealso, this is the seeAlsoUber singleton
+		.add(Expression.ne("class", "seealso"));
+		
+		if(!all){			
+			crit.add(Expression.ne("class", "association"))			
+			.add(Expression.ne("class", "metadate"))
+			.add(Expression.ne("class", "metatext"))
+			.add(Expression.ne("class", "metalocation"))
+			.add(Expression.ne("class", "date"))
+			.add(Expression.ne("class", "text"))
+			.add(Expression.ne("class", "location"));
+		}
+		crit.addOrder( Order.asc("title").ignoreCase() )
 		.setProjection(getTopicIdentifier());
 
-//		List<Topic> l = getHibernateTemplate().findByCriteria(crit);
-//		for (Topic topic : l) {
-//		System.out.println("topic "+topic+"  class "+topic.getClass());
-//		}
 
+		return getAllTopicIdentifiers(crit);
+		
+	}
+	
+	private List<TopicIdentifier> getAllTopicIdentifiers(DetachedCriteria crit) {
+		
 		List<Object[]> list = getHibernateTemplate().findByCriteria(crit);
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
@@ -431,7 +448,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		return rtn;
 	}
-
+	
 	public Topic getForID(User user, long topicID) {
 		
 		
