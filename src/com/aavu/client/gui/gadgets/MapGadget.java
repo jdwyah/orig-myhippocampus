@@ -138,12 +138,17 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 						
 			add(titleP);
 			
+			System.out.println("LOAD "+locations.size());
+						
 			for (Iterator iter = locations.iterator(); iter.hasNext();) {
-				HippoLocation mv = (HippoLocation) iter.next();
+				HippoLocation location = (HippoLocation) iter.next();
 				
-				add(new LocationLabel(mv));
+				System.out.println("LOAD");
 				
-				mapWidget.add(meta,mv);				
+				add(new LocationLabel(location));
+				
+				mapWidget.add(meta,location);
+				mapWidget.centerOn(location);
 			}
 		}
 
@@ -191,12 +196,19 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 
 	private void saveLocation(Meta theSelectedMeta, HippoLocation newLoc) {
 
-		System.out.println("Save "+newLoc);
+		System.out.println("\n\n--------------------\n\nSave "+newLoc);
 		
-		Set locations = myTopic.getAllMetas(theSelectedMeta);
+		Set locations = myTopic.getMetaValuesFor(theSelectedMeta);		
+		
+		System.out.println("bf Saving locations size "+locations.size());
+		
 		locations.add(newLoc);
 		
-		System.out.println("size "+locations.size());
+		System.out.println("af Saving locations size "+locations.size());
+		for (Iterator iter = locations.iterator(); iter.hasNext();) {			
+			HippoLocation hl = (HippoLocation) iter.next();
+			System.out.println("hl "+hl);
+		}
 		
 		manager.getTopicCache().executeCommand(myTopic,new SaveMetaLocationCommand(myTopic,theSelectedMeta,locations),
 				new StdAsyncCallback(ConstHolder.myConstants.save()){});
@@ -218,7 +230,12 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 		Set locations = myTopic.getMetaValuesFor(selectedMeta);		
 		locations.add(dragged);
 		
-		System.out.println("size "+locations.size());
+		
+		System.out.println("Updating locations size "+locations.size());
+		for (Iterator iter = locations.iterator(); iter.hasNext();) {
+			HippoLocation hl = (HippoLocation) iter.next();
+			System.out.println("hl "+hl);
+		}
 		
 		manager.getTopicCache().executeCommand(myTopic,new SaveMetaLocationCommand(myTopic,selectedMeta,locations),
 				new StdAsyncCallback(ConstHolder.myConstants.save()){});

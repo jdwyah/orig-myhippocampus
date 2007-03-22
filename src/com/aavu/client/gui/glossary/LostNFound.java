@@ -41,5 +41,11 @@ public class LostNFound extends Glossary implements ExplorerPanel {
 		
 	}
 
+
+	public void loadAll() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

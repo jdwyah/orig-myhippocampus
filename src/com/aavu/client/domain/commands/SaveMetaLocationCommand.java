@@ -49,9 +49,14 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 //		with the session: [com.aavu.client.domain.MetaLocation#2457]
 		//over-write all locations
 		//clear on first iteration, then don't clear
+		
+		System.out.println("\nEXECUTE SAVE META");
+		System.out.println("values "+values.size());
+		
 		boolean clear = true;
 		for (Iterator iter = values.iterator(); iter.hasNext();) {
 			HippoLocation location = (HippoLocation) iter.next();
+			System.out.println("----"+location);
 			location.setUser(getTopic(0).getUser());
 			getTopic(0).addMetaValue((Meta) getTopic(1), location,clear);	
 			
@@ -61,7 +66,7 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 		System.out.println("topic assoc "+getTopic(0).getAssociations().size());
 		System.out.println("topic metas "+getTopic(0).getMetas().size());
 		
-		System.out.println(" "+getTopic(0).toPrettyString());
+		//System.out.println(" "+getTopic(0).toPrettyString());
 		
 		//would like to use code like this, but since we're not returning ids,
 		//it won't work right.

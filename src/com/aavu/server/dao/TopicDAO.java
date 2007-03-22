@@ -1,10 +1,13 @@
 package com.aavu.server.dao;
 
 import java.util.List;
+import java.util.Set;
 
+import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -17,56 +20,57 @@ import com.aavu.server.web.domain.UserPageBean;
 
 public interface TopicDAO {
 
-	void saveSimple(Topic t);
+	void changeState(Topic t, boolean toIsland);
 	
-	Topic save(Topic t) throws HippoBusinessException;
+	void delete(Topic topic);
+
+	void deleteOccurrence(Occurrence o);
+	Topic get(long topicID);
+
+	List getAllMetas(User currentUser);
 
 	List<TopicIdentifier> getAllTopicIdentifiers(User user);
-	List<TopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
 
-	List<String> getTopicsStarting(User user,String match);
+	List<TopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
+	
+	List<Topic> getAllTopics(User u);
+
+	Topic getForID(User currentUser, long topicID);
 
 	Topic getForName(User user,String string);
 
 	List<TopicIdentifier> getLinksTo(Topic topic,User user);
+	Occurrence getOccurrrence(long id);
 	
-	void tester();
+	MetaSeeAlso getSeeAlsoSingleton();
 
+	List<TimeLineObj> getTimeline(long tagID, User user);
+
+	List<TimeLineObj> getTimeline(User user);
+
+	List<TopicIdentifier> getTopicForOccurrence(long id);
 	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
 
-	Topic getForID(User currentUser, long topicID);
+	List<String> getTopicsStarting(User user,String match);
 
-	List<TimeLineObj> getTimeline(long meta_id, User user);
+	MindTree getTree(MindTreeOcc occ);
+	
+	WebLink getWebLinkForURI(String url, User currentUser);
 
-	List<Topic> getAllTopics(User u);
+	Topic load(long topicID);
+	void populateUsageStats(UserPageBean rtn);
+
+	MindTree save(MindTree tree);
 
 	Occurrence save(Occurrence link);
 
-	List<TopicIdentifier> getTopicForOccurrence(long id);
+	Topic save(Topic t) throws HippoBusinessException;
 
-	MindTree getTree(MindTreeOcc occ);
-	MindTree save(MindTree tree);
+	void saveSimple(Topic t);
 
-	void populateUsageStats(UserPageBean rtn);
-
-	void delete(Topic topic);
-	
 	void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude);
 
-	Topic load(long topicID);
-	Topic get(long topicID);
-
-	MetaSeeAlso getSeeAlsoSingleton();
-
-	WebLink getWebLinkForURI(String url, User currentUser);
-
-	void changeState(Topic t, boolean toIsland);
-
-	Occurrence getOccurrrence(long id);
-
-	void deleteOccurrence(Occurrence o);
-
-	List getAllMetas(User currentUser);
+	void tester();
 	
 
 }

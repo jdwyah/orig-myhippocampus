@@ -214,8 +214,16 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
 		 if ( !(other instanceof AbstractTopic) ) return false;
 		 AbstractTopic castOther = ( AbstractTopic ) other; 
          
-		 return ( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )
- && (this.isPublicVisible()==castOther.isPublicVisible());
+		 if(this.getId() != 0 && 
+				 this.getId() == castOther.getId()){
+			 return true;
+		 }
+		 
+		 return ( (this.getTitle()==castOther.getTitle()) ||
+				 ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )
+				 && (this.isPublicVisible()==castOther.isPublicVisible())
+				 && (this.getLatitude()==castOther.getLatitude())
+				 && (this.getLongitude()==castOther.getLongitude());
    }
    
    public int hashCode() {

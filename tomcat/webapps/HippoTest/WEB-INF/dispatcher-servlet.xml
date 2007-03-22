@@ -56,7 +56,7 @@
 
 	<bean id="createUserController" class="com.aavu.server.web.controllers.CreateUserController">
 		<property name="formView" value="signup" />
-		<property name="successView" value="index" />
+		<property name="successView" value="redirect:/site/index.html" /><!-- redirect index needs command in model -->
 		<property name="validator" ref="createUserValidator" />
 		<property name="userService" ref="userService" />
 	</bean>

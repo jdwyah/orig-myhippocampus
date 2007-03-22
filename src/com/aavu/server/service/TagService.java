@@ -25,5 +25,4 @@ public interface TagService {
 
 	List<TagStat> getTagStats();
 
-	Tag makeMeATag(Topic topic);
 }

@@ -1,8 +1,10 @@
 package com.aavu.server.dao.hibernate;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.test.AssertThrows;
@@ -637,6 +639,92 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 
 		System.out.println("list "+list.size());
+	}
+
+	public void testGetTimelineAll_1() throws HippoBusinessException{
+
+		Topic t1 = new Topic(u,C);
+		
+		
+		MetaDate md = new MetaDate();
+		md.setTitle("Date Seen");
+
+		HippoDate date = new HippoDate();
+		date.setDate(new Date());
+		
+		t1.addMetaValue(md, date);
+		
+		t1  = topicDAO.save(t1);
+
+		List<TimeLineObj> list = topicDAO.getTimeline(u);
+
+		assertEquals(1, list.size());
+		
+		for (TimeLineObj timeLine : list) {
+			System.out.println("timelineObj "+timeLine);
+		}
+		
+		System.out.println("list "+list.size());
+	}
+
+	public void testGetTimelineAll_2() throws HippoBusinessException{
+
+		//Add a topic w/ 2 meta dates. 
+		//Make sure that 'limitToTheseMetas' works
+		//
+		Topic t1 = new Topic(u,C);
+				
+		MetaDate md = new MetaDate();
+		md.setTitle("Date Seen");
+		HippoDate date = new HippoDate();
+		date.setDate(new Date());						
+		t1.addMetaValue(md, date);		
+		t1  = topicDAO.save(t1);
+		
+		MetaDate md2 = new MetaDate();
+		md2.setTitle("Date Read");
+		HippoDate date2 = new HippoDate();
+		date2.setDate(new Date());						
+		t1.addMetaValue(md2, date2);		
+		t1  = topicDAO.save(t1);
+						
+		List<TimeLineObj> list = topicDAO.getTimeline(u);
+		assertEquals(2, list.size());
+		
+		for (TimeLineObj timeLine : list) {
+			System.out.println("timelineObj "+timeLine);
+		}
+		
+		System.out.println("2");		
+		
+		
+		
+		//
+		//add a second topic, with a meta date for each meta
+		//
+		Topic t2 = new Topic(u,E);
+		Tag tag = new Tag(u,D);
+		t2.tagTopic(tag);
+		
+		for (Iterator iter = t1.getMetas().iterator(); iter.hasNext();) {
+			Meta m = (Meta) iter.next();
+		
+			HippoDate adate = new HippoDate();
+			adate.setDate(new Date());						
+			t2.addMetaValue(m, adate);		
+			t2  = topicDAO.save(t2);
+		}		
+		
+		list = topicDAO.getTimeline(u);		
+		assertEquals(4, list.size());
+		
+		Tag tt = (Tag) t2.getTags().iterator().next();
+		
+		list = topicDAO.getTimeline(tt.getId(),u);		
+		assertEquals(2, list.size());
+		
+		
+		
 	}
 	
 	public void testSubjectSave() throws HippoBusinessException {

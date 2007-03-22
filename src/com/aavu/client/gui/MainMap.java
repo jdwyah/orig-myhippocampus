@@ -9,6 +9,7 @@ import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGFrame;
 import org.gwm.client.impl.DefaultGInternalFrame;
+import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -21,7 +22,9 @@ import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 
 public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 
@@ -31,7 +34,7 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		
 	private Ocean ocean;
 	private StatusPanel statusPanel;
-	private CompassRose compassRose;
+	private SearchBox searchBox;
 	private GadgetDisplayer gadgetDisplayer;
 	private CenterTopicDisplayer centerDisplayer;
 	
@@ -40,7 +43,7 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 
 	private MultiDivPanel mainP;
 	
-	public MainMap(Manager manager){
+	public MainMap(final Manager manager){
 		this.manager = manager;
 		
 		this.frames = new ArrayList();
@@ -65,8 +68,17 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		
 		statusPanel = new StatusPanel();
 		
-		compassRose = new CompassRose(manager);
-		mainP.add(compassRose);
+		PNGImage questionHorse = new PNGImage("img/questionHorse.png",44,80);
+		questionHorse.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.showHelp();
+			}});
+		questionHorse.addStyleName("H-AbsolutePanel");
+		questionHorse.addStyleName("H-QuestionHorse");
+		mainP.add(questionHorse);
+		
+		searchBox = new SearchBox(manager);
+		mainP.add(searchBox);
 		mainP.add(ocean.getWidget());//,0,0);
 		
 		//mainP.add(sideBar);
@@ -219,6 +231,14 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		DOM.setStyleAttribute(ext.getElement(), "left", left+"px");
 		DOM.setStyleAttribute(ext.getElement(), "top", top+"px");
 		
+	}
+
+	public void zoomIn() {
+		ocean.zoomIn();
+	}
+
+	public void zoomOut() {
+		ocean.zoomOut();
 	}
 
 

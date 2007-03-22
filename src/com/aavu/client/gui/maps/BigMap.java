@@ -36,4 +36,9 @@ public class BigMap extends Composite implements ExplorerPanel {
 		
 	}
 
+	public void loadAll() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

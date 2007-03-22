@@ -19,25 +19,6 @@ import com.aavu.server.web.domain.UserPageBean;
 
 public interface TopicService {
 
-	List<TopicIdentifier> getAllTopicIdentifiers();
-	List<TopicIdentifier> getAllTopicIdentifiers(boolean all);
-
-	Topic save(Topic topic) throws HippoBusinessException;
-
-	List<String> getTopicsStarting(String match);
-
-	Topic getForName(String string);
-
-	List<FullTopicIdentifier> getTopicIdsWithTag(long id);
-
-	Topic getForID(long topicID);
-
-	List<TimeLineObj> getTimelineObjs(long meta_id);
-
-	Occurrence save(Occurrence link);
-	
-	List<TopicIdentifier> getLinksTo(Topic topic);
-
 	/**
 	 * Create the link and save it for each of the tags enumerated, creating
 	 * and saving those if necessary. 
@@ -47,26 +28,46 @@ public interface TopicService {
 	 * @throws HippoBusinessException 
 	 */
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
-
-	MindTree getTree(MindTreeOcc occ);
-
-	MindTree saveTree(MindTree tree);
-
-	UserPageBean getUserPageBean(User su);
+	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
 	void delete(Topic topic) throws HippoBusinessException;
 
-	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
+	void deleteOccurrence(long id) throws HippoPermissionException;
 
 	void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException;
 
-	WebLink getWebLinkForURL(String url);
-	
-	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
-
-	void deleteOccurrence(long id) throws HippoPermissionException;
-
 	List getAllMetas();
 
-	List getTopicIdsWithTags(List<TopicIdentifier> shoppingList);
+	List<TopicIdentifier> getAllTopicIdentifiers();
+
+	List<TopicIdentifier> getAllTopicIdentifiers(boolean all);
+	Topic getForID(long topicID);
+
+	Topic getForName(String string);
+	
+	List<TopicIdentifier> getLinksTo(Topic topic);
+
+	List<TimeLineObj> getTimelineObjs(long tagID);
+
+	List<List<TimeLineObj>>  getTimelineWithTags(List<TopicIdentifier> shoppingList);
+
+	List<FullTopicIdentifier> getTopicIdsWithTag(long id);
+
+	List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList);
+
+	List<String> getTopicsStarting(String match);
+
+	MindTree getTree(MindTreeOcc occ);
+
+	UserPageBean getUserPageBean(User su);
+
+	WebLink getWebLinkForURL(String url);
+	
+	Occurrence save(Occurrence link);
+
+	Topic save(Topic topic) throws HippoBusinessException;
+
+	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
+
+	MindTree saveTree(MindTree tree);
 }

@@ -129,6 +129,11 @@ public boolean equals(Object other) {
 		 if ( !(other instanceof AbstractOccurrence) ) return false;
 		 AbstractOccurrence castOther = ( AbstractOccurrence ) other; 
          
+		 if(this.getId() != 0 && 
+				 this.getId() == castOther.getId()){
+			 return true;
+		 }
+		 
 		 return ( (this.getUser()==castOther.getUser()) || ( this.getUser()!=null && castOther.getUser()!=null && this.getUser().equals(castOther.getUser()) ) )
  && ( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )
  && ( (this.getData()==castOther.getData()) || ( this.getData()!=null && castOther.getData()!=null && this.getData().equals(castOther.getData()) ) )

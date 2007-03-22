@@ -78,26 +78,33 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 								count++;
 							}
 							
-							draw(tags);
+							drawTags(tags);
 						}});
 		}else{
 			System.out.println("no shopping needed");
-			if(tags.isEmpty()){
-				System.out.println("drawALL");
-				drawAll();	
-			}else{
-				System.out.println("draw(tags)");
-				draw(tags);
-			}
+			
+			System.out.println("draw(tags)");
+			drawTags(tags);
 		}
 
+	}
+	
+	public void loadAll() {
+		mananager.getTopicCache().getAllTopicIdentifiers( 
+				new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
+					//@Override
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+											
+						draw((List) result);					
+					}});
 	}
 
 	protected List getFTI(TopicIdentifier tag) {
 		return (List) tagToIdentifierMap.get(tag);
 	}
 		
-	protected void draw(Set tags) {
+	protected void drawTags(Set tags) {
 		List all = new ArrayList();		
 		for (Iterator iter = tags.iterator(); iter.hasNext();) {			
 			TopicIdentifier tag = (TopicIdentifier) iter.next();
@@ -108,11 +115,6 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 		}
 		draw(all);
 	} 
-
-
-	private void drawAll() {
-		draw(new ArrayList());
-	}
 
 	
 	protected abstract void draw(List ftis);

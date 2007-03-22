@@ -45,6 +45,7 @@ public class Explorer extends Composite {
 	
 	//<TopicIdentifier>
 	private Set tags = new HashSet();
+	private boolean allmode;
 	
 
 
@@ -123,6 +124,8 @@ public class Explorer extends Composite {
 	public void load(Set tagstats) {
 		ExplorerPanel selectedPanel = selectedB.getExplorerP();
 		
+		allmode = false;
+		
 		System.out.println("explorer load "+tagstats.size());
 		tags.clear();
 		for (Iterator iter = tagstats.iterator(); iter.hasNext();) {
@@ -133,9 +136,12 @@ public class Explorer extends Composite {
 			System.out.println(" type "+GWT.getTypeName(tags));
 			tags.add(tag);
 			
-		}		
+		}				
 		
-		
+	}
+	
+	public void setAllMode(boolean allmode){
+		this.allmode = allmode;
 	}
 
 
@@ -146,6 +152,7 @@ public class Explorer extends Composite {
 		public ExplorerB(String label,ExplorerPanel w){
 			super(label);
 			addClickListener(this);
+			addStyleName("H-ExplorerButton");
 			this.explorerP = w;
 		}
 
@@ -162,7 +169,11 @@ public class Explorer extends Composite {
 			System.out.println("on click size "+tags.size());
 			
 			currentView.clear();
-			explorerP.load(tags);
+			if(allmode){
+				explorerP.loadAll();
+			}else{
+				explorerP.load(tags);
+			}
 			currentView.add(explorerP.getWidget());		
 		}
 	}

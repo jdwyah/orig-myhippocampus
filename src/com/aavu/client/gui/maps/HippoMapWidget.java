@@ -62,8 +62,8 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 
 	    //Retrieve the GMap2 object and start manipulating your map
 	    gmaps = mapWidget.getGmap();
-	    gmaps.addControl(GControl.GSmallMapControl());
-
+	    
+	    gmaps.addControl(GControl.GSmallZoomControl());
 	    
 	    //Add the widget to your GWT UI (You can do this before or after you call getGmap() now).
 	    //gmaps.openInfoWindowHtml(pos, "The center of the world"); 
@@ -73,7 +73,7 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 
 	    eventManager.addOnMoveStartListener(gmaps, new GMap2EventMoveListener() {
 	    	public void onMoveStart(GMap2 map) {
-	    		Logger.log("move started");
+	    		//Logger.log("move started");
 	    	}
 
 	    	public void onMoveEnd(GMap2 map){
@@ -169,8 +169,12 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	
 	public void onDragEnd(GMarker marker) {
 		HippoLocation dragged = (HippoLocation) markerToLocation.get(marker);
-		System.out.println("drag ended ");
+		
 		if(dragged != null){
+			
+			System.out.println("!!!!!!!!!!!!!!!!!!!!drag ended "+marker.getPoint());
+			gmaps.setCenter(marker.getPoint());
+			
 			dragged.setLocation(marker.getPoint());
 			gadget.update(dragged);
 		}
@@ -179,6 +183,13 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	public void onDragStart(GMarker marker) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public void centerOn(HippoLocation location) {
+		System.out.println("!!!!!!!!!!!!!CENTER ON "+location.getLocation());
+		//gmaps.setCenter(latlng)
+		gmaps.setCenter(location.getLocation());
 	}
 	
 	

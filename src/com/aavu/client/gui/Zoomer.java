@@ -5,6 +5,7 @@ import org.gwtwidgets.client.ui.PNGImage;
 import com.aavu.client.service.Manager;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -18,7 +19,7 @@ public class Zoomer extends SimplePanel implements MouseListener {
 	private static final int NUM_BELOW_1 = 4;
 	
 	private Manager manager;
-	private PNGImage slider;
+	//private PNGImage slider;
 	private int curLevel;
 
 	private AbsolutePanel absPanel = new AbsolutePanel();
@@ -30,25 +31,42 @@ public class Zoomer extends SimplePanel implements MouseListener {
 	 * 
 	 * @param manager
 	 */
-	public Zoomer(Manager manager){		
+	public Zoomer(final Manager manager){		
 		this.manager = manager;
 		
 		//addStyleName("H-AbsolutePanel");		
 		//setPixelSize(24, 138);
 		
-		slider = new PNGImage("img/zoomerSlider.png",24,14);
+//		slider = new PNGImage("img/zoomerSlider.png",24,14);
+//		
+//		PNGImage sliderBase = new PNGImage("img/zoomerBase.png",24,138);
+//		
 		
-		PNGImage sliderBase = new PNGImage("img/zoomerBase.png",24,138);
+		PNGImage magnifyBig = new PNGImage("img/magnifyingBig.png",43,40);
+		magnifyBig.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.zoomIn();				
+			}});
+		PNGImage magnifySmall = new PNGImage("img/magnifyingSmall.png",43,40);
+		magnifySmall.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				manager.zoomOut();
+			}});
 		
-		sliderBase.addMouseListener(this);
 		
-		absPanel.add(sliderBase,0,0);
-		absPanel.add(slider,SLIDER_LEFT,BASE);
+//		sliderBase.addMouseListener(this);
+//		
+//		absPanel.add(sliderBase,0,0);
+//		absPanel.add(slider,SLIDER_LEFT,BASE);
+		
+		absPanel.add(magnifyBig,0,0);
+		absPanel.add(magnifySmall,0,40);
+		
 		
 		setToZoom(convertFromScale(1.0));		
 		
 		//interestingly, this is only necessary for FF
-		absPanel.setPixelSize(24,138);
+		absPanel.setPixelSize(43,80);
 		
 		add(absPanel);
 		
@@ -66,7 +84,7 @@ public class Zoomer extends SimplePanel implements MouseListener {
 		
 		int top = i*INCR + BASE; 
 		System.out.println("top "+top);
-		absPanel.setWidgetPosition(slider, SLIDER_LEFT, top);
+		//absPanel.setWidgetPosition(slider, SLIDER_LEFT, top);
 		
 	}
 	public void setToScale(double scale){

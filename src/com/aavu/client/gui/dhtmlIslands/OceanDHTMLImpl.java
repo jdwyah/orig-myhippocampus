@@ -359,9 +359,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		
 	}
 	public void zoomOut() {
-		System.out.println("zoom up from "+currentScale);
-
-	
+		//System.out.println("zoom up from "+currentScale);
 		
 		double oldScale = currentScale;
 
@@ -853,7 +851,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	
 	private void centerOn(int x, int y){
 
-		System.out.println("centering on "+x+" "+ y);
+		//System.out.println("centering on "+x+" "+ y);
 		
 		int width = Window.getClientWidth();
 		int height = Window.getClientHeight();
@@ -865,7 +863,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		int top = (int) (y * currentScale) - halfHeight;
 
 //		SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
-		System.out.println("left "+left+" top "+top);
+//		System.out.println("left "+left+" top "+top);
 
 		//intuitively this is (left - curbackX) but things are reversed			
 		int dx = left + curbackX;

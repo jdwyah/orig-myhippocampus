@@ -129,7 +129,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	public void addMetaValue(Meta meta, Topic metaValue,boolean clear) {
 			
 		
-		System.out.println("Topic.addMetaValue: "+meta+" "+metaValue);
+		System.out.println("Topic.addMetaValue: "+meta+" "+metaValue+" clear "+clear);
 		
 //		Topic cur_val = getSingleMetaValueFor(meta);
 //		if(cur_val != null){
@@ -148,11 +148,12 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			System.out.println("cur_v "+cur_val);			
 			
 			if(cur_val.equals(metaValue)){
-				System.out.println("Were Equal, Moving on. C: "+cur_val.getTitle()+" mv "+metaValue.getTitle());
+				System.out.println("Were Equal, copy props to make sure. C: "+cur_val.getTitle()+" mv "+metaValue.getTitle());
+				metaValue.copyPropsIntoParam(cur_val);				
 				return;
 			}else{
-				System.out.println("cur "+cur_val.getIdentifier());
-				System.out.println("new "+metaValue.getIdentifier());
+				System.out.println("!= cur "+cur_val.getIdentifier());
+				System.out.println("!= new "+metaValue.getIdentifier());
 			}
 		}
 		

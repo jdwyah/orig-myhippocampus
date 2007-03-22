@@ -11,6 +11,8 @@ public interface ExplorerPanel {
 	Widget getWidget();
 
 	//Set<TopicIdentifier>
+	//all == null
+	void loadAll();
 	void load(Set tags);
 
 }

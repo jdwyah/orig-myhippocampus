@@ -21,6 +21,5 @@ public interface TagDAO {
 	
 	List<TagStat> getTagStats(User user);
 
-	Tag upgradeToTag(Topic t);
 	
 }

@@ -1,6 +1,5 @@
 package com.aavu.server.service.gwt;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,7 +11,6 @@ import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -26,103 +24,11 @@ import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.util.gwt.GWTSpringControllerReplacement;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
 public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implements GWTTopicService {
 
 	private static final Logger log = Logger.getLogger(GWTTopicServiceImpl.class);
-
-	private TopicService topicService;
-	private SearchService searchService;
-
-	public void setTopicService(TopicService topicService) {
-		this.topicService = topicService;
-	}
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
-	}
-
-	public TopicIdentifier createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
-		
-		log.debug("create New: "+title+" "+topicOrTagOrMeta.getClass());
-		
-		topicOrTagOrMeta.setTitle(title);
-
-		topicOrTagOrMeta = topicService.save(topicOrTagOrMeta);
-		return topicOrTagOrMeta.getIdentifier();
-	}
-	public void saveCommand(AbstractCommand command) throws HippoBusinessException {
-		log.info("command "+command.getClass()+" "+command);		
-		topicService.executeAndSaveCommand(command);
-	}
-
-
-	public String[] match(String match) {
-		log.debug("match");
-		try {
-
-			String[] list = new String[]{};
-			list = topicService.getTopicsStarting(match).toArray(list);
-
-			return list;
-
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-
-
-
-	private Topic[] convertToArray(List<Topic> list){
-
-		log.debug("ConvertToArray");
-
-		Topic[] rtn = new Topic[list.size()];
-
-		for(int i=0;i<list.size();i++){				
-			Topic t = list.get(i);
-
-
-			//t.setUser(null);
-			rtn[i] = convert(t);
-		}
-
-		return rtn;
-	}
-	private TopicIdentifier[] convertToArray(List<TopicIdentifier> list){
-
-		TopicIdentifier[] rtn = new TopicIdentifier[list.size()];
-		for(int i=0;i<list.size();i++){				
-			TopicIdentifier t = list.get(i);
-			rtn[i] = t;
-		}
-		return rtn;
-	}
-	private FullTopicIdentifier[] convertToArray(List<FullTopicIdentifier> list){
-
-		FullTopicIdentifier[] rtn = new FullTopicIdentifier[list.size()];
-		for(int i=0;i<list.size();i++){				
-			FullTopicIdentifier t = list.get(i);
-			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
-			rtn[i] = t;
-		}
-		return rtn;
-	}
-	private TimeLineObj[] convertToArray(List<TimeLineObj> list){
-
-		TimeLineObj[] rtn = new TimeLineObj[list.size()];
-		for(int i=0;i<list.size();i++){				
-			TimeLineObj t = list.get(i);
-			rtn[i] = t;
-		}
-		return rtn;
-	}
-
 
 	/**
 	 * Convert a topic to GWT serializable form. 
@@ -150,7 +56,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		
 		return t;
 	}
-
 	/**
 	 * 1) Over-write dates
 	 * 2) Null out the lazy loaded MindTree for MindTreeOcc's 
@@ -181,6 +86,104 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		return rtn;		
 	}
 
+	private TopicService topicService;
+	private SearchService searchService;
+
+	public void changeState(long topicID, boolean toIsland) throws HippoException {
+		topicService.changeState(topicID, toIsland);		
+	}
+	private Set convertSetSimple(Set in) {
+		HashSet rtn = new HashSet();
+		try{			
+			for (Iterator iter = in.iterator(); iter.hasNext();) {				
+				rtn.add(iter.next());
+			}
+		}catch(LazyInitializationException ex){
+			log.debug("caught lazy ");
+		}
+		return rtn;		
+	}
+
+
+	private FullTopicIdentifier[] convertToArray(List<FullTopicIdentifier> list){
+
+		FullTopicIdentifier[] rtn = new FullTopicIdentifier[list.size()];
+		for(int i=0;i<list.size();i++){				
+			FullTopicIdentifier t = list.get(i);
+			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
+			rtn[i] = t;
+		}
+		return rtn;
+	}
+
+
+
+
+	private TimeLineObj[] convertToArray(List<TimeLineObj> list){
+
+		TimeLineObj[] rtn = new TimeLineObj[list.size()];
+		for(int i=0;i<list.size();i++){				
+			TimeLineObj t = list.get(i);
+			rtn[i] = t;
+		}
+		return rtn;
+	}
+	private Topic[] convertToArray(List<Topic> list){
+
+		log.debug("ConvertToArray");
+
+		Topic[] rtn = new Topic[list.size()];
+
+		for(int i=0;i<list.size();i++){				
+			Topic t = list.get(i);
+
+
+			//t.setUser(null);
+			rtn[i] = convert(t);
+		}
+
+		return rtn;
+	}
+	private TopicIdentifier[] convertToArray(List<TopicIdentifier> list){
+
+		TopicIdentifier[] rtn = new TopicIdentifier[list.size()];
+		for(int i=0;i<list.size();i++){				
+			TopicIdentifier t = list.get(i);
+			rtn[i] = t;
+		}
+		return rtn;
+	}
+	private MindTree convertTree(MindTree tree) {
+		tree.setLeftSide(convertSetSimple(tree.getLeftSide()));
+		tree.setRightSide(convertSetSimple(tree.getRightSide()));
+		
+		//TODO eek... this might be a bug -> bad things...
+		tree.setTopic(null);
+		
+		return tree;
+	}
+
+
+	public TopicIdentifier createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
+		
+		log.debug("create New: "+title+" "+topicOrTagOrMeta.getClass());
+		
+		topicOrTagOrMeta.setTitle(title);
+
+		topicOrTagOrMeta = topicService.save(topicOrTagOrMeta);
+		return topicOrTagOrMeta.getIdentifier();
+	}
+
+	public void delete(Topic topic) throws HippoException {
+		try{
+			topicService.delete(topic);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
+
 //	private Map converter(Map metaValues) {
 //	return converter(metaValues,false);
 //	}
@@ -189,54 +192,14 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 //	return null;
 //	}
 
-	public Topic getTopicForName(String topicName) {
-		try {
-			Topic t = topicService.getForName(topicName);
-
-			if(t != null){
-				log.debug("orig "+t.getId()+" "+t.getTitle());
-
-				//just json the Abstract topic parts
-				Topic converted = convert(t);
-				log.debug("conv: "+t.getId()+" tit "+t.getTitle());
-				return converted;
-			}else{
-				log.debug("NULL");
-			}
-
-			return t;
-
-			//return convert(topicService.getForName(topicName));
-
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			return null;
-		}
+	public void deleteOccurrence(long id) throws HippoException {
+		topicService.deleteOccurrence(id);
 	}
 
-	/**
-	 * this conversion is just list -> array
-	 * @throws HippoException 
-	 * 
-	 */
-	public List getTopicIdsWithTag(long id) throws HippoException {
-		try {
-
-			return topicService.getTopicIdsWithTag(id);
-
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			throw new HippoException(e);		
-		}
+	public List getAllMetas() throws HippoException {
+		return topicService.getAllMetas();
 	}
 	
-	public List getTopicsWithTags(List shoppingList) throws HippoException {
-		return topicService.getTopicIdsWithTags(shoppingList);
-	}
-	
-
 	/**
 	 * this conversion is just list -> array
 	 * @throws HippoException 
@@ -251,11 +214,25 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e);			
 		}
 	}
+	
 
-	public Topic getTopicByID(long topicID) throws HippoException {
+	public List getLinksTo(Topic topic) throws HippoException {
+		try{
+			return topicService.getLinksTo(topic);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
+
+	public List getTimelineObjs(long tag_id) throws HippoException {
 		try {
-
-			return convert(topicService.getForID(topicID));
+			List<TimeLineObj> list = topicService.getTimelineObjs(tag_id);
+			
+			
+			Converter.scan(list);
+			return list;
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -264,13 +241,10 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		}
 	}
 
-	public List getTimelineObjs(long meta_id) throws HippoException {
+	public Topic getTopicByID(long topicID) throws HippoException {
 		try {
-			List<TimeLineObj> list = topicService.getTimelineObjs(meta_id);
-			
-			
-			Converter.scan(list);
-			return list;
+
+			return convert(topicService.getForID(topicID));
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
@@ -301,25 +275,51 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 //	}
 
 
-	public List getLinksTo(Topic topic) throws HippoException {
-		try{
-			return topicService.getLinksTo(topic);
-		}  catch (Exception e) {
+	public Topic getTopicForName(String topicName) {
+		try {
+			Topic t = topicService.getForName(topicName);
+
+			if(t != null){
+				log.debug("orig "+t.getId()+" "+t.getTitle());
+
+				//just json the Abstract topic parts
+				Topic converted = convert(t);
+				log.debug("conv: "+t.getId()+" tit "+t.getTitle());
+				return converted;
+			}else{
+				log.debug("NULL");
+			}
+
+			return t;
+
+			//return convert(topicService.getForName(topicName));
+
+		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			throw new HippoException(e.getMessage());
+			return null;
 		}
 	}
 
 
-	public List search(String searchString) throws HippoException {
-		try{
-			return searchService.search(searchString);
-		}  catch (Exception e) {
+	/**
+	 * this conversion is just list -> array
+	 * @throws HippoException 
+	 * 
+	 */
+	public List getTopicIdsWithTag(long id) throws HippoException {
+		try {
+
+			return topicService.getTopicIdsWithTag(id);
+
+		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			throw new HippoException(e.getMessage());
+			throw new HippoException(e);		
 		}
+	}
+	public List getTopicsWithTags(List shoppingList) throws HippoException {
+		return topicService.getTopicIdsWithTags(shoppingList);
 	}
 	public MindTree getTree(MindTreeOcc occ) throws HippoException {
 		try{
@@ -330,6 +330,34 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e.getMessage());
 		}
 	}
+	public WebLink getWebLinkForURL(String url) throws HippoException {
+		return topicService.getWebLinkForURL(url);
+	}
+	public String[] match(String match) {
+		log.debug("match");
+		try {
+
+			String[] list = new String[]{};
+			list = topicService.getTopicsStarting(match).toArray(list);
+
+			return list;
+
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+
+	public void saveCommand(AbstractCommand command) throws HippoBusinessException {
+		log.info("command "+command.getClass()+" "+command);		
+		topicService.executeAndSaveCommand(command);
+	}
+	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException {
+		topicService.saveTopicLocation(tagId,topicId,xpct,ypct);		
+	}
 	public MindTree saveTree(MindTree tree) throws HippoException {
 		try{
 			return  convertTree(topicService.saveTree(tree));
@@ -339,52 +367,20 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e.getMessage());
 		}
 	}
-	private MindTree convertTree(MindTree tree) {
-		tree.setLeftSide(convertSetSimple(tree.getLeftSide()));
-		tree.setRightSide(convertSetSimple(tree.getRightSide()));
-		
-		//TODO eek... this might be a bug -> bad things...
-		tree.setTopic(null);
-		
-		return tree;
-	}
-	private Set convertSetSimple(Set in) {
-		HashSet rtn = new HashSet();
-		try{			
-			for (Iterator iter = in.iterator(); iter.hasNext();) {				
-				rtn.add(iter.next());
-			}
-		}catch(LazyInitializationException ex){
-			log.debug("caught lazy ");
-		}
-		return rtn;		
-	}
-	
-	
-
-	public void delete(Topic topic) throws HippoException {
+	public List search(String searchString) throws HippoException {
 		try{
-			topicService.delete(topic);
+			return searchService.search(searchString);
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
 			throw new HippoException(e.getMessage());
 		}
 	}
-	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException {
-		topicService.saveTopicLocation(tagId,topicId,xpct,ypct);		
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
 	}
-	public WebLink getWebLinkForURL(String url) throws HippoException {
-		return topicService.getWebLinkForURL(url);
-	}
-	public void changeState(long topicID, boolean toIsland) throws HippoException {
-		topicService.changeState(topicID, toIsland);		
-	}
-	public void deleteOccurrence(long id) throws HippoException {
-		topicService.deleteOccurrence(id);
-	}
-	public List getAllMetas() throws HippoException {
-		return topicService.getAllMetas();
+	public void setTopicService(TopicService topicService) {
+		this.topicService = topicService;
 	}
 	
 

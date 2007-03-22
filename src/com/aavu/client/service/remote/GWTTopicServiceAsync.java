@@ -20,53 +20,53 @@ public interface GWTTopicServiceAsync {
 
 
 
-	void getAllTopicIdentifiers(AsyncCallback callback);
+	void changeState(long topicID, boolean toIsland,AsyncCallback callback);
 
 	
-	//void getTopicsStarting(String match, AsyncCallback callback);
-	void match(String match, AsyncCallback callback);	
+	void createNew(String title,Topic topicOrTagOrMeta, AsyncCallback callback);	
 
-	void getTopicForName(String topicName, AsyncCallback callback);
-	void getTopicIdsWithTag(long id, AsyncCallback callback);
+	void delete(Topic topic, AsyncCallback callback);
+	void deleteOccurrence(long id, AsyncCallback callback);
+	
+	void getAllMetas(AsyncCallback callback);
+	
+	void getAllTopicIdentifiers(AsyncCallback callback);	
+	
+	//List<TopicIdentifier> 
+	void getLinksTo(Topic topic, AsyncCallback callback);
+	
+	//List TimeLineObj
+	void getTimelineObjs(long tag_id, AsyncCallback callback);
 	
 	/*
 	 * @Deprecated
 	 */	
 	void getTopicByID(long topicID, AsyncCallback back);
-	
-	//List TimeLineObj
-	void getTimelineObjs(long meta_id, AsyncCallback callback);	
-	
-	//List<TopicIdentifier> 
-	void getLinksTo(Topic topic, AsyncCallback callback);
-	
-	//List<SearchResult>
-	void search(String searchString,AsyncCallback callback);
-	
-	//MindTree
-	void getTree(MindTreeOcc occ,AsyncCallback callback);
-	//MindTree 
-	void saveTree(MindTree tree,AsyncCallback callback);
+	void getTopicForName(String topicName, AsyncCallback callback);
 
-	void delete(Topic topic, AsyncCallback callback);
-
-	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct, AsyncCallback callback);
-
-	void saveCommand(AbstractCommand command, AsyncCallback callback);
-	void createNew(String title,Topic topicOrTagOrMeta, AsyncCallback callback);
-	
-	//Weblink
-	void getWebLinkForURL(String url, AsyncCallback callback);
-	
-	void changeState(long topicID, boolean toIsland,AsyncCallback callback);
-
-
-	void deleteOccurrence(long id, AsyncCallback callback);
-
-	void getAllMetas(AsyncCallback callback);
+	void getTopicIdsWithTag(long id, AsyncCallback callback);
 
 	//List<TopicIdentifier>
 	void getTopicsWithTags(List shoppingList, AsyncCallback callback);
+
+	//MindTree
+	void getTree(MindTreeOcc occ,AsyncCallback callback);
+	//Weblink
+	void getWebLinkForURL(String url, AsyncCallback callback);
+	
+	//void getTopicsStarting(String match, AsyncCallback callback);
+	void match(String match, AsyncCallback callback);
+	
+	void saveCommand(AbstractCommand command, AsyncCallback callback);
+
+
+	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct, AsyncCallback callback);
+
+	//MindTree 
+	void saveTree(MindTree tree,AsyncCallback callback);
+
+	//List<SearchResult>
+	void search(String searchString,AsyncCallback callback);
 }
 
 

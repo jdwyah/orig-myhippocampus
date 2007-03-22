@@ -89,7 +89,7 @@ public abstract class MetaGadget extends Gadget  {
 	public int load(Topic topic) {
 		this.topic = topic;
 		
-		System.out.println(topic.toPrettyString());
+		//System.out.println("Meta Gadget Load "+topic.toPrettyString());
 		
 		metasPanel.clear();
 		

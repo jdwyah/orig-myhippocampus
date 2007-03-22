@@ -50,8 +50,10 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 		
 		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineObj.LAST_UPDATED,ConstHolder.myConstants.timeline_lastUpdated());
 		TimeLineSelector createdB = new TimeLineSelector(TimeLineObj.CREATED,ConstHolder.myConstants.timeline_created());
+		TimeLineSelector metasB = new TimeLineSelector(TimeLineObj.ALL_METAS,ConstHolder.myConstants.timeline_metas());
 		typeSelector.add(lastUpdatedB);
 		typeSelector.add(createdB);
+		typeSelector.add(metasB);
 
 		
 		

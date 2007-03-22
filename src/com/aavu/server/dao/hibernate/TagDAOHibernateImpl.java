@@ -83,7 +83,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 						
 		List<Object[]> list = getHibernateTemplate().find(""+
 				"select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from Tag tag "+
-				"where  user is ? "
+				"where  user is ? order by tag.title"
 				,user);
 		
 		//This is the query if we decide to get rid of the instances mapping again.

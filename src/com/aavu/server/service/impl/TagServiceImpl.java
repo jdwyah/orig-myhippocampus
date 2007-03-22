@@ -109,9 +109,6 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 	public List<TagStat> getTagStats() {
 		return tagDAO.getTagStats(userService.getCurrentUser());
 	}
-	public Tag makeMeATag(Topic topic) {
-		return tagDAO.upgradeToTag(topic);
-	}
 
 
 }

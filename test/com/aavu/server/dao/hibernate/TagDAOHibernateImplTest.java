@@ -413,25 +413,4 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 
-	public void testUpgradeToTag() throws HippoBusinessException{
-		Tag[] three = add3();
-
-		
-		
-		Topic t = new Topic();
-		t.getLatestEntry().setData(B);
-		t.setTitle(C);
-		t.setUser(u);
-		t.tagTopic(three[0]);
-					
-		
-		t = topicDAO.save(t);
-		long id = t.getId();
-		
-		Tag upgraded = tagDAO.upgradeToTag(t);
-		
-		assertEquals(id, upgraded.getId());
-		
-		
-	}
 }

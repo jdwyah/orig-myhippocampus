@@ -17,6 +17,7 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.AddButton;
+import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -40,7 +41,7 @@ public class TagChooser extends Composite {
 		
 		mainP = new VerticalPanel();
 		
-		mainP.add(new Label(ConstHolder.myConstants.chooser_showing()));
+		mainP.add(new HeaderLabel(ConstHolder.myConstants.chooser_showing()));
 		
 		
 		tagP = new VerticalPanel();
@@ -57,6 +58,13 @@ public class TagChooser extends Composite {
 		
 		mainP.add(addEditButton);
 		
+		Button showAllB = new Button(ConstHolder.myConstants.chooser_show_all());
+		showAllB.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				loadAll();
+			}			});
+		
+		mainP.add(showAllB);
 		initWidget(mainP);
 	}
 
@@ -64,11 +72,21 @@ public class TagChooser extends Composite {
 	//Set<TagStat>
 	public void showTags(Set tags) {
 		tagP.clear();
-		for (Iterator iter = tags.iterator(); iter.hasNext();) {
-			TopicIdentifier tag = (TopicIdentifier) iter.next();			
-			tagP.add(new TopicLink(tag));
+		if(tags.isEmpty()){
+			tagP.add(new Label(ConstHolder.myConstants.chooser_all()));
+		}else{
+			for (Iterator iter = tags.iterator(); iter.hasNext();) {
+				TopicIdentifier tag = (TopicIdentifier) iter.next();			
+				tagP.add(new TopicLink(tag));
+			}
 		}
 	}
+	
+	private void loadAll() {
+		showTags(new HashSet());
+		explorer.setAllMode(true);
+	}
+	
 	
 	//Set<TagStat>
 	public void loadTags(Set tags) {

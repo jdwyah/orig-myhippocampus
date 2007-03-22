@@ -130,14 +130,5 @@ public class GWTTagServiceImpl extends GWTSpringControllerReplacement implements
 		}
 	}
 
-	public Tag makeMeATag(Topic topic) throws HippoException {
-		try{
-			return convert(tagService.makeMeATag(topic));
-		}catch(Exception e){
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
-	}
 
 }

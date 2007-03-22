@@ -32,6 +32,7 @@ import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.glossary.GlossaryWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.gui.timeline.TimeLineWindow;
+import com.aavu.client.help.HelpWindow;
 import com.aavu.client.help.UserHelper;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
@@ -506,6 +507,12 @@ public class Manager implements TopicSaveListener, LoginListener {
 	public void zoomTo(double scale) {
 		map.zoomTo(scale);	
 	}
+	public void zoomOut() {
+		map.zoomOut();
+	}
+	public void zoomIn() {
+		map.zoomIn();
+	}
 	public void editEntry(Topic topic) {				
 		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());						
 	}
@@ -568,6 +575,11 @@ public class Manager implements TopicSaveListener, LoginListener {
 		
 		getTopicCache().changeState(topic.getId(), toIsland, wrapper);	
 	}
+	
+	public void showHelp() {
+		HelpWindow hw = new HelpWindow(this,newFrame());
+	}
+	
 	
 
 
