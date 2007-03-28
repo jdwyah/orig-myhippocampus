@@ -1,5 +1,6 @@
 package com.aavu.server.service.gwt;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
@@ -213,12 +216,17 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 	
 	public void testTimeline() throws HippoException{
 		
-		List rtn = topicService.getTimelineObjs(0);
+		List<TopicIdentifier> shoppingList = new ArrayList<TopicIdentifier>();
+		shoppingList.add(new TopicIdentifier(35,"foo"));
 		
-		for (Iterator iter = rtn.iterator(); iter.hasNext();) {
-			TimeLineObj obj = (TimeLineObj) iter.next();
-			log.debug(obj);
-		}		
+		
+		List<List<FullTopicIdentifier>> rtn = topicService.getTimelineWithTags(shoppingList);
+		
+		for(List<FullTopicIdentifier> ftis : rtn){
+			for (FullTopicIdentifier identifier : ftis) {
+				log.debug(identifier);
+			}
+		}				
 		
 		assertNotNull(rtn);
 	}

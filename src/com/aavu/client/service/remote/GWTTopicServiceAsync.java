@@ -8,6 +8,8 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
@@ -30,13 +32,20 @@ public interface GWTTopicServiceAsync {
 	
 	void getAllMetas(AsyncCallback callback);
 	
+	//List<DatedTopicIdentifiers>
 	void getAllTopicIdentifiers(AsyncCallback callback);	
 	
 	//List<TopicIdentifier> 
 	void getLinksTo(Topic topic, AsyncCallback callback);
 	
 	//List TimeLineObj
-	void getTimelineObjs(long tag_id, AsyncCallback callback);
+	//void getTimelineObjs(long tag_id, AsyncCallback callback);
+	
+	//List<TimeLineObj>
+	void getTimeline(AsyncCallback callback);
+	
+	//List<List<TimeLineObj>>
+	void getTimelineWithTags(List shoppingList, AsyncCallback callback);
 	
 	/*
 	 * @Deprecated

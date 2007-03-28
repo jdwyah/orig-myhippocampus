@@ -9,6 +9,7 @@ import java.util.Set;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.blog.BlogView;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.glossary.LostNFound;
 import com.aavu.client.gui.maps.BigMap;
@@ -49,8 +50,9 @@ public class Explorer extends Composite {
 	
 
 
-	public Explorer(Manager manager, int width, int height, CloseListener close) {
-		this(new HashMap(),manager,width,height,close);
+	public Explorer(Manager manager, int width, int height, PopupWindow window) {
+		this(new HashMap(),manager,width,height,window);
+		allmode = true;
 	}
 
 	
@@ -64,7 +66,7 @@ public class Explorer extends Composite {
 	 * @param width 
 	 * @param frame
 	 */
-	public Explorer(Map defaultMap, Manager manager, int width, int height, CloseListener close) {
+	public Explorer(Map defaultMap, Manager manager, int width, int height, PopupWindow window) {
 		
 		this.manager = manager;
 		//this.tagToIdentifierMap = defaultMap;
@@ -77,7 +79,7 @@ public class Explorer extends Composite {
 		
 		glossary = new ExplorerGlossary(manager,defaultMap,Orientation.HORIZONTAL);		
 						
-		timeline = new TimeLineWrapper(manager,defaultMap,width,height,close);
+		timeline = new TimeLineWrapper(manager,defaultMap,width,height,window);
 				
 		blogView = new BlogView(manager,defaultMap);
 		
@@ -166,7 +168,7 @@ public class Explorer extends Composite {
 
 			selectedB = (ExplorerB) sender;
 			
-			System.out.println("on click size "+tags.size());
+			System.out.println("on click size "+tags.size()+" allmode "+allmode);
 			
 			currentView.clear();
 			if(allmode){

@@ -8,6 +8,7 @@ import java.util.Set;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.explorer.FTICachingExplorerPanel;
 import com.aavu.client.service.Manager;
@@ -44,7 +45,7 @@ public class BlogView extends FTICachingExplorerPanel {
 
 
 		for (Iterator iterator = ftis.iterator(); iterator.hasNext();) {
-			FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();
+			DatedTopicIdentifier fti = (DatedTopicIdentifier) iterator.next();
 
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.add(new TopicLink(fti));

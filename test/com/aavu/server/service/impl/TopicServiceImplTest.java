@@ -25,6 +25,7 @@ import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.service.TopicService;
@@ -122,7 +123,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		System.out.println("after: "+t.getId());
 
-		List<TopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
 
 		assertEquals(2, savedL.size());		
 
@@ -179,7 +180,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<TopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
 
 		//NOTE: getAllTopics doesn't take a User right now. That functionality was only used here.
 		//List<Topic> allTopics = topicDAO.getAllTopics();				
@@ -252,7 +253,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		System.out.println("after: "+t.getId());
 
-		List<TopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
 
 		assertEquals(2, savedL.size());		
 
@@ -538,7 +539,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
 	
 	private void clean() throws HippoBusinessException {
-		List<TopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
 
 		for (TopicIdentifier identifier : savedL) {
 			log.debug("Clean: "+identifier.getTopicTitle());

@@ -193,7 +193,7 @@ public class AddLink implements EntryPoint {
 	 */
 	private void init(){		
 		System.out.println("init()");
-		addL.init(new AsyncCallback(){
+		addL.getExistingLinkAndCreatePanel(new AsyncCallback(){
 			public void onSuccess(Object result) {		
 				System.out.println("init success -> loadGUI");
 				loadGUI((Widget) result);												

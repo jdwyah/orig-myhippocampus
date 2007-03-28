@@ -105,29 +105,8 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 
-	private FullTopicIdentifier[] convertToArray(List<FullTopicIdentifier> list){
-
-		FullTopicIdentifier[] rtn = new FullTopicIdentifier[list.size()];
-		for(int i=0;i<list.size();i++){				
-			FullTopicIdentifier t = list.get(i);
-			t.setLastUpdated(new Date(t.getLastUpdated().getTime()));
-			rtn[i] = t;
-		}
-		return rtn;
-	}
 
 
-
-
-	private TimeLineObj[] convertToArray(List<TimeLineObj> list){
-
-		TimeLineObj[] rtn = new TimeLineObj[list.size()];
-		for(int i=0;i<list.size();i++){				
-			TimeLineObj t = list.get(i);
-			rtn[i] = t;
-		}
-		return rtn;
-	}
 	private Topic[] convertToArray(List<Topic> list){
 
 		log.debug("ConvertToArray");
@@ -205,9 +184,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * @throws HippoException 
 	 * 
 	 */
-	public TopicIdentifier[] getAllTopicIdentifiers() throws HippoException {
+	public List getAllTopicIdentifiers() throws HippoException {
 		try {
-			return convertToArray(topicService.getAllTopicIdentifiers());
+			return topicService.getAllTopicIdentifiers();
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -226,20 +205,26 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		}
 	}
 
-	public List getTimelineObjs(long tag_id) throws HippoException {
-		try {
-			List<TimeLineObj> list = topicService.getTimelineObjs(tag_id);
-			
-			
-			Converter.scan(list);
-			return list;
-
-		} catch (Exception e) {
+	public List<TimeLineObj> getTimeline() throws HippoException {
+		try{
+			return topicService.getTimeline();
+		}  catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
-			throw new HippoException(e);		
+			throw new HippoException(e.getMessage());
 		}
 	}
+	
+	
+	public List<List<TimeLineObj>> getTimelineWithTags(List shoppingList) throws HippoException {
+		try{
+			return topicService.getTimelineWithTags(shoppingList);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}		
+	}	
 
 	public Topic getTopicByID(long topicID) throws HippoException {
 		try {

@@ -9,6 +9,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -38,17 +39,17 @@ public interface TopicService {
 
 	List getAllMetas();
 
-	List<TopicIdentifier> getAllTopicIdentifiers();
+	List<DatedTopicIdentifier> getAllTopicIdentifiers();
 
-	List<TopicIdentifier> getAllTopicIdentifiers(boolean all);
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all);
+	
 	Topic getForID(long topicID);
 
 	Topic getForName(String string);
 	
 	List<TopicIdentifier> getLinksTo(Topic topic);
 
-	List<TimeLineObj> getTimelineObjs(long tagID);
-
+	List<TimeLineObj> getTimeline();
 	List<List<TimeLineObj>>  getTimelineWithTags(List<TopicIdentifier> shoppingList);
 
 	List<FullTopicIdentifier> getTopicIdsWithTag(long id);

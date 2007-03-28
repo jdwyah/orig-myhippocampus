@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
@@ -16,12 +14,11 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.commands.SaveTitleCommand;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.gui.TopicSaveListener;
-import com.aavu.client.service.Manager;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
@@ -115,13 +112,15 @@ public class TopicCache {
 			topicService.getAllTopicIdentifiers(new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
-					TopicIdentifier[] topicIdents = (TopicIdentifier[]) result;
-					System.out.println("rec "+topicIdents.length);
+					List topicIdents = (List) result;
+					System.out.println("rec "+topicIdents.size());
 					topicIdentifiers.clear();
-					for (int i = 0; i < topicIdents.length; i++) {
-						System.out.println("adding! "+i+" id:"+topicIdents[i].getTopicID()+" "+topicIdents[i].getTopicTitle());
-						topicIdentifiers.put(topicIdents[i],null);						
-					}					
+					for (Iterator iter = topicIdents.iterator(); iter.hasNext();) {
+						DatedTopicIdentifier datedID = (DatedTopicIdentifier) iter.next();
+						System.out.println("adding! id:"+datedID.getTopicID()+" "+datedID.getTopicTitle());
+						topicIdentifiers.put(datedID,null);
+					}
+										
 					topicIdentifiersDirty = false;
 					callback.onSuccess(topicIdentifiers.getKeyList());					
 				}
@@ -423,9 +422,11 @@ public class TopicCache {
 	}
 
 
-
-	public void getTimelineObjs(long meta_id, AsyncCallback callback) {
-		topicService.getTimelineObjs(meta_id,callback);
+	public void getAllTimelineObjs(AsyncCallback callback) {
+		topicService.getTimeline(callback);
+	}
+	public void getTimelineObjs(List shoppingList, AsyncCallback callback) {
+		topicService.getTimelineWithTags(shoppingList, callback);
 	}
 
 	public void addSaveListener(TopicSaveListener l){

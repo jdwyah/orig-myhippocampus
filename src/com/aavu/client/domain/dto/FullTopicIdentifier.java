@@ -22,11 +22,6 @@ public class FullTopicIdentifier extends DatedTopicIdentifier implements IsSeria
 	 * @param latitude
 	 * @param longitude
 	 */
-	public FullTopicIdentifier(long topicID, String topicTitle, double latitude, double longitude) {
-		super(topicID,topicTitle);		
-		this.latitudeOnIsland = latitude;
-		this.longitudeOnIsland = longitude;
-	}
 
 	public FullTopicIdentifier(TopicTypeConnector conn) {
 		super(conn.getTopic().getId(),conn.getTopic().getTitle(),conn.getTopic().getCreated(),conn.getTopic().getLastUpdated());

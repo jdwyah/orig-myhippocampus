@@ -7,11 +7,7 @@ public class DatedTopicIdentifier extends TopicIdentifier {
 	private Date created;
 	private Date lastUpdated;
 	
-	public DatedTopicIdentifier(){}
-	
-	public DatedTopicIdentifier(long topicID, String topicTitle) {
-		super(topicID,topicTitle);
-	}
+	public DatedTopicIdentifier(){}	
 
 	public DatedTopicIdentifier(long topicID, String topicTitle,Date created, Date lastUpdated) {
 		super(topicID,topicTitle);

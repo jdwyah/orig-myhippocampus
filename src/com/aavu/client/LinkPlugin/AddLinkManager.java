@@ -33,7 +33,7 @@ public class AddLinkManager implements CloseListener {
 
 
 
-	public void init(final AsyncCallback loadGUICallback) {
+	public void getExistingLinkAndCreatePanel(final AsyncCallback loadGUICallback) {
 		topicService.getWebLinkForURL(url, new AsyncCallback(){
 			public void onFailure(Throwable caught) {
 				System.out.println("ALM fail "+caught.getMessage());

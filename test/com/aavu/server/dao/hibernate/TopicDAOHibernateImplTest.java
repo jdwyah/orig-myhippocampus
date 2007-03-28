@@ -1,13 +1,10 @@
 package com.aavu.server.dao.hibernate;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.springframework.test.AssertThrows;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
@@ -24,6 +21,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -36,16 +34,6 @@ import com.aavu.server.dao.UserDAO;
 import com.aavu.server.service.gwt.Converter;
 import com.aavu.server.service.gwt.NewConverter;
 import com.aavu.server.web.domain.UserPageBean;
-import com.google.gwt.user.client.rpc.SerializationException;
-import com.google.gwt.user.client.rpc.SerializationStreamReader;
-import com.google.gwt.user.client.rpc.SerializationStreamWriter;
-import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
-import com.google.gwt.user.client.rpc.impl.Serializer;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.google.gwt.user.server.rpc.impl.ServerSerializableTypeOracle;
-import com.google.gwt.user.server.rpc.impl.ServerSerializableTypeOracleImpl;
-import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamReader;
-import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter;
 
 public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	private static final Logger log = Logger.getLogger(TopicDAOHibernateImplTest.class);
@@ -124,7 +112,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println("after: "+t.getId());
 
-		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 
 		//tag does not show up bc user not set
 		assertEquals(1, savedL.size());		
@@ -182,7 +170,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 
 		//NOTE: getAllTopics doesn't take a User right now. That functionality was only used here.
 		//List<Topic> allTopics = topicDAO.getAllTopics();				
@@ -361,7 +349,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		t = topicDAO.save(t);
 
-		List<TopicIdentifier> list = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> list = topicDAO.getAllTopicIdentifiers(u);
 
 		assertEquals(1,list.size());
 
@@ -930,7 +918,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 
 		assertEquals(2, savedL.size());
 		
@@ -985,7 +973,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 
 		assertEquals(3, savedL.size());
 		
@@ -1044,7 +1032,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 
 		assertEquals(4, savedL.size());
 		
@@ -1097,7 +1085,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<TopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
 
 		assertEquals(3, savedL.size());
 		

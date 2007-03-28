@@ -8,14 +8,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.gwm.client.event.GFrameAdapter;
+import org.gwm.client.event.GFrameEvent;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeLine;
+import com.aavu.client.gui.timeline.TimeLineConst;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -28,7 +34,18 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 
-
+/**
+ * Wraps a timeline in a GUI that let's us pick from
+ * 1) Last Updated
+ * 2) Created
+ * 3) Metas
+ * 
+ * Uses the functionality of FTICachingExplorerPanel to reduce trips to server if 
+ * we're just looking at Updated or Created, since those should already be loaded.
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class TimeLineWrapper extends FTICachingExplorerPanel {
 
 	private HippoTimeLine timeline;
@@ -39,8 +56,9 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 
 	private List lastLoadedftis;
 
-
-	public TimeLineWrapper(Manager manager, Map defaultMap, int width, int height, CloseListener close) {
+	private TimeLineConst currentStyle = TimeLineConst.UPDATED;
+	
+	public TimeLineWrapper(Manager manager, Map defaultMap, int width, int height, PopupWindow window) {
 		super(manager, defaultMap);
 		
 		VerticalPanel mainP = new VerticalPanel();
@@ -48,53 +66,73 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 		
 		this.manager = manager;
 		
-		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineObj.LAST_UPDATED,ConstHolder.myConstants.timeline_lastUpdated());
-		TimeLineSelector createdB = new TimeLineSelector(TimeLineObj.CREATED,ConstHolder.myConstants.timeline_created());
-		TimeLineSelector metasB = new TimeLineSelector(TimeLineObj.ALL_METAS,ConstHolder.myConstants.timeline_metas());
+		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineConst.UPDATED,ConstHolder.myConstants.timeline_lastUpdated());
+		TimeLineSelector createdB = new TimeLineSelector(TimeLineConst.CREATED,ConstHolder.myConstants.timeline_created());
+		TimeLineSelector metasB = new TimeLineSelector(TimeLineConst.META,ConstHolder.myConstants.timeline_metas());
 		typeSelector.add(lastUpdatedB);
 		typeSelector.add(createdB);
 		typeSelector.add(metasB);
 
 		
-		
-		timeline = new HippoTimeLine(manager,width - 30,height,close);		
+		timeline = new HippoTimeLine(manager,width - 30,height,window);		
 		
 		
 		mainP.add(typeSelector);
 		mainP.add(timeline);		
 		
+		window.addInternalFrameListener(new GFrameAdapter(){
+			//@Override
+			public void frameResized(GFrameEvent evt) {				
+				super.frameResized(evt);
+				resize(evt);
+			}});
+		
 		initWidget(mainP);
 	}
 	
-
+	private void resize(GFrameEvent evt) {
+		timeline.resize(evt);
+	}
+	
 	/**
-	 * We're storing last updated & created already, but if they want date seen, 
-	 * we'll need to go async.
+	 * We're storing last updated & created already, but we need to parse that out of the 
+	 * allIdentifiers list.
 	 * 
-	 * @param style_or_meta
+	 * @param style
 	 * @param allIdentifiers 
 	 * @return
 	 */
-	private void getTimeLinesOfStyle(long style_or_meta,AsyncCallback callback, List allIdentifiers) {
+	private void getTimeLinesOfStyle(TimeLineConst style,AsyncCallback callback, List allIdentifiers) {
 		
-		//not a created || updated, do async lookup of the meta id
-		if(style_or_meta != TimeLineObj.CREATED 
-				&&
-				style_or_meta != TimeLineObj.LAST_UPDATED){
-			manager.getTopicCache().getTimelineObjs(style_or_meta,callback);
+		//not a created || updated, go async
+		if(TimeLineConst.META == style){
+			
+			if(allMode){				
+				manager.getTopicCache().getAllTimelineObjs(callback);				
+			}else{
+				//no caching for now
+				List shoppingList = new ArrayList();
+				
+				for (Iterator iter = tags.iterator(); iter.hasNext();) {
+					TopicIdentifier tag = (TopicIdentifier) iter.next();				
+					shoppingList.add(tag);								
+				}				
+				manager.getTopicCache().getTimelineObjs(shoppingList, callback);				
+			}
+			
 		}else{
 
 			List timelineList = new ArrayList();
 			
 			for (Iterator iter = allIdentifiers.iterator(); iter.hasNext();) {
 			
-				FullTopicIdentifier fti = (FullTopicIdentifier) iter.next();
+				DatedTopicIdentifier fti = (DatedTopicIdentifier) iter.next();
 
 				Date date = null;
-				if(TimeLineObj.CREATED == style_or_meta){
+				if(TimeLineConst.CREATED == style){
 					date = fti.getCreated();
 				}
-				else if(TimeLineObj.LAST_UPDATED == style_or_meta){
+				else if(TimeLineConst.UPDATED == style){
 					date = fti.getLastUpdated();
 				}
 
@@ -116,18 +154,32 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 	 * @author Jeff Dwyer	 
 	 */
 	private class TimeLineSelector extends Button implements ClickListener {
-		private long style_or_meta;
-		public TimeLineSelector(long l, String text){
+		private TimeLineConst style;
+		
+		public TimeLineSelector(TimeLineConst l, String text){
 			super(text);
-			this.style_or_meta = l;
+			this.style = l;
 			addClickListener(this);
 		}
 
 		public void onClick(Widget sender) {					
-			getTimeLinesOfStyle(style_or_meta,new TimeLineLookup(),lastLoadedftis);
+			currentStyle = style;
+			if(TimeLineConst.META == style 
+					&&
+					!allMode){
+				getTimeLinesOfStyle(style,new TimeLineLookupWMerge(),lastLoadedftis);
+			}else{
+				getTimeLinesOfStyle(style,new TimeLineLookup(),lastLoadedftis);
+			}
 		}
 	}
 	
+	/**
+	 * Wrap the call to timeline.load() so that we have the option of doing an async fetch to 
+	 * the server.
+	 * 
+	 * @author Jeff Dwyer
+	 */
 	private class TimeLineLookup extends StdAsyncCallback {
 		public TimeLineLookup(){
 			super("Timeline Lookup");			
@@ -139,45 +191,39 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 		}
 		
 	}
+	/**
+	 * Merge the shopping list style return into one big list.
+	 * 
+	 * Note, could cache here.
+	 * 
+	 * @author Jeff Dwyer	 
+	 */
+	private class TimeLineLookupWMerge extends StdAsyncCallback {
+		public TimeLineLookupWMerge(){
+			super("Timeline Lookup WMerge");			
+		}				
+		//@Override
+		public void onSuccess(Object result) {
+			super.onSuccess(result);
+			List listOfListOfTimelines = (List) result;
+			List all = new ArrayList();
+			for (Iterator iter = listOfListOfTimelines.iterator(); iter.hasNext();) {
+				List ftis = (List) iter.next();
+				all.addAll(ftis);
+			}			
+			timeline.load(all);
+		}		
+	}
 
 	public Widget getWidget() {
 		return this;
 	}
 
-//
-//	public void load(Set tags) {
-//		
-////		
-////		for (Iterator iter = tags.iterator(); iter.hasNext();) {
-////			TopicIdentifier tagIdent = (TopicIdentifier) iter.next();
-////			Set metaDatesForTag = tag.getTagPropertyDates();
-////			for (Iterator iter2 = metaDatesForTag.iterator(); iter2.hasNext();) {
-////				MetaDate datemeta = (MetaDate) iter2.next();
-////				TimeLineSelector metaButton = new TimeLineSelector(datemeta.getId(),datemeta.getTitle());
-////				typeSelector.add(metaButton);
-////			}	
-////		}
-//		
-//		
-//		
-//	}
-
-	//@Override
-//	protected void draw(Set tags) {
-//		List all = new ArrayList();
-//		
-//		for (Iterator iter = tags.iterator(); iter.hasNext();) {			
-//			TopicIdentifier tag = (TopicIdentifier) iter.next();
-//			all.addAll(getFTI(tag));
-//		}
-//		draw(all);
-//	} 
-
 
 	//@Override
 	protected void draw(List ftis) {
 		this.lastLoadedftis = ftis;
-		getTimeLinesOfStyle(TimeLineObj.LAST_UPDATED,new TimeLineLookup(),ftis);		
+		getTimeLinesOfStyle(currentStyle,new TimeLineLookup(),ftis);		
 	}
 
 }

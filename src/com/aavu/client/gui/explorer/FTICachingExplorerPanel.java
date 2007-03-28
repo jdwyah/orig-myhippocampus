@@ -23,6 +23,8 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 	
 	private static Map tagToIdentifierMap;
 	private Manager mananager;
+	protected boolean allMode;	
+	protected Set tags;
 	
 	public FTICachingExplorerPanel(Manager manager, Map existingMap){
 		tagToIdentifierMap = existingMap;
@@ -34,12 +36,8 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 		return this;
 	}
 
-	public void load(final Set tags) {
-		
-		System.out.println("ftu load "+tags.size());
-		
-		//doload		
-		final List shoppingList = new ArrayList();
+	protected List makeShoppingList(final Set tags){
+		List shoppingList = new ArrayList();
 		
 		for (Iterator iter = tags.iterator(); iter.hasNext();) {
 			TopicIdentifier tag = (TopicIdentifier) iter.next();
@@ -51,6 +49,19 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 				shoppingList.add(tag);
 			}			
 		}
+		return shoppingList;
+	}
+	
+	public void load(final Set tags) {
+		this.tags = tags;
+		allMode = false;
+		
+		System.out.println("ftu load "+tags.size());
+		
+		
+		
+		//doload		
+		final List shoppingList = makeShoppingList(tags);
 		
 		if(!shoppingList.isEmpty()){
 			
@@ -90,6 +101,7 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 	}
 	
 	public void loadAll() {
+		allMode = true; 
 		mananager.getTopicCache().getAllTopicIdentifiers( 
 				new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
 					//@Override

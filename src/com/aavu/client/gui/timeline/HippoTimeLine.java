@@ -3,6 +3,8 @@ package com.aavu.client.gui.timeline;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gwm.client.event.GFrameEvent;
+
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.timeline.renderers.HippoRender;
 import com.aavu.client.service.Manager;
@@ -175,6 +177,11 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		closeListener.close();
 		
 		manager.bringUpChart(id);
+	}
+	public void resize(GFrameEvent evt) {		
+		 simileWidget.setWidth(evt.getGFrame().getWidth() - 30 + "px");
+         simileWidget.setHeight(evt.getGFrame().getHeight() + "px");         
+         simileWidget.layout();
 	}
 	
 

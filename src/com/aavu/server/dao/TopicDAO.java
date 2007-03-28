@@ -1,17 +1,16 @@
 package com.aavu.server.dao;
 
 import java.util.List;
-import java.util.Set;
 
-import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -29,9 +28,9 @@ public interface TopicDAO {
 
 	List getAllMetas(User currentUser);
 
-	List<TopicIdentifier> getAllTopicIdentifiers(User user);
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user);
 
-	List<TopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
 	
 	List<Topic> getAllTopics(User u);
 

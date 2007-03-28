@@ -32,6 +32,8 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -245,16 +247,17 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return ll2;
 	}
 
-	private List<TopicIdentifier> getAllTopicIdentifiers(DetachedCriteria crit) {
+	private List<DatedTopicIdentifier> getAllTopicIdentifiers(DetachedCriteria crit) {
 		
 		List<Object[]> list = getHibernateTemplate().findByCriteria(crit);
 
-		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+		List<DatedTopicIdentifier> rtn = new ArrayList<DatedTopicIdentifier>(list.size());
 
 		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
 		for (Object[] o : list){
-			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+			//rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));
+			rtn.add(new DatedTopicIdentifier((Long)o[1],(String)o[0],(Date)o[2],(Date)o[3]));
 		}
 
 		return rtn;
@@ -264,16 +267,16 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	/**
 	 * TODO replace hardcoded class discriminators with .class.
 	 */	
-	public List<TopicIdentifier> getAllTopicIdentifiers(User user) {
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user) {
 		return getAllTopicIdentifiers(user, false);
 	}
 	
 	
 	/**
-	 * user by some unit tests to help wipe a user's account.
+	 * all param is used by some unit tests to help wipe a user's account.
 	 * 
 	 */
-	public List<TopicIdentifier> getAllTopicIdentifiers(User user,boolean all) {
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all) {
 
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class);
 
@@ -474,7 +477,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	private Projection getTopicIdentifier(){
 		return Projections.projectionList()
 		.add(Property.forName("title"))
-		.add(Property.forName("id"));
+		.add(Property.forName("id"))
+		.add(Property.forName("created"))
+		.add(Property.forName("lastUpdated"));
 	}
 
 	public List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user) {

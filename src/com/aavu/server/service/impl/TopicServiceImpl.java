@@ -19,6 +19,7 @@ import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -125,12 +126,12 @@ public class TopicServiceImpl implements TopicService {
 	
 	
 	
-	public List<TopicIdentifier> getAllTopicIdentifiers() {
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
 	}
 
 	
-	public List<TopicIdentifier> getAllTopicIdentifiers(boolean all) {
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
 	}
 
@@ -161,15 +162,18 @@ public class TopicServiceImpl implements TopicService {
 		}
 		return seealsoSingleton;
 	}
-	public List<TimeLineObj> getTimelineObjs(long tagID) {
-		return topicDAO.getTimeline(tagID,userService.getCurrentUser());
-	}
+//	public List<TimeLineObj> getTimelineObjs(long tagID) {
+//		return topicDAO.getTimeline(tagID,userService.getCurrentUser());
+//	}
 
+	public List<TimeLineObj> getTimeline() {
+		return topicDAO.getTimeline(userService.getCurrentUser());
+	}
 	public List<List<TimeLineObj>>  getTimelineWithTags(List<TopicIdentifier> shoppingList) {
 		List<List<TimeLineObj>> rtn = new ArrayList<List<TimeLineObj>>(shoppingList.size());
 				
 		for (TopicIdentifier tag : shoppingList) {
-			rtn.add(getTimelineObjs(tag.getTopicID()));
+			rtn.add(topicDAO.getTimeline(tag.getTopicID(),userService.getCurrentUser()));
 		}		
 		return rtn;		
 	}
