@@ -42,7 +42,7 @@ public class BlogView extends FTICachingExplorerPanel {
 	}
 
 	public void draw(List ftis) {
-
+		mainPanel.clear();
 
 		for (Iterator iterator = ftis.iterator(); iterator.hasNext();) {
 			DatedTopicIdentifier fti = (DatedTopicIdentifier) iterator.next();

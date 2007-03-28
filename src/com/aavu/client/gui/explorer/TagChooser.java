@@ -10,7 +10,6 @@ import java.util.Set;
 import org.gwm.client.GInternalFrame;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
@@ -19,17 +18,21 @@ import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.AddButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TagChooser extends Composite {
 
+	
 	private VerticalPanel mainP;
 	private Manager manager;
 	private VerticalPanel tagP;
@@ -84,7 +87,7 @@ public class TagChooser extends Composite {
 	
 	private void loadAll() {
 		showTags(new HashSet());
-		explorer.setAllMode(true);
+		explorer.loadAll();
 	}
 	
 	
@@ -121,9 +124,7 @@ public class TagChooser extends Composite {
 					System.out.println("stats "+stats.length+" "+((int)Math.ceil((double)stats.length / NUM_COLS))+" "+NUM_COLS);
 					
 					Grid grid = new Grid((int)Math.ceil((double)stats.length / NUM_COLS), NUM_COLS);
-					
-					
-					
+										
 					int row = 0;
 					int col = 0;
 					for (int i = 0; i < stats.length; i++) {
@@ -147,7 +148,7 @@ public class TagChooser extends Composite {
 							col=0;
 						}
 						
-					}
+					}					
 					mainP.insert(grid, 0);
 					
 				}});
@@ -174,17 +175,61 @@ public class TagChooser extends Composite {
 		
 	}
 	
-	private class Picker extends CheckBox {
+	private class Picker extends Label implements ClickListener {
 
+		private static final String CHECKED_STYLE = "H-TagPicker-Checked";
+		private static final String HOVER_STYLE = "H-TagPicker-Hover";
+		
+		public static final double MAX = 3;
+		public static final double TOPIC_SKY = 20;
+		
 		private TagStat stat;
+		private boolean checked;
 
 		public Picker(TagStat stat) {
 			super(stat.getTagName());
 			this.stat = stat;		
+			addStyleName("H-TagPicker");
+			
+			double fontSize = MAX * stat.getNumberOfTopics() / TOPIC_SKY;
+			
+			fontSize = fontSize < 1 ? 1 : fontSize;
+			System.out.println("stat "+stat.getNumberOfTopics()+" "+fontSize);
+			DOM.setStyleAttribute(getElement(), "font-size", fontSize+"em");
+			
+			addClickListener(this);
+			addMouseListener(new MouseListenerAdapter(){
+				//@Override
+				public void onMouseEnter(Widget sender) {
+					addStyleName(HOVER_STYLE);
+				}
+				//@Override
+				public void onMouseLeave(Widget sender) {
+					removeStyleName(HOVER_STYLE);	
+				}});
+		}
+
+		
+		public void setChecked(boolean b) {
+			checked = b;
+			if(isChecked()){
+				addStyleName(CHECKED_STYLE);
+			}else{				
+				removeStyleName(CHECKED_STYLE);				
+			}
+		}
+
+		public boolean isChecked() {
+			return checked;
 		}
 
 		public TopicIdentifier getIdentifier() {
 			return stat.getTopicIdentifier();
+		}
+
+
+		public void onClick(Widget sender) {
+			setChecked(!isChecked());			
 		}
 		
 	}

@@ -1,9 +1,13 @@
 package com.aavu.client.gui.timeline;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.gwm.client.event.GFrameEvent;
+import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.timeline.renderers.HippoRender;
@@ -17,14 +21,19 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
-import com.netthreads.gwt.simile.timeline.client.ITimeLineRender;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.netthreads.gwt.simile.timeline.client.TimeLine;
 import com.netthreads.gwt.simile.timeline.client.TimeLineClickListener;
 import com.netthreads.gwt.simile.timeline.client.TimeLineWidget;
 
 public class HippoTimeLine extends Composite implements TimeLineClickListener {
 
-
+	private static final String TZ = " 00:00:00 GMT-0600";
+	private transient static SimpleDateFormat sdf = new SimpleDateFormat("EE MMM dd yyyy");
+	public static String getDateInJSON(Date date) {
+		return sdf.format(date)+TZ;
+	}
+	
 	private static final int WIDTH = 680;
 	private static final int HEIGHT = 400;
 		
@@ -34,6 +43,10 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 	private TimeLineObj[] timeLinesObjs;
 	private Manager manager;
 	private CloseListener closeListener;
+	private HippoRender render;
+	private SimplePanel holder;
+	private int width;
+	private int height;
 	
 	
 	private static int counter = 0;
@@ -52,16 +65,20 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		this.topicCache = manager.getTopicCache();		
 		this.manager = manager;
 		this.closeListener = close;
+		this.width = width;
+		this.height = height;
 		
 		//timeline = new SimileTimeline("foo_"+counter++);		
 		
 
-		ITimeLineRender render = new HippoRender();
+		render = new HippoRender();
 		System.out.println("SIZE "+width+" "+height);
-		simileWidget = new TimeLineWidget(height+"px",width+"px", render);
-						
-		initWidget(simileWidget);
+		
 	
+		holder = new SimplePanel();
+		
+		initWidget(holder);
+		
 	}
 
 
@@ -113,25 +130,49 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 
 	public void load(List timelines){
 				
-		simileWidget.clearData();
 		
 		if(timelines == null){
 			return;	
 		}
 		
 		
-		
 		JSONObject jo = new JSONObject();
 		JSONArray events = new JSONArray();
+		
+		//<Date,Integer>
+		Map monthBucket = new HashMap();
 		
 		int i = 0;
 		for (Iterator iter = timelines.iterator(); iter.hasNext();) {
 			TimeLineObj tlo = (TimeLineObj) iter.next();
 //			System.out.println("C "+tlo.getJSONObj());
+			
+			Date monthOf = new Date(tlo.getStart().getYear(),tlo.getStart().getMonth(),0);
+			
+			Integer cur = (Integer) monthBucket.get(monthOf);
+			if(cur == null){
+				monthBucket.put(monthOf, new Integer(1));
+			}else{
+				monthBucket.put(monthOf, new Integer(cur.intValue() + 1));
+			}
+			
 			events.set(i, tlo.getJSONObj());	
 			i++;
 		}
-					
+		
+		render.clearHotZones();
+		for (Iterator iter = monthBucket.keySet().iterator(); iter.hasNext();) {
+			Date date = (Date) iter.next();
+			Integer numberOfTimePoints = (Integer) monthBucket.get(date);
+			
+			System.out.println("checking bucket "+date+" "+numberOfTimePoints);
+			
+			if(numberOfTimePoints.intValue() > 10){
+				System.out.println("adding zone ");
+				render.addZone(date,numberOfTimePoints.intValue());
+			}
+		}
+		//render.thing();	
 		
 		jo.put("events",events);		
 		jo.put("dateTimeFormat", new JSONString("iso8601"));
@@ -139,13 +180,14 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		Logger.log("Sending to simile: "+jo.toString());
 		//timeline.load(jo);
 		
-		if(timelines.size() == 0){
+		/*if(timelines.size() == 0){
 			Window.alert(ConstHolder.myConstants.timeline_no_objs_msg());
-		}
+		}*/
 		
-		
+		simileWidget = new TimeLineWidget(height+"px",width+"px", render);	
+				
 		simileWidget.loadJSON(jo.toString());
-		
+				
 		//simileWidget.getTimeLine() is null for a while, so just keep circling back until it isn't
 		Timer t = new Timer(){
 			public void run() {
@@ -158,8 +200,11 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		t.schedule(100);
 		
 		
+		holder.setWidget(simileWidget);
+		
 	}
 	private boolean setClickListener() {
+		
 		TimeLine t = simileWidget.getTimeLine();
 		if(t != null){
 			t.setClickListener(this);
@@ -178,10 +223,12 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		
 		manager.bringUpChart(id);
 	}
-	public void resize(GFrameEvent evt) {		
-		 simileWidget.setWidth(evt.getGFrame().getWidth() - 30 + "px");
-         simileWidget.setHeight(evt.getGFrame().getHeight() + "px");         
-         simileWidget.layout();
+	public void resize(GFrameEvent evt) {
+		if(simileWidget != null){
+			simileWidget.setWidth(evt.getGFrame().getWidth() - 30 + "px");
+			simileWidget.setHeight(evt.getGFrame().getHeight() + "px");         
+			simileWidget.layout();
+		}
 	}
 	
 

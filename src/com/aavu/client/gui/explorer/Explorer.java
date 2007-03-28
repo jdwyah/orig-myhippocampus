@@ -120,8 +120,16 @@ public class Explorer extends Composite {
 		//default to glossary
 		currentView.clear();
 		currentView.add(glossary);
+		
+		azB.onClick(azB);
 	}
 
+
+	public void loadAll() {
+		allmode = true;
+		selectedB.getExplorerP().loadAll();
+	}
+	
 	//Set<TagStat>
 	public void load(Set tagstats) {
 		ExplorerPanel selectedPanel = selectedB.getExplorerP();
@@ -139,13 +147,8 @@ public class Explorer extends Composite {
 			tags.add(tag);
 			
 		}				
-		
+		selectedB.getExplorerP().load(tagstats);
 	}
-	
-	public void setAllMode(boolean allmode){
-		this.allmode = allmode;
-	}
-
 
 	private class ExplorerB extends Button implements ClickListener{
 
@@ -179,5 +182,7 @@ public class Explorer extends Composite {
 			currentView.add(explorerP.getWidget());		
 		}
 	}
+
+
 
 }

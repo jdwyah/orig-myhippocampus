@@ -116,33 +116,6 @@ public class Manager implements TopicSaveListener, LoginListener {
 		}
 	}
 	
-//	public void bringUpChart(final Topic topic, boolean editMode) {
-//		map.displayTopic(topic);
-//		map.centerOn(topic);
-//	}
-	
-//	public void bringUpChart(final Topic topic, boolean editMode) {
-//		
-//		if(topic instanceof Tag){
-//			System.out.println("BRINGING UP TAG "+topic.toPrettyString());
-//			System.out.println(" "+topic.getMetas());
-//			System.out.println(" "+topic.getMetas().size());
-//			getTopicCache().getTopicsWithTag(topic.getId(),new StdAsyncCallback(ConstHolder.myConstants.oceanIslandLookupAsync()){
-//				public void onSuccess(Object result) {
-//					super.onSuccess(result);
-//					FullTopicIdentifier[] topics = (FullTopicIdentifier[]) result;
-//					IslandDetailsWindow tcw = new IslandDetailsWindow((Tag) topic,topics,Manager.this);					
-//				}});
-//						
-//		}else{
-//			System.out.println("BRINGING UP TOPIC "+topic);
-//			TopicWindow tw = new TopicWindow(this,topic);		
-////			if(editMode){
-////				//tw.setToEdit();
-////			}
-//			
-//		}
-//	}
 
 	//public void show(Topic topic, boolean editMode) {
 	
