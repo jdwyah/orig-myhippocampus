@@ -401,6 +401,20 @@ a:visited {
 	border-color: gray;
 }
 
+
+.H-HelpPicker {
+	padding: 5px;
+	margin: 5px;
+}
+
+.H-Help5Qs .gwt-Label {
+	font-size: 1.3em;
+	font-weight: bold;
+}
+.H-Help-Hover {
+	text-decoration: underline;
+}
+
 .H-TagClowd {
 	width: 100px;
 }

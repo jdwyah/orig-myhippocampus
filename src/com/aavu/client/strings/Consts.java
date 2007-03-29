@@ -162,8 +162,6 @@ public interface Consts extends Messages {
 	
 	
 	String gadget_already_showing();
-	String help_welcome();
-	String help_blank_start_1();
 	
 	
 	
@@ -212,12 +210,51 @@ public interface Consts extends Messages {
 	
 	String bigmap_getall_async();
 	
+	
+	String help_welcome();
+	String help_help();
+	
+	
+	String help_who();
+	String help_who_1();
+	String help_who_1_A();
+	String help_who_2();
+	String help_who_2_A();	
+	String help_who_3();
+	String help_who_3_A();	
+	
+	String help_what();
+	String help_what_1();
+	String help_what_1_A();
+	String help_what_2();
+	String help_what_2_A();	
+	String help_what_3();
+	String help_what_3_A();
 		
+	String help_how();
+	String help_how_1();
+	String help_how_1_A();
+	String help_how_2();
+	String help_how_2_A();	
+	String help_how_3();
+	String help_how_3_A();
+
+	String help_why();
+	String help_why_1();
+	String help_why_1_A();
+	String help_why_2();
+	String help_why_2_A();	
+	String help_why_3();
+	String help_why_3_A();
 	
-	
-	
-	
-	
+	String help_where();
+	String help_where_1();
+	String help_where_1_A();
+	String help_where_2();
+	String help_where_2_A();	
+	String help_where_3();
+	String help_where_3_A();
+
 	
 	
 		

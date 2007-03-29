@@ -16,27 +16,28 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class HelpWindow extends PopupWindow {
 
-	private static final int WIDTH = 750;
+	private static final int WIDTH = 550;
 	private static final int HEIGHT = 500;
 	private Manager manager;
 	
-	private HorizontalPanel mainP;
+	private VerticalPanel mainP;
 	
 	public HelpWindow(Manager manager, GInternalFrame frame) {
 		super(frame,ConstHolder.myConstants.help_welcome(),WIDTH,HEIGHT);
 		this.manager = manager;
 
-		mainP = new HorizontalPanel();
+		mainP = new VerticalPanel();
 		
-		mainP.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
-		
-		
-		mainP.add(new Label(ConstHolder.myConstants.help_blank_start_1()));
 				
+		mainP.add(new Label(ConstHolder.myConstants.help_help()));
+				
+		mainP.add(new HelpPicker());
+		
 		setContent(mainP);
 		
 	}
