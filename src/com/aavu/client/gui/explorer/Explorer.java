@@ -52,7 +52,6 @@ public class Explorer extends Composite {
 
 	public Explorer(Manager manager, int width, int height, PopupWindow window) {
 		this(new HashMap(),manager,width,height,window);
-		allmode = true;
 	}
 
 	
@@ -83,7 +82,7 @@ public class Explorer extends Composite {
 				
 		blogView = new BlogView(manager,defaultMap);
 		
-		bigMap = new BigMap(manager);
+		bigMap = new BigMap(manager,width,height);
 		
 		lostNFound = new LostNFound(manager);
 		
@@ -106,6 +105,10 @@ public class Explorer extends Composite {
 		
 		//carfeull, tags = defaultMap.keySet() makes tags a HashMap.KeySet obj and .add() is unsopported
 		tags.addAll(defaultMap.keySet());
+		
+		if(defaultMap.isEmpty()){
+			allmode = true;
+		}
 		
 		CellPanel leftPanel = new VerticalPanel();
 		leftPanel.add(optionsPanel);

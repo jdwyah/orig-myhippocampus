@@ -10,7 +10,7 @@ import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -26,37 +26,41 @@ public interface TopicDAO {
 	void deleteOccurrence(Occurrence o);
 	Topic get(long topicID);
 
+	List<LocationDTO> getLocations(User user);
+	List<LocationDTO> getLocations(long tagID, User user);
+	
 	List getAllMetas(User currentUser);
 
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user);
-
-	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
 	
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
+
 	List<Topic> getAllTopics(User u);
 
 	Topic getForID(User currentUser, long topicID);
 
 	Topic getForName(User user,String string);
-
 	List<TopicIdentifier> getLinksTo(Topic topic,User user);
-	Occurrence getOccurrrence(long id);
 	
+
+	Occurrence getOccurrrence(long id);
+
 	MetaSeeAlso getSeeAlsoSingleton();
 
 	List<TimeLineObj> getTimeline(long tagID, User user);
-
 	List<TimeLineObj> getTimeline(User user);
 
 	List<TopicIdentifier> getTopicForOccurrence(long id);
-	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
 
+	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
+	
 	List<String> getTopicsStarting(User user,String match);
 
 	MindTree getTree(MindTreeOcc occ);
-	
 	WebLink getWebLinkForURI(String url, User currentUser);
 
 	Topic load(long topicID);
+
 	void populateUsageStats(UserPageBean rtn);
 
 	MindTree save(MindTree tree);

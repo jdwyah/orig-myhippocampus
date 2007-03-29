@@ -26,136 +26,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TopicCache {
 
-	public static final ReturnTypeConstant TOPIC = new ReturnTypeConstant(1);
-	public static final ReturnTypeConstant TOPIC_LIST = new ReturnTypeConstant(2);
-
-	private Map topicByName = new HashMap(); 
-	private Map topicByID = new HashMap();
-	private GWTTopicServiceAsync topicService;
-
-	/**
-	 * map with null values. we just need something sortable.
-	 * Map<TopicIdentifiers,null>
-	 */
-	private GWTSortedMap topicIdentifiers = new GWTSortedMap();
-	
-	private List saveListeners = new ArrayList();
-	private boolean topicIdentifiersDirty = true;
-	
-
-	public TopicCache(GWTTopicServiceAsync topicService) {
-		this.topicService = topicService;
-	}
-
-
-
-	public Topic getTopicForName(String topicName) {
-		return (Topic) topicByName.get(topicName);		
-	}
-
-	public Topic getTopicById(long id) {	
-		return (Topic) topicByID.get(new Long(id));
-	}
-
-
-
-	public void getTopic(TopicIdentifier ident, StdAsyncCallback callback) {				
-		Topic t = (Topic) topicByID.get(new Long(ident.getTopicID()));		
-		if(t != null){
-			System.out.println("ti - hit "+ident.getTopicTitle());
-			callback.onSuccess(t);
-		}else{
-			System.out.println("ti - miss "+ident.getTopicTitle());
-			topicService.getTopicForName(ident.getTopicTitle(), new TopicNameCallBack(TOPIC,callback));			
-		}			
-	}
-
-
-	public void getTopicByIdA(long topicID, AsyncCallback callback) {
-
-		Topic t = (Topic) topicByID.get(new Long(topicID));
-
-		if(t != null){
-			System.out.println("hit "+topicID);
-			callback.onSuccess(t);
-		}else{
-			System.out.println("miss "+topicID);
-			topicService.getTopicByID(topicID, new TopicNameCallBack(TOPIC,callback));			
-		}			
-
-	}
-
-	public void getTopicForNameA(String topicName, AsyncCallback callback) {
-
-		Topic t = (Topic) topicByName.get(topicName);
-
-		if(t != null){
-			System.out.println("hit "+topicName);
-			callback.onSuccess(t);
-		}else{
-			System.out.println("miss "+topicName);
-			topicService.getTopicForName(topicName, new TopicNameCallBack(TOPIC,callback));			
-		}			
-
-	}
-
-
-	/**
-	 * return the identifier list or set it if 1st call
-	 * 
-	 * @param callback
-	 */
-	public void getAllTopicIdentifiers(final AsyncCallback callback) {
-		if(!topicIdentifiersDirty){
-			callback.onSuccess(topicIdentifiers.getKeyList());			
-		} else {
-			topicService.getAllTopicIdentifiers(new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
-				public void onSuccess(Object result) {
-					super.onSuccess(result);
-					List topicIdents = (List) result;
-					System.out.println("rec "+topicIdents.size());
-					topicIdentifiers.clear();
-					for (Iterator iter = topicIdents.iterator(); iter.hasNext();) {
-						DatedTopicIdentifier datedID = (DatedTopicIdentifier) iter.next();
-						System.out.println("adding! id:"+datedID.getTopicID()+" "+datedID.getTopicTitle());
-						topicIdentifiers.put(datedID,null);
-					}
-										
-					topicIdentifiersDirty = false;
-					callback.onSuccess(topicIdentifiers.getKeyList());					
-				}
-				public void onFailure(Throwable caught) {
-					callback.onFailure(caught);
-				}});		
-		}
-	}
-
-	/**
-	 * Ok, here's how this works. We don't want to serialize the whole topic, send it to the 
-	 * server and then hope/pray/hack that things get saved right with respect to all of the
-	 * lazy loading / persistent set / CGLIB etc munging that we did on the way to the client.
-	 * 
-	 * Instead we implement our logic in commands. 
-	 * 
-	 * These nuggets have everything they need to affect the changes. 
-	 * We'll run them here on the client, to update our local state, but then we'll serialize
-	 * them and send them over to the server where they will be hydrated, run and saved.
-	 * 
-	 * @param topic
-	 * @param command
-	 * @param callback
-	 */
-	public void executeCommand(Topic topic, AbstractCommand command, AsyncCallback callback) {
-		
-		try {
-			command.executeCommand();
-		} catch (HippoBusinessException e) {
-			Logger.log("command execution problem: "+e);
-		}
-		
-		topicService.saveCommand(command,new SaveCallbackWrapper(topic,command,callback));		
-	}	
-	
 	/**
 	 * Call the save listeners on success, then pass the results back to the original caller.
 	 * @author Jeff Dwyer
@@ -185,6 +55,158 @@ public class TopicCache {
 			
 			callback.onSuccess(result);
 		}
+	}
+	/**
+	 * This callback expects to be onSuccessed once the topicIdentifiers have been loaded
+	 * 
+	 *  onSuccess shoudl be called with null.
+	 */
+	private class TopicLookupOrNewCallback implements AsyncCallback {
+
+		private AsyncCallback originalCallback;
+		private String linkTo;
+
+		public TopicLookupOrNewCallback(AsyncCallback originalCallback,String linkTo) {
+			this.originalCallback = originalCallback;
+			this.linkTo = linkTo;
+		}
+		public void onFailure(Throwable caught) {					
+			originalCallback.onFailure(caught);
+		}
+		public void onSuccess(Object result) {
+			TopicIdentifier found = CacheUtils.searchTopics(topicIdentifiers,linkTo);
+			
+			if(found != null){
+				System.out.println("Found "+found);
+				originalCallback.onSuccess(found);			
+			}
+			else{
+				System.out.println("Create New! ");
+				createNew(linkTo, false, originalCallback);
+								
+			}
+		}
+		
+	}
+
+	/**
+	 * a callback that wraps the real callback, but caches the returned topic
+	 * 
+	 * you know, closures/first order functions could make this wayyy cooler.
+	 * 
+	 * @author Jeff Dwyer
+	 *
+	 */
+	private class TopicNameCallBack implements AsyncCallback {
+
+		private AsyncCallback callback;
+		private ReturnTypeConstant rtn;
+
+		public TopicNameCallBack(ReturnTypeConstant rtn, AsyncCallback callback) {
+			this.callback = callback;	
+			this.rtn = rtn;
+		}
+		public void onFailure(Throwable caught) {
+			callback.onFailure(caught);
+		}
+		public void onSuccess(Object result) {
+
+			if(rtn == TOPIC){
+				
+				System.out.println("res "+result);
+				
+				Topic t = (Topic) result;
+				
+				System.out.println("rec "+t);
+				if(t != null){
+					//Logger.debug("rec: "+t.toPrettyString());
+					System.out.println("single adding to cache title:"+t.getTitle());
+				}
+				//topicByName.put(t.getTitle(), t);
+				//topicByID.put(new Long(t.getId()), t);
+				
+
+			}else if(rtn == TOPIC_LIST){
+				Topic[] t = (Topic[]) result;
+				//	if(t.)
+				for (int i = 0; i < t.length; i++) {					
+					Topic topic = t[i];
+					System.out.println("list adding to cache "+topic.getTitle());
+					//topicByName.put(topic.getTitle(), topic);
+					//topicByID.put(new Long(topic.getId()), topic);
+					
+					
+				}				
+			}
+
+
+			callback.onSuccess(result);
+		}
+
+	} 
+	public static final ReturnTypeConstant TOPIC = new ReturnTypeConstant(1);
+	public static final ReturnTypeConstant TOPIC_LIST = new ReturnTypeConstant(2);
+
+	private Map topicByName = new HashMap();
+	
+	private Map topicByID = new HashMap();
+	private GWTTopicServiceAsync topicService;
+	
+
+	/**
+	 * map with null values. we just need something sortable.
+	 * Map<TopicIdentifiers,null>
+	 */
+	private GWTSortedMap topicIdentifiers = new GWTSortedMap();
+
+
+
+	private List saveListeners = new ArrayList();
+
+	private boolean topicIdentifiersDirty = true;
+
+
+
+	public TopicCache(GWTTopicServiceAsync topicService) {
+		this.topicService = topicService;
+	}
+
+
+	public void addSaveListener(TopicSaveListener l){
+		saveListeners.add(l);
+	}
+
+	public void changeState(long id, boolean b, AsyncCallback callback) {
+		topicService.changeState(id, b, callback);
+	}
+
+
+	/**
+	 * All new topic creation shoudl route through here
+	 * 
+	 * @param title
+	 * @param isIsland
+	 * @param callback
+	 */
+	public void createNew(String title, boolean isIsland, AsyncCallback callback) {
+		//TODO inefficient. We should wrap & insert instead of doing a full lookup
+		topicIdentifiersDirty = true;
+		
+		if(isIsland){
+			createNew(title, new Tag(),callback);
+		}else{
+			createNew(title, new Topic(),callback);
+		}
+	}
+
+	public void createNew(String title, Topic topicOrTagOrMeta, AsyncCallback callback) {
+				
+		topicService.createNew(title, topicOrTagOrMeta, callback);		
+	}	
+	
+	public void delete(Topic topic, StdAsyncCallback callback) {
+		topicService.delete(topic,callback);
+		//TODO update after delete
 	}
 	
 
@@ -280,90 +302,146 @@ public class TopicCache {
 //
 //	}
 
-	public void match(String match, AsyncCallback call) {
-		topicService.match(match, call);		
+	public void deleteOccurrence(WebLink link, AsyncCallback callback) {
+		topicService.deleteOccurrence(link.getId(), callback);		
 	}
 
 	/**
-	 * callback for List<TopicIdentifier>
-	 * @param id
+	 * Ok, here's how this works. We don't want to serialize the whole topic, send it to the 
+	 * server and then hope/pray/hack that things get saved right with respect to all of the
+	 * lazy loading / persistent set / CGLIB etc munging that we did on the way to the client.
+	 * 
+	 * Instead we implement our logic in commands. 
+	 * 
+	 * These nuggets have everything they need to affect the changes. 
+	 * We'll run them here on the client, to update our local state, but then we'll serialize
+	 * them and send them over to the server where they will be hydrated, run and saved.
+	 * 
+	 * @param topic
+	 * @param command
 	 * @param callback
 	 */
-	public void getTopicsWithTag(long id, StdAsyncCallback callback) {
-		topicService.getTopicIdsWithTag(id,callback);
+	public void executeCommand(Topic topic, AbstractCommand command, AsyncCallback callback) {
+		
+		try {
+			command.executeCommand();
+		} catch (HippoBusinessException e) {
+			Logger.log("command execution problem: "+e);
+		}
+		
+		topicService.saveCommand(command,new SaveCallbackWrapper(topic,command,callback));		
+	}
+
+
+	public void getAllLocations(AsyncCallback callback) {
+		topicService.getAllLocations(callback);
+	}
+
+
+	public void getAllMetasOfType(Meta type, AsyncCallback callback) {		
+		topicService.getAllMetas(callback);
+	}
+
+
+	public void getAllTimelineObjs(AsyncCallback callback) {
+		topicService.getTimeline(callback);
 	}
 
 
 	/**
-	 * returns List<List<FullTopicIdentifier>>
-	 * @param shoppingList
+	 * return the identifier list or set it if 1st call
+	 * 
 	 * @param callback
 	 */
-	public void getTopicsWithTag(List shoppingList, StdAsyncCallback callback) {
-		topicService.getTopicsWithTags(shoppingList,callback);
-	}
-
-
-	/**
-	 * a callback that wraps the real callback, but caches the returned topic
-	 * 
-	 * you know, closures/first order functions could make this wayyy cooler.
-	 * 
-	 * @author Jeff Dwyer
-	 *
-	 */
-	private class TopicNameCallBack implements AsyncCallback {
-
-		private AsyncCallback callback;
-		private ReturnTypeConstant rtn;
-
-		public TopicNameCallBack(ReturnTypeConstant rtn, AsyncCallback callback) {
-			this.callback = callback;	
-			this.rtn = rtn;
-		}
-		public void onFailure(Throwable caught) {
-			callback.onFailure(caught);
-		}
-		public void onSuccess(Object result) {
-
-			if(rtn == TOPIC){
-				
-				System.out.println("res "+result);
-				
-				Topic t = (Topic) result;
-				
-				System.out.println("rec "+t);
-				if(t != null){
-					//Logger.debug("rec: "+t.toPrettyString());
-					System.out.println("single adding to cache title:"+t.getTitle());
+	public void getAllTopicIdentifiers(final AsyncCallback callback) {
+		if(!topicIdentifiersDirty){
+			callback.onSuccess(topicIdentifiers.getKeyList());			
+		} else {
+			topicService.getAllTopicIdentifiers(new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
+				public void onFailure(Throwable caught) {
+					callback.onFailure(caught);
 				}
-				//topicByName.put(t.getTitle(), t);
-				//topicByID.put(new Long(t.getId()), t);
-				
-
-			}else if(rtn == TOPIC_LIST){
-				Topic[] t = (Topic[]) result;
-				//	if(t.)
-				for (int i = 0; i < t.length; i++) {					
-					Topic topic = t[i];
-					System.out.println("list adding to cache "+topic.getTitle());
-					//topicByName.put(topic.getTitle(), topic);
-					//topicByID.put(new Long(topic.getId()), topic);
-					
-					
-				}				
-			}
-
-
-			callback.onSuccess(result);
+				public void onSuccess(Object result) {
+					super.onSuccess(result);
+					List topicIdents = (List) result;
+					System.out.println("rec "+topicIdents.size());
+					topicIdentifiers.clear();
+					for (Iterator iter = topicIdents.iterator(); iter.hasNext();) {
+						DatedTopicIdentifier datedID = (DatedTopicIdentifier) iter.next();
+						System.out.println("adding! id:"+datedID.getTopicID()+" "+datedID.getTopicTitle());
+						topicIdentifiers.put(datedID,null);
+					}
+										
+					topicIdentifiersDirty = false;
+					callback.onSuccess(topicIdentifiers.getKeyList());					
+				}});		
 		}
-
+	}
+	public void getLinksTo(Topic topic2, StdAsyncCallback callback) {
+		topicService.getLinksTo(topic2, callback);
 	}
 
 
+	public void getLocationsFor(List shoppingList, AsyncCallback callback) {
+		topicService.getLocationsForTags(shoppingList, callback);
+	}
 	public int getNumberOfTopics() {
 		return topicIdentifiers.size();
 	}
+
+	public void getTimelineObjs(List shoppingList, AsyncCallback callback) {
+		topicService.getTimelineWithTags(shoppingList, callback);
+	}
+
+
+
+	public void getTopic(TopicIdentifier ident, StdAsyncCallback callback) {				
+		Topic t = (Topic) topicByID.get(new Long(ident.getTopicID()));		
+		if(t != null){
+			System.out.println("ti - hit "+ident.getTopicTitle());
+			callback.onSuccess(t);
+		}else{
+			System.out.println("ti - miss "+ident.getTopicTitle());
+			topicService.getTopicForName(ident.getTopicTitle(), new TopicNameCallBack(TOPIC,callback));			
+		}			
+	}
+
+	public Topic getTopicById(long id) {	
+		return (Topic) topicByID.get(new Long(id));
+	}
+	public void getTopicByIdA(long topicID, AsyncCallback callback) {
+
+		Topic t = (Topic) topicByID.get(new Long(topicID));
+
+		if(t != null){
+			System.out.println("hit "+topicID);
+			callback.onSuccess(t);
+		}else{
+			System.out.println("miss "+topicID);
+			topicService.getTopicByID(topicID, new TopicNameCallBack(TOPIC,callback));			
+		}			
+
+	}
+	public Topic getTopicForName(String topicName) {
+		return (Topic) topicByName.get(topicName);		
+	}
+
+
+
+	public void getTopicForNameA(String topicName, AsyncCallback callback) {
+
+		Topic t = (Topic) topicByName.get(topicName);
+
+		if(t != null){
+			System.out.println("hit "+topicName);
+			callback.onSuccess(t);
+		}else{
+			System.out.println("miss "+topicName);
+			topicService.getTopicForName(topicName, new TopicNameCallBack(TOPIC,callback));			
+		}			
+
+	}
+
 
 
 	/**
@@ -388,72 +466,36 @@ public class TopicCache {
 			ourCall.onSuccess(null);
 		}		
 	}
+
+
+
 	/**
-	 * This callback expects to be onSuccessed once the topicIdentifiers have been loaded
-	 * 
-	 *  onSuccess shoudl be called with null.
+	 * returns List<List<FullTopicIdentifier>>
+	 * @param shoppingList
+	 * @param callback
 	 */
-	private class TopicLookupOrNewCallback implements AsyncCallback {
-
-		private AsyncCallback originalCallback;
-		private String linkTo;
-
-		public TopicLookupOrNewCallback(AsyncCallback originalCallback,String linkTo) {
-			this.originalCallback = originalCallback;
-			this.linkTo = linkTo;
-		}
-		public void onFailure(Throwable caught) {					
-			originalCallback.onFailure(caught);
-		}
-		public void onSuccess(Object result) {
-			TopicIdentifier found = CacheUtils.searchTopics(topicIdentifiers,linkTo);
-			
-			if(found != null){
-				System.out.println("Found "+found);
-				originalCallback.onSuccess(found);			
-			}
-			else{
-				System.out.println("Create New! ");
-				createNew(linkTo, false, originalCallback);
-								
-			}
-		}
-		
+	public void getTopicsWithTag(List shoppingList, StdAsyncCallback callback) {
+		topicService.getTopicsWithTags(shoppingList,callback);
 	}
-
-
-	public void getAllTimelineObjs(AsyncCallback callback) {
-		topicService.getTimeline(callback);
-	}
-	public void getTimelineObjs(List shoppingList, AsyncCallback callback) {
-		topicService.getTimelineWithTags(shoppingList, callback);
-	}
-
-	public void addSaveListener(TopicSaveListener l){
-		saveListeners.add(l);
+	/**
+	 * callback for List<TopicIdentifier>
+	 * @param id
+	 * @param callback
+	 */
+	public void getTopicsWithTag(long id, StdAsyncCallback callback) {
+		topicService.getTopicIdsWithTag(id,callback);
 	}
 
 
 
-	public void getLinksTo(Topic topic2, StdAsyncCallback callback) {
-		topicService.getLinksTo(topic2, callback);
-	}
-
-	public void search(String text, StdAsyncCallback callback) {		
-		topicService.search(text, callback);		
-	}
 	public void getTreeFor(MindTreeOcc treeOcc, StdAsyncCallback callback) {
 		topicService.getTree(treeOcc, callback);
 	}
-	public void saveTree(MindTree mindTree, StdAsyncCallback callback) {
-		topicService.saveTree(mindTree, callback);
-	}
 
 
 
-	public void delete(Topic topic, StdAsyncCallback callback) {
-		topicService.delete(topic,callback);
-		//TODO update after delete
+	public void match(String match, AsyncCallback call) {
+		topicService.match(match, call);		
 	}
 
 
@@ -464,47 +506,13 @@ public class TopicCache {
 
 
 
-	/**
-	 * All new topic creation shoudl route through here
-	 * 
-	 * @param title
-	 * @param isIsland
-	 * @param callback
-	 */
-	public void createNew(String title, boolean isIsland, AsyncCallback callback) {
-		//TODO inefficient. We should wrap & insert instead of doing a full lookup
-		topicIdentifiersDirty = true;
-		
-		if(isIsland){
-			createNew(title, new Tag(),callback);
-		}else{
-			createNew(title, new Topic(),callback);
-		}
-	}
-	public void createNew(String title, Topic topicOrTagOrMeta, AsyncCallback callback) {
-				
-		topicService.createNew(title, topicOrTagOrMeta, callback);		
+	public void saveTree(MindTree mindTree, StdAsyncCallback callback) {
+		topicService.saveTree(mindTree, callback);
 	}
 
-
-
-	public void changeState(long id, boolean b, AsyncCallback callback) {
-		topicService.changeState(id, b, callback);
+	public void search(String text, StdAsyncCallback callback) {		
+		topicService.search(text, callback);		
 	}
-
-
-
-	public void deleteOccurrence(WebLink link, AsyncCallback callback) {
-		topicService.deleteOccurrence(link.getId(), callback);		
-	}
-
-
-
-	public void getAllMetasOfType(Meta type, AsyncCallback callback) {		
-		topicService.getAllMetas(callback);
-	}
-
-
 
 
 

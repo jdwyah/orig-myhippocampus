@@ -197,7 +197,11 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		
 		focusBackdrop = new EventBackdrop();
 		focusBackdrop.addMouseListener(this);
+		
+		//added in order because the event can be cancelled
+		focusBackdrop.addWheelistener(manager);
 		focusBackdrop.addWheelistener(this);
+		
 		focusBackdrop.addKeyboardListener(oceanKeyboardListener);
 		add(focusBackdrop,0,0);
 
@@ -727,12 +731,13 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		return backY;
 	}
 
-	public void onWheel(Widget widget, int delta) {
+	public boolean onWheel(Widget widget, int delta) {
 		if(delta < 0){
 			zoomOut();
 		}else{
 			zoomIn();
 		}
+		return false;
 	}
 
 	public void update(Tag t, AbstractCommand command) {

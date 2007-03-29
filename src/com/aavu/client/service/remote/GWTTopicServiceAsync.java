@@ -76,6 +76,12 @@ public interface GWTTopicServiceAsync {
 
 	//List<SearchResult>
 	void search(String searchString,AsyncCallback callback);
+
+
+	void getAllLocations(AsyncCallback callback);
+
+
+	void getLocationsForTags(List shoppingList, AsyncCallback callback);
 }
 
 

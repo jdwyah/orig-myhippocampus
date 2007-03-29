@@ -2,14 +2,23 @@ package com.aavu.client.gui.dhtmlIslands;
 
 import com.aavu.client.gui.ext.SourcesWheelEvents;
 import com.aavu.client.gui.ext.WheelListener;
+import com.aavu.client.gui.ext.WheelListenerCollection;
+import com.aavu.client.gui.ext.WheelListenerCollectionCancellable;
+import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EventBackdrop extends FocusPanel implements SourcesWheelEvents {
 
-	private WheelListener wheelListener;
-	
+	/**
+	 * cancellable collection so that if the manager says one of the maps have 
+	 * consumed the event, we won't pass on the event to the Ocean
+	 * 
+	 */
+	private WheelListenerCollectionCancellable listeners;
+		
 	public EventBackdrop(){
 		setWidth("100%");
 		setHeight("100%");
@@ -20,16 +29,19 @@ public class EventBackdrop extends FocusPanel implements SourcesWheelEvents {
 	}
 	
 	public void scrollDelta(int delta){
-		if(wheelListener != null){
-			wheelListener.onWheel(this, delta);
+		if(listeners != null){
+			listeners.fireWheel(this, delta);
 		}
 	}
 
 	/**
-	 * WARN can only add one listener.
+	 * 
 	 */
 	public void addWheelistener(WheelListener listener) {
-		wheelListener = listener;
+		if(listeners == null){
+			listeners = new WheelListenerCollectionCancellable();
+		}
+		listeners.add(listener);
 	}
 	
 	

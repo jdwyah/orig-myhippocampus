@@ -210,6 +210,8 @@ public interface Consts extends Messages {
 	String explorer_map();
 	String explorer_lostFound();
 	
+	String bigmap_getall_async();
+	
 		
 	
 	

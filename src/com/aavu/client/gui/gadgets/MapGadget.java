@@ -13,8 +13,10 @@ import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
+import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.maps.HippoMapWidget;
+import com.aavu.client.gui.maps.MapController;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.DeleteButton;
@@ -32,10 +34,12 @@ import com.mapitz.gwt.googleMaps.client.GLatLng;
  * @author Jeff Dwyer
  *
  */
-public class MapGadget extends MetaGadget implements TopicLoader {
+public class MapGadget extends MetaGadget implements TopicLoader, MapController {
 	
 
-	private Meta selectedMeta;
+	private static final int DEFAULT_ZOOM = 1;
+
+	private MetaLocation selectedMeta;
 	
 	private Topic myTopic;	
 	private Manager manager;
@@ -49,8 +53,9 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 		this.manager = _manager;
 		    
 		
-		mapWidget = new HippoMapWidget(this);
-
+		mapWidget = new HippoMapWidget(this,200,200,DEFAULT_ZOOM);		
+		manager.addWheelistener(mapWidget);
+		
 		extraPanel.add(mapWidget);
 	}
 	
@@ -92,11 +97,11 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 		makeVisible();
 		
 		
-		MetaW metaWidge = new MetaW(meta,showDelete);		
+		MetaW metaWidge = new MetaW((MetaLocation)meta,showDelete);		
 		
 		metasPanel.add(metaWidge);
 		
-		selectedMeta = meta;
+		selectedMeta = (MetaLocation) meta;
 		
 		//HippoLocation mv = (HippoLocation) myTopic.getSingleMetaValueFor(meta);
 		
@@ -111,10 +116,10 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 
 	private class MetaW extends VerticalPanel implements ClickListener {
 
-		private Meta meta;
+		private MetaLocation meta;
 		private Label title;		
 
-		public MetaW(Meta _meta, boolean showDelete) {
+		public MetaW(MetaLocation _meta, boolean showDelete) {
 			this.meta = _meta;
 			
 			Set locations = myTopic.getMetaValuesFor(meta);
@@ -147,7 +152,9 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 				
 				add(new LocationLabel(location));
 				
-				mapWidget.add(meta,location);
+				LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(),location,meta);
+				
+				mapWidget.add(locObj);
 				mapWidget.centerOn(location);
 			}
 		}
@@ -180,14 +187,16 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 	}
 
 	
-	public HippoLocation getNewLocationForPoint(GLatLng point) {
+	public LocationDTO getNewLocationForPoint(GLatLng point) {
 		if(selectedMeta != null){
 			HippoLocation newLoc = new HippoLocation();
 			newLoc.setLocation(point);
 			
 			saveLocation(selectedMeta,newLoc);
 			
-			return newLoc;
+			LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(),newLoc,selectedMeta);
+			
+			return locObj;
 		}else{
 			Window.alert("Click the green + to add a location type");
 			return null;
@@ -218,18 +227,17 @@ public class MapGadget extends MetaGadget implements TopicLoader {
 
 
 
-	public void userSelected(HippoLocation selected) {
-		// TODO Auto-generated method stub
+	public void userClicked(LocationDTO selected) {
+		System.out.println("selected "+selected);
 		
 	}
 
 
 
-	public void update(HippoLocation dragged) {
+	public void update(LocationDTO dragged) {
 		System.out.println("Update "+dragged+" selectedMeta "+selectedMeta);
 		Set locations = myTopic.getMetaValuesFor(selectedMeta);		
-		locations.add(dragged);
-		
+		locations.add(dragged.getLocation());		
 		
 		System.out.println("Updating locations size "+locations.size());
 		for (Iterator iter = locations.iterator(); iter.hasNext();) {

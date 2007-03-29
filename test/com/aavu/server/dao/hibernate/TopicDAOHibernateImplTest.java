@@ -1,5 +1,7 @@
 package com.aavu.server.dao.hibernate;
 
+import glassbox.thread.context.MonitorContextLoaderManagement.SavedContext;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +11,7 @@ import org.apache.log4j.Logger;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoDate;
+import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaLocation;
@@ -22,6 +25,7 @@ import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -609,6 +613,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(12,allTopics.size());
 	}
 
+	
 
 
 	public void testGetTimeline(){
@@ -714,6 +719,121 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
+	
+	public void testGetMapAll_1() throws HippoBusinessException{
+
+		Topic t1 = new Topic(u,C);
+		
+		
+		MetaLocation md = new MetaLocation();
+		md.setTitle("Where");
+
+		HippoLocation loc = new HippoLocation();
+		loc.setLatitude(400);
+		loc.setLongitude(350);
+		
+		t1.addMetaValue(md, loc);
+		
+		t1  = topicDAO.save(t1);
+
+		List<LocationDTO> list = topicDAO.getLocations(u);
+
+		assertEquals(1, list.size());
+		
+		for (LocationDTO sloc : list) {
+			System.out.println("LocationDTO "+sloc);
+		}
+		
+		System.out.println("list "+list.size());
+	}
+	
+	/**
+	 * NOTE: if HippoLocation titles are not set, the association will get the same name 
+	 * and this may trigger a .eq where we don't really want it, leading to association #2
+	 * not getting added.
+	 * 
+	 * TODO, change association .eq() to not .eq() based on title??
+	 * 
+	 * @throws HippoBusinessException
+	 */
+	public void testGetMapAll_2() throws HippoBusinessException{
+
+		//Add a topic w/ 2 meta locations. 
+		//Make sure that 'limitToTheseMetas' works
+		//
+		Topic t1 = new Topic(u,C);
+				
+		MetaLocation md = new MetaLocation();
+		md.setTitle("Where");
+		HippoLocation loc = new HippoLocation();
+		loc.setTitle("555, 2323");
+		loc.setLatitude(555);
+		loc.setLongitude(2323);
+		t1.addMetaValue(md, loc,false);		
+		t1  = topicDAO.save(t1);
+		
+		System.out.println("FIRST "+t1.toPrettyString());
+		
+		MetaLocation md2 = new MetaLocation();
+		md2.setTitle("Birthplace");
+		HippoLocation loc2 = new HippoLocation();
+		loc2.setTitle("999, 111");
+		loc2.setLatitude(999);
+		loc2.setLongitude(111);					
+		t1.addMetaValue(md2, loc2,false);		
+		
+		System.out.println("SAVING "+t1.toPrettyString());
+		
+		t1  = topicDAO.save(t1);
+						
+		Topic saved = topicDAO.getForName(u, C);
+		System.out.println("SAVED "+saved.toPrettyString());
+		
+		
+		List<LocationDTO> list = topicDAO.getLocations(u);
+		assertEquals(2, list.size());
+		
+		for (LocationDTO sloc : list) {
+			System.out.println("Location "+sloc);
+		}
+		
+		System.out.println("2");		
+		
+		
+		
+		//
+		//add a second topic, with a meta date for each meta
+		//
+		Topic t2 = new Topic(u,E);
+		Tag tag = new Tag(u,D);
+		t2.tagTopic(tag);
+		
+	
+		int i = 0;
+		for (Iterator iter = t1.getMetas().iterator(); iter.hasNext();) {
+			Meta m = (Meta) iter.next();
+		
+			HippoLocation aloc = new HippoLocation();
+			aloc.setTitle(i+", 3344");
+			aloc.setLatitude(i);
+			aloc.setLongitude(3344);					
+			t2.addMetaValue(m, aloc);		
+			t2  = topicDAO.save(t2);
+			i++;
+		}		
+		
+		list = topicDAO.getLocations(u);
+		assertEquals(4, list.size());
+		
+		Tag tt = (Tag) t2.getTags().iterator().next();
+		
+		list = topicDAO.getLocations(tt.getId(),u);		
+		assertEquals(2, list.size());
+		
+		
+		
+	}
+	
 	
 	public void testSubjectSave() throws HippoBusinessException {
 		Topic t = new Topic(u,B);

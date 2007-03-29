@@ -4,13 +4,13 @@ import java.util.List;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -37,19 +37,23 @@ public interface TopicService {
 
 	void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException;
 
+	List<LocationDTO> getAllLocations();
+
 	List getAllMetas();
 
 	List<DatedTopicIdentifier> getAllTopicIdentifiers();
-
+	
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all);
-	
-	Topic getForID(long topicID);
 
-	Topic getForName(String string);
+	Topic getForID(long topicID);
 	
-	List<TopicIdentifier> getLinksTo(Topic topic);
+	Topic getForName(String string);
+
+	List<TopicIdentifier> getLinksTo(Topic topic);	
+	List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList);
 
 	List<TimeLineObj> getTimeline();
+
 	List<List<TimeLineObj>>  getTimelineWithTags(List<TopicIdentifier> shoppingList);
 
 	List<FullTopicIdentifier> getTopicIdsWithTag(long id);
@@ -59,16 +63,14 @@ public interface TopicService {
 	List<String> getTopicsStarting(String match);
 
 	MindTree getTree(MindTreeOcc occ);
-
+	
 	UserPageBean getUserPageBean(User su);
 
 	WebLink getWebLinkForURL(String url);
-	
+
 	Occurrence save(Occurrence link);
 
 	Topic save(Topic topic) throws HippoBusinessException;
-
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
-
 	MindTree saveTree(MindTree tree);
 }

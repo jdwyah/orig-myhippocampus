@@ -21,6 +21,7 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -117,35 +118,47 @@ public class TopicServiceImpl implements TopicService {
 		saveCommand(command);	
 	}
 	
-	public List getAllMetas() {		
-		return topicDAO.getAllMetas(userService.getCurrentUser());
+	public List<LocationDTO> getAllLocations() {	
+		return topicDAO.getLocations(userService.getCurrentUser());
 	}
 	
 	
 	
 	
 	
+	
+	public List getAllMetas() {		
+		return topicDAO.getAllMetas(userService.getCurrentUser());
+	}
+
 	
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
 	}
 
-	
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
 	}
 
+	
+	
 	public Topic getForID(long topicID) {
 		return topicDAO.getForID(userService.getCurrentUser(),topicID);
 	}
-
-	
-	
 	public Topic getForName(String string) {
 		return topicDAO.getForName(userService.getCurrentUser(),string);
 	}
 	public List<TopicIdentifier> getLinksTo(Topic topic) {
 		return topicDAO.getLinksTo(topic, userService.getCurrentUser());
+	}
+
+	public List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList) {
+		List<List<LocationDTO>> rtn = new ArrayList<List<LocationDTO>>(shoppingList.size());
+		
+		for (TopicIdentifier tag : shoppingList) {
+			rtn.add(topicDAO.getLocations(tag.getTopicID(),userService.getCurrentUser()));
+		}		
+		return rtn;		
 	}
 	public MetaSeeAlso getSeeAlsoMetaSingleton() throws HippoBusinessException{		
 		if(seealsoSingleton == null){
@@ -165,7 +178,6 @@ public class TopicServiceImpl implements TopicService {
 //	public List<TimeLineObj> getTimelineObjs(long tagID) {
 //		return topicDAO.getTimeline(tagID,userService.getCurrentUser());
 //	}
-
 	public List<TimeLineObj> getTimeline() {
 		return topicDAO.getTimeline(userService.getCurrentUser());
 	}
@@ -206,6 +218,7 @@ public class TopicServiceImpl implements TopicService {
 	public List<String> getTopicsStarting(String match) {
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
+	
 	public MindTree getTree(MindTreeOcc occ) {
 		return topicDAO.getTree(occ);
 	}
@@ -215,6 +228,11 @@ public class TopicServiceImpl implements TopicService {
 		topicDAO.populateUsageStats(rtn);
 		return rtn;
 	}
+	
+	
+	
+	
+	
 	
 	public WebLink getWebLinkForURL(String url) {
 		return topicDAO.getWebLinkForURI(url,userService.getCurrentUser());		
@@ -247,11 +265,6 @@ public class TopicServiceImpl implements TopicService {
 			command.setTopic(2,getSeeAlsoMetaSingleton());
 		}
 	}
-	
-	
-	
-	
-	
 	
 	public Occurrence save(Occurrence link) {
 		return topicDAO.save(link);
@@ -322,7 +335,6 @@ public class TopicServiceImpl implements TopicService {
 	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) {
 		topicDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
 	}
-	
 	public MindTree saveTree(MindTree tree) {
 		return topicDAO.save(tree);
 	}

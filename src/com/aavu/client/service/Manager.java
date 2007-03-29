@@ -26,6 +26,10 @@ import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.ViewMemberWindow;
 import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.ext.SourcesWheelEvents;
+import com.aavu.client.gui.ext.WheelListener;
+import com.aavu.client.gui.ext.WheelListenerCollection;
+import com.aavu.client.gui.ext.WheelListenerCollectionCancellable;
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.glossary.Glossary;
@@ -46,7 +50,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Manager implements TopicSaveListener, LoginListener {
+public class Manager implements TopicSaveListener, LoginListener, WheelListener, SourcesWheelEvents {
 	
 	private HippoCache hippoCache;	
 	private MainMap map;
@@ -63,6 +67,7 @@ public class Manager implements TopicSaveListener, LoginListener {
 
 	private GadgetManager gadgetManager;
 	private UserActionListener userActionListener;
+	private WheelListenerCollectionCancellable mapWheelListeners;
 	
 	public Manager(HippoCache hippoCache){
 		this.hippoCache = hippoCache;
@@ -551,6 +556,26 @@ public class Manager implements TopicSaveListener, LoginListener {
 	
 	public void showHelp() {
 		HelpWindow hw = new HelpWindow(this,newFrame());
+	}
+	
+	
+	
+	public boolean onWheel(Widget widget, int delta) {
+
+		boolean result = false;
+		if(mapWheelListeners != null){
+			if(mapWheelListeners.fireWheel(widget, delta)){
+				result = true;
+			}
+		}
+		return result;
+	}
+	
+	public void addWheelistener(WheelListener listener) {
+		if(mapWheelListeners == null){
+			mapWheelListeners = new WheelListenerCollectionCancellable();
+		}
+		mapWheelListeners.add(listener);
 	}
 	
 	

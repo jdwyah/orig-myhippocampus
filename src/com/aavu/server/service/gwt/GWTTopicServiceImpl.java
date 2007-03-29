@@ -175,10 +175,21 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		topicService.deleteOccurrence(id);
 	}
 
+	public List getAllLocations() throws HippoException {
+		try {
+			return topicService.getAllLocations();
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e);			
+		}
+	}
+	
 	public List getAllMetas() throws HippoException {
 		return topicService.getAllMetas();
 	}
 	
+
 	/**
 	 * this conversion is just list -> array
 	 * @throws HippoException 
@@ -193,7 +204,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e);			
 		}
 	}
-	
 
 	public List getLinksTo(Topic topic) throws HippoException {
 		try{
@@ -204,6 +214,17 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e.getMessage());
 		}
 	}
+	
+	
+	public List getLocationsForTags(List shoppingList) throws HippoException {
+		try {
+			return topicService.getLocationsForTags(shoppingList);
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e);			
+		}
+	}	
 
 	public List<TimeLineObj> getTimeline() throws HippoException {
 		try{
@@ -212,29 +233,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
 			throw new HippoException(e.getMessage());
-		}
-	}
-	
-	
-	public List<List<TimeLineObj>> getTimelineWithTags(List shoppingList) throws HippoException {
-		try{
-			return topicService.getTimelineWithTags(shoppingList);
-		}  catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}		
-	}	
-
-	public Topic getTopicByID(long topicID) throws HippoException {
-		try {
-
-			return convert(topicService.getForID(topicID));
-
-		} catch (Exception e) {
-			log.error("FAILURE: "+e);
-			e.printStackTrace();
-			throw new HippoException(e);		
 		}
 	}
 
@@ -260,6 +258,28 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 //	}
 
 
+	public List<List<TimeLineObj>> getTimelineWithTags(List shoppingList) throws HippoException {
+		try{
+			return topicService.getTimelineWithTags(shoppingList);
+		}  catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}		
+	}
+
+
+	public Topic getTopicByID(long topicID) throws HippoException {
+		try {
+
+			return convert(topicService.getForID(topicID));
+
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e);		
+		}
+	}
 	public Topic getTopicForName(String topicName) {
 		try {
 			Topic t = topicService.getForName(topicName);
@@ -285,8 +305,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			return null;
 		}
 	}
-
-
 	/**
 	 * this conversion is just list -> array
 	 * @throws HippoException 
@@ -315,6 +333,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e.getMessage());
 		}
 	}
+	
+	
+
 	public WebLink getWebLinkForURL(String url) throws HippoException {
 		return topicService.getWebLinkForURL(url);
 	}
@@ -333,9 +354,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			return null;
 		}
 	}
-	
-	
-
 	public void saveCommand(AbstractCommand command) throws HippoBusinessException {
 		log.info("command "+command.getClass()+" "+command);		
 		topicService.executeAndSaveCommand(command);

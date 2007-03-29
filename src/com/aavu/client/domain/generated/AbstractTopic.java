@@ -216,6 +216,7 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
          
 		 if(this.getId() != 0 && 
 				 this.getId() == castOther.getId()){
+			 System.out.println("ID EQUALS!");
 			 return true;
 		 }
 		 

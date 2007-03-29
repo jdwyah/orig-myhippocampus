@@ -36,7 +36,7 @@
 	<classpathentry kind="lib" path="tools/gwt/gwt-user-1.2.22.jar"/>
 	<classpathentry kind="lib" path="lib/sitemesh-2.3-editted.jar"/>
 	<classpathentry kind="lib" path="lib/compass-1.1RC1.jar" sourcepath="C:/Downloads/compass-1.1RC1-SNAPSHOT-with-dependencies/compass-1.1RC1-SNAPSHOT/src/main/src/compass-src-1.1rc1.zip"/>
-	<classpathentry kind="lib" path="lib/acegi-security-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/acegi-security-1.0.3.jar" sourcepath="C:/workspace/source/acegi-security-1.0.3-src.zip"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/ehcache-1.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.8.jar"/>

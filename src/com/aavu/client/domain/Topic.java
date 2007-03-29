@@ -190,6 +190,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 				}
 			}
 		}
+		System.out.println("Contains: "+contains);
 		
 		//redundant if we've already created, which would be ok except for the fact that 
 		//set.add(assoc) will add it even if it loop, set.eq() says it contains it 
