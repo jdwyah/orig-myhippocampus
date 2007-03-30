@@ -31,6 +31,7 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestNoTransaction;
+import com.mapitz.gwt.googleMaps.client.GLatLng;
 
 public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
@@ -333,10 +334,10 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		System.out.println("saved meta1 "+savedMeta1);
 		assertTrue(savedMeta1 instanceof MetaLocation);
 		
-		String LAT_LONG = "25.3,45.3";
-				
+			
 		HippoLocation loc1 = new HippoLocation();
-		loc1.setTitle(LAT_LONG);
+		loc1.setLatitude(LAT1);
+		loc1.setLongitude(LONG1);
 		
 		Set locs = new HashSet();
 		locs.add(loc1);
@@ -359,8 +360,10 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		HippoLocation savedLoc = (HippoLocation) topicS.getSingleMetaValueFor(savedMeta);
 		assertNotNull(savedLoc);
-		assertEquals(LAT_LONG, savedLoc.getTitle());
-	
+		
+		assertEquals(LAT1, savedLoc.getLatitude());
+		assertEquals(LONG1, savedLoc.getLongitude());
+		
 		
 	}
 	public void testMultipleLocationCommand() throws HippoBusinessException {
@@ -385,19 +388,16 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		System.out.println("saved meta1 "+savedMeta1);
 		assertTrue(savedMeta1 instanceof MetaLocation);
 		
-		
 				
-		
 		HippoLocation loc1 = new HippoLocation();
-		loc1.setTitle(E);
 		loc1.setLatitude(LAT1);
 		loc1.setLongitude(LONG1);
+		loc1.setTitle(E);
 		
 		HippoLocation loc2 = new HippoLocation();
-		loc2.setTitle(D);
 		loc2.setLatitude(LAT2);
 		loc2.setLongitude(LONG2);
-		
+		loc2.setTitle(D);		
 		
 		Set locs = new HashSet();
 		locs.add(loc1);
@@ -459,10 +459,10 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 				
 		HippoDate date = new HippoDate();
-		date.setDate(new Date());
+		date.setStartDate(new Date());
 		
 		
-		AbstractCommand comm = new SaveMetaDateCommand(topic,savedMeta1,date.getTitle());
+		AbstractCommand comm = new SaveMetaDateCommand(topic,savedMeta1,date);
 		
 				
 		topicService.executeAndSaveCommand(comm);
@@ -523,10 +523,10 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		//
 		final HippoDate d2 = new HippoDate();
 		d2.setUser(u);
-		d2.setDate(new Date());
+		d2.setStartDate(new Date());
 		final HippoDate d3 = new HippoDate();
 		d3.setUser(u);
-		d3.setDate(new Date());
+		d3.setStartDate(new Date());
 
 		assertEquals(d2.getTitle(), d3.getTitle());
 

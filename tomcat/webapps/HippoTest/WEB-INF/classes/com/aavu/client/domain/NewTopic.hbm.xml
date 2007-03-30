@@ -32,11 +32,13 @@
 			<column name="data" sql-type="text"></column>
 		</property>-->
 
+		<!-- Note, this is also the pseudo property EndDate for HippoDate objs-->
 		<property name="lastUpdated" type="java.util.Date">
 			<meta attribute="field-description">Last updated</meta>
 			<column name="dateUpdated" sql-type="timestamp" />
 		</property>
 
+		<!-- Note, this is also the pseudo property StartDate for HippoDate objs-->
 		<property name="created" type="java.util.Date">
 			<!-- <meta attribute="use-in-equals">true</meta>-->
 			<meta attribute="field-description">Created date</meta>
@@ -126,6 +128,7 @@
 		
 			
 		<!-- meaningless from DB perspective. only usefull for differentiation -->
+		<!-- Do Note that Date Created & Date Updated have different meanings for classes of this type -->
 		<subclass name="HippoDate" discriminator-value="date">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 		</subclass>

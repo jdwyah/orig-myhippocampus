@@ -107,6 +107,14 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		o.setLongitude(getLongitude());
 		o.setTitle(getTitle());
 	}
+	public void copyPropsButNotIDIntoParam(Topic o){		
+		o.setCreated(getCreated());
+		o.setUser(getUser());
+		o.setLastUpdated(getLastUpdated());
+		o.setLatitude(getLatitude());
+		o.setLongitude(getLongitude());
+		o.setTitle(getTitle());
+	}
 	
 	public void accept(TopicVisitor visitor) {
 		visitor.visit(this);
@@ -145,52 +153,48 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			
 		}else{
 			Topic cur_val = (Topic) assoc.getMembers().iterator().next();
-			System.out.println("cur_v "+cur_val);			
+			System.out.println("Topic.addMetaValue cur_v "+cur_val);			
 			
 			if(cur_val.equals(metaValue)){
-				System.out.println("Were Equal, copy props to make sure. C: "+cur_val.getTitle()+" mv "+metaValue.getTitle());
+				System.out.println("Topic.addMetaValue Were Equal, copy props to make sure. C: "+cur_val.getTitle()+" mv "+metaValue.getTitle());
 				metaValue.copyPropsIntoParam(cur_val);				
 				return;
 			}else{
-				System.out.println("!= cur "+cur_val.getIdentifier());
-				System.out.println("!= new "+metaValue.getIdentifier());
+				System.out.println("Topic.addMetaValue != cur "+cur_val.getIdentifier());
+				System.out.println("Topic.addMetaValue != new "+metaValue.getIdentifier());
 			}
 		}
 		
+		System.out.println("assoc "+assoc+" metav "+metaValue);
 		assoc.setTitle(getTitle()+" to "+metaValue.getTitle());
 		
 		//redundant if we've already created
 		assoc.addType(meta);
 		
 		if(clear){
-			System.out.println("clearing");
+			System.out.println("Topic.addMetaValue clearing");
 			assoc.getMembers().clear();
 		}
 		assoc.getMembers().add(metaValue);
-						
-		metaValue.addType(meta);
-		
-		//unecessary now that it's the same table
-		//meta.getInstances().add(metaValue);
 		
 		
-		System.out.println("bf assoc "+getAssociations().size()+" ");
+		System.out.println("Topic.addMetaValue bf assoc "+getAssociations().size()+" ");
 		
 		boolean contains = false;
-		if(getAssociations().size() == 1){
+		if(!getAssociations().isEmpty()){
 			Association cur1 = (Association) getAssociations().iterator().next();
-			System.out.println("CMP "+cur1.compare(assoc));
+			System.out.println("Topic.addMetaValue CMP "+cur1.compare(assoc));
 			
 			for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 				Association cur = (Association) iter.next();
 				
-				System.out.println("cmp 2 "+cur.compare(assoc));
+				System.out.println("Topic.addMetaValue cmp 2 "+cur.compare(assoc));
 				if(cur.equals(assoc)){
 					contains = true;
 				}
 			}
 		}
-		System.out.println("Contains: "+contains);
+		System.out.println("Contains: "+contains+" if true adding association.");
 		
 		//redundant if we've already created, which would be ok except for the fact that 
 		//set.add(assoc) will add it even if it loop, set.eq() says it contains it 
@@ -198,7 +202,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			getAssociations().add(assoc);
 		}
 		
-		System.out.println("after assoc "+getAssociations().size());
+		System.out.println("Topic.addMetaValue after assoc "+getAssociations().size());
 		
 		
 		//System.out.println(topic+"size "+topic.getMetaValues());
@@ -552,7 +556,12 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return metas;		
 	}
 	/**
+	 * Visitor pattern to avoid instanceof not working for CGLib enhanced objs.
+	 * Note, this problem only effect server side work, since our HibernateSerializer
+	 * cloning fixes this for the client.
 	 * 
+	 * See comments in TopicVisitor.java
+	 *  
 	 * @return
 	 */
 	public Set getMetas() {
@@ -634,15 +643,20 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		if(sb.length() > 0){
 			return sb.toString();
 		}
-		sb.append("Compare:\n");
+		sb.append("Topic.Compare:\n");
 		sb.append(this.getId()+" id "+castOther.getId()+"\n");
+		sb.append("Topic.Compare ");
 		sb.append(this.getTitle()+" title "+castOther.getTitle()+"\n");
+		sb.append("Topic.Compare ");
 		sb.append(this.getCreated()+" created "+castOther.getCreated()+"\n");
+		sb.append("Topic.Compare ");
 		sb.append(this.getLatestEntry()+" data "+castOther.getLatestEntry()+"\n");
+		sb.append("Topic.Compare ");
 		sb.append(this.getUser()+" user "+castOther.getUser()+"\n");
+		sb.append("Topic.Compare ");
 		sb.append(this.isPublicVisible()+" public "+castOther.isPublicVisible()+"\n");
 		
-		sb.append("EQ: "+(( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )		
+		sb.append("Topic.Compare EQ: "+(( (this.getTitle()==castOther.getTitle()) || ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )		
 		 && (this.isPublicVisible()==castOther.isPublicVisible())));
 		
 		return sb.toString();

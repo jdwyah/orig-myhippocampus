@@ -151,6 +151,8 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		//<Date,Integer>
 		Map monthBucket = new HashMap();
 		
+		Logger.log("sorting");
+		
 		int i = 0;
 		for (Iterator iter = timelines.iterator(); iter.hasNext();) {
 			TimeLineObj tlo = (TimeLineObj) iter.next();
@@ -180,13 +182,12 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 				System.out.println("adding zone ");
 				render.addZone(date,numberOfTimePoints.intValue());
 			}
-		}
-		//render.thing();	
+		}	
 		
 		jo.put("events",events);		
 		jo.put("dateTimeFormat", new JSONString("iso8601"));
 		
-		Logger.log("Sending to simile: "+jo.toString());
+		Logger.debug("Sending to simile: "+jo.toString());
 		//timeline.load(jo);
 		
 		/*if(timelines.size() == 0){
@@ -194,16 +195,21 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		}*/
 		
 		simileWidget = new TimeLineWidget(height+"px",width+"px", render);	
-				
+		
+		Logger.log("timeline created");		
+		
 		simileWidget.loadJSON(jo.toString());
-				
+		
+		Logger.log("load complete");
+		
 		//simileWidget.getTimeLine() is null for a while, so just keep circling back until it isn't
 		Timer t = new Timer(){
 			public void run() {
 				if(setClickListener()){
 					cancel();
 				}else{
-					scheduleRepeating(500);
+					Logger.log("HippoTimelineRepeat");
+					schedule(500);
 				}
 			}};
 		t.schedule(100);
@@ -262,7 +268,10 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		}		
 	}
 	
-	
+	/**
+	 * sometimes seem to be getting weird evt passed to us. Very small dimensions. 
+	 * @param evt
+	 */
 	public void resize(GFrameEvent evt) {
 		if(simileWidget != null){
 			

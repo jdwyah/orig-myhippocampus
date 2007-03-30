@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.timeline.HippoTimeLine;
+import com.aavu.client.util.Logger;
 import com.netthreads.gwt.simile.timeline.client.BandInfo;
 import com.netthreads.gwt.simile.timeline.client.BandOptions;
 import com.netthreads.gwt.simile.timeline.client.DateTime;
@@ -36,6 +37,7 @@ public class HippoRender implements ITimeLineRender
      */
     public void render(TimeLineWidget widget)
     {
+    
     	ArrayList bandInfos = widget.getBandInfos();
     	ArrayList bandHotZones = widget.getBandHotZones();
     	ArrayList bandDecorators = widget.getBandDecorators();
@@ -46,8 +48,9 @@ public class HippoRender implements ITimeLineRender
       
         
         bandHotZones.addAll(myHotZones);
-        
-        System.out.println("\n\n\n\n\nRENDER "+myHotZones.size()+"\n\n"+bandHotZones);
+               
+        //NOTE! this sysout freezes FF recursive toString explosion
+        //System.out.println("\n\n\n\n\nRENDER "+myHotZones.size()+"\n\n"+bandHotZones);
         
         
         // ---------------------------------------------------------------
@@ -113,6 +116,7 @@ public class HippoRender implements ITimeLineRender
         bandInfos.add(bottom);
         bottom.setSyncWith(0);
         bottom.setHighlight(true);
+        
     }
 
     public void clearHotZones(){

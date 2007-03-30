@@ -643,7 +643,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		md.setTitle("Date Seen");
 
 		HippoDate date = new HippoDate();
-		date.setDate(new Date());
+		date.setStartDate(new Date());
 		
 		t1.addMetaValue(md, date);
 		
@@ -670,15 +670,18 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		MetaDate md = new MetaDate();
 		md.setTitle("Date Seen");
 		HippoDate date = new HippoDate();
-		date.setDate(new Date());						
+		date.setStartDate(new Date());						
 		t1.addMetaValue(md, date);		
 		t1  = topicDAO.save(t1);
 		
 		MetaDate md2 = new MetaDate();
 		md2.setTitle("Date Read");
 		HippoDate date2 = new HippoDate();
-		date2.setDate(new Date());						
-		t1.addMetaValue(md2, date2);		
+		date2.setStartDate(new Date());						
+		t1.addMetaValue(md2, date2);
+						
+		assertEquals(2, t1.getAllMetas(new MetaDate()).size());
+		
 		t1  = topicDAO.save(t1);
 						
 		List<TimeLineObj> list = topicDAO.getTimeline(u);
@@ -703,7 +706,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			Meta m = (Meta) iter.next();
 		
 			HippoDate adate = new HippoDate();
-			adate.setDate(new Date());						
+			adate.setStartDate(new Date());						
 			t2.addMetaValue(m, adate);		
 			t2  = topicDAO.save(t2);
 		}		

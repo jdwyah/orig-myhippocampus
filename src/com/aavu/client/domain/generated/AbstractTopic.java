@@ -16,7 +16,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public abstract class AbstractTopic  implements IsSerializable, java.io.Serializable {
 
     // Fields    
-
+	/**
+	 * NOTE: this is used in .equals() if true
+	 */
+	 public abstract boolean mustHaveUniqueName();
+	
      private long id;
      private User user;
      /**
@@ -216,15 +220,23 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
          
 		 if(this.getId() != 0 && 
 				 this.getId() == castOther.getId()){
-			 System.out.println("ID EQUALS!");
+			 System.out.println("ID EQUALS! "+this.getId()+" "+castOther.getId());
 			 return true;
 		 }
-		 
-		 return ( (this.getTitle()==castOther.getTitle()) ||
-				 ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )
-				 && (this.isPublicVisible()==castOther.isPublicVisible())
-				 && (this.getLatitude()==castOther.getLatitude())
-				 && (this.getLongitude()==castOther.getLongitude());
+		 if(this.mustHaveUniqueName()){			 
+			 return ( (this.getTitle()==castOther.getTitle()) ||
+					 ( this.getTitle()!=null && castOther.getTitle()!=null && this.getTitle().equals(castOther.getTitle()) ) )
+					 && (this.isPublicVisible()==castOther.isPublicVisible())
+					 && (this.getLatitude()==castOther.getLatitude())
+					 && (this.getLongitude()==castOther.getLongitude());
+		 }else{
+			 
+			 //TODO PEND HIGH. What should this be???? ID !=, object !=  
+			 return false;
+//			 return ((this.isPublicVisible()==castOther.isPublicVisible())
+//					 && (this.getLatitude()==castOther.getLatitude())
+//					 && (this.getLongitude()==castOther.getLongitude()));
+		 }
    }
    
    public int hashCode() {

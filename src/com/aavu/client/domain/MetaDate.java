@@ -60,10 +60,10 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	    if(mv != null){
 	    	
 	    	
-	    	datePicker.setCurrentDate(mv.getDate());
+	    	datePicker.setCurrentDate(mv.getStartDate());
 	    	
 	    	SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");						
-	    	datePicker.setText(df.format(mv.getDate()));
+	    	datePicker.setText(df.format(mv.getStartDate()));
 	    }else{
 	    	mv = new HippoDate();
 	    }
@@ -82,17 +82,20 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 						Date cDate = dp.getSelectedDate();
 						//String val = cDate.getTime()+"";
 						
-						mv.setDate(cDate);
+						mv.setStartDate(cDate);
 						
 						//mv.setTitle(df.format(cDate));
 						//mv.setData(val);
 												
 						//topicService.getTopicIdentForNameOrCreateNew(linkTo, callback)
 						
-						System.out.println("Go to Save MV "+mv.getId()+" "+mv.getDate());
+						System.out.println("Go to Save MV "+mv.getId()+" "+mv.getStartDate());
+						
+						HippoDate hdate = new HippoDate();
+						hdate.setStartDate(cDate);
 						
 						topicService.executeCommand(topic,new SaveMetaDateCommand(topic,MetaDate.this,
-								cDate.getTime()+""),
+								hdate),
 								new StdAsyncCallback(ConstHolder.myConstants.save()){});
 										
 					}});

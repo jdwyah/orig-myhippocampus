@@ -46,4 +46,13 @@ public class Association extends AbstractAssociation implements Serializable,IsS
 		return (Topic) getTypesAsTopics().iterator().next();
 	}
 
+	/**
+	 * Note, this will change the .equals method that we use to not associate titles as eq
+	 * 
+	 */
+	//@Override
+	public boolean mustHaveUniqueName() {
+		return false;
+	}
+
 }

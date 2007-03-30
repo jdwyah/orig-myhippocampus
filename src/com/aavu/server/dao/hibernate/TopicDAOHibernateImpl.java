@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
+import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
@@ -419,7 +420,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		crit.setProjection(Projections.projectionList()
 				.add(Property.forName("id"))
 				.add(Property.forName("title"))
-				.add(Property.forName("metaValue.title")));
+				.add(Property.forName("metaValue.created")));
 		
 		List<Object[]>  ll = getHibernateTemplate().findByCriteria(crit);
 		
@@ -435,9 +436,8 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			}
 			//?BigInteger topic_id = (BigInteger) oa[0];
 			Long topicId = (Long) oa[0];
-
-			String dateStr = (String) oa[2];
-			Date date = new Date(Long.parseLong(dateStr));			
+			
+			Date date = (Date) oa[2];			
 
 			//add metaDate
 			rtn.add(new TimeLineObj(new TopicIdentifier(topicId.longValue(),(String)oa[1]),date,null));						
@@ -607,7 +607,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	public Topic save(Topic t) throws HippoBusinessException {
 		System.out.println("SAVE "+t.getTitle());
-		
+				
 		//
 		//Save the subject. If they've just added the subject it will be unsaved,
 		//even if it's already in the DB, do a lookup.
