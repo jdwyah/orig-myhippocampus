@@ -24,9 +24,11 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -46,12 +48,6 @@ public class TagChooser extends Composite {
 		
 		mainP.add(new HeaderLabel(ConstHolder.myConstants.chooser_showing()));
 		
-		
-		tagP = new VerticalPanel();
-		showTags(defaultMap.keySet());
-	
-		mainP.add(tagP);
-		
 		AddButton addEditButton = new AddButton(ConstHolder.myConstants.chooser_add());
 		
 		addEditButton.addClickListener(new ClickListener(){
@@ -61,13 +57,14 @@ public class TagChooser extends Composite {
 		
 		mainP.add(addEditButton);
 		
-		Button showAllB = new Button(ConstHolder.myConstants.chooser_show_all());
-		showAllB.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				loadAll();
-			}			});
 		
-		mainP.add(showAllB);
+		tagP = new VerticalPanel();
+		showTags(defaultMap.keySet());
+	
+		mainP.add(tagP);
+		
+	
+		
 		initWidget(mainP);
 	}
 
@@ -107,11 +104,11 @@ public class TagChooser extends Composite {
 		private static final int WIDTH = 500;
 		protected static final int NUM_COLS = 5;
 		
-		private VerticalPanel mainP;
+		private VerticalPanel tagSelectP;
 		private List pickers = new ArrayList();
 		private TagChooser chooser;
 
-		public TagSelectPopup(GInternalFrame frame, final Set tags, TagChooser chooser) {
+		public TagSelectPopup(GInternalFrame frame, final Set tags, final TagChooser chooser) {
 			super(frame, ConstHolder.myConstants.chooser_tagSelectTitle(), WIDTH, HEIGHT);
 			this.chooser = chooser;
 			
@@ -149,14 +146,37 @@ public class TagChooser extends Composite {
 						}
 						
 					}					
-					mainP.insert(grid, 0);
+					tagSelectP.insert(grid, 0);
 					
 				}});
-			mainP = new VerticalPanel();
+			tagSelectP = new VerticalPanel();
+			
+		
+						
+			ScrollPanel sp = new ScrollPanel(tagSelectP);
+			sp.setHeight(HEIGHT-40+"px");
+			
+			
 			
 			Button selectB = new Button(ConstHolder.myConstants.chooser_lookup_select());
 			selectB.addClickListener(this);
-			mainP.add(selectB);
+			
+			Button showAllB = new Button(ConstHolder.myConstants.chooser_show_all());
+			showAllB.addClickListener(new ClickListener(){
+				public void onClick(Widget sender) {
+					TagSelectPopup.this.chooser.loadAll();
+					close();
+				}});						
+			
+			HorizontalPanel bottomP = new HorizontalPanel();
+			bottomP.add(selectB);
+			bottomP.add(showAllB);
+			
+			
+			VerticalPanel mainP = new VerticalPanel();
+			mainP.add(sp);
+			mainP.add(bottomP);
+			
 			setContent(mainP);			
 		}
 
@@ -186,16 +206,16 @@ public class TagChooser extends Composite {
 		private TagStat stat;
 		private boolean checked;
 
-		public Picker(TagStat stat) {
-			super(stat.getTagName());
+		public Picker(final TagStat stat) {
+			super(stat.getTagName()+"("+stat.getNumberOfTopics()+")");
 			this.stat = stat;		
 			addStyleName("H-TagPicker");
 			
-			double fontSize = MAX * stat.getNumberOfTopics() / TOPIC_SKY;
-			
-			fontSize = fontSize < 1 ? 1 : fontSize;
-			System.out.println("stat "+stat.getNumberOfTopics()+" "+fontSize);
-			DOM.setStyleAttribute(getElement(), "font-size", fontSize+"em");
+			//not doing anything. why?
+//			double fontSize = MAX * stat.getNumberOfTopics() / TOPIC_SKY;
+//			fontSize = fontSize < 1 ? 1 : fontSize;
+//			System.out.println("stat "+stat.getNumberOfTopics()+" "+fontSize);
+//			DOM.setStyleAttribute(getElement(), "font-size", fontSize+"em");
 			
 			addClickListener(this);
 			addMouseListener(new MouseListenerAdapter(){

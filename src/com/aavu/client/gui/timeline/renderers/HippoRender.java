@@ -69,7 +69,7 @@ public class HippoRender implements ITimeLineRender
 //        bandInfos.add(top);
 
         BandOptions mainOpts = BandOptions.create();
-        mainOpts.setWidth("90%");
+        mainOpts.setWidth("85%");
         //mainOpts.setTrackHeight(.5f);
         //mainOpts.setTrackGap(0.2f);
         mainOpts.setIntervalUnit(DateTime.MONTH());
@@ -94,7 +94,7 @@ public class HippoRender implements ITimeLineRender
         
         // Bands
         BandOptions bottomOpts = BandOptions.create();
-        bottomOpts.setWidth("10%");
+        bottomOpts.setWidth("15%");
         bottomOpts.setTrackHeight(.2f);
         bottomOpts.setTrackGap(0.2f);
         bottomOpts.setIntervalUnit(DateTime.YEAR());
@@ -137,13 +137,16 @@ public class HippoRender implements ITimeLineRender
         HotZoneBandOptions bottomHotZoneOpts = HotZoneBandOptions.create();
         bottomHotZoneOpts.setStart(HippoTimeLine.getDateInJSON(date));
         
-        //System.out.println("new hot zone from "+HippoTimeLine.getDateInJSON(date)+" to ");
+        System.out.println("new hot zone from "+HippoTimeLine.getDateInJSON(date)+" to ");
         
+        //set to last day of the month by going to next month, 
+        //then back 1 day (range is 1-31, so 0 is -1)
         date.setMonth(date.getMonth()+1);        
+        date.setDate(0);
         topHotZoneOpts.setEnd(HippoTimeLine.getDateInJSON(date));
         bottomHotZoneOpts.setEnd(HippoTimeLine.getDateInJSON(date));
                 
-        //System.out.println(HippoTimeLine.getDateInJSON(date)+" ! ");
+        System.out.println(HippoTimeLine.getDateInJSON(date)+" ! ");
         
         if(howManyInThisMonth > 40){
         	topHotZoneOpts.setMagnify(10);
@@ -154,7 +157,7 @@ public class HippoRender implements ITimeLineRender
         }
         
         topHotZoneOpts.setUnit(DateTime.WEEK());
-        topHotZoneOpts.setMultiple(1);
+        topHotZoneOpts.setMultiple(1);       
         
         bottomHotZoneOpts.setUnit(DateTime.MONTH());
         bottomHotZoneOpts.setMultiple(1);

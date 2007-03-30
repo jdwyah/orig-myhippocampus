@@ -238,7 +238,16 @@ public interface Consts extends Messages {
 	String help_how_2_A();	
 	String help_how_3();
 	String help_how_3_A();
+	String help_how_4();
+	String help_how_4_A();
+	String help_how_5();
+	String help_how_5_A();
+	String help_how_6();
+	String help_how_6_A();
+	String help_how_7();
+	String help_how_7_A();
 
+	
 	String help_why();
 	String help_why_1();
 	String help_why_1_A();
@@ -254,6 +263,7 @@ public interface Consts extends Messages {
 	String help_where_2_A();	
 	String help_where_3();
 	String help_where_3_A();
+	String topic_preview_gotherenow();
 
 	
 	

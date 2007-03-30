@@ -6,10 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.gwm.client.GInternalFrame;
 import org.gwm.client.event.GFrameEvent;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.gui.ext.GUIEffects;
+import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.glossary.SimpleTopicDisplay;
 import com.aavu.client.gui.timeline.renderers.HippoRender;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
@@ -21,6 +27,7 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.netthreads.gwt.simile.timeline.client.TimeLine;
 import com.netthreads.gwt.simile.timeline.client.TimeLineClickListener;
@@ -37,6 +44,8 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 	private static final int WIDTH = 680;
 	private static final int HEIGHT = 400;
 		
+	private static final int MIN_RESIZE = 300;
+	
 	private TimeLineWidget simileWidget;
 	
 	private TopicCache topicCache;
@@ -147,7 +156,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 			TimeLineObj tlo = (TimeLineObj) iter.next();
 //			System.out.println("C "+tlo.getJSONObj());
 			
-			Date monthOf = new Date(tlo.getStart().getYear(),tlo.getStart().getMonth(),0);
+			Date monthOf = new Date(tlo.getStart().getYear(),tlo.getStart().getMonth(),1);
 			
 			Integer cur = (Integer) monthBucket.get(monthOf);
 			if(cur == null){
@@ -214,19 +223,59 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 	}
 	
 	
-	public void onClick(int x, int y, String description) {
+	public void onClick(final int x,final int y, final String description) {
 		
 		System.out.println("HIPPO "+x+" "+y+" "+description);
 		long id = Long.parseLong(description);
 		
-		closeListener.close();
 		
-		manager.bringUpChart(id);
+		showPreview(id,x,y);
+		
+//		closeListener.close();
+//		
+//		manager.bringUpChart(id);
 	}
+	
+	private void showPreview(final long id, final int x, final int y){
+		manager.getTopicCache().getTopicByIdA(id, new StdAsyncCallback("Preview"){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+
+				Topic topic = (Topic) result;				
+				
+				PreviewPopup window = new PreviewPopup(manager.newFrame(),topic,y,x);
+				
+				System.out.println("SHOWING POPUP at "+x+" "+y);
+			}});
+	}
+	
+	private class PreviewPopup extends PopupWindow {
+
+		private static final int WIDTH = 400;
+		private static final int HEIGHT = 200;
+				
+		public PreviewPopup(GInternalFrame frame,Topic topic,int top,int left) {
+			super(frame,topic.getTitle(),WIDTH,HEIGHT);
+			SimpleTopicDisplay display = new SimpleTopicDisplay(topic,manager,this);		
+			frame.setLocation(top, left);
+			setContent(display);
+		}		
+	}
+	
+	
 	public void resize(GFrameEvent evt) {
 		if(simileWidget != null){
-			simileWidget.setWidth(evt.getGFrame().getWidth() - 30 + "px");
-			simileWidget.setHeight(evt.getGFrame().getHeight() + "px");         
+			
+			int newWidth = evt.getGFrame().getWidth() - 30;
+			int newHeight = evt.getGFrame().getHeight();
+
+			System.out.println("HippoTimeline RSIZE "+newWidth+" "+newHeight);
+
+			newWidth = newWidth > MIN_RESIZE ? newWidth : MIN_RESIZE;
+			newHeight = newHeight > MIN_RESIZE ? newHeight : MIN_RESIZE;
+			
+			simileWidget.setWidth(newWidth + "px");
+			simileWidget.setHeight(newHeight + "px");         
 			simileWidget.layout();
 		}
 	}

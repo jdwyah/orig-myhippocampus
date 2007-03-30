@@ -49,10 +49,19 @@ public class HelpPicker extends Composite {
 		HelpLabel how1 = new HelpLabel(ConstHolder.myConstants.help_how_1(),answerP,new Label(ConstHolder.myConstants.help_how_1_A()));
 		HelpLabel how2 = new HelpLabel(ConstHolder.myConstants.help_how_2(),answerP,new Label(ConstHolder.myConstants.help_how_2_A()));		
 		HelpLabel how3 = new HelpLabel(ConstHolder.myConstants.help_how_3(),answerP,new Label(ConstHolder.myConstants.help_how_3_A()));
+		HelpLabel how4 = new HelpLabel(ConstHolder.myConstants.help_how_4(),answerP,new Label(ConstHolder.myConstants.help_how_4_A()));
+		HelpLabel how5 = new HelpLabel(ConstHolder.myConstants.help_how_5(),answerP,new Label(ConstHolder.myConstants.help_how_5_A()));
+		HelpLabel how6 = new HelpLabel(ConstHolder.myConstants.help_how_6(),answerP,new Label(ConstHolder.myConstants.help_how_6_A()));
+		HelpLabel how7 = new HelpLabel(ConstHolder.myConstants.help_how_7(),answerP,new Label(ConstHolder.myConstants.help_how_7_A()));
+		
 		HelpLabel how = new HelpLabel(ConstHolder.myConstants.help_how(),questionP,answerP);
 		how.add(how1);
 		how.add(how2);
 		how.add(how3);
+		how.add(how4);
+		how.add(how5);
+		how.add(how6);
+		how.add(how7);
 		
 		
 		HelpLabel why1 = new HelpLabel(ConstHolder.myConstants.help_why_1(),answerP,new Label(ConstHolder.myConstants.help_why_1_A()));
