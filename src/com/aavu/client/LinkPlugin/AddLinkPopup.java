@@ -16,12 +16,12 @@ public class AddLinkPopup extends PopupWindow {
 	private WebLink link;
 	private Manager manager;
 
-	public AddLinkPopup(final LinkDisplayWidget widget, Manager _manager, GInternalFrame frame, WebLink _link, final Topic myTopic) {
+	public AddLinkPopup(final LinkDisplayWidget widget, Manager _manager, GInternalFrame frame, WebLink _link, final Topic myTopic, String username) {
 		super(frame, ConstHolder.myConstants.link_add_title(),WIDTH,HEIGHT);
 		this.manager = _manager;
 		this.link = _link;
 		
-		AddLinkContent addLinkContent = new AddLinkContent(widget,manager.getTopicCache(),link,myTopic,this,true);
+		AddLinkContent addLinkContent = new AddLinkContent(widget,manager.getTopicCache(),link,myTopic,this,true,username);
 		
 		setContent(addLinkContent);
 		

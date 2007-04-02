@@ -65,7 +65,7 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 		editLink(newL);
 	}
 	private void editLink(WebLink link){
-		AddLinkPopup pop = new AddLinkPopup(this,manager,manager.newFrame(),link,myTopic);
+		AddLinkPopup pop = new AddLinkPopup(this,manager,manager.newFrame(),link,myTopic,null);
 	}	
 	
 	public int load(Topic topic){

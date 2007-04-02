@@ -5,29 +5,23 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import org.gwm.client.event.GFrameAdapter;
 import org.gwm.client.event.GFrameEvent;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.MetaDate;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.gui.timeline.TimeLineConst;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.ButtonGroup;
+import com.aavu.client.widget.SelectableButton;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -46,7 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class TimeLineWrapper extends FTICachingExplorerPanel {
+public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGroup {
 
 	private HippoTimeLine timeline;
 	
@@ -57,6 +51,8 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 	private List lastLoadedftis;
 
 	private TimeLineConst currentStyle = TimeLineConst.UPDATED;
+
+	private SelectableButton currentButton;
 	
 	public TimeLineWrapper(Manager manager, Map defaultMap, int width, int height, PopupWindow window) {
 		super(manager, defaultMap);
@@ -66,13 +62,14 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 		
 		this.manager = manager;
 		
-		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineConst.UPDATED,ConstHolder.myConstants.timeline_lastUpdated());
-		TimeLineSelector createdB = new TimeLineSelector(TimeLineConst.CREATED,ConstHolder.myConstants.timeline_created());
-		TimeLineSelector metasB = new TimeLineSelector(TimeLineConst.META,ConstHolder.myConstants.timeline_metas());
+		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineConst.UPDATED,ConstHolder.myConstants.timeline_lastUpdated(),this);
+		TimeLineSelector createdB = new TimeLineSelector(TimeLineConst.CREATED,ConstHolder.myConstants.timeline_created(),this);
+		TimeLineSelector metasB = new TimeLineSelector(TimeLineConst.META,ConstHolder.myConstants.timeline_metas(),this);
 		typeSelector.add(lastUpdatedB);
 		typeSelector.add(createdB);
 		typeSelector.add(metasB);
 
+		metasB.setSelected(true);
 		
 		timeline = new HippoTimeLine(manager,width - 30,height,window);		
 		
@@ -153,16 +150,18 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 	 * 
 	 * @author Jeff Dwyer	 
 	 */
-	private class TimeLineSelector extends Button implements ClickListener {
+	private class TimeLineSelector extends SelectableButton implements ClickListener {
 		private TimeLineConst style;
 		
-		public TimeLineSelector(TimeLineConst l, String text){
-			super(text);
+		public TimeLineSelector(TimeLineConst l, String text,ButtonGroup buttonGroup){
+			super(text,buttonGroup);
 			this.style = l;
 			addClickListener(this);
 		}
 
-		public void onClick(Widget sender) {					
+		public void onClick(Widget sender) {
+			super.onClick();
+			
 			currentStyle = style;
 			if(TimeLineConst.META == style 
 					&&
@@ -224,6 +223,14 @@ public class TimeLineWrapper extends FTICachingExplorerPanel {
 	protected void draw(List ftis) {
 		this.lastLoadedftis = ftis;
 		getTimeLinesOfStyle(currentStyle,new TimeLineLookup(),ftis);		
+	}
+
+	public void newSelection(SelectableButton button) {		
+		if(currentButton != null){			
+			currentButton.setSelected(false);			
+		}
+		currentButton = button;
+		currentButton.setSelected(true);
 	}
 
 }

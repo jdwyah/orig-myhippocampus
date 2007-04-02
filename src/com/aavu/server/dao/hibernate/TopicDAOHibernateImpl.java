@@ -405,7 +405,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.createAlias("associations", "assoc")				
 		.createAlias("assoc.members", "metaValue")
 		.createAlias("assoc.types", "assocTypeConn")
-		.createAlias("assocTypeConn.type", "assocType")
+		.createAlias("assocTypeConn.type", "assocType")		
 		.add(Expression.eq("assocType.class", "metadate"));
 		
 		if(tagID != -1){
@@ -417,10 +417,22 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			crit.add(Subqueries.propertyIn("id", tags));
 		}
 	
-		crit.setProjection(Projections.projectionList()
+		
+		//This code leads to a SQL issue. See
+		//http://forum.hibernate.org/viewtopic.php?t=941669
+		//
+//		crit.setProjection(Projections.projectionList()
+//				.add(Property.forName("id"))
+//				.add(Property.forName("title"))
+//				.add(Property.forName("metaValue.created"))
+//				.add(Projections.distinct(Property.forName("metaValue.id"))));
+	
+		crit.setProjection(Projections.distinct(Projections.projectionList()
 				.add(Property.forName("id"))
 				.add(Property.forName("title"))
-				.add(Property.forName("metaValue.created")));
+				.add(Property.forName("metaValue.created"))
+				.add(Property.forName("metaValue.id"))));
+		
 		
 		List<Object[]>  ll = getHibernateTemplate().findByCriteria(crit);
 		

@@ -60,8 +60,9 @@ public interface GWTTopicServiceAsync {
 
 	//MindTree
 	void getTree(MindTreeOcc occ,AsyncCallback callback);
-	//Weblink
-	void getWebLinkForURL(String url, AsyncCallback callback);
+
+	//LinkAndUser
+	void getWebLinkForURLAndUser(String url, AsyncCallback callback);
 	
 	//void getTopicsStarting(String match, AsyncCallback callback);
 	void match(String match, AsyncCallback callback);

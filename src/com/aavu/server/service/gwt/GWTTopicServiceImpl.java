@@ -15,6 +15,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -336,8 +337,8 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	
 	
 
-	public WebLink getWebLinkForURL(String url) throws HippoException {
-		return topicService.getWebLinkForURL(url);
+	public LinkAndUser getWebLinkForURLAndUser(String url) throws HippoException {
+		return topicService.getWebLinkForURLAndUser(url);
 	}
 	public String[] match(String match) {
 		log.debug("match");

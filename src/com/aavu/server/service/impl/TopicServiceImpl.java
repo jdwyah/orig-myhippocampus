@@ -21,6 +21,7 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -115,7 +116,8 @@ public class TopicServiceImpl implements TopicService {
 	public void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException {
 		hydrateCommand(command);
 		command.executeCommand();		
-		saveCommand(command);	
+		saveCommand(command);
+		deleteCommand(command);		
 	}
 	
 	public List<LocationDTO> getAllLocations() {	
@@ -234,8 +236,9 @@ public class TopicServiceImpl implements TopicService {
 	
 	
 	
-	public WebLink getWebLinkForURL(String url) {
-		return topicDAO.getWebLinkForURI(url,userService.getCurrentUser());		
+	public LinkAndUser getWebLinkForURLAndUser(String url) {
+		User u = userService.getCurrentUser();
+		return new LinkAndUser(topicDAO.getWebLinkForURI(url,u),u);		
 	}
 	/**
 	 * PEND Would prefer to make these loads instead of gets, 
@@ -329,9 +332,17 @@ public class TopicServiceImpl implements TopicService {
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
 			Topic topic = (Topic) iter.next();
 			save(topic);
-		}
-		
+		}		
 	}
+	private void deleteCommand(AbstractCommand command) throws HippoBusinessException {		
+		Set topics = command.getDeleteSet();
+		for (Iterator iter = topics.iterator(); iter.hasNext();) {		
+			Topic topic = (Topic) iter.next();
+			log.info("DeleteCommand Delete: "+topic);
+			delete(topic);
+		}		
+	}
+	
 	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) {
 		topicDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
 	}

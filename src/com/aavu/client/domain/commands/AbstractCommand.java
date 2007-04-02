@@ -118,6 +118,9 @@ public abstract class AbstractCommand implements IsSerializable {
 	public List getTopics() {
 		return topics;
 	}
+	public Set getDeleteSet(){
+		return new HashSet();
+	}
 	public void setTopics(List topics) {
 		this.topics = topics;
 	}

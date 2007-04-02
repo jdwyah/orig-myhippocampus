@@ -1,6 +1,7 @@
 package com.aavu.client.LinkPlugin;
 
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.cache.TopicCache;
@@ -34,7 +35,7 @@ public class AddLinkManager implements CloseListener {
 
 
 	public void getExistingLinkAndCreatePanel(final AsyncCallback loadGUICallback) {
-		topicService.getWebLinkForURL(url, new AsyncCallback(){
+		topicService.getWebLinkForURLAndUser(url, new AsyncCallback(){
 			public void onFailure(Throwable caught) {
 				System.out.println("ALM fail "+caught.getMessage());
 				loadGUICallback.onFailure(caught);
@@ -42,7 +43,10 @@ public class AddLinkManager implements CloseListener {
 
 			public void onSuccess(Object result) {
 				Logger.debug("ALM succ "+result);
-				weblink = (WebLink) result;
+				
+				LinkAndUser linkAndUser = (LinkAndUser) result;
+
+				weblink = linkAndUser.getWeblink();
 				
 				if(weblink == null){
 					weblink = new WebLink();
@@ -59,7 +63,7 @@ public class AddLinkManager implements CloseListener {
 				
 				//panel = new AddLinkPanel(AddLinkManager.this,weblink,url,notes,description);
 				
-				panel = new AddLinkContent(topicCache,weblink,AddLinkManager.this);
+				panel = new AddLinkContent(topicCache,weblink,AddLinkManager.this,linkAndUser.getUser().getUsername());
 				
 				loadGUICallback.onSuccess(panel);
 			}});

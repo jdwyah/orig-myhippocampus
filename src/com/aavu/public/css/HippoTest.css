@@ -157,7 +157,34 @@ a:visited {
 	right: 0px;
 	padding: 4px;	
 }
-
+.H-SelectableButton {
+	background-image: url("../img/blueFade.png");
+	background-repeat: repeat-x;
+	background-position: 0px -10px;
+	background-color: #CFE0F5;
+	border: 1px solid #D8E3FD;
+	border-style: ridge;
+	color: #DDDDDD;
+	font-weight: bold;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 3px;
+}
+.H-SelectableButton-Selected {
+	background-image: url("../img/blueFade.png");
+	background-repeat: repeat-x;
+	background-position: 0px -10px;
+	background-color: #CFE0F5;	
+	font-weight: bold;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 3px;
+	border: 1px solid yellow;
+	border-style: groove;
+	color: white;
+}
 .H-ExplorerButton {
 	width: 100%;
 }

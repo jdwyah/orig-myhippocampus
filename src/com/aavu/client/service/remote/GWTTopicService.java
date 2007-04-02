@@ -6,6 +6,7 @@ import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -60,7 +61,8 @@ public interface GWTTopicService extends RemoteService {
 	
 	MindTree getTree(MindTreeOcc occ) throws HippoException;
 
-	WebLink getWebLinkForURL(String url) throws HippoException;
+	LinkAndUser getWebLinkForURLAndUser(String url) throws HippoException;
+	
 	//List getTopicsStarting(String match);//List<String>
 	String[] match(String match);//List<String>
 	

@@ -136,6 +136,8 @@ public interface Consts extends Messages {
 	String link_add();
 	String link_topics();
 	String link_please_pick();
+	String link_add_foruser(String username);
+
 	String required();
 	String save_async();
 	
@@ -264,8 +266,7 @@ public interface Consts extends Messages {
 	String help_where_3();
 	String help_where_3_A();
 	String topic_preview_gotherenow();
-
-	
+		
 	
 		
 	

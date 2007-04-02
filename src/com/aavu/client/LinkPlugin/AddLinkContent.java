@@ -47,10 +47,10 @@ public class AddLinkContent extends Composite implements CompleteListener {
 	//http://localhost:8888/com.aavu.AddLink/AddLink.html?url=http%3A%2F%2Fwww.resourcebundleeditor.com%2Fwiki%2FSupport&description=ResourceBundle%20Editor&notes=pport%20mechanisms%20are%20hosted%20on%20
 	//http://localhost:8888/com.aavu.AddLink/AddLink.html?url=http%3A%2F%2Fwww.google.com&description=ResourceBundle%20Editor&notes=pport%20mechanisms%20are%20hosted%20on%20
 
-	public AddLinkContent(TopicCache topicCache, WebLink weblink, AddLinkManager manager) {
-		this(null,topicCache,weblink,null,manager,false);
+	public AddLinkContent(TopicCache topicCache, WebLink weblink, AddLinkManager manager,String username) {
+		this(null,topicCache,weblink,null,manager,false,username);
 	}	
-	public AddLinkContent(TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener,boolean showDelete) {		
+	public AddLinkContent(TopicLoader widget, TopicCache _topicCache, WebLink _link, final Topic myTopic, final CloseListener closeListener,boolean showDelete, String username) {		
 		this.topicCache = _topicCache;
 		this.link = _link;
 		this.loader = widget;
@@ -131,7 +131,10 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		}
 		
 		notificationLabel = new Label();
-		notificationLabel.setVisible(false);
+		if(username != null){
+			notificationLabel.setText(ConstHolder.myConstants.link_add_foruser(username));
+		}
+		//notificationLabel.setVisible(true);
 		mainPanel.setWidget(4,2, notificationLabel);
 		
 		initWidget(mainPanel);

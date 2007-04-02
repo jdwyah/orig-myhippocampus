@@ -24,7 +24,8 @@ public class HippoText extends MetaValue implements IsSerializable, Serializable
 	}	
 
 	public HippoText(User u,String string) {
-		this();
+		super(u,string);	
+		setPublicVisible(false);
 		setValue(string);
 	}
 

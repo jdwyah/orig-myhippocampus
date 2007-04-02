@@ -1,19 +1,28 @@
 package com.aavu.client.domain.commands;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.HippoText;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.util.SetUtils;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * Save a List of HippoLocations. Must pass all locations for the given Meta
+ * Save a List of HippoLocations. Must pass all locations for the given Meta.
+ * 
+ * We'll try to match the passed in list with the saved list, modifying everything that needs be.
+ * If things are passed in but not saved, we add.
+ * If things are saved, but not passed in, we delete.
+ * 
+ * Note: Remember that addMetaValue() will clear members unless called with false.
  * 
  * @author Jeff Dwyer
  *
@@ -21,6 +30,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class SaveMetaLocationCommand extends AbstractCommand implements IsSerializable {
 
 	private Set values;
+	private Set toDelete = new HashSet();
 
 	public SaveMetaLocationCommand(){};
 	
@@ -32,59 +42,61 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 	//@Override
 	public void executeCommand() {
 
-//		HippoLocation mv = (HippoLocation) getTopic(0).getSingleMetaValueFor((Meta) getTopic(1));
-//
-//		HippoLocation incoming = (HippoLocation)values.iterator().next();
-//		if(mv == null){
-//			mv = new HippoLocation();		
-//		}
-//		mv.setUser(getTopic(0).getUser());
-//		mv.setTitle(incoming.getTitle());
-//		mv.setLatitude(incoming.getLatitude());
-//		mv.setLongitude(incoming.getLongitude());
-//		
-//		getTopic(0).addMetaValue((Meta) getTopic(1), mv);		
+		System.out.println("\nSaveMetaLocationCommand EXECUTE SAVE META");
+		System.out.println("SaveMetaLocationCommand values "+values.size());
 		
-//		org.hibernate.NonUniqueObjectException: a different object with the same identifier value was already associated
-//		with the session: [com.aavu.client.domain.MetaLocation#2457]
-		//over-write all locations
-		//clear on first iteration, then don't clear
+		Set curLocations = getTopic(0).getMetaValuesFor((Meta) getTopic(1)); 
 		
-		System.out.println("\nEXECUTE SAVE META");
-		System.out.println("values "+values.size());
+		//assume that we'll delete everything, than remove what we won't delete
+		toDelete.addAll(curLocations);
 		
-		boolean clear = true;
+		System.out.println("SaveMetaLocationCommand CurLocations.size "+curLocations.size());
+		
 		for (Iterator iter = values.iterator(); iter.hasNext();) {
 			HippoLocation location = (HippoLocation) iter.next();
-			System.out.println("----"+location);
-			location.setUser(getTopic(0).getUser());
-			getTopic(0).addMetaValue((Meta) getTopic(1), location,clear);	
+		
+			System.out.println("SaveMetaLocationCommand Processing "+location);
 			
-			clear = false;
+			//get and modify
+			//remove, found from curLocations, dregs will be deleted
+			if(location.getId() > 0){
+				System.out.println("SaveMetaLocationCommand ID>0 -> MODIFY");
+				HippoLocation curForThatID = (HippoLocation) SetUtils.getFromSetById(curLocations, location.getId());
+				
+				location.copyPropsButNotIDIntoParam(curForThatID);
+				
+				System.out.println("remove "+location.getId());
+				SetUtils.removeFromSetById(toDelete, location.getId());
+			}
+			//new, add
+			else{
+				System.out.println("SaveMetaLocationCommand ADD");
+				location.setUser(getTopic(0).getUser());
+				getTopic(0).addMetaValue((Meta) getTopic(1), location,false);
+			}
+		
 		}
 		
-		System.out.println("topic assoc "+getTopic(0).getAssociations().size());
-		System.out.println("topic metas "+getTopic(0).getMetas().size());
 		
-		//System.out.println(" "+getTopic(0).toPrettyString());
-		
-		//would like to use code like this, but since we're not returning ids,
-		//it won't work right.
-		//
-//		//		if unsaved, just save
-//		//
-//		//else, copy the value of the location across
-//		//
-//		if(value.getId() == 0){
-//			getTopic(0).addMetaValue((Meta) getTopic(1), value,false);	
-//		}else{
-//			Set metaValues = getTopic(0).getMetaValuesFor((Meta) getTopic(1));
-//			HippoLocation savedLocation = (HippoLocation) SetUtils.getFromSetById(getAffectedTopics(), value.getId());
-//			savedLocation.setLocation(value.getLocation());			
+//		
+//		HippoDate mv = (HippoDate) getTopic(0).getSingleMetaValueFor((Meta) getTopic(1));
+//		
+//		boolean clear = true;
+//		for (Iterator iter = values.iterator(); iter.hasNext();) {
+//			HippoLocation location = (HippoLocation) iter.next();
+//			System.out.println("----"+location);
+//			location.setUser(getTopic(0).getUser());
+//			getTopic(0).addMetaValue((Meta) getTopic(1), location,clear);	
+//			
+//			clear = false;
 //		}
+//		
+//		System.out.println("topic assoc "+getTopic(0).getAssociations().size());
+//		System.out.println("topic metas "+getTopic(0).getMetas().size());
+			
 	}
 
-	
+	//@Override
 	public List getTopics() {
 		System.out.println("\n\n\nRETURN SMALL SUBLIST");
 		
@@ -93,6 +105,10 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 		
 		return rtn;
 		//return topics.subList(0, 1);
+	}
+	//@Override
+	public Set getDeleteSet(){
+		return toDelete;
 	}
 	
 	//@Override

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
+import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.AddLinkCommand;
@@ -39,7 +40,9 @@ public class AddLinkController extends SimpleFormController {
 
 		AddLinkCommand command = new AddLinkCommand();
 		
-		WebLink link = topicService.getWebLinkForURL(url);
+		LinkAndUser linkAndU = topicService.getWebLinkForURLAndUser(url);
+		
+		WebLink link = linkAndU.getWeblink();
 		
 		if(url != null && url.length() > 0 && link != null){
 			

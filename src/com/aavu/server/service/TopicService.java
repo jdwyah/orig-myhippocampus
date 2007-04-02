@@ -10,6 +10,7 @@ import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -41,8 +42,16 @@ public interface TopicService {
 
 	List getAllMetas();
 
+	/**
+	 * Filter out Dates/Locaitons/Metas.
+	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers();
 	
+	/**
+	 * Don't filter out Dates, Locations, Metas. Intended for debugging/testing use.
+	 * @param all
+	 * @return
+	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all);
 
 	Topic getForID(long topicID);
@@ -66,7 +75,7 @@ public interface TopicService {
 	
 	UserPageBean getUserPageBean(User su);
 
-	WebLink getWebLinkForURL(String url);
+	LinkAndUser getWebLinkForURLAndUser(String url);
 
 	Occurrence save(Occurrence link);
 

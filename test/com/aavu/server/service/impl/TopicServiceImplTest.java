@@ -438,6 +438,140 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 			
 	}
 	
+	
+	public void testMultipleLocationsInMultiplePassesCommand() throws HippoBusinessException {
+		
+		clean();
+				
+		System.out.println("SAVED TAG "+B);
+		
+		
+		Topic topic = new Topic(u,C);
+		topic = (Topic) topicService.save(topic);
+		
+		MetaLocation metaL = new MetaLocation();
+		metaL.setTitle(K);
+		metaL = (MetaLocation) topicService.save(metaL);
+		
+		MetaLocation savedMeta1 = (MetaLocation) topicService.getForID(metaL.getId());
+		assertNotSame(0, savedMeta1.getId());
+		System.out.println("saved meta1 "+savedMeta1);
+		assertTrue(savedMeta1 instanceof MetaLocation);
+		
+				
+		HippoLocation loc1 = new HippoLocation();
+		loc1.setLatitude(LAT1);
+		loc1.setLongitude(LONG1);
+		loc1.setTitle(E);
+		
+		HippoLocation loc2 = new HippoLocation();
+		loc2.setLatitude(LAT2);
+		loc2.setLongitude(LONG2);
+		loc2.setTitle(D);		
+		
+		Set locs = new HashSet();
+		locs.add(loc1);		
+		
+		AbstractCommand comm = new SaveMetaLocationCommand(topic,savedMeta1,locs);
+		
+				
+		topicService.executeAndSaveCommand(comm);
+		
+		System.out.println("FINISHED SAVE 1");		
+		
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());
+		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		Meta savedMeta = (Meta) topicS.getMetas().iterator().next();
+		assertNotNull(savedMeta);
+		assertEquals(K, savedMeta.getTitle());
+		
+		
+		Set members = topicS.getMetaValuesFor(savedMeta);			
+		assertEquals(1, members.size());		
+		
+		HippoLocation s1 = (HippoLocation) topicS.getSingleMetaValueFor(savedMeta);
+		assertEquals(E, s1.getTitle());
+		assertEquals(LAT1, s1.getLatitude());
+		assertEquals(LONG1, s1.getLongitude());
+		
+		List<DatedTopicIdentifier> idents = topicService.getAllTopicIdentifiers(true);
+		assertEquals(4, idents.size());
+		
+		
+		
+		
+		//
+		//Add the second Locations and verify that we now have 2
+		//
+		locs.add(loc2);
+		AbstractCommand comm2 = new SaveMetaLocationCommand(topic,savedMeta1,locs);	
+		topicService.executeAndSaveCommand(comm2);
+		
+		topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		savedMeta = (Meta) topicS.getMetas().iterator().next();
+		assertNotNull(savedMeta);
+		assertEquals(K, savedMeta.getTitle());		
+		members = topicS.getMetaValuesFor(savedMeta);			
+		assertEquals(2, members.size());		
+		
+		for (Iterator iter = members.iterator(); iter.hasNext();) {
+			HippoLocation l = (HippoLocation) iter.next();
+			if(l.getTitle().equals(D)){
+				assertEquals(LAT2, l.getLatitude());
+				assertEquals(LONG2, l.getLongitude());
+			}else if(l.getTitle().equals(E)){
+				assertEquals(LAT1, l.getLatitude());
+				assertEquals(LONG1, l.getLongitude());
+			}else{
+				fail("Wrong Title "+l.getTitle());
+			}
+		}		
+		idents = topicService.getAllTopicIdentifiers(true);
+		assertEquals(5, idents.size());
+		
+		//
+		//Now do a command with only loc2.
+		//assert that we've gone down to just 1 meta-value. 
+		//
+		Set locs3 = new HashSet();
+		locs3.add(loc2);		
+		AbstractCommand comm3 = new SaveMetaLocationCommand(topic,savedMeta1,locs3);	
+		topicService.executeAndSaveCommand(comm3);
+		
+		topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		savedMeta = (Meta) topicS.getMetas().iterator().next();
+		assertNotNull(savedMeta);
+		assertEquals(K, savedMeta.getTitle());		
+		members = topicS.getMetaValuesFor(savedMeta);			
+		assertEquals(1, members.size());		
+		
+		
+		HippoLocation s3 = (HippoLocation) topicS.getSingleMetaValueFor(savedMeta);
+		assertEquals(D, s3.getTitle());
+		assertEquals(LAT2, s3.getLatitude());
+		assertEquals(LONG2, s3.getLongitude());
+		
+		
+		
+		//
+		//Test that there was no DB leakage
+		//
+		idents = topicService.getAllTopicIdentifiers(true);
+		assertEquals(4, idents.size());
+			
+	}
+	
+	
+	
 	public void testMetaDateCommand() throws HippoBusinessException {
 		
 		clean();
