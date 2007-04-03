@@ -80,7 +80,7 @@ public class Explorer extends Composite implements ButtonGroup {
 						
 		timeline = new TimeLineWrapper(manager,defaultMap,width,height,window);
 				
-		blogView = new BlogView(manager,defaultMap);
+		blogView = new BlogView(manager,defaultMap,height);
 		
 		bigMap = new BigMap(manager,width,height);
 		
@@ -124,7 +124,7 @@ public class Explorer extends Composite implements ButtonGroup {
 		currentView.clear();
 		currentView.add(glossary);
 		
-		azB.onClick(azB);
+		recentB.onClick(azB);
 	}
 
 

@@ -4,6 +4,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.TooltipListener;
+import com.aavu.client.gui.timeline.CloseListener;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
@@ -20,7 +21,7 @@ public class TopicLink extends SimplePanel implements ClickListener {
 	private static final int DEFAULT_MAX_STRING = 40;
 	private Label l;
 	protected long id;
-	private PopupWindow popup; 
+	private CloseListener popup; 
 	
 	/**
 	 * dummyLink
@@ -35,19 +36,19 @@ public class TopicLink extends SimplePanel implements ClickListener {
 	public TopicLink(TopicIdentifier topic) {
 		this(topic.getTopicTitle(), topic.getTopicID());	
 	}
-	public TopicLink(TopicIdentifier topic,PopupWindow popup) {
+	public TopicLink(TopicIdentifier topic,CloseListener popup) {
 		this(topic.getTopicTitle(), topic.getTopicID(),DEFAULT_MAX_STRING,popup);	
 	}
 	private TopicLink(String title, final long id){
 		this(title,id,DEFAULT_MAX_STRING,null);
 	}
-	public TopicLink(TopicIdentifier topic, PopupWindow popup,int maxStringLength) {
+	public TopicLink(TopicIdentifier topic, CloseListener popup,int maxStringLength) {
 		this(topic.getTopicTitle(),topic.getTopicID(),maxStringLength,popup);		
 	}
-	public TopicLink(String title, long id, PopupWindow popup){
+	public TopicLink(String title, long id, CloseListener popup){
 		this(title,id,DEFAULT_MAX_STRING,popup);
 	}
-	public TopicLink(String title, long id, int maxStringLength,PopupWindow popup){
+	public TopicLink(String title, long id, int maxStringLength,CloseListener popup){
 		this.popup = popup;
 		
 		l = null;

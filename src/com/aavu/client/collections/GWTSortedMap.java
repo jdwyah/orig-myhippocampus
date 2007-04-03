@@ -35,7 +35,7 @@ public class GWTSortedMap implements Map {
 	
 	public List getKeyList() {
 		if(dirty){
-			System.out.println("SORT ");
+			System.out.println("GWTSortedMap.SORT ");
 			if(compare == null){
 				Collections.sort(keys.getList());
 			}else{

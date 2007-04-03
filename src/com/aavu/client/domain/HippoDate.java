@@ -3,11 +3,9 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Iterator;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
-import com.aavu.client.widget.autocompletion.Completable;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
@@ -29,15 +27,6 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 		setPublicVisible(false);
 	}
 
-	public Date getStartDate(){
-		return getCreated();
-	}
-	public void setStartDate(Date date){
-		if(getTitle() == null || getTitle().equals("")){
-			setTitle(df.format(date));
-		}
-		setCreated(date);
-	}
 	/**
 	 * bc DB has not-null constraints on lastUpdated, we'll say that... eq == null... 
 	 * hmmm, need to make sure not to fake out Hibernate.
@@ -50,12 +39,21 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 //		}
 		return getLastUpdated();
 	}
+	public Date getStartDate(){
+		return getCreated();
+	}
+	public boolean mustHaveUniqueName() {
+		return false;
+	}
 	public void setEndDate(Date date){
 		setLastUpdated(date);
 	}
 	
-	public boolean mustHaveUniqueName() {
-		return false;
+	public void setStartDate(Date date){
+		if(getTitle() == null || getTitle().equals("")){
+			setTitle(df.format(date));
+		}
+		setCreated(date);
 	}
 
 }

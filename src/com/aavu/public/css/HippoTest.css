@@ -86,6 +86,7 @@ a:visited {
 	-khtml-opacity: .88;
 	/*background: red;*/
 	border: 2px solid #D8E3FD;
+
 	border-style: ridge;
 	color: white;
 	width: 100%;
@@ -187,6 +188,15 @@ a:visited {
 }
 .H-ExplorerButton {
 	width: 100%;
+}
+.H-Blog-Date {
+	font-size: .8em;
+	color: #444444;
+}
+.H-Blog-NextPage {
+	margin: 1em;
+	color: blue;
+	text-decoration: underline;	
 }
 
 .H-MetaEditorWidget {

@@ -1,16 +1,13 @@
 package com.aavu.client.gui;
 
-import org.gwtwidgets.client.wrap.Effect;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.GUIEffects;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.glossary.SimpleTopicDisplay;
+import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.TopicLink;
-import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
@@ -23,7 +20,7 @@ public class TopicPreviewLink extends TopicLink implements MouseListener {
 	private boolean dirty = true;
 	private Timer t;
 	
-	public TopicPreviewLink(TopicIdentifier topic,int max_link_chars,PopupWindow popup,Panel showPreview,Manager manager){
+	public TopicPreviewLink(TopicIdentifier topic,int max_link_chars,CloseListener popup,Panel showPreview,Manager manager){
 		super(topic,popup,max_link_chars);		
 		addMouseListener(this);
 		this.showPreview = showPreview;
