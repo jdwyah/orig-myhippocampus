@@ -154,7 +154,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 				
 				LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(),location,meta);
 				
-				mapWidget.add(locObj);
+				mapWidget.add(locObj,false);
 				
 				//TODO doesn't center. 'top-lefts'
 				//mapWidget.centerOn(location);

@@ -24,6 +24,7 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
+import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -670,6 +671,72 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 	
+	
+	public void testTagPropertyCommand() throws HippoBusinessException {
+		
+		clean();
+		
+		Tag tag = new Tag(u,C);
+		tag = (Tag) topicService.save(tag);
+				
+		
+		MetaDate metaDate = new MetaDate();
+		metaDate.setTitle(J);
+		metaDate = (MetaDate) topicService.save(metaDate);
+		
+		MetaDate savedMeta1 = (MetaDate) topicService.getForID(metaDate.getId());
+		assertNotSame(0, savedMeta1.getId());
+		System.out.println("||| metaL "+metaDate+" "+metaDate.getClass());
+		System.out.println("||| savedMeta1 "+savedMeta1+" "+savedMeta1.getClass());
+		assertTrue(savedMeta1 instanceof MetaDate);
+		
+		
+		
+		Meta[] metas = new Meta[]{savedMeta1};
+		
+		AbstractCommand comm = new SaveTagPropertiesCommand(tag,metas);
+				
+		topicService.executeAndSaveCommand(comm);
+		
+		System.out.println("FINISHED SAVE");		
+		
+		
+		Topic topicS = topicService.getForID(tag.getId());
+		assertEquals(0, topicS.getTypes().size());
+		
+		System.out.println(topicS.toPrettyString());		
+		assertEquals(1, topicS.getTagProperties().size());		
+		
+		
+		//
+		//add a second meta
+		//
+		MetaDate metaDate2 = new MetaDate();
+		metaDate2.setTitle(D);
+		metaDate2 = (MetaDate) topicService.save(metaDate2);		
+		MetaDate savedMeta2 = (MetaDate) topicService.getForID(metaDate2.getId());
+		assertNotSame(0, savedMeta2.getId());	
+		assertTrue(savedMeta2 instanceof MetaDate);	
+		
+		metas = new Meta[]{savedMeta1,savedMeta2};
+		comm = new SaveTagPropertiesCommand(tag,metas);
+		topicService.executeAndSaveCommand(comm);		
+		topicS = topicService.getForID(tag.getId());
+		
+		assertEquals(2, topicS.getTagProperties().size());
+		
+		
+		
+		//
+		//remove a meta and ensure that we're back to 1
+		//
+		metas = new Meta[]{savedMeta2};
+		comm = new SaveTagPropertiesCommand(tag,metas);
+		topicService.executeAndSaveCommand(comm);		
+		topicS = topicService.getForID(tag.getId());
+		
+		assertEquals(1, topicS.getTagProperties().size());
+	}
 	
 	
 	private void clean() throws HippoBusinessException {

@@ -135,6 +135,9 @@ public class UserServiceImpl implements UserService {
 		userDAO.save(user);
 	}
 
+	/**
+	 * lowercase usernames before creation
+	 */
 	public void createUser(String username, String userpass, boolean superV) {
 
 		//hmm a bit odd having the logic catc in the 
@@ -143,7 +146,7 @@ public class UserServiceImpl implements UserService {
 		log.debug("pp: "+hashPassword(userpass));
 		
 		User user = new User();
-		user.setUsername(username);
+		user.setUsername(username.toLowerCase());
 		user.setPassword(hashPassword(userpass));		
 		user.setSupervisor(superV);
 		

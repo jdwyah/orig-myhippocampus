@@ -80,12 +80,14 @@ public class TagPropertyPanel extends Gadget {
 	}
 	private void addMWidg(final Meta meta) {
 		final HorizontalPanel hp = new HorizontalPanel();
-		hp.add(new Label(meta.getTitle()));
+		final Label thisLabel = new Label(meta.getTitle());
+		hp.add(thisLabel);
 		
 		DeleteButton deleteButton = new DeleteButton();
 		deleteButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {			
 				metas.remove(meta);
+				hp.remove(thisLabel);
 			}
 		});
 		hp.add(deleteButton);

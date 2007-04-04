@@ -8,14 +8,15 @@ import com.aavu.client.HippoTest;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.ext.TooltipListener;
-import com.aavu.client.gui.mapper.MapperWidget;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Dashboard extends SimplePanel {
@@ -90,29 +91,26 @@ public class Dashboard extends SimplePanel {
 				Window.open(HippoTest.getRelativeURL("/site/j_acegi_logout"),"logout","");						
 			}});
 		
-		ImageButton glossaryButton = new ImageButton(ConstHolder.myConstants.glossary_image(),64,45);
-		glossaryButton.addClickListener(new ClickListener(){
+		ImageButton explorerButton = new ImageButton(ConstHolder.myConstants.glossary_image(),64,45);
+		explorerButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.showGlossary();
 			}});
-		glossaryButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.glossary_tooltip()));
+		explorerButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.explorer_tooltip()));
 		
 		
 		
 		mainPanel.add(addNewButton);
-		mainPanel.add(addNewIslandButton);
-		
-//		mainPanel.add(tagButton);		
-//		mainPanel.add(timeLine);
-//		mainPanel.add(addDeliciousTags);		
-		
-		mainPanel.add(glossaryButton);
-		
+		mainPanel.add(addNewIslandButton);		
+		mainPanel.add(explorerButton);		
 		mainPanel.add(logoutB);
 		
 		
-		//mainPanel.add(facebookB);
-				
+//		mainPanel.add(new Label("New Topic"));
+//		mainPanel.add(new Label("New Island"));
+//		mainPanel.add(new Label("Explore"));
+//		mainPanel.add(new TextBox());
+		
 
 		add(mainPanel);
 		//sets

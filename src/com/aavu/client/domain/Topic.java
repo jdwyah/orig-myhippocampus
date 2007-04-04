@@ -121,6 +121,14 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 	
 	
+	/**
+	 * NOTE! this will clear() the members. Shouldn't really be necessary and can 
+	 * lead to DB-leaks if you don't remember to actually delete things as well, but 
+	 * we're using it because of the set.add() duplication annoyances. 
+	 * 
+	 * @param meta
+	 * @param metaValue
+	 */
 	public void addMetaValue(Meta meta, Topic metaValue) {
 		addMetaValue(meta, metaValue,true);
 	}
@@ -146,12 +154,13 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 		Association assoc = getAssociationForMetaOrNull(meta);
 		if(assoc == null){
-			System.out.println("addMetaValue: create new assoc");
+			System.out.println("Topic.addMetaValue: create new assoc");
 			assoc = new Association(this);
 			
 			
 			
 		}else{
+			System.out.println("Topic.addMetaValue assoc.member.size() "+assoc.getMembers().size());
 			Topic cur_val = (Topic) assoc.getMembers().iterator().next();
 			System.out.println("Topic.addMetaValue cur_v "+cur_val);			
 			
@@ -346,9 +355,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * @param meta
 	 */
 	public void addTagProperty(Meta meta) {		
-		Association a = new Association(this,meta);		
-		getAssociations().add(a);		
+		Association a = getTagPropertyAssociation();	
+		a.getMembers().add(meta);		
 	}
+
 
 	public String getCompleteStr() {		
 		return getTitle();
@@ -504,7 +514,12 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * 
 	 * Use getPropertiesDueToTags() if you want the reverse of this.
 	 * 
-	 * NOTE: calling getTagProperties().add() won't do anything. Use addMeta()
+	 * NOTE: calling getTagProperties().add() won't do anything. Use addTagProperty()
+	 * 
+	 * These are defined by associations of no type, with a meta member.
+	 * 
+	 * Any topic should only have _1_ of these associations and that association should
+	 * have all the tagProperties as members. It could theoretically have a type of PropertiesOfThisTag.class 
 	 * 
 	 * //old comment
 	 * //This was returning MetaValue associations as well, until we added members.size() == 0 
@@ -514,25 +529,52 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public Set getTagProperties() {
 		Set metas = new HashSet();
-		
-		
-		
-		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-			Association association = (Association) iter.next();
-									
-			for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
-				Topic possibleMeta = (Topic) iterator.next();
-			
-				if (possibleMeta instanceof Meta) {							
-					metas.add(possibleMeta);				
-				}	
-			}			
-			
-		}
+				
+		Association association = getTagPropertyAssociation();
+
+		for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
+			Topic possibleMeta = (Topic) iterator.next();
+
+			System.out.println("getTagProperties CHECKING "+possibleMeta);
+
+			//sanity check. All members of this association really should be 
+			//Metas. 
+			//
+			if (possibleMeta instanceof Meta) {							
+				metas.add(possibleMeta);				
+			}	
+		}			
+					
 		return metas;		
 	}
 	/**
-	 * Inverse of getTagProperties(). 
+	 * Return the Association to our TagProperties, or create a new association and add it.
+	 * @return
+	 */
+	public Association getTagPropertyAssociation(){
+		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
+			Association association = (Association) iter.next();
+				
+			System.out.println("gtpa: "+association+" Member size: "+association.getMembers().size());
+			
+			for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
+				Topic possibleMeta = (Topic) iterator.next();
+			
+				System.out.println("Checking: "+possibleMeta);
+				if (possibleMeta instanceof Meta) {							
+					return association;				
+				}	
+			}						
+		}
+		System.out.println("No TagPropertyAssociation Found");
+		Association rtn = new Association(this);
+		rtn.setTitle("Tag Properties for "+getTitle());
+		getAssociations().add(rtn);
+		return rtn;
+	}
+	
+	/**
+	 * Inverse of getTagProperties(). Get's all metas of our tags.
 	 * 
 	 * @return
 	 */
@@ -598,11 +640,16 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return metas;		
 	}
 	private Association getAssociationForMetaOrNull(Meta meta) {
+		
+		System.out.println("NUM assoc "+getAssociations().size());
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			
+			System.out.println("association.members.size() "+association.getMembers().size());
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possible = (Topic) iterator.next();
+				
+				System.out.println("getAssociationForMetaOrNull "+possible.getId()+" "+meta.getId());
 				
 				if (possible.getId() == meta.getId()) {	
 					return association;									

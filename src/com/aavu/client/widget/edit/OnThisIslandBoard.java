@@ -55,7 +55,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		});
 
 		
-		Button examineB = new Button("View Members");
+		Button examineB = new Button(ConstHolder.myConstants.explorer_onthisisland());
 		examineB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
 				viewMembers();				

@@ -1,16 +1,13 @@
 package com.aavu.client.gui.maps;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.aavu.client.domain.HippoLocation;
-import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.gui.ext.WheelListener;
-import com.aavu.client.gui.gadgets.MapGadget;
+import com.aavu.client.gui.maps.ext.MarkerManager;
 import com.aavu.client.util.Logger;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.mapitz.gwt.googleMaps.client.GControl;
@@ -25,6 +22,8 @@ import com.mapitz.gwt.googleMaps.client.GMarker;
 import com.mapitz.gwt.googleMaps.client.GMarkerEventClickListener;
 import com.mapitz.gwt.googleMaps.client.GMarkerEventDragListener;
 import com.mapitz.gwt.googleMaps.client.GMarkerEventManager;
+import com.mapitz.gwt.googleMaps.client.GMarkerManager;
+import com.mapitz.gwt.googleMaps.client.GMarkerManagerOptions;
 import com.mapitz.gwt.googleMaps.client.GMarkerOptions;
 import com.mapitz.gwt.googleMaps.client.GOverlay;
 
@@ -37,16 +36,19 @@ import com.mapitz.gwt.googleMaps.client.GOverlay;
  */
 public class HippoMapWidget extends Composite implements GMarkerEventDragListener, WheelListener, GMap2EventMouseListener, GMarkerEventClickListener {
 	
+	private static final int MAX_ZOOM = 17;
+	private static final int AMALGAMIZED_START = 4;
+	private static final int AMALGAM_END = 3;
 	private GMap2 gmaps;
 	private GMap2Widget mapWidget;
 	private MapController controller;
 	
 	private Map markerToLocation = new HashMap();
 
-	private GMarkerOptions moveableMarkerOps;
-
 	private GMarkerEventManager markerEventManager;
 	private boolean weHaveFocus;
+	private MarkerManager markerManager;
+	
 	
 	
 	public HippoMapWidget(MapController gadget, int width, int height,int zoom) {
@@ -55,9 +57,8 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		//middle of atlantic
 		GLatLng center = new GLatLng(33.13755119234614, -35.15625);
 		
-				
-		moveableMarkerOps = new GMarkerOptions();		
-		moveableMarkerOps.setDraggable(true); 
+
+		
 		
 	    mapWidget = new GMap2Widget(height+"", width+"",center,zoom,null);
 	    
@@ -67,6 +68,9 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 
 	    //Retrieve the GMap2 object and start manipulating your map
 	    gmaps = mapWidget.getGmap();
+	    GMarkerManagerOptions opts = new GMarkerManagerOptions();
+	    opts.setTrackMarkers(true);
+	    markerManager = new MarkerManager(gmaps,opts);
 	    
 	    gmaps.addControl(GControl.GSmallZoomControl());
 	    
@@ -77,14 +81,14 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	    GMap2EventManager eventManager = GMap2EventManager.getInstance();
 
 	    eventManager.addOnMoveStartListener(gmaps, new GMap2EventMoveListener() {
-	    	public void onMoveStart(GMap2 map) {
-	    		//Logger.log("move started");
+	    	public void onMove(GMap2 map){
 	    	}
 
 	    	public void onMoveEnd(GMap2 map){
 	    	}
 
-	    	public void onMove(GMap2 map){
+	    	public void onMoveStart(GMap2 map) {
+	    		//Logger.log("move started");
 	    	}
 	    });
 	    
@@ -110,24 +114,71 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	}
 	
 
-	private GMarker createPoint(LocationDTO locObj) {
+	public void add(LocationDTO locObj,boolean partOfAmalgam) {
+		createPoint(locObj,partOfAmalgam);		
+	}
+	public void addAmalgam(LocationDTO locObj,String title) {
+		createPoint(locObj,title,false,0,AMALGAM_END);		
+	}
+
+	public void centerOn(HippoLocation location) {
+		System.out.println("!!!!!!!!!!!!!CENTER ON "+location.getLocation());
+		//gmaps.setCenter(latlng)
+		gmaps.setCenter(location.getLocation());
+	}
+
+	public void clear() {
 		
-		moveableMarkerOps.setTitle(locObj.getOnMapTitle());
+		
+		gmaps.clearOverlays();		
+		
+		//weird. no markerManager.clear() sounds like google spaced this functionality.
+		//http://groups.google.com/group/Google-Maps-API/browse_thread/thread/8f21c0763d4d3283/848f91821bb6b2c6
+		//http://googlemapsapi.blogspot.com/2007/03/new-open-source-utility-library-for.html
+	    
+		//fixed by wrapping the new MarkerManager (not GMarkerManager) API
+		markerManager.clearMarkers();
+	    
+		
+	}
+	
+	
+	private GMarker createPoint(LocationDTO locObj) {
+		return createPoint(locObj, false);
+	}
+	private GMarker createPoint(LocationDTO locObj,boolean amalgamized) {
+		if(amalgamized){
+			return createPoint(locObj, locObj.getOnMapTitle(),true,AMALGAMIZED_START,MAX_ZOOM);
+		}else{
+			return createPoint(locObj, locObj.getOnMapTitle(),true,0,MAX_ZOOM);	
+		}
+		
+	}
+		
+	private GMarker createPoint(LocationDTO locObj,String title,boolean draggable,int minZoom,int maxZoom) {
+	
+		System.out.println("Create Point "+locObj.getOnMapTitle()+" Title "+title+" draggable "+draggable+" "+minZoom+" "+maxZoom);
+		
+		GMarkerOptions moveableMarkerOps;		
+		moveableMarkerOps = new GMarkerOptions();		
+		moveableMarkerOps.setDraggable(draggable); 
+		moveableMarkerOps.setTitle(title);
 		
 		GMarker m = new GMarker(locObj.getLocation().getLocation(),moveableMarkerOps);
 		markerEventManager.addOnDragEndListener(m, this);
 		markerEventManager.addOnClickListener(m, this);
 		
-		m.enableDragging();		
-		gmaps.addOverlay(m);
+		
+		if(draggable){
+			m.enableDragging();
+		}
+		
+		markerManager.addMarker(m,minZoom,maxZoom);
+		//gmaps.addOverlay(m);
+		
 		
 		markerToLocation.put(m, locObj);
 		return m;
-	}
-
-	public void clear() {
-		gmaps.clearOverlays();
-		
 	}
 
 	private void newPoint(GLatLng point) {
@@ -135,8 +186,7 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		LocationDTO newLoc = controller.getNewLocationForPoint(point);
 		
 		if(newLoc != null){		
-			GMarker marker = createPoint(newLoc);
-		
+			GMarker marker = createPoint(newLoc);		
 		}
 		
 		
@@ -144,31 +194,13 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	}
 	
 	
-	private void userSelected(GMarker marker) {
-		
-		System.out.println("Marker clicked "+marker);
-		
-		LocationDTO selected = (LocationDTO) markerToLocation.get(marker);
-		System.out.println("sel "+selected);
-				
-		if(selected != null){
-			controller.userClicked(selected);
-		}
-	}
-		
-	public void add(LocationDTO locObj) {
-		createPoint(locObj);		
-	}
-
 	
 	
 	
 	
 	
-	
-	
-	public void setSize(int i) {
-		mapWidget.setPixelSize(i, i);
+	public void onClick(GMarker marker) {
+		userSelected(marker);
 	}
 
 
@@ -176,6 +208,9 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 
 	
 	
+	public void onDblClick(GMarker marker) {
+		
+	}
 	public void onDragEnd(GMarker marker) {
 		LocationDTO dragged = (LocationDTO) markerToLocation.get(marker);
 		
@@ -189,23 +224,26 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		}
 		
 	}
+
+
 	public void onDragStart(GMarker marker) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	public void centerOn(HippoLocation location) {
-		System.out.println("!!!!!!!!!!!!!CENTER ON "+location.getLocation());
-		//gmaps.setCenter(latlng)
-		gmaps.setCenter(location.getLocation());
-	}
-
-
 	
+	public void onMouseMove(GMap2 map, GLatLng latlng) {}
+
+
+	public void onMouseOut(GMap2 map, GLatLng latlng) {
+		weHaveFocus = false;
+	}
+	public void onMouseOver(GMap2 map, GLatLng latlng) {
+		weHaveFocus = true;
+	}
 	public boolean onWheel(Widget widget, int delta) {		
 		if(weHaveFocus){
-			System.out.println("Map processing wheel");
 			if(delta < 0){
 				gmaps.zoomOut();
 			}else{
@@ -217,22 +255,19 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	}
 
 
-	public void onMouseMove(GMap2 map, GLatLng latlng) {}
-	public void onMouseOut(GMap2 map, GLatLng latlng) {
-		weHaveFocus = false;
+	public void setSize(int i) {
+		mapWidget.setPixelSize(i, i);
 	}
-	public void onMouseOver(GMap2 map, GLatLng latlng) {
-		weHaveFocus = true;
-	}
-
-
-	public void onClick(GMarker marker) {
-		userSelected(marker);
-	}
-	public void onDblClick(GMarker marker) {
+	private void userSelected(GMarker marker) {
 		
+		System.out.println("Marker clicked "+marker);
+		
+		LocationDTO selected = (LocationDTO) markerToLocation.get(marker);
+		System.out.println("sel "+selected);
+				
+		if(selected != null){
+			controller.userClicked(selected);
+		}
 	}
-	
-	
 	
 }

@@ -18,16 +18,18 @@ public class SetUtils {
 	 * @return
 	 */
 	public static Object getFromSetById(Set topics,long id){
-		for (Iterator iter = topics.iterator(); iter.hasNext();) {
+		for (Iterator iter = topics.iterator(); iter.hasNext();) {			
 			Object o = (Object) iter.next();
 			if (o instanceof Occurrence) {
 				Occurrence occ = (Occurrence) o;
+				System.out.println("check "+occ.getId());
 				if(occ.getId() == id){
 					return occ;
 				}
 			}
 			if (o instanceof Topic) {
 				Topic top = (Topic) o;
+				System.out.println("check "+top.getId());
 				if(top.getId() == id){
 					return top;
 				}

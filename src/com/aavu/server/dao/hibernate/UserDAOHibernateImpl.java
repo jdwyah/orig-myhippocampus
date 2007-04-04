@@ -31,6 +31,9 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		return getHibernateTemplate().find("from User");
 	}
 
+	/**
+	 * Uses username.toLowerCase()
+	 */
 	public User getUserByUsername(String username) throws UsernameNotFoundException {		
 		//Hack to run a 1-time initialization of the DB
 		//
@@ -40,7 +43,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		}
 		log.debug("Inited");
 		
-		List<User> list = getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username);
+		List<User> list = getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username.toLowerCase());
 		log.debug("list "+list);
 		log.debug("list "+list.size());
 		
@@ -64,12 +67,15 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		return (User) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from User where id = :id", "id", id));
 	}
 
+	/**
+	 * Uses username.toLowerCase()
+	 */
 	public ServerSideUser loadUserByUsername(String username)
 			throws UsernameNotFoundException, DataAccessException {
 		
 		log.debug("here");
 		
-		List<User> users = getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username);
+		List<User> users = getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username.toLowerCase());
 
 		log.debug("Found "+users.size()+" users for username "+username);
 

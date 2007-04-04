@@ -573,8 +573,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (Topic topic : allTopics) {
 			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		////should be nine. 6 from before plus:  Recommender, Patriot->Recommender, and SeeAlso, 
-		assertEquals(9,allTopics.size());
+		////should be eight. 6 from before plus:  Recommender, Patriot->Recommender 
+		assertEquals(8,allTopics.size());
 
 
 		Topic anotherBook = new Topic(u,G);
@@ -590,9 +590,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (Topic topic : allTopics) {
 			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		////should be just 10. 9 from before plus: Another 
+		////should be just 9. 8 from before plus: Another 
 		//
-		assertEquals(10,allTopics.size());
+		assertEquals(9,allTopics.size());
 
 
 		Topic anotherRecommender = new Topic(u,H);
@@ -606,8 +606,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (Topic topic : allTopics) {
 			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		////should be just 12. 10 from before plus: AnotherRecommender & AnotherRecomender's Association 
-		assertEquals(12,allTopics.size());
+		////should be just 11. 9 from before plus: AnotherRecommender & AnotherRecomender's Association 
+		assertEquals(11,allTopics.size());
 	}
 
 	

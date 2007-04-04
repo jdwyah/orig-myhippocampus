@@ -1,17 +1,18 @@
 package com.aavu.client.gui.maps;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.HippoLocation;
-import com.aavu.client.domain.commands.SaveMetaLocationCommand;
+import com.aavu.client.domain.IntPair;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.gui.explorer.ExplorerPanel;
 import com.aavu.client.service.Manager;
-import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -45,6 +46,82 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		initWidget(mainP);
 	}
 
+	private void addToMap(List allLocations) {
+		mapWidget.clear();
+		
+		//<IntPair,Set<LocationDTO>>
+		Map lowPassFilter = new HashMap();
+		
+		for (Iterator iter = allLocations.iterator(); iter.hasNext();) {
+			LocationDTO locdto = (LocationDTO) iter.next();
+			
+			IntPair key = locdto.getLocation().getFilteredLocation();
+			Set locations = (Set) lowPassFilter.get(key);
+			if(locations == null){
+				locations = new HashSet();
+			}else{
+				System.out.println("match");
+			}
+			System.out.println("key "+key.getX()+" "+key.getY()+" "+locdto.getOnMapTitle());
+			locations.add(locdto);
+			lowPassFilter.put(key, locations);
+								
+		}	
+		System.out.println("--fin--");
+		for (Iterator iter = lowPassFilter.keySet().iterator(); iter.hasNext();) {
+			IntPair key = (IntPair) iter.next();
+		
+			Set locations = (Set) lowPassFilter.get(key);
+			
+			System.out.println("key "+key.getX()+" "+key.getY());
+			
+			boolean partOfAmalgam = false;
+			
+			if(locations.size() > 1){
+				partOfAmalgam = true;
+				
+				int count = 0;
+				StringBuffer amalgamText = new StringBuffer();
+				for (Iterator iterator = locations.iterator(); iterator.hasNext();) {
+					LocationDTO locDTO = (LocationDTO) iterator.next();					
+					amalgamText.append(locDTO.getOnMapTitle());
+					amalgamText.append("\n");
+					if(++count > 5){
+						amalgamText.append(ConstHolder.myConstants.map_amalgam_more());
+						break;
+					}
+				}
+				
+				//just use the last location
+				//PEND LOW do averaging
+				LocationDTO locDTO = (LocationDTO) locations.iterator().next();
+				System.out.println("add amalgam "+amalgamText.toString());
+				mapWidget.addAmalgam(locDTO,amalgamText.toString());				
+			}
+			
+			for (Iterator iterator = locations.iterator(); iterator.hasNext();) {
+				LocationDTO locDTO = (LocationDTO) iterator.next();				
+				System.out.println("add regul "+locDTO.getOnMapTitle()+" "+partOfAmalgam);
+				mapWidget.add(locDTO,partOfAmalgam);
+			}
+			
+			
+		
+			
+			
+		}
+		
+		
+		
+	}
+
+	/**
+	 * no add, so return null here
+	 */
+	public LocationDTO getNewLocationForPoint(GLatLng point) {
+		return null;
+	}
+
 	public Widget getWidget() {
 		return this;
 	}
@@ -66,7 +143,7 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 				addToMap(allLocations);							
 			}});
 	}
-
+	
 	public void loadAll() {
 		
 		manager.getTopicCache().getAllLocations(new StdAsyncCallback(ConstHolder.myConstants.bigmap_getall_async()){
@@ -77,21 +154,6 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 				addToMap(allLocations);							
 			}});
 		
-	}
-
-	private void addToMap(List allLocations) {
-		mapWidget.clear();
-		for (Iterator iter = allLocations.iterator(); iter.hasNext();) {
-			LocationDTO locdto = (LocationDTO) iter.next();				
-			mapWidget.add(locdto);
-		}	
-	}
-	
-	/**
-	 * no add, so return null here
-	 */
-	public LocationDTO getNewLocationForPoint(GLatLng point) {
-		return null;
 	}
 
 

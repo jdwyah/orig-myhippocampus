@@ -19,10 +19,16 @@ import com.mapitz.gwt.googleMaps.client.GLatLng;
 public class HippoLocation extends MetaValue implements IsSerializable, Serializable{
 	
 	private static final int SIGNIFICANT_DIGITS = 100000;
+	private static final int FILTER = 20;
 	
 	public HippoLocation(){
 		setPublicVisible(false);
 	}	
+	
+	public IntPair getFilteredLocation(){
+		return new IntPair((getLatitude()/(SIGNIFICANT_DIGITS*FILTER)),
+				getLongitude()/(SIGNIFICANT_DIGITS*FILTER));		
+	}
 	
 	public GLatLng getLocation(){				
 		return new GLatLng((double)getLatitude()/SIGNIFICANT_DIGITS,

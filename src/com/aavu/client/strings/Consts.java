@@ -144,6 +144,8 @@ public interface Consts extends Messages {
 	String clouds_src();
 	String glossary_image();
 	String glossary_tooltip();
+	String explorer_tooltip();
+	
 	String glossary();
 	String meta_text();
 	String meta_date();
@@ -210,6 +212,8 @@ public interface Consts extends Messages {
 	String explorer_map();
 	String explorer_lostFound();
 	
+	String explorer_onthisisland();
+	
 	String bigmap_getall_async();
 	
 	
@@ -266,6 +270,11 @@ public interface Consts extends Messages {
 	String help_where_3();
 	String help_where_3_A();
 	String topic_preview_gotherenow();
+	
+	
+	String map_amalgam_more();
+	
+	
 		
 	
 		

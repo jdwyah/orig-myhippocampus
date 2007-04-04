@@ -50,7 +50,7 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 
 	private List lastLoadedftis;
 
-	private TimeLineConst currentStyle = TimeLineConst.UPDATED;
+	private TimeLineConst currentStyle = TimeLineConst.META;
 
 	private SelectableButton currentButton;
 	
@@ -99,7 +99,16 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 	 * @param allIdentifiers 
 	 * @return
 	 */
-	private void getTimeLinesOfStyle(TimeLineConst style,AsyncCallback callback, List allIdentifiers) {
+	private void getTimeLinesOfStyle(TimeLineConst style, List allIdentifiers) {
+		
+		AsyncCallback callback;
+		if(TimeLineConst.META == style 
+				&&
+				!allMode){
+			callback = new TimeLineLookupWMerge();
+		}else{
+			callback = new TimeLineLookup();
+		}
 		
 		//not a created || updated, go async
 		if(TimeLineConst.META == style){
@@ -163,13 +172,7 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 			super.onClick();
 			
 			currentStyle = style;
-			if(TimeLineConst.META == style 
-					&&
-					!allMode){
-				getTimeLinesOfStyle(style,new TimeLineLookupWMerge(),lastLoadedftis);
-			}else{
-				getTimeLinesOfStyle(style,new TimeLineLookup(),lastLoadedftis);
-			}
+			getTimeLinesOfStyle(style,lastLoadedftis);
 		}
 	}
 	
@@ -222,7 +225,7 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 	//@Override
 	protected void draw(List ftis) {
 		this.lastLoadedftis = ftis;
-		getTimeLinesOfStyle(currentStyle,new TimeLineLookup(),ftis);		
+		getTimeLinesOfStyle(currentStyle,ftis);		
 	}
 
 	public void newSelection(SelectableButton button) {		
