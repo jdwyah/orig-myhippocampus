@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class MetaSeeAlso extends Meta {
 
-	
+	private static final String TYPE = "SeeAlso";
 	public static final String UBER_TITLE = "SEEALSO UBER";
 
 	public MetaSeeAlso(){
@@ -37,8 +37,7 @@ public class MetaSeeAlso extends Meta {
 
 	//@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return TYPE;
 	}
 	
 	

@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -22,6 +23,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.server.dao.TagDAO;
 
 public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
@@ -49,27 +51,29 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 	}
 
-	public List<String> getTagsStarting(User user, String match) {
+	public List<TopicIdentifier> getTagsStarting(User user, String match) {
 		return getTagsStarting(user, match, DEFAULT_TAG_AUTOCOMPLETE_MAX);		
 	}
-	public List<String> getTagsStarting(User user, String match,int max) {
+	public List<TopicIdentifier> getTagsStarting(User user, String match,int max) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)		
 		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),
 				Expression.or(
 				Expression.eq("user", user),Expression.eq("publicVisible", true))))
-		.setProjection(Property.forName("title"));				
+		.setProjection(Projections.projectionList()
+		.add(Property.forName("title"))
+		.add(Property.forName("id")));			
 		log.debug("USER: "+user+" USER ID "+user.getId()+" NAME "+user.getUsername()+" MATCH|"+match+"|");
-		return getHibernateTemplate().findByCriteria(crit,0,max);
-	}
-
-	public void removeTag(User user, Tag selectedTag){		
-
-		throw new UnsupportedOperationException();
 		
-		//TODO re-implement
-		//but for now this is dangerous.. could be orphaning lots of things
+		List<Object[]> list = getHibernateTemplate().findByCriteria(crit,0,max);
 		
-		//getHibernateTemplate().delete(selectedTag);		
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+
+		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list){
+			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+		}		
+		return rtn;				
 	}
 
 	/**

@@ -59,7 +59,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		EnterInfoButton enterInfoButton = new EnterInfoButton();		
 		enterInfoButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
-				completed(topicCompleter.getText());
+				topicCompleter.complete();
 			}
 		});
 
@@ -113,17 +113,9 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 			}
 			
 		});
-		
-		
+				
 		Association assoc = myTopic.getSeeAlsoAssociation();
 		
-//		System.out.println("found see also");
-//		System.out.println("1 "+myTopic.toPrettyString());
-
-//		System.out.println("2 "+assoc.getMembers().size());
-
-//		System.out.println("3 "+assoc.getMembers().iterator().next());
-
 		int size = alsos.load(assoc);
 		if(size > 0){			
 			setVisible(true);
@@ -133,23 +125,13 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		
 	}
 
-	public void completed(String completeText) {
+	public void completed(TopicIdentifier topicID) {
 		
-		topicService.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.seeAlso_async()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				TopicIdentifier to = (TopicIdentifier) result;
-				
-				//myTopic.addSeeAlso(to);
+		alsos.add(topicID);
+		topicCompleter.setText("");
 
-				alsos.add(to);
-				topicCompleter.setText("");
-								
-				topicService.executeCommand(myTopic,new SaveSeeAlsoCommand(myTopic,new Topic(to)),
-						new StdAsyncCallback(ConstHolder.myConstants.save_async()){});
-				
-			}});
-		
+		topicService.executeCommand(myTopic,new SaveSeeAlsoCommand(myTopic,new Topic(topicID)),
+				new StdAsyncCallback(ConstHolder.myConstants.save_async()){});		
 	}
 	
 	/**
@@ -167,7 +149,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		}
 		
 		public int load(Association seeAlsoAssoc){
-			int size = 0;
+			int size = 0;			
 			seeAlsoPanel.clear();
 			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();

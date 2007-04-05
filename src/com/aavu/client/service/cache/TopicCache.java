@@ -456,7 +456,7 @@ public class TopicCache {
 	 * @param linkTo
 	 * @param callback
 	 */
-	public void getTopicIdentForNameOrCreateNew(String linkTo, final StdAsyncCallback callback) {
+	public void getTopicIdentForNameOrCreateNew(String linkTo, final AsyncCallback callback) {
 
 		TopicLookupOrNewCallback ourCall = new TopicLookupOrNewCallback(callback,linkTo);
 		

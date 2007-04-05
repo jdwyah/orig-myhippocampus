@@ -38,7 +38,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 		enterB = new EnterInfoButton();
 		enterB.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				completed(completer.getText());	
+				completer.complete();	
 			}});
 		
 		topicDisplayLink = new ActionableTopicLabel(ConstHolder.myConstants.editMe(),new ClickListener(){
@@ -81,26 +81,12 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 	 * Could replace this double Async with a single if we return the to of the created.
 	 * 
 	 */
-	public void completed(final String completeText) {
-		System.out.println("COMPLETED LISTENER!");
-		completer.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.seeAlso_async()){
-			public void onSuccess(Object result) {				
-				super.onSuccess(result);
-				
-				
-				
-				System.out.println("GetTopicIdentForNameOrCreateNew: "+result);
-				TopicIdentifier to = (TopicIdentifier) result;
-				System.out.println("GetTopicIdentForNameOrCreateNewID: "+to);
-				
-				//in command // topic.addMetaValue(meta, new Topic(to));
-				
-				setToShowMode(to);
-				
-				topicCache.executeCommand(topic,new SaveMetaTopicCommand(topic,meta,
-						new Topic(to)),
-						new StdAsyncCallback(ConstHolder.myConstants.save()){});
-				
-			}});
+	public void completed(final TopicIdentifier topicID) {
+		
+		setToShowMode(topicID);
+
+		topicCache.executeCommand(topic,new SaveMetaTopicCommand(topic,meta,
+				new Topic(topicID)),
+				new StdAsyncCallback(ConstHolder.myConstants.save()){});
 	}
 }

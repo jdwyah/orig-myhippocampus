@@ -1,6 +1,7 @@
 package com.aavu.client.gui.blog;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +10,9 @@ import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
-import com.aavu.client.domain.mapper.MindTreeElement;
 import com.aavu.client.gui.TopicPreviewLink;
 import com.aavu.client.gui.explorer.FTICachingExplorerPanel;
 import com.aavu.client.service.Manager;
-import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -92,9 +91,13 @@ public class BlogView extends FTICachingExplorerPanel {
 	 */
 	public void draw(List ftis) {
 		sortedByDate.clear();
+		
+		Date now = new Date();		
 		for (Iterator iterator = ftis.iterator(); iterator.hasNext();) {
 			sortedByDate.put((DatedTopicIdentifier) iterator.next(),null);
 		}
+		Date fin = new Date();
+		System.out.println("BlogView sort took "+(fin.getTime() - now.getTime()));
 		display(0);
 	}
 	

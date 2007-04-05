@@ -61,14 +61,10 @@ public class GWTTagServiceImpl extends GWTSpringControllerReplacement implements
 //		tagService.removeTag(selectedTag);
 //	}
 
-	public String[] match(String match) {
+	public List match(String match) {
 		try{
-			String[] list = new String[]{};
-			list = tagService.getTagsStarting(match).toArray(list);
-						
-			log.debug("Found: "+list.length+" matches ");
 			
-			return list;
+			return tagService.getTagsStarting(match);			
 
 		}  catch (Exception e) {
 			log.error("FAILURE: "+e);

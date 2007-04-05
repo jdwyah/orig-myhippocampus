@@ -54,7 +54,7 @@ public interface TopicDAO {
 
 	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
 	
-	List<String> getTopicsStarting(User user,String match);
+	List<TopicIdentifier> getTopicsStarting(User user,String match);
 
 	MindTree getTree(MindTreeOcc occ);
 	WebLink getWebLinkForURI(String url, User currentUser);

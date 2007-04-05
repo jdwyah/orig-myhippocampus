@@ -11,6 +11,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.strings.ConstHolder;
@@ -61,7 +62,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		EnterInfoButton addTagButton = new EnterInfoButton();		
 		addTagButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
-				completed(tagBox.getText());
+				tagBox.complete();
 			}
 		});
 
@@ -90,28 +91,19 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		
 	}
 
-	public void tagTopic(final String tagName){
-		//need to check if it's a built in tag or not bla bla
-		//for now just creates new (bland) Tag and adds it to list
-		//topic needs to get tagged when its saved
-
-		//First, do a name lookup on this tag
-		//
-		tagCache.getTagAddIfNew(tagName, new StdAsyncCallback("tagservice.getTagAddIfNew"){
-
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				Tag tag = (Tag) result;				
-				addTag(tag);
-			}});
+	
 
 
-	}
-
-	public void completed(String completeText) {
-		tagTopic(completeText);
+	public void completed(TopicIdentifier topicID) {
+		Tag tag = new Tag();
+		tag.setId(topicID.getTopicID());
+		tag.setTitle(topicID.getTopicTitle());
+		
+		addTag(tag);
+		
 		tagBox.setText("");
-	}	
+	}
+		
 	
 	/**
 	 * load the topic into the GUI 

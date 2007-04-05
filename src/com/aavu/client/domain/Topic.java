@@ -9,6 +9,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.util.SetUtils;
 import com.aavu.client.widget.autocompletion.Completable;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -60,6 +61,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	/**
 	 * TODO move these clones to their subclasses
 	 * 
+	 * NOTE!!: Forgetting to put an appropriate entry in here can really make you scratch
+	 * your head.
+	 * 
 	 * Switch is needed to keep type information over serialization
 	 * 
 	 * 
@@ -74,6 +78,8 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			o = new MetaTopic();
 		else if(this instanceof MetaLocation)
 			o = new MetaLocation();
+		else if(this instanceof MetaSeeAlso)
+			o = new MetaSeeAlso();
 		else if(this instanceof HippoDate)
 			o = new HippoDate();
 		else if(this instanceof HippoText)
@@ -492,8 +498,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				
 				Topic possibleSee = (Topic) iterator.next();				
-				
-				
+								
 				possibleSee.accept(visitor);
 				
 				if(!found.isEmpty()){
@@ -555,7 +560,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 				
-			System.out.println("gtpa: "+association+" Member size: "+association.getMembers().size());
+			System.out.println("Topic.getTagPropertyAssociation: "+association+" Member size: "+association.getMembers().size());
 			
 			for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();

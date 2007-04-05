@@ -1,21 +1,14 @@
 package com.aavu.client.widget.edit;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.autocompletion.RemoteTopicAutoCompletionItems;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 public class TopicCompleter extends AutoCompleteTextBoxWithCompleteCallback {
 
 	private static final int LENGTH = 40;
 	private TopicCache topicService;
-
-//	private static TopicCache topicService;
-//		
-//	public static void setTopicService(TopicCache topicService) {
-//		TopicCompleter.topicService = topicService;
-//	}
-
 
 
 	public TopicCompleter(TopicCache topicService) {
@@ -27,16 +20,17 @@ public class TopicCompleter extends AutoCompleteTextBoxWithCompleteCallback {
 
 	}
 	
-
 	/**
 	 * Convenience method to use our TopicService.
 	 * 
 	 * @param completeText
 	 * @param callback
 	 */
-	public void getTopicIdentForNameOrCreateNew(String completeText, StdAsyncCallback callback) {
+	public void getTopicIdentForNameOrCreateNew(String completeText, AsyncCallback callback) {
 		topicService.getTopicIdentForNameOrCreateNew(completeText, callback);
 	}
+
+	
 
 	
 }

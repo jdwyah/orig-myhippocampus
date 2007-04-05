@@ -63,8 +63,8 @@ public interface GWTTopicService extends RemoteService {
 
 	LinkAndUser getWebLinkForURLAndUser(String url) throws HippoException;
 	
-	//List getTopicsStarting(String match);//List<String>
-	String[] match(String match);//List<String>
+	//List<TopicIdentifier>
+	List match(String match);//List<String>
 	
 	void saveCommand(AbstractCommand command) throws HippoBusinessException;
 	

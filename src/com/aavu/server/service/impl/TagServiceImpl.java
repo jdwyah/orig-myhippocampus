@@ -9,6 +9,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.TagDAO;
@@ -70,21 +71,12 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 
 
 
-	public List<String> getTagsStarting(String match) {
+	public List<TopicIdentifier> getTagsStarting(String match) {
 		return tagDAO.getTagsStarting(userService.getCurrentUser(),match);
 	}
 
 
 
-
-	public void removeTag(Tag selectedTag) throws PermissionDeniedException {
-		if(userService.getCurrentUser().equals(selectedTag.getUser())){
-			tagDAO.removeTag(userService.getCurrentUser(),selectedTag);
-		}else{
-			log.warn("User: "+userService.getCurrentUser().getUsername()+" tried to delete tag of "+selectedTag.getUser().getUsername());
-			throw new PermissionDeniedException("No permission to delete tag");
-		}
-	}
 
 
 

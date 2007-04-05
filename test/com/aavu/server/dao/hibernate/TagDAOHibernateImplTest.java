@@ -11,6 +11,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
@@ -153,7 +154,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		add3();
 
-		List<String> l1 = tagDAO.getTagsStarting(u, "Z");
+		List<TopicIdentifier> l1 = tagDAO.getTagsStarting(u, "Z");
 		assertEquals(0, l1.size());
 
 		l1 = tagDAO.getTagsStarting(u, "X");
@@ -174,7 +175,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		Tag t = tagDAO.getTag(u, A);
 		assertEquals(A,t.getName());
 
-		tagDAO.removeTag(u, t);
+		topicDAO.delete(t);
 
 		List<Tag> list = tagDAO.getAllTags(u);		
 		

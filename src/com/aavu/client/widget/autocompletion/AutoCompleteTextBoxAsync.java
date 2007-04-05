@@ -1,5 +1,11 @@
 package com.aavu.client.widget.autocompletion;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -11,6 +17,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class AutoCompleteTextBoxAsync extends TextBox implements KeyboardListener, MatchesRequiring {
 
+	//Map<String,TopicIdentifier>
+	private Map matchSet = new HashMap();
+	
 	protected CompletionItems items = null;
 	protected boolean popupAdded = false;
 	protected boolean visible = false;
@@ -235,17 +244,36 @@ public class AutoCompleteTextBoxAsync extends TextBox implements KeyboardListene
 				
 	}
 
-	public void setMatches(String[] strings) {		
+	private void setMatches(String[] strings) {		
 		updateChoices(strings, getText());
 	}
-	public void setMatches(Completable[] matches) {
-		
-		String[] arr = new String[matches.length];
-		for (int i = 0; i < matches.length; i++) {			
-			arr[i] = matches[i].getCompleteStr();
-		}
+//	public void setMatches(Completable[] matches) {
+//		
+//		String[] arr = new String[matches.length];
+//		for (int i = 0; i < matches.length; i++) {			
+//			arr[i] = matches[i].getCompleteStr();
+//		}
+//		setMatches(arr);		
+//	}
+
+	//List TopicIdentifier
+	public void setMatches(List list) {
+		String[] arr = new String[list.size()];
+		int i = 0;		
+		matchSet.clear();
+		for (Iterator iter = list.iterator(); iter.hasNext();) {
+			TopicIdentifier identifier = (TopicIdentifier) iter.next();
+			arr[i] = identifier.getTopicTitle();
+			i++;
+			
+			matchSet.put(identifier.getTopicTitle(), identifier);
+		}		
 		setMatches(arr);		
 	}
 
+	protected TopicIdentifier getTopicIdForString(String str){
+		return (TopicIdentifier) matchSet.get(str);
+	}
+	
 }
 

@@ -10,8 +10,9 @@
 
 package com.aavu.client.widget.autocompletion;
 
+import java.util.List;
+
 import com.aavu.client.service.cache.TagCache;
-import com.aavu.client.service.remote.GWTTagServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class RemoteTAGAutoCompletionItems implements CompletionItems {
@@ -31,7 +32,7 @@ public class RemoteTAGAutoCompletionItems implements CompletionItems {
 			}
 
 			public void onSuccess(Object result) {
-				widget.setMatches( (String[]) result);
+				widget.setMatches( (List) result);
 				widget.onMatch( match );
 			}
 

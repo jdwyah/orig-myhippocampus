@@ -106,7 +106,8 @@ public class SubjectBoard extends Composite{
 	private void setNewSubject(Subject subject){	
 		setSubject(subject);		
 		if(subject != null){
-			tagBoard.tagTopic(subject.getTagName());
+			//TODO
+			//tagBoard.tagTopic(subject.getTagName());
 		}
 		saveNeeded.onChange(this);
 	}

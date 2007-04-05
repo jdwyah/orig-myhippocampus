@@ -46,7 +46,7 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 		EnterInfoButton enterInfoButton = new EnterInfoButton();		
 		enterInfoButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
-				completer.completed(topicCompleter.getText());
+				topicCompleter.complete();
 			}
 		});
 				

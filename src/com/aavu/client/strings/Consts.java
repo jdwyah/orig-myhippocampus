@@ -273,6 +273,7 @@ public interface Consts extends Messages {
 	
 	
 	String map_amalgam_more();
+	String autocomplete_create_Async();
 	
 	
 		

@@ -209,18 +209,10 @@ public class AddLinkContent extends Composite implements CompleteListener {
 	}
 	
 	
-
-	public void completed(String completeText) {
-		topicCache.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.seeAlso_async()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				TopicIdentifier to = (TopicIdentifier) result;
-								
-				tagsBoard.add(to,new TopicLink(to));
-				tagsBoard.clearText();
-				
-			}});
-	}
+	public void completed(TopicIdentifier topicID) {
+		tagsBoard.add(topicID,new TopicLink(topicID));
+		tagsBoard.clearText();
+	}	
 
 
 	/**
@@ -248,5 +240,6 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		
 		return true;
 	}
+	
 	
 }

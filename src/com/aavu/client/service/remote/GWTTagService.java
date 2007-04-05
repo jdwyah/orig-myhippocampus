@@ -1,7 +1,8 @@
 package com.aavu.client.service.remote;
 
+import java.util.List;
+
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -14,7 +15,8 @@ public interface GWTTagService extends RemoteService {
 
 	Tag[] getAllTags();
 	
-	String[] match(String match);//List<String>
+	//List<TopicIdentifier>
+	List match(String match);
 	
 	Tag getTagForName(String completeText);
 	

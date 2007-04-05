@@ -50,7 +50,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 		EnterInfoButton enterInfoButton = new EnterInfoButton();		
 		enterInfoButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender){
-				completed(topicCompleter.getText());
+				topicCompleter.complete();
 			}
 		});
 
@@ -142,31 +142,27 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	}	
 	
 	/**
-	 * lookup the string, create a new topic if necessary.
+	 * 
 	 * 
 	 * Then tag and save it.
 	 */
-	public void completed(String completeText) {
-		
-		topicService.getTopicIdentForNameOrCreateNew(completeText,new StdAsyncCallback(ConstHolder.myConstants.save_async()){
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				TopicIdentifier to = (TopicIdentifier) result;
-				
-				Topic newTopic = new Topic();
-				newTopic.setTitle(to.getTopicTitle());
-				newTopic.setId(to.getTopicID());
-				
-				topicCompleter.setText("");
 
-				
-				onThisIslandPanel.insert(new TopicLink(newTopic),0);				
-				
-				topicService.executeCommand(newTopic, new SaveTagtoTopicCommand(newTopic,(Tag) myTag),
-						new StdAsyncCallback(ConstHolder.myConstants.save_async()){});				
-			}});
-		
+	public void completed(TopicIdentifier topicID) {
+
+		Topic newTopic = new Topic();
+		newTopic.setTitle(topicID.getTopicTitle());
+		newTopic.setId(topicID.getTopicID());
+
+		topicCompleter.setText("");
+
+
+		onThisIslandPanel.insert(new TopicLink(newTopic),0);				
+
+		topicService.executeCommand(newTopic, new SaveTagtoTopicCommand(newTopic,(Tag) myTag),
+				new StdAsyncCallback(ConstHolder.myConstants.save_async()){});				
+
+
 	}
-	
-	
+
+
 }

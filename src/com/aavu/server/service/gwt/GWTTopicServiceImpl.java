@@ -340,14 +340,12 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public LinkAndUser getWebLinkForURLAndUser(String url) throws HippoException {
 		return topicService.getWebLinkForURLAndUser(url);
 	}
-	public String[] match(String match) {
+	public List match(String match) {
 		log.debug("match");
 		try {
 
-			String[] list = new String[]{};
-			list = topicService.getTopicsStarting(match).toArray(list);
-
-			return list;
+			
+			return topicService.getTopicsStarting(match);
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);

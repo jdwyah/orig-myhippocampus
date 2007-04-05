@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.server.service.TagService;
 import com.aavu.server.service.TopicService;
 
@@ -33,16 +34,16 @@ public class AjaxController extends MultiActionController {
 			return new ModelAndView("simpleString","string","<UL></UL>");
 		}
 		
-		List<String> tags = topicService.getTopicsStarting(searchString);
+		List<TopicIdentifier> tags = topicService.getTopicsStarting(searchString);
 
 		return new ModelAndView("simpleString","string",getMatchList(tags));
 	}
 	
-	private String getMatchList(List<String> list){
+	private String getMatchList(List<TopicIdentifier> list){
 		StringBuffer str = new StringBuffer("<UL>");
-		for (String string : list) {
+		for (TopicIdentifier ti : list) {
 			str.append("<LI>");
-			str.append(string);
+			str.append(ti.getTopicTitle());
 			str.append("</LI>");
 		}
 		str.append("</UL>");

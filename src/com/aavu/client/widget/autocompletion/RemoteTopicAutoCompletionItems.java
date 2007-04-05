@@ -10,6 +10,8 @@
 
 package com.aavu.client.widget.autocompletion;
 
+import java.util.List;
+
 import com.aavu.client.service.cache.TopicCache;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -31,7 +33,7 @@ public class RemoteTopicAutoCompletionItems implements CompletionItems {
 			}
 
 			public void onSuccess(Object result) {
-				widget.setMatches( (String[]) result);
+				widget.setMatches( (List) result);
 				widget.onMatch( match );
 			}
 

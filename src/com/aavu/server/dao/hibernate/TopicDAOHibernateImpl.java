@@ -521,11 +521,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * (non-Javadoc)
 	 * @see com.aavu.server.dao.TopicDAO#getTopicsStarting(com.aavu.client.domain.User, java.lang.String)
 	 */
-	public List<String> getTopicsStarting(User user, String match) {
+	public List<TopicIdentifier> getTopicsStarting(User user, String match) {
 		return getTopicsStarting(user, match, DEFAULT_AUTOCOMPLET_MAX);		
 	}
 
-	public List<String> getTopicsStarting(User user, String match,int max) {
+	public List<TopicIdentifier> getTopicsStarting(User user, String match,int max) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)		
 		.add(Expression.eq("user", user))
 		.add(Expression.ilike("title", match, MatchMode.ANYWHERE))
@@ -533,13 +533,22 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		.add(Expression.ne("class", "seealso"))
 		.add(Expression.ne("class", "metadate"))
 		.add(Expression.ne("class", "text"))//this is correct, right?
-		.add(Expression.ne("class", "date"))
-		
-		.addOrder( Order.asc("title") )
-		
-		.setProjection(Property.forName("title"));	
+		.add(Expression.ne("class", "date"))		
+		.addOrder( Order.asc("title") )		
+		.setProjection(Projections.projectionList()
+		.add(Property.forName("title"))
+		.add(Property.forName("id")));
 
-		return getHibernateTemplate().findByCriteria(crit,0,max);
+		List<Object[]> list = getHibernateTemplate().findByCriteria(crit,0,max);
+				
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+
+		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list){
+			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+		}		
+		return rtn;		
 	}
 
 	/**

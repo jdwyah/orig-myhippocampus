@@ -29,6 +29,7 @@ import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoPermissionException;
 import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.UserPageBean;
@@ -45,6 +46,7 @@ public class TopicServiceImpl implements TopicService {
 	private TopicDAO topicDAO;
 
 	private UserService userService;
+	//private SearchService searchService;
 
 	public void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException {
 
@@ -217,7 +219,8 @@ public class TopicServiceImpl implements TopicService {
 		
 		return rtn;
 	}
-	public List<String> getTopicsStarting(String match) {
+	public List<TopicIdentifier> getTopicsStarting(String match) {
+		
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 	
@@ -355,6 +358,9 @@ public class TopicServiceImpl implements TopicService {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+//	public void setSearchService(SearchService searchService) {
+//		this.searchService = searchService;
+//	}
 	
 
 }

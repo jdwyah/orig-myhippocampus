@@ -69,7 +69,7 @@ public interface TopicService {
 
 	List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList);
 
-	List<String> getTopicsStarting(String match);
+	List<TopicIdentifier> getTopicsStarting(String match);
 
 	MindTree getTree(MindTreeOcc occ);
 	

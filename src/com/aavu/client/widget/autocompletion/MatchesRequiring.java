@@ -10,12 +10,18 @@
 
 package com.aavu.client.widget.autocompletion;
 
+import java.util.List;
+
+import com.aavu.client.domain.dto.TopicIdentifier;
+
 public interface MatchesRequiring {
 
         public void onMatch(String text);
 
-        public void setMatches(Completable[] matches);
+        //public void setMatches(TopicIdentifier[] matches);
+		//public void setMatches(String[] strings);
 
-		public void setMatches(String[] strings);
+		//List<TopicIdentifier>
+		public void setMatches(List list);
 
 }
