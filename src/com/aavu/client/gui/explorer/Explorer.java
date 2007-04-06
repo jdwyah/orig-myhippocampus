@@ -82,7 +82,7 @@ public class Explorer extends Composite implements ButtonGroup {
 				
 		blogView = new BlogView(manager,defaultMap,height);
 		
-		bigMap = new BigMap(manager,width,height);
+		bigMap = new BigMap(manager,window,width,height);
 		
 		lostNFound = new LostNFound(manager);
 		

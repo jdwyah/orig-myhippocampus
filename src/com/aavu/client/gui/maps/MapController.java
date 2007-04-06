@@ -2,6 +2,7 @@ package com.aavu.client.gui.maps;
 
 import com.aavu.client.domain.dto.LocationDTO;
 import com.mapitz.gwt.googleMaps.client.GLatLng;
+import com.mapitz.gwt.googleMaps.client.GMarker;
 
 public interface MapController {
 
@@ -13,8 +14,10 @@ public interface MapController {
 	 */
 	LocationDTO getNewLocationForPoint(GLatLng point);
 
-	void userClicked(LocationDTO selected);
-
 	void update(LocationDTO dragged);
+
+	void userDoubleClicked(LocationDTO selected);
+
+	void userSelected(LocationDTO selected, GMarker marker);
 
 }

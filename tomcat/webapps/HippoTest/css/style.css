@@ -19,6 +19,14 @@
 	align: right;
 	vertical-align: top;
 }
+	/*background-color: #B2BB2B;*//*bcard green*/
+	/*background-color: #E1E184;*//*faded green*/
+	/*background-color: #D3D345;*//*middle green*/
+
+
+.loginBox {
+	background-color: #E1E184;/*faded green*/
+}
 
 .message {
 	border: 2px;

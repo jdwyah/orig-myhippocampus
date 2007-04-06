@@ -8,10 +8,8 @@ import org.gwtwidgets.client.ui.ImageButton;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.gui.ext.TooltipListener;
@@ -27,6 +25,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.mapitz.gwt.googleMaps.client.GLatLng;
+import com.mapitz.gwt.googleMaps.client.GMarker;
 
 /**
  * Google Map Gadget.
@@ -36,88 +35,37 @@ import com.mapitz.gwt.googleMaps.client.GLatLng;
  */
 public class MapGadget extends MetaGadget implements TopicLoader, MapController {
 	
+	/**
+	 * store this because we need to center AFTER load() & setVisible() or we'll
+	 * end up just 'top-lefting' bc we center when size == (0,0)
+	 */
+	private HippoLocation centerLoc;		
+	
+	/**
+	 * 
+	 * @author Jeff Dwyer
+	 *
+	 */
+	private class LocationLabel extends Label implements ClickListener{
 
-	private static final int DEFAULT_ZOOM = 1;
-
-	private MetaLocation selectedMeta;
-	
-	private Topic myTopic;	
-	private Manager manager;
-
-	private HippoMapWidget mapWidget;
-	
-	
-	public MapGadget(Manager _manager) {		
-		super(_manager, ConstHolder.myConstants.gadget_map_title(), new MetaLocation());
-		
-		this.manager = _manager;
-		    
-		
-		mapWidget = new HippoMapWidget(this,200,200,DEFAULT_ZOOM);		
-		manager.addWheelistener(mapWidget);
-		
-		extraPanel.add(mapWidget);
-	}
-	
-	
-	
-	public int load(Topic topic){
-		myTopic = topic;
-		mapWidget.clear();
-		
-		int size = super.load(topic);		
-		
-		System.out.println("SIZE "+size);
-		
-		if(size > 0){			
-			makeVisible();
-		}else{
-			//extraPanel.setVisible(false);
+		public LocationLabel(HippoLocation mv) {
+			
+			setText(mv.toShortString());	
+			
+			addClickListener(this);
 		}
-		
-		return size;
-	}
 
-	
-
-	//@Override
-	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_map(),60,60);
-		b.setBorderOnWidth(0);
-		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.gadget_map_title()));
-		return b;
-	}
-
-
-
-
-	//@Override
-	protected void addMWidg(final Meta meta, boolean showDelete) {
-		
-		makeVisible();
-		
-		
-		MetaW metaWidge = new MetaW((MetaLocation)meta,showDelete);		
-		
-		metasPanel.add(metaWidge);
-		
-		selectedMeta = (MetaLocation) meta;
-		
-		//HippoLocation mv = (HippoLocation) myTopic.getSingleMetaValueFor(meta);
-		
-	}
-	
-
-	private void makeVisible() {
-		mapWidget.setSize(200);
-		mapWidget.setVisible(true);
-		extraPanel.setVisible(true);
+		public void onClick(Widget sender) {
+			
+			//mapWidget.putInChooseMode();
+		}		
 	}
 
 	private class MetaW extends VerticalPanel implements ClickListener {
 
 		private MetaLocation meta;
-		private Label title;		
+		private Label title;
+		
 
 		public MetaW(MetaLocation _meta, boolean showDelete) {
 			this.meta = _meta;
@@ -156,8 +104,8 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 				
 				mapWidget.add(locObj,false);
 				
-				//TODO doesn't center. 'top-lefts'
-				//mapWidget.centerOn(location);
+				centerLoc = location;
+
 			}
 		}
 
@@ -168,27 +116,52 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 		
 	}
 	
-	/**
-	 * 
-	 * @author Jeff Dwyer
-	 *
-	 */
-	private class LocationLabel extends Label implements ClickListener{
+	private static final int DEFAULT_ZOOM = 1;	
+	private MetaLocation selectedMeta;
 
-		public LocationLabel(HippoLocation mv) {
-			
-			setText(mv.toShortString());	
-			
-			addClickListener(this);
-		}
-
-		public void onClick(Widget sender) {
-			
-			//mapWidget.putInChooseMode();
-		}		
-	}
+	private Topic myTopic;
+	
+	
+	private Manager manager;
+	
+	
+	
+	private HippoMapWidget mapWidget;
 
 	
+
+	public MapGadget(Manager _manager) {		
+		super(_manager, ConstHolder.myConstants.gadget_map_title(), new MetaLocation());
+		
+		this.manager = _manager;
+		    
+		
+		mapWidget = new HippoMapWidget(this,200,200,DEFAULT_ZOOM);		
+		manager.addWheelistener(mapWidget);
+		
+		extraPanel.add(mapWidget);
+	}
+
+
+
+
+	//@Override
+	protected void addMWidg(final Meta meta, boolean showDelete) {
+		
+		makeVisible();
+		
+		
+		MetaW metaWidge = new MetaW((MetaLocation)meta,showDelete);		
+		
+		metasPanel.add(metaWidge);
+		
+		selectedMeta = (MetaLocation) meta;
+		
+		//HippoLocation mv = (HippoLocation) myTopic.getSingleMetaValueFor(meta);
+		
+	}
+	
+
 	public LocationDTO getNewLocationForPoint(GLatLng point) {
 		if(selectedMeta != null){
 			HippoLocation newLoc = new HippoLocation();
@@ -203,6 +176,61 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 			Window.alert("Click the green + to add a location type");
 			return null;
 		}
+	}
+
+	//@Override
+	public ImageButton getPickerButton() {		
+		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_map(),60,60);
+		b.setBorderOnWidth(0);
+		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.gadget_map_title()));
+		return b;
+	}
+	
+	public int load(Topic topic){
+		myTopic = topic;
+		mapWidget.clear();
+		
+		int size = super.load(topic);		
+		
+		System.out.println("SIZE "+size);
+		
+		if(size > 0){			
+			makeVisible();
+		}else{
+			//extraPanel.setVisible(false);
+		}
+		
+		return size;
+	}
+
+	
+	//@Override
+	public void nowVisible() {		
+		center();
+	}
+
+
+
+
+	/**
+	 * separate this because we need to center AFTER load() & setVisible() or we'll
+	 * end up just 'top-lefting' bc we center when size == (0,0)
+	 */
+	private void center() {
+		
+		System.out.println("about to center "+mapWidget.getOffsetWidth());
+		System.out.println("about to center "+mapWidget.isVisible());
+		
+		mapWidget.centerOn(centerLoc);
+	}
+
+
+
+
+	private void makeVisible() {
+		mapWidget.setSize(200);
+		mapWidget.setVisible(true);
+		extraPanel.setVisible(true);
 	}
 
 	private void saveLocation(Meta theSelectedMeta, HippoLocation newLoc) {
@@ -229,13 +257,6 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 
 
 
-	public void userClicked(LocationDTO selected) {
-		System.out.println("selected "+selected);
-		
-	}
-
-
-
 	public void update(LocationDTO dragged) {
 		System.out.println("Update "+dragged+" selectedMeta "+selectedMeta);
 		Set locations = myTopic.getMetaValuesFor(selectedMeta);		
@@ -250,6 +271,20 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 		manager.getTopicCache().executeCommand(myTopic,new SaveMetaLocationCommand(myTopic,selectedMeta,locations),
 				new StdAsyncCallback(ConstHolder.myConstants.save()){});
 
+	}
+
+
+
+	public void userDoubleClicked(LocationDTO selected) {
+		System.out.println("selected "+selected);
+		
+	}
+
+
+
+	public void userSelected(LocationDTO selected, GMarker marker) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

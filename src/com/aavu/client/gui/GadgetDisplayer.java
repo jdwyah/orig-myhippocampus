@@ -64,6 +64,11 @@ public class GadgetDisplayer extends Composite {
 		}
 		
 		setVisible(true);
+		
+		for (Iterator iter = gadgets.iterator(); iter.hasNext();) {
+			Gadget gadget = (Gadget) iter.next();			
+			gadget.nowVisible();			
+		}
 				
 	}
 

@@ -13,6 +13,13 @@ import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Cool class that prevents us sending millions of async requests on mouse over,
+ * delaying just a bit so we're sure the user really wants it. 
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class TopicPreviewLink extends TopicLink implements MouseListener {
 
 	private Panel showPreview;
@@ -52,7 +59,7 @@ public class TopicPreviewLink extends TopicLink implements MouseListener {
 					dirty = false;		
 				}};
 			
-			System.out.println("schedule "+id);
+			//System.out.println("schedule "+id);
 			t.schedule(500);
 
 		}
@@ -60,7 +67,7 @@ public class TopicPreviewLink extends TopicLink implements MouseListener {
 
 
 	public void onMouseLeave(Widget sender) {
-		System.out.println("cancel "+id);
+		//System.out.println("cancel "+id);
 		t.cancel();
 		dirty = true;		
 	}

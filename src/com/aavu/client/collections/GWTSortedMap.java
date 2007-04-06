@@ -41,6 +41,7 @@ public class GWTSortedMap implements Map {
 			}else{
 				Collections.sort(keys.getList(),compare);
 			}
+			dirty = false;
 		}
 		return keys.getList();
 	}
@@ -53,6 +54,7 @@ public class GWTSortedMap implements Map {
 			}else{
 				Collections.sort(keys.getList(),compare);
 			}
+			dirty = false;
 		}
 		return keys;
 	}

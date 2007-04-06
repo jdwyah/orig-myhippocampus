@@ -97,6 +97,7 @@ public class BlogView extends FTICachingExplorerPanel {
 			sortedByDate.put((DatedTopicIdentifier) iterator.next(),null);
 		}
 		Date fin = new Date();
+		System.out.println("BlogView sort from "+fin.getTime()+" to " + now.getTime());
 		System.out.println("BlogView sort took "+(fin.getTime() - now.getTime()));
 		display(0);
 	}
