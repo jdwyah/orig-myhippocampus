@@ -39,7 +39,9 @@ public class AbstractBaseTestClass extends AbstractDependencyInjectionSpringCont
 		super.onSetUp();
 		createSecureContext();
 
-		PropertyConfigurator.configure(getClass().getResource("/WEB-INF/classes/log4j.properties"));
+		PropertyConfigurator.configure(getClass().getResource("/log4j.properties"));
+		
+		//PropertyConfigurator.configure(getClass().getResource("/WEB-INF/classes/log4j.properties"));
 		
 		
 		
@@ -125,10 +127,10 @@ public class AbstractBaseTestClass extends AbstractDependencyInjectionSpringCont
 
 	@Override
 	protected String[] getConfigLocations() {
-		String[] paths = {"classpath:/WEB-INF/applicationContext-acegi-security.xml",
-				  "classpath:/WEB-INF/applicationContext-hibernate.xml",			
-		          "classpath:/WEB-INF/applicationContext.xml",						  
-				  "classpath:/WEB-INF/dispatcher-servlet.xml"};
+		String[] paths = {"classpath*:src/main/webapp/WEB-INF/applicationContext-acegi-security.xml",
+				  "classpath*:WEB-INF/applicationContext-hibernate.xml",			
+		          "classpath*:WEB-INF/applicationContext.xml",						  
+				  "classpath*:WEB-INF/dispatcher-servlet.xml"};
 		return paths;
 	}
 	

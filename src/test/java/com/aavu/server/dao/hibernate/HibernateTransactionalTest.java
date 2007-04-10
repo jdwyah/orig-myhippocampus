@@ -22,8 +22,16 @@ public class HibernateTransactionalTest extends AbstractTransactionalDataSourceS
 //		PropertyConfigurator.configure(pathc+"log4j.properties");
 //		return new String[] {pathh+"applicationContext-hibernate.xml",pathh+"applicationContext.xml"};
 		
-		PropertyConfigurator.configure(getClass().getResource("/log4j.properties"));		
-		return new String[] {"classpath*:/applicationContext-hibernate.xml","classpath*:/applicationContext.xml"};
+		
+		
+		PropertyConfigurator.configure(getClass().getResource("/log4j.properties"));
+		
+		String path = "src/main/webapp/WEB-INF/";
+		String pathh = "file:"+path;
+		return new String[] {pathh+"applicationContext-hibernate.xml",pathh+"applicationContext.xml"};
+
+		//this finds them in resources/
+		//return new String[] {"classpath*:/applicationContext-hibernate.xml","classpath*:/applicationContext.xml"};
 	}
 
 }
