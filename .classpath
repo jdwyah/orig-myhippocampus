@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry kind="lib" path="lib/db4o-5.2-java5.jar" sourcepath="lib/db4o-5.2-src.zip"/>
@@ -48,5 +48,5 @@
 	<classpathentry kind="lib" path="lib/gwm-hippo.jar"/>
 	<classpathentry kind="lib" path="lib/hessian-3.0.20.jar"/>
 	<classpathentry kind="lib" path="lib/googlemaps_gwt_2_1_2.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target"/>
 </classpath>
