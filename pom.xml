@@ -12,9 +12,92 @@
 	<dependencies>
 
 		<dependency>
+            <groupId>com.google</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>1.2.22</version>
+            <!-- gwt-user only needed for compiling -->
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+            <groupId>com.google</groupId>
+            <artifactId>gwt-dev-windows</artifactId>
+            <version>1.2.22</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Only needed if using GWT RPC used -->
+        <dependency>
+            <groupId>com.google</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>1.2.22</version>
+            <scope>compile</scope>
+        </dependency>
+
+	   <dependency>
+            <groupId>com.google</groupId>
+            <artifactId>gwt-maps</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+		<dependency>
+            <groupId>com.google</groupId>
+            <artifactId>gwm</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+		<dependency>
+            <groupId>com.google</groupId>
+            <artifactId>gwt-widgets</artifactId>
+            <version>0.1.3</version>
+        </dependency>
+		<dependency>
+            <groupId>com.google</groupId>
+            <artifactId>gwt-timeline</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
+		<dependency>
+      		<groupId>org.apache.lucene</groupId>
+      		<artifactId>lucene-core</artifactId>
+      		<version>2.0.0</version>
+      		<scope>compile</scope>
+	    </dependency>
+		<dependency>
+      		<groupId>org.apache.lucene</groupId>
+      		<artifactId>lucene-highlighter</artifactId>
+      		<version>2.0.0</version>
+      		<scope>compile</scope>
+	    </dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-snowball</artifactId>
+			<version>2.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensymphony.compass</groupId>
+			<artifactId>compass-core</artifactId>
+			<version>1.1RC1</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.db4o</groupId>
+			<artifactId>db4o</artifactId>
+			<version>5.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.db4o</groupId>
+			<artifactId>db4o-spring</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+
+
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.4</version>
+            <scope>provided</scope>			
 		</dependency>
 
 		<dependency>
@@ -26,12 +109,6 @@
 			<groupId>opensymphony</groupId>
 			<artifactId>sitemesh</artifactId>
 			<version>2.2.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>uk.ltd.getahead</groupId>
-			<artifactId>dwr</artifactId>
-			<version>1.1.1</version>
 		</dependency>
 
 		<dependency>
@@ -109,6 +186,38 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.xi8ix</groupId>
+				<artifactId>xi8ix-gwtc</artifactId>
+				<version>1.3.3.1</version>
+				<configuration>
+					<modules>
+						<!-- Insert your module(s) here... Two examples are below. -->
+						<module>com.aavu.HippoTest</module>
+	 				
+					</modules>
+					<maxMemory>512</maxMemory>
+					<!-- There are several optional configuration settings available. -->
+					<!-- Only include these if you need to change the defaults. -->
+
+					<!-- Specify the directory to compile to (only specify once). -->
+					<!-- Standard maven properties can be used. -->
+					<!-- For example, to put in a subdirectory "gwt" of the standard -->
+					<!-- maven webapp output directory use this setting. -->
+					<webappDirectory>${project.build.directory}/${project.build.finalName}/gwt</webappDirectory>
+				</configuration>
+				<executions>
+					<!-- Run the gwtc goal during the compile phase -->
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>gwtc</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

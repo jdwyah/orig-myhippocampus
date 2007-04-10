@@ -41,14 +41,11 @@ public class AbstractBaseTestClass extends AbstractDependencyInjectionSpringCont
 
 		PropertyConfigurator.configure(getClass().getResource("/WEB-INF/classes/log4j.properties"));
 		
-		String[] paths = {"classpath:/WEB-INF/applicationContext-acegi-security.xml",
-						  "classpath:/WEB-INF/applicationContext-hibernate.xml",			
-				          "classpath:/WEB-INF/applicationContext.xml",						  
-						  "classpath:/WEB-INF/dispatcher-servlet.xml"};
+		
 		
 
 		ctx = new XmlWebApplicationContext();		
-		ctx.setConfigLocations(paths);
+		ctx.setConfigLocations(getConfigLocations());
 		 
 		MockServletContext m = new MockServletContext();//"PemsOrder/WebRoot/");
 		try {
@@ -124,6 +121,15 @@ public class AbstractBaseTestClass extends AbstractDependencyInjectionSpringCont
 	 */
 	private static void destroySecureContext() {
 		SecurityContextHolder.setContext(new SecurityContextImpl());
+	}
+
+	@Override
+	protected String[] getConfigLocations() {
+		String[] paths = {"classpath:/WEB-INF/applicationContext-acegi-security.xml",
+				  "classpath:/WEB-INF/applicationContext-hibernate.xml",			
+		          "classpath:/WEB-INF/applicationContext.xml",						  
+				  "classpath:/WEB-INF/dispatcher-servlet.xml"};
+		return paths;
 	}
 	
 	
