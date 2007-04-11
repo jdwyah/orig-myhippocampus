@@ -7,7 +7,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <meta name="description" content="Personal HD" />
-  <meta name="keywords" content="personal,knowledge,management" />
+  <meta name="keywords" content="personal,knowledge,management,visualization,collection,GWT" />
   <meta name="author" content="Jeff Dwyer/" />
   
   <link rel="stylesheet" type="text/css" href="<@spring.url "/css/style.css"/>"/>
@@ -18,47 +18,28 @@
 
 <body onload="${page.properties["body.onload"]?default("")}">
 
+<div id="wrapper">
 
-<table class="container">
+	<div id="main">
        
-    <tr>
-     <td class="sidePanel">
-      <img src="<@spring.url "/img/sideSeaHorse.png"/>"/>
-     </td>
+    	<div id="sidebar">
+	      <img src="<@spring.url "/img/myhippocampusLogo_140_254.png"/>"/>
+		</div>
      
-         
-     <td class="mainPanel" >
+	    <div id="header">
     
-     
-    <table class="header">
-    <tr><td>
-   	    <img src="<@spring.url "/img/myhippocampusLogo.png"/>"/>
-   	    <BR>   	    
-   	    Welcome <#if user?exists>${user.username}</#if> to MyHippocampus!
-   	 <!--   <div class="navigation">
-      <ul>
-        <li class="selected">Home</li>
-        <li><a href="tour.html">Tour</a></li>
-        <li><a href="manifesto.html">Manifesto</a></li>
-		<#if user?exists>
-	        <li><a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/>My Page</a></li>
-			<#if user.supervisor>
-	            <li><a href="<@spring.url "/site/secure/extreme/userManager.html?action=list"/>"/>Admin</a></li>
-            </#if>
-        <#else>
-        	<li><a href="signup.html">Sign up</a></li>  
-        </#if>
-      </ul>
- 
-       </div>-->
-    </tr></td>
-    </table>
-    
+   		    <img src="<@spring.url "/img/myhippocampusLogo.png"/>"/>
+   	    	<BR>   
+   	    	<@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
+   
+	    </div>
 
-    <div id="content">
+
+    	<div id="content">
              ${body}
-    </div>
+    	</div>
 
+	</div><!--main-->
 
     <div id="footer">
     	©2007 <a href="<@spring.url "/site/index.html"/>"/>MyHippocampus</a> 
@@ -67,9 +48,8 @@
     	| <a href="<@spring.url "/site/acknowledgments.html"/>"/>Acknowledgements</a> 
 	</div>
 	
-	</td><!--end main panel-->
-	</tr>
-	</table>
+	
+</div><!--wrapper-->
 
 		
 <!-- Start of StatCounter Code -->
