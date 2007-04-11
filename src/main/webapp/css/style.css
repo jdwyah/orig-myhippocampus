@@ -5,8 +5,7 @@ body {
 	padding: 0em;
 	font-family: Verdana, Tahoma, Arial, sans-serif;
 	background-color: #D2EAF9;
-	background-image: url("../com.aavu.HippoTest/img/simplicity/ocean100.png");
-
+	background-image:url("../com.aavu.HippoTest/img/simplicity/ocean100.png");
 }
 
 #header {
@@ -18,6 +17,7 @@ body {
 #content {
 	padding-top: 120px;
 }
+
 #footer {
 	position: fixed;
 	left: 30%;
@@ -30,20 +30,22 @@ body {
 	width: 200px;
 	height: 900px;
 }
-#sidebar > img {
+
+#sidebar>img {
 	margin-left: 25px;
 }
-	/*background-color: #B2BB2B;*//*bcard green*/
-	/*background-color: #E1E184;*//*faded green*/
-	/*background-color: #D3D345;*//*middle green*/
 
+/*background-color: #B2BB2B;*/ /*bcard green*/
+	/*background-color: #E1E184;*/ /*faded green*/
+	/*background-color: #D3D345;*/ /*middle green*/
 #whatIsIsland {
 	position: absolute;
 	left: 21%;
 	top: 20%;
 }
-#whatIsIsland > div.islandOverlay {
-	width:500px;
+
+#whatIsIsland>div.islandOverlay {
+	width: 500px;
 	margin: 25px;
 }
 
@@ -52,7 +54,8 @@ body {
 	left: 35%;
 	top: 60%;
 }
-#signupIsland > div.islandOverlay {
+
+#signupIsland>div.islandOverlay {
 	margin-left: 25px;
 	margin-top: 40px;
 }
@@ -62,7 +65,8 @@ body {
 	left: 60%;
 	top: 20%;
 }
-#loginIsland > div.islandOverlay {
+
+#loginIsland>div.islandOverlay {
 	margin-top: 5px;
 	margin-left: 15px;
 }
@@ -75,34 +79,44 @@ fieldset {
 	margin-left: 10px;
 }
 
-.island {
-	/*border-style: solid;
+.island { /*border-style: solid;
 	border-width: 2px;
 	border-color: red;*/
+	
 }
+
 .islandOverlay {
 	position: absolute;
 	z-index: 2;
 }
 
 legend {
-	color: #600D25;
+	color: #600D25; font-size : 1.3em;
+	font-weight: bold;;
 	font-size: 1.3em;
-	font-weight: bold;
 }
+
 .islandHeader {
-	color: #600D25;	
+	color: #600D25;
 	font-size: 2em;
 	font-weight: bold;
 }
+
 .islandDesc {
 	font-size: 1.5em;
 }
+
 .acre {
 	width: 60px;
 	height: 60px;
 	position: absolute;
 	-moz-user-select: none;
+}
+
+.slashUser {
+	vertical-align: middle; 
+	color: #CBD043;;
+	font-size: 50pt;
 }
 
 .message {
@@ -111,9 +125,11 @@ legend {
 	padding: 5px;
 	background-color: #FFBB99;
 }
+
 .error {
 	color: red;
 }
+
 .splash-title {
 	font-size: 60pt;
 	line-height: 65pt;
@@ -121,12 +137,11 @@ legend {
 
 .splash-word {
 	font-size: 4em;
-
 	line-height: 1em;
 	position: relative;
 	left: 20px;
 	margin-bottom: .4em;
-	margin-top: .4em;	
+	margin-top: .4em;
 }
 
 .splash-definition {
@@ -137,9 +152,11 @@ legend {
 	margin-top: .4em;
 	left: 40px;
 }
+
 .tip-question {
 	font-weight: bold;
 }
+
 .hid {
 	color: rgb(90, 90, 90);
 	text-decoration: none;
@@ -148,4 +165,5 @@ legend {
 .hid a:hover {
 	color: rgb(90, 90, 90);
 	text-decoration: none;
-}}
+}
+}

@@ -24,14 +24,15 @@
        
     	<div id="sidebar">
 	      <img src="<@spring.url "/img/myhippocampusLogo_140_254.png"/>"/>
+	      
+	      <@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
+	      
 		</div>
      
 	    <div id="header">
     
    		    <img src="<@spring.url "/img/myhippocampusLogo.png"/>"/>
-   	    	<BR>   
-   	    	<@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
-   
+			<#if user?exists><span class="slashUser">/${user.username}</span></#if>
 	    </div>
 
 

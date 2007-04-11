@@ -37,7 +37,8 @@ public class IndexController extends BasicController {
 		
 		log.debug("SERVLET PATH: "+req.getServletPath());
 		
-		Map model = new HashMap();
+		Map model = getDefaultModel();
+		
 		model.put("command",new MailingListCommand());
 
 		//parameter may be on param line if we're redirect:ed here (createUserController)
@@ -45,12 +46,15 @@ public class IndexController extends BasicController {
 
 		User su = null;
 		try{
+			//TODO already have this from getDefaultModel()
 			su = userService.getCurrentUser();	
 			
 			UserPageBean bean = topicService.getUserPageBean(su);
 		
+			model.put("bean", bean);
 			
-			return new ModelAndView(loggedInView,"bean",bean);
+			return new ModelAndView(loggedInView,model);
+			
 		}catch(UsernameNotFoundException e){
 			log.debug("No user logged in.");
 		}

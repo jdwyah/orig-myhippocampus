@@ -1,5 +1,8 @@
 package com.aavu.server.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,16 +34,23 @@ public class BasicController extends AbstractController {
 
 		log.debug("SERVLET PATH: "+req.getServletPath());
 
+
+		return new ModelAndView(getView(),getDefaultModel());
+		
+	}
+	
+	protected Map<String,Object> getDefaultModel(){
+		Map<String,Object> model = new HashMap<String, Object>();
+		
 		User su = null;
 		try{
 			su = userService.getCurrentUser();	
-			return new ModelAndView(getView(),"user",su);
+			model.put("user",su);			
 		}catch(UsernameNotFoundException e){
 			log.debug("No user logged in.");
 		}
-
-		return new ModelAndView(getView());
-		
+				
+		return model;
 	}
 
 	public void setUserService(UserService userService) {
