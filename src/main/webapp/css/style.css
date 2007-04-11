@@ -153,6 +153,23 @@ legend {
 	left: 40px;
 }
 
+.middle-column-box-white {
+	background-color: white;
+	margin: 0px 50px 50px 250px;
+}
+.middle-column-box-white p {
+	padding: 0 5px 5px 5px;
+}
+
+.middle-column-box-title-green {
+	font-size: 1.4em;
+	font-weight: bold;
+	background-color: #d3d345;
+}
+.subheading {
+	font-weight: bold;
+}
+
 .tip-question {
 	font-weight: bold;
 }

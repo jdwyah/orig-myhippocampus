@@ -15,16 +15,13 @@ import com.aavu.server.service.TopicService;
 import com.aavu.server.web.domain.MailingListCommand;
 import com.aavu.server.web.domain.UserPageBean;
 
-public class IndexController extends BasicController {
-	private static final Logger log = Logger.getLogger(IndexController.class);
+public class UserPageController extends BasicController {
+	private static final Logger log = Logger.getLogger(UserPageController.class);
 	
 	private String loggedInView;	
 	
 	private TopicService topicService;
-
-	public void setLoggedInView(String loggedInView) {
-		this.loggedInView = loggedInView;
-	}
+	
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
 	}
@@ -39,22 +36,21 @@ public class IndexController extends BasicController {
 		
 		Map model = getDefaultModel();
 		
-		model.put("command",new MailingListCommand());
-
-		//parameter may be on param line if we're redirect:ed here (createUserController)
-		model.put("message",req.getParameter("message"));		
 
 		User su = null;
 		try{
+			//TODO already have this from getDefaultModel()
 			su = userService.getCurrentUser();	
 			
-			return new ModelAndView(loggedInView);
+			UserPageBean bean = topicService.getUserPageBean(su);
+		
+			model.put("bean", bean);
+			
+			return new ModelAndView(loggedInView,model);
 			
 		}catch(UsernameNotFoundException e){
-			log.debug("No user logged in.");
+			throw new Exception("No User Logged In.");
 		}
-
-		return new ModelAndView(getView(),model);
 		
 	}
 

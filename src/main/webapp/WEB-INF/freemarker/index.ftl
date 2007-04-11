@@ -1,5 +1,6 @@
 <html>
 <#import "/spring.ftl" as spring/>
+<#import "common.ftl" as common/>
 <head>
   <title><@spring.message "site"/></title>
 </head>
@@ -10,10 +11,6 @@
  </#if>							
      
    
-
-	<#macro regError>
-		<span class="error"><@spring.showErrors"<br>"/></span>
-	</#macro>
 
 
   	<#macro acre left top color num type>
@@ -40,7 +37,7 @@
 		<div class="islandOverlay">
   			<p class="islandHeader"><@spring.message "index.whatIs.header"/></p>
   			<ul>
-  			<li><a href="<@spring.url "/site/basics.html"/>"/><@spring.message "index.whatIs.1"/></a></li>
+  			<li><a href="<@spring.url "/site/tour.html"/>"/><@spring.message "index.whatIs.1"/></a></li>
   			<li><a href="<@spring.url "/site/screencasts.html"/>"/><@spring.message "index.whatIs.2"/></a></li>
   			<li><a href="<@spring.url "/site/manifesto.html"/>"/><@spring.message "index.whatIs.3"/></a></li>
 			</ul>
@@ -77,24 +74,7 @@
 		<a href="j_acegi_logout">Logout</a>
 	<#else>
 		 <div id="loginBox">
-		 <form id="loginForm" action="j_acegi_security_check" method="POST">
-			<fieldset>
-
-				<legend><@spring.message "login.1.header"/></legend>
-
-				 <label for="j_username"><input type='text' name='j_username' id = 'j_username'><@spring.message "login.1.user"/>
-				 </label>
-			 <p>
-				 <label for="j_password"><input type='password' name='j_password' id = 'j_password'><@spring.message "login.1.pass"/>
-				 </label>
-			 <p>
-			 	<label for="_acegi_security_remember_me"><input type="checkbox" name="_acegi_security_remember_me"><@spring.message "login.1.dontask"/>
-				 </label>
-			 <p>
-			 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
-
-			</fieldset>
-		 </form>	
+			 <@common.loginForm/>
 		 </div>		 
 	</#if>
 	
@@ -131,14 +111,7 @@
 
 		  <div class="islandOverlay">
 		    <div>
-		    <form action="<@spring.url "/site/interested.html"/>" method="POST">
-			<fieldset>
-				<legend><@spring.message "login.2.header"/></legend>				
-	 							
-					<@spring.message "login.2.addemail"/><@spring.formInput "command.email"/><@regError/>					
-					<input value="<@spring.message "login.2.addemail"/>" type="submit">
-			</fieldset>
-		    </form>		
+			    <@common.interested/>
 		    </div>
 		  </div>
 		  

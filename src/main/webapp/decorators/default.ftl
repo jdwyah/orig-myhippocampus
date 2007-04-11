@@ -3,6 +3,7 @@
 
 <!---NOTE: this is the decorator spring.ftl--->
 <#import "spring.ftl" as spring/>
+<#import "../WEB-INF/freemarker/common.ftl" as common/>
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -27,12 +28,27 @@
 	      
 	      <@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
 	      
+	       <ul>
+	       	<li><a href="<@spring.url "/site/index.html"/>"/><@spring.message "sidebar.frontPage"/></a></li>
+	       	<li><a href="<@spring.url "/site/secure/userPage.html"/>"/><@spring.message "sidebar.userPage"/></a></li>
+  			<li><a href="<@spring.url "/site/tour.html"/>"/><@spring.message "sidebar.tour"/></a></li>
+  			<li><a href="<@spring.url "/site/screencasts.html"/>"/><@spring.message "sidebar.screencasts"/></a></li>
+			<li><a href="<@spring.url "/site/tips.html"/>"/><@spring.message "sidebar.tips"/></a></li>
+  			<li><a href="<@spring.url "/site/manifesto.html"/>"/><@spring.message "sidebar.manifestos"/></a></li>
+		   </ul>
+	      
 		</div>
      
 	    <div id="header">
     
    		    <img src="<@spring.url "/img/myhippocampusLogo.png"/>"/>
-			<#if user?exists><span class="slashUser">/${user.username}</span></#if>
+			<#if user?exists><span class="slashUser">/${user.username}</span>
+				<a href="<@spring.url "/site/j_acegi_logout"/>">(Logout)</a>
+			<#else>
+				<#--><div id="loginBox">
+				 <@common.loginForm/>
+				</div>		-->
+			</#if>
 	    </div>
 
 
