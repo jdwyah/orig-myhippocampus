@@ -29,7 +29,7 @@
           <p class="subheading"><@spring.message "manifesto1.4.0"/></p>      
 		  			<p><@spring.message "manifesto1.4.1"/></p>
 
-		  <p><@spring.message "manifesto1.5.1"/><a href="<@spring.url "/site/manifesto2.html"/>"/><@spring.message "manifesto1.5.2"/></a></p>
+		  <p><@spring.message "manifesto1.5.1"/> <a href="<@spring.url "/site/manifesto2.html"/>"/><@spring.message "manifesto1.5.2"/></a></p>
      
         <#if !user?exists>
 	      <@common.interested/>
@@ -38,10 +38,6 @@
       </div>
   						
       
-      
-            
- 	
-
-    </div>
+    
 </body>
 </html>

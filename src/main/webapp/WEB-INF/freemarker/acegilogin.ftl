@@ -4,7 +4,12 @@
   </head>
 
   <body>
-    <h1>Login</h1>
+  
+  
+	
+	 <div class="middle-column-box-white">
+        <div class="middle-column-box-title-green">Login</div>
+
 
 	<#if login_error?has_content>
       <font color="red">
@@ -24,6 +29,7 @@
 
     </form>
 
+	</div>
 
   </body>
 </html>

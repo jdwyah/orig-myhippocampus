@@ -63,16 +63,12 @@
 
 -->
 
-  <!-- MIDDLE COLUMN -->
-    <div id="middle-column">
-	
 
 	<#macro regError>
 		<font color="#FF0000"><@spring.showErrors"<br>"/></font>
 	</#macro>
 
 
-	<p>
       <div class="middle-column-box-white">
         <div class="middle-column-box-title-green">Sign-up now!</div>
         
@@ -89,8 +85,6 @@
 	   </div>
 	   
 	   
-	  </div>
-<p></p>
 
 
 </body>

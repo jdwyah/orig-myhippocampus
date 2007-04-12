@@ -24,8 +24,8 @@
 	<div id="main">
        
     	<div id="sidebar">
-	      <img src="<@spring.url "/img/myhippocampusLogo_140_254.png"/>"/>
-	      
+    	<a href="<@spring.url "/site/index.html"/>"/><img border="0" src="<@spring.url "/img/myhippocampusLogo_140_254.png"/>"/></a>
+	      <br>
 	      <@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
 	      
 	       <ul>
@@ -54,7 +54,7 @@
 
     	<div id="content">
              ${body}
-    	</div>
+    	</div><!--content-->
 
 	</div><!--main-->
 

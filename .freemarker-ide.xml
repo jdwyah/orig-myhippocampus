@@ -1,7 +1,13 @@
 <config>
 	<context-values>
+		<resource path="src/main/webapp/WEB-INF/freemarker/secure/showTopic.ftl">
+			<value key="topic" object-class="com.aavu.client.domain.Topic"/>
+		</resource>
 		<resource path="tomcat/webapps/HippoTest/WEB-INF/freemarker/secure/extreme/userList.ftl">
 			<value key="user" object-class="com.aavu.server.domain.ServerSideUser"/>
+		</resource>
+		<resource path="src/main/webapp/WEB-INF/freemarker/secure/searchResults.ftl">
+			<value key="result" object-class="com.aavu.client.domain.dto.SearchResult"/>
 		</resource>
 		<resource path="tomcat/webapps/HippoTest/WEB-INF/freemarker/secure/userPage.ftl">
 			<value key="bean" object-class="com.aavu.server.web.domain.UserPageBean"/>

@@ -22,7 +22,7 @@
           <p class="subheading"><@spring.message "manifesto2.4.0"/></p>      
 		  			<p><@spring.message "manifesto2.4.1"/></p>
 		  			<p><@spring.message "manifesto2.4.2"/></p>  			
-      </div>
+
       
  	  <#if !user?exists>
 	      <@common.interested/>

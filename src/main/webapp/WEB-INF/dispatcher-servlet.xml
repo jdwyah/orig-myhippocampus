@@ -8,13 +8,8 @@
 		<property name="loggedInView" value="redirect:/site/secure/userPage.html"/>
 		<property name="userService" ref="userService"/>
 		<property name="topicService" ref="topicService"/>
-	</bean>
-	<bean id="userPageController" class="com.aavu.server.web.controllers.UserPageController">
-		<property name="view" value="secure/userPage" />
-		<property name="topicService" ref="topicService"/>
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="tourController" class="com.aavu.server.web.controllers.BasicController">
+	</bean>	
+	<bean id="tourController" class="com.aavu.server.web.controllers.ManifestoController">
 		<property name="view" value="tour" />
 		<property name="userService" ref="userService" />
 	</bean>
@@ -111,6 +106,26 @@
 		<property name="serviceInterface" value="com.aavu.server.service.MessageService" />
 	</bean>
 
+
+	<bean id="userPageController" class="com.aavu.server.web.controllers.UserPageController">
+		<property name="view" value="secure/userPage" />
+		<property name="topicService" ref="topicService"/>
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="searchController" class="com.aavu.server.web.controllers.SearchController">
+		<property name="successView" value="secure/search" />
+		<property name="searchService" ref="searchService"/>
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="showTopicController" class="com.aavu.server.web.controllers.ShowTopicController">
+		<property name="view" value="secure/showTopic" />
+		<property name="topicService" ref="topicService"/>
+		<property name="userService" ref="userService" />
+	</bean>
+
+
+
+
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="alwaysUseFullPath" value="true" />
 		<property name="mappings">
@@ -136,7 +151,6 @@
 				<prop key="/service/showFile.html">showFileController</prop>
 
 				<prop key="/site/index.html">indexController</prop>
-				<prop key="/site/secure/userPage.html">userPageController</prop>
 				<prop key="/site/tips.html">tipsController</prop>
 				<prop key="/site/tour.html">tourController</prop>
 				<prop key="/site/screencasts.html">screencastsController</prop>				
@@ -144,7 +158,10 @@
 				<prop key="/site/manifesto2.html">manifestoController2</prop>
 				<prop key="/site/contact.html">contactController</prop>		
 				<prop key="/site/acknowledgments.html">acknowledgmentsController</prop>						
-						
+
+				<prop key="/site/secure/search.html">searchController</prop>
+				<prop key="/site/secure/userPage.html">userPageController</prop>
+				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
 
 			</props>
 		</property>

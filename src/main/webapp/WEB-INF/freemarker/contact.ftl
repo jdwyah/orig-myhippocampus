@@ -1,22 +1,23 @@
 <html>
 <#import "/spring.ftl" as spring/>
 <head>
-  <title>MyHippocampus - Contact</title>
+  <title><@spring.message "contact.title"/></title>
 </head>
 
 <body>
 	
 	
-	<div class="middle-column-box-title-green">
-	  <p class="subheading">Contact Us</p>
-	</div>
-
+	 <div class="middle-column-box-white">
+        <div class="middle-column-box-title-green"><@spring.message "contact.1"/></div>
+	
+	
 	 <#if message?exists>
 		 <p class="message">${message}</p>
 	 </#if>
 
-	  <p class="subheading">Thanks for your interest in MyHippocampus. You can get in touch with us by emailing jdwyah here at myhippocampus.com</p>
+	  <p class="subheading"><@spring.message "contact.1.0"/></p>
 
+	</div>
 	
 </body>
 </html>

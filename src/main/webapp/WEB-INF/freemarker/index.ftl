@@ -36,6 +36,12 @@
   	<div id="whatIsIsland" class="island">
 		<div class="islandOverlay">
   			<p class="islandHeader"><@spring.message "index.whatIs.header"/></p>
+
+			<#--
+			<p class="subheading"> <a href="<@spring.url "/site/tour.html"/>"/><@spring.message "index.whatIs.1"/></a><p>
+			<p class="subheading"> <a href="<@spring.url "/site/screencasts.html"/>"/><@spring.message "index.whatIs.2"/></a><p>
+			<p class="subheading"> <a href="<@spring.url "/site/manifesto.html"/>"/><@spring.message "index.whatIs.3"/></a><p>
+			-->
   			<ul>
   			<li><a href="<@spring.url "/site/tour.html"/>"/><@spring.message "index.whatIs.1"/></a></li>
   			<li><a href="<@spring.url "/site/screencasts.html"/>"/><@spring.message "index.whatIs.2"/></a></li>

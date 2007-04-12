@@ -7,10 +7,8 @@
 <body>
 	
 	
-	<div class="middle-column-box-title-green">
-	  <p class="subheading"><@spring.message "acknowledgments.1"/></p>
-	</div>
-
+	 <div class="middle-column-box-white">
+        <div class="middle-column-box-title-green"><@spring.message "acknowledgments.1"/></div>
 	 <#if message?exists>
 		 <p class="message">${message}</p>
 	 </#if>
@@ -21,6 +19,7 @@
   	  <li><a href="http://simile.mit.edu/timeline/">Simile Timeline</a></li>
   	  </ul>
 	  
+	  </div>
 
 	
 </body>

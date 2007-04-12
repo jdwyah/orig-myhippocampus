@@ -13,13 +13,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.aavu.client.domain.User;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.web.domain.MailingListCommand;
+import com.aavu.server.web.domain.SearchCommand;
 import com.aavu.server.web.domain.UserPageBean;
 
 public class UserPageController extends BasicController {
 	private static final Logger log = Logger.getLogger(UserPageController.class);
-	
-	private String loggedInView;	
-	
+		
 	private TopicService topicService;
 	
 	public void setTopicService(TopicService topicService) {
@@ -45,8 +44,9 @@ public class UserPageController extends BasicController {
 			UserPageBean bean = topicService.getUserPageBean(su);
 		
 			model.put("bean", bean);
+			model.put("command",new SearchCommand());
 			
-			return new ModelAndView(loggedInView,model);
+			return new ModelAndView(getView(),model);
 			
 		}catch(UsernameNotFoundException e){
 			throw new Exception("No User Logged In.");
