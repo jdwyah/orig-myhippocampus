@@ -11,7 +11,7 @@ import org.acegisecurity.providers.TestingAuthenticationToken;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
-public class BaseTestNoTransaction extends AbstractDependencyInjectionSpringContextTests {
+public abstract class BaseTestNoTransaction extends AbstractDependencyInjectionSpringContextTests {
 	@Override
 	protected String[] getConfigLocations() {
 

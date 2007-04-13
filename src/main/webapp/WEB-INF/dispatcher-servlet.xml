@@ -123,8 +123,24 @@
 		<property name="userService" ref="userService" />
 	</bean>
 
+	<bean id="paypalController" class="com.aavu.server.web.controllers.PaypalIPNController">
+		<property name="userService" ref="userService" />
+		<property name="view" value="ipn/ipn" />
+	</bean>
 
+	<bean id="paypalTestController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="ipn/test" />
+		<property name="userService" ref="userService" />
+	</bean>
 
+	<bean id="paypalOkController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="ipn/signupOk" />
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="upgradeController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="secure/upgrade" />
+		<property name="userService" ref="userService" />
+	</bean>
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="alwaysUseFullPath" value="true" />
@@ -136,9 +152,15 @@
 				<prop key="/service/subjectService">GWTSubjectService</prop>
 				<prop key="/service/messageService">hessianMessageService</prop>
 
+				<prop key="/site/ipn">paypalController</prop>						
+				<prop key="/site/ipn/test.html">paypalTestController</prop>	
+				<prop key="/site/account/signupOk.html">paypalOkController</prop>					
+					
+
 				<prop key="/site/acegilogin.html">loginController</prop>
 				<prop key="/site/interested.html">mailingListController</prop>
 				<prop key="/site/signup.html">createUserController</prop>
+				
 
 
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
@@ -159,9 +181,12 @@
 				<prop key="/site/contact.html">contactController</prop>		
 				<prop key="/site/acknowledgments.html">acknowledgmentsController</prop>						
 
+
 				<prop key="/site/secure/search.html">searchController</prop>
 				<prop key="/site/secure/userPage.html">userPageController</prop>
 				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
+
+				<prop key="/site/secure/upgrade.html">upgradeController</prop>						
 
 			</props>
 		</property>

@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.InitDAO;
 import com.aavu.server.dao.UserDAO;
@@ -103,6 +104,14 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 
 	public void setInitDAO(InitDAO initDAO) {
 		this.initDAO = initDAO;
+	}
+
+	public User getForPaypalID(String paypalID) {
+		return (User) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from User where paypalId = :id", "id", paypalID));
+	}
+
+	public Subscription getSubscriptionByID(long subscriptionID) {
+		return (Subscription) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from Subscription where id = :id", "id", subscriptionID));
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.aavu.client.domain.User;
+import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.service.UserService;
 
 public class UserManagerController extends MultiActionController {
@@ -27,7 +28,7 @@ public class UserManagerController extends MultiActionController {
 		return new ModelAndView(viewUserList,"users",users);
 	}
 
-	public ModelAndView delete(HttpServletRequest request, HttpServletResponse response){
+	public ModelAndView delete(HttpServletRequest request, HttpServletResponse response) throws PermissionDeniedException{
 		
 
 		String idStr = request.getParameter("user");		
@@ -38,7 +39,7 @@ public class UserManagerController extends MultiActionController {
 		List<User> users = userService.getAllUsers();		
 		return new ModelAndView(viewUserList,"users",users); 
 	}
-	public ModelAndView enable(HttpServletRequest request, HttpServletResponse response){
+	public ModelAndView enable(HttpServletRequest request, HttpServletResponse response) throws PermissionDeniedException{
 		
 		
 		String idStr = request.getParameter("user");		
@@ -50,7 +51,7 @@ public class UserManagerController extends MultiActionController {
 		return new ModelAndView(viewUserList,"users",users); 
 	}
 	
-	public ModelAndView supervisor(HttpServletRequest request, HttpServletResponse response){
+	public ModelAndView supervisor(HttpServletRequest request, HttpServletResponse response) throws PermissionDeniedException{
 
 		String idStr = request.getParameter("user");		
 		Integer id = Integer.parseInt(idStr);

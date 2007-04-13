@@ -6,7 +6,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.test.AbstractTransactionalDataSourceSpringContextTests;
 
 
-public class HibernateTransactionalTest extends AbstractTransactionalDataSourceSpringContextTests{
+public abstract class HibernateTransactionalTest extends AbstractTransactionalDataSourceSpringContextTests{
 
 	@Override
 	protected String[] getConfigLocations() {

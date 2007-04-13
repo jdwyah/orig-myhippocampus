@@ -114,9 +114,10 @@ legend {
 }
 
 .slashUser {
+	border-top: 30px;	
 	vertical-align: top; 
 	color: #CBD043;;
-	font-size: 50pt;
+	font-size: 30pt;
 }
 #enterButton {
 	border: 0px;

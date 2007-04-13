@@ -21,15 +21,12 @@
 		<property name="supervisor" type="boolean" column="supervisor">
 		</property>		
 		
-		<!--
-
-		<set name="topics" inverse="true">
-			<key column="user_id" />
-			<one-to-many class="Topic" />
-		</set>
-
-	-->
-	
+		<property name="paypalID" type="string" column="paypalID">
+		</property>
+				
+				
+				
+		<many-to-one name="subscription" class="Subscription" column="subscription_id" lazy="false"/>
 	
 	
 	</class>

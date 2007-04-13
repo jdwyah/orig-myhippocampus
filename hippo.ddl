@@ -126,11 +126,21 @@
 
     create table Users (
         user_id bigint not null auto_increment,
-        user_name varchar(255),
-        password varchar(255),
-        enabled bit,
-        supervisor bit,
+        user_name varchar(255) not null,
+        password varchar(255) not null,
+        enabled bit not null DEFAULT '1',
+        supervisor bit not null DEFAULT '0',
+        subscription_id BIGINT NOT NULL DEFAULT '0';
+		paypalID varchar(255) default NULL,        
         primary key (user_id)
+    ) type=InnoDB;
+
+    create table Subscriptions (
+        subscription_id bigint not null auto_increment,
+        description varchar(255) not null,
+        price double not null,
+        maxTopics integer not null ,
+        primary key (subscription_id)
     ) type=InnoDB;
 
     create table instancetable (
@@ -220,6 +230,13 @@
         primary key (connector_id)
     ) type=InnoDB;
     
+   alter table Users 
+        add index UserSubIndex (subscription_id), 
+        add constraint UserSubIndex 
+        foreign key (subscription_id) 
+        references Subscriptions (subscription_id);
+
+            
    alter table type_connector 
         add index fromIdx (from_id), 
         add constraint fromIdx 

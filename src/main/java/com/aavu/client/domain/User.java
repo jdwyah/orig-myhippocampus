@@ -22,6 +22,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class User extends AbstractUser implements IsSerializable {
 
+	private static final int PREMIUM_CUTOFF = 50;
+
 	public User(){
 		setEnabled(true);
 		setSupervisor(false);		
@@ -37,6 +39,9 @@ public class User extends AbstractUser implements IsSerializable {
 
 	public boolean isCredentialsNonExpired() {
 		return true;
+	}
+	public boolean isPremiumAccount(){
+		return getSubscription().getMaxTopics() > PREMIUM_CUTOFF;
 	}
 
 	public int getWorldSize(int totalNumberOfTopics, int numberOfTags) {

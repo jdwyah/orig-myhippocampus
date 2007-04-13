@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 
-public class AbstractBaseTestClass extends AbstractDependencyInjectionSpringContextTests {
+public abstract class AbstractBaseTestClass extends AbstractDependencyInjectionSpringContextTests {
 	protected static Logger log = Logger.getLogger(AbstractBaseTestClass.class);
 	
 	protected XmlWebApplicationContext ctx;

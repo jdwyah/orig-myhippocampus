@@ -11,8 +11,11 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
+import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.UserService;
@@ -22,12 +25,14 @@ public class UserServiceImpl implements UserService {
 
 	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
+	private static final long CANCELLED_SUBSCRIPTION_ID = 1;
+
 	private UserDAO userDAO;
-	
+
 	public User getCurrentUser() throws UsernameNotFoundException {
 
 		log.debug("getCurrentUser");
-		
+
 		Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -38,19 +43,19 @@ public class UserServiceImpl implements UserService {
 			log.debug("not a UserDetail, it's a "+obj.getClass().getName());
 			username = obj.toString();
 		}
-		
+
 		log.debug("loadUserByUsername "+username);
-		
+
 		try {
 			return userDAO.getUserByUsername(username);	
 		} catch (UsernameNotFoundException e) {
 			log.warn(e);
 			throw e;
 		}
-		
-		
+
+
 	}
-	
+
 	public void createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
 		User user = new User();
 
@@ -73,16 +78,16 @@ public class UserServiceImpl implements UserService {
 			md5.update(password.getBytes("UTF-8"));
 			BigInteger hash = new BigInteger(1, md5.digest());
 			hashword = hash.toString(16);
-						
+
 		} catch (NoSuchAlgorithmException nsae) {
 			log.error(nsae);
 		} catch (UnsupportedEncodingException e) {
 			log.error(e);
 		}
-		
+
 		return pad(hashword,32,'0');
 	}
-	
+
 	private String pad(String s, int length, char pad) {
 		StringBuffer buffer = new StringBuffer(s);
 		while (buffer.length() < length) {
@@ -113,26 +118,37 @@ public class UserServiceImpl implements UserService {
 		this.userDAO = userDAO;
 	}
 
-	public void toggleEnabled(Integer id) {				
-		User user = userDAO.getUserForId(id);
-		user.setEnabled(!user.isEnabled());
-		userDAO.save(user);
+	/**
+	 * TODO LOW AOP this security concern
+	 */
+	public void toggleEnabled(Integer id) throws PermissionDeniedException {			
+		if(getCurrentUser().isSupervisor()){
+			User user = userDAO.getUserForId(id);
+			user.setEnabled(!user.isEnabled());
+			userDAO.save(user);
+		}else{
+			throw new PermissionDeniedException("You don't have rights to do that.");
+		}
 	}
 
-
-
-	public void delete(Integer id) {
-		User user = userDAO.getUserForId(id);
-		userDAO.delete(user);
+	public void delete(Integer id) throws PermissionDeniedException {
+		if(getCurrentUser().isSupervisor()){
+			User user = userDAO.getUserForId(id);
+			userDAO.delete(user);
+		}else{
+			throw new PermissionDeniedException("You don't have rights to do that.");
+		}
 	}
 
-
-
-	public void toggleSupervisor(Integer id) {
-		System.out.println("ID "+id);
-		User user = userDAO.getUserForId(id);
-		user.setSupervisor(!user.isSupervisor());
-		userDAO.save(user);
+	public void toggleSupervisor(Integer id) throws PermissionDeniedException {
+		if(getCurrentUser().isSupervisor()){
+			System.out.println("ID "+id);
+			User user = userDAO.getUserForId(id);
+			user.setSupervisor(!user.isSupervisor());
+			userDAO.save(user);
+		}else{
+			throw new PermissionDeniedException("You don't have rights to do that.");
+		}
 	}
 
 	/**
@@ -144,16 +160,61 @@ public class UserServiceImpl implements UserService {
 		//
 		log.debug("u: "+username+" p "+userpass);
 		log.debug("pp: "+hashPassword(userpass));
-		
+
 		User user = new User();
 		user.setUsername(username.toLowerCase());
 		user.setPassword(hashPassword(userpass));		
 		user.setSupervisor(superV);
-		
+
 		userDAO.save(user);
 
 	}
 
+	public void changeToSubscriptionAndSave(User user, Subscription subscription, String paypalID) {
+		
+		user.setPaypalID(paypalID);
+		
+		user.setSubscription(subscription);
+		userDAO.save(user);
+		
+	}
+
+
+	/**
+	 * Remove the paypal ID
+	 */	
+	public void subscriptionCancel(String paypalID) {
+		Subscription cancelled = userDAO.getSubscriptionByID(CANCELLED_SUBSCRIPTION_ID);
+		
+		User user = userDAO.getForPaypalID(paypalID);
+		
+		changeToSubscriptionAndSave(user, cancelled,"");
+	}
+
+	
+	public void subscriptionRecordPayment(String paypalID) {
+		
+		User user = userDAO.getForPaypalID(paypalID);		
+		log.info(user.getId()+" "+user.getUsername()+" "+paypalID+" PAID!");	
+	}
+
+	public void subscriptionNewSignup(long hippoID,String paypalID, long subscriptionID,String userEmail) throws HippoBusinessException {
+		
+		User userToProcess = userDAO.getUserForId(hippoID);
+		
+		User otherUserWithThisPaypal = userDAO.getForPaypalID(paypalID);
+		
+		if(otherUserWithThisPaypal != null){
+			throw new HippoBusinessException("Already Have a user for that paypalID");
+		}
+		
+		
+		Subscription subscription = userDAO.getSubscriptionByID(subscriptionID);
+
+		changeToSubscriptionAndSave(userToProcess, subscription,paypalID);
+		
+	}
+	
 
 
 }

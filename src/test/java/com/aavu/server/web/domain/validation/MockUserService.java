@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 
+import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.server.service.UserService;
@@ -55,6 +56,36 @@ public class MockUserService implements UserService {
 	public void toggleSupervisor(Integer id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void changeToSubscription(Integer id, Subscription subscription) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public User getForPaypalID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void subscriptionCancel(String paypalID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void subscriptionNewSignup(String paypalID, long subscriptionID, String payerEmail) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void subscriptionRecordPayment(String paypalID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID, String payerEmail) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

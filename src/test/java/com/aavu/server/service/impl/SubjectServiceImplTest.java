@@ -87,17 +87,17 @@ public class SubjectServiceImplTest extends BaseTestWithTransaction {
 			System.out.println("list: "+subject.getName()+" "+subject.getForeignID());
 		}
 	}
-	public void testDeliciousReq() throws IOException, DocumentException, HippoException{
-		List<DeliciousPost> posts = subjectService.deliciousReq("jdwyah","internet.com");
-
-		
-	}
-	
-	public void testDeliciousAdd() throws IOException, DocumentException, HippoException{
-		
-		assertEquals(0, topicService.getAllTopicIdentifiers().size());		
-		subjectService.addDeliciousTags("jdwyah", "internet.com");
-		
-		assertTrue(topicService.getAllTopicIdentifiers().size() > 40);
-	}
+//	public void testDeliciousReq() throws IOException, DocumentException, HippoException{
+//		List<DeliciousPost> posts = subjectService.deliciousReq("jdwyah","internet.com");
+//
+//		
+//	}
+//	
+//	public void testDeliciousAdd() throws IOException, DocumentException, HippoException{
+//		
+//		assertEquals(0, topicService.getAllTopicIdentifiers().size());		
+//		subjectService.addDeliciousTags("jdwyah", "internet.com");
+//		
+//		assertTrue(topicService.getAllTopicIdentifiers().size() > 40);
+//	}
 }

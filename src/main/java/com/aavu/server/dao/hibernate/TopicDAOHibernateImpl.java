@@ -598,9 +598,13 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
 		.add(Expression.eq("user", rtn.getUser()))
-		.add(Expression.ne("class", "association"))
-		.add(Expression.ne("class", "seealso"))
-		.add(Expression.ne("class", "metadate"))
+			.add(Expression.ne("class", "association"))			
+			.add(Expression.ne("class", "metadate"))
+			.add(Expression.ne("class", "metatext"))
+			.add(Expression.ne("class", "metalocation"))
+			.add(Expression.ne("class", "date"))
+			.add(Expression.ne("class", "text"))
+			.add(Expression.ne("class", "location"))		
 		.setProjection(Projections.rowCount());
 		
 		rtn.setNumberOfTopics(DataAccessUtils.intResult(getHibernateTemplate().findByCriteria(crit)));

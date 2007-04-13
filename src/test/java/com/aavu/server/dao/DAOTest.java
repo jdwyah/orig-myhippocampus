@@ -7,7 +7,7 @@ import com.db4o.ObjectContainer;
 
 import junit.framework.TestCase;
 
-public class DAOTest extends TestCase {
+public abstract class DAOTest extends TestCase {
 
 	private static final String FILENAME = "db2.yac";
 	

@@ -16,10 +16,7 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 		this.userDAO = userDAO;
 	}
 
-	public void testDelete() {
-		
-		fail("Not yet implemented");
-	}
+	
 
 	public void testGetUserByUsername() {
 		String USER = "jdwyah";
@@ -29,12 +26,9 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 
-	public void testGetUserForId() {
-		fail("Not yet implemented");
-	}
 
 	public void testLoadUserByUsername() {
-		String USER = "jdwyah";
+		String USER = "test";
 		ServerSideUser u = userDAO.loadUserByUsername(USER);		
 		assertEquals(USER, u.getUsername());
 		

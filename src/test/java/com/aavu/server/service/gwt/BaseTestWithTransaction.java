@@ -12,7 +12,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
 
-public class BaseTestWithTransaction extends AbstractTransactionalSpringContextTests {
+public abstract class BaseTestWithTransaction extends AbstractTransactionalSpringContextTests {
 	
 	private static String username = "test-with-data";	
 	public void setUsername(String username) {
@@ -22,15 +22,10 @@ public class BaseTestWithTransaction extends AbstractTransactionalSpringContextT
 	@Override
 	protected String[] getConfigLocations() {
 
-		String path = "tomcat/webapps/HippoTest/WEB-INF/";
-		String pathc = path+"classes/";
-
-		File f = new File(".");
-		System.out.println(f.getAbsolutePath());
-
+		PropertyConfigurator.configure(getClass().getResource("/log4j.properties"));
+		
+		String path = "src/main/webapp/WEB-INF/";
 		String pathh = "file:"+path;
-
-		PropertyConfigurator.configure(pathc+"log4j.properties");
 		return new String[] {pathh+"applicationContext-hibernate.xml",pathh+"applicationContext.xml"};
 
 	}

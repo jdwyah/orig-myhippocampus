@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.db4ospring.support.Db4oDaoSupport;
 import org.springframework.dao.DataAccessException;
 
+import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.InitDAO;
 import com.aavu.server.dao.UserDAO;
@@ -144,6 +145,16 @@ public class UserDAOdb4oImpl extends Db4oDaoSupport implements UserDAO, UserDeta
 			User u = (User) users.get(0);
 			return u;
 		}
+	}
+
+	public User getForPaypalID(String paypalID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Subscription getSubscriptionByID(long subscriptionID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

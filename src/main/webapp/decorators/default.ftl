@@ -35,6 +35,9 @@
   			<li><a href="<@spring.url "/site/screencasts.html"/>"/><@spring.message "sidebar.screencasts"/></a></li>
 			<li><a href="<@spring.url "/site/tips.html"/>"/><@spring.message "sidebar.tips"/></a></li>
   			<li><a href="<@spring.url "/site/manifesto.html"/>"/><@spring.message "sidebar.manifestos"/></a></li>
+			<#if user?exists>
+<li><a href="<@spring.url "/site/secure/upgrade.html"/>"/><@spring.message "sidebar.account"/></a></li>
+			</#if>
 		   </ul>
 	      
 		</div>

@@ -982,39 +982,39 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 
-	public void testGetTree() throws HippoBusinessException{
-		
-		Topic t = new Topic(u,B);
-		t = topicDAO.save(t);
-		
-		MindTreeOcc occ = new MindTreeOcc(t);		
-		MindTree tree = occ.getMindTree();
-		tree.getRightSide().add(new MindTreeElement("Foo",null,0,3));
-		tree.getRightSide().add(new MindTreeElement("Foo2",null,1,2));
-		tree.getLeftSide().add(new MindTreeElement("FooL",null,0,1));
-		
-		
-		//save tree explicitly
-		topicDAO.save(tree);
-		
-//		//save occ explicitly?
-//		topicDAO.save(occ);		
-		
-		t.getOccurences().add(occ);
-		
-		Topic saved = topicDAO.save(t);
-		
-		assertEquals(1, saved.getOccurences().size());
-		
-		MindTreeOcc socc = (MindTreeOcc) saved.getOccurences().iterator().next();
-		
-		MindTree savedTree = topicDAO.getTree(socc);
-				
-		assertNotNull(savedTree);
-		
-		assertEquals(2, savedTree.getRightSide().size());
-		assertEquals(1, savedTree.getLeftSide().size());
-	}
+//	public void testGetTree() throws HippoBusinessException{
+//		
+//		Topic t = new Topic(u,B);
+//		t = topicDAO.save(t);
+//		
+//		MindTreeOcc occ = new MindTreeOcc(t);		
+//		MindTree tree = occ.getMindTree();
+//		tree.getRightSide().add(new MindTreeElement("Foo",null,0,3));
+//		tree.getRightSide().add(new MindTreeElement("Foo2",null,1,2));
+//		tree.getLeftSide().add(new MindTreeElement("FooL",null,0,1));
+//		
+//		
+//		//save tree explicitly
+//		topicDAO.save(tree);
+//		
+////		//save occ explicitly?
+////		topicDAO.save(occ);		
+//		
+//		t.getOccurences().add(occ);
+//		
+//		Topic saved = topicDAO.save(t);
+//		
+//		assertEquals(1, saved.getOccurences().size());
+//		
+//		MindTreeOcc socc = (MindTreeOcc) saved.getOccurences().iterator().next();
+//		
+//		MindTree savedTree = topicDAO.getTree(socc);
+//				
+//		assertNotNull(savedTree);
+//		
+//		assertEquals(2, savedTree.getRightSide().size());
+//		assertEquals(1, savedTree.getLeftSide().size());
+//	}
 
 
 	public void testDelete() throws HippoBusinessException{

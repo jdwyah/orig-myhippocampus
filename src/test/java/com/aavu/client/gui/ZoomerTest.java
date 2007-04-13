@@ -4,7 +4,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 
 import junit.framework.TestCase;
 
-public class ZoomerTest extends GWTTestCase {
+public abstract class ZoomerTest extends GWTTestCase {
 
 	public void testScaling(){
 		
