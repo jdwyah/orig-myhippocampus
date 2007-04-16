@@ -32,3 +32,14 @@
 		</fieldset>
 	</form>		
 </#macro>
+
+<#macro pngImage src width height>
+	<#if iePre7?exists>
+		<div>
+			<span style="display:inline-block;width:${width}px;height:${height}px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<@spring.url "${src}"/>', sizingMethod='scale')"></span>
+		</div>
+	<#else>
+		<!-- commonPNG -->
+		<img src=${src} width=${width} height=${height} border=0/>
+	</#if>
+</#macro>

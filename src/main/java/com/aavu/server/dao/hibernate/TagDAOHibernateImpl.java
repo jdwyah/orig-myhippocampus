@@ -124,10 +124,10 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
 		for (Object[] o : list){
-			if(log.isDebugEnabled()){
-				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);	
-				log.debug("TagStat "+o[0].getClass()+" "+o[1].getClass()+" "+o[2].getClass()+" "+o[3].getClass()+" "+o[4].getClass());
-			}			
+//			if(log.isDebugEnabled()){
+//				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);	
+//				//log.debug("TagStat "+o[0].getClass()+" "+o[1].getClass()+" "+o[2].getClass()+" "+o[3].getClass()+" "+o[4].getClass());
+//			}			
 			
 			rtn.add(new TagStat((Long)o[0],(Integer)o[1],(String)o[2],(Integer) o[3],(Integer) o[4]));			
 		}

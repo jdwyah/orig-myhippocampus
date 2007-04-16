@@ -181,7 +181,8 @@ public class UserServiceImpl implements UserService {
 
 
 	/**
-	 * Remove the paypal ID
+	 * Remove the paypal ID so they can switch to a different paypal account by cancelling,
+	 * then re-signing up.
 	 */	
 	public void subscriptionCancel(String paypalID) {
 		Subscription cancelled = userDAO.getSubscriptionByID(CANCELLED_SUBSCRIPTION_ID);
@@ -191,13 +192,24 @@ public class UserServiceImpl implements UserService {
 		changeToSubscriptionAndSave(user, cancelled,"");
 	}
 
-	
-	public void subscriptionRecordPayment(String paypalID) {
+	/**
+	 * TODO do something.
+	 * NOTE: this req will often be received _before_ subscriptionNewSignup
+	 * 
+	 */
+	public void subscriptionRecordPayment(long hippoID,String paypalID) {
 		
-		User user = userDAO.getForPaypalID(paypalID);		
-		log.info(user.getId()+" "+user.getUsername()+" "+paypalID+" PAID!");	
+		User userWithThisPaypal = userDAO.getForPaypalID(paypalID);
+		User userToProcess = userDAO.getUserForId(hippoID);
+		
+		log.info(userToProcess.getId()+" "+userToProcess.getUsername()+" "+paypalID+" PAID!");	
 	}
 
+	/**
+	 * Currently blocking signups for multiple users from 1 paypal account.
+	 * This is because on cancel, we only receive the paypalID and if there are
+	 * multiples, we wouldn't know who to cancel.
+	 */
 	public void subscriptionNewSignup(long hippoID,String paypalID, long subscriptionID,String userEmail) throws HippoBusinessException {
 		
 		User userToProcess = userDAO.getUserForId(hippoID);
@@ -213,6 +225,10 @@ public class UserServiceImpl implements UserService {
 
 		changeToSubscriptionAndSave(userToProcess, subscription,paypalID);
 		
+	}
+
+	public List<Subscription> getAllUpgradeSubscriptions() {
+		return userDAO.getAllUpgradeSubscriptions();
 	}
 	
 

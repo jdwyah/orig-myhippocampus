@@ -1297,8 +1297,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	
 	public void testPopualateUsageStats(){
 		
-		UserPageBean bean = new UserPageBean();
-		topicDAO.populateUsageStats(bean);
+		UserPageBean bean = topicDAO.getUsageStats(u);
 		
 		System.out.println(bean);
 	}

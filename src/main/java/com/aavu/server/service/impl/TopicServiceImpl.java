@@ -28,6 +28,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoPermissionException;
+import com.aavu.client.exception.HippoSubscriptionException;
 import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
@@ -82,6 +83,28 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 
+	private boolean userIsOverSubscriptionLimit(){
+		User u = userService.getCurrentUser();		
+		int curTopics = topicDAO.getTopicCount(u);		
+		return u.getSubscription().getMaxTopics() < curTopics;
+	}
+	
+	public Topic createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
+
+		
+		log.debug("create New: "+title+" "+topicOrTagOrMeta.getClass());
+	
+		if(userIsOverSubscriptionLimit()){
+			throw new HippoSubscriptionException("Too many topics for your subscription.");
+		}
+		
+		topicOrTagOrMeta.setTitle(title);
+
+		topicOrTagOrMeta = save(topicOrTagOrMeta);
+		
+		return topicOrTagOrMeta;
+	}
+
 	/*
 	 * TODO maybe AOP secure this? 
 	 * 
@@ -102,6 +125,15 @@ public class TopicServiceImpl implements TopicService {
 		}
 	}
 
+	private void deleteCommand(AbstractCommand command) throws HippoBusinessException {		
+		Set topics = command.getDeleteSet();
+		for (Iterator iter = topics.iterator(); iter.hasNext();) {		
+			Topic topic = (Topic) iter.next();
+			log.info("DeleteCommand Delete: "+topic);
+			delete(topic);
+		}		
+	}
+	
 	public void deleteOccurrence(long id) throws HippoPermissionException {
 		Occurrence o = topicDAO.getOccurrrence(id);
 		if(o.getUser() != userService.getCurrentUser()){
@@ -109,7 +141,12 @@ public class TopicServiceImpl implements TopicService {
 		}
 		topicDAO.deleteOccurrence(o);
 	}
-
+	
+	
+	
+	
+	
+	
 	/**
 	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects.
 	 * 2) Execute. use the domain classes logic & the command to enact the change
@@ -121,42 +158,35 @@ public class TopicServiceImpl implements TopicService {
 		saveCommand(command);
 		deleteCommand(command);		
 	}
+
 	
 	public List<LocationDTO> getAllLocations() {	
 		return topicDAO.getLocations(userService.getCurrentUser());
 	}
-	
-	
-	
-	
-	
-	
+
 	public List getAllMetas() {		
 		return topicDAO.getAllMetas(userService.getCurrentUser());
 	}
 
 	
+	
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
 	}
-
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
 	}
-
-	
-	
 	public Topic getForID(long topicID) {
 		return topicDAO.getForID(userService.getCurrentUser(),topicID);
 	}
+
 	public Topic getForName(String string) {
 		return topicDAO.getForName(userService.getCurrentUser(),string);
 	}
 	public List<TopicIdentifier> getLinksTo(Topic topic) {
 		return topicDAO.getLinksTo(topic, userService.getCurrentUser());
 	}
-
-	public List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList) {
+public List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList) {
 		List<List<LocationDTO>> rtn = new ArrayList<List<LocationDTO>>(shoppingList.size());
 		
 		for (TopicIdentifier tag : shoppingList) {
@@ -179,7 +209,7 @@ public class TopicServiceImpl implements TopicService {
 		}
 		return seealsoSingleton;
 	}
-//	public List<TimeLineObj> getTimelineObjs(long tagID) {
+	//	public List<TimeLineObj> getTimelineObjs(long tagID) {
 //		return topicDAO.getTimeline(tagID,userService.getCurrentUser());
 //	}
 	public List<TimeLineObj> getTimeline() {
@@ -208,6 +238,7 @@ public class TopicServiceImpl implements TopicService {
 		return rtn;
 		//return topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
 	}
+	
 	public List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList) {
 		
 		List<List<FullTopicIdentifier>> rtn = new ArrayList<List<FullTopicIdentifier>>(shoppingList.size());
@@ -224,20 +255,17 @@ public class TopicServiceImpl implements TopicService {
 		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 	
+	
+	
+	
+	
+	
 	public MindTree getTree(MindTreeOcc occ) {
 		return topicDAO.getTree(occ);
 	}
-	public UserPageBean getUserPageBean(User su) {
-		UserPageBean rtn = new UserPageBean();
-		rtn.setUser(su);
-		topicDAO.populateUsageStats(rtn);
-		return rtn;
+	public UserPageBean getUserPageBean(User su) {		
+		return topicDAO.getUsageStats(su);
 	}
-	
-	
-	
-	
-	
 	
 	public LinkAndUser getWebLinkForURLAndUser(String url) {
 		User u = userService.getCurrentUser();
@@ -337,15 +365,6 @@ public class TopicServiceImpl implements TopicService {
 			save(topic);
 		}		
 	}
-	private void deleteCommand(AbstractCommand command) throws HippoBusinessException {		
-		Set topics = command.getDeleteSet();
-		for (Iterator iter = topics.iterator(); iter.hasNext();) {		
-			Topic topic = (Topic) iter.next();
-			log.info("DeleteCommand Delete: "+topic);
-			delete(topic);
-		}		
-	}
-	
 	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) {
 		topicDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
 	}
@@ -355,12 +374,9 @@ public class TopicServiceImpl implements TopicService {
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
-	public void setUserService(UserService userService) {
+public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-//	public void setSearchService(SearchService searchService) {
-//		this.searchService = searchService;
-//	}
 	
 
 }

@@ -23,7 +23,7 @@ public class ManifestoController extends BasicController {
 			HttpServletResponse arg1) throws Exception {
 
 
-		Map model = getDefaultModel();		
+		Map model = getDefaultModel(req);		
 		model.put("command",new MailingListCommand());
 		
 		return new ModelAndView(getView(),model);

@@ -28,7 +28,7 @@ public class ShowTopicController extends BasicController {
 		Topic result = topicService.getForID(id);
 		List<FullTopicIdentifier> onThisIsland = topicService.getTopicIdsWithTag(id);
 		
-		Map<String,Object> model = getDefaultModel();
+		Map<String,Object> model = getDefaultModel(req);
 		model.put("topic", result);
 		model.put("onThisIsland",onThisIsland);
 		model.put("command",new SearchCommand());

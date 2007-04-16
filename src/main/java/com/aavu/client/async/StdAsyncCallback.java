@@ -1,10 +1,12 @@
 package com.aavu.client.async;
 
 import com.aavu.client.exception.HippoException;
+import com.aavu.client.exception.HippoSubscriptionException;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.service.Manager;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class StdAsyncCallback implements AsyncCallback {
 
@@ -45,6 +47,9 @@ public class StdAsyncCallback implements AsyncCallback {
 			if(caught.getMessage().startsWith("Username not found")){
 				manager.doLogin();
 			}
+		}
+		if(caught instanceof  HippoSubscriptionException){
+			manager.userNeedsToUpgrade();
 		}
 		
 		if(manager != null){

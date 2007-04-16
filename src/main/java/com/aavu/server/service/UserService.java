@@ -24,6 +24,7 @@ public interface UserService {
 
 	void toggleSupervisor(Integer id) throws PermissionDeniedException;
 
+	List<Subscription> getAllUpgradeSubscriptions();
 	User getCurrentUser() throws UsernameNotFoundException;
 	
 	void delete(Integer id) throws PermissionDeniedException;
@@ -33,7 +34,7 @@ public interface UserService {
 
 	void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID, String payerEmail) throws HippoBusinessException;
 
-	void subscriptionRecordPayment(String paypalID);
+	void subscriptionRecordPayment(long hippoID,String paypalID);
 
 	void subscriptionCancel(String paypalID);
 

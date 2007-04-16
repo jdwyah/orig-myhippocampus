@@ -88,4 +88,14 @@ public class MockUserService implements UserService {
 		
 	}
 
+	public void subscriptionRecordPayment(long hippoID, String paypalID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Subscription> getAllUpgradeSubscriptions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

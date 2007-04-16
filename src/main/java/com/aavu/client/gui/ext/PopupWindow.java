@@ -19,6 +19,9 @@ public class PopupWindow implements CloseListener {
     public PopupWindow(GInternalFrame frame, String title) {
     	this(frame,title,false,WIDTH,HEIGHT);
 	}
+    public PopupWindow(GInternalFrame frame, String title,boolean noHeightSet) {
+    	this(frame,title,false,-1,-1);
+	}
     public PopupWindow(GInternalFrame frame, String title, int width, int height) {
     	this(frame,title,false,width,height);	
 	}
@@ -30,18 +33,24 @@ public class PopupWindow implements CloseListener {
     	//NOTE: don't forget to add the css file to the html.
 		frame.setTheme("alphacube");
     	
-		frame.setWidth(width);
-		frame.setHeight(height);
+		if(width != -1){
+			frame.setWidth(width);
+			frame.setHeight(height);
+			
+			int w = (Window.getClientWidth() - width) / 2;
+			int h = Window.getClientHeight() / 3;
+			
+			//System.out.println("W "+w+" H "+h+" "+Window.getClientWidth()+" "+Window.getClientHeight());
+			
+			w = (w < 100) ? 100 : w;
+			h = (h < 100) ? 100 : h;
+			frame.setLocation(w, h);
+		}
 		frame.setMinimizable(false);
 		frame.setMaximizable(true);
 		frame.setDraggable(true);
 		
-		int w = (Window.getClientWidth() - width) / 2;
-		int h = (Window.getClientHeight() - height) / 2;
-		w = (w < 100) ? 100 : w;
-		h = (h < 100) ? 100 : h;
-		frame.setLocation(w, h);
-		
+	
 		
 		frame.setVisible(true);
 		

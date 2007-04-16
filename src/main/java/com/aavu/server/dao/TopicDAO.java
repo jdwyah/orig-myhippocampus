@@ -26,21 +26,21 @@ public interface TopicDAO {
 	void deleteOccurrence(Occurrence o);
 	Topic get(long topicID);
 
-	List<LocationDTO> getLocations(User user);
-	List<LocationDTO> getLocations(long tagID, User user);
-	
 	List getAllMetas(User currentUser);
-
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user);
 	
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
 
 	List<Topic> getAllTopics(User u);
-
+	
 	Topic getForID(User currentUser, long topicID);
 
 	Topic getForName(User user,String string);
+
 	List<TopicIdentifier> getLinksTo(Topic topic,User user);
+
+	List<LocationDTO> getLocations(long tagID, User user);
+	List<LocationDTO> getLocations(User user);
 	
 
 	Occurrence getOccurrrence(long id);
@@ -50,18 +50,19 @@ public interface TopicDAO {
 	List<TimeLineObj> getTimeline(long tagID, User user);
 	List<TimeLineObj> getTimeline(User user);
 
+	int getTopicCount(final User user);
+
 	List<TopicIdentifier> getTopicForOccurrence(long id);
-
-	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
 	
+	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
+
 	List<TopicIdentifier> getTopicsStarting(User user,String match);
-
 	MindTree getTree(MindTreeOcc occ);
+
+	UserPageBean getUsageStats(final User user);
+
 	WebLink getWebLinkForURI(String url, User currentUser);
-
 	Topic load(long topicID);
-
-	void populateUsageStats(UserPageBean rtn);
 
 	MindTree save(MindTree tree);
 

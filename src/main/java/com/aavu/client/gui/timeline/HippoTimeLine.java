@@ -191,7 +191,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 		//timeline.load(jo);
 		
 		/*if(timelines.size() == 0){
-			Window.alert(ConstHolder.myConstants.timeline_no_objs_msg());
+			manager.displayInfo(ConstHolder.myConstants.timeline_no_objs_msg());
 		}*/
 		
 		simileWidget = new TimeLineWidget(height+"px",width+"px", render);	

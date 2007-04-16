@@ -149,7 +149,7 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 
 
 	public void update(LocationDTO dragged) {
-		Window.alert("Dragging not supported here yet. Use the MapGadget to edit locations");
+		manager.displayInfo("Dragging not supported here yet. Use the MapGadget to edit locations");
 //		System.out.println("Update "+dragged+" selectedMeta "+selectedMeta);
 //		Set locations = myTopic.getMetaValuesFor(selectedMeta);		
 //		locations.add(dragged.getLocation());		

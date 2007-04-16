@@ -10,6 +10,10 @@ public class UserPageBean {
 	private int numberOfIslands;
 	private int numberOfLinks;
 	
+	public UserPageBean(User user){
+		this.user = user;
+	}
+	
 	public User getUser() {
 		return user;
 	}

@@ -9,7 +9,7 @@
 	<url>http://maven.apache.org</url>
 	<build>
 		<plugins>
-			<plugin>
+ 		 <plugin>
 				<groupId>org.xi8ix</groupId>
 				<artifactId>xi8ix-gwtc</artifactId>
 				<version>1.3.3.1</version>
@@ -29,7 +29,7 @@
 					<maxMemory>512</maxMemory>
 					<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 				</configuration>
-			</plugin>
+			</plugin> 	
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -48,7 +48,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
@@ -60,19 +59,14 @@
 						<version>1.2.13</version>
 					</dependency>
 				</dependencies>
-				<configuration>				
-					<!-- <webAppSourceDirectory>${basedir}/target/ROOT-1.0-SNAPSHOT</webAppSourceDirectory>-->
+				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<contextPath>/</contextPath>
 				</configuration>
 			</plugin>
-
-
 		</plugins>
 	</build>
 	<dependencies>
-
-		<!-- GWT -->
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-user</artifactId>
@@ -111,9 +105,6 @@
 			<artifactId>gwt-timeline</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-
-
-		<!-- Search -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
@@ -137,11 +128,6 @@
 			<artifactId>compass-core</artifactId>
 			<version>1.1RC1</version>
 		</dependency>
-
-
-
-
-		<!-- General -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -162,8 +148,6 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.5.2</version>
 		</dependency>
-
-		<!-- WEB -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -195,9 +179,6 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2</version>
 		</dependency>
-
-
-		<!-- Remoting -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-remoting</artifactId>
@@ -208,9 +189,6 @@
 			<artifactId>hessian</artifactId>
 			<version>3.0.8</version>
 		</dependency>
-
-
-		<!-- DB -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-hibernate3</artifactId>
@@ -246,9 +224,6 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.1</version>
 		</dependency>
-
-
-		<!-- TEST -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -261,10 +236,6 @@
 			<version>2.0-m4</version>
 			<scope>test</scope>
 		</dependency>
-
-
-
-		<!-- DeadWood -->
 		<dependency>
 			<groupId>org.db4o</groupId>
 			<artifactId>db4o</artifactId>
@@ -276,6 +247,15 @@
 			<artifactId>db4o-spring</artifactId>
 			<version>1.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcprov-jdk15</artifactId>
+			<version>124</version>
+		</dependency>
+		<dependency>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcmail-jdk14</artifactId>
+			<version>136</version>
+		</dependency>
 	</dependencies>
 </project>

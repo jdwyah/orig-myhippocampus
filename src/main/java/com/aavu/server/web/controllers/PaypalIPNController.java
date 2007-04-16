@@ -15,9 +15,28 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
+import sun.net.www.http.Hurryable;
+
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoInfrastructureException;
 import com.aavu.server.service.UserService;
 
+/**
+ * 
+ *	1) secure/upgrade.html has a <form> which goes and pokes paypal with 
+ *		an "I want to subscribe"
+ *	1.5) We include the userID in the "custom" field
+ *	2) Paypal sends us and IPN to myhippocampus/site/ipn when they've signed up, then IPNs when payment is approved.
+ *
+ *	3) On Signup IPN receipt:
+ *	3.1) We send a req to Paypal saying "Really? Are we not just being spoofed"?
+ *	3.2) If we get VALID, we retrieve the custom field, store the paypal_id and give the user the new subscription.
+ *
+ *	4) On cancel IPN receipt, we lookup the paypal_id and cancel it.
+ *	
+ * @author Jeff Dwyer
+ *
+ */
 public class PaypalIPNController extends AbstractController {
 
 	private static final Logger log = Logger.getLogger(PaypalIPNController.class);
@@ -25,19 +44,19 @@ public class PaypalIPNController extends AbstractController {
 	private static final String ENCODING = "UTF-8";
 	
 	private static final String POST_BACK_VALIDATE = "cmd=_notify-validate";
-	//private static final String PAYPAL_ENDPOINT = "https://www.paypal.com/cgi-bin/webscr";
-	private static final String PAYPAL_ENDPOINT = "https://www.sandbox.paypal.com/cgi-bin/webscr";
-
-	private static final String PAYPAL_SUBSCR_FAILED = "subscr-failed";
 	
-	private static final String PAYPAL_SUBSCR_CANCEL = "subscr-cancel";
-	private static final String PAYPAL_SUBSCR_PAYMENT = "subscr-payment";
-	private static final String PAYPAL_SUBSCR_SIGNUP = "subscr-signup";
-	private static final String PAYPAL_SUBSCR_EOT = "subscr-eot";
-	private static final String PAYPAL_SUBSCR_MODIFY = "subscr-modify";
+	private static final String PAYPAL_SUBSCR_FAILED = "subscr_failed";
+	
+	
+	private static final String PAYPAL_SUBSCR_CANCEL = "subscr_cancel";
+	private static final String PAYPAL_SUBSCR_PAYMENT = "subscr_payment";
+	private static final String PAYPAL_SUBSCR_SIGNUP = "subscr_signup";
+	private static final String PAYPAL_SUBSCR_EOT = "subscr_eot";
+	private static final String PAYPAL_SUBSCR_MODIFY = "subscr_modify";
 	
 	private UserService userService;
 	private String view;
+	private String paypalEndpoint;
 	
 	public void setView(String view) {
 		this.view = view;
@@ -87,7 +106,7 @@ public class PaypalIPNController extends AbstractController {
 		//NOTE: change http: to https: in the following URL to verify using SSL (for increased security).
 		//using HTTPS requires either Java 1.4 or greater, or Java Secure Socket Extension (JSSE)
 		//and configured for older versions.
-		URL u = new URL(PAYPAL_ENDPOINT);
+		URL u = new URL(paypalEndpoint);
 		URLConnection uc = u.openConnection();
 		uc.setDoOutput(true);
 		uc.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
@@ -103,7 +122,7 @@ public class PaypalIPNController extends AbstractController {
 		String res = in.readLine();
 		in.close();
 		
-		log.debug("Return From "+PAYPAL_ENDPOINT);
+		log.debug("Return From "+paypalEndpoint);
 				
 		//assign posted variables to local variables
 		String itemName = request.getParameter("item_name");
@@ -122,9 +141,27 @@ public class PaypalIPNController extends AbstractController {
 		//user's accounts.
 		String payerID = request.getParameter("payer_id");
 		
-		String custom =  request.getParameter("custom");
+		log.debug("ItemName "+itemName+"\n"+
+				"itemNumber "+itemNumber+"\n"+
+				"paymentStatus "+paymentStatus+"\n"+
+				"paymentAmount "+paymentAmount+"\n"+
+				"paymentCurrency "+paymentCurrency+"\n"+
+				"txnId "+txnId+"\n"+
+				"txnType "+txnType+"\n"+
+				"receiverEmail "+receiverEmail+"\n"+
+				"payerEmail "+payerEmail+"\n"+
+				"payerID "+payerID+"\n"+
+				"custom: "+request.getParameter("custom"));
 		
-		long hippoUserID = Long.parseLong(custom);
+		long hippoUserID = -1;
+		String custom =  request.getParameter("custom");	
+		if(custom != null){
+			try{			
+				hippoUserID = Long.parseLong(custom);
+			}catch (NumberFormatException e) {
+				log.warn(e.getMessage());
+			}
+		}//else custom will be null on CANCEL reqs
 		
 		String messageRtn = "";
 		
@@ -137,17 +174,18 @@ public class PaypalIPNController extends AbstractController {
 			//process payment
 			
 			log.debug("VERIFIED");
-			log.debug("ItemName +"+itemName+"\n"+
-					"itemNumber +"+itemNumber+"\n"+
-					"paymentStatus +"+paymentStatus+"\n"+
-					"paymentAmount +"+paymentAmount+"\n"+
-					"paymentCurrency +"+paymentCurrency+"\n"+
-					"txnId +"+txnId+"\n"+
-					"txnType +"+txnType+"\n"+
-					"receiverEmail +"+receiverEmail+"\n"+
-					"payerEmail +"+payerEmail+"\n");
+			log.debug("ItemName "+itemName+"\n"+
+					"itemNumber "+itemNumber+"\n"+
+					"paymentStatus "+paymentStatus+"\n"+
+					"paymentAmount "+paymentAmount+"\n"+
+					"paymentCurrency "+paymentCurrency+"\n"+
+					"txnId "+txnId+"\n"+
+					"txnType "+txnType+"\n"+
+					"receiverEmail "+receiverEmail+"\n"+
+					"payerEmail "+payerEmail+"\n");
 			
 			long subscriptionID = Long.parseLong(itemNumber);
+			
 			
 			processIPN(txnType,hippoUserID,subscriptionID,payerID,payerEmail);
 									
@@ -156,15 +194,15 @@ public class PaypalIPNController extends AbstractController {
 		else if(res.equals("INVALID")) {
 			//log for investigation
 			log.warn("PAYPAL INVALID ");
-			log.warn("ItemName +"+itemName+"\n"+
-					"itemNumber +"+itemNumber+"\n"+
-					"paymentStatus +"+paymentStatus+"\n"+
-					"paymentAmount +"+paymentAmount+"\n"+
-					"paymentCurrency +"+paymentCurrency+"\n"+
-					"txnId +"+txnId+"\n"+
-					"txnType +"+txnType+"\n"+
-					"receiverEmail +"+receiverEmail+"\n"+
-					"payerEmail +"+payerEmail+"\n");
+			log.warn("ItemName "+itemName+"\n"+
+					"itemNumber "+itemNumber+"\n"+
+					"paymentStatus "+paymentStatus+"\n"+
+					"paymentAmount "+paymentAmount+"\n"+
+					"paymentCurrency "+paymentCurrency+"\n"+
+					"txnId "+txnId+"\n"+
+					"txnType "+txnType+"\n"+
+					"receiverEmail "+receiverEmail+"\n"+
+					"payerEmail "+payerEmail+"\n");
 
 			messageRtn = "Invalid";
 		}
@@ -172,15 +210,15 @@ public class PaypalIPNController extends AbstractController {
 		else {
 			//error
 			log.error("PAYPAL neither INVALID nor COMPLETED");
-			log.warn("ItemName +"+itemName+"\n"+
-					"itemNumber +"+itemNumber+"\n"+
-					"paymentStatus +"+paymentStatus+"\n"+
-					"paymentAmount +"+paymentAmount+"\n"+
-					"paymentCurrency +"+paymentCurrency+"\n"+
-					"txnId +"+txnId+"\n"+
-					"txnType +"+txnType+"\n"+
-					"receiverEmail +"+receiverEmail+"\n"+
-					"payerEmail +"+payerEmail+"\n");
+			log.warn("ItemName "+itemName+"\n"+
+					"itemNumber "+itemNumber+"\n"+
+					"paymentStatus "+paymentStatus+"\n"+
+					"paymentAmount "+paymentAmount+"\n"+
+					"paymentCurrency "+paymentCurrency+"\n"+
+					"txnId "+txnId+"\n"+
+					"txnType "+txnType+"\n"+
+					"receiverEmail "+receiverEmail+"\n"+
+					"payerEmail "+payerEmail+"\n");
 			
 			messageRtn = "Error";
 		}
@@ -205,40 +243,58 @@ public class PaypalIPNController extends AbstractController {
 	 * @param paypalID
 	 * @param payerEmail
 	 * @throws HippoBusinessException 
+	 * @throws HippoInfrastructureException 
 	 */
-	private void processIPN(String txn_type,long hippoUserID,long subscriptionID, String paypalID, String payerEmail) throws HippoBusinessException {
+	private void processIPN(String txn_type,long hippoUserID,long subscriptionID, String paypalID, String payerEmail) throws HippoBusinessException, HippoInfrastructureException {
 		
 		
-		if(txn_type.equals(PAYPAL_SUBSCR_SIGNUP)){
-			log.info("IPN Signup "+paypalID);
+		if(txn_type.equals(PAYPAL_SUBSCR_SIGNUP)){			
+			log.info("IPN Signup "+paypalID+" "+hippoUserID);
+			
+			if(hippoUserID == -1){
+				throw new HippoInfrastructureException("No custom variable in Paypal return.");
+			}
 			userService.subscriptionNewSignup(hippoUserID,paypalID,subscriptionID,payerEmail);			
 		}
 		else if(txn_type.equals(PAYPAL_SUBSCR_EOT)){
-			log.error("IPN EndOfTerm "+paypalID);
+			log.warn("IPN EndOfTerm "+paypalID+" "+hippoUserID);
 
 			userService.subscriptionCancel(paypalID);
 
 		}
 		else if(txn_type.equals(PAYPAL_SUBSCR_FAILED)){
-			log.warn("IPN Failed "+paypalID);
+			log.warn("IPN Failed "+paypalID+" "+hippoUserID);
 		}
 		else if(txn_type.equals(PAYPAL_SUBSCR_MODIFY)){
-			log.info("IPN Modify "+paypalID);
+			log.info("IPN Modify "+paypalID+" "+hippoUserID);
 		}
 		else if(txn_type.equals(PAYPAL_SUBSCR_PAYMENT)){
-			log.info("IPN Paid!! "+paypalID);
-			userService.subscriptionRecordPayment(paypalID);
+			log.info("IPN Paid "+paypalID+" "+hippoUserID);
+			if(hippoUserID == -1){
+				throw new HippoInfrastructureException("No custom variable in Paypal return.");
+			}
+			userService.subscriptionRecordPayment(hippoUserID,paypalID);
 		}
 		else if(txn_type.equals(PAYPAL_SUBSCR_CANCEL)){
-			log.info("IPN CANCEL "+paypalID);
+			log.info("IPN CANCEL "+paypalID+" "+hippoUserID);
 			
 			userService.subscriptionCancel(paypalID);
+		}else{
+			log.error("txn_type: Invalid "+paypalID);
+			throw new HippoBusinessException("Invalid txn_type "+txn_type);
 		}
+		
+		log.info("IPN Process Complete "+paypalID+" "+hippoUserID+" "+txn_type);
 	}
 
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+
+	public void setPaypalEndpoint(String paypalEndpoint) {
+		this.paypalEndpoint = paypalEndpoint;
 	}
 	
 	

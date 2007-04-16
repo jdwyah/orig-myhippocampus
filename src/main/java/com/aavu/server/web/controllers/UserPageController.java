@@ -33,7 +33,7 @@ public class UserPageController extends BasicController {
 		
 		log.debug("SERVLET PATH: "+req.getServletPath());
 		
-		Map model = getDefaultModel();
+		Map model = getDefaultModel(req);
 		
 
 		User su = null;

@@ -173,7 +173,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 			
 			return locObj;
 		}else{
-			Window.alert("Click the green + to add a location type");
+			manager.displayInfo("Click the green + to add a location type");
 			return null;
 		}
 	}

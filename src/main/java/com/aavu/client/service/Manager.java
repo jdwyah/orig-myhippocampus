@@ -48,6 +48,7 @@ import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Manager implements TopicSaveListener, LoginListener, WheelListener, SourcesWheelEvents {
@@ -351,7 +352,7 @@ public class Manager implements TopicSaveListener, LoginListener, WheelListener,
 	}
 	private GInternalFrame newFrame(String title) {
 		
-		GInternalFrame frame = new DefaultGInternalFrameHippoExt("",map);
+		GInternalFrame frame = new DefaultGInternalFrameHippoExt(title,map);
 
 		map.addFrame(frame);
 		
@@ -576,6 +577,23 @@ public class Manager implements TopicSaveListener, LoginListener, WheelListener,
 			mapWheelListeners = new WheelListenerCollectionCancellable();
 		}
 		mapWheelListeners.add(listener);
+	}
+	
+	
+	/**
+	 * Simple warning dialog wrapper
+	 * 
+	 * NOTE: css style in public/themes/alphacube.css
+	 * @param warning
+	 */
+	public void displayInfo(String warning){
+		GInternalFrame f = newFrame();
+		PopupWindow w = new PopupWindow(f,ConstHolder.myConstants.displayInfoTitle(),true);			
+		f.setContent(warning);
+	}
+	
+	public void userNeedsToUpgrade() {
+		displayInfo(ConstHolder.myConstants.userNeedsToUpgrade());		
 	}
 	
 	

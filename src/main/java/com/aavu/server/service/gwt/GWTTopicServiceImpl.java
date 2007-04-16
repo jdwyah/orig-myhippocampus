@@ -146,11 +146,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 	public TopicIdentifier createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
 		
-		log.debug("create New: "+title+" "+topicOrTagOrMeta.getClass());
 		
-		topicOrTagOrMeta.setTitle(title);
-
-		topicOrTagOrMeta = topicService.save(topicOrTagOrMeta);
+		topicOrTagOrMeta = topicService.createNew(title,topicOrTagOrMeta);
+		
 		return topicOrTagOrMeta.getIdentifier();
 	}
 

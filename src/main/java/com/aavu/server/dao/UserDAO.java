@@ -14,6 +14,7 @@ public interface UserDAO {
 	List<User> getAllUsers();
 	User getForPaypalID(String paypalID);
 	Subscription getSubscriptionByID(long subscriptionID);
+	List<Subscription> getAllUpgradeSubscriptions();
 	User getUserByUsername(String username) throws UsernameNotFoundException ;
 	User getUserForId(long id);
 	

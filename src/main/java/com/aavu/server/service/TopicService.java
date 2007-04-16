@@ -32,6 +32,8 @@ public interface TopicService {
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
+	Topic createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException;
+
 	void delete(Topic topic) throws HippoBusinessException;
 
 	void deleteOccurrence(long id) throws HippoPermissionException;
@@ -41,24 +43,24 @@ public interface TopicService {
 	List<LocationDTO> getAllLocations();
 
 	List getAllMetas();
-
+	
 	/**
 	 * Filter out Dates/Locaitons/Metas.
 	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers();
-	
+
 	/**
 	 * Don't filter out Dates, Locations, Metas. Intended for debugging/testing use.
 	 * @param all
 	 * @return
 	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all);
-
-	Topic getForID(long topicID);
 	
-	Topic getForName(String string);
+	Topic getForID(long topicID);
 
-	List<TopicIdentifier> getLinksTo(Topic topic);	
+	Topic getForName(String string);	
+	List<TopicIdentifier> getLinksTo(Topic topic);
+
 	List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList);
 
 	List<TimeLineObj> getTimeline();
@@ -70,15 +72,14 @@ public interface TopicService {
 	List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList);
 
 	List<TopicIdentifier> getTopicsStarting(String match);
-
-	MindTree getTree(MindTreeOcc occ);
 	
+	MindTree getTree(MindTreeOcc occ);
+
 	UserPageBean getUserPageBean(User su);
 
 	LinkAndUser getWebLinkForURLAndUser(String url);
 
 	Occurrence save(Occurrence link);
-
 	Topic save(Topic topic) throws HippoBusinessException;
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
 	MindTree saveTree(MindTree tree);

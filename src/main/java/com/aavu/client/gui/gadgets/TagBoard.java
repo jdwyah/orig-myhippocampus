@@ -165,7 +165,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 				new StdAsyncCallback(ConstHolder.myConstants.delete_async()){
 					public void onFailure(Throwable caught) {
 						super.onFailure(caught);
-						Window.alert("Problem Removing Tag "+caught);
+						manager.displayInfo("Problem Removing Tag "+caught);
 					}
 					public void onSuccess(Object result) {
 						super.onSuccess(result);

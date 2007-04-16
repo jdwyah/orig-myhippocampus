@@ -157,6 +157,11 @@ public class UserDAOdb4oImpl extends Db4oDaoSupport implements UserDAO, UserDeta
 		return null;
 	}
 
+	public List<Subscription> getAllUpgradeSubscriptions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

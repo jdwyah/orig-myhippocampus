@@ -35,11 +35,11 @@ public class BasicController extends AbstractController {
 		log.debug("SERVLET PATH: "+req.getServletPath());
 
 
-		return new ModelAndView(getView(),getDefaultModel());
+		return new ModelAndView(getView(),getDefaultModel(req));
 		
 	}
 	
-	protected Map<String,Object> getDefaultModel(){
+	protected Map<String,Object> getDefaultModel(HttpServletRequest req){
 		Map<String,Object> model = new HashMap<String, Object>();
 		
 		User su = null;
@@ -49,6 +49,14 @@ public class BasicController extends AbstractController {
 		}catch(UsernameNotFoundException e){
 			log.debug("No user logged in.");
 		}
+		
+		//IE < 7 check 
+		String userAgent = req.getHeader("User-Agent");		
+		if(userAgent.contains("MSIE") 
+				&& 
+				!userAgent.contains("MSIE 7")) {
+			model.put("iePre7", true);
+		} 		
 				
 		return model;
 	}

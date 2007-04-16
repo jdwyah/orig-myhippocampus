@@ -88,7 +88,7 @@ public class GadgetDisplayer extends Composite {
 			gadget.showForFirstTime();
 		}else{		
 			if(gadget.isVisible()){
-				Window.alert(ConstHolder.myConstants.gadget_already_showing());
+				manager.displayInfo(ConstHolder.myConstants.gadget_already_showing());
 			}
 			else{
 				//This will force the ConnectionBoard to unhide itself 

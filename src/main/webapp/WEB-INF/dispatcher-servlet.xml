@@ -123,7 +123,9 @@
 		<property name="userService" ref="userService" />
 	</bean>
 
+	<!-- ?? why doesn't ${paypal.endpoint} work?? -->
 	<bean id="paypalController" class="com.aavu.server.web.controllers.PaypalIPNController">
+		<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr" />
 		<property name="userService" ref="userService" />
 		<property name="view" value="ipn/ipn" />
 	</bean>
@@ -137,8 +139,14 @@
 		<property name="view" value="ipn/signupOk" />
 		<property name="userService" ref="userService" />
 	</bean>
-	<bean id="upgradeController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="secure/upgrade" />
+	
+	<!-- ?? why doesn't ${paypal.endpoint} work?? -->
+	<bean id="accountController" class="com.aavu.server.web.controllers.AccountController">
+		<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
+		<property name="paypalEmail" value="sandboxjdwyah@myhippocampus.com"/>
+		<!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
+		<property name="paypalEmail" value="sandboxjdwyah@myhippocampus.com"/>-->
+		<property name="view" value="secure/account" />
 		<property name="userService" ref="userService" />
 	</bean>
 
@@ -186,7 +194,7 @@
 				<prop key="/site/secure/userPage.html">userPageController</prop>
 				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
 
-				<prop key="/site/secure/upgrade.html">upgradeController</prop>						
+				<prop key="/site/secure/account.html">accountController</prop>						
 
 			</props>
 		</property>
@@ -202,6 +210,13 @@
 		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
 		<property name="templateLoaderPath">
 			<value>/</value>
+		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="datetime_format">MM/dd/yyyy</prop>
+				<prop key="number_format">0.#####</prop>
+				<prop key="url_escaping_charset">ISO-8859-1</prop>
+			</props>
 		</property>
 	</bean>
 

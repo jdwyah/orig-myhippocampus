@@ -15,7 +15,7 @@
 
   	<#macro acre left top color num type>
   		<div class="acre" style="left: ${left}px; top: ${top}px;">
-			<img  src="../com.aavu.HippoTest/img/simplicity/type120px_${color}_${num}_${type}.png"/>				
+    		<@common.pngImage src="../com.aavu.HippoTest/img/simplicity/type120px_${color}_${num}_${type}.png" width="120" height="120"/>
 		</div>
 	</#macro>
   
@@ -38,14 +38,14 @@
   			<p class="islandHeader"><@spring.message "index.whatIs.header"/></p>
 
 			<#--
-			<p class="subheading"> <a href="<@spring.url "/site/tour.html"/>"/><@spring.message "index.whatIs.1"/></a><p>
-			<p class="subheading"> <a href="<@spring.url "/site/screencasts.html"/>"/><@spring.message "index.whatIs.2"/></a><p>
-			<p class="subheading"> <a href="<@spring.url "/site/manifesto.html"/>"/><@spring.message "index.whatIs.3"/></a><p>
+			<p class="subheading"> <a href="<@spring.url "/site/tour.html"/>"><@spring.message "index.whatIs.1"/></a><p>
+			<p class="subheading"> <a href="<@spring.url "/site/screencasts.html"/>"><@spring.message "index.whatIs.2"/></a><p>
+			<p class="subheading"> <a href="<@spring.url "/site/manifesto.html"/>"><@spring.message "index.whatIs.3"/></a><p>
 			-->
   			<ul>
-  			<li><a href="<@spring.url "/site/tour.html"/>"/><@spring.message "index.whatIs.1"/></a></li>
-  			<li><a href="<@spring.url "/site/screencasts.html"/>"/><@spring.message "index.whatIs.2"/></a></li>
-  			<li><a href="<@spring.url "/site/manifesto.html"/>"/><@spring.message "index.whatIs.3"/></a></li>
+  			<li><a href="<@spring.url "/site/tour.html"/>"><@spring.message "index.whatIs.1"/></a></li>
+  			<li><a href="<@spring.url "/site/screencasts.html"/>"><@spring.message "index.whatIs.2"/></a></li>
+  			<li><a href="<@spring.url "/site/manifesto.html"/>"><@spring.message "index.whatIs.3"/></a></li>
 			</ul>
   		</div>
   	

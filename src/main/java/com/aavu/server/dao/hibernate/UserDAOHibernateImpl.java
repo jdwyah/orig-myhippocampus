@@ -19,6 +19,8 @@ import com.aavu.server.service.UserService;
 public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO, UserDetailsService {
 	
 	private static final Logger log = Logger.getLogger(UserDAOHibernateImpl.class);
+
+	private static final int DEMO_TOPIC_LIMIT = 50;
 	
 	private boolean init;
 	private UserService userService;
@@ -112,6 +114,10 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 
 	public Subscription getSubscriptionByID(long subscriptionID) {
 		return (Subscription) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from Subscription where id = :id", "id", subscriptionID));
+	}
+
+	public List<Subscription> getAllUpgradeSubscriptions() {
+		return getHibernateTemplate().find("from Subscription where maxTopics > "+DEMO_TOPIC_LIMIT);
 	}
 
 }

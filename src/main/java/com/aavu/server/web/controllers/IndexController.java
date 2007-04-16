@@ -37,7 +37,7 @@ public class IndexController extends BasicController {
 		
 		log.debug("SERVLET PATH: "+req.getServletPath());
 		
-		Map model = getDefaultModel();
+		Map model = getDefaultModel(req);
 		
 		model.put("command",new MailingListCommand());
 

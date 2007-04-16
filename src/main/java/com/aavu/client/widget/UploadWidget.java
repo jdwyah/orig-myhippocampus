@@ -92,7 +92,7 @@ public class UploadWidget extends Composite {
 				
 				
 				if(event.getResults().startsWith("Error")){				
-					Window.alert(event.getResults());
+					manager.displayInfo(event.getResults());
 					return;
 				}else{
 					String key = event.getResults().trim();
