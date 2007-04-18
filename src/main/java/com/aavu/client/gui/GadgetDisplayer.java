@@ -83,7 +83,7 @@ public class GadgetDisplayer extends Composite {
 		 * if this is a first time add
 		 */
 		if(gadgetPanel.getWidgetIndex(gadget) == -1){
-			gadget.load(topic);
+			gadget.load(topic);			
 			gadgetPanel.add(gadget);
 			gadget.showForFirstTime();
 		}else{		

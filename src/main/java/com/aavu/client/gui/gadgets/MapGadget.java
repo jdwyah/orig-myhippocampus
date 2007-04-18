@@ -128,7 +128,6 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	
 	private HippoMapWidget mapWidget;
 
-	
 
 	public MapGadget(Manager _manager) {		
 		super(_manager, ConstHolder.myConstants.gadget_map_title(), new MetaLocation());
@@ -163,17 +162,25 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	
 
 	public LocationDTO getNewLocationForPoint(GLatLng point) {
+		
 		if(selectedMeta != null){
+			
+			if(myTopic.getMetaValuesFor(selectedMeta).size() > 0){
+				manager.displayInfo(ConstHolder.myConstants.gadget_map_onlyoneper());
+				return null;
+			}
+			
 			HippoLocation newLoc = new HippoLocation();
 			newLoc.setLocation(point);
 			
-			saveLocation(selectedMeta,newLoc);
+			saveLocation(selectedMeta,newLoc);			
 			
 			LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(),newLoc,selectedMeta);
 			
+			
 			return locObj;
 		}else{
-			manager.displayInfo("Click the green + to add a location type");
+			manager.displayInfo(ConstHolder.myConstants.gadget_map_clickToAdd());			
 			return null;
 		}
 	}
@@ -218,8 +225,8 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	 */
 	private void center() {
 		
-		System.out.println("about to center "+mapWidget.getOffsetWidth());
-		System.out.println("about to center "+mapWidget.isVisible());
+//		System.out.println("about to center "+mapWidget.getOffsetWidth());
+//		System.out.println("about to center "+mapWidget.isVisible());
 		
 		mapWidget.centerOn(centerLoc);
 	}
@@ -285,6 +292,20 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	public void userSelected(LocationDTO selected, GMarker marker) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+
+	/**
+	 * NOTE: Only necessary for IE. Without this, the map will load and display, but it 
+	 * won't play nicely with the other gadgets, in particular any EntryPreview with more than a few
+	 * lines of text in it. FF worked fine.
+	 */
+	//@Override
+	public void showForFirstTime() {
+		super.showForFirstTime();
+		makeVisible();
 	}
 
 

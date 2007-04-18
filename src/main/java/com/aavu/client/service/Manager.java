@@ -106,6 +106,9 @@ public class Manager implements TopicSaveListener, LoginListener, WheelListener,
 			}});
 	}
 	public void bringUpChart(TopicIdentifier ident) {
+		
+		map.clearForLoading();
+		
 		hippoCache.getTopicCache().getTopic(ident,new StdAsyncCallback(ConstHolder.myConstants.topic_lookupAsync()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);

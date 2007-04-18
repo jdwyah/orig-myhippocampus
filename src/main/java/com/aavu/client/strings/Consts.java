@@ -276,6 +276,8 @@ public interface Consts extends Messages {
 	String autocomplete_create_Async();
 	String displayInfoTitle();
 	String userNeedsToUpgrade();
+	String gadget_map_onlyoneper();
+	String gadget_map_clickToAdd();
 	
 	
 		

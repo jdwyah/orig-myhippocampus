@@ -173,6 +173,9 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		manager.getGadgetManager().load(topic);		
 				
 	}
+	public void clearForLoading() {
+		centerDisplayer.clearForLoading();
+	}
 	
 	public boolean centerOn(Topic topic){
 		return ocean.centerOn(topic);		
@@ -240,6 +243,8 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 	public void zoomOut() {
 		ocean.zoomOut();
 	}
+
+	
 
 
 }

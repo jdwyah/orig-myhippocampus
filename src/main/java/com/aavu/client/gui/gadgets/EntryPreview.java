@@ -10,6 +10,8 @@ import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EntryPreview extends Gadget {
@@ -24,13 +26,17 @@ public class EntryPreview extends Gadget {
 			
 			System.out.println("entry "+entry.getData());
 			
+			String stripped = entry.getDataWithoutBodyTags();
+			
 			//TODO make sure we don't cut off in the middle of an HTML tag
-			if(entry.getData() != null && entry.getData().length() > NUM_CHARS){
-				String str = entry.getData().substring(0,NUM_CHARS)+"</body>";
-				System.out.println(str);
+			if(stripped != null && stripped.length() > NUM_CHARS){
+				String str = stripped.substring(0,NUM_CHARS);
+				str += "</p></div>";
+				System.out.println("CUT |"+str+"|");
 				textPanel.add(new TextDisplay(str));
 			}else{
-				textPanel.add(new TextDisplay(entry.getData()));
+				System.out.println("NO CUT |"+stripped+"|");
+				textPanel.add(new TextDisplay(stripped));
 			}		
 			
 			System.out.println("textPanel "+textPanel);

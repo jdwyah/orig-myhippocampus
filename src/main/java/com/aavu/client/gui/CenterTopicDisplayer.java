@@ -67,6 +67,11 @@ public class CenterTopicDisplayer extends Composite {
 	public void unload() {
 		setVisible(false);
 	}
+
+
+	public void clearForLoading() {
+		setVisible(false);
+	}
 	
 	
 }
