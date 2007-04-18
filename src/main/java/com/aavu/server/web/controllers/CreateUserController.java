@@ -7,7 +7,10 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
+import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
+import com.aavu.server.domain.MailingListEntry;
+import com.aavu.server.service.InvitationService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
@@ -15,7 +18,7 @@ public class CreateUserController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(CreateUserController.class);
 	
 	private UserService userService;
-	
+	private InvitationService invitationService;
 	
 	public CreateUserController(){
 		setCommandClass(CreateUserRequestCommand.class);		
@@ -37,12 +40,13 @@ public class CreateUserController extends SimpleFormController {
 		CreateUserRequestCommand comm = (CreateUserRequestCommand) arg0;
 
 		log.debug("SUBMIT");
-		try {
-			userService.createUser(comm);	
-		} catch (DuplicateUserException e) {
-			log.error("Fail Duplicate User");			
-		}
-				
+		
+
+		
+		User u = userService.createUser(comm);	
+		
+		invitationService.saveSignedUpUser(comm.getRandomkey(),u);
+		
 
 		String successStr = "Thanks "+comm.getUsername()+" your account is setup and you're ready to login!";
 
@@ -53,6 +57,10 @@ public class CreateUserController extends SimpleFormController {
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public void setInvitationService(InvitationService invitationService) {
+		this.invitationService = invitationService;
 	}
 
 	

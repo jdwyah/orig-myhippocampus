@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-
-<beans>
 	<bean id="indexController" class="com.aavu.server.web.controllers.IndexController">
 		<property name="view" value="index"/>
 		<property name="loggedInView" value="redirect:/site/secure/userPage.html"/>
@@ -18,7 +21,7 @@
 		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="screencastsController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="screencasts" />
+		<property name="view" value="secure/screencasts" />
 		<property name="userService" ref="userService" />
 	</bean>	
 	<bean id="manifestoController" class="com.aavu.server.web.controllers.ManifestoController">
@@ -50,15 +53,21 @@
 		<property name="view" value="acegilogin" />
 	</bean>
 	
+	<bean id="errorController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="servletErrorView" />
+		<property name="userService" ref="userService" />		
+	</bean>
+	
 	<bean id="mailingListController" class="com.aavu.server.web.controllers.MailingListController">
 		<property name="formView" value="index" />
 		<property name="successView" value="index" />
-		<property name="mailingDAO" ref="mailingListDAO"/>
+		<property name="invitationService" ref="invitationService"/>
 	</bean>
 
 
 	<bean id="createUserValidator" class="com.aavu.server.web.domain.validation.CreateUserRequestValidator">
-		<property name="userService" ref="userService"></property>
+		<property name="userService" ref="userService"/>
+		<property name="invitationService" ref="invitationService"/>
 	</bean>
 
 	<bean id="createUserController" class="com.aavu.server.web.controllers.CreateUserController">
@@ -66,6 +75,14 @@
 		<property name="successView" value="redirect:/site/index.html" /><!-- redirect index needs command in model -->
 		<property name="validator" ref="createUserValidator" />
 		<property name="userService" ref="userService" />
+		<property name="invitationService" ref="invitationService"/>
+	</bean>
+
+
+	<bean id="manageMailingListController" class="com.aavu.server.web.controllers.ManageMailingListController">
+		<property name="invitationService" ref="invitationService"/>
+		<property name="view" value="secure/extreme/mailingList" />
+		<property name="methodNameResolver" ref="userManagerResolver" />
 	</bean>
 
 	<bean id="userManagerController" class="com.aavu.server.web.controllers.UserManagerController">
@@ -112,6 +129,13 @@
 		<property name="topicService" ref="topicService"/>
 		<property name="userService" ref="userService" />
 	</bean>
+
+	<bean id="invitationController" class="com.aavu.server.web.controllers.InvitationController">
+		<property name="view" value="redirect:/site/secure/userPage.html" />
+		<property name="invitationService" ref="invitationService"/>
+		<property name="userService" ref="userService" />
+	</bean>
+	
 	<bean id="searchController" class="com.aavu.server.web.controllers.SearchController">
 		<property name="successView" value="secure/search" />
 		<property name="searchService" ref="searchService"/>
@@ -125,7 +149,8 @@
 
 	<!-- ?? why doesn't ${paypal.endpoint} work?? -->
 	<bean id="paypalController" class="com.aavu.server.web.controllers.PaypalIPNController">
-		<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr" />
+		<!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr" />-->
+		<property name="paypalEndpoint" value="https://www.paypal.com/cgi-bin/webscr"/>
 		<property name="userService" ref="userService" />
 		<property name="view" value="ipn/ipn" />
 	</bean>
@@ -142,10 +167,10 @@
 	
 	<!-- ?? why doesn't ${paypal.endpoint} work?? -->
 	<bean id="accountController" class="com.aavu.server.web.controllers.AccountController">
-		<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
-		<property name="paypalEmail" value="sandboxjdwyah@myhippocampus.com"/>
 		<!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
 		<property name="paypalEmail" value="sandboxjdwyah@myhippocampus.com"/>-->
+		<property name="paypalEndpoint" value="https://www.paypal.com/cgi-bin/webscr"/>
+		<property name="paypalEmail" value="jdwyah@myhippocampus.com"/>
 		<property name="view" value="secure/account" />
 		<property name="userService" ref="userService" />
 	</bean>
@@ -172,7 +197,10 @@
 
 
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
+				<prop key="/site/secure/extreme/mailingList.html">manageMailingListController</prop>
 
+
+				<prop key="/site/secure/screencasts.html">screencastsController</prop>				
 				<prop key="/site/secure/addLink.html">addLinkController</prop>
 				<prop key="/site/secure/getTopics.html">ajaxController</prop>				
 				
@@ -183,17 +211,18 @@
 				<prop key="/site/index.html">indexController</prop>
 				<prop key="/site/tips.html">tipsController</prop>
 				<prop key="/site/tour.html">tourController</prop>
-				<prop key="/site/screencasts.html">screencastsController</prop>				
 				<prop key="/site/manifesto.html">manifestoController</prop>
 				<prop key="/site/manifesto2.html">manifestoController2</prop>
 				<prop key="/site/contact.html">contactController</prop>		
 				<prop key="/site/acknowledgments.html">acknowledgmentsController</prop>						
 
+				<prop key="/site/servletErrorView.html">errorController</prop>						
 
 				<prop key="/site/secure/search.html">searchController</prop>
 				<prop key="/site/secure/userPage.html">userPageController</prop>
 				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
 
+				<prop key="/site/secure/invite.html">invitationController</prop>						
 				<prop key="/site/secure/account.html">accountController</prop>						
 
 			</props>
@@ -206,19 +235,6 @@
 	</bean>
 
 
-	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer" abstract="false"
-		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
-		<property name="templateLoaderPath">
-			<value>/</value>
-		</property>
-		<property name="freemarkerSettings">
-			<props>
-				<prop key="datetime_format">MM/dd/yyyy</prop>
-				<prop key="number_format">0.#####</prop>
-				<prop key="url_escaping_charset">ISO-8859-1</prop>
-			</props>
-		</property>
-	</bean>
 
 	<!-- <bean id="internalViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="com.aavu.HippoTest/" />
@@ -227,12 +243,12 @@
 
 
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" abstract="false"
-		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
+		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
 		<property name="basename" value="messages" />
 	</bean>
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" abstract="false"
-		singleton="true" lazy-init="default" autowire="default" dependency-check="default">
+		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
 		<property name="requestContextAttribute">
 			<value>rc</value>
 		</property>
@@ -247,5 +263,15 @@
 		</property>
 		<property name="exposeSpringMacroHelpers" value="true" />
 	</bean>
+
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" abstract="false"
+		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Exception">errorView</prop>
+			</props>
+		</property>
+	</bean>
+
 
 </beans>

@@ -18,15 +18,16 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
  */
 public class MockUserService implements UserService {
 
-	public void createUser(CreateUserRequestCommand comm)
+	public User createUser(CreateUserRequestCommand comm)
 			throws DuplicateUserException {
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 
-	public void createUser(String user, String pass, boolean superV) {
+	public User createUser(String user, String pass, boolean superV) {
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 	public void delete(Integer id) {
@@ -96,6 +97,11 @@ public class MockUserService implements UserService {
 	public List<Subscription> getAllUpgradeSubscriptions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void subtractInvitationFrom(User inviter) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

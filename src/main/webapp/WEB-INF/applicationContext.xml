@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
@@ -53,7 +51,7 @@
 		<property name="userDAO" ref="userDAO" />
 		<property name="tagDAO" ref="tagDAO" />
 		<property name="topicDAO" ref="topicDAO" />
-		<property name="fileService" ref="fileService"/>
+		<property name="fileService" ref="fileService" />
 	</bean>
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
 		<property name="userService" ref="userService" />
@@ -63,14 +61,43 @@
 	<bean id="awsConnection" class="com.aavu.server.s3.com.amazon.s3.AWSAuthConnection">
 		<property name="awsAccessKeyId" value="${aws.s3.auth}" />
 		<property name="awsSecretAccessKey" value="${aws.s3.secret}" />
-		<property name="defaultBucket" value="myhippocampus"/>
-	</bean>
-	
-	<bean id="fileService" class="com.aavu.server.service.impl.FilePersistanceServiceImpl">
-		<property name="awsConnection" ref="awsConnection"/>
-		<property name="topicDAO" ref="topicDAO"/>
+		<property name="defaultBucket" value="myhippocampus" />
 	</bean>
 
+	<bean id="fileService" class="com.aavu.server.service.impl.FilePersistanceServiceImpl">
+		<property name="awsConnection" ref="awsConnection" />
+		<property name="topicDAO" ref="topicDAO" />
+	</bean>
+
+
+
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer" abstract="false"
+		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="templateLoaderPath">
+			<value>/</value>
+		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="datetime_format">MM/dd/yyyy</prop>
+				<prop key="number_format">0.#####</prop>
+				<prop key="url_escaping_charset">ISO-8859-1</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.myhippocampus.com" />
+		<property name="username" value="subscriptions"/>		
+		<property name="password" value="Hippo7000"/>
+	</bean>
+	<bean id="invitationService" class="com.aavu.server.service.impl.InvitationServiceImpl">
+		<property name="mailingListDAO" ref="mailingListDAO"></property>
+		<property name="configurer" ref="freemarkerConfig"></property>
+		<property name="from" value="subscriptions@myhippocampus.com"></property>
+		<property name="invitationTemplate" value="/WEB-INF/freemarker/mail/invitation.ftl"></property>
+		<property name="mailSender" ref="mailSender"></property>
+		<property name="userService" ref="userService" />
+		<property name="masterkey" value="MonsterSeahorse"></property>
+	</bean>
 
 	<!-- the transactional advice (i.e. what 'happens'; see the <aop:advisor/> bean below) -->
 	<tx:advice id="txAdvice" transaction-manager="txManager">
@@ -86,7 +113,7 @@
 	<!-- ensure that the above transactional advice runs for any execution
 		of an operation defined by the FooService interface -->
 	<aop:config>
-		<aop:pointcut id="transactionalServices" expression="execution(* com.aavu.server.service.*.*(..))"/>
+		<aop:pointcut id="transactionalServices" expression="execution(* com.aavu.server.service.*.*(..))" />
 		<!-- <aop:pointcut id="transactionalMessages" expression="execution(* com.aavu.server.service.impl.MessageServiceImpl.*(..))" />-->
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="transactionalServices" />
 	</aop:config>

@@ -7,8 +7,11 @@
   </head>
 
   <body>
-    <h1>Here are all the users:</h1>
-
+  
+  
+	 <div class="middle-column-box-white">
+        <div class="middle-column-box-title-green">Here are all the users:</div>
+	
     <table>
     <tr>
     <th>Name</th>
@@ -18,6 +21,7 @@
     <th>Enabled</th>    
     <th>Password</th>
     <th>Super</th>        
+    <th>Subscription</th>            
     <th></th>
     </tr>
     
@@ -31,11 +35,12 @@
 		<td>${user.password}</td>					
 		<td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=supervisor&user=${user.id?c}"/>"/>${user.supervisor?string}</a></td>
 		<td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=delete&user=${user.id?c}"/>"/>Delete</a></td>				
+		<td>${user.subscription.id}</td>
 		</tr>
 	</#list>
 	</table>
 
-	<p>
+	</div>
 
   </body>
 </html>

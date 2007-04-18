@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 
 public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 	private static final Logger log = Logger.getLogger(UserDAOHibernateImplTest.class);
+
+	private static final String A = "dsafd";
+	private static final String B = "324234234";
 
 	private UserDAO userDAO;
 	public void setUserDAO(UserDAO userDAO) {
@@ -19,7 +23,7 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 	
 
 	public void testGetUserByUsername() {
-		String USER = "jdwyah";
+		String USER = "test";
 		User u = userDAO.getUserByUsername(USER);		
 		assertEquals(USER, u.getUsername());
 		
@@ -35,13 +39,18 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 	}
 
 	public void testSave() {
-		String A = "dsafd";
+		
 		
 		User u = new User();
 		u.setUsername(A);
+		u.setPassword(A);
 		
 		List<User> list = userDAO.getAllUsers();
 		
+		
+		System.out.println("GET ID: "+u.getSubscription().getId());
+		
+		u.setSubscription(new Subscription());
 		
 		userDAO.save(u);
 		
@@ -66,6 +75,7 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		User u = new User();
 		u.setUsername(A);
+		u.setPassword(B);
 		
 		List<User> list = userDAO.getAllUsers();
 				

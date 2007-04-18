@@ -4,20 +4,36 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import com.aavu.server.domain.MailingListEntry;
+import com.aavu.server.service.InvitationService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public class CreateUserRequestValidator implements Validator{
 
+	
+	
 	private static final int MIN_LENGTH = 3;
+	private InvitationService invitationService;
 	private UserService userService;
+	
+	public void setInvitationService(InvitationService invitationService) {
+		this.invitationService = invitationService;
+	}
+
+
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	
 	
 	public boolean supports(Class clazz) {
 		return clazz.equals(CreateUserRequestCommand.class);
 	}
 
-	
-	
+
 	/**
 	 * lookup messages from resource bundle 
 	 * 
@@ -27,14 +43,16 @@ public class CreateUserRequestValidator implements Validator{
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username","required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password","required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password2","required");
-
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "randomkey","required");
+		
 		CreateUserRequestCommand comm = (CreateUserRequestCommand) command;
+		
+		
 		
 		//username must have no '.' for openid compatibility
 		if(comm.getUsername().contains(".")){
 			errors.rejectValue("username","invalid.username.nodots");
-		}
-		
+		}		
 		
 		//spaces would break email functionality
 		if(comm.getUsername().contains(" ")){
@@ -66,11 +84,15 @@ public class CreateUserRequestValidator implements Validator{
 			errors.rejectValue("username","invalid.username.exists");
 		}
 		
-	}
-
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
+		
+		if(!invitationService.isKeyValid(comm.getRandomkey())){
+			errors.rejectValue("randomkey","invalid");
+		}
+		MailingListEntry entry = invitationService.getEntryForKey(comm.getRandomkey());
+		if(entry != null && entry.getSignedUpUser() != null){
+			errors.rejectValue("randomkey","invalid.randomkey.exists");
+		}
+		
 	}
 
 }

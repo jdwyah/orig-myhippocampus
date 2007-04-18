@@ -43,12 +43,27 @@
 		Number of Topics: ${bean.numberOfTopics}<BR>
 	</div>
 	</p>
-	
+	<#if user?exists><li><a href="<@spring.url "/site/secure/screencasts.html"/>"><@spring.message "sidebar.screencasts"/></a></li></#if>
+	  			
 	<#if bean.user?exists>
 		<#if bean.user.supervisor>
 			<p>
-	         <a href="<@spring.url "/site/secure/extreme/userManager.html?action=list"/>"/>Admin</a></li>
+			<ul>
+				<li><a href="<@spring.url "/site/secure/extreme/userManager.html?action=list"/>"/>Admin</a></li>
+	     	 	<li><a href="<@spring.url "/site/secure/extreme/mailingList.html?action=list"/>"/>Mailing List</a></li>
+	     	</ul>
         </#if>
+
+        <#if (bean.user.invitations > 0)>
+			<p class="subheading">
+    	    Spread the word, you have ${bean.user.invitations} invitations left. 
+        	</p>
+			Invite a friend to use MyHippocampus! 
+			<form method="post" action="<@spring.url "/site/secure/invite.html"/>">
+				<input type="text" name="email"/><input type="submit" value="Invite"/>
+			</form>
+        </#if>
+        
     </#if>
 		
 	<div class="middle-column-box-title-green">Browser Plugins</div>		

@@ -19,5 +19,5 @@ public interface UserDAO {
 	User getUserForId(long id);
 	
 	ServerSideUser loadUserByUsername(final String username) throws UsernameNotFoundException, DataAccessException;
-	void save(User user);
+	User save(User user);
 }

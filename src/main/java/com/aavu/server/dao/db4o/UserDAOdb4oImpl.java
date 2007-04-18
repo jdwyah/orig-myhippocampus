@@ -48,7 +48,7 @@ public class UserDAOdb4oImpl extends Db4oDaoSupport implements UserDAO, UserDeta
 
 	}
 
-	public void save(User user) {
+	public User save(User user) {
 
 		if(user.getId() == 0){
 			getDb4oTemplate().set(user);
@@ -59,7 +59,8 @@ public class UserDAOdb4oImpl extends Db4oDaoSupport implements UserDAO, UserDeta
 			getDb4oTemplate().bind(user, user.getId());			
 		}
 		
-		getDb4oTemplate().set(user);	
+		getDb4oTemplate().set(user);
+		return user;
 	}
 
 	public List<User> getAllUsers() {

@@ -92,8 +92,9 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		}
 	}
 
-	public void save(User user) {
+	public User save(User user) {
 		getHibernateTemplate().saveOrUpdate(user);
+		return user;
 	}
 
 	public void setInit(boolean init) {

@@ -23,6 +23,14 @@
 		<property name="host" type="string" column="host">
 		</property>		
 	
+		<many-to-one name="inviter" class="com.aavu.client.domain.User" column="inviter" lazy="false"/>
+		<many-to-one name="signedUpUser" class="com.aavu.client.domain.User" column="signedUpUser" lazy="false"/>
+	
+		<property name="randomkey" type="string" column="randomkey">
+		</property>
+		<property name="sentEmailOk" type="boolean" column="sentEmailOk">
+		</property>
+		
 	
 	</class>
 

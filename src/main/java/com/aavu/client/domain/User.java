@@ -25,6 +25,9 @@ public class User extends AbstractUser implements IsSerializable {
 	private static final int PREMIUM_CUTOFF = 50;
 
 	public User(){
+		Subscription none = new Subscription();
+		none.setId(0);
+		setSubscription(none);
 		setEnabled(true);
 		setSupervisor(false);		
 	}

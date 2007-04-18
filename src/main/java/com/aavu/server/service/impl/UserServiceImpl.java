@@ -56,19 +56,16 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	public void createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
+	public User createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
 		User user = new User();
 
 
-		createUser(comm.getUsername(),comm.getPassword());
-
+		return createUser(comm.getUsername(),comm.getPassword());
 
 	}
 
-
-
-	private void createUser(String username,String userpass) throws DuplicateUserException{
-		createUser(username,userpass,false);
+	private User createUser(String username,String userpass) throws DuplicateUserException{
+		return createUser(username,userpass,false);
 	}
 
 	private String hashPassword(String password) {
@@ -153,8 +150,9 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * lowercase usernames before creation
+	 * @return 
 	 */
-	public void createUser(String username, String userpass, boolean superV) {
+	public User createUser(String username, String userpass, boolean superV) {
 
 		//hmm a bit odd having the logic catc in the 
 		//
@@ -166,7 +164,8 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(hashPassword(userpass));		
 		user.setSupervisor(superV);
 
-		userDAO.save(user);
+		return userDAO.save(user);
+		
 
 	}
 
@@ -229,6 +228,17 @@ public class UserServiceImpl implements UserService {
 
 	public List<Subscription> getAllUpgradeSubscriptions() {
 		return userDAO.getAllUpgradeSubscriptions();
+	}
+
+	/**
+	 * Don't let it go negative.
+	 */
+	public void subtractInvitationFrom(User inviter) {
+		int current = inviter.getInvitations();
+		if(current > 0){
+			inviter.setInvitations(current - 1);
+		}
+		userDAO.save(inviter);
 	}
 	
 

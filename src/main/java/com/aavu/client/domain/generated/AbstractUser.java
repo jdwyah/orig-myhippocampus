@@ -15,25 +15,19 @@ public abstract class AbstractUser  implements IsSerializable,java.io.Serializab
 
      private boolean enabled;
      private long id;
+     private int invitations;
      private String password;
-     private Subscription subscription;
-     private boolean supervisor;
-     
-     private String username;
-
      private String paypalID;
+     
+     private Subscription subscription;
+     
+     private boolean supervisor;
+
+     private String username;
      
      // Constructors
 
-    public String getPaypalID() {
-		return paypalID;
-	}
-
-	public void setPaypalID(String paypalID) {
-		this.paypalID = paypalID;
-	}
-
-	/** default constructor */
+    /** default constructor */
     public AbstractUser() {
     }
 
@@ -54,15 +48,23 @@ public abstract class AbstractUser  implements IsSerializable,java.io.Serializab
 			 return ( (this.getUsername()==castOther.getUsername()) || ( this.getUsername()!=null && castOther.getUsername()!=null && this.getUsername().equals(castOther.getUsername()) ) );
 	   }
 
-    // Property accessors
+	// Property accessors
     public long getId() {
         return this.id;
     }
-    
-   
+
+	public int getInvitations() {
+		return invitations;
+	}
+
     public String getPassword() {
         return this.password;
     }
+    
+   
+    public String getPaypalID() {
+		return paypalID;
+	}
     
     public Subscription getSubscription() {
 		return subscription;
@@ -95,20 +97,28 @@ public abstract class AbstractUser  implements IsSerializable,java.io.Serializab
     public void setId(long id) {
         this.id = id;
     }
+    public void setInvitations(int invitations) {
+		this.invitations = invitations;
+	}
+    
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public void setSubscription(Subscription subscription) {
-		this.subscription = subscription;
-	}
 
 
-   public void setSupervisor(boolean supervisor) {
-    this.supervisor = supervisor;
+   public void setPaypalID(String paypalID) {
+	this.paypalID = paypalID;
 }
    
-   public void setUsername(String username) {
+   public void setSubscription(Subscription subscription) {
+	this.subscription = subscription;
+}
+
+public void setSupervisor(boolean supervisor) {
+    this.supervisor = supervisor;
+}
+
+public void setUsername(String username) {
     this.username = username;
 }   
 

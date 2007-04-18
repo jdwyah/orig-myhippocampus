@@ -21,12 +21,15 @@
 		<property name="supervisor" type="boolean" column="supervisor">
 		</property>		
 		
+		<property name="invitations" type="int" column="invitations">
+		</property>		
+		
 		<property name="paypalID" type="string" column="paypalID">
 		</property>
 				
 				
 				
-		<many-to-one name="subscription" class="Subscription" column="subscription_id" lazy="false"/>
+		<many-to-one name="subscription" class="Subscription" column="subscription_id" lazy="false" insert="false" update="false"/>
 	
 	
 	</class>

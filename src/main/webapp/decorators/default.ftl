@@ -33,7 +33,7 @@
 	       	<li><a href="<@spring.url "/site/index.html"/>"><@spring.message "sidebar.frontPage"/></a></li>
 	       	<li><a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a></li>
   			<li><a href="<@spring.url "/site/tour.html"/>"><@spring.message "sidebar.tour"/></a></li>
-  			<li><a href="<@spring.url "/site/screencasts.html"/>"><@spring.message "sidebar.screencasts"/></a></li>
+  			<#if user?exists><li><a href="<@spring.url "/site/secure/screencasts.html"/>"><@spring.message "sidebar.screencasts"/></a></li></#if>
 			<li><a href="<@spring.url "/site/tips.html"/>"><@spring.message "sidebar.tips"/></a></li>
   			<li><a href="<@spring.url "/site/manifesto.html"/>"><@spring.message "sidebar.manifestos"/></a></li>
 			<#if user?exists>

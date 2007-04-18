@@ -44,7 +44,7 @@
 			-->
   			<ul>
   			<li><a href="<@spring.url "/site/tour.html"/>"><@spring.message "index.whatIs.1"/></a></li>
-  			<li><a href="<@spring.url "/site/screencasts.html"/>"><@spring.message "index.whatIs.2"/></a></li>
+  			<#if user?exists><li><a href="<@spring.url "/site/secure/screencasts.html"/>"><@spring.message "index.whatIs.2"/></a></li></#if>
   			<li><a href="<@spring.url "/site/manifesto.html"/>"><@spring.message "index.whatIs.3"/></a></li>
 			</ul>
   		</div>
@@ -82,6 +82,7 @@
 		 <div id="loginBox">
 			 <@common.loginForm/>
 		 </div>		 
+		<a href="<@spring.url "/site/signup.html"/>"><@spring.message "login.signup"/></a>
 	</#if>
 	
 		</div><!--islandOverlay-->

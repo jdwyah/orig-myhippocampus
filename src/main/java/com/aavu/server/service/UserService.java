@@ -14,7 +14,7 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public interface UserService {
 
-	void createUser(CreateUserRequestCommand comm) throws DuplicateUserException;
+	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException;
 
 	boolean isUnique(CreateUserRequestCommand comm);
 
@@ -29,7 +29,7 @@ public interface UserService {
 	
 	void delete(Integer id) throws PermissionDeniedException;
 
-	void createUser(String user, String pass, boolean superV);
+	User createUser(String user, String pass, boolean superV);
 	 	
 
 	void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID, String payerEmail) throws HippoBusinessException;
@@ -37,5 +37,7 @@ public interface UserService {
 	void subscriptionRecordPayment(long hippoID,String paypalID);
 
 	void subscriptionCancel(String paypalID);
+
+	void subtractInvitationFrom(User inviter);
 
 }

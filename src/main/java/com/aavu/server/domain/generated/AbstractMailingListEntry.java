@@ -1,5 +1,7 @@
 package com.aavu.server.domain.generated;
-// Generated Dec 4, 2006 10:37:27 AM by Hibernate Tools 3.1.0.beta5
+
+import com.aavu.client.domain.User;
+//Generated Dec 4, 2006 10:37:27 AM by Hibernate Tools 3.1.0.beta5
 
 
 
@@ -8,86 +10,123 @@ package com.aavu.server.domain.generated;
  */
 public abstract class AbstractMailingListEntry  implements java.io.Serializable {
 
-    // Fields    
+	// Fields    
 
-     private long id;
-     private String email;
-     private String userAgent;
-     private String referer;
-     private String host;
+	private String email;
+	private String host;
+	private long id;
+	private User inviter;
+	private String randomkey;
 
-     // Constructors
+	private String referer;
+	private boolean sentEmailOk;
+	private User signedUpUser;
 
-    /** default constructor */
-    public AbstractMailingListEntry() {
-    }
+	private String userAgent;
 
-    /** full constructor */
-    public AbstractMailingListEntry(String email, String userAgent, String referer, String host) {
-       this.email = email;
-       this.userAgent = userAgent;
-       this.referer = referer;
-       this.host = host;
-    }
-    
-   
-    // Property accessors
-    public long getId() {
-        return this.id;
-    }
-    
-    public void setId(long id) {
-        this.id = id;
-    }
-    public String getEmail() {
-        return this.email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getUserAgent() {
-        return this.userAgent;
-    }
-    
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
-    }
-    public String getReferer() {
-        return this.referer;
-    }
-    
-    public void setReferer(String referer) {
-        this.referer = referer;
-    }
-    public String getHost() {
-        return this.host;
-    }
-    
-    public void setHost(String host) {
-        this.host = host;
-    }
+	// Constructors
+	/** default constructor */
+	public AbstractMailingListEntry() {
+	}
+
+	/** full constructor */
+	public AbstractMailingListEntry(String email, String userAgent, String referer, String host) {
+		this.email = email;
+		this.userAgent = userAgent;
+		this.referer = referer;
+		this.host = host;
+	}
+
+	public boolean equals(Object other) {
+		if ( (this == other ) ) return true;
+		if ( (other == null ) ) return false;
+		if ( !(other instanceof AbstractMailingListEntry) ) return false;
+		AbstractMailingListEntry castOther = ( AbstractMailingListEntry ) other; 
+
+		return ( (this.getEmail()==castOther.getEmail()) || ( this.getEmail()!=null && castOther.getEmail()!=null && this.getEmail().equals(castOther.getEmail()) ) );
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
 
 
-   public boolean equals(Object other) {
-         if ( (this == other ) ) return true;
-		 if ( (other == null ) ) return false;
-		 if ( !(other instanceof AbstractMailingListEntry) ) return false;
-		 AbstractMailingListEntry castOther = ( AbstractMailingListEntry ) other; 
-         
-		 return ( (this.getEmail()==castOther.getEmail()) || ( this.getEmail()!=null && castOther.getEmail()!=null && this.getEmail().equals(castOther.getEmail()) ) );
-   }
-   
-   public int hashCode() {
-         int result = 17;
-         
-         
-         result = 37 * result + ( getEmail() == null ? 0 : this.getEmail().hashCode() );
-         
-         
-         
-         return result;
-   }   
+	public String getHost() {
+		return this.host;
+	}
+
+	// Property accessors
+	public long getId() {
+		return this.id;
+	}
+	public User getInviter() {
+		return inviter;
+	}
+
+	public String getRandomkey() {
+		return randomkey;
+	}
+	public String getReferer() {
+		return this.referer;
+	}
+
+	public User getSignedUpUser() {
+		return signedUpUser;
+	}
+	public String getUserAgent() {
+		return this.userAgent;
+	}
+
+	public int hashCode() {
+		int result = 17;
+
+
+		result = 37 * result + ( getEmail() == null ? 0 : this.getEmail().hashCode() );
+
+
+
+		return result;
+	}
+	public boolean isSentEmailOk() {
+		return sentEmailOk;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setInviter(User inviter) {
+		this.inviter = inviter;
+	}
+
+	public void setRandomkey(String randomkey) {
+		this.randomkey = randomkey;
+	}
+
+	public void setReferer(String referer) {
+		this.referer = referer;
+	}
+
+	public void setSentEmailOk(boolean sentEmailOk) {
+		this.sentEmailOk = sentEmailOk;
+	}
+
+	public void setSignedUpUser(User signedUpUser) {
+		this.signedUpUser = signedUpUser;
+	}
+
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}   
 
 
 }

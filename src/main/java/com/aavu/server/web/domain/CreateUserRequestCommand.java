@@ -5,6 +5,7 @@ public class CreateUserRequestCommand {
 	private String username;
 	private String password;
 	private String password2;
+	private String randomkey;
 	
 	public String getPassword() {
 		return password;
@@ -23,6 +24,12 @@ public class CreateUserRequestCommand {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public String getRandomkey() {
+		return randomkey;
+	}
+	public void setRandomkey(String randomkey) {
+		this.randomkey = randomkey;
 	}
 	
 }

@@ -29,6 +29,8 @@ public class MailingListDAOHibernateImplTest extends HibernateTransactionalTest 
 		
 		List<MailingListEntry> list = mailingListDAO.getMailingList();
 		
+		System.out.println("list.size "+list.size());
+		
 		boolean found = false;
 		for (MailingListEntry entry : list) {
 			if(A.equals(entry.getEmail())
@@ -43,5 +45,6 @@ public class MailingListDAOHibernateImplTest extends HibernateTransactionalTest 
 		assertTrue(found);
 		
 	}
+	
 
 }

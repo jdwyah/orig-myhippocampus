@@ -12,13 +12,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import com.aavu.server.dao.MailingListDAO;
+import com.aavu.server.service.InvitationService;
 import com.aavu.server.web.domain.MailingListCommand;
 import com.aavu.server.web.domain.validation.MailingListCommandValidator;
 
 public class MailingListController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(MailingListController.class);
 	
-	private MailingListDAO mailingDAO;
+	private InvitationService invitationService;
 	
 	
 	public MailingListController(){
@@ -38,7 +39,7 @@ public class MailingListController extends SimpleFormController {
 		log.debug("email: "+comm.getEmail());
 		log.debug("user-agent: "+comm.getUserAgent());
 		
-		mailingDAO.createEntry(comm);	
+		invitationService.requestInvitation(comm);	
 				
 		String successStr = "Thanks "+comm.getEmail()+" we'll let you know when you can sign up for an account.";
 
@@ -50,9 +51,10 @@ public class MailingListController extends SimpleFormController {
 		
 	}
 
-	public void setMailingDAO(MailingListDAO mailingDAO) {
-		this.mailingDAO = mailingDAO;
+	public void setInvitationService(InvitationService invitationService) {
+		this.invitationService = invitationService;
 	}
+
 
 	
 
