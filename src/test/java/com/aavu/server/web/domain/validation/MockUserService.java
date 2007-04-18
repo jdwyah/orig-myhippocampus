@@ -104,4 +104,9 @@ public class MockUserService implements UserService {
 		
 	}
 
+	public User createUser(String user, String pass, String email, boolean superV) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -57,15 +57,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
-		User user = new User();
+		
 
-
-		return createUser(comm.getUsername(),comm.getPassword());
+		return createUser(comm.getUsername(),comm.getPassword(),comm.getEmail());
 
 	}
 
-	private User createUser(String username,String userpass) throws DuplicateUserException{
-		return createUser(username,userpass,false);
+	private User createUser(String username,String userpass,String email) throws DuplicateUserException{
+		return createUser(username,userpass,email,false);
 	}
 
 	private String hashPassword(String password) {
@@ -152,7 +151,7 @@ public class UserServiceImpl implements UserService {
 	 * lowercase usernames before creation
 	 * @return 
 	 */
-	public User createUser(String username, String userpass, boolean superV) {
+	public User createUser(String username, String userpass, String email, boolean superV) {
 
 		//hmm a bit odd having the logic catc in the 
 		//
@@ -161,7 +160,8 @@ public class UserServiceImpl implements UserService {
 
 		User user = new User();
 		user.setUsername(username.toLowerCase());
-		user.setPassword(hashPassword(userpass));		
+		user.setPassword(hashPassword(userpass));
+		user.setEmail(email);
 		user.setSupervisor(superV);
 
 		return userDAO.save(user);

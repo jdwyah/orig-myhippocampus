@@ -5,6 +5,7 @@ public class CreateUserRequestCommand {
 	private String username;
 	private String password;
 	private String password2;
+	private String email;
 	private String randomkey;
 	
 	public String getPassword() {
@@ -30,6 +31,12 @@ public class CreateUserRequestCommand {
 	}
 	public void setRandomkey(String randomkey) {
 		this.randomkey = randomkey;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

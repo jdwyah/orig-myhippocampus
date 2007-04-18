@@ -81,9 +81,6 @@ public class InvitationServiceImpl implements InvitationService {
 
 		sendInvite(invitation);
 
-		invitation.setSentEmailOk(true);
-		mailingListDAO.save(invitation);
-
 
 	}
 
@@ -95,10 +92,12 @@ public class InvitationServiceImpl implements InvitationService {
 					MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 					message.setTo(invitation.getEmail());
 					message.setFrom(from);
-
+					message.setSubject("MyHippocampus Invitation");
+					
 					Map<String,Object> model = new HashMap<String, Object>();            	 
 					model.put("inviter", invitation.getInviter());
 					model.put("randomkey", invitation.getRandomkey());
+					model.put("email", invitation.getEmail());
 					
 					Template textTemplate = configurer.getConfiguration().getTemplate(invitationTemplate);
 					final StringWriter textWriter = new StringWriter();
@@ -106,6 +105,7 @@ public class InvitationServiceImpl implements InvitationService {
 					textTemplate.process(model, textWriter);
 
 					message.setText(textWriter.toString(), true);
+					
 					
 					
 					log.info("Inviting: "+invitation.getEmail());
@@ -116,6 +116,8 @@ public class InvitationServiceImpl implements InvitationService {
 			};
 			this.mailSender.send(preparator);
 
+			invitation.setSentEmailOk(true);
+			mailingListDAO.save(invitation);
 
 		} catch (Exception e) {
 			log.error(e);

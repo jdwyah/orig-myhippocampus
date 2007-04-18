@@ -45,7 +45,8 @@
      
 	    <div id="header">
     		<@common.pngImage src="/img/myhippocampusLogo.png" width="552" height="82"/>
-			<#if user?exists><span class="slashUser">/${user.username}</span>
+			<#if user?exists>
+				<#--<span class="slashUser">/${user.username}</span>-->
 				<a href="<@spring.url "/site/j_acegi_logout"/>">(Logout)</a>
 			<#else>
 				<#--><div id="loginBox">

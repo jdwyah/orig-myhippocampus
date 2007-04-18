@@ -23,6 +23,8 @@
 		
 		<tr><td>Special Key:</td><td><@spring.formInput "command.randomkey"/><@regError/></td></tr>
 
+		<tr><td>Email:</td><td><@spring.formInput "command.email"/><@regError/></td></tr>
+
         <tr><td colspan='2'><input name="submit" type="submit" value="Create Account"></td></tr>
       </table>
 

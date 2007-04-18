@@ -19,6 +19,7 @@ public class CreateUserRequestValidatorTest extends TestCase {
 	private static final String OK_P2 = "diffpassword55kjfd89.$$$!09384@";
 	private static final String GOOD_KEY = "ASJDFASJKDASD";
 	private static final String BAD_KEY = "JHASDKJASD";
+	private static final String OK_EMAIL = "A@b.com";
 	
 	
 	private CreateUserRequestValidator validator;
@@ -38,6 +39,7 @@ public class CreateUserRequestValidatorTest extends TestCase {
 		c.setUsername(OK_U1);
 		c.setPassword(OK_P1);
 		c.setPassword2(OK_P1);
+		c.setEmail(OK_EMAIL);
 		c.setRandomkey(GOOD_KEY);
 		
 		BindException errors = new BindException(c, "");		
@@ -65,6 +67,7 @@ public class CreateUserRequestValidatorTest extends TestCase {
 		c.setPassword(OK_P1);
 		c.setPassword2(OK_P2);		
 		c.setRandomkey(GOOD_KEY);
+		c.setEmail(OK_EMAIL);
 		BindException errors = new BindException(c, "");		
 		validator.validate(c, errors);
 		assertTrue(errors.hasErrors());

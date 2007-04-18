@@ -44,6 +44,7 @@ public class CreateUserRequestValidator implements Validator{
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password","required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password2","required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "randomkey","required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email","required");
 		
 		CreateUserRequestCommand comm = (CreateUserRequestCommand) command;
 		

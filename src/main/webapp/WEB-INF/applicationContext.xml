@@ -85,9 +85,7 @@
 		</property>
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.myhippocampus.com" />
-		<property name="username" value="subscriptions"/>		
-		<property name="password" value="Hippo7000"/>
+		<property name="host" value="k2smtpout.secureserver.net" /><!-- http://help.godaddy.com/article.php?article_id=122&topic_id=120 -->		
 	</bean>
 	<bean id="invitationService" class="com.aavu.server.service.impl.InvitationServiceImpl">
 		<property name="mailingListDAO" ref="mailingListDAO"></property>

@@ -1,5 +1,7 @@
 package com.aavu.server.web.controllers;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -20,10 +22,22 @@ public class CreateUserController extends SimpleFormController {
 	private UserService userService;
 	private InvitationService invitationService;
 	
-	public CreateUserController(){
-		setCommandClass(CreateUserRequestCommand.class);		
-	}
 	
+
+
+
+	@Override
+	protected Object formBackingObject(HttpServletRequest req) throws Exception {
+		CreateUserRequestCommand com = new CreateUserRequestCommand();
+		
+		com.setEmail(req.getParameter("email"));
+		com.setRandomkey(req.getParameter("secretkey"));
+		
+		return com;
+	}
+
+
+
 	@Override
 	protected void onBindAndValidate(HttpServletRequest request, Object command, BindException errors) throws Exception {
 		log.debug("OnBindAndValidate");

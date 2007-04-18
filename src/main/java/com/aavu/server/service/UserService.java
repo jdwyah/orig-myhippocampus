@@ -9,35 +9,34 @@ import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
-import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public interface UserService {
 
 	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException;
 
-	boolean isUnique(CreateUserRequestCommand comm);
+	User createUser(String user, String pass, String email, boolean superV);
+
+	void delete(Integer id) throws PermissionDeniedException;
+
+	List<Subscription> getAllUpgradeSubscriptions();
 
 	List<User> getAllUsers();
+
+	User getCurrentUser() throws UsernameNotFoundException;
+	boolean isUnique(CreateUserRequestCommand comm);
+	
+	void subscriptionCancel(String paypalID);
+
+	void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID, String payerEmail) throws HippoBusinessException;
+	 	
+	void subscriptionRecordPayment(long hippoID,String paypalID);
+
+	void subtractInvitationFrom(User inviter);
 
 	void toggleEnabled(Integer id) throws PermissionDeniedException;
 
 	void toggleSupervisor(Integer id) throws PermissionDeniedException;
 
-	List<Subscription> getAllUpgradeSubscriptions();
-	User getCurrentUser() throws UsernameNotFoundException;
 	
-	void delete(Integer id) throws PermissionDeniedException;
-
-	User createUser(String user, String pass, boolean superV);
-	 	
-
-	void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID, String payerEmail) throws HippoBusinessException;
-
-	void subscriptionRecordPayment(long hippoID,String paypalID);
-
-	void subscriptionCancel(String paypalID);
-
-	void subtractInvitationFrom(User inviter);
-
 }

@@ -20,9 +20,9 @@ public class InitDAOImpl extends Db4oDaoSupport implements InitDAO {
 		try {
 			log.debug("doInit");
 
-			userService.createUser("test","test",false);
-			userService.createUser("jdwyah","jdwyah",true);
-			userService.createUser("vpech","vpech",true);
+			userService.createUser("test","test","j@d.com",false);
+			userService.createUser("jdwyah","jdwyah","j@d.com",true);
+			userService.createUser("vpech","vpech","j@d.com",true);
 			
 		} catch (Exception e) {
 			log.error("Failed doInit "+e);

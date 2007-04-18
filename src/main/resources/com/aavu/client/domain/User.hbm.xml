@@ -16,6 +16,8 @@
 		
 		<property name="password" type="string" column="password">
 		</property>
+		<property name="email" type="string" column="email">
+		</property>
 		<property name="enabled" type="boolean" column="enabled">
 		</property>
 		<property name="supervisor" type="boolean" column="supervisor">

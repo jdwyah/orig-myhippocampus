@@ -13,11 +13,13 @@ public abstract class AbstractUser  implements IsSerializable,java.io.Serializab
 
     // Fields    
 
+	 private String email;
      private boolean enabled;
      private long id;
      private int invitations;
      private String password;
      private String paypalID;
+     
      
      private Subscription subscription;
      
@@ -120,6 +122,14 @@ public void setSupervisor(boolean supervisor) {
 
 public void setUsername(String username) {
     this.username = username;
+}
+
+public String getEmail() {
+	return email;
+}
+
+public void setEmail(String email) {
+	this.email = email;
 }   
 
 
