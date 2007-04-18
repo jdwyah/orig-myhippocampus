@@ -48,7 +48,6 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 		List<User> list = userDAO.getAllUsers();
 		
 		
-		System.out.println("GET ID: "+u.getSubscription().getId());
 		
 		u.setSubscription(new Subscription());
 		
