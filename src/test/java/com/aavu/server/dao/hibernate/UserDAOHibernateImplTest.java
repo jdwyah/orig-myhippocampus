@@ -48,9 +48,6 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 		List<User> list = userDAO.getAllUsers();
 		
 		
-		
-		u.setSubscription(new Subscription());
-		
 		userDAO.save(u);
 		
 		User saved = userDAO.getUserByUsername(A);

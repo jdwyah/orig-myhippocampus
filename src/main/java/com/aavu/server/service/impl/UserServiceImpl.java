@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			return userDAO.getUserByUsername(username);	
 		} catch (UsernameNotFoundException e) {
-			log.warn(e);
+			log.debug(e);
 			throw e;
 		}
 

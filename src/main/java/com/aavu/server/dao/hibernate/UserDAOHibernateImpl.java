@@ -92,7 +92,17 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		}
 	}
 
+	/**
+	 * Save, ensuring that newly created users have the 'none' subscription first.  
+	 * (non-Javadoc)
+	 * @see com.aavu.server.dao.UserDAO#save(com.aavu.client.domain.User)
+	 */
 	public User save(User user) {
+		System.out.println("SAVING "+user);
+		if(user.getSubscription() == null){
+			Subscription none = (Subscription) DataAccessUtils.requiredSingleResult(getHibernateTemplate().find("from Subscription where id = 0"));			
+			user.setSubscription(none);
+		}
 		getHibernateTemplate().saveOrUpdate(user);
 		return user;
 	}
