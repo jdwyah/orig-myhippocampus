@@ -406,7 +406,7 @@ public class Manager implements TopicSaveListener, LoginListener, WheelListener,
 	 * User is logged in. Update GUI.
 	 *
 	 */
-	private void loadGUI() {
+	private void loadGUI() {		
 		map.load();
 	}
 	

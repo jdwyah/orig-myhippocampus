@@ -34,8 +34,7 @@ public class IndexController extends BasicController {
 	protected ModelAndView handleRequestInternal(HttpServletRequest req,
 			HttpServletResponse arg1) throws Exception {
 
-		
-		log.debug("SERVLET PATH: "+req.getServletPath());
+		log.debug("SERVLET PATH: "+req.getServletPath()+" "+req.getPathInfo()+" "+req.getQueryString());
 		
 		Map model = getDefaultModel(req);
 		

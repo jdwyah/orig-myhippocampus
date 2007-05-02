@@ -88,6 +88,11 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		this();
 		init(occ,popupText,alignRight);
 	}
+	public ExternalLink(String text, String url) {
+		this();
+		setText(text);
+		setTarget(url);		
+	}
 
 	private static native String urlEncode( String str )
     /*-{

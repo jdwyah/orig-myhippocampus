@@ -42,6 +42,8 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 	private List frames;
 
 	private MultiDivPanel mainP;
+
+	private Dashboard dashboard;
 	
 	public MainMap(final Manager manager){
 		this.manager = manager;
@@ -82,7 +84,8 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		mainP.add(ocean.getWidget());//,0,0);
 		
 		//mainP.add(sideBar);
-		mainP.add(new Dashboard(manager));
+		dashboard = new Dashboard(manager);
+		mainP.add(dashboard);
 		
 		mainP.add(statusPanel);
 		
@@ -114,7 +117,8 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 	 */
 	public void load(){
 		//sideBar.load();
-		ocean.load();
+		dashboard.load();
+		ocean.load();		
 	}
 
 	public void growIsland(Tag tag) {

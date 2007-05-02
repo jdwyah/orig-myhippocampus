@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import java.util.Map;
 
 import org.gwtwidgets.client.ui.ImageButton;
+import org.gwtwidgets.client.util.WindowUtils;
 
 import com.aavu.client.HippoTest;
 import com.aavu.client.collections.GWTSortedMap;
@@ -32,7 +33,8 @@ public class Dashboard extends SimplePanel {
 	// 'A' -> a's
 	// 'B-C' -> b's & c's
 	//<String,List<Topic>>
-	Map sidebarEntries = new GWTSortedMap();	
+	Map sidebarEntries = new GWTSortedMap();
+	private UserWidget userW;	
 
 
 	public Dashboard(Manager _manager){
@@ -85,11 +87,7 @@ public class Dashboard extends SimplePanel {
 				ExternalPopup ex = new ExternalPopup("Facebook",login,626,436);
 			}});
 				
-		Button logoutB = new Button("Logout");
-		logoutB.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				Window.open(HippoTest.getRelativeURL("/site/j_acegi_logout"),"logout","");						
-			}});
+		userW = new UserWidget(manager);	
 		
 		ImageButton explorerButton = new ImageButton(ConstHolder.myConstants.glossary_image(),64,45);
 		explorerButton.addClickListener(new ClickListener(){
@@ -103,7 +101,7 @@ public class Dashboard extends SimplePanel {
 		mainPanel.add(addNewButton);
 		mainPanel.add(addNewIslandButton);		
 		mainPanel.add(explorerButton);		
-		mainPanel.add(logoutB);
+		mainPanel.add(userW);
 		
 		
 //		mainPanel.add(new Label("New Topic"));
@@ -116,6 +114,11 @@ public class Dashboard extends SimplePanel {
 		//sets
 		addStyleName("H-AbsolutePanel");
 		addStyleName("H-Dashboard");		
+	}
+
+
+	public void load() {
+		userW.load();
 	}
 
 

@@ -22,9 +22,6 @@ public class LoginService {
 		LoginWindow lw = new LoginWindow(frame,listener);
 	}
 	
-	public static void doWhenLoggedIn(AsyncCallback callback){
-		
-	}
 	
 	
 }

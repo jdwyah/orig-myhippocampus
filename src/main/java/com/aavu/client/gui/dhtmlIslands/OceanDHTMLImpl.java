@@ -245,9 +245,10 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 		
 		
 		for (Iterator iter = islands.keySet().iterator(); iter.hasNext();) {
-			Entry e = (Entry) iter.next();
-			remove((Widget) e.getValue());
-			objects.remove(e.getValue());
+			Long e = (Long) iter.next();
+			Widget w = (Widget) islands.get(e);
+			remove((Widget) w);
+			objects.remove(w);
 		}
 		islands.clear();
 

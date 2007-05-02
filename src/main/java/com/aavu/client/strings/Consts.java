@@ -278,7 +278,15 @@ public interface Consts extends Messages {
 	String userNeedsToUpgrade();
 	String gadget_map_onlyoneper();
 	String gadget_map_clickToAdd();
-	
+		
+	String userw_usename();
+	String userw_none();
+	String userw_logout();
+	String userw_site();
+	String userw_signup();
+	String userw_logout_url();
+	String userw_site_url();
+	String userw_signup_url();
 	
 		
 	
