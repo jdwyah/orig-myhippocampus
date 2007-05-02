@@ -80,7 +80,7 @@ public class Explorer extends Composite implements ButtonGroup {
 						
 		timeline = new TimeLineWrapper(manager,defaultMap,width,height,window);
 				
-		blogView = new BlogView(manager,defaultMap,height);
+		blogView = new BlogView(manager,defaultMap,width,height);
 		
 		bigMap = new BigMap(manager,window,width,height);
 		

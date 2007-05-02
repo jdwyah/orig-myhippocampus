@@ -12,13 +12,14 @@ import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.gui.TopicPreviewLink;
 import com.aavu.client.gui.explorer.FTICachingExplorerPanel;
+import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,15 +46,15 @@ public class BlogView extends FTICachingExplorerPanel {
 	private static final SimpleDateFormat df = new SimpleDateFormat("EE, MMM dd");
 
 
-	private static final int MAX_PER_PAGE = 14;
+	private static final int MAX_PER_PAGE = 10;
 
 
 	private static final String DATE_STYLE = "H-Blog-Date";
-	private VerticalPanel tagPanel = new VerticalPanel();
+	private MultiDivPanel tagPanel = new MultiDivPanel();
 	private HorizontalPanel mainPanel = new HorizontalPanel();
 	
 	
-	private SimplePanel previewPanel = new SimplePanel();
+	private ScrollPanel previewPanel = new ScrollPanel();
 	private Manager manager;
 
 
@@ -61,7 +62,7 @@ public class BlogView extends FTICachingExplorerPanel {
 
 	private NextPage pageNavigation;
 	
-	public BlogView(Manager manager, Map defaultMap, int height) {
+	public BlogView(Manager manager, Map defaultMap, int width,int height) {
 		super(manager,defaultMap);	
 		this.manager = manager;
 	
@@ -76,6 +77,10 @@ public class BlogView extends FTICachingExplorerPanel {
 		
 		leftPanel.add(pageNavigation);
 		mainPanel.add(leftPanel);
+		
+		previewPanel.setWidth(width-200+"px");
+		previewPanel.setHeight(height-100+"px");
+		
 		mainPanel.add(previewPanel);
 		System.out.println("INITTIING");
 		initWidget(mainPanel);
@@ -113,6 +118,7 @@ public class BlogView extends FTICachingExplorerPanel {
 		tagPanel.clear();
 		
 		int count = 0;
+		
 		for (Iterator iterator = sortedByDate.getKeyList().iterator(); iterator.hasNext();) {
 
 			DatedTopicIdentifier fti = (DatedTopicIdentifier) iterator.next();		
@@ -126,17 +132,27 @@ public class BlogView extends FTICachingExplorerPanel {
 				break;
 			}
 			
-			HorizontalPanel hp = new HorizontalPanel();
-			hp.setVerticalAlignment(HorizontalPanel.ALIGN_BOTTOM);
+			
+			
+			MultiDivPanel hp = new MultiDivPanel();			
+			hp.addStyleName("H-BlogView");
 			
 			TopicPreviewLink previewLink = new TopicPreviewLink(fti,100,null,previewPanel,manager);
+			//previewLink.addStyleName("H-BlogLink");
 			
 			Label dateLabel = new Label(df.format(fti.getCreated()),false);
 			dateLabel.addStyleName(DATE_STYLE);
+			
+			
 			hp.add(dateLabel);
 			hp.add(previewLink);
+					
+			if(count % 2 == 0){
+				hp.addStyleName("H-BlogView");			
+			}else{
+				hp.addStyleName("H-BlogViewOdd");				
+			}
 			
-		
 			tagPanel.add(hp);
 			
 		}
@@ -156,12 +172,13 @@ public class BlogView extends FTICachingExplorerPanel {
 			
 			HorizontalPanel mainP = new HorizontalPanel();
 			
-			next = new Label("Next Page");
+			next = new Label(ConstHolder.myConstants.blog_next());
 			next.addClickListener(this);
-			previous = new Label("Previous Page");
+			previous = new Label(ConstHolder.myConstants.blog_previous());
 			previous.addClickListener(this);
 			
 			showing = new Label("");
+			showing.setWidth("90px");
 			
 			mainP.add(previous);
 			mainP.add(showing);
@@ -182,10 +199,10 @@ public class BlogView extends FTICachingExplorerPanel {
 			}
 			if(start + MAX_PER_PAGE < max){
 				next.setVisible(true);
-				showing.setText(start +" - " + (start+MAX_PER_PAGE));
+				showing.setText(start +" - " + (start+MAX_PER_PAGE)+" of "+max);
 			}else{
 				next.setVisible(false);
-				showing.setText(start +" - " + max);
+				showing.setText(start +" - " + max+" of "+max);
 			}
 			
 		}

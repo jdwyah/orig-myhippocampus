@@ -635,8 +635,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
 			
-				//System.out.println("getMetas() possible meta "+possibleMeta+" "+(possibleMeta instanceof Meta)+" "+possibleMeta.getId());
-				//System.out.println("poss "+possibleMeta.getClass());
+				//carefull, these break GWT bc of .getClass
+//				System.out.println("getMetas() possible meta "+possibleMeta+" "+(possibleMeta instanceof Meta)+" "+possibleMeta.getId());
+//				System.out.println("poss "+possibleMeta.getClass());
 								
 				possibleMeta.accept(visitor);
 				

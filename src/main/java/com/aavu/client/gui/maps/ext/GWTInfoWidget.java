@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Wrapper for a HasClickListeners widget.
  * 
+ * 
  * @author Jeff Dwyer
  *
  */

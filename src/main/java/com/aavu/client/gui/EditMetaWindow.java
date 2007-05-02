@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -38,7 +39,7 @@ public class EditMetaWindow extends PopupWindow implements ChangeListener {
 	public static final int WIDTH = 350;
 	private static final int HEIGHT = 250;
 	
-	private Grid mainP;
+	private Grid gripP;
 	
 	private Meta selected;
 //	private ChooseMetaW dateChooser;
@@ -56,7 +57,7 @@ public class EditMetaWindow extends PopupWindow implements ChangeListener {
 		this.manager = manager;
 	
 		//CHECKSTYLE:OFF
-		mainP = new Grid(3,4);
+		gripP = new Grid(3,4);
 		//CHECKSTYLE:ON				
 		
 		
@@ -71,53 +72,6 @@ public class EditMetaWindow extends PopupWindow implements ChangeListener {
 			System.out.println("location chooser");
 		}
 		
-//		if(type == null || type instanceof MetaDate){
-//			dateChooser = new ChooseMetaW(manager,new MetaDate());
-//			dateChooser.addChangeListener(this);
-//			
-//			mainP.setWidget(0, 0, new Label(ConstHolder.myConstants.meta_date()));
-//			mainP.setWidget(1, 0, dateChooser);
-//			
-//			Button newDateB = new Button(ConstHolder.myConstants.meta_new());		
-//			newDateB.addClickListener(new ClickListener(){
-//				public void onClick(Widget sender) {
-//					manager.newMeta(new MetaDate(),new EZCallback(){
-//						public void onSuccess(Object result) {
-//							TopicIdentifier res = (TopicIdentifier) result;						
-//							
-//							Meta newM = new MetaDate();
-//							newM.setId(res.getTopicID());
-//							newM.setTitle(res.getTopicTitle());
-//							
-//							dateChooser.add(newM);
-//						}});			
-//				}});
-//			mainP.setWidget(2,0,newDateB);
-//		}
-//		if(type == null || type instanceof MetaText){
-//			textChooser = new ChooseMetaW(manager,new MetaText());
-//			textChooser.addChangeListener(this);
-//			
-//			mainP.setWidget(0, 1, new Label(ConstHolder.myConstants.meta_text()));
-//			mainP.setWidget(1, 1, textChooser);
-//			
-//			Button newTextB = new Button(ConstHolder.myConstants.meta_new());		
-//			newTextB.addClickListener(new ClickListener(){
-//				public void onClick(Widget sender) {
-//					manager.newMeta(new MetaText(),new EZCallback(){
-//						public void onSuccess(Object result) {
-//							TopicIdentifier res = (TopicIdentifier) result;						
-//							
-//							Meta newM = new MetaText();
-//							newM.setId(res.getTopicID());
-//							newM.setTitle(res.getTopicTitle());
-//							
-//							textChooser.add(newM);
-//						}});			
-//				}});
-//			mainP.setWidget(2,1,newTextB);
-//		}
-		
 		
 		Button selectB = new Button(ConstHolder.myConstants.meta_select());		
 		selectB.addClickListener(new ClickListener(){
@@ -125,14 +79,18 @@ public class EditMetaWindow extends PopupWindow implements ChangeListener {
 				callback.onSuccess(selected);
 				close();
 			}});
-		mainP.setWidget(1,3,selectB);
+		gripP.setWidget(1,3,selectB);
 		
 		
 		
 		
 		editP = new SimplePanel();
-		mainP.setWidget(2, 3, editP);
+		gripP.setWidget(2, 3, editP);
 		
+		
+		VerticalPanel mainP = new VerticalPanel();
+		mainP.add(gripP);
+		mainP.add(new Label(ConstHolder.myConstants.meta_chooser_help()));
 		setContent(mainP);		
 	}
 	
@@ -140,8 +98,8 @@ public class EditMetaWindow extends PopupWindow implements ChangeListener {
 		final ChooseMetaW chooser = new ChooseMetaW(manager,meta);
 		chooser.addChangeListener(this);
 		
-		mainP.setWidget(0, column, new Label(headerText));
-		mainP.setWidget(1, column, chooser);
+		gripP.setWidget(0, column, new Label(headerText));
+		gripP.setWidget(1, column, chooser);
 		
 		Button newButton = new Button(newButtonText);		
 		newButton.addClickListener(new ClickListener(){
@@ -156,7 +114,7 @@ public class EditMetaWindow extends PopupWindow implements ChangeListener {
 						chooser.add(meta);
 					}});			
 			}});		
-		mainP.setWidget(2,column,newButton);
+		gripP.setWidget(2,column,newButton);
 		
 		
 	}

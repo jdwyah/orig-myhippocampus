@@ -19,6 +19,7 @@ import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,6 +35,9 @@ import com.mapitz.gwt.googleMaps.client.GMarker;
 public class BigMap extends Composite implements ExplorerPanel, MapController {
 
 	private static final int DEFAULT_ZOOM = 2;
+
+	private static final int BLURB_HEIGHT = 200;
+	private static final int BLURB_WIDTH = 350;
 
 	private HippoMapWidget mapWidget;	
 	private Manager manager;
@@ -175,7 +179,9 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 	}
 
 	public void userSelected(LocationDTO selected, final GMarker marker) {		
-		SimpleTopicDisplay std = new SimpleTopicDisplay(selected.getTopic(),manager,closeable,new EZCallback(){
+		SimpleTopicDisplay std = new SimpleTopicDisplay(selected.getTopic(),manager,closeable,
+				BLURB_WIDTH,BLURB_HEIGHT,
+				new EZCallback(){
 			public void onSuccess(Object result) {
 
 				SimpleTopicDisplay wi = (SimpleTopicDisplay) result;

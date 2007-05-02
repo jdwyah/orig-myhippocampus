@@ -15,6 +15,7 @@ import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.mapitz.gwt.googleMaps.client.GControl;
+import com.mapitz.gwt.googleMaps.client.GIcon;
 import com.mapitz.gwt.googleMaps.client.GLatLng;
 import com.mapitz.gwt.googleMaps.client.GMap2;
 import com.mapitz.gwt.googleMaps.client.GMap2EventClickListener;
@@ -129,6 +130,7 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		
 		int count = 0;
 		StringBuffer amalgamText = new StringBuffer();
+		
 		for (Iterator iterator = locations.iterator(); iterator.hasNext();) {
 			LocationDTO locDTO = (LocationDTO) iterator.next();					
 			amalgamText.append(locDTO.getTopic().getTopicTitle());
@@ -138,7 +140,7 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 			totalLong += locDTO.getLocation().getLocation().lng();
 			
 			if(++count > 5){
-				amalgamText.append(ConstHolder.myConstants.map_amalgam_more());
+				amalgamText.append(ConstHolder.myConstants.map_amalgam_more());				
 				break;
 			}
 		
@@ -149,7 +151,8 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		LocationDTO locDTO = (LocationDTO) locations.iterator().next();
 		System.out.println("add amalgam "+amalgamText.toString());	
 		
-		GLatLng point = new GLatLng(totalLat/locations.size(),totalLong/locations.size());
+		//only avg based on count, not locations.size() since we don't add all of them
+		GLatLng point = new GLatLng(totalLat/count,totalLong/count);
 		
 		
 		createPoint(point,locations,amalgamText.toString(),false,0,AMALGAM_END);	
@@ -207,7 +210,15 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		moveableMarkerOps = new GMarkerOptions();		
 		moveableMarkerOps.setDraggable(draggable); 
 		moveableMarkerOps.setTitle(title);
-	
+		
+//		GIcon icon = GIcon.create(); 
+//		icon.setImage("markerA.png"); 
+//		icon.setShadow("shadow50.png"); 
+//		icon.setIconSize(GSize.create(20, 34)); 
+//		icon.setShadowSize(GSize.create(37, 34)); 
+//		icon.setIconAnchor(GPoint.create(9, 34)); 
+//		icon.setInfoWindowAnchor(GPoint.create(9, 2)); 
+
 		
 		GMarker m = new GMarker(point,moveableMarkerOps);
 		markerEventManager.addOnDragEndListener(m, this);

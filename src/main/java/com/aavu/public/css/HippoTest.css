@@ -189,8 +189,19 @@ a:visited {
 .H-ExplorerButton {
 	width: 100%;
 }
+.H-BlogView {
+	background-color: #ffffff;
+	border-bottom: 1px solid black;
+}
+.H-BlogViewOdd {
+	background-color: #669999;
+	border-bottom: 1px solid black;
+}
+.H-BlogLink {
+	margin-left: 100px;
+}
 .H-Blog-Date {
-	font-size: .8em;
+	font-size: .6em;
 	color: #444444;
 }
 .H-Blog-NextPage {

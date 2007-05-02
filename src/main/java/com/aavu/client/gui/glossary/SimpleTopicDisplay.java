@@ -37,6 +37,9 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 	private CloseListener close;
 
 	private Button goThere;
+
+	private int width = -1;
+	private int height = -1;
 	
 	
 	public SimpleTopicDisplay() {
@@ -78,10 +81,13 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 	 * @param id
 	 * @param manager
 	 * @param close
+	 * @param height 
+	 * @param width 
 	 */
-	public SimpleTopicDisplay(final TopicIdentifier id, final Manager manager, final CloseListener close,final AsyncCallback callback) {
+	public SimpleTopicDisplay(final TopicIdentifier id, final Manager manager, final CloseListener close,int width, int height, final AsyncCallback callback) {
 		this();	
-		
+		this.width = width;
+		this.height = height;
 		manager.getTopicCache().getTopicByIdA(id.getTopicID(), new StdAsyncCallback("Preview"){
 			
 
@@ -123,7 +129,12 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 		Entry e = topic.getLatestEntry();
 		
 		if(!e.isEmpty()){
-			mainP.add(new TextDisplay(topic.getLatestEntry().getData()));			
+			if(width != -1 && height != -1){
+				mainP.add(new TextDisplay(topic.getLatestEntry().getData(),width,height));	
+			}else{
+				mainP.add(new TextDisplay(topic.getLatestEntry().getData()));
+			}
+						
 		}
 	}
 
@@ -138,6 +149,10 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 		}
 	}
 
+	/**
+	 * TODO not working when wrapped in GoogleMap. Needs GWTInfoWidgetWrapping?
+	 * @param tag
+	 */
 	private void showTag(final Tag tag){
 		
 		TopicLink tagLink = new TopicLink(tag);				

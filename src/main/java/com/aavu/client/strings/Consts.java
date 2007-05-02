@@ -287,7 +287,9 @@ public interface Consts extends Messages {
 	String userw_logout_url();
 	String userw_site_url();
 	String userw_signup_url();
-	
+	String blog_next();
+	String blog_previous();
+	String meta_chooser_help();
 		
 	
 		
