@@ -1,5 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -240,6 +241,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	}
 
+	public void evict(Serializable obj) {
+		getHibernateTemplate().evict(obj);	
+	}
+
+
 	public Topic get(long topicID) {
 		return (Topic) getHibernateTemplate().get(Topic.class, topicID);
 	}
@@ -268,13 +274,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return rtn;
 	}
 
-
 	/**
 	 * TODO replace hardcoded class discriminators with .class.
 	 */	
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user) {
 		return getAllTopicIdentifiers(user, false);
 	}
+
+
+
 
 	/**
 	 * all param is used by some unit tests to help wipe a user's account.
@@ -305,9 +313,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 	}
 
-
-
-
 	/**
 	 * TESTING ONLY
 	 * Should not be exposed to Service layer.
@@ -321,6 +326,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return getHibernateTemplate().findByCriteria(crit);
 	}
 
+
 	public Topic getForID(User user, long topicID) {
 
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
@@ -329,8 +335,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));			
 	}
-
-
 	public Topic getForName(User user, String string) {
 
 		log.debug("user "+user.getUsername()+" string "+string);
@@ -344,6 +348,9 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title = :title", "user", user);
 	}
+
+
+
 	public List<TopicIdentifier> getLinksTo(Topic topic,User user) {
 		Object[] params = {topic.getId(),user};
 		log.debug("----------getLinksTo-----------");
@@ -368,8 +375,6 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		}
 		return rtn;		
 	}
-
-
 
 	/**
 	 * Pretty much the same code as getTimelines. Could refactor out common functionality.
@@ -445,6 +450,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return getLocations(-1,user);
 	}
 
+
 	public Occurrence getOccurrrence(long id) {
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Occurrence.class)				
 				.add(Expression.eq("id", id)));
@@ -452,10 +458,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return (Occurrence) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));				
 	}
 
-
 	public MetaSeeAlso getSeeAlsoSingleton() {
 		return (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find("from MetaSeeAlso"));
 	}
+
 
 	/**
 	 * 
@@ -529,8 +535,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		}
 
 		return rtn;
-	}
-
+	}	
 
 	/**
 	 * 
@@ -538,7 +543,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 */	
 	public List<TimeLineObj> getTimeline(User user) {
 		return getTimeline(-1,user);
-	}	
+	}
 
 	public int getTopicCount(User user) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)
@@ -708,6 +713,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		return link;
 	}
 
+
 	public Topic save(Topic t) throws HippoBusinessException {
 		System.out.println("SAVE "+t.getTitle());
 
@@ -731,11 +737,10 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		return t;		
 	}
-
-
-	public void saveSimple(Topic t){
-		getHibernateTemplate().save(t);
+	public Long saveSimple(Topic t){
+		return (Long) getHibernateTemplate().save(t);
 	}
+
 	public void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude){
 
 		log.debug("-------------SAVE TOPICS LOCATION---------------");

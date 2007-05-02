@@ -170,7 +170,7 @@
 		<!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
 		<property name="paypalEmail" value="sandboxjdwyah@myhippocampus.com"/>-->
 		<property name="paypalEndpoint" value="https://www.paypal.com/cgi-bin/webscr"/>
-		<property name="paypalEmail" value="jdwyah@myhippocampus.com"/>
+		<property name="paypalEmail" value="subscriptions@myhippocampus.com"/>
 		<property name="view" value="secure/account" />
 		<property name="userService" ref="userService" />
 	</bean>

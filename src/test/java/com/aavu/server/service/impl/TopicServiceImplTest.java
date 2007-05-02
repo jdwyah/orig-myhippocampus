@@ -444,9 +444,6 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		clean();
 				
-		System.out.println("SAVED TAG "+B);
-		
-		
 		Topic topic = new Topic(u,C);
 		topic = (Topic) topicService.save(topic);
 		
@@ -573,6 +570,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
 	
 	
+		
+	
 	public void testMetaDateCommand() throws HippoBusinessException {
 		
 		clean();
@@ -625,6 +624,64 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
 		
 	}
+	
+
+	public void testConnectionsInMultiplePassesCommand() throws HippoBusinessException {
+		
+		clean();
+						
+		Topic topic = new Topic(u,C);
+		topic = (Topic) topicService.save(topic);
+		
+		
+		Topic topic2 = new Topic(u,D);
+		topic2 = (Topic) topicService.save(topic2);
+		
+		Topic topic3 = new Topic(u,E);
+		topic3 = (Topic) topicService.save(topic3);
+		
+		
+		AbstractCommand comm = new SaveSeeAlsoCommand(topic,topic2);
+						
+		topicService.executeAndSaveCommand(comm);
+		
+		log.debug("FINISHED SAVE 1");		
+		
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		
+		Association see = topicS.getSeeAlsoAssociation();
+		assertNotNull(see);
+		assertNotNull(see.getMembers());
+		assertEquals(1, see.getMembers().size());		
+		assertEquals(topic2, see.getMembers().iterator().next());
+		
+		
+		comm = new SaveSeeAlsoCommand(topic,topic3);		
+		topicService.executeAndSaveCommand(comm);
+		
+		log.debug("FINISHED SAVE 2");		
+		
+		
+		topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());		
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		
+		see = topicS.getSeeAlsoAssociation();
+		assertNotNull(see);
+		assertNotNull(see.getMembers());
+		assertEquals(2, see.getMembers().size());		
+		
+		for (Iterator iter = see.getMembers().iterator(); iter.hasNext();) {
+			Topic element = (Topic) iter.next();
+			assertTrue(element.equals(topic2) || element.equals(topic3));
+		}
+			
+	}
+	
 	
 	/**
 	 * Test duplicate entry and "" title checks.
@@ -750,7 +807,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 //			t = topicService.save(t);
 			topicService.delete(t);
 		}
-		
+		log.debug("\n-----CLEAN FIN--------");
 	}
 
 
