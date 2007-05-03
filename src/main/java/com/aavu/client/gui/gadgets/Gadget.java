@@ -5,6 +5,7 @@ import org.gwtwidgets.client.ui.ImageButton;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -18,28 +19,33 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public abstract class Gadget extends Composite {
 	
-	private VerticalPanel mainP;
+	private DisclosurePanel mainP;
 
 	/**
 	 * Child Gadget responsible for its own title bar w/ this constructor.
 	 *
 	 */
 	public Gadget(){
-		mainP = new VerticalPanel();		
+		
+		mainP = new DisclosurePanel();		
 		super.initWidget(mainP);		
+		mainP.setOpen(true);		
 		addStyleName("H-Gadget");
 	}
 	
 	public Gadget(String title){
-		mainP = new VerticalPanel();
-		mainP.add(new HeaderLabel(title));		
+		mainP = new DisclosurePanel();
+		mainP.setHeader(new HeaderLabel(title));
+		mainP.setOpen(true);		
 		
 		super.initWidget(mainP);
 		
 		addStyleName("H-Gadget");
 	}
 	
-	
+	protected void setHeader(Widget widget) {
+		mainP.setHeader(widget);				
+	}
 	//@Override
 	protected void initWidget(Widget widget) {
 		mainP.add(widget);				

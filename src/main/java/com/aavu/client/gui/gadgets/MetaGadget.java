@@ -63,7 +63,7 @@ public abstract class MetaGadget extends Gadget  {
 		headerP.add(new HeaderLabel(title));
 		headerP.add(addEditButton);
 		
-		mainPanel.add(headerP);
+		setHeader(headerP);
 		
 		mainPanel.add(metasPanel);		
 		mainPanel.add(extraPanel);

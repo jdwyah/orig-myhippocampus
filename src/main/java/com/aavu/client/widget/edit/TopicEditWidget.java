@@ -44,7 +44,6 @@ public class TopicEditWidget extends Composite implements SourcesChangeEvents {
 		//tagBoard = new TagBoard(manager);
 		//subjectBoard = new SubjectBoard(manager,titleBox,tagBoard);
 			
-		setupTopic();		
 		
 		VerticalPanel panel = new VerticalPanel();		
 		
@@ -55,10 +54,19 @@ public class TopicEditWidget extends Composite implements SourcesChangeEvents {
 	
 	
 		initWidget(panel);
+
+		
 	}
 	
 	
-	
+	//@Override
+	protected void onAttach() {
+		super.onAttach();
+		setupTopic();	
+	}
+
+
+
 	private void setupTopic() {
 		System.out.println("setupTopic");
 		if(topic != null){		

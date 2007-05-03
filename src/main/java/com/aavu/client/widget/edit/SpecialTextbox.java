@@ -1,31 +1,34 @@
 package com.aavu.client.widget.edit;
 
-import org.gwtwidgets.client.wrap.Effect;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.EntryEditWindow;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.ModablePopupPanel;
-import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.RichText2.HippoEditor;
+import com.aavu.client.util.Logger;
+import com.aavu.client.widget.RichText.RichTextToolbar;
 import com.aavu.client.widget.RichText2.KeyCodeEventListener;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SpecialTextbox extends Composite implements KeyCodeEventListener, ClickListener, SourcesChangeEvents {
+public class SpecialTextbox extends Composite implements KeyCodeEventListener, ClickListener, SourcesChangeEvents, KeyboardListener {
 
 	/**
 	 * no I'm not kidding. 92 is "|" on IE & FF, but ctrl-Pipe is 28 on IE. I dunno.
@@ -34,7 +37,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	private static final int KEY_PIPE_IE = 28;
 	private static final int KEY_PIPE_FF = 92;	//124; \92?  |124. ctrl \ 28?
 
-	private HippoEditor textArea;
+	private RichTextArea textArea;
 	private PopupPanel completePopup;
 	private TopicCompleter completer;
 	private Button selectButton;
@@ -49,10 +52,17 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		super();
 		this.topicCache = topicC;
 
-		textArea = new HippoEditor(this);
-		textArea.setKeyEventlistener(this);		
+		textArea = new RichTextArea(); //new HippoEditor(this);
+		
+		textArea.setSize((EntryEditWindow.WIDTH - 120)+"px", "400px");
+		textArea.addKeyboardListener(this);
 
-		HorizontalPanel mainPanel = new HorizontalPanel();		
+		RichTextToolbar toolbar = new RichTextToolbar(textArea);
+				
+		//textArea.addChangeListener(this);		
+		//textArea.setKeyEventlistener(this);		
+
+		VerticalPanel mainPanel = new VerticalPanel();		
 
 
 		completer = new TopicCompleter(topicC);
@@ -87,29 +97,62 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		completePanel.add(cancelButton);
 		completePopup.add(completePanel);		
 
+		mainPanel.add(toolbar);
 		mainPanel.add(textArea);
 
 
 
 		//mainPanel.add(completePanel);
 		initWidget(mainPanel);
+		
+		
+		ChangeTimer t = new ChangeTimer();
+		t.scheduleRepeating(2000);
 	}
 
-
+	/**
+	 * TODO take this out once the ChangeListener works correctly. 
+	 * 
+	 * @author Jeff Dwyer
+	 *
+	 */
+	private class ChangeTimer extends Timer {
+		private String lastText;
+		//@Override
+		public void run() {
+			try{
+				String cur = textArea.getText();
+				if(lastText != null && !cur.equals(lastText)){
+					listeners.fireChange(SpecialTextbox.this);
+				}
+				lastText = cur;
+			}catch(Exception e){
+				Logger.debug("Caught "+e);
+			}
+		}
+	}
 
 
 	public void keyCodeEvent(int i,boolean ctrl) {
 		if(ctrl && (i == KEY_PIPE_FF || i == KEY_PIPE_IE)){
 			openLinkDialog();			
 		}
-		if(listeners != null){
-			listeners.fireChange(this);
-		}
+//		if(listeners != null){
+//			listeners.fireChange(this);
+//		}
 	}
 
 
-	public void setText(String text) {
-		textArea.setHTML(text);		
+	/**
+	 * PEND MED Necessary? otherwise we get a content.body.blah not an object 
+	 * @param text
+	 */
+	public void setText(final String text) {
+		DeferredCommand.addCommand(new Command(){
+			public void execute(){
+				textArea.setHTML(text);	
+			}
+		});
 	}
 
 	public String getText() {
@@ -133,9 +176,9 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 				
 				TopicIdentifier topic = (TopicIdentifier) result;
 				
-				textArea.setSelectionRange(range);
-
-				textArea.makeLink(topic.getTopicID());
+//				textArea.setSelectionRange(range);
+//
+//				textArea.makeLink(topic.getTopicID());
 
 				hideLinker();
 
@@ -167,13 +210,13 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	private void openLinkDialog() {
 		System.out.println("LINK");
 
-		range = textArea.getExpandedSelection();//getSelectionRange();
+		//range = textArea.getExpandedSelection();//getSelectionRange();
 
 		completePopup.show();			
 		completePopup.setVisible(true);				
 		GUIEffects.appear(completePopup, 1);
 
-		DeferredCommand.add(new Command(){
+		DeferredCommand.addCommand(new Command(){
 			public void execute() {			
 				completer.setFocus(true);		
 			}});
@@ -182,8 +225,12 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 
 
-
-	public void addChangeListener(ChangeListener listener) {
+	/**
+	 * NOTE see above, textArea listeners seem broken
+	 */
+	public void addChangeListener(ChangeListener listener) {		
+		textArea.addChangeListener(listener);
+		
 		if(listeners == null){
 			listeners = new ChangeListenerCollection();
 		}
@@ -191,12 +238,34 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	}
 
 
-
-
 	public void removeChangeListener(ChangeListener listener) {
+		
+		textArea.removeChangeListener(listener);
 		if(listeners != null){
 			listeners.remove(listener);
 		}		
+	}
+
+
+
+
+	public void onKeyDown(Widget sender, char keyCode, int modifiers) {
+		System.out.println("DOWN KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
+	}
+	public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+		System.out.println("PRESS KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
+	}
+	public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+		
+		System.out.println("UP KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
+		
+		if((KEY_CTRL == modifiers) && (keyCode == KEY_PIPE_FF || keyCode == KEY_PIPE_IE)){
+			openLinkDialog();			
+		}
+//		System.out.println("list "+listeners);
+//		if(listeners != null){
+//			listeners.fireChange(this);
+//		}		
 	}
 
 }

@@ -2,6 +2,7 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Entry extends Occurrence implements Serializable,IsSerializable, ReallyCloneable {
@@ -36,6 +37,9 @@ public class Entry extends Occurrence implements Serializable,IsSerializable, Re
 	 * contentEditatble vs contenteditable
 	 * BODY vs body.
 	 * 
+	 * PEND HIGH Note, the catch is now a valid case, since we've switched to the GWT editor which doesn't need the
+	 * body tags. Because we've got mixed data, we'll just hope that errors are new data w/o body tag. 
+	 * 
 	 * @return
 	 */
 	public String getDataWithoutBodyTags(){
@@ -45,16 +49,13 @@ public class Entry extends Occurrence implements Serializable,IsSerializable, Re
 		int end = getData().toUpperCase().indexOf(INIT_STR_END); 
 		
 		try{ 		
-//			System.out.println("!!!!!! "+getData());
-//			System.out.println(start+" "+end);
-//			System.out.println(getData().substring(start,end));
-
 			return getData().substring(start,end);		
 		}catch (StringIndexOutOfBoundsException e) {
-			System.out.println("e. "+e.getMessage());
-			System.out.println("!!!!!! "+getData()+" "+getData().length());
-			System.out.println(start+" "+end);
-			return start+" "+end+" "+getData()+" ";
+			//System.out.println("e. "+e.getMessage());
+			//System.out.println("!!!!!! "+getData()+" "+getData().length());
+			//System.out.println(start+" "+end);
+			Logger.debug("Didn't Find Body Tag, hoping..");
+			return getData();
 		}
 	}
 	

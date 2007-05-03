@@ -26,6 +26,9 @@ import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.SerializationException;
+import com.google.gwt.user.server.rpc.RPC;
+import com.google.gwt.user.server.rpc.RPCRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -37,9 +40,16 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * 
  */
 
-public class GWTSpringControllerReplacement extends RemoteServiceServletReplacement implements
+public class GWTSpringControllerReplacement extends RemoteServiceServlet implements
 ServletContextAware, Controller, RemoteService {
 	private static final long serialVersionUID = 5399966488983189122L;
+
+	@Override
+	public String processCall(String payload) throws SerializationException {
+		RPCRequest rpcRequest = RPC.decodeRequest(payload, this.getClass());
+		return RPCWithHibernateSupport.invokeAndEncodeResponse(this, rpcRequest.getMethod(),
+				rpcRequest.getParameters());
+	}
 
 	private static ThreadLocal<HttpServletRequest> servletRequest = new ThreadLocal<HttpServletRequest>();
 	private static ThreadLocal<HttpServletResponse> servletResponse = new ThreadLocal<HttpServletResponse>();

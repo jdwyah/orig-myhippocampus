@@ -43,7 +43,6 @@ public class HippoEditor extends Editor {
 		System.out.println("SETTING HTML");
 		setHTML(text);		
 	}
-
 	public String getText() {
 		return getHTML();		
 	}
