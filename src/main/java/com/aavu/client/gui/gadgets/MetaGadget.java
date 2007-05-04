@@ -16,6 +16,8 @@ import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.AddButton;
 import com.aavu.client.widget.DeleteButton;
 import com.aavu.client.widget.HeaderLabel;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -55,7 +57,14 @@ public abstract class MetaGadget extends Gadget  {
 		
 		addEditButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				addEditClick();				
+				addEditClick();		
+				
+				//PEND MED grrr... DisclosurePanel closes if we have any click spots. Re-open
+				//automatically to counteract, but this ends up with a flicker.
+				DeferredCommand.addCommand(new Command(){
+					public void execute() {
+						mainP.setOpen(true);		
+					}});				
 			}});
 		
 		HorizontalPanel headerP = new HorizontalPanel();

@@ -29,7 +29,7 @@ public class ViewMemberWindow extends PopupWindow {
 	 * @param frame
 	 */
 	public ViewMemberWindow(Manager manager, GInternalFrame frame) {
-		this(ConstHolder.myConstants.glossary_tooltip(),null, null, manager, frame);
+		this(ConstHolder.myConstants.explorer_tooltip(),null, null, manager, frame);
 	}
 	public ViewMemberWindow(Topic myTag, List topics, Manager manager, GInternalFrame frame) {
 		this(myTag.getTitle(),myTag, topics, manager, frame);

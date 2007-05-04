@@ -160,9 +160,11 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		
 	
 	public void centerOn(HippoLocation location) {
-		System.out.println("!!!!!!!!!!!!!CENTER ON "+location.getLocation());
-		//gmaps.setCenter(latlng)
-		gmaps.setCenter(location.getLocation());
+		if(location != null){
+			System.out.println("!!!!!!!!!!!!!CENTER ON "+location.getLocation());
+			//gmaps.setCenter(latlng)
+			gmaps.setCenter(location.getLocation());
+		}
 	}
 	private void centerOn(GLatLng point, int zoom) {
 		gmaps.setCenter(point,zoom);

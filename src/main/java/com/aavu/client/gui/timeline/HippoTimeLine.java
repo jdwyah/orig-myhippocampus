@@ -262,7 +262,7 @@ public class HippoTimeLine extends Composite implements TimeLineClickListener {
 				
 		public PreviewPopup(GInternalFrame frame,Topic topic,int top,int left) {
 			super(frame,topic.getTitle(),WIDTH,HEIGHT);
-			SimpleTopicDisplay display = new SimpleTopicDisplay(topic,manager,this);		
+			SimpleTopicDisplay display = new SimpleTopicDisplay(topic,manager,this,WIDTH,HEIGHT);		
 			frame.setLocation(top, left);
 			setContent(display);
 		}		

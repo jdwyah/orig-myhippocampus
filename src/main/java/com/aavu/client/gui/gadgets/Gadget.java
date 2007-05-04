@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public abstract class Gadget extends Composite {
 	
-	private DisclosurePanel mainP;
+	protected DisclosurePanel mainP;
 
 	/**
 	 * Child Gadget responsible for its own title bar w/ this constructor.

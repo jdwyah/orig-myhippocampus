@@ -60,7 +60,7 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 	 * @param topic
 	 */
 	public SimpleTopicDisplay(Topic topic) {
-		this(topic,null,null);
+		this(topic,null,null,-1,-1);
 	}
 	
 	/**
@@ -68,9 +68,10 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 	 * @param topic
 	 * @param manager
 	 */
-	public SimpleTopicDisplay(final Topic topic, final Manager manager, final CloseListener close) {
+	public SimpleTopicDisplay(final Topic topic, final Manager manager, final CloseListener close,int width, int height) {
 		this();	
-		
+		this.width = width;
+		this.height = height;
 		draw(topic,manager,close);
 		
 	}

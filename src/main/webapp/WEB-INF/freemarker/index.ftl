@@ -5,12 +5,14 @@
   <title><@spring.message "site"/></title>
 </head>
 
-<body>
- <#if message?exists>
-	 <p class="message">${message}</p>
- </#if>							
+<body>					
      
    
+ <#if message?exists>
+	<div style="z-index: 99; position: absolute; left: 200px;">
+	 <p class="message">${message}</p>
+	</div>
+ </#if>			  	 	  
 
 
   	<#macro acre left top color num type>
@@ -138,6 +140,7 @@
 		<@doacres seq, "Orange"/>   
 	</div>	  	 	  
 	  	 	  
+
 	
     
 </body>
