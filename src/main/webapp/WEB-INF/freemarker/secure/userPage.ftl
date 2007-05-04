@@ -43,7 +43,6 @@
 		Number of Topics: ${bean.numberOfTopics}<BR>
 	</div>
 	</p>
-	<#if user?exists><li><a href="<@spring.url "/site/secure/screencasts.html"/>"><@spring.message "sidebar.screencasts"/></a></li></#if>
 	  			
 	<#if bean.user?exists>
 		<#if bean.user.supervisor>

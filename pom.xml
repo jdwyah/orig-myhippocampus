@@ -70,26 +70,26 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>1.4.0.build1006</version>
+			<version>1.4.0.build1012</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-dev-windows</artifactId>
-			<version>1.4.0.build1006</version>
+			<version>1.4.0.build1012</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>1.4.0.build1006</version>
+			<version>1.4.0.build1012</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-maps</artifactId>
 			<version>2.1.4.build1006</version>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwm</artifactId>

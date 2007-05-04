@@ -64,7 +64,6 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 		VerticalPanel mainPanel = new VerticalPanel();		
 
-
 		completer = new TopicCompleter(topicC);
 		completer.addKeyboardListener(new KeyboardListenerAdapter(){
 			public void onKeyUp(Widget sender, char keyCode, int modifiers) {

@@ -20,6 +20,7 @@ body {
 
 #footer {
 	position: fixed;
+	text-align: center;
 	left: 30%;
 	top: 95%;
 }

@@ -839,3 +839,15 @@ a:visited {
 .gwt-StackPanel .gwt-StackPanelItem-selected {
 	
 }
+
+.gwt-SuggestBox {
+	z-index: 9999;
+}
+.gwt-SuggestBoxPopup {
+	z-index: 9999;
+}
+.gwt-SuggestBoxPopup .item {
+	font-size: small;
+}
+.gwt-SuggestBoxPopup .item-selected {	
+}

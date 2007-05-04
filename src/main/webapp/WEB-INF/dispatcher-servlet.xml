@@ -21,7 +21,7 @@
 		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="screencastsController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="secure/screencasts" />
+		<property name="view" value="screencasts" />
 		<property name="userService" ref="userService" />
 	</bean>	
 	<bean id="manifestoController" class="com.aavu.server.web.controllers.ManifestoController">
@@ -200,7 +200,7 @@
 				<prop key="/site/secure/extreme/mailingList.html">manageMailingListController</prop>
 
 
-				<prop key="/site/secure/screencasts.html">screencastsController</prop>				
+				<prop key="/site/screencasts.html">screencastsController</prop>				
 				<prop key="/site/secure/addLink.html">addLinkController</prop>
 				<prop key="/site/secure/getTopics.html">ajaxController</prop>				
 				

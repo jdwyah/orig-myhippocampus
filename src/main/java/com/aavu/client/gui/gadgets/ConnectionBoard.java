@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
+import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
@@ -18,12 +19,15 @@ import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
+import com.aavu.client.widget.edit.TopicCompleteOracle;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.ui.CellPanel;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -54,6 +58,12 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		topicCompleter = new TopicCompleter(manager.getTopicCache());		
 		topicCompleter.addListener(this);
 
+		
+//		TopicCompleteOracle oracle = new TopicCompleteOracle(manager.getTopicCache());
+//		final SuggestBox b = new SuggestBox(oracle);
+//		oracle.setCompleteListener(b,this);
+		
+		
 		alsos = new SeeAlsoWidget();
 		
 		EnterInfoButton enterInfoButton = new EnterInfoButton();		
@@ -70,6 +80,8 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		cp.add(new Label(ConstHolder.myConstants.addTo()));
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
+		
+		//mainP.add(b);
 		
 		
 		refPanel = new VerticalPanel();

@@ -29,6 +29,7 @@
       </table>
 
     </form>
+	    <@spring.message "signup.message"/>
 	   </div>
 	   
 	   
