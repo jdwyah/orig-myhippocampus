@@ -44,7 +44,7 @@ public class MailingListDAOHibernateImpl extends HibernateDaoSupport implements 
 	}
 
 	public void save(MailingListEntry invitation) {
-		getHibernateTemplate().save(invitation);
+		getHibernateTemplate().saveOrUpdate(invitation);
 	}
 
 	public MailingListEntry getEntryForKey(String randomkey) {
