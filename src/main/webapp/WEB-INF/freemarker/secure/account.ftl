@@ -71,8 +71,26 @@ encrypt the whole button on the fly. See code stublets in com.aavu.service.paypa
 		<p>
 		<@spring.message "account.about.1"/>
 		<p>
+
 		<@spring.message "account.about.2"/>
 
+	<#--><div class="middle-column-box-title-green">
+		<@spring.message "account.charging"/>
+	</div>
+		<p>
+		<@spring.message "account.chargin.0"/>
+	
+	Why we're charging
+	
+We're charging for MyHippocampus for a very simple reason. We need the money ;) A lot of the Internet runs on
+the idea that once you get people hooked, you'll be able to pop in advertisements and everything will turn out fine.
+Unfortunately this would put us in the unenviable position of having to 'monetize' eyeballs in the
+future, because we feel that this often leads to a conflicted position where we'd be more
+interested in getting you to click on ads than on providing you with a great service. Instead we're looking for passionate users 
+who think this service is worth it. 
+
+Please contact us if you have any feedback or questions about this. 
+	-->
 </div>
 
 

@@ -10,7 +10,8 @@ public class AddButton extends PNGImage {
 	public AddButton(String tooltip){
 		super(ConstHolder.myConstants.img_add(),
 				16,16);	
-		addMouseListener(new TooltipListener(tooltip));			
+		addMouseListener(new TooltipListener(tooltip));		
+		addStyleName("H-AddButton");
 	}
 
 }

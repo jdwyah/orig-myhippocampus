@@ -170,17 +170,18 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
 						widgetToRemoveOnSuccess.removeFromParent();
-					}});				
+					}});
+		
+	
+		//re-load the gadgets.
+		manager.getGadgetManager().load(cur_topic);			
 	}
 	
 	/**
-	 * Typically we don't touch a topics tags on save. only if they've been 
-	 * updated. This is because unless they've been updated, they won't be full
-	 * fledged objects (due to the fact that we didn't JOIN and 
-	 * serialize topic.types.instances... etc
+	 * re-load the gadgets. If we've tagged it with something with metas,
+	 * we'll want to open those gadgets. ie tag Bob as Person opens Text:Email gadget.
 	 * 
-	 * If we're tagging though, it's a full obj and we need to save it.
-	 * 
+	 * PEND this will require a trip to server. Would be nice to make this more targetted.		
 	 * @param tag
 	 */
 	private void addTag(final Tag tag) {
@@ -190,7 +191,16 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		}
 		//incommand tagsToSave.add(tag);
 		manager.getTopicCache().executeCommand(cur_topic,new SaveTagtoTopicCommand(cur_topic,tag), 
-				new StdAsyncCallback(ConstHolder.myConstants.save()){});		
+				new StdAsyncCallback(ConstHolder.myConstants.save()){
+					//@Override
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+						//needs a full bringUpChart, because Tag will just be a placeholder
+						manager.bringUpChart(cur_topic.getId());	
+					}			
+		});		
+		
+						
 	}
 	
 //	private void displayMetas(Tag tag, TagGadget tg) {

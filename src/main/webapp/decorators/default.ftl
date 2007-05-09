@@ -67,7 +67,7 @@
     	| <a href="<@spring.url "/site/contact.html"/>">Contact Us</a> 
     	| <a href="http://myhippocampus.blogspot.com/">Blog</a>
     	| <a href="<@spring.url "/site/acknowledgments.html"/>">Acknowledgements</a> 
-    	<br>Patent Pending
+    	<br>
 	</div>
 	
 	

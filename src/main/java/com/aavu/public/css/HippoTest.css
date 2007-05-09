@@ -158,6 +158,9 @@ a:visited {
 	right: 0px;
 	padding: 4px;	
 }
+.H-AddButton {
+	border: 0px;
+}
 .H-SelectableButton {
 	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;

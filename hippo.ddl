@@ -113,7 +113,7 @@
         topic_id bigint not null auto_increment,
         discriminator varchar(255) not null,
         user_id bigint,
-        title varchar(255),
+        title varchar(255) not null,
         latitude integer not null,
         longitude integer not null,
         dateUpdated timestamp,

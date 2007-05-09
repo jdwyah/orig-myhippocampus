@@ -760,76 +760,26 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 	
 	/**
-	 * TODO please help me understand this. see commented function below. hashcode == and TTC == && .eq(),
-	 * but it won't remove it from the set. why???
-	 * 
-	 * more issues with our .equals() and remove() not guaranteeing removal if underlying objects mutate.
-	 * 
-	 * Workaround here is to make a new set and add everything that shouldn't be deleted. 
-	 * 
-	 * @param topic
+	 * Gar. This method has had some issues in the past. See r331, which once seemed to be necessary but
+	 * now doesn't seem to work. This is a good thing, as this method is much simpler.
+	 * Must have been something we did to our .equals() methods.
 	 */
 	public boolean removeType(Topic topic){
-		//System.out.println("Remove T size "+getTypes().size());
-		Set replacementSet = new HashSet();
-		boolean found = false;
 		
+		boolean found = false;
+
 		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
 			
 			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
 			
-			if(!twl.getType().equals(topic)){
-				replacementSet.add(twl);
-			}else{
+			if(twl.getType().equals(topic)){
+				iter.remove();
 				found = true;
-			}
-		}
-		setTypes(replacementSet);
-				
+			}			
+		}						
 		return found;
-		//System.out.println("Remove T size "+getTypes().size());
 	}
 	
-//	public void removeType2(Topic topic){
-//		
-//		System.out.println("Remove T size "+getTypes().size());
-//		
-//		TopicTypeConnector ttc = null;
-//		
-//		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
-//			
-//			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
-//			
-//			System.out.println("remove "+topic+" Top "+twl.getTopic()+" type "+twl.getType());
-//			
-//			if(twl.getType().equals(topic)){
-//				System.out.println("eq, removing");
-//				
-//				System.out.println("twl.getHash "+twl.hashCode());
-//				ttc = twl;
-//				break;
-//			}			
-//		}
-//		
-//		System.out.println("2nd.getHash "+getTypes().iterator().next().hashCode());
-//		
-//	//	HashSet<E>k;
-//		System.out.println("rem res "+getTypes().remove(ttc));
-//		
-//		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
-//		
-//			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
-//			
-//			System.out.println("H"+(ttc.hashCode() == twl.hashCode()));
-//			System.out.println("=="+(twl == ttc));
-//			System.out.println("=="+twl.equals(ttc));
-//			
-//			System.out.println("rem twl "+getTypes().remove(twl));
-//			System.out.println("rem ttc "+getTypes().remove(ttc));
-//		}
-//		
-//		System.out.println("Remove T size "+getTypes().size());
-//	}
 	
 	public Set getTypesAsTopics(){
 		

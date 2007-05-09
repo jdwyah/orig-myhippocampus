@@ -19,8 +19,10 @@ import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
@@ -793,6 +795,45 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		topicS = topicService.getForID(tag.getId());
 		
 		assertEquals(1, topicS.getTagProperties().size());
+	}
+	
+
+	public void testRemoveTagComand() throws HippoBusinessException {
+		
+		clean();
+		
+		Tag tag = new Tag(u,C);
+		tag = (Tag) topicService.save(tag);
+				
+		
+		Topic topic = new Tag(u,D);
+		topic = topicService.save(topic);
+		
+		AbstractCommand comm = new SaveTagtoTopicCommand(topic,tag);
+				
+		topicService.executeAndSaveCommand(comm);
+		
+		System.out.println("FINISHED SAVE");		
+		
+		
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getTypes().size());		
+		  
+		assertEquals(tag,topicS.getTags().iterator().next());
+		
+		
+		
+		comm = new RemoveTagFromTopicCommand(topic,tag);
+		topicService.executeAndSaveCommand(comm);
+		
+		
+		topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());
+		
+		
+		Tag tagS = (Tag) topicService.getForID(tag.getId());		
+		assertEquals(0, topicService.getTopicIdsWithTag(tagS.getId()).size());
+				
 	}
 	
 	
