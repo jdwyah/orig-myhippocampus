@@ -17,6 +17,7 @@
 		<ul>
 		<li><a href="http://www.myhippocampus.com/screencasts/Whirlwind/Whirlwind.html">The Whirlwind Tour</a></li>		
 		<li><a href="http://www.myhippocampus.com/screencasts/FirstSteps/FirstSteps.html">First Steps</a></li>
+		<li><a href="http://www.myhippocampus.com/screencasts/TipsAndTricks/TipsAndTricks.html">Tips & Tricks</a></li>
 <#--		<li><a href="http://www.myhippocampus.com/screencasts/Step2/Step2.html">First Steps</a></li>-->
 		</ul>
 
