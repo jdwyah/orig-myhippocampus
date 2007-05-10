@@ -45,16 +45,32 @@ public class Entry extends Occurrence implements Serializable,IsSerializable, Re
 	public String getDataWithoutBodyTags(){
 		String s = "<body";
 		int start_body = getData().toLowerCase().indexOf(s);
-		int start = getData().indexOf('>', start_body) + 1;
-		int end = getData().toUpperCase().indexOf(INIT_STR_END); 
 		
+		if(start_body == -1){
+			System.out.println("Didn't Find Body Tag.");
+			return getData();
+		}
+		
+		//System.out.println("start_b "+start_body);
+		
+		//NOTE!! this was 
+		int start = getData().indexOf('>', start_body) + 1;		
+		int end = getData().toUpperCase().indexOf(INIT_STR_END); 
+		Logger.log("wo body"+getData().length()+" "+start+" "+end+" "+start_body);
+		
+		//PEND HIGH
+		//string.substring() has different functionality on my machine than
+		//on the server. No joke. str.substring(30,-1) throws exception locally,
+		//but no exception on server, thus our catch doesn't work. Should all be fixed from 
+		//catch of start_body == -1 above.
 		try{ 		
+			//Logger.log(""+getData().length())
 			return getData().substring(start,end);		
 		}catch (StringIndexOutOfBoundsException e) {
 			//System.out.println("e. "+e.getMessage());
 			//System.out.println("!!!!!! "+getData()+" "+getData().length());
 			//System.out.println(start+" "+end);
-			Logger.debug("Didn't Find Body Tag, hoping..");
+			System.out.println("Catch! Didn't Find Body Tag, hoping.."+start+" "+end);
 			return getData();
 		}
 	}
