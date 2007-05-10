@@ -99,7 +99,7 @@ public class MockUserService implements UserService {
 		return null;
 	}
 
-	public void subtractInvitationFrom(User inviter) {
+	public void addInvitationsTo(User inviter,int num) {
 		// TODO Auto-generated method stub
 		
 	}

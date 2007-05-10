@@ -231,12 +231,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Don't let it go negative.
+	 * don't let it go negative
 	 */
-	public void subtractInvitationFrom(User inviter) {
+	public void addInvitationsTo(User inviter,int num) {
 		int current = inviter.getInvitations();
-		if(current > 0){
-			inviter.setInvitations(current - 1);
+		int newV = current + num;
+		if(newV >= 0){
+			inviter.setInvitations(newV);
 		}
 		userDAO.save(inviter);
 	}

@@ -74,14 +74,20 @@ public class InvitationServiceImpl implements InvitationService {
 		if(inviter.getInvitations() < 1){
 			throw new HippoBusinessException("No invites available for user.");
 		}
+		
+		log.debug("before create entry");
+		
+		final MailingListEntry invitation = mailingListDAO.createEntry(email, inviter);		
+		
+		log.debug("subtract entry "+inviter.getInvitations());
+		
+		userService.addInvitationsTo(inviter,-1);
 
-		final MailingListEntry invitation = mailingListDAO.createEntry(email, inviter);
-
-		userService.subtractInvitationFrom(inviter);
-
+		log.debug("send invite "+inviter.getInvitations());
+		
 		sendInvite(invitation);
 
-
+		log.debug("sent "+inviter.getInvitations());
 	}
 
 	public void sendInvite(final MailingListEntry invitation) throws HippoInfrastructureException {

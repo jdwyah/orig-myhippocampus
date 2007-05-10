@@ -7,6 +7,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.util.Logger;
 import com.aavu.client.widget.edit.TopicWidget;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -24,18 +25,18 @@ public class EntryPreview extends Gadget {
 			
 			textPanel.clear();						
 			
-			System.out.println("entry "+entry.getData());
-			
+			Logger.log("entry "+entry.getData());
+			Logger.log("chopBody "+entry.getDataWithoutBodyTags());
 			String stripped = entry.getDataWithoutBodyTags();
 			
 			//TODO make sure we don't cut off in the middle of an HTML tag
 			if(stripped != null && stripped.length() > NUM_CHARS){
 				String str = stripped.substring(0,NUM_CHARS);
 				str += "</p></div>";
-				System.out.println("CUT |"+str+"|");
+				Logger.log("CUT |"+str+"|");
 				textPanel.add(new TextDisplay(str));
 			}else{
-				System.out.println("NO CUT |"+stripped+"|");
+				Logger.log("NO CUT |"+stripped+"|");
 				textPanel.add(new TextDisplay(stripped));
 			}		
 			

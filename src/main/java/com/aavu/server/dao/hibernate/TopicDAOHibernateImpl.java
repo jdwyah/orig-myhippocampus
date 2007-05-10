@@ -145,7 +145,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 				}				
 				topic.getTypes().clear();
 
-				System.out.println("after clear "+topic.toPrettyString());
+				//System.out.println("after clear "+topic.toPrettyString());
 
 //				for (TopicTypeConnector conn : (Set<TopicTypeConnector>)topic.getTypes()) {
 //				log.info("Was a tag. Removing instances "+instance);
@@ -751,18 +751,18 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		Set<TopicTypeConnector> types = t.getTypes();
 
-		System.out.println(t.toPrettyString());
+		//System.out.println(t.toPrettyString());
 
 		log.debug("Types size "+t.getTypesAsTopics().size());
 		log.debug("TypesWith loc size "+types.size());
 
 		for(TopicTypeConnector twl : types){
 
-			System.out.println("Found "+twl.getTopic().getTitle()+" lat "+twl.getLatitude()+" long "+twl.getLongitude());
+			//System.out.println("Found "+twl.getTopic().getTitle()+" lat "+twl.getLatitude()+" long "+twl.getLongitude());
 
 			if(twl.getTopic().getId() == topicID){
 
-				System.out.println("updating "+topicID);
+				//System.out.println("updating "+topicID);
 
 				twl.setLatitude(latitude);
 				twl.setLongitude(longitude);

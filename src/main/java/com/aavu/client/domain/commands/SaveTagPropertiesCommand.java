@@ -73,7 +73,7 @@ public class SaveTagPropertiesCommand extends AbstractCommand implements IsSeria
 		}
 	
 		
-		System.out.println("SaveTagProps finished. Will save:\n"+getTopic(0).toPrettyString());
+		//System.out.println("SaveTagProps finished. Will save:\n"+getTopic(0).toPrettyString());
 		
 	}
 

@@ -271,10 +271,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public boolean removeTag(Tag tag) {
 
-		System.out.println("REMOVE-------------------");
-		System.out.println(tag.toPrettyString());
-		System.out.println("FROM-------------------");
-		System.out.println(toPrettyString());
+//		System.out.println("REMOVE-------------------");
+//		System.out.println(tag.toPrettyString());
+//		System.out.println("FROM-------------------");
+//		System.out.println(toPrettyString());
 		
 		//boolean b = true;//tag.getInstances().remove(this);
 		
@@ -560,18 +560,18 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 				
-			System.out.println("Topic.getTagPropertyAssociation: "+association+" Member size: "+association.getMembers().size());
+			//System.out.println("Topic.getTagPropertyAssociation: "+association+" Member size: "+association.getMembers().size());
 			
 			for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
 			
-				System.out.println("Checking: "+possibleMeta);
+				//System.out.println("Checking: "+possibleMeta);
 				if (possibleMeta instanceof Meta) {							
 					return association;				
 				}	
 			}						
 		}
-		System.out.println("No TagPropertyAssociation Found");
+		//System.out.println("No TagPropertyAssociation Found");
 		Association rtn = new Association(this);
 		rtn.setTitle("Tag Properties for "+getTitle());
 		getAssociations().add(rtn);

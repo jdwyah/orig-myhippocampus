@@ -2,6 +2,8 @@ package com.aavu.server.service;
 
 import java.util.List;
 
+import org.springframework.mail.javamail.JavaMailSender;
+
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoInfrastructureException;
@@ -23,5 +25,7 @@ public interface InvitationService {
 
 	MailingListEntry getEntryById(Long id);
 
-	List<MailingListEntry> getMailingList(); 
+	List<MailingListEntry> getMailingList();
+
+	void setMailSender(JavaMailSender sender); 
 }

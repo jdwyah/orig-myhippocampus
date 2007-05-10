@@ -2,6 +2,8 @@ package com.aavu.server.web.domain.validation;
 
 import java.util.List;
 
+import org.springframework.mail.javamail.JavaMailSender;
+
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoInfrastructureException;
@@ -60,6 +62,11 @@ public class MockInvitationService implements InvitationService {
 	}
 
 	public void sendInvite(MailingListEntry invitation) throws HippoInfrastructureException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setMailSender(JavaMailSender sender) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -32,7 +32,7 @@ public interface UserService {
 	 	
 	void subscriptionRecordPayment(long hippoID,String paypalID);
 
-	void subtractInvitationFrom(User inviter);
+	void addInvitationsTo(User inviter,int num);
 
 	void toggleEnabled(Integer id) throws PermissionDeniedException;
 

@@ -62,7 +62,7 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 			log.debug("created: "+t.getId());
 			return t;
 		}else{
-			log.debug("existed "+rt.getId()+"\n"+rt.toPrettyString());
+			log.debug("existed "+rt.getId()+"\n"+rt);
 
 			return rt;
 		}
