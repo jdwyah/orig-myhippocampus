@@ -56,7 +56,7 @@ public class Entry extends Occurrence implements Serializable,IsSerializable, Re
 		//NOTE!! this was 
 		int start = getData().indexOf('>', start_body) + 1;		
 		int end = getData().toUpperCase().indexOf(INIT_STR_END); 
-		Logger.log("wo body"+getData().length()+" "+start+" "+end+" "+start_body);
+		System.out.println("wo body"+getData().length()+" "+start+" "+end+" "+start_body);
 		
 		//PEND HIGH
 		//string.substring() has different functionality on my machine than

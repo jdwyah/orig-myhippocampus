@@ -98,7 +98,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 	 * @see com.aavu.server.dao.UserDAO#save(com.aavu.client.domain.User)
 	 */
 	public User save(User user) {
-		System.out.println("SAVING "+user);
+		log.debug(" "+user+" "+user.getSubscription());
 		if(user.getSubscription() == null){
 			Subscription none = (Subscription) DataAccessUtils.requiredSingleResult(getHibernateTemplate().find("from Subscription where id = 0"));			
 			user.setSubscription(none);

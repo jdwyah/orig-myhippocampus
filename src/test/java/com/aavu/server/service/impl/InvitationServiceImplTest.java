@@ -113,13 +113,16 @@ public class InvitationServiceImplTest extends BaseTestWithTransaction {
 		
 
         
-        userService.addInvitationsTo(u, 1);
+        userService.addInvitationsTo(u, 4);
         u = userService.getCurrentUser();
         
         User sUser = userDAO.getUserForId(u.getId());
         
-        assertEquals(1, sUser.getInvitations());
+        assertEquals(4, sUser.getInvitations());
         
+		invitationService.createAndSendInvitation("jdwyah@gmail.com", sUser);
+		invitationService.createAndSendInvitation("jdwyah@gmail.com", sUser);
+		invitationService.createAndSendInvitation("jdwyah@gmail.com", sUser);
 		invitationService.createAndSendInvitation("jdwyah@gmail.com", sUser);
 		
 		sUser = userDAO.getUserForId(u.getId());

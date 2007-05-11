@@ -167,16 +167,18 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			
 		}else{
 			System.out.println("Topic.addMetaValue assoc.member.size() "+assoc.getMembers().size());
-			Topic cur_val = (Topic) assoc.getMembers().iterator().next();
-			System.out.println("Topic.addMetaValue cur_v "+cur_val);			
-			
-			if(cur_val.equals(metaValue)){
-				System.out.println("Topic.addMetaValue Were Equal, copy props to make sure. C: "+cur_val.getTitle()+" mv "+metaValue.getTitle());
-				metaValue.copyPropsIntoParam(cur_val);				
-				return;
-			}else{
-				System.out.println("Topic.addMetaValue != cur "+cur_val.getIdentifier());
-				System.out.println("Topic.addMetaValue != new "+metaValue.getIdentifier());
+			if(assoc.getMembers().size() > 0){
+				Topic cur_val = (Topic) assoc.getMembers().iterator().next();
+				System.out.println("Topic.addMetaValue cur_v "+cur_val);			
+
+				if(cur_val.equals(metaValue)){
+					System.out.println("Topic.addMetaValue Were Equal, copy props to make sure. C: "+cur_val.getTitle()+" mv "+metaValue.getTitle());
+					metaValue.copyPropsIntoParam(cur_val);				
+					return;
+				}else{
+					System.out.println("Topic.addMetaValue != cur "+cur_val.getIdentifier());
+					System.out.println("Topic.addMetaValue != new "+metaValue.getIdentifier());
+				}
 			}
 		}
 		

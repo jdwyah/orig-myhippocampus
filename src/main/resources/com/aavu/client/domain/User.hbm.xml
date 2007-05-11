@@ -31,7 +31,7 @@
 				
 				
 				
-		<many-to-one name="subscription" class="Subscription" column="subscription_id" lazy="false"/>
+		<many-to-one cascade="save-update" name="subscription" class="Subscription" column="subscription_id" lazy="false"/>
 	
 	
 	</class>

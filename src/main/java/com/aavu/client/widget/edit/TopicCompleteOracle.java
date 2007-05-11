@@ -73,10 +73,12 @@ public class TopicCompleteOracle extends SuggestOracle {
 	public void setCompleteListener(final SuggestBox box,final CompleteListener completeListener) {
 		box.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {
-				getTopicIdentForNameOrCreateNew(box.getText(), new EZCallback(){
-					public void onSuccess(Object result) {
-						completeListener.completed((TopicIdentifier) result);
-					}});				
+				
+				System.out.println("ONCHANGE "+box.getText());
+//				getTopicIdentForNameOrCreateNew(box.getText(), new EZCallback(){
+//					public void onSuccess(Object result) {
+//						completeListener.completed((TopicIdentifier) result);
+//					}});				
 			}});		
 	}
 
