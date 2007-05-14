@@ -94,8 +94,7 @@ public interface Consts extends Messages {
 	String tag_upgradeAsync();
 	String island_new();
 	String island_create();
-	String topic_new_image();
-	String island_new_image();
+	
 	
 	String addTo();
 	
@@ -142,7 +141,6 @@ public interface Consts extends Messages {
 	String save_async();
 	
 	String clouds_src();
-	String glossary_image();
 	String glossary_tooltip();
 	String explorer_tooltip();
 	
@@ -154,15 +152,6 @@ public interface Consts extends Messages {
 	String loading_islands();
 	String on_this_island_more(int i);
 	String close_without_saving();
-	String img_gadget_file();
-	String img_gadget_entry();
-	String img_gadget_link();
-	String img_gadget_tagProperties();
-	String img_gadget_picker();
-	String img_gadget_connections();
-	String img_gadget_time();
-	String img_gadget_text();
-	
 	
 	
 	String gadget_already_showing();
@@ -170,10 +159,6 @@ public interface Consts extends Messages {
 	
 	
 	String enterInfo_image();
-	
-	String topic_picker_topic_image();
-	String topic_picker_island_image();
-	String topic_picker_delete_image();
 	
 	String topic_picker_topic_tooltip();
 	String topic_picker_island_tooltip();
@@ -192,10 +177,8 @@ public interface Consts extends Messages {
 	String meta_select();
 	String gadget_text_title();
 	String delete_tooltip();
-	String img_delete();
-	String img_add();
 	
-	String img_gadget_map();
+	
 	String gadget_map_title();
 	String meta_location();
 	

@@ -1,15 +1,14 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
-import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GadgetPicker extends Composite {
@@ -34,7 +33,7 @@ public class GadgetPicker extends Composite {
 		for (Iterator iter = gadgetManager.getFullGadgetList().iterator(); iter.hasNext();) {
 			final Gadget gadget = (Gadget) iter.next();
 			
-			ImageButton imgButton = gadget.getPickerButton();
+			Image imgButton = gadget.getPickerButton();
 			imgButton.addClickListener(new ClickListener(){
 				public void onClick(Widget sender) {
 					gadgetManager.show(gadget);
@@ -49,7 +48,7 @@ public class GadgetPicker extends Composite {
 				
 		gadgetOptionsP.setVisible(false);
 				
-		ImageButton addButton = new ImageButton(ConstHolder.myConstants.img_gadget_picker(),60,60);
+		Image addButton = ConstHolder.images.gadgetPicker().createImage();
 		addButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {				
 				toggle();		

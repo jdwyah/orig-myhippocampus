@@ -43,6 +43,8 @@ public class UserPageController extends BasicController {
 			
 			UserPageBean bean = topicService.getUserPageBean(su);
 		
+			log.debug("User: "+bean.getUser().getUsername());
+			
 			model.put("bean", bean);
 			model.put("command",new SearchCommand());
 			

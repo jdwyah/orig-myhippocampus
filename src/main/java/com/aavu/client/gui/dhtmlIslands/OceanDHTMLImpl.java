@@ -31,6 +31,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Panel;
@@ -145,6 +146,7 @@ public class OceanDHTMLImpl extends AbsolutePanel implements Ocean, MouseListene
 	
 	private void clouds() {
 		leftCloud = new SimplePanel();
+		
 		PNGImage lc = new PNGImage(ConstHolder.myConstants.clouds_src(),120,120);		
 		lc.setStyleName("H-Clouds");
 		leftCloud.setStyleName("H-Clouds");

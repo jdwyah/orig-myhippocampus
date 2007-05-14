@@ -14,7 +14,6 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.EditMetaWindow;
@@ -28,16 +27,14 @@ import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.SourcesWheelEvents;
 import com.aavu.client.gui.ext.WheelListener;
-import com.aavu.client.gui.ext.WheelListenerCollection;
 import com.aavu.client.gui.ext.WheelListenerCollectionCancellable;
-import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.glossary.Glossary;
-import com.aavu.client.gui.glossary.GlossaryWindow;
 import com.aavu.client.gui.timeline.HippoTimeLine;
 import com.aavu.client.gui.timeline.TimeLineWindow;
 import com.aavu.client.help.HelpWindow;
 import com.aavu.client.help.UserHelper;
+import com.aavu.client.images.Images;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.service.cache.TopicCache;
@@ -48,7 +45,6 @@ import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Manager implements TopicSaveListener, LoginListener, WheelListener, SourcesWheelEvents {
@@ -95,6 +91,7 @@ public class Manager implements TopicSaveListener, LoginListener, WheelListener,
 	}
 	private void initConstants() {
 		ConstHolder.myConstants = (Consts) GWT.create(Consts.class);
+		ConstHolder.images = (Images) GWT.create(Images.class);
 	}	
 
 	

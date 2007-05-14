@@ -1,7 +1,5 @@
 package com.aavu.client.gui;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTitleCommand;
@@ -14,6 +12,7 @@ import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TitleGadget extends Gadget {
@@ -45,7 +44,7 @@ public class TitleGadget extends Gadget {
 	}
 
 	//@Override
-	public ImageButton getPickerButton() {		
+	public Image getPickerButton() {		
 		throw new UnsupportedOperationException();
 	}
 

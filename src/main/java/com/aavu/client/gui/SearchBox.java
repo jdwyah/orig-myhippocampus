@@ -1,7 +1,5 @@
 package com.aavu.client.gui;
 
-import org.gwtwidgets.client.ui.PNGImage;
-
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.AbsolutePanel;

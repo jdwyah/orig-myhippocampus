@@ -1,11 +1,10 @@
 package com.aavu.client.gui.gadgets;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.google.gwt.user.client.ui.Image;
 
 /**
  * Gadget to display a topic's metadate information
@@ -23,8 +22,8 @@ public class TimeGadget extends MetaGadget  {
 
 
 	//@Override
-	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_time(),40,60);
+	public Image getPickerButton() {		
+		Image b = ConstHolder.images.hourglassbase().createImage();	
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.gadget_time_title()));
 		return b;
 	}

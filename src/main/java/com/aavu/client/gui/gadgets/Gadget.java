@@ -1,12 +1,10 @@
 package com.aavu.client.gui.gadgets;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
 import com.aavu.client.domain.Topic;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -53,7 +51,7 @@ public abstract class Gadget extends Composite {
 	
 	public abstract int load(Topic topic);
 
-	public abstract ImageButton getPickerButton();
+	public abstract Image getPickerButton();
 
 	public void showForFirstTime() {}
 

@@ -1,7 +1,5 @@
 package com.aavu.client.gui.gadgets;
 
-import org.gwtwidgets.client.ui.PNGImage;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
@@ -13,6 +11,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -25,8 +24,8 @@ public class StatusPicker extends Composite {
 	private HorizontalPanel optionsP;
 	private SimplePanel currentP;
 	private ClickListener editListener;
-	private PNGImage topicImage;
-	private PNGImage islandImage;
+	private Image topicImage;
+	private Image islandImage;
 	private ClickableImg topicO;
 	private ClickableImg isleO;
 	private ClickableImg deleteO;
@@ -45,17 +44,20 @@ public class StatusPicker extends Composite {
 				toggle();
 			}
 		};
-		topicImage = new PNGImage(ConstHolder.myConstants.topic_picker_topic_image(),20,20);
+		
+		
+		
+		topicImage = ConstHolder.images.titleBarTopic().createImage();
 		topicImage.addClickListener(editListener);
-		islandImage = new PNGImage(ConstHolder.myConstants.topic_picker_island_image(),20,20);
+		islandImage = ConstHolder.images.titleBarIsland().createImage();
 		islandImage.addClickListener(editListener);
 				
-		topicO = new ClickableImg(ConstHolder.myConstants.topic_picker_topic_image(),
-				ConstHolder.myConstants.topic_picker_topic_tooltip(),20,20,CHANGE_TO_TOPIC_ACTION);
-		isleO = new ClickableImg(ConstHolder.myConstants.topic_picker_island_image(),
-				ConstHolder.myConstants.topic_picker_island_tooltip(),20,20,CHANGE_TO_ISLAND_ACTION);
-		deleteO = new ClickableImg(ConstHolder.myConstants.topic_picker_delete_image(),
-				ConstHolder.myConstants.topic_picker_delete_tooltip(),20,20,DELETE_ACTION);
+		topicO = new ClickableImg(ConstHolder.images.titleBarTopic().createImage(),
+				ConstHolder.myConstants.topic_picker_topic_tooltip(),CHANGE_TO_TOPIC_ACTION);
+		isleO = new ClickableImg(ConstHolder.images.titleBarTopic().createImage(),
+				ConstHolder.myConstants.topic_picker_island_tooltip(),CHANGE_TO_ISLAND_ACTION);
+		deleteO = new ClickableImg(ConstHolder.images.bin_closed().createImage(),
+				ConstHolder.myConstants.topic_picker_delete_tooltip(),DELETE_ACTION);
 		
 		optionsP.add(topicO);
 		optionsP.add(isleO);
@@ -71,7 +73,7 @@ public class StatusPicker extends Composite {
 		addStyleName("H-StatusPicker");
 		
 	}
-	public void updateImage(PNGImage image) {				
+	public void updateImage(Image image) {				
 		currentP.clear();
 		currentP.add(image);		
 	}
@@ -141,15 +143,15 @@ public class StatusPicker extends Composite {
 	}
 	
 	
-	private class ClickableImg extends PNGImage implements ClickListener{
+	private class ClickableImg extends Composite implements ClickListener{
 
 		private int action_command;
 		
-		public ClickableImg(String string, String tooltip,int i, int j, int action_command) {
-			super(string,i,j);
+		public ClickableImg(Image image, String tooltip, int action_command) {			
 			this.action_command = action_command;			
-			addClickListener(this);			
-			addMouseListener(new TooltipListener(tooltip));
+			image.addClickListener(this);			
+			image.addMouseListener(new TooltipListener(tooltip));
+			initWidget(image);
 		}
 
 		public void onClick(Widget sender) {			

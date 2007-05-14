@@ -8,22 +8,21 @@ import org.gwm.client.GDesktopPane;
 import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGFrame;
-import org.gwm.client.impl.DefaultGInternalFrame;
-import org.gwtwidgets.client.ui.PNGImage;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.LocationSetter;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MainMap extends Composite implements GDesktopPane, LocationSetter {
@@ -70,7 +69,7 @@ public class MainMap extends Composite implements GDesktopPane, LocationSetter {
 		
 		statusPanel = new StatusPanel();
 		
-		PNGImage questionHorse = new PNGImage("img/questionHorse.png",44,80);
+		Image questionHorse = ConstHolder.images.questionHorse().createImage();
 		questionHorse.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.showHelp();

@@ -22,6 +22,7 @@ import com.aavu.client.widget.tags.MetaTypeChooser;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -151,8 +152,8 @@ public class TagPropertyPanel extends Gadget {
 
 
 	//@Override
-	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_tagProperties(),39,36);
+	public Image getPickerButton() {		
+		Image b = ConstHolder.images.gadgetTagProperties().createImage();
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.island_property()));
 		return b;
 	}

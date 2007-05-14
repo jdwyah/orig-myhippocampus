@@ -3,8 +3,6 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
@@ -18,9 +16,9 @@ import com.aavu.client.gui.maps.MapController;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.DeleteButton;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -186,9 +184,8 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	}
 
 	//@Override
-	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_map(),60,60);
-		b.setBorderOnWidth(0);
+	public Image getPickerButton() {		
+		Image b = ConstHolder.images.gadgetMap().createImage();
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.gadget_map_title()));
 		return b;
 	}

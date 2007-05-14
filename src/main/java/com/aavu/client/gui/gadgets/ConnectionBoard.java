@@ -3,9 +3,6 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
-import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Topic;
@@ -19,15 +16,13 @@ import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
-import com.aavu.client.widget.edit.TopicCompleteOracle;
 import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.ui.CellPanel;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -40,6 +35,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	private SeeAlsoWidget alsos;
 	private Manager manager;
 	private VerticalPanel refPanel;
+	
 	
 	/**
 	 * Special Gadget. Is always added, but maintains own visibility, since we don't know at 
@@ -60,8 +56,10 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		
 //		TopicCompleteOracle oracle = new TopicCompleteOracle(manager.getTopicCache());
-//		final SuggestBox b = new SuggestBox(oracle);
+//	//	final SuggestBox b = new SuggestBox(oracle);
 //		oracle.setCompleteListener(b,this);
+		
+		
 		
 		
 		alsos = new SeeAlsoWidget();
@@ -81,7 +79,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
 		
-		//mainP.add(b);
+//		mainP.add(b);
 		
 		
 		refPanel = new VerticalPanel();
@@ -177,8 +175,8 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	}
 
 	//@Override
-	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_connections(),60,60);
+	public Image getPickerButton() {		
+		Image b = ConstHolder.images.gadgetConnections().createImage();
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.connections()));
 		return b;
 	}

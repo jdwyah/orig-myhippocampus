@@ -12,6 +12,7 @@ import com.aavu.client.widget.edit.TopicWidget;
 import com.aavu.client.wiki.TextDisplay;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -76,8 +77,8 @@ public class EntryPreview extends Gadget {
 	}
 
 	//@Override
-	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_entry(),60,47);
+	public Image getPickerButton() {		
+		Image b = ConstHolder.images.gadgetEntry().createImage();
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.entry()));
 		return b;
 	}

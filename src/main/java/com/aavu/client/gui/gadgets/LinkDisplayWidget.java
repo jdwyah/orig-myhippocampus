@@ -16,6 +16,7 @@ import com.aavu.client.widget.ExternalLink;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -160,8 +161,8 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 	}
 
 	//@Override
-	public ImageButton getPickerButton() {		
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_link(),59,29);
+	public Image getPickerButton() {		
+		Image b = ConstHolder.images.gadgetLinks().createImage();	
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.link_add_title()));
 		return b;
 	}

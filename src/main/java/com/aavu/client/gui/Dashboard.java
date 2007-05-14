@@ -3,28 +3,20 @@ package com.aavu.client.gui;
 import java.util.Map;
 
 import org.gwtwidgets.client.ui.ImageButton;
-import org.gwtwidgets.client.util.WindowUtils;
 
-import com.aavu.client.HippoTest;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Dashboard extends SimplePanel {
-
-	public static final int NEW_BUTTON_W = 60;
-	public static final int NEW_BUTTON_H = 46;
-
 
 	private Manager manager;
 
@@ -49,15 +41,16 @@ public class Dashboard extends SimplePanel {
 //				manager.showTagBoard();
 //			}});
 
-		ImageButton addNewButton = new ImageButton(ConstHolder.myConstants.topic_new_image(),NEW_BUTTON_W,NEW_BUTTON_H);
+		Image addNewButton = ConstHolder.images.newTopic().createImage();
 		addNewButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.newTopic();
 			}});
 		addNewButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.topic_new()));
 		
-		//ImageButton addNewIslandButton = new ImageButton(ConstHolder.myConstants.island_new_image(),60,41);
-		ImageButton addNewIslandButton = new ImageButton(ConstHolder.myConstants.island_new_image(),45,45);
+
+		Image addNewIslandButton = ConstHolder.images.newIsland().createImage();
+		 
 		addNewIslandButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.newIsland();
@@ -70,13 +63,13 @@ public class Dashboard extends SimplePanel {
 				DeliciousWidget widg = new DeliciousWidget(manager); 				
 			}});
 
-		ImageButton timeLine = new ImageButton(ConstHolder.myConstants.timeline_image(),40,60);
-		timeLine.addClickListener(new ClickListener(){
-
-			public void onClick(Widget sender) {
-				manager.showTimeline();
-			}});
-		timeLine.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.timeline()));
+//		ImageButton timeLine = new ImageButton(ConstHolder.myConstants.timeline_image(),40,60);
+//		timeLine.addClickListener(new ClickListener(){
+//
+//			public void onClick(Widget sender) {
+//				manager.showTimeline();
+//			}});
+//		timeLine.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.timeline()));
 		
 		Button facebookB = new Button("FaceBook");
 		facebookB.addClickListener(new ClickListener(){
@@ -89,7 +82,7 @@ public class Dashboard extends SimplePanel {
 				
 		userW = new UserWidget(manager);	
 		
-		ImageButton explorerButton = new ImageButton(ConstHolder.myConstants.glossary_image(),64,45);
+		Image explorerButton = ConstHolder.images.bookAZ().createImage();
 		explorerButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.showGlossary();

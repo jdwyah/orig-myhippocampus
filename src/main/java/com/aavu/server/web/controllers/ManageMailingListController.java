@@ -48,7 +48,7 @@ public class ManageMailingListController extends MultiActionController {
 		invitationService.sendInvite(entry);
 				
 		Map model = getModel();
-		model.put("message", "Success ReSending Invite");
+		model.put("message", "Success Re-Sending Invite");
 				
 		return new ModelAndView(view,getModel());
 	}

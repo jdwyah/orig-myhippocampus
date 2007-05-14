@@ -1,11 +1,11 @@
 package com.aavu.client.gui;
 
-import org.gwtwidgets.client.ui.PNGImage;
-
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,7 +19,6 @@ public class Zoomer extends SimplePanel implements MouseListener {
 	private static final int NUM_BELOW_1 = 4;
 	
 	private Manager manager;
-	//private PNGImage slider;
 	private int curLevel;
 
 	private AbsolutePanel absPanel = new AbsolutePanel();
@@ -42,12 +41,13 @@ public class Zoomer extends SimplePanel implements MouseListener {
 //		PNGImage sliderBase = new PNGImage("img/zoomerBase.png",24,138);
 //		
 		
-		PNGImage magnifyBig = new PNGImage("img/magnifyingBig.png",43,40);
+		Image magnifyBig = ConstHolder.images.magnifyingBig().createImage();		
 		magnifyBig.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.zoomIn();				
 			}});
-		PNGImage magnifySmall = new PNGImage("img/magnifyingSmall.png",43,40);
+		
+		Image magnifySmall = ConstHolder.images.magnifyingSmall().createImage();
 		magnifySmall.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
 				manager.zoomOut();

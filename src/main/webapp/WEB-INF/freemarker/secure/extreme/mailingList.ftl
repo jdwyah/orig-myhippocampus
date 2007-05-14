@@ -10,6 +10,13 @@
   
   
 	 <div class="middle-column-box-white">
+	 
+	    
+ <#if message?exists>	
+	 <p class="message">${message}</p>
+ </#if>			  	 	  
+	 
+	 
         <div class="middle-column-box-title-green">Here's the wait list:</div>
 	
     <table>

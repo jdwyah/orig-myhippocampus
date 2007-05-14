@@ -3,14 +3,11 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.gwtwidgets.client.ui.PNGImage;
-
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveMetaFromTopicCommand;
-import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.AddButton;
@@ -18,7 +15,6 @@ import com.aavu.client.widget.DeleteButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;

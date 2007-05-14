@@ -15,6 +15,7 @@ import com.aavu.client.widget.UploadWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -84,8 +85,8 @@ public class UploadBoard extends Gadget {
 	}
 
 	//@Override
-	public ImageButton getPickerButton() {
-		ImageButton b = new ImageButton(ConstHolder.myConstants.img_gadget_file(),36,50);
+	public Image getPickerButton() {		
+		Image b = ConstHolder.images.gadgetFiles().createImage();	
 		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.files()));
 		return b;
 	}

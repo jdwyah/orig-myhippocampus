@@ -3,8 +3,6 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -12,6 +10,7 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -71,7 +70,7 @@ public class ReferenceBoard extends Gadget {
 	}
 
 	//@Override
-	public ImageButton getPickerButton() {
+	public Image getPickerButton() {
 		// TODO Auto-generated method stub
 		return null;
 	}
