@@ -54,7 +54,7 @@ public class StatusPicker extends Composite {
 				
 		topicO = new ClickableImg(ConstHolder.images.titleBarTopic().createImage(),
 				ConstHolder.myConstants.topic_picker_topic_tooltip(),CHANGE_TO_TOPIC_ACTION);
-		isleO = new ClickableImg(ConstHolder.images.titleBarTopic().createImage(),
+		isleO = new ClickableImg(ConstHolder.images.titleBarIsland().createImage(),
 				ConstHolder.myConstants.topic_picker_island_tooltip(),CHANGE_TO_ISLAND_ACTION);
 		deleteO = new ClickableImg(ConstHolder.images.bin_closed().createImage(),
 				ConstHolder.myConstants.topic_picker_delete_tooltip(),DELETE_ACTION);

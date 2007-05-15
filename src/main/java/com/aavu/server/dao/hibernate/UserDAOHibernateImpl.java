@@ -20,7 +20,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 	
 	private static final Logger log = Logger.getLogger(UserDAOHibernateImpl.class);
 
-	private static final int DEMO_TOPIC_LIMIT = 50;
+	private static final int DEMO_TOPIC_LIMIT = 75;
 	
 	private boolean init;
 	private UserService userService;
@@ -98,10 +98,14 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 	 * @see com.aavu.server.dao.UserDAO#save(com.aavu.client.domain.User)
 	 */
 	public User save(User user) {
-		log.debug(" "+user+" "+user.getSubscription());
+		log.warn(" "+user+" "+user.getSubscription());
+		
 		if(user.getSubscription() == null){
-			Subscription none = (Subscription) DataAccessUtils.requiredSingleResult(getHibernateTemplate().find("from Subscription where id = 0"));			
+			log.warn("go get subscription!");
+			Subscription none = (Subscription) DataAccessUtils.requiredSingleResult(getHibernateTemplate().find("from Subscription where id = 1"));			
 			user.setSubscription(none);
+		}else{
+			log.warn("SUB: "+user.getSubscription().getId()+" "+user.getSubscription().getDescription()+" "+user.getSubscription().getMaxTopics());
 		}
 		getHibernateTemplate().saveOrUpdate(user);
 		return user;
@@ -127,6 +131,9 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		return (Subscription) DataAccessUtils.uniqueResult(getHibernateTemplate().findByNamedParam("from Subscription where id = :id", "id", subscriptionID));
 	}
 
+	public List<Subscription> getAllSubscriptions() {
+		return getHibernateTemplate().find("from Subscription");
+	}
 	public List<Subscription> getAllUpgradeSubscriptions() {
 		return getHibernateTemplate().find("from Subscription where maxTopics > "+DEMO_TOPIC_LIMIT);
 	}
