@@ -1,5 +1,6 @@
 <html>
 <#import "/spring.ftl" as spring/>
+<#import "common.ftl" as common/>
 <head>
   <title><@spring.message "screencasts.title"/></title>
 </head>
@@ -24,7 +25,10 @@
 <#--		<li><a href="http://www.myhippocampus.com/screencasts/Step2/Step2.html">First Steps</a></li>-->
 		</ul>
 
-
+	<p>
+ 	<#if !user?exists>
+	      <@common.signupNow/>
+	</#if>
 		
 	</div>
 	

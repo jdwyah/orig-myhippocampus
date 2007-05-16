@@ -1,13 +1,22 @@
 package com.aavu.server.web.domain;
 
+import org.springframework.util.StringUtils;
+
 public class CreateUserRequestCommand {
 
 	private String username;
+	private String openIDusername;
 	private String password;
 	private String password2;
 	private String email;
 	private String randomkey;
 	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public String getPassword() {
 		return password;
 	}
@@ -20,11 +29,16 @@ public class CreateUserRequestCommand {
 	public void setPassword2(String password2) {
 		this.password2 = password2;
 	}
-	public String getUsername() {
-		return username;
+	
+	/**
+	 * NOTE: this getter does OpenID normalization
+	 * @return
+	 */
+	public String getOpenIDusername() {				
+		return com.janrain.openid.Util.normalizeUrl(openIDusername);
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setOpenIDusername(String openIDusername) {
+		this.openIDusername = openIDusername;
 	}
 	public String getRandomkey() {
 		return randomkey;
@@ -37,6 +51,12 @@ public class CreateUserRequestCommand {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isOpenID() {
+		return StringUtils.hasText(getOpenIDusername());
+	}
+	public boolean isStandard(){
+		return StringUtils.hasText(getUsername());
 	}
 	
 }

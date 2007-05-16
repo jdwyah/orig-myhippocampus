@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html>
 <#import "/spring.ftl" as spring/>
 <#import "common.ftl" as common/>
 <head>
@@ -32,9 +32,9 @@
 
 		  <p><@spring.message "manifesto1.5.1"/> <a href="<@spring.url "/site/manifesto2.html"/>"/><@spring.message "manifesto1.5.2"/></a></p>
      
-        <#if !user?exists>
-	      <@common.interested/>
- 	    </#if>
+ 	  <#if !user?exists>
+	      <@common.signupNow/>
+	   </#if>
  	    
       </div>
   						

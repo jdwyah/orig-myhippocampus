@@ -1,6 +1,7 @@
 package com.aavu.server.service.impl;
 
 import java.io.StringWriter;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ import com.aavu.server.dao.MailingListDAO;
 import com.aavu.server.domain.MailingListEntry;
 import com.aavu.server.service.InvitationService;
 import com.aavu.server.service.UserService;
+import com.aavu.server.util.CryptUtils;
+import com.aavu.server.web.controllers.SignupIfPossibleController;
 import com.aavu.server.web.domain.MailingListCommand;
 
 import freemarker.template.Template;
@@ -43,10 +46,26 @@ public class InvitationServiceImpl implements InvitationService {
 		return mailingListDAO.getEntryForKey(randomkey);
 	}
 
+	/**
+	 * PEND low 
+	 * SignupIfPossibleController.CHEAT should be a MD5(timestamp + pass) that we check on our end, but...
+	 * 
+	 */
 	public boolean isKeyValid(String randomkey) {
 		return (getEntryForKey(randomkey) != null)
 		||
-		randomkey.equals(masterkey);		
+		randomkey.equals(masterkey)
+		||
+		isValidTimestampKey(randomkey);		
+	}
+
+	
+	private boolean isValidTimestampKey(String randomkey) {
+		Calendar c = Calendar.getInstance();
+		c.get(Calendar.DAY_OF_WEEK_IN_MONTH);			
+		String preCrypt = SignupIfPossibleController.SECRET+c.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+		String crypt = CryptUtils.hashString(preCrypt);
+		return crypt.equals(randomkey);
 	}
 
 	public void requestInvitation(MailingListCommand comm) {

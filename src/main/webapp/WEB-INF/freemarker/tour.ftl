@@ -26,7 +26,7 @@
      
       
  	  <#if !user?exists>
-	      <@common.interested/>
+	      <@common.signupNow/>
 	   </#if>
     </div>
   	 

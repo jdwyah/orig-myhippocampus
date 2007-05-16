@@ -25,7 +25,7 @@
        
     	<div id="sidebar">
     	
-    	<a href="<@spring.url "/site/index.html"/>"/><@common.pngImage src="/img/myhippocampusLogo_140_254.png" width="140" height="254"/></a>
+    	<a href="<@spring.url "/site/index.html"/>"><@common.pngImage src="/img/myhippocampusLogo_140_254.png" width="140" height="254"/></a>
 	      <br>
 	      <@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
 	      

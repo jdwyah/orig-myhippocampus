@@ -22,7 +22,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class User extends AbstractUser implements IsSerializable {
 
-	private static final int PREMIUM_CUTOFF = 50;
+	public static final int PREMIUM_CUTOFF = 75;
 
 	public User(){
 		setEnabled(true);

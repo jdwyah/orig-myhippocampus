@@ -79,7 +79,7 @@
 	<#if user?exists>
 	    <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/>Goto My Page!</a>
 		<br>
-		<a href="j_acegi_logout">Logout</a>
+		<a href="/j_acegi_logout">Logout</a>
 	<#else>
 		 <div id="loginBox">
 			 <@common.loginForm/>
@@ -118,9 +118,10 @@
 	<div id="signupIsland" class="island">
 
 		  <div class="islandOverlay">
-		    <div>
-			    <@common.interested/>
-	    		<a href="<@spring.url "/site/signup.html"/>"><@spring.message "login.signup"/></a>
+		    <div>			    
+			    <h2>
+	    		<a href="<@spring.url "/site/signupIfPossible.html"/>"><@spring.message "login.signup"/></a>
+	    		</h2>
 		    </div>
 		  </div>
 		  

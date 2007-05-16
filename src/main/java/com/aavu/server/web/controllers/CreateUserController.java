@@ -1,17 +1,15 @@
 package com.aavu.server.web.controllers;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.acegisecurity.ui.openid.consumers.JanRainOpenIDConsumer;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import com.aavu.client.domain.User;
-import com.aavu.client.exception.DuplicateUserException;
-import com.aavu.server.domain.MailingListEntry;
 import com.aavu.server.service.InvitationService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
@@ -22,7 +20,7 @@ public class CreateUserController extends SimpleFormController {
 	private UserService userService;
 	private InvitationService invitationService;
 	
-	
+
 
 
 
@@ -50,19 +48,22 @@ public class CreateUserController extends SimpleFormController {
 	}
 
 	@Override
-	protected ModelAndView onSubmit(Object arg0) throws Exception {
-		CreateUserRequestCommand comm = (CreateUserRequestCommand) arg0;
+	protected ModelAndView onSubmit(HttpServletRequest request,
+			HttpServletResponse response, Object command, BindException errors)
+			throws Exception {
+	
+		CreateUserRequestCommand comm = (CreateUserRequestCommand) command;
 
-		log.debug("SUBMIT");
+		log.debug("SUBMIT "+comm.isOpenID());
+		
 		
 
-		
 		User u = userService.createUser(comm);	
-		
-		invitationService.saveSignedUpUser(comm.getRandomkey(),u);
-		
 
-		String successStr = "Thanks "+comm.getUsername()+" your account is setup and you're ready to login!";
+		invitationService.saveSignedUpUser(comm.getRandomkey(),u);
+
+
+		String successStr = "Thanks "+u.getUsername()+" your account is setup and you're ready to login!";
 
 		return new ModelAndView(getSuccessView(),"message",successStr);
 
@@ -76,6 +77,7 @@ public class CreateUserController extends SimpleFormController {
 	public void setInvitationService(InvitationService invitationService) {
 		this.invitationService = invitationService;
 	}
+
 
 	
 	

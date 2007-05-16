@@ -32,8 +32,7 @@ public class BasicController extends AbstractController {
 	protected ModelAndView handleRequestInternal(HttpServletRequest req,
 			HttpServletResponse arg1) throws Exception {
 
-		log.debug("SERVLET PATH: "+req.getServletPath()+" "+req.getPathInfo()+" "+req.getQueryString());
-
+		//log.debug("SERVLET PATH: "+req.getServletPath()+" "+req.getPathInfo()+" "+req.getQueryString());
 
 		return new ModelAndView(getView(),getDefaultModel(req));
 		
@@ -47,7 +46,7 @@ public class BasicController extends AbstractController {
 			su = userService.getCurrentUser();	
 			model.put("user",su);			
 		}catch(UsernameNotFoundException e){
-			log.debug("No user logged in.");
+			//log.debug("No user logged in.");
 		}
 		
 		//IE < 7 check 
@@ -56,8 +55,8 @@ public class BasicController extends AbstractController {
 				&& 
 				!userAgent.contains("MSIE 7")) {
 			model.put("iePre7", true);
-		} 		
-				
+		}
+		
 		return model;
 	}
 

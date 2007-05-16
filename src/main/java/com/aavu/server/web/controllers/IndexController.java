@@ -37,8 +37,6 @@ public class IndexController extends BasicController {
 		log.debug("SERVLET PATH: "+req.getServletPath()+" "+req.getPathInfo()+" "+req.getQueryString());
 		
 		Map model = getDefaultModel(req);
-		
-		model.put("command",new MailingListCommand());
 
 		//parameter may be on param line if we're redirect:ed here (createUserController)
 		model.put("message",req.getParameter("message"));		

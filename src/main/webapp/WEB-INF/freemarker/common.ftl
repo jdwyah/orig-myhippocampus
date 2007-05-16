@@ -5,9 +5,24 @@
 </#macro>
 
 <#macro loginForm>
-	 <form id="loginForm" action="j_acegi_security_check" method="POST">
+
+<script language="javascript" type="text/javascript"> 
+  
+  function doOpenID(){
+      document.getElementById('openIDForm').style.display='block';
+      document.getElementById('upForm').style.display='none';      
+  }
+  function doUsernamePassword(){
+	  document.getElementById('openIDForm').style.display='none';
+      document.getElementById('upForm').style.display='block';
+  }
+  
+   
+</script>
+
+	 <form id="upForm" action="/j_acegi_security_check" method="POST" style="display: none">
 		<fieldset>
-			<legend><@spring.message "login.1.header"/></legend>
+			<legend><@spring.message "login.1.header"/> <a class="link" onclick="javascript:doOpenID();">Use OpenID</a></legend>
 			 <label for="j_username"><input type='text' name='j_username' id = 'j_username'><@spring.message "login.1.user"/>
 			 </label>
 		 <p>
@@ -20,17 +35,22 @@
 		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
 		</fieldset>
 	 </form>	
+	 <form id="openIDForm" action="/site/j_acegi_openid_start" method="POST" style="display: block">
+		<fieldset>
+			<legend><@spring.message "login.1.header"/> <a class="link" onclick="javascript:doUsernamePassword();">Use username / password</a></legend>
+			 <label for="j_username2"><input type='text' name='j_username' id = 'j_username2' class="openid-identifier"><@spring.message "login.1.user"/>
+			 </label>		 		 
+		 <p>
+		 <input type="hidden" name="password"/>
+		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
+		</fieldset>
+	 </form>	
 </#macro>
 
-<#macro interested>
-	<form action="<@spring.url "/site/interested.html"/>" method="POST">
-		<fieldset>
-			<legend><@spring.message "login.2.header"/></legend>				
-								
-				<@spring.message "login.2.addemail"/><@spring.formInput "command.email"/><@regError/>					
-				<input value="<@spring.message "login.2.addemail"/>" type="submit">
-		</fieldset>
-	</form>		
+<#macro signupNow>
+	<h2>
+	 	<a href="<@spring.url "/site/signupIfPossible.html"/>"><@spring.message "login.signup"/></a>
+	</h2>
 </#macro>
 
 <#macro pngImage src width height>

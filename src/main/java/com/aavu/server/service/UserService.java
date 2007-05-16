@@ -24,7 +24,7 @@ public interface UserService {
 	List<User> getAllUsers();
 
 	User getCurrentUser() throws UsernameNotFoundException;
-	boolean isUnique(CreateUserRequestCommand comm);
+	boolean exists(String username);
 	
 	void subscriptionCancel(String paypalID);
 
@@ -37,6 +37,8 @@ public interface UserService {
 	void toggleEnabled(Integer id) throws PermissionDeniedException;
 
 	void toggleSupervisor(Integer id) throws PermissionDeniedException;
+
+	boolean nowAcceptingSignups();
 
 	
 }

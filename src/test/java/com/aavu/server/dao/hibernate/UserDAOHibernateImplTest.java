@@ -110,5 +110,23 @@ public class UserDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		
 	}
+	
+	public void testGetUserCount(){
+	
+		List<User> list = userDAO.getAllUsers();
+		
+		long pre = userDAO.getUserCount();
+		
+		assertEquals(pre, list.size());
+		
+		User u = new User();
+		u.setUsername(A);
+		u.setPassword(B);
+		
+		userDAO.save(u);
+		
+		assertEquals(pre+1, userDAO.getUserCount());
+		
+	}
 
 }

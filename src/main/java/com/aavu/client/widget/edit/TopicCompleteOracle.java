@@ -6,11 +6,10 @@ import java.util.List;
 
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.gadgets.ConnectionBoard;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.widget.autocompletion.SuggestBoxExt;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -70,7 +69,7 @@ public class TopicCompleteOracle extends SuggestOracle {
 			}});		
 	}
 
-	public void setCompleteListener(final SuggestBox box,final CompleteListener completeListener) {
+	public void setCompleteListener(final SuggestBoxExt box,final CompleteListener completeListener) {
 		box.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {
 				

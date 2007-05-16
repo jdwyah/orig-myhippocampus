@@ -26,10 +26,11 @@
 			<value>
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
-				/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+				/**=httpSessionContextIntegrationFilter,logoutFilter,openIDResponseProcess,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 			</value>
-		</property>
+		</property>		
 	</bean>
+	<!-- /**=httpSessionContextIntegrationFilter,logoutFilter,openIDResponseProcess,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor -->
 
 	<bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter"/>
 
@@ -41,14 +42,14 @@
 				<bean class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler"/>
 			</list>
 		</constructor-arg>
-		<property name="filterProcessesUrl" value="/site/j_acegi_logout"/>
+		<property name="filterProcessesUrl" value="/j_acegi_logout"/>
 	</bean>
 
 	<bean id="authenticationProcessingFilter" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
 		<property name="authenticationManager" ref="authenticationManager"/>
 		<property name="authenticationFailureUrl" value="/site/acegilogin.html?login_error=1"/>
 		<property name="defaultTargetUrl" value="/site/index.html"/>
-		<property name="filterProcessesUrl" value="/site/j_acegi_security_check"/>
+		<property name="filterProcessesUrl" value="/j_acegi_security_check"/>
 		<property name="rememberMeServices" ref="rememberMeServices"/>
 	</bean>
    
@@ -58,11 +59,11 @@
 		<property name="authenticationManager" ref="authenticationManager"/>
 		<property name="rememberMeServices" ref="rememberMeServices"/>
 	</bean>
-
+ 
 	<bean id="anonymousProcessingFilter" class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
-		<property name="key" value="changeThis"/>
+		<property name="key" value="JJKKSLSSDKSDSDSD"/>
 		<property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
-	</bean>
+	</bean> 
 
 	<bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
 		<property name="authenticationEntryPoint">
@@ -76,7 +77,7 @@
 				<property name="errorPage" value="/site/accessDenied.html"/>
 			</bean>
 		</property>
-	</bean>
+	</bean>	
 
 	<bean id="filterInvocationInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
 		<property name="authenticationManager" ref="authenticationManager"/>
@@ -107,18 +108,19 @@
 
 	<bean id="rememberMeServices" class="org.acegisecurity.ui.rememberme.TokenBasedRememberMeServices">
 		<property name="userDetailsService" ref="userDAO"/>
-		<property name="key" value="changeThis"/>
+		<property name="key" value="DNFJKDSFSJDFSDkjfSd"/>
 	</bean>
 
 	<bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager">
 		<property name="providers">
 			<list>
 				<ref local="daoAuthenticationProvider"/>
+				<ref local="openIDAuthProvider"/>
 				<bean class="org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider">
-					<property name="key" value="changeThis"/>
-				</bean>
+					<property name="key" value="JJKKSLSSDKSDSDSD"/>
+				</bean> 
 				<bean class="org.acegisecurity.providers.rememberme.RememberMeAuthenticationProvider">
-					<property name="key" value="changeThis"/>
+					<property name="key" value="DNFJKDSFSJDFSDkjfSd"/>
 				</bean>
 			</list>
 		</property>
@@ -147,5 +149,23 @@
 
 	<!-- This bean is optional; it isn't used by any other bean as it only listens and logs -->
 	<bean id="loggerListener" class="org.acegisecurity.event.authentication.LoggerListener"/>
+
+	<bean id="openIDStore" class="com.janrain.openid.store.MemoryStore">
+		<constructor-arg value="secrethashvalue"/>
+	</bean>
+	<bean id="openIDConsumer" class="org.acegisecurity.ui.openid.consumers.JanRainOpenIDConsumer">
+		<property name="store" ref="openIDStore"/>
+	</bean>
+	<bean id="openIDResponseProcess" class="org.acegisecurity.ui.openid.OpenIDResponseProcessingFilter">
+		<property name="consumer" ref="openIDConsumer"/>
+		<property name="defaultTargetUrl" value="/site/index.html"/>
+		<property name="authenticationFailureUrl" value="/site/acegilogin.html?login_error=1"/>
+		<property name="authenticationManager" ref="authenticationManager"></property>
+		<property name="rememberMeServices" ref="rememberMeServices"></property>
+	</bean>
+	<bean id="openIDAuthProvider" class="org.acegisecurity.providers.openid.OpenIDAuthenticationProvider">
+		<property name="ssoAuthoritiesPopulator" ref="userDAO"/>
+	</bean>
+
 
 </beans>

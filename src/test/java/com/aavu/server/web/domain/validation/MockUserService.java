@@ -109,4 +109,13 @@ public class MockUserService implements UserService {
 		return null;
 	}
 
+	public boolean exists(String username) {
+		return false;
+	}
+
+	public boolean nowAcceptingSignups() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

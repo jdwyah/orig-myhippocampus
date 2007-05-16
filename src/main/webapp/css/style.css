@@ -76,6 +76,13 @@ fieldset {
 	border: none;
 }
 
+#signupForm fieldset {
+	border: 1px solid black;
+}
+#signupForm legend {
+	color: white;
+}
+
 #loginForm input {
 	margin-left: 10px;
 }
@@ -112,6 +119,18 @@ legend {
 	height: 60px;
 	position: absolute;
 	-moz-user-select: none;
+}
+a.link {
+	color: white;
+	text-decoration: underline;
+	
+}
+input.openid-identifier {   
+	background: url(http://openid.net/login-bg.gif) no-repeat;
+	background-color: #fff;
+	background-position: 0 50%;
+	color: #000;
+	padding-left: 18px;
 }
 
 .slashUser {
@@ -231,6 +250,8 @@ legend {
 	font-weight: bold;
 	background-color: #e1e184;
 	color: black;
+	margin: 4px;
+	padding: 5px;
 }
 
 .subheading {

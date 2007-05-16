@@ -56,9 +56,8 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		
 //		TopicCompleteOracle oracle = new TopicCompleteOracle(manager.getTopicCache());
-//	//	final SuggestBox b = new SuggestBox(oracle);
+//		final SuggestBoxExt b = new SuggestBoxExt(oracle);
 //		oracle.setCompleteListener(b,this);
-		
 		
 		
 		
@@ -79,7 +78,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
 		
-//		mainP.add(b);
+		//mainP.add(b);
 		
 		
 		refPanel = new VerticalPanel();
@@ -91,7 +90,22 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		
 		initWidget(mainP);
 		
+
+//		System.out.println("P6 "+getParent(6, b.getElement()));
+//		System.out.println("P8 "+getParent(8, b.getElement()));
+//		System.out.println("P10 "+getParent(10, b.getElement()));
+//		
+//		DOM.setIntStyleAttribute(getParent(8, b.getElement()), "z-index", 99);
+		
+		
 	}
+//	private Element getParent(int num,Element e){
+//		if(0 == num){
+//			return e;
+//		}else{
+//			return getParent(num - 1, DOM.getParent(e));
+//		}
+//	}
 
 	public int load(Topic topic) {
 		myTopic = topic;

@@ -53,6 +53,8 @@
 	     	</ul>
         </#if>
 
+
+		<div class="middle-column-box-title-green">Invitations</div>
         <#if (bean.user.invitations > 0)>
 			<p class="subheading">
     	    Spread the word, you have ${bean.user.invitations} invitations left. 
@@ -65,6 +67,18 @@
 			<p class="subheading">
     	    You have ${bean.user.invitations} invitations left. 
         	</p>
+        </#if>
+        
+        
+        
+        <#if bean.user.password?exists>
+			<div class="middle-column-box-title-green">OpenID</div>
+        	<p class="subheading">
+    	    	Changing to OpenID 
+        	</p>
+        	What's all this "OpenID" stuff you ask? Well, the news is that MyHippocampus has now started accepting OpenID logins. OpenID is a pretty neat thing that's
+        	designed to save us all from the insanity of having to manage different usernames & passwords. Read more about it <a href="http://openid.net/">here.</a>
+        	If you'd like to start using an OpenID account please use the contact link to send us an email and we'll get back to you with the details about how to do that (it's easy!)
         </#if>
         
     </#if>

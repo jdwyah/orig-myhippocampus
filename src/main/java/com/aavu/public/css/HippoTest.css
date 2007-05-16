@@ -848,6 +848,7 @@ a:visited {
 }
 .gwt-SuggestBoxPopup {
 	z-index: 9999;
+	background-color: white;
 }
 .gwt-SuggestBoxPopup .item {
 	font-size: small;

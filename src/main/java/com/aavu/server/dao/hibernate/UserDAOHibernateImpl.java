@@ -2,6 +2,9 @@ package com.aavu.server.dao.hibernate;
 
 import java.util.List;
 
+import org.acegisecurity.AuthenticationException;
+import org.acegisecurity.providers.cas.CasAuthoritiesPopulator;
+import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UserDetailsService;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
@@ -16,11 +19,9 @@ import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.UserService;
 
-public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO, UserDetailsService {
+public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO, UserDetailsService, CasAuthoritiesPopulator {
 	
 	private static final Logger log = Logger.getLogger(UserDAOHibernateImpl.class);
-
-	private static final int DEMO_TOPIC_LIMIT = 75;
 	
 	private boolean init;
 	private UserService userService;
@@ -51,7 +52,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		log.debug("list "+list.size());
 		
 		if(list.size() != 1){
-			System.out.println("UsernameNotFoundException "+list.size()+" users.");
+			System.out.println("getUserByUsername UsernameNotFoundException "+list.size()+" users for "+username);						
 			throw new UsernameNotFoundException("Username not found or duplicate.");
 		}else{			
 			log.debug("load user success "+list.get(0));
@@ -77,14 +78,19 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 			throws UsernameNotFoundException, DataAccessException {
 		
 		log.debug("here");
-		
+		if(username == null){
+			throw new UsernameNotFoundException("Username null not found");
+		}
 		List<User> users = getHibernateTemplate().findByNamedParam("from User where username = :name", "name", username.toLowerCase());
 
 		log.debug("Found "+users.size()+" users for username "+username);
 
-		if(users.size() != 1){
-			System.out.println("UsernameNotFoundException "+users.size()+" users.");
-			throw new UsernameNotFoundException("Username not found or duplicate.");
+		if(users.size() != 1){			
+			if(users.size() != 0){
+				throw new UsernameNotFoundException("Duplicate Username Problem: "+username);
+			} else {
+				throw new UsernameNotFoundException("Username not found: "+username);
+			}
 		}else{			
 			log.debug("load user success "+users.get(0));
 			User u = (User) users.get(0);
@@ -135,7 +141,27 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		return getHibernateTemplate().find("from Subscription");
 	}
 	public List<Subscription> getAllUpgradeSubscriptions() {
-		return getHibernateTemplate().find("from Subscription where maxTopics > "+DEMO_TOPIC_LIMIT);
+		return getHibernateTemplate().find("from Subscription where maxTopics > "+User.PREMIUM_CUTOFF);
+	}
+
+	public UserDetails getUserDetails(String username) throws AuthenticationException {
+		log.info("getting userdetails "+username);
+//		try {
+			return loadUserByUsername(username);	
+//		} catch (UsernameNotFoundException e) {
+//			log.info("OpenID login "+username+" creating temp user.");
+//			User u = new User();
+//			u.setUsername(username);
+//			return new ServerSideUser(u);
+//		}
+		
+	}
+
+	/**
+	 * use iterate() to avoid returning rows. Hibernate ref "11.13. Tips & Tricks"
+	 */
+	public long getUserCount() {			
+		return (Long)getHibernateTemplate().iterate("select count(*) from User").next();		
 	}
 
 }

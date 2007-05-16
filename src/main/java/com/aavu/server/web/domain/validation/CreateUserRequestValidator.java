@@ -1,5 +1,6 @@
 package com.aavu.server.web.domain.validation;
 
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -11,44 +12,30 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public class CreateUserRequestValidator implements Validator{
 
-	
-	
 	private static final int MIN_LENGTH = 3;
+	
+	
 	private InvitationService invitationService;
+
+
+
 	private UserService userService;
-	
-	public void setInvitationService(InvitationService invitationService) {
-		this.invitationService = invitationService;
-	}
-
-
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 
 	
 	
-	public boolean supports(Class clazz) {
-		return clazz.equals(CreateUserRequestCommand.class);
+	private void doOpenIDValidation(CreateUserRequestCommand comm, Errors errors) {		
+		//Normalization happens in this getter
+		if(userService.exists(comm.getOpenIDusername())){
+			errors.rejectValue("openIDusername","invalid.username.exists");
+		}	
 	}
 
 
-	/**
-	 * lookup messages from resource bundle 
-	 * 
-	 * NOTE: topicService.createUser() .lowerCases() the username
-	 */
-	public void validate(Object command, Errors errors) {
+	private void doStandardValidation(CreateUserRequestCommand comm, Errors errors) {
+		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username","required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password","required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password2","required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "randomkey","required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email","required");
-		
-		CreateUserRequestCommand comm = (CreateUserRequestCommand) command;
-		
-		
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password2","required");		
 		
 		//username must have no '.' for openid compatibility
 		if(comm.getUsername().contains(".")){
@@ -70,6 +57,9 @@ public class CreateUserRequestValidator implements Validator{
 		if(comm.getPassword().length() < MIN_LENGTH){
 			errors.rejectValue("password","invalid.password.length");
 		}
+		if(comm.getUsername().equals("anonymousUser")){
+			errors.rejectValue("username","invalid.username");
+		}
 		
 		//username != password
 		if(comm.getPassword().equals(comm.getUsername())){
@@ -81,10 +71,58 @@ public class CreateUserRequestValidator implements Validator{
 			errors.rejectValue("password2","invalid.password2");
 		}
 		
-		if(!userService.isUnique(comm)){
+		if(userService.exists(comm.getUsername())){
 			errors.rejectValue("username","invalid.username.exists");
-		}
+		}	
+	}
+
+	public void setInvitationService(InvitationService invitationService) {
+		this.invitationService = invitationService;
+	}
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public boolean supports(Class clazz) {
+		return clazz.equals(CreateUserRequestCommand.class);
+	}
+
+
+
+	/**
+	 * lookup messages from resource bundle 
+	 * 
+	 * NOTE: topicService.createUser() .lowerCases() the username
+	 */
+	public void validate(Object command, Errors errors) {
 		
+		
+		
+		
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "randomkey","required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email","required");
+		
+		CreateUserRequestCommand comm = (CreateUserRequestCommand) command;
+		
+		System.out.println("COMMAND VALIDATE "+comm.getRandomkey());
+		
+		boolean standard = comm.isStandard();
+		boolean openID = comm.isOpenID();
+		
+		if(standard && openID){
+			errors.rejectValue("username","invalid.username.both");
+			errors.rejectValue("openIDusername","invalid.username.both");
+		}
+		if(!standard && !openID){
+			errors.rejectValue("username","invalid.username.oneorother");
+			errors.rejectValue("openIDusername","invalid.username.oneorother");
+		}	
+		
+		if(standard){		
+			doStandardValidation(comm,errors);
+		}else if(openID){			
+			doOpenIDValidation(comm,errors);			
+		}		
 		
 		if(!invitationService.isKeyValid(comm.getRandomkey())){
 			errors.rejectValue("randomkey","invalid");

@@ -19,6 +19,7 @@ import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.UserService;
+import com.aavu.server.util.CryptUtils;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public class UserServiceImpl implements UserService {
@@ -28,6 +29,8 @@ public class UserServiceImpl implements UserService {
 	private static final long CANCELLED_SUBSCRIPTION_ID = 1;
 
 	private UserDAO userDAO;
+
+	private int maxUsers;
 
 	public User getCurrentUser() throws UsernameNotFoundException {
 
@@ -57,9 +60,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
-		
 
-		return createUser(comm.getUsername(),comm.getPassword(),comm.getEmail());
+		if(comm.isStandard()){
+			return createUser(comm.getUsername(),comm.getPassword(),comm.getEmail());
+		}else if(comm.isOpenID()){
+			return createUser(comm.getOpenIDusername(),null,comm.getEmail());
+		}else{
+			throw new RuntimeException("Command Neither standard nor open");
+		}
 
 	}
 
@@ -67,41 +75,18 @@ public class UserServiceImpl implements UserService {
 		return createUser(username,userpass,email,false);
 	}
 
-	private String hashPassword(String password) {
-		String hashword = null;
-		try {
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			md5.update(password.getBytes("UTF-8"));
-			BigInteger hash = new BigInteger(1, md5.digest());
-			hashword = hash.toString(16);
-
-		} catch (NoSuchAlgorithmException nsae) {
-			log.error(nsae);
-		} catch (UnsupportedEncodingException e) {
-			log.error(e);
-		}
-
-		return pad(hashword,32,'0');
-	}
-
-	private String pad(String s, int length, char pad) {
-		StringBuffer buffer = new StringBuffer(s);
-		while (buffer.length() < length) {
-			buffer.insert(0, pad);
-		}
-		return buffer.toString();
-	}
+	
 
 
 	/**
 	 * Return if the command has a unique username
 	 */
-	public boolean isUnique(CreateUserRequestCommand comm) {		
+	public boolean exists(String username) {		
 		try{
-			userDAO.loadUserByUsername(comm.getUsername());			
-			return false; 			
+			userDAO.loadUserByUsername(username);			
+			return true; 			
 		}catch (UsernameNotFoundException e) {
-			return true;
+			return false;
 		}		
 	}
 
@@ -153,17 +138,22 @@ public class UserServiceImpl implements UserService {
 	 */
 	public User createUser(String username, String userpass, String email, boolean superV) {
 
-		//hmm a bit odd having the logic catc in the 
+		//hmm a bit odd having the logic catch in the 
 		//
-		log.debug("u: "+username+" p "+userpass);
-		log.debug("pp: "+hashPassword(userpass));
+		if(log.isDebugEnabled()){
+			log.debug("u: "+username+" p "+userpass);
+			log.debug("pp: "+CryptUtils.hashString(userpass));
+		}
 
 		User user = new User();
-		user.setUsername(username.toLowerCase());
-		user.setPassword(hashPassword(userpass));
+		user.setUsername(username.toLowerCase());		
 		user.setEmail(email);
 		user.setSupervisor(superV);
-
+		
+		if(userpass != null){
+			user.setPassword(CryptUtils.hashString(userpass));
+		}
+		
 		return userDAO.save(user);
 		
 
@@ -240,6 +230,14 @@ public class UserServiceImpl implements UserService {
 			inviter.setInvitations(newV);
 		}
 		userDAO.save(inviter);
+	}
+
+	public boolean nowAcceptingSignups() {
+		return userDAO.getUserCount() <  maxUsers;
+	}
+
+	public void setMaxUsers(int maxUsers) {
+		this.maxUsers = maxUsers;
 	}
 	
 
