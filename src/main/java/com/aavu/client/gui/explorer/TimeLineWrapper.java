@@ -44,8 +44,7 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 
 	private HippoTimeLine timeline;
 	
-	private Manager manager;
-
+	
 	private HorizontalPanel typeSelector;
 
 	private List lastLoadedftis;
@@ -60,7 +59,6 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 		VerticalPanel mainP = new VerticalPanel();
 		typeSelector = new HorizontalPanel();
 		
-		this.manager = manager;
 		
 		TimeLineSelector lastUpdatedB = new TimeLineSelector(TimeLineConst.UPDATED,ConstHolder.myConstants.timeline_lastUpdated(),this);
 		TimeLineSelector createdB = new TimeLineSelector(TimeLineConst.CREATED,ConstHolder.myConstants.timeline_created(),this);
@@ -152,6 +150,18 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 		}
 	}
 	
+	public void loadAll() {
+		allMode = true; 
+		
+//		manager.getTopicCache().getAllTopicIdentifiers( 
+//				new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
+//					//@Override
+//					public void onSuccess(Object result) {
+//						super.onSuccess(result);
+//											
+//						draw((List) result);					
+//					}});
+	}
 	
 	/**
 	 * use a callback so that we can do async calls IF NEEDED
@@ -221,6 +231,7 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 		return this;
 	}
 
+	
 
 	//@Override
 	protected void draw(List ftis) {

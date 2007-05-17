@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
@@ -30,7 +31,6 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoPermissionException;
 import com.aavu.client.exception.HippoSubscriptionException;
 import com.aavu.server.dao.TopicDAO;
-import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.UserPageBean;
@@ -165,15 +165,18 @@ public class TopicServiceImpl implements TopicService {
 		return topicDAO.getLocations(userService.getCurrentUser());
 	}
 
-	public List getAllMetas() {		
+	public List<Meta> getAllMetas() {		
 		return topicDAO.getAllMetas(userService.getCurrentUser());
 	}
 
-
+	
 
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
-		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser());
+		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),false);
 	}
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr) {
+		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),start,max,startStr);
+	}	
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
 	}

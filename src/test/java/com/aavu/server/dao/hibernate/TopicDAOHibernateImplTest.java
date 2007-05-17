@@ -113,7 +113,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println("after: "+t.getId());
 
-		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u,false);
 
 		//tag does not show up bc user not set
 		assertEquals(1, savedL.size());		
@@ -171,7 +171,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u,false);
 
 		//NOTE: getAllTopics doesn't take a User right now. That functionality was only used here.
 		//List<Topic> allTopics = topicDAO.getAllTopics();				
@@ -350,7 +350,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		t = topicDAO.save(t);
 
-		List<DatedTopicIdentifier> list = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> list = topicDAO.getAllTopicIdentifiers(u,false);
 
 		assertEquals(1,list.size());
 
@@ -364,7 +364,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2 = topicDAO.save(t2);
 
 
-		list = topicDAO.getAllTopicIdentifiers(u);
+		list = topicDAO.getAllTopicIdentifiers(u,false);
 
 		for(TopicIdentifier tident : list){
 			System.out.println("tident "+tident);
@@ -1038,7 +1038,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u,false);
 
 		assertEquals(2, savedL.size());
 		
@@ -1052,7 +1052,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		topicDAO.delete(patriotGames);
 		
-		savedL = topicDAO.getAllTopicIdentifiers(u);
+		savedL = topicDAO.getAllTopicIdentifiers(u,false);
 		assertEquals(1, savedL.size());
 		
 		book = (Tag) topicDAO.getForName(u, D);
@@ -1093,7 +1093,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u,false);
 
 		assertEquals(3, savedL.size());
 		
@@ -1103,7 +1103,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		topicDAO.delete(patriotGames);
 		
-		savedL = topicDAO.getAllTopicIdentifiers(u);
+		savedL = topicDAO.getAllTopicIdentifiers(u,false);
 		assertEquals(2, savedL.size());
 		
 		book = (Tag) topicDAO.getForName(u, D);
@@ -1152,7 +1152,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u,false);
 
 		assertEquals(4, savedL.size());
 		
@@ -1162,7 +1162,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		topicDAO.delete(patriotGames);
 		
-		savedL = topicDAO.getAllTopicIdentifiers(u);
+		savedL = topicDAO.getAllTopicIdentifiers(u,false);
 		assertEquals(3, savedL.size());
 		
 		book = (Tag) topicDAO.getForName(u, D);
@@ -1205,7 +1205,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println(patriotGames.toPrettyString());
 
-		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u);
+		List<DatedTopicIdentifier> savedL = topicDAO.getAllTopicIdentifiers(u,false);
 
 		assertEquals(3, savedL.size());
 		
@@ -1215,7 +1215,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		topicDAO.delete(book);
 		
-		savedL = topicDAO.getAllTopicIdentifiers(u);
+		savedL = topicDAO.getAllTopicIdentifiers(u,false);
 		assertEquals(2, savedL.size());
 		
 		//assert that Book is no longer there

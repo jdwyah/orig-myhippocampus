@@ -190,13 +190,14 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	
 
 	/**
-	 * this conversion is just list -> array
+	 * 
+	 *  
 	 * @throws HippoException 
 	 * 
 	 */
-	public List getAllTopicIdentifiers() throws HippoException {
+	public List getAllTopicIdentifiers(int start, int max, String startStr) throws HippoException{
 		try {
-			return topicService.getAllTopicIdentifiers();
+			return topicService.getAllTopicIdentifiers(start,max,startStr);
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);
 			e.printStackTrace();
@@ -305,7 +306,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		}
 	}
 	/**
-	 * this conversion is just list -> array
+	 * 
 	 * @throws HippoException 
 	 * 
 	 */
@@ -382,6 +383,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
 	}
+	
 	
 
 	

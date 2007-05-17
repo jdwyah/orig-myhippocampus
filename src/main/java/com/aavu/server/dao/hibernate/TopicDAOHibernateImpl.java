@@ -27,6 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoLocation;
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
@@ -251,16 +252,16 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	}
 
 
-	public List getAllMetas(User user) {
-		List<Object[]> ll2 = getHibernateTemplate().find("from Meta meta "+				
+	public List<Meta> getAllMetas(User user) {
+		List<Meta> ll2 = getHibernateTemplate().find("from Meta meta "+				
 				"where meta.user = ?",user);
 		return ll2;
 	}
 
 
-	private List<DatedTopicIdentifier> getAllTopicIdentifiers(DetachedCriteria crit) {
+	private List<DatedTopicIdentifier> getAllTopicIdentifiers(DetachedCriteria crit,int start, int max) {
 
-		List<Object[]> list = getHibernateTemplate().findByCriteria(crit);
+		List<Object[]> list = getHibernateTemplate().findByCriteria(crit,start,max);
 
 		List<DatedTopicIdentifier> rtn = new ArrayList<DatedTopicIdentifier>(list.size());
 
@@ -275,20 +276,31 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	}
 
 	/**
-	 * TODO replace hardcoded class discriminators with .class.
+	 * 
 	 */	
-	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user) {
-		return getAllTopicIdentifiers(user, false);
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr) {
+		return getAllTopicIdentifiers(user, start, max, startStr,false);
 	}
-
-
-
 
 	/**
 	 * all param is used by some unit tests to help wipe a user's account.
 	 * 
 	 */
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all) {
+		return getAllTopicIdentifiers(user,0,9999,null,all);
+	}
+	
+	/**
+	 * TODO replace hardcoded class discriminators with .class.
+	 * 
+	 * @param user
+	 * @param start
+	 * @param max
+	 * @param startStr
+	 * @param all
+	 * @return
+	 */
+	private List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr,boolean all) {
 
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class);
 
@@ -305,11 +317,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 			.add(Expression.ne("class", "text"))
 			.add(Expression.ne("class", "location"));
 		}
-		crit.addOrder( Order.asc("title").ignoreCase() )
+		if(startStr != null){
+			crit.add(Expression.ilike("title", startStr, MatchMode.START));
+		}
+		crit.addOrder( Order.desc("lastUpdated") )
+		
 		.setProjection(getTopicIdentifier());
 
 
-		return getAllTopicIdentifiers(crit);
+		return getAllTopicIdentifiers(crit,start,max);
 
 	}
 

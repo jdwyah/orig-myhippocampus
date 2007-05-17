@@ -2,6 +2,7 @@ package com.aavu.server.service;
 
 import java.util.List;
 
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
@@ -42,13 +43,20 @@ public interface TopicService {
 
 	List<LocationDTO> getAllLocations();
 
-	List getAllMetas();
+	List<Meta> getAllMetas();
 	
+	/**
+	 * Filter out Dates/Locaitons/Metas.
+	 * @param startStr 
+	 * @param max 
+	 * @param start 
+	 */
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr);
 	/**
 	 * Filter out Dates/Locaitons/Metas.
 	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers();
-
+	
 	/**
 	 * Don't filter out Dates, Locations, Metas. Intended for debugging/testing use.
 	 * @param all

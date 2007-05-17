@@ -167,7 +167,7 @@ public class LoginWindow extends PopupWindow {
 			}});
 		
 		
-		setToOpenID(true);
+		setToOpenID(false);
 		
 		form.setWidget(panel);
 		

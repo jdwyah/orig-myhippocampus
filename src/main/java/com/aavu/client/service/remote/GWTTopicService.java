@@ -32,7 +32,7 @@ public interface GWTTopicService extends RemoteService {
 	List getAllMetas() throws HippoException;
 		
 	//List<DatedTopicIdentifier>
-	List getAllTopicIdentifiers() throws HippoException;
+	List getAllTopicIdentifiers(int start, int max, String startStr) throws HippoException;	
 	
 	//List<TimeLineObj>
 	//List getTimelineObjs(long tag_id) throws HippoException;

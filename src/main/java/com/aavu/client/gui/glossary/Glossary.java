@@ -2,35 +2,28 @@ package com.aavu.client.gui.glossary;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.explorer.ExplorerPanel;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
-import com.aavu.client.gui.ext.tabbars.TabHasWidgets;
-import com.aavu.client.gui.ext.tabbars.TabPanelExt;
-import com.aavu.client.gui.ext.tabbars.VertableTabPanel;
 import com.aavu.client.service.Manager;
-import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.TopicLink;
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Glossary extends FocusPanel {
 	
 	//PEND unused
-	private static final String KEYS = "<span class=\"H-SideBarKey\">";
-	private static final String KEYS_NOELEM = "<span class=\"H-SideBarKey H-SideBarKeyNoElements\">";
-	private static final String KEYEND = "</span>";
+//	private static final String KEYS = "<span class=\"H-SideBarKey\">";
+//	private static final String KEYS_NOELEM = "<span class=\"H-SideBarKey H-SideBarKeyNoElements\">";
+//	private static final String KEYEND = "</span>";
 
 	private static final String OTHER = "#'s";
 	private static final int MAX_LINK_CHARS = 25;//11;
@@ -50,22 +43,26 @@ public class Glossary extends FocusPanel {
 	
 	//protected VertableTabPanel tabPanel;
 	private boolean dirty = true;
-				TabPanel panel;
-	protected TabHasWidgets tabPanel;
+
+	protected TabPanel tabPanel;
 				
+	private Map keyToGlossaryPage = new HashMap();
+	private boolean adHocMode;
+	
 	public Glossary(Manager manager,Orientation orient){
 		
-		this.manager = manager;
-		
+		this.manager = manager;		
 		
 		if(orient == Orientation.VERTICAL){
-			VertableTabPanel tabP = new VertableTabPanel(orient);
-			tabPanel = tabP;
-			add(tabP);
+			throw new UnsupportedOperationException();
+//			VertableTabPanel tabP = new VertableTabPanel(orient);
+//			tabPanel = tabP;
+//			add(tabP);
+			
 		}else{
-			TabPanel tabP = new TabPanelExt();
-			tabPanel = (TabHasWidgets) tabP;
-			add(tabP);
+
+			tabPanel = new TabPanel();
+			add(tabPanel);
 		}
 		
 				
@@ -75,47 +72,51 @@ public class Glossary extends FocusPanel {
 		
 	}
 
-	/**
-	 * Convert to list repr
-	 *  
-	 * @param t
-	 */
-	public void load(TopicIdentifier[] topics) {
-		List conv = new ArrayList();
-		for (int i = 0; i < topics.length; i++) {
-			conv.add(topics[i]);
-		}		
-		load(conv);
-	}	
+
 	
 	/**
 	 * Called with no parameter default behavior is to do a lookup for all topic identifiers
 	 *
 	 */
-	public void load(){		
-		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
-
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				List topics = (List) result;
-				load(topics);
-			}
-		});
+	public void doAdHoc(){	
+		
+		adHocMode = true;
+		
+		innerLoad(new ArrayList());
+		
+//		manager.getTopicCache().getAllTopicIdentifiers(new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
+//
+//			public void onSuccess(Object result) {
+//				super.onSuccess(result);
+//				List topics = (List) result;
+//				load(topics);
+//			}
+//		});
 	}
+
 
 	/**
 	 * List<TopicIdentifier>
 	 * @param topicIdents
 	 */
 	public void load(List topicIdents) {
-		alphabetizeTopics(topicIdents);
+		
+		adHocMode = false;
+	
+		innerLoad(topicIdents);
+	}
+
+	private void innerLoad(List arrayList) {
+				
+		alphabetizeTopics(arrayList);
 		dirty = false;
 	}
+
 	
 	protected void alphabetizeTopics(List topics) {
 		//<String,Map<String,TopicIdentifier>>
 		Map allEntries = new GWTSortedMap();		
-
+		
 		System.out.println("topics! "+topics.size());
 				
 				
@@ -146,7 +147,8 @@ public class Glossary extends FocusPanel {
 
 	private void addAsLabels(Map sidebarEntries) {
 		tabPanel.clear();
-
+		keyToGlossaryPage.clear();
+		
 		for (Iterator iter = sidebarEntries.keySet().iterator(); iter.hasNext();) {
 			String key = (String) iter.next();
 			
@@ -160,7 +162,8 @@ public class Glossary extends FocusPanel {
 			
 			GlossaryPage glossaryPage = new GlossaryPage(manager);
 						
-			String st = KEYS_NOELEM;			
+			boolean hadElems = false;
+					
 			
 			for (Iterator iterator = topics.keySet().iterator(); iterator.hasNext();) {
 				String title = (String) iterator.next();
@@ -168,14 +171,14 @@ public class Glossary extends FocusPanel {
 				
 				glossaryPage.add(topic,MAX_LINK_CHARS);
 				
-				st = KEYS;
+				hadElems = true;
 			}
 
 			//TODO VertableTabPanel.hideDeck() seems to die if there's nothing in the selected deck
 			//fix??
 			
 			
-			if(st == KEYS_NOELEM){
+			if(!hadElems){
 				//PEND any effect??
 				//placeholder so there's always something in there			
 				glossaryPage.add(new Label("    (no topics)     "));
@@ -184,8 +187,49 @@ public class Glossary extends FocusPanel {
 			//System.out.println("ADD key "+key.toString()+" "+st+key.toString()+KEYEND);
 			
 			//tabPanel.add(vp,new SidebarLabel(st+key.toString()+KEYEND));
-			tabPanel.add(glossaryPage,st+key.toString()+KEYEND,true);
+			Label label = new Label(key);
+			label.addStyleName("H-SideBarKey");
+			if(!hadElems){
+				label.addStyleName("H-SideBarKeyNoElements");
+			}
+			tabPanel.add(glossaryPage,label);		
+			
+			keyToGlossaryPage.put(label,glossaryPage);
+			
+			
+			/**
+			 * PEND messy
+			 * add a click listener to refresh on clicks...
+			 * only go do the async if it's empty...
+			 */
+			if(adHocMode){
+				label.addClickListener(new ClickListener(){
+					public void onClick(Widget sender) {
+						final Label label = (Label) sender;
+						final GlossaryPage page = (GlossaryPage) keyToGlossaryPage.get(label);
 
+						//NOTE!! ==1 bc of "  no topics   " 
+						if(page.size() == 1){
+							manager.getTopicCache().getAllTopicIdentifiers(0, 999, label.getText().substring(0,1),
+									new StdAsyncCallback(""){
+								//@Override
+								public void onSuccess(Object result) {
+									super.onSuccess(result);
+									List ftis = (List) result;
+
+									page.clear();
+
+									for (Iterator iterator = ftis.iterator(); iterator.hasNext();) {								
+										TopicIdentifier topic = (TopicIdentifier) iterator.next();								
+										page.add(topic,MAX_LINK_CHARS);								
+									}
+									if(ftis.size() > 0){
+										label.removeStyleName("H-SideBarKeyNoElements");
+									}
+								}});
+						}
+					}});
+			}
 		}
 	}
 

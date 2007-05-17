@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
+import com.aavu.client.async.EZCallback;
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.gui.TopicPreviewLink;
@@ -39,7 +41,7 @@ public class BlogView extends FTICachingExplorerPanel {
 		public int compare(Object o1, Object o2) {
 			DatedTopicIdentifier o = (DatedTopicIdentifier)o1;
 			DatedTopicIdentifier oo = (DatedTopicIdentifier) o2;			
-			return -o.getCreated().compareTo(oo.getCreated());
+			return -o.getLastUpdated().compareTo(oo.getLastUpdated());
 		}};
 
 	
@@ -55,16 +57,17 @@ public class BlogView extends FTICachingExplorerPanel {
 	
 	
 	private ScrollPanel previewPanel = new ScrollPanel();
-	private Manager manager;
 
 
 	private GWTSortedMap sortedByDate = new GWTSortedMap(dateComparator);
 
-	private NextPage pageNavigation;
+	private Navigator pageNavigation;
+
+
+	private int loadAllStart = 0;
 	
 	public BlogView(Manager manager, Map defaultMap, int width,int height) {
 		super(manager,defaultMap);	
-		this.manager = manager;
 	
 		
 		ScrollPanel scroll = new ScrollPanel(tagPanel);		
@@ -73,7 +76,7 @@ public class BlogView extends FTICachingExplorerPanel {
 		VerticalPanel leftPanel = new VerticalPanel();
 		leftPanel.add(scroll);
 		
-		pageNavigation = new NextPage(0);
+		pageNavigation = new Navigator(0);
 		
 		leftPanel.add(pageNavigation);
 		mainPanel.add(leftPanel);
@@ -95,6 +98,14 @@ public class BlogView extends FTICachingExplorerPanel {
 	 * on draw, setup the sorted list, then display starting at 0.
 	 */
 	public void draw(List ftis) {
+		
+		pageNavigation.setNoNumbers(false);
+		
+		prepForDisplay(ftis);
+		display(0);
+	}
+	
+	private void prepForDisplay(List ftis){
 		sortedByDate.clear();
 		
 		Date now = new Date();		
@@ -103,8 +114,55 @@ public class BlogView extends FTICachingExplorerPanel {
 		}
 		Date fin = new Date();
 		System.out.println("BlogView sort from "+fin.getTime()+" to " + now.getTime());
-		System.out.println("BlogView sort took "+(fin.getTime() - now.getTime()));
-		display(0);
+		System.out.println("BlogView sort took "+(fin.getTime() - now.getTime()));		
+	}
+	
+
+	public void loadAll() {
+		allMode = true;
+		
+		loadAllStart  = 0;
+		
+		pageNavigation.setNoNumbers(true);
+		
+		doLoadAll();
+	}
+	
+	private void doLoadAll(){
+		manager.getTopicCache().getAllTopicIdentifiers(loadAllStart, MAX_PER_PAGE, new StdAsyncCallback("Fetch Blog"){
+
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				
+				List ftis = (List) result;				
+				System.out.println("LOAD all return ");
+				
+				//NOTE! sorting is redundant...
+				prepForDisplay(ftis);
+				
+				display(loadAllStart);
+			}			
+		});		
+	}
+	
+	private void display(int start){
+		//System.out.println("Display "+start+" "+loadAllStart+" "+allMode);
+		
+		if(allMode){				
+			if(start != loadAllStart){
+
+				loadAllStart = start;
+				doLoadAll();
+			}else{
+				draw(0);
+			}
+		
+		}else{
+			draw(start);
+
+		}
+		pageNavigation.setStart(start,sortedByDate.size());
+
 	}
 	
 	/**
@@ -113,8 +171,8 @@ public class BlogView extends FTICachingExplorerPanel {
 	 * 
 	 * @param start
 	 */
-	private void display(int start) {
-	
+	private void draw(int start) {
+				
 		tagPanel.clear();
 		
 		int count = 0;
@@ -123,8 +181,7 @@ public class BlogView extends FTICachingExplorerPanel {
 
 			DatedTopicIdentifier fti = (DatedTopicIdentifier) iterator.next();		
 			count++;
-			
-	
+						
 			if(count < start){
 				continue;
 			}
@@ -140,10 +197,9 @@ public class BlogView extends FTICachingExplorerPanel {
 			TopicPreviewLink previewLink = new TopicPreviewLink(fti,100,null,previewPanel,manager);
 			//previewLink.addStyleName("H-BlogLink");
 			
-			Label dateLabel = new Label(df.format(fti.getCreated()),false);
+			Label dateLabel = new Label(df.format(fti.getLastUpdated()),false);
 			dateLabel.addStyleName(DATE_STYLE);
-			
-			
+					
 			hp.add(dateLabel);
 			hp.add(previewLink);
 					
@@ -156,19 +212,17 @@ public class BlogView extends FTICachingExplorerPanel {
 			tagPanel.add(hp);
 			
 		}
-			
-		pageNavigation.setStart(start,sortedByDate.size());
-
+		
 	}
 	
-	private class NextPage extends Composite implements ClickListener {
+	private class Navigator extends Composite implements ClickListener {
 		private Label previous;
 		private Label next;
 		private int start;
 		private Label showing;
 
-
-		public NextPage(int count){
+		
+		public Navigator(int count){
 			
 			HorizontalPanel mainP = new HorizontalPanel();
 			
@@ -189,7 +243,14 @@ public class BlogView extends FTICachingExplorerPanel {
 			next.addStyleName("H-Blog-NextPage");
 		}
 
-		
+
+
+		public void setNoNumbers(boolean noNumbers) {
+			showing.setVisible(!noNumbers);
+		}
+
+
+
 		public void setStart(int start,int max) {
 			this.start = start;
 			if(start == 0){
@@ -205,11 +266,17 @@ public class BlogView extends FTICachingExplorerPanel {
 				showing.setText(start +" - " + max+" of "+max);
 			}
 			
+
+			//hackish if we're in allMode, show next no matter what
+			if(!showing.isVisible()){
+				next.setVisible(true);
+			}
+			
 		}
 
 
 		public void onClick(Widget sender) {
-			if(next == sender){
+			if(next == sender){				
 				display(start+MAX_PER_PAGE);
 			}else if(previous == sender){
 				display(start-MAX_PER_PAGE);

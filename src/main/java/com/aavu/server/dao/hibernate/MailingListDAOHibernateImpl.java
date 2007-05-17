@@ -22,7 +22,7 @@ public class MailingListDAOHibernateImpl extends HibernateDaoSupport implements 
 	}
 
 	public List<MailingListEntry> getMailingList() {		
-		return getHibernateTemplate().find("from MailingListEntry entry");
+		return getHibernateTemplate().find("from MailingListEntry entry where sentEmailOk = false");
 
 //		DetachedCriteria crit  = DetachedCriteria.forClass(MailingListEntry.class)				
 //				.setFetchMode("signedUpUser", FetchMode.JOIN)

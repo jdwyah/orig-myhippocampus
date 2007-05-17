@@ -51,4 +51,12 @@ public class GlossaryPage extends Composite {
 		listPanel.add(label);
 	}
 
+	public void clear() {
+		listPanel.clear();
+	}
+
+	public int size() {
+		return listPanel.getWidgetCount();
+	}
+
 }

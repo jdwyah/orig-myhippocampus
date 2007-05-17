@@ -3,6 +3,7 @@ package com.aavu.server.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
@@ -28,9 +29,9 @@ public interface TopicDAO {
 	void evict(Serializable obj);
 
 	Topic get(long topicID);
-	List getAllMetas(User currentUser);
+	List<Meta> getAllMetas(User currentUser);
 	
-	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user);
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr);
 
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all);
 	

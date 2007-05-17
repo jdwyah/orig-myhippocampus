@@ -33,7 +33,7 @@ public interface GWTTopicServiceAsync {
 	void getAllMetas(AsyncCallback callback);
 	
 	//List<DatedTopicIdentifiers>
-	void getAllTopicIdentifiers(AsyncCallback callback);	
+	void getAllTopicIdentifiers(int start, int max, String startStr, AsyncCallback callback);	
 	
 	//List<TopicIdentifier> 
 	void getLinksTo(Topic topic, AsyncCallback callback);

@@ -22,13 +22,13 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 	
 	
 	private static Map tagToIdentifierMap;
-	private Manager mananager;
+	protected Manager manager;
 	protected boolean allMode;	
 	protected Set tags;
 	
 	public FTICachingExplorerPanel(Manager manager, Map existingMap){
 		tagToIdentifierMap = existingMap;
-		this.mananager = manager;  
+		this.manager = manager;  
 	}
 	
 	
@@ -67,7 +67,7 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 			
 			System.out.println("Going shopping");
 			
-			mananager.getTopicCache().getTopicsWithTag(shoppingList, 
+			manager.getTopicCache().getTopicsWithTag(shoppingList, 
 					new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
 						//@Override
 						public void onSuccess(Object result) {
@@ -100,17 +100,17 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 
 	}
 	
-	public void loadAll() {
-		allMode = true; 
-		mananager.getTopicCache().getAllTopicIdentifiers( 
-				new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
-					//@Override
-					public void onSuccess(Object result) {
-						super.onSuccess(result);
-											
-						draw((List) result);					
-					}});
-	}
+//	public void loadAll() {
+//		allMode = true; 
+//		mananager.getTopicCache().getAllTopicIdentifiers( 
+//				new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
+//					//@Override
+//					public void onSuccess(Object result) {
+//						super.onSuccess(result);
+//											
+//						draw((List) result);					
+//					}});
+//	}
 
 	protected List getFTI(TopicIdentifier tag) {
 		return (List) tagToIdentifierMap.get(tag);

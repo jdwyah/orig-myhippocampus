@@ -24,13 +24,16 @@ public class ExplorerGlossary extends FTICachingExplorerPanel {
 
 	
 
-
-
-
 	//@Override
 	protected void draw(List ftis) {
 		System.out.println("explorer glossary load "+ftis.size());
 		myGlossary.load(ftis);
+	}
+
+
+
+	public void loadAll() {
+		myGlossary.doAdHoc();
 	}
 
 }

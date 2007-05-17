@@ -35,8 +35,8 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 
 				System.out.println("TagStat Result "+tagStats);
 
-				runCommandDeferred(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
-
+				//runCommandDeferred(getCommand(manager.getUser(),tagStats, manager.getTopicCache().getNumberOfTopics()));
+				runCommandDeferred(getCommand(manager.getUser(),tagStats, 0));
 			}});
 		
 	}
