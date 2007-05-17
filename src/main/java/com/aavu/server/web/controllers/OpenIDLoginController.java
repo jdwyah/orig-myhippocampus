@@ -28,7 +28,7 @@ public class OpenIDLoginController extends AbstractController {
 	protected ModelAndView handleRequestInternal(HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
 		
-		
+		//HttpUtils.getRequestURL(req).toString();
 		// get the submitted id field
         String id = req.getParameter(identityField);
 

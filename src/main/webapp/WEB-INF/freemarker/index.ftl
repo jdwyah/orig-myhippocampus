@@ -117,12 +117,10 @@
 	
 	<div id="signupIsland" class="island">
 
-		  <div class="islandOverlay">
-		    <div>			    
+		  <div class="islandOverlay">		    		    
 			    <h2>
 	    		<a href="<@spring.url "/site/signupIfPossible.html"/>"><@spring.message "login.signup"/></a>
-	    		</h2>
-		    </div>
+	    		</h2>		    
 		  </div>
 		  
 		 			

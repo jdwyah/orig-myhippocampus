@@ -108,6 +108,12 @@ public class InvitationServiceImplTest extends BaseTestWithTransaction {
 		List<Subscription> allSubscriptions = userDAO.getAllSubscriptions();		
 		assertEquals(4, allSubscriptions.size());
 		
+		
+        u = userService.getCurrentUser();
+        u.setInvitations(0);
+        u = userDAO.save(u);
+		assertEquals(0, u.getInvitations());
+		
 		new AssertThrows(HippoBusinessException.class) {
             public void test() throws HippoBusinessException, HippoInfrastructureException {
             	invitationService.createAndSendInvitation("jdwyah@gmail.com", u);

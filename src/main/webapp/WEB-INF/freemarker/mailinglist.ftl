@@ -27,7 +27,9 @@
 		</form>			
 	
 		<p>
-		Have a secret key? Then go <a href="<@spring.url "/site/signup.html"/>">Signup!</a>
+		<@spring.message "mailinglist.expl"/>
+		<p>
+		Have a secret key already? Then go <a href="<@spring.url "/site/signup.html"/>">Signup!</a>
 	</div>
 	
 </body>

@@ -19,7 +19,7 @@
     <th>NotLocked</th>    
     <th>Cred Not Expired</th>        
     <th>Enabled</th>    
-    <th>Password</th>
+    <th>Invitations</th>
     <th>Super</th>        
     <th>Subscription</th>            
     <th></th>
@@ -32,7 +32,7 @@
 	    <td>${user.accountNonLocked?string}</td>
 	    <td>${user.credentialsNonExpired?string}</td>
 	    <td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=enable&user=${user.id?c}"/>"/>${user.enabled?string}</a></td>
-		<td>${user.password}</td>					
+		<td>${user.invitations}</td>					
 		<td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=supervisor&user=${user.id?c}"/>"/>${user.supervisor?string}</a></td>
 		<td><a href="<@spring.url "/site/secure/extreme/userManager.html?action=delete&user=${user.id?c}"/>"/>Delete</a></td>				
 		<td>${user.subscription.id}</td>

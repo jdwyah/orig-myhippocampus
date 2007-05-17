@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
@@ -30,11 +31,14 @@ public class LoginWindow extends PopupWindow {
 	private static final int HEIGHT = 150;
 	private static final int WIDTH = 300;
 	private static final String SECURITY_URL = "j_acegi_security_check";
-	//private static final String SECURITY_URL = "j_acegi_openid_start";
+	private static final String SECURITY_URL_OPENID = "site/j_acegi_openid_start";
 	
 	private FormPanel form;	
 	private Label messageLabel;
 	private LoginListener listener;
+	private Label toggleL;
+	private boolean isOpenID;
+	private HorizontalPanel passPanel;
 	
 
 	private static boolean semaphore = false;
@@ -64,6 +68,12 @@ public class LoginWindow extends PopupWindow {
 		
 		form = new FormPanel();
 		
+		KeyboardListener enterListener = new KeyboardListenerAdapter(){
+			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+				if(keyCode == KEY_ENTER){
+					form.submit();					
+				}
+			}};
 		
 		form.setAction(HippoTest.getRelativeURL(SECURITY_URL));
 
@@ -79,24 +89,28 @@ public class LoginWindow extends PopupWindow {
 
 		final PasswordTextBox password = new PasswordTextBox();
 		password.setName("j_password");
-		password.addKeyboardListener(new KeyboardListenerAdapter(){
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-				if(keyCode == KEY_ENTER){
-					form.submit();					
-				}
+		password.addKeyboardListener(enterListener);
+		
+		toggleL = new Label();
+		toggleL.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+				toggle();
 			}});
+		toggleL.addStyleName("gwt-Hyperlink");
 
 		HorizontalPanel uP = new HorizontalPanel();
 
 		uP.add(new Label(ConstHolder.myConstants.deliciousUsername()));
 		uP.add(username);
 
-		HorizontalPanel pP = new HorizontalPanel();
-		pP.add(new Label(ConstHolder.myConstants.deliciousPassword()));
-		pP.add(password);
+		passPanel = new HorizontalPanel();
+		passPanel.add(new Label(ConstHolder.myConstants.deliciousPassword()));
+		passPanel.add(password);
 
+		panel.add(toggleL);
+		
 		panel.add(uP);
-		panel.add(pP);
+		panel.add(passPanel);
 
 		panel.add(new Button("Login", new ClickListener() {
 			public void onClick(Widget sender) {
@@ -131,6 +145,8 @@ public class LoginWindow extends PopupWindow {
 			}
 
 			public void onSubmit(FormSubmitEvent event) {
+				System.out.println("submit to "+form.getAction());
+				
 				// This event is fired just before the form is submitted. We can take
 				// this opportunity to perform validation.
 //				if (username.getText().length() == 0) {
@@ -151,9 +167,29 @@ public class LoginWindow extends PopupWindow {
 			}});
 		
 		
+		setToOpenID(true);
+		
 		form.setWidget(panel);
 		
 		setCenteredContent(form);
+	}
+
+	private void toggle() {
+		setToOpenID(!isOpenID);				
+	}
+	
+	private void setToOpenID(boolean toOpenID) {
+		if(toOpenID){
+			toggleL.setText(ConstHolder.myConstants.login_Standard());
+			form.setAction(HippoTest.getRelativeURL(SECURITY_URL_OPENID));
+			passPanel.setVisible(false);
+		}else{
+			toggleL.setText(ConstHolder.myConstants.login_OpenID());
+			form.setAction(HippoTest.getRelativeURL(SECURITY_URL));
+			passPanel.setVisible(true);
+		}
+		
+		isOpenID = toOpenID;
 	}
 
 	private void failure(){

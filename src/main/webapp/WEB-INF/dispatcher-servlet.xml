@@ -207,7 +207,7 @@
 				<prop key="/site/signup.html">createUserController</prop>
 
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
-				<prop key="/site/secure/extreme/mailinglist.html">manageMailingListController</prop>
+				<prop key="/site/secure/extreme/mailingList.html">manageMailingListController</prop>
 
 
 				<prop key="/site/screencasts.html">screencastsController</prop>				

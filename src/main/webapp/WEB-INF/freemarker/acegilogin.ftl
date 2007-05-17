@@ -23,6 +23,11 @@
 		  <@common.loginForm/>
 		</div>		 
 
+	<p>
+  		<#if !user?exists>
+	      <@common.signupNow/>
+	   </#if>
+ 	    
 	</div>
 
   </body>

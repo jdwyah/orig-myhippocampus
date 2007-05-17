@@ -8,6 +8,11 @@ body {
 	background-image:url("../com.aavu.HippoTest/img/simplicity/ocean100.png");
 }
 
+h2 {
+	font-size: 2em;
+	font-weight: bold;
+}
+
 #header {
 	position: absolute;
 	left: 200px;

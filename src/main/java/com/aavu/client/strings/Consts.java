@@ -273,6 +273,9 @@ public interface Consts extends Messages {
 	String blog_next();
 	String blog_previous();
 	String meta_chooser_help();
+	
+	String login_OpenID();
+	String login_Standard();
 		
 	
 		
