@@ -92,7 +92,7 @@ public class NewHippoTimeLine extends ViewPanel {
 						public void onSuccess(Object result) {							
 							super.onSuccess(result);
 							
-							PreviewPopup p = new PreviewPopup(manager.newFrame(),(Topic) result,sender.getAbsoluteLeft(),sender.getAbsoluteTop());									
+							PreviewPopup p = new PreviewPopup(manager.newFrame(),(Topic) result,0,0);									
 						}});					
 				}});
 			

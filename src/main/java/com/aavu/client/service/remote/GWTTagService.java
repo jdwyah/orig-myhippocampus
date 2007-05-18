@@ -15,7 +15,10 @@ public interface GWTTagService extends RemoteService {
 
 	Tag[] getAllTags();
 	
-	//List<TopicIdentifier>
+
+	/**
+     * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
+     */
 	List match(String match);
 	
 	Tag getTagForName(String completeText);

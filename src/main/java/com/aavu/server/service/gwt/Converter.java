@@ -29,8 +29,8 @@ public class Converter {
 		log.debug("scanning with hibernate support ");
 		String str = serializeWithHibernateSupport(object);
 		
-		log.debug("scanning REGULAR");
-		serialize(object);
+//		log.debug("scanning REGULAR");
+//		serialize(object);
 		
 		
 		log.info("CGLib: "+str.contains("CGLIB")+

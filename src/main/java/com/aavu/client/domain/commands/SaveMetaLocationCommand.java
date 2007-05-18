@@ -29,7 +29,13 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class SaveMetaLocationCommand extends AbstractCommand implements IsSerializable {
 
+	/**
+     * @gwt.typeArgs <com.aavu.client.domain.Topic>
+     */
 	private Set values;
+	/**
+     * @gwt.typeArgs <com.aavu.client.domain.Topic>
+     */
 	private Set toDelete = new HashSet();
 
 	public SaveMetaLocationCommand(){};

@@ -9,7 +9,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
 
 public interface GWTSubjectService extends RemoteService {
 
-	//List <Subject>
+	/**
+     * @gwt.typeArgs <com.aavu.client.domain.subjects.Subject>
+     */
 	List lookup(Subject type, String matchString) throws HippoBusinessException;
 	void addDeliciousTags(String username, String password) throws HippoException;
 }
