@@ -4,12 +4,13 @@ import java.util.Date;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
+import com.aavu.client.gui.timeline.HasDate;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TimeLineObj implements IsSerializable {
+public class TimeLineObj implements IsSerializable, HasDate {
 	
 	private transient static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	public static String getDateInJSON(Date date) {
@@ -73,5 +74,9 @@ public class TimeLineObj implements IsSerializable {
 	}
 	public String toString(){
 		return topic.getTopicTitle()+" "+getStart()+" "+getEnd();
+	}
+
+	public Date getDate() {
+		return getStart();
 	}
 }

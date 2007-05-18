@@ -101,5 +101,11 @@ public interface Images extends ImageBundle {
      * @gwt.resource bookAZ.png
      */
     AbstractImagePrototype bookAZ();
+
+    /**
+     * @gwt.resource bullet_blue.png
+     */
+    AbstractImagePrototype bullet_blue();
+
     
 }

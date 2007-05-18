@@ -330,13 +330,21 @@ a:visited {
 	z-index: 1;
 }
 
-.H-Ocean { /*background-color: #CCE6FF;*/
-	background-repeat: repeat;
-	position: absolute;
-	left: 0px;
-	top: 0px;
+.H-ViewPanel {
+	position: absolute;	
 	height: 100%;
 	width: 100%;
+}
+
+.H-Timeline {	
+	background-image: url("../img/timelinebg.png");
+	background-repeat: repeat;
+	z-index: 55;	
+}
+.H-Ocean { /*background-color: #CCE6FF;*/
+	background-repeat: repeat;	
+	left: 0px;
+	top: 0px;
 	z-index: 0;
 }
 

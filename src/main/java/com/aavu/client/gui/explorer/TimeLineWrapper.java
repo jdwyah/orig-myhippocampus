@@ -14,7 +14,7 @@ import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.timeline.HippoTimeLine;
+import com.aavu.client.gui.timeline.NewHippoTimeLine;
 import com.aavu.client.gui.timeline.TimeLineConst;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -42,14 +42,14 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGroup {
 
-	private HippoTimeLine timeline;
+	private NewHippoTimeLine timeline;
 	
 	
 	private HorizontalPanel typeSelector;
 
 	private List lastLoadedftis;
 
-	private TimeLineConst currentStyle = TimeLineConst.META;
+	private TimeLineConst currentStyle = TimeLineConst.CREATED;
 
 	private SelectableButton currentButton;
 	
@@ -67,11 +67,11 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 		typeSelector.add(createdB);
 		typeSelector.add(metasB);
 
-		metasB.setSelected(true);
+		createdB.setSelected(true);
 		
-		timeline = new HippoTimeLine(manager,width - 30,height,window);		
+		timeline = new NewHippoTimeLine(manager,width - 110,height-70,window);		
 		
-		
+	
 		mainP.add(typeSelector);
 		mainP.add(timeline);		
 		
@@ -153,14 +153,12 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 	public void loadAll() {
 		allMode = true; 
 		
-//		manager.getTopicCache().getAllTopicIdentifiers( 
-//				new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
-//					//@Override
-//					public void onSuccess(Object result) {
-//						super.onSuccess(result);
-//											
-//						draw((List) result);					
-//					}});
+		manager.getTopicCache().getAllTopicIdentifiers(0, 200, new StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
+			//@Override
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				draw((List) result);
+			}});		
 	}
 	
 	/**

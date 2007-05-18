@@ -191,4 +191,7 @@ public class DateUtil implements DateConstants {
 	public static String getMonth(Date date){
 		return MONTHS[date.getMonth()];
 	}
+	public static String getMonth(int date){
+		return MONTHS[date];
+	}
 }

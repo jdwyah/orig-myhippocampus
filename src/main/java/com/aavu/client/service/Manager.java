@@ -30,8 +30,6 @@ import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.gui.ext.WheelListenerCollectionCancellable;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.glossary.Glossary;
-import com.aavu.client.gui.timeline.HippoTimeLine;
-import com.aavu.client.gui.timeline.TimeLineWindow;
 import com.aavu.client.help.HelpWindow;
 import com.aavu.client.help.UserHelper;
 import com.aavu.client.images.Images;
@@ -217,37 +215,7 @@ public class Manager implements TopicSaveListener, LoginListener, WheelListener,
 	}
 	
 	
-	public void showTimeline() {
-//		List timeLinesObjs = new ArrayList();
-//		for(int i=0;i<10;i++){
-//			Date d = new Date(2005,i,22);
-//			Date e = null;
-//			if(i % 2 == 0){
-//				e = new Date(2006,i,22);
-//			}
-//			timeLinesObjs.add(new TimeLineObj(null,d,e));
-//		}
-//		OldTimeLine tl = new OldTimeLine(this,timeLinesObjs);
-//		tl.setPopupPosition(DEF_X,DEF_Y);
-//		tl.show();
-//		
-		
-//		TimeLineObj[] arr = new TimeLineObj[10];
-//		for(int i=0;i<10;i++){
-//			Date d = new Date(2005,i,22);
-//			Date e = null;
-//			if(i % 2 == 0){
-//				e = new Date(2006,i,22);
-//			}
-//			arr[i] = new TimeLineObj(new TopicIdentifier(4,"foo"),d,e);
-//		}
-		
-		
-		HippoTimeLine hippoTime = new HippoTimeLine(this);
-		TimeLineWindow hippoTimeW = new TimeLineWindow(hippoTime,newFrame());
-						
-		
-	}
+	
 
 	/*
 	 * 
