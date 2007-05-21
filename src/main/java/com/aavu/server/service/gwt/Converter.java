@@ -9,7 +9,9 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.generated.AbstractTopicTypeConnector;
 import com.aavu.server.util.gwt.ServerSerializationStreamWriterWithHibernateEscaping;
+import com.aavu.server.util.gwt.ServerSerializationStreamWriterWithHibernateSupport2;
 import com.google.gwt.user.client.rpc.SerializationException;
+import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 import com.google.gwt.user.server.rpc.impl.ServerSerializableTypeOracle;
 import com.google.gwt.user.server.rpc.impl.ServerSerializableTypeOracleImpl;
 import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter;
@@ -52,12 +54,14 @@ public class Converter {
 		ServerSerializationStreamWriter stream = new ServerSerializationStreamWriter(
 				serializableTypeOracle);
 		
+		
 
 		stream.prepareToWrite();
 
 		Object responseObj = t;
 		boolean isException = false;
 		try {
+			
 			stream.serializeValue(responseObj, Topic.class);
 		} catch (SerializationException e) {
 			responseObj = e;
@@ -71,9 +75,13 @@ public class Converter {
 		ServerSerializableTypeOracle serializableTypeOracle;
 		serializableTypeOracle = new ServerSerializableTypeOracleImpl(
 				getPackagePaths());
-		ServerSerializationStreamWriterWithHibernateEscaping stream = new ServerSerializationStreamWriterWithHibernateEscaping(
-				serializableTypeOracle);
 		
+//		ServerSerializationStreamWriterWithHibernateEscaping stream = new ServerSerializationStreamWriterWithHibernateEscaping(
+//				serializableTypeOracle);
+
+		ServerSerializationStreamWriterWithHibernateSupport2 stream = new ServerSerializationStreamWriterWithHibernateSupport2(
+				serializableTypeOracle);
+
 
 		stream.prepareToWrite();
 
@@ -86,7 +94,7 @@ public class Converter {
 			isException = true;
 		}
 		String bufferStr = (isException ? "{EX}" : "{OK}") + stream.toString();
-		System.out.println("HIBSUPPORT "+bufferStr);
+		System.out.println("HIBSUPPORT2 "+bufferStr);
 		return bufferStr;
 	}
 
@@ -192,6 +200,24 @@ public class Converter {
 
 		return b;
 
+	}
+
+	public static Object deserialize(String str) {
+		ServerSerializableTypeOracle serializableTypeOracle;
+		serializableTypeOracle = new ServerSerializableTypeOracleImpl(
+				getPackagePaths());
+		ServerSerializationStreamWriter stream = new ServerSerializationStreamWriter(
+				serializableTypeOracle);
+		
+		//ClientSerializationStreamReader
+		
+		ClientSerializationStreamReader reader = new ClientSerializationStreamReader(null);
+		
+		
+		
+		
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

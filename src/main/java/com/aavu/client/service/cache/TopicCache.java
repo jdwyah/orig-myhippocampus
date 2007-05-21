@@ -396,5 +396,10 @@ public class TopicCache {
 	}
 
 
+	public void test(StdAsyncCallback stdAsyncCallback) {
+		topicService.test(stdAsyncCallback);
+	}
+
+
 
 }

@@ -20,7 +20,7 @@ public interface GWTTopicServiceAsync {
 	//remember, these MUST BE VOID! returns
 	//
 
-
+	void test(AsyncCallback callback);
 
 	void changeState(long topicID, boolean toIsland,AsyncCallback callback);
 

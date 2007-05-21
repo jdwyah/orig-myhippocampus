@@ -47,6 +47,7 @@ ServletContextAware, Controller, RemoteService {
 	@Override
 	public String processCall(String payload) throws SerializationException {
 		RPCRequest rpcRequest = RPC.decodeRequest(payload, this.getClass());
+		
 		return RPCWithHibernateSupport.invokeAndEncodeResponse(this, rpcRequest.getMethod(),
 				rpcRequest.getParameters());
 	}

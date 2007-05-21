@@ -11,10 +11,10 @@ import org.hibernate.LazyInitializationException;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.TestObj;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -382,6 +382,18 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
+	}
+	
+	
+	public TestObj test() {
+				
+		TestObj t = new TestObj();
+		TestObj t2 = new TestObj();
+		
+		t.addConn(t2);
+		
+		
+		return t;
 	}
 	
 	

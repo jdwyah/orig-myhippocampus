@@ -13,6 +13,7 @@ public interface Consts extends Messages {
 	String seeAlsos();
 	String seeAlsosN(int i);
 	String title();
+	String date();
 	String addTag();
 	String occurrences();
 	String occurrencesN(int size);
@@ -276,6 +277,7 @@ public interface Consts extends Messages {
 	
 	String login_OpenID();
 	String login_Standard();
+	
 		
 	
 		

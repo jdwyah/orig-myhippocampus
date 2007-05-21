@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.ext.TooltipListener;
@@ -95,6 +96,18 @@ public class Dashboard extends SimplePanel {
 		mainPanel.add(addNewIslandButton);		
 		mainPanel.add(explorerButton);		
 		mainPanel.add(userW);
+		
+//		Button b = new Button("test");
+//		b.addClickListener(new ClickListener(){
+//
+//			public void onClick(Widget arg0) {
+//				manager.getTopicCache().test(new StdAsyncCallback(" "){
+//					public void onSuccess(Object result) {
+//						super.onSuccess(result);
+//						System.out.println("received "+result);
+//					}});
+//			}});
+//		mainPanel.add(b);
 		
 		
 //		mainPanel.add(new Label("New Topic"));

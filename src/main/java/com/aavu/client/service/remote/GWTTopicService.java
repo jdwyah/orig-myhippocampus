@@ -3,22 +3,21 @@ package com.aavu.client.service.remote;
 import java.util.List;
 
 import com.aavu.client.domain.MindTreeOcc;
+import com.aavu.client.domain.TestObj;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.LinkAndUser;
-import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 
 public interface GWTTopicService extends RemoteService {
 
-
+	TestObj test();
+	
 	void changeState(long topicID, boolean toIsland) throws HippoException;
 		
 	TopicIdentifier createNew(String title,Topic topicOrTagOrMeta) throws HippoBusinessException;

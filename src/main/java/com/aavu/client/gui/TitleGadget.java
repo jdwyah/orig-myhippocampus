@@ -1,7 +1,12 @@
 package com.aavu.client.gui;
 
+import java.util.Date;
+
+import org.gwtwidgets.client.util.SimpleDateFormat;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveDateCreatedCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.gadgets.Gadget;
@@ -9,10 +14,16 @@ import com.aavu.client.gui.gadgets.StatusPicker;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.HeaderLabel;
+import com.aavu.client.widget.datepicker.DateFormatter;
+import com.aavu.client.widget.datepicker.HDatePicker;
+import com.aavu.client.widget.datepicker.SimpleDatePicker;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TitleGadget extends Gadget {
@@ -21,7 +32,10 @@ public class TitleGadget extends Gadget {
 	private EditableLabelExtension titleBox;
 	private Topic topic;
 	private StatusPicker picker;
+	private HDatePicker datePicker;
 
+	//private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+	
 	public TitleGadget(final Manager manager){
 		super("");
 		
@@ -32,6 +46,38 @@ public class TitleGadget extends Gadget {
 			}			
 		});
 		
+	datePicker = new HDatePicker(HorizontalPanel.ALIGN_RIGHT);	    
+	    datePicker.setWeekendSelectable(true);
+	    datePicker.setDateFormat(DateFormatter.DATE_FORMAT_MMDDYYYY);
+	    
+	  
+	    	    
+	    datePicker.addChangeListener(new ChangeListener(){
+			public void onChange(final Widget sender) {
+				SimpleDatePicker dp = (SimpleDatePicker) sender;
+				System.out.println("cur "+dp.getCurrentDate());
+				System.out.println("dp "+dp.getText());
+				System.out.println("dp "+dp.getSelectedDate());
+				
+				DeferredCommand.add(new Command(){
+
+					public void execute() {
+						SimpleDatePicker dp = (SimpleDatePicker) sender;
+						Date cDate = dp.getSelectedDate();
+						
+						if(!topic.getCreated().equals(cDate)){
+							System.out.println("\n\n!= "+cDate+" "+topic.getCreated());
+							
+							manager.getTopicCache().executeCommand(topic, 
+									new SaveDateCreatedCommand(topic,cDate),new StdAsyncCallback(ConstHolder.myConstants.save()+"TitleDate"));
+						}else{
+							System.out.println("\n\nEQAL forget it");
+						}
+					}});
+			}});
+		
+	    
+	    
 		CellPanel titleP = new HorizontalPanel();
 		titleP.add(new HeaderLabel(ConstHolder.myConstants.title()));
 		titleP.add(titleBox);
@@ -40,7 +86,15 @@ public class TitleGadget extends Gadget {
 		
 		titleP.add(picker);
 		
-		initWidget(titleP);
+		
+		CellPanel dateP = new HorizontalPanel();
+		dateP.add(new HeaderLabel(ConstHolder.myConstants.date()));
+		dateP.add(datePicker);
+		
+		VerticalPanel mainP = new VerticalPanel();
+		mainP.add(titleP);
+		mainP.add(dateP);
+		initWidget(mainP);
 	}
 
 	//@Override
@@ -53,6 +107,12 @@ public class TitleGadget extends Gadget {
 		this.topic = topic;
 		titleBox.setText(topic.getTitle());
 		picker.load(topic);
+		
+		datePicker.setSelectedDate(topic.getCreated());
+		//datePicker.setCurrentDate(topic.getCreated());
+	    						
+		//datePicker.setText(df.format(mv.getStartDate()));
+		
 		return 0;
 	}
 

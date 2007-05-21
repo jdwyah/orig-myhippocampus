@@ -1,4 +1,4 @@
-package com.aavu.server.service.impl;
+package com.aavu.server.util.gwt;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -78,6 +78,25 @@ public class SerializationTestsForUserTest extends BaseTestNoTransaction {
 		assertFalse(str.contains("java.sql.Timestamp"));
 		
 	}
+
+
+
+	public void testSerializationAndDeserialization(){
+		
+		User uu = new User();
+		uu.setId(1);
+		
+		Topic t = topicService.getForID(515);
+		
+		String str = Converter.serializeWithHibernateSupport(t);
+				
+		assertFalse(str.contains("CGLIB"));		
+		assertFalse(str.contains("Persistent"));		
+		assertFalse(str.contains("java.sql.Timestamp"));
+		
+		Object o = Converter.deserialize(str);
+	}
+	
 	public void testSerializationOfSubTypes(){
 
 		User uu = new User();

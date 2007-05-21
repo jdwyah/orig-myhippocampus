@@ -60,10 +60,8 @@ public class MetaDate extends Meta implements IsSerializable,Serializable {
 	    if(mv != null){
 	    	
 	    	
-	    	datePicker.setCurrentDate(mv.getStartDate());
+	    	datePicker.setSelectedDate(mv.getStartDate());
 	    	
-	    	SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");						
-	    	datePicker.setText(df.format(mv.getStartDate()));
 	    }else{
 	    	mv = new HippoDate();
 	    }

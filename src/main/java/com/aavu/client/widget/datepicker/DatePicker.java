@@ -100,10 +100,12 @@ public abstract class DatePicker extends TextBox implements KeyboardListener{
 	 * setCurrentDate
 	 * Setter method for currentDate
 	 * 
+	 * You should probably call setSelectedDate() instead of this
+	 * 
 	 * @param Date
 	 */
-	public void setCurrentDate(Date currentDate) {
-		this.currentDate = currentDate;
+	protected void setCurrentDate(Date currentDate) {
+		this.currentDate = currentDate;		
 	}
 
 	/*
@@ -124,6 +126,7 @@ public abstract class DatePicker extends TextBox implements KeyboardListener{
 	 */
 	public void setSelectedDate(Date selectedDate) {		
 		this.selectedDate = selectedDate;
+		setCurrentDate(selectedDate);
 		String dateStr = dateFormatter.formatDate(selectedDate);
 		setText(dateStr);
 	}

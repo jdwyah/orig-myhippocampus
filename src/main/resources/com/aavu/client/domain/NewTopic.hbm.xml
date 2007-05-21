@@ -153,11 +153,11 @@
 			</subclass>
 			<subclass name="MetaText" discriminator-value="metatext">
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
-			</subclass>
-			<subclass name="MetaSeeAlso" discriminator-value="seealso">
+			</subclass>			
+			<subclass name="MetaLocation" discriminator-value="metalocation">
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
-			<subclass name="MetaLocation" discriminator-value="metalocation">
+			<subclass name="MetaSeeAlso" discriminator-value="seealso">
 				<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 			</subclass>
 		</subclass>
