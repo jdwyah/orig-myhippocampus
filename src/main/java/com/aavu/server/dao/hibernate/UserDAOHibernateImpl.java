@@ -52,7 +52,9 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		log.debug("list "+list.size());
 		
 		if(list.size() != 1){
-			System.out.println("getUserByUsername UsernameNotFoundException "+list.size()+" users for "+username);						
+			if(!username.equals("anonymousUser")){
+				log.debug("getUserByUsername UsernameNotFoundException "+list.size()+" users for "+username);
+			}
 			throw new UsernameNotFoundException("Username not found or duplicate.");
 		}else{			
 			log.debug("load user success "+list.get(0));
@@ -162,6 +164,19 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 	 */
 	public long getUserCount() {			
 		return (Long)getHibernateTemplate().iterate("select count(*) from User").next();		
+	}
+
+	/**
+	 * only openID users are allowed '.' and all openID usernames must have a '.'
+	 * so, if it's got a '.' janrain.normalize() before the lookup
+	 */
+	public User getUserForEmailAddress(String username)  throws UsernameNotFoundException {
+
+		if(username.contains(".")){
+			return getUserByUsername(com.janrain.openid.Util.normalizeUrl(username));
+		}else{
+			return getUserByUsername(username);
+		}
 	}
 
 }

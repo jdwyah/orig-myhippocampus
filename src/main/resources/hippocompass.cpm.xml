@@ -15,6 +15,9 @@
 		<property name="username">
 			<meta-data>${hippo.username}</meta-data>
 		</property>
+		<property name="id">
+			<meta-data>${hippo.userID}</meta-data>
+		</property>
 	</class>
 
 	<contract alias="userSecured">

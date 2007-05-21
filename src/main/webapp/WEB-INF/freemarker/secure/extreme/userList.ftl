@@ -10,7 +10,7 @@
   
   
 	 <div class="middle-column-box-white">
-        <div class="middle-column-box-title-green">Here are all the users:</div>
+        <div class="middle-column-box-title-green">Here are all ${users.size} users: </div>
 	
     <table>
     <tr>

@@ -81,7 +81,7 @@ public class MessageServiceImpl implements MessageService {
 
 		
 		try {
-			User u = userDAO.getUserByUsername(username);
+			User u = userDAO.getUserForEmailAddress(username);
 
 			log.debug("Subject: "+subject);
 			log.debug("Text: "+text);

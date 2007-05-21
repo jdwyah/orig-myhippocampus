@@ -25,6 +25,9 @@ public class CreateUserRequestValidator implements Validator{
 	
 	private void doOpenIDValidation(CreateUserRequestCommand comm, Errors errors) {		
 		//Normalization happens in this getter
+		if(!comm.getOpenIDusername().contains(".")){
+			errors.rejectValue("openIDusername","invalid.openIDusername.nodots");
+		}
 		if(userService.exists(comm.getOpenIDusername())){
 			errors.rejectValue("openIDusername","invalid.username.exists");
 		}	

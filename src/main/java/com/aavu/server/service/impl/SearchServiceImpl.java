@@ -81,11 +81,11 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 	}
 
 	public List<SearchResult> search(final String searchString){
-		return search(searchString,userService.getCurrentUser().getUsername(), 0, DEFAULT_MAX_SEARCH_RESULTS);
+		return search(searchString,userService.getCurrentUser(), 0, DEFAULT_MAX_SEARCH_RESULTS);
 	}
-	private List<SearchResult> search(final String searchString,final String username,final int start, final int max_num_hits){
+	private List<SearchResult> search(final String searchString,final User user,final int start, final int max_num_hits){
 
-		log.debug("-----"+searchString+"--------"+username+"-----");
+		log.debug("-----"+searchString+"--------"+user.getUsername()+"-----");
 		
 		//search for "" -> bad things
 		//org.compass.core.engine.SearchEngineQueryParseException: Failed to parse query [];
@@ -114,14 +114,15 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 //  		    .toQuery().hits();
 				
 				
-				Map<String,String> mustEqualMap = new HashMap<String, String>();
-				mustEqualMap.put("username", username);				
+				Map<String,Object> mustEqualMap = new HashMap<String, Object>();				
+				mustEqualMap.put("userID", user.getId());				
 				
 				//create compass query with free text query that the user typed in.
 				CompassQueryBuilder queryBuilder = session.queryBuilder();
 				CompassQueryStringBuilder qStrBuilder = queryBuilder.queryString(searchString);
 				CompassQuery compassQuery = qStrBuilder.toQuery();
 
+				
 				// if mustEqualMap passed in with name-value pairs, loop through the
 				// map and create a query filter which is set with the free text query that
 				// was just created with the free text string.
@@ -130,7 +131,10 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 					CompassBooleanQueryBuilder booleanQueryBuilder = queryBuilder.bool();
 					Set<String> searchPropSet = mustEqualMap.keySet();
 					for(String searchProp : searchPropSet ) {
-						String value = mustEqualMap.get(searchProp);
+						Object value = mustEqualMap.get(searchProp);					
+						
+						//booleanQueryBuilder.addMust(queryBuilder.fuzzy(searchProp,value));
+						
 						booleanQueryBuilder.addMust(queryBuilder.term(searchProp,value));
 					}
 					CompassQueryFilter queryFilter =
@@ -153,7 +157,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 						//huh, guess this is ${hippo.title} since entry has only data
 						hits.highlighter(i).fragment("text"); // this will cache the highlighted fragment
 					}catch(SearchEngineException see){
-						log.warn("Search Engine Exception: "+see+" search term "+searchString+" username "+username);
+						log.warn("Search Engine Exception: "+see+" search term "+searchString+" username "+user.getUsername());
 					}
 				}		
 				return hits.detach(start,max_num_hits);
@@ -232,7 +236,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 			//I think root == false takes care of this..
 			else if (obj instanceof User) {
 				log.warn("Shouldn't Happen");
-				User user = (User) obj;		
+				User userRes = (User) obj;		
 				//TODO user.getID() will break this
 				//res = new SearchResult(user.getId(),defaultCompassHit.getScore(),user.getUsername(),null);
 			}

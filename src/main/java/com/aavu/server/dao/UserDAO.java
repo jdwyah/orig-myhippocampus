@@ -22,4 +22,5 @@ public interface UserDAO {
 	ServerSideUser loadUserByUsername(final String username) throws UsernameNotFoundException, DataAccessException;
 	User save(User user);
 	long getUserCount();
+	User getUserForEmailAddress(String username);
 }
