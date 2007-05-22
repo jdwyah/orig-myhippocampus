@@ -9,6 +9,7 @@ import java.util.Set;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.collections.GWTSortedMap;
+import com.aavu.client.widget.datepicker.DateConstants;
 import com.aavu.client.widget.datepicker.DateUtil;
 
 public class TreeOfTime {
@@ -90,9 +91,13 @@ public class TreeOfTime {
 		case 3:
 			return d.getMonth();//month
 		case 4:
-			return (int)Math.floor(d.getDate() / 7.0);//week
-		case 5:
-			return d.getDay();
+			return (int)Math.floor((d.getDate()-1) / 7.0);//week
+		case 5:			
+			//return 1-7 of this week
+			int rtn = d.getDate() % 7;
+			rtn = 0 == rtn ? 7 : rtn;
+			//System.out.println("get sort d5 "+d.getDate()+" "+(d.getDate() % 7)+" "+rtn);
+			return rtn;
 		case 6:
 			return d.getHours();
 		case 7:
@@ -165,8 +170,19 @@ public class TreeOfTime {
 		
 		return num / denom;
 	}
+	private static String getDayStr(int key){
+		if(key == 1)
+			return "1st";
+		if(key == 2)
+			return "2nd";
+		if(key == 3)
+			return "3nd";
+		return key+"th";
+	}
 	
 	public static String getLabelForDepth(int depth,int key, Date date){
+		
+		
 		switch (depth) {
 		case 1:
 			return "The "+key+"0's";
@@ -175,14 +191,14 @@ public class TreeOfTime {
 		case 3:
 			return DateUtil.getMonth(key)+" "+(date.getYear()+1900);
 		case 4:
-			return DateUtil.getMonth(key)+" "+(date.getYear()+1900)+" Week "+(key+1);
+			if(4 == key){
+				return DateUtil.getMonth(date.getMonth())+" "+(date.getYear()+1900)+" 28th-31st";
+			}else{
+				return DateUtil.getMonth(date.getMonth())+" "+(date.getYear()+1900)+" "+getDayStr((7*key+1))+"-"+getDayStr((7*(key+1)));
+			}
 		case 5:
-			String s = DateUtil.getMonth(key)+" ";
-			if(key == 1)
-				return "1st "+(date.getYear()+1900);
-			if(key == 2)
-				return "2nd "+(date.getYear()+1900);
-			return key+"th "+(date.getYear()+1900);
+			String s = DateUtil.getMonth(date.getMonth())+" ";			
+			return s+getDayStr(date.getDate())+" "+(date.getYear()+1900);
 		case 6:
 			return df.format(date)+" "+key+" O'Clock";			
 		case 7:
@@ -213,24 +229,26 @@ public class TreeOfTime {
 //		}
 //	}
 
+	
+	
 	public String toPrettyString() {
 		StringBuffer sb = new StringBuffer();
-		toPrettyString(sb,"");
+		toPrettyString(sb,"",new Integer(0));
 		return sb.toString();	
 	}
-	private void toPrettyString(StringBuffer sb,String spacer) {		
+	private void toPrettyString(StringBuffer sb,String spacer,Integer yourkey) {		
 		for (Iterator iterator = leafs.keySet().iterator(); iterator.hasNext();) {
 			Integer key = (Integer) iterator.next();
 			sb.append(spacer);
 			sb.append(key + "->\n");
 			TreeOfTime subleaf = (TreeOfTime) leafs.get(key);
-			subleaf.toPrettyString(sb,spacer+"---");
+			subleaf.toPrettyString(sb,spacer+"---",key);
 			sb.append("\n");
 		}
 		for (Iterator iterator = members.iterator(); iterator.hasNext();) {
 			HasDate date = (HasDate) iterator.next();
 			sb.append(spacer);
-			sb.append("= "+date.toString());
+			sb.append("= "+date.toString()+" "+getLabelForDepth(depth, yourkey.intValue(), date.getDate())+" depth "+depth+" key "+yourkey.intValue());
 			sb.append("\n");
 		}
 		

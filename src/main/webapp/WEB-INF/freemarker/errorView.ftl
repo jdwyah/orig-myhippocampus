@@ -1,5 +1,8 @@
 <html>
 	<head>
+	<#--decorator won't be called on some errors-->
+	<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+	
 	<title>ERROR</title>		
 	</head>
 	

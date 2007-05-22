@@ -161,9 +161,16 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 
 	/**
 	 * use iterate() to avoid returning rows. Hibernate ref "11.13. Tips & Tricks"
+	 * 
+	 * grrrrr... started throwing a classcastexception, but not repeatable..
 	 */
-	public long getUserCount() {			
-		return (Long)getHibernateTemplate().iterate("select count(*) from User").next();		
+	public long getUserCount() {		
+		try{
+			return (Long)getHibernateTemplate().iterate("select count(*) from User").next();
+		}catch (ClassCastException e) {
+			log.error(e.getMessage());
+			return 10000;
+		}
 	}
 
 	/**

@@ -37,7 +37,7 @@
 		<div class="searchRes">
 			<p class="searchTitle subheading">
 			${result_index + 1})  <@spring.message "userPage.search.score"/>${result.score}
-				<a href="<@spring.url "/site/secure/showTopic.html?id=${result.topicID?c}"/>">${result.title}</a>
+				<a href="<@spring.url "/site/secure/showTopic.html?id=${result.topicID?c}"/>">${result.title?default("undefined")}</a>
 			</p>
 		   ${result.text?default("")} 
 		</div>	
