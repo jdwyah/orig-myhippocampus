@@ -277,6 +277,7 @@ public interface Consts extends Messages {
 	
 	String login_OpenID();
 	String login_Standard();
+	String gadget_not_available();
 	
 		
 	

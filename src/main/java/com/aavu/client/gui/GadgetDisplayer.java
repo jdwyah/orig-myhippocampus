@@ -79,6 +79,10 @@ public class GadgetDisplayer extends Composite {
 
 
 	public void addGadget(Gadget gadget) {
+		if(!gadget.enabled(manager.getUser())){
+			manager.displayInfo(ConstHolder.myConstants.gadget_not_available());
+			return;
+		}
 		/*
 		 * if this is a first time add
 		 */

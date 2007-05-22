@@ -7,6 +7,7 @@ import org.gwtwidgets.client.ui.ImageButton;
 import com.aavu.client.HippoTest;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -94,6 +95,11 @@ public class UploadBoard extends Gadget {
 	//@Override
 	public boolean isOnForTopic(Topic topic) {
 		return topic.hasFiles();
+	}
+
+	//@Override
+	public boolean enabled(User user) {
+		return user.isPremiumAccount();
 	}
 	
 	

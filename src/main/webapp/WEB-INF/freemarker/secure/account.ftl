@@ -58,7 +58,7 @@ encrypt the whole button on the fly. See code stublets in com.aavu.service.paypa
 		</div>
 		
 		<#list subscriptions as subscription>
-			<@makeButton subscription/>${subscription.description} $${subscription.price} / month for up to ${subscription.maxTopics} topics.					
+			<@makeButton subscription/>${subscription.description} $${subscription.price} / month for up to ${subscription.maxTopics} topics & 500MB of file storage.					
 		</#list>
 		
 

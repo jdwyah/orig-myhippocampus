@@ -10,14 +10,17 @@ import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ViewPanel extends AbsolutePanel implements MouseListener {
+public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesChangeEvents {
 
-	private static final int SHOW_TOPICS_AT_ZOOM = 3;
-
+	
 	protected int backX = 0;
 	protected int backY = 0;
 	private int curbackX = 0;
@@ -38,11 +41,9 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 
 	protected boolean islandDrag;
 
-	private int lastx;
-
-	private int lasty;
 
 	protected List objects = new ArrayList();
+	private ChangeListenerCollection changeCollection = new ChangeListenerCollection();
 
 	public ViewPanel(){
 		super();
@@ -62,7 +63,7 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 
 	}
 
-	protected void addObject(RemembersPosition rp) {		
+	public void addObject(RemembersPosition rp) {		
 		add(rp.getWidget(),rp.getLeft(),rp.getTop());
 		objects.add(rp);
 	}
@@ -92,6 +93,7 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 	 * don't let a regular clear() happen or you'll lose the focusBackdrop
 	 */
 	public void clear(){
+		//System.out.println("calling our clear()");
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 			Widget w = (Widget) iter.next();			
 			remove(w);
@@ -118,6 +120,14 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 
 
 
+	public int getCurbackX() {
+		return curbackX;
+	}
+
+	public int getCurbackY() {
+		return curbackY;
+	}
+
 	protected int getCenterX(){
 		return getCenterX(currentScale,Window.getClientWidth());
 	}
@@ -142,6 +152,25 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 	public boolean isDoYTranslate() {
 		return doYTranslate;
 	}
+	
+	/**
+	 * Do an absolute move
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void moveTo(int x, int y) {
+		int dx = backX - x;
+		int dy = backY - y;
+		
+		moveByDelta(dx, dy);
+
+		//this was normally set in finishDrag()
+		backX = curbackX;
+		backY = curbackY;
+	}
+	
+	
 	/**
 	 * This moves the background and then sets the back position.
 	 * Call this when you want a move.
@@ -198,30 +227,26 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 			//setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale), (int)((rp.getTop()+curbackY)*currentScale));				
 			setWidgetPosition(rp.getWidget(),(int)((rp.getLeft())*currentScale)+curbackX, (int)((rp.getTop())*currentScale)+curbackY);
 
-
-			/*
-			 * All the islands need to check to see if they're in the visible 
-			 * window. If so, and we're zoomed in enough, show the topics. 
-			 * 
-			 * all others should turn topics off.
-			 * 
-			 */
-			if(o instanceof Island){
-				Island island = (Island) o;
-				int left = (int) (centerX - halfWidth/currentScale);
-				int top = (int) (centerY - halfHeight/currentScale);
-				int right = (int) (centerX + halfWidth/currentScale);
-				int bottom = (int) (centerY + halfHeight/currentScale);
-				if(island.isWithin(left,top,right,bottom) && currentScale >= SHOW_TOPICS_AT_ZOOM ){
-					island.showTopics();
-				}else{
-					island.removeTopics();
-				}
-
-			}
+			objectHasMoved(rp,halfWidth,halfHeight,centerX,centerY);
+						
 		}
+		
+		
 
 	}
+	
+	/**
+	 * Override this if you want object move event processing 
+	 * 
+	 * @param o
+	 * @param halfWidth
+	 * @param halfHeight
+	 * @param centerX
+	 * @param centerY
+	 */
+	protected void objectHasMoved(RemembersPosition o, int halfWidth, int halfHeight, int centerX, int centerY) {}		
+	
+
 	public void onMouseDown(Widget sender, int x, int y) {		
 		//System.out.println("down "+(sender instanceof Island) +" x "+x+" y "+y +" "+dragging);
 
@@ -243,11 +268,10 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
-		//System.out.println("move "+(sender instanceof Island) +" x "+x+" y "+y +" "+dragging);
-		lastx = x;
-		lasty = y;
+		//System.out.println("move "+(sender instanceof Island) +" x "+x+" y "+y +" "+dragging);		
 		if (dragging) {			
-			moveByDelta(dragStartX - x, dragStartY - y);			
+			moveByDelta(dragStartX - x, dragStartY - y);	
+			changeCollection.fireChange(this);
 		}
 	}
 
@@ -262,5 +286,17 @@ public class ViewPanel extends AbsolutePanel implements MouseListener {
 
 	protected void unselect() {
 
+	}
+
+	public void redraw() {
+		moveBy(0, 0);
+	}
+
+	public void addChangeListener(ChangeListener listener) {
+		changeCollection.add(listener);
+	}
+
+	public void removeChangeListener(ChangeListener listener) {
+		changeCollection.remove(listener);
 	}
 }
