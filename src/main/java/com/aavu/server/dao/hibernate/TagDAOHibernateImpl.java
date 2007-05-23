@@ -148,7 +148,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 				.executeUpdate();				
 				return updatedEntities;				
 			}});
-		System.out.println("res: "+res);
+		log.debug("res: "+res);
 		
 		getHibernateTemplate().evict(t);
 		

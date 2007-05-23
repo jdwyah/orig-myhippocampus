@@ -8,14 +8,11 @@ import java.util.Set;
 
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.dto.LocationDTO;
-import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.gui.maps.ext.MarkerManager;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.mapitz.gwt.googleMaps.client.GControl;
-import com.mapitz.gwt.googleMaps.client.GIcon;
 import com.mapitz.gwt.googleMaps.client.GLatLng;
 import com.mapitz.gwt.googleMaps.client.GMap2;
 import com.mapitz.gwt.googleMaps.client.GMap2EventClickListener;
@@ -27,10 +24,10 @@ import com.mapitz.gwt.googleMaps.client.GMarker;
 import com.mapitz.gwt.googleMaps.client.GMarkerEventClickListener;
 import com.mapitz.gwt.googleMaps.client.GMarkerEventDragListener;
 import com.mapitz.gwt.googleMaps.client.GMarkerEventManager;
-import com.mapitz.gwt.googleMaps.client.GMarkerManager;
 import com.mapitz.gwt.googleMaps.client.GMarkerManagerOptions;
 import com.mapitz.gwt.googleMaps.client.GMarkerOptions;
 import com.mapitz.gwt.googleMaps.client.GOverlay;
+import com.mapitz.gwt.googleMaps.client.JSObject;
 
 
 /**
@@ -39,7 +36,7 @@ import com.mapitz.gwt.googleMaps.client.GOverlay;
  * @author Jeff Dwyer
  *
  */
-public class HippoMapWidget extends Composite implements GMarkerEventDragListener, WheelListener, GMap2EventMouseListener, GMarkerEventClickListener {
+public class HippoMapWidget extends Composite implements GMarkerEventDragListener, GMap2EventMouseListener, GMarkerEventClickListener {
 	
 	private static final int MAX_ZOOM = 17;
 	private static final int AMALGAMIZED_START = 4;
@@ -62,7 +59,6 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		//middle of atlantic
 		GLatLng center = new GLatLng(33.13755119234614, -35.15625);
 		
-
 		
 		
 	    mapWidget = new GMap2Widget(height+"", width+"",center,zoom,null);
@@ -115,10 +111,17 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	    eventManager.addOnMouseOutListener(gmaps, this);
 	    eventManager.addOnMouseOverListener(gmaps, this);
 	    
+
+		enableScrollWheelZoom(gmaps.getJSObject());
+	    
 	    initWidget(mapWidget);
 	}
 	
 
+	public static native void enableScrollWheelZoom(JSObject map)/*-{
+  		map.enableScrollWheelZoom();
+  	}-*/;
+	
 	public void add(LocationDTO locObj,boolean partOfAmalgam) {
 		createPoint(locObj,partOfAmalgam);		
 	}
@@ -295,17 +298,7 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 	public void onMouseOver(GMap2 map, GLatLng latlng) {
 		weHaveFocus = true;
 	}
-	public boolean onWheel(Widget widget, int delta) {		
-		if(weHaveFocus){
-			if(delta < 0){
-				gmaps.zoomOut();
-			}else{
-				gmaps.zoomIn();
-			}
-			return true;
-		}
-		return false;
-	}
+	
 
 
 	public void setSize(int i) {

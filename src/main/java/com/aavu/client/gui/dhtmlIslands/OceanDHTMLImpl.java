@@ -1,9 +1,7 @@
 package com.aavu.client.gui.dhtmlIslands;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,12 +21,13 @@ import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.ext.WheelListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelVelocity;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -39,7 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedListener, WheelListener {
+public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedListener, MouseWheelListener {
 
 	private static final int CLOUD_MOVE_MSEC = 7000;
 
@@ -375,9 +374,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 
 		oceanKeyboardListener = new OceanKeyBoardListener(this);
 		
-		//added in order because the event can be cancelled
-		focusBackdrop.addWheelistener(manager);
-		focusBackdrop.addWheelistener(this);
+		
+		focusBackdrop.addMouseWheelListener(this);
 		
 		focusBackdrop.addKeyboardListener(oceanKeyboardListener);
 		
@@ -556,7 +554,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 	 * 
 	 */
 	//@Override
-	protected void objectHasMoved(Object o, int halfWidth, int halfHeight, int centerX, int centerY) {
+	protected void objectHasMoved(RemembersPosition o, int halfWidth, int halfHeight, int centerX, int centerY) {
 		
 		if(o instanceof Island){
 			Island island = (Island) o;
@@ -573,14 +571,6 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		}
 	}
 
-	public boolean onWheel(Widget widget, int delta) {
-		if(delta < 0){
-			zoomOut();
-		}else{
-			zoomIn();
-		}
-		return false;
-	}
 
 	private void reCenter(int centerX, int centerY, double scale, int halfWidth, int halfHeight) {
 
@@ -720,6 +710,16 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		
 		finishZoom(oldScale);
 		
+	}
+
+	
+	public void onMouseWheel(Widget sender, int x, int y,
+			MouseWheelVelocity velocity) {
+		if(velocity.isSouth()){
+			zoomOut();
+		}else{
+			zoomIn();
+		}		
 	}
 
 

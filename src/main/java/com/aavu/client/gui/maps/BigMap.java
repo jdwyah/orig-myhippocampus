@@ -51,7 +51,6 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		VerticalPanel mainP = new VerticalPanel();
 
 		mapWidget = new HippoMapWidget(this,width,height,DEFAULT_ZOOM);		
-		manager.addWheelistener(mapWidget);
 
 		mainP.add(mapWidget);
 

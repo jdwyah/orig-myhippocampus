@@ -134,7 +134,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 		    
 		
 		mapWidget = new HippoMapWidget(this,200,200,DEFAULT_ZOOM);		
-		manager.addWheelistener(mapWidget);
+		
 		
 		extraPanel.add(mapWidget);
 	}

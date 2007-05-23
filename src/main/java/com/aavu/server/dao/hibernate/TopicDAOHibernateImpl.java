@@ -433,14 +433,17 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		for (Object result : ll) {
 			Object[] oa = (Object[]) result;
-			for (int i = 0; i < oa.length; i++) {
-				Object object = oa[i];
-				if(object != null){
-					System.out.println(" "+i+" "+object+" "+object.getClass());
-				}else{
-					System.out.println(" "+i+" "+object+" ");
-				}
-			}
+			
+//			if(log.isDebugEnabled()){
+//				for (int i = 0; i < oa.length; i++) {
+//					Object object = oa[i];
+//					if(object != null){
+//						log.debug(" "+i+" "+object+" "+object.getClass());
+//					}else{
+//						log.debug(" "+i+" "+object+" ");
+//					}
+//				}
+//			}
 
 			TopicIdentifier topic = new TopicIdentifier((Long)oa[0],(String)oa[1]);
 
