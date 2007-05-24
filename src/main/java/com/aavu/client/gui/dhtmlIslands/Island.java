@@ -525,7 +525,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
 			FullTopicIdentifier fti = (FullTopicIdentifier) iter.next();	
 			
-			System.out.println("fti: "+fti);
+			//System.out.println("Island.fti: "+fti);
 			
 			if(fti.getLongitudeOnIsland() < 0){
 				//just try to space them out a bit if they don't have real values

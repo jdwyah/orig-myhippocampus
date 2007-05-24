@@ -209,7 +209,8 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 
 	
 	//@Override
-	public void nowVisible() {		
+	public void nowVisible() {
+		makeVisible();//necessary. otherwise we just get grey maps.
 		center();
 	}
 

@@ -542,7 +542,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
 			Topic possibleMeta = (Topic) iterator.next();
 
-			System.out.println("getTagProperties CHECKING "+possibleMeta);
+			//System.out.println("Topic.getTagProperties CHECKING "+possibleMeta);
 
 			//sanity check. All members of this association really should be 
 			//Metas. 
@@ -628,11 +628,11 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 			}			
 		};
 		
-		System.out.println("getMetas() assoc size"+getAssociations().size());
+		//System.out.println("Topic.getMetas() assoc size"+getAssociations().size());
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			
-			System.out.println("getMetas() assoc "+association);
+			//System.out.println("Topic.getMetas() assoc "+association);
 			
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possibleMeta = (Topic) iterator.next();
@@ -649,15 +649,15 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 	private Association getAssociationForMetaOrNull(Meta meta) {
 		
-		System.out.println("NUM assoc "+getAssociations().size());
+		//System.out.println("Topic.NUM assoc "+getAssociations().size());
 		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
 			Association association = (Association) iter.next();
 			
-			System.out.println("association.members.size() "+association.getMembers().size());
+			//System.out.println("Topic.association.members.size() "+association.getMembers().size());
 			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
 				Topic possible = (Topic) iterator.next();
 				
-				System.out.println("getAssociationForMetaOrNull "+possible.getId()+" "+meta.getId());
+				//System.out.println("Topic.getAssociationForMetaOrNull "+possible.getId()+" "+meta.getId());
 				
 				if (possible.getId() == meta.getId()) {	
 					return association;									
