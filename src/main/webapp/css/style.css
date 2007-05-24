@@ -5,7 +5,7 @@ body {
 	padding: 0em;
 	font-family: Verdana, Tahoma, Arial, sans-serif;
 	background-color: #D2EAF9;
-	background-image:url("../com.aavu.HippoTest/img/simplicity/ocean100.png");
+	background-image:url("../com.aavu.HippoTest/img/simplicity/ocean200.png");
 }
 
 h2 {
@@ -32,8 +32,8 @@ h2 {
 
 #sidebar {
 	float: left;
-	background-color: #d3d345; /*green*/
-	width: 200px;
+	background-color: #B2BB2B; /*green*/
+	width: 180px;
 	height: 900px;
 }
 

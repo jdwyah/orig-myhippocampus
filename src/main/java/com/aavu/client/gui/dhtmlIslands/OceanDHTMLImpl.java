@@ -712,9 +712,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		
 	}
 
-	
-	public void onMouseWheel(Widget sender, int x, int y,
-			MouseWheelVelocity velocity) {
+
+	public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
 		if(velocity.isSouth()){
 			zoomOut();
 		}else{

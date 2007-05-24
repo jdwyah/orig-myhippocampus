@@ -109,6 +109,18 @@ public class UserServiceImpl implements UserService {
 		}		
 	}
 
+	/**
+	 * only openID users are allowed '.' and all openID usernames must have a '.'
+	 * so, if it's got a '.' janrain.normalize() before the lookup
+	 */
+	public User getUserWithNormalization(String username)  throws UsernameNotFoundException {
+
+		if(username.contains(".")){
+			return userDAO.getUserByUsername(com.janrain.openid.Util.normalizeUrl(username));
+		}else{
+			return userDAO.getUserByUsername(username);
+		}
+	}
 
 	public List<User> getAllUsers() {
 		return userDAO.getAllUsers();

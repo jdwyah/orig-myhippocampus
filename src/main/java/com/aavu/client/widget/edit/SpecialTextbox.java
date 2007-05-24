@@ -227,9 +227,9 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	/**
 	 * NOTE see above, textArea listeners seem broken
 	 */
-	public void addChangeListener(ChangeListener listener) {		
-		textArea.addChangeListener(listener);
-		
+	public void addChangeListener(ChangeListener listener) {	
+
+		textArea.addKeyboardListener(this);
 		if(listeners == null){
 			listeners = new ChangeListenerCollection();
 		}
@@ -239,7 +239,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 	public void removeChangeListener(ChangeListener listener) {
 		
-		textArea.removeChangeListener(listener);
+		textArea.removeKeyboardListener(this);
 		if(listeners != null){
 			listeners.remove(listener);
 		}		
@@ -249,22 +249,24 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 
 	public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-		System.out.println("DOWN KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
+		//System.out.println("DOWN KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
 	}
 	public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-		System.out.println("PRESS KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
+		//System.out.println("PRESS KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
 	}
 	public void onKeyUp(Widget sender, char keyCode, int modifiers) {
 		
-		System.out.println("UP KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
+		listeners.fireChange(sender);
 		
-		if((KEY_CTRL == modifiers) && (keyCode == KEY_PIPE_FF || keyCode == KEY_PIPE_IE)){
-			openLinkDialog();			
-		}
-//		System.out.println("list "+listeners);
-//		if(listeners != null){
-//			listeners.fireChange(this);
-//		}		
+//		System.out.println("UP KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
+//		
+//		if((KEY_CTRL == modifiers) && (keyCode == KEY_PIPE_FF || keyCode == KEY_PIPE_IE)){
+//			openLinkDialog();			
+//		}
+////		System.out.println("list "+listeners);
+////		if(listeners != null){
+////			listeners.fireChange(this);
+////		}		
 	}
 
 }

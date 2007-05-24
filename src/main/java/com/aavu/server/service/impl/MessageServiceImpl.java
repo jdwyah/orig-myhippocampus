@@ -17,18 +17,18 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.TopicDAO;
-import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.MessageServiceReturn;
 import com.aavu.server.domain.PersistedFile;
 import com.aavu.server.service.FilePersistanceService;
 import com.aavu.server.service.MessageService;
+import com.aavu.server.service.UserService;
 
 public class MessageServiceImpl implements MessageService {
 	private static final Logger log = Logger.getLogger(MessageServiceImpl.class);
 
 	private static final String INBOX = "Inbox";
 
-	private UserDAO userDAO;
+	private UserService userService;
 	private FilePersistanceService fileService;
 	
 	
@@ -81,7 +81,7 @@ public class MessageServiceImpl implements MessageService {
 
 		
 		try {
-			User u = userDAO.getUserForEmailAddress(username);
+			User u = userService.getUserWithNormalization(username);
 
 			log.debug("Subject: "+subject);
 			log.debug("Text: "+text);
@@ -150,8 +150,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
+	
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 	public void setTagDAO(TagDAO tagDAO) {

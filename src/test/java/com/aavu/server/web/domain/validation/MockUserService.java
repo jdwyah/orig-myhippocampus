@@ -118,4 +118,9 @@ public class MockUserService implements UserService {
 		return false;
 	}
 
+	public User getUserWithNormalization(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

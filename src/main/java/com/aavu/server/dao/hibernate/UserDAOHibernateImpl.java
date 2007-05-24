@@ -173,17 +173,6 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		}
 	}
 
-	/**
-	 * only openID users are allowed '.' and all openID usernames must have a '.'
-	 * so, if it's got a '.' janrain.normalize() before the lookup
-	 */
-	public User getUserForEmailAddress(String username)  throws UsernameNotFoundException {
-
-		if(username.contains(".")){
-			return getUserByUsername(com.janrain.openid.Util.normalizeUrl(username));
-		}else{
-			return getUserByUsername(username);
-		}
-	}
+	
 
 }

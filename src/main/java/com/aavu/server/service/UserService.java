@@ -24,6 +24,9 @@ public interface UserService {
 	List<User> getAllUsers();
 
 	User getCurrentUser() throws UsernameNotFoundException;
+
+	User getUserWithNormalization(String username);
+	
 	boolean exists(String username);
 	
 	void subscriptionCancel(String paypalID);
@@ -39,6 +42,7 @@ public interface UserService {
 	void toggleSupervisor(Integer id) throws PermissionDeniedException;
 
 	boolean nowAcceptingSignups();
+
 
 	
 }

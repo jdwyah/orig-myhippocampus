@@ -49,7 +49,7 @@
 		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="messageService" class="com.aavu.server.service.impl.MessageServiceImpl">
-		<property name="userDAO" ref="userDAO" />
+		<property name="userService" ref="userService" />
 		<property name="tagDAO" ref="tagDAO" />
 		<property name="topicDAO" ref="topicDAO" />
 		<property name="fileService" ref="fileService" />

@@ -12,6 +12,7 @@ import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -30,6 +31,8 @@ public interface TopicDAO {
 
 	Topic get(long topicID);
 	List<Meta> getAllMetas(User currentUser);
+
+	List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User user,int start, int max, String startStr);
 	
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr);
 
@@ -40,7 +43,8 @@ public interface TopicDAO {
 	Topic getForID(User currentUser, long topicID);
 
 	Topic getForName(User user,String string);
-
+	Topic getPublicForName(String username, String string);
+	
 	List<TopicIdentifier> getLinksTo(Topic topic,User user);
 	List<LocationDTO> getLocations(long tagID, User user);
 	
@@ -58,6 +62,7 @@ public interface TopicDAO {
 	
 	List<TopicIdentifier> getTopicForOccurrence(long id);
 
+	List<TopicTypeConnector> getTopicIdsWithTag(long id);
 	List<TopicTypeConnector> getTopicIdsWithTag(long tagid,User user);
 	List<TopicIdentifier> getTopicsStarting(User user,String match);
 
@@ -79,6 +84,9 @@ public interface TopicDAO {
 	void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude);
 
 	void tester();
+
+	
+
 	
 
 }

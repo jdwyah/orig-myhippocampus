@@ -84,12 +84,6 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 
-	private boolean userIsOverSubscriptionLimit(){
-		User u = userService.getCurrentUser();		
-		int curTopics = topicDAO.getTopicCount(u);		
-		return u.getSubscription().getMaxTopics() < curTopics;
-	}
-
 	public Topic createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
 
 
@@ -143,11 +137,6 @@ public class TopicServiceImpl implements TopicService {
 		topicDAO.deleteOccurrence(o);
 	}
 
-
-
-
-
-
 	/**
 	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects.
 	 * 2) Execute. use the domain classes logic & the command to enact the change
@@ -161,32 +150,41 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 
+
+
+
+
 	public List<LocationDTO> getAllLocations() {	
 		return topicDAO.getLocations(userService.getCurrentUser());
 	}
+
 
 	public List<Meta> getAllMetas() {		
 		return topicDAO.getAllMetas(userService.getCurrentUser());
 	}
 
-	
-
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),false);
 	}
-	public List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr) {
-		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),start,max,startStr);
-	}	
+
+	
+
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
 		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
 	}
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr) {
+		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),start,max,startStr);
+	}
+	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username,int start, int max, String startStr) {		
+		return topicDAO.getAllTopicIdentifiers(userService.getUserWithNormalization(username),start,max,startStr);
+	}	
 	public Topic getForID(long topicID) {
 		return topicDAO.getForID(userService.getCurrentUser(),topicID);
 	}
-
 	public Topic getForName(String string) {
 		return topicDAO.getForName(userService.getCurrentUser(),string);
 	}
+
 	public List<TopicIdentifier> getLinksTo(Topic topic) {
 		return topicDAO.getLinksTo(topic, userService.getCurrentUser());
 	}
@@ -198,6 +196,22 @@ public class TopicServiceImpl implements TopicService {
 		}		
 		return rtn;		
 	}
+	public Topic getPublicTopic(String userString, String topicString) throws HippoBusinessException {		
+		Topic t = topicDAO.getPublicForName(userString, topicString);
+		if(t != null){
+			return t;
+		}else{
+			if(userService.exists(userString)){
+				throw new HippoBusinessException("No Topic Found");
+			}else{				
+				throw new HippoBusinessException("No User "+userString+" Found");				
+			}
+		}		
+	}
+	public List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id){
+		return connectorsToTIs(topicDAO.getTopicIdsWithTag(id));
+	}
+	
 	public MetaSeeAlso getSeeAlsoMetaSingleton() throws HippoBusinessException{		
 		if(seealsoSingleton == null){
 			log.info("seealso single == null. Finding... ");
@@ -231,6 +245,10 @@ public class TopicServiceImpl implements TopicService {
 
 		List<TopicTypeConnector> conns = topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
 
+		return connectorsToTIs(conns);
+				
+	}
+	private List<FullTopicIdentifier> connectorsToTIs(List<TopicTypeConnector> conns){
 		List<FullTopicIdentifier> rtn = new ArrayList<FullTopicIdentifier>(conns.size());
 		for (TopicTypeConnector conn : conns) {
 			rtn.add(new FullTopicIdentifier(conn));
@@ -240,7 +258,6 @@ public class TopicServiceImpl implements TopicService {
 
 		}
 		return rtn;
-		//return topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
 	}
 
 	public List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList) {
@@ -380,6 +397,11 @@ public class TopicServiceImpl implements TopicService {
 	}
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	private boolean userIsOverSubscriptionLimit(){
+		User u = userService.getCurrentUser();		
+		int curTopics = topicDAO.getTopicCount(u);		
+		return u.getSubscription().getMaxTopics() < curTopics;
 	}
 
 

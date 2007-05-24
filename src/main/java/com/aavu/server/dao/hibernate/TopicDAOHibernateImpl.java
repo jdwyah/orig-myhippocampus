@@ -279,7 +279,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * 
 	 */	
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr) {
-		return getAllTopicIdentifiers(user, start, max, startStr,false);
+		return getAllTopicIdentifiers(user, start, max, startStr,false,false);
 	}
 
 	/**
@@ -287,9 +287,11 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * 
 	 */
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,boolean all) {
-		return getAllTopicIdentifiers(user,0,9999,null,all);
+		return getAllTopicIdentifiers(user,0,9999,null,all,false);
 	}
-	
+	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User user,int start, int max, String startStr){
+		return getAllTopicIdentifiers(user, start, max, startStr,false,true);
+	}
 	/**
 	 * TODO replace hardcoded class discriminators with .class.
 	 * 
@@ -300,13 +302,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 	 * @param all
 	 * @return
 	 */
-	private List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr,boolean all) {
+	private List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr,boolean all,boolean publicOnly) {
 
 		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class);
 
-		crit.add(Expression.eq("user", user))
+		crit.add(Expression.eq("user", user));
+		
+		
 		//never add seealso, this is the seeAlsoUber singleton
-		.add(Expression.ne("class", "seealso"));
+		crit.add(Expression.ne("class", "seealso"));
 
 		if(!all){			
 			crit.add(Expression.ne("class", "association"))			
@@ -365,7 +369,20 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title = :title", "user", user);
 	}
 
+	public Topic getPublicForName(String username, String string) {
 
+		log.debug("Public user "+username+" string "+string);
+
+		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
+				.createAlias("user", "u")	
+				.add(Expression.eq("u.username", username))
+				.add(Expression.eq("publicVisible",true))
+				.add(Expression.eq("title", string)));
+
+		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+
+		//return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title = :title", "user", user);
+	}
 
 	public List<TopicIdentifier> getLinksTo(Topic topic,User user) {
 		Object[] params = {topic.getId(),user};
@@ -622,6 +639,16 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 //		log.debug("DAO says "+connector.getId()+" "+connector.getLongitude()+" "+connector.getLatitude());
 //		}
 //		}
+
+		return rtn;
+	}
+	/**
+	 * No user, so only return public topics
+	 */
+	public List<TopicTypeConnector> getTopicIdsWithTag(long tagid) {
+
+		List<TopicTypeConnector> rtn = getHibernateTemplate().find("from TopicTypeConnector conn "+
+				"where conn.type.id = ? and conn.topic.publicVisible = true order by conn.topic.lastUpdated DESC",new Long(tagid));
 
 		return rtn;
 	}

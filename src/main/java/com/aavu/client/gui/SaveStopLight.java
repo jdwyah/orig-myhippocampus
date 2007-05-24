@@ -17,7 +17,7 @@ public class SaveStopLight extends Composite {
 
 	public SaveStopLight(final ClickListener saveNow){
 		sp = new StackPanel();
-		sp.removeStyleName("gwt-StackPanel");
+		sp.setStyleName("H-SaveLight");
 		sp.add(new ImageButton(ConstHolder.myConstants.save_greenLight(),30,30));
 
 		redLight = new ImageButton(ConstHolder.myConstants.save_redLight(),30,30);

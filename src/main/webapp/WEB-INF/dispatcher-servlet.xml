@@ -152,6 +152,15 @@
 		<property name="topicService" ref="topicService"/>
 		<property name="userService" ref="userService" />
 	</bean>
+	
+	<bean id="browseController" class="com.aavu.server.web.controllers.BrowseController">
+		<property name="view" value="browseShow" />
+		<property name="notFoundView" value="browseNotFound"/>
+		<property name="userStartView" value="browseUser"/>
+		<property name="topicService" ref="topicService"/>
+		<property name="userService" ref="userService" />
+	</bean>
+	
 
 	<!-- ?? why doesn't ${paypal.endpoint} work?? -->
 	<bean id="paypalController" class="com.aavu.server.web.controllers.PaypalIPNController">
@@ -236,14 +245,53 @@
 
 				<prop key="/site/secure/invite.html">invitationController</prop>						
 				<prop key="/site/secure/account.html">accountController</prop>	
-				
-				
+								
 				<prop key="/site/j_acegi_openid_start">openIDLoginStartController</prop>					
 
+				<prop key="/site/**/*">browseController</prop>
+
+				<!-- 
+				<prop key="/css/**/*">myServletForwardingController</prop>
+				<prop key="/decorators/**/*">myServletForwardingController</prop>
+				<prop key="/img/**/*">myServletForwardingController</prop>
+				<prop key="/com.aavu.HippoTest/**/*">myServletForwardingController</prop>
+				<prop key="/com.aavu.AddLink/**/*">myServletForwardingController</prop>
+				<prop key="/resources/**/*">myServletForwardingController</prop>
+				<prop key="/screencasts/**/*">myServletForwardingController</prop>
+ 				-->
+				
+				
 			</props>
 		</property>
 
 	</bean>
+	<!-- All other resources are served up plain -->
+	<!-- 
+	<bean name="/css/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="default"/>
+	</bean>
+	<bean name="/decorators/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="default"/>
+	</bean>
+	<bean name="/img/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="default"/>
+	</bean>
+	<bean name="/com.aavu.HippoTest/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="default"/>
+	</bean>
+	<bean name="/com.aavu.AddLink/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="default"/>
+	</bean>
+	<bean name="/resources/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="default"/>
+	</bean>
+	<bean name="/screencasts/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="default"/>
+	</bean>
+	<bean id="myServletForwardingController" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+   		<property name="servletName" value="default"/>
+ 	</bean> -->
+	
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10485760"/><!-- 10MB -->

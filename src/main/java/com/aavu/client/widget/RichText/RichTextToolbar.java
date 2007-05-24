@@ -220,10 +220,6 @@ public class RichTextToolbar extends Composite {
         basic.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
         fontSizes.setSelectedIndex(0);
       }
-
-      if (sender == richText) {
-        updateStatus();
-      }
     }
 
     public void onClick(Widget sender) {
@@ -395,7 +391,6 @@ public class RichTextToolbar extends Composite {
 
       // We only use these listeners for updating status, so don't hook them up
       // unless at least basic editing is supported.
-      richText.addChangeListener(listener);
       richText.addKeyboardListener(listener);
       richText.addClickListener(listener);
     }
@@ -479,3 +474,4 @@ public class RichTextToolbar extends Composite {
     }
   }
 }
+

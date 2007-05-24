@@ -173,7 +173,7 @@ public class UserDAOdb4oImpl extends Db4oDaoSupport implements UserDAO, UserDeta
 		return 0;
 	}
 
-	public User getUserForEmailAddress(String username) {
+	public User getUserWithNormalization(String username) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -47,22 +47,30 @@ public interface TopicService {
 	
 	/**
 	 * Filter out Dates/Locaitons/Metas.
-	 * @param startStr 
-	 * @param max 
-	 * @param start 
-	 */
-	List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr);
-	/**
-	 * Filter out Dates/Locaitons/Metas.
 	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers();
-	
 	/**
 	 * Don't filter out Dates, Locations, Metas. Intended for debugging/testing use.
 	 * @param all
 	 * @return
 	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all);
+	
+	/**
+	 * Filter out Dates/Locaitons/Metas.
+	 * @param startStr 
+	 * @param max 
+	 * @param start 
+	 */
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr);
+	
+	/**
+	 * Filter out Dates/Locaitons/Metas.
+	 * @param startStr 
+	 * @param max 
+	 * @param start 
+	 */
+	List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username,int start, int max, String startStr);
 	
 	Topic getForID(long topicID);
 
@@ -71,6 +79,9 @@ public interface TopicService {
 
 	List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList);
 
+	Topic getPublicTopic(String userString, String topicString) throws HippoBusinessException;
+	List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id);
+	
 	List<TimeLineObj> getTimeline();
 
 	List<List<TimeLineObj>>  getTimelineWithTags(List<TopicIdentifier> shoppingList);
@@ -78,17 +89,17 @@ public interface TopicService {
 	List<FullTopicIdentifier> getTopicIdsWithTag(long id);
 
 	List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList);
-
-	List<TopicIdentifier> getTopicsStarting(String match);
 	
+	List<TopicIdentifier> getTopicsStarting(String match);
+
 	MindTree getTree(MindTreeOcc occ);
 
 	UserPageBean getUserPageBean(User su);
 
 	LinkAndUser getWebLinkForURLAndUser(String url);
-
 	Occurrence save(Occurrence link);
 	Topic save(Topic topic) throws HippoBusinessException;
 	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
 	MindTree saveTree(MindTree tree);
+	
 }
