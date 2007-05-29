@@ -156,7 +156,7 @@ public class TopicCache {
 	public static final ReturnTypeConstant TOPIC_LIST = new ReturnTypeConstant(2);
 
 	private Map topicByName = new HashMap();
-	
+
 	private Map topicByID = new HashMap();
 	private GWTTopicServiceAsync topicService;
 	
@@ -306,9 +306,7 @@ public class TopicCache {
 		}			
 
 	}
-	public Topic getTopicForName(String topicName) {
-		return (Topic) topicByName.get(topicName);		
-	}
+
 
 
 

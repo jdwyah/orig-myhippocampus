@@ -30,7 +30,7 @@
 
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO" />
-		<property name="maxUsers" value="100" />
+		<property name="maxUsers" value="150" />
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
 		<property name="topicDAO" ref="topicDAO" />

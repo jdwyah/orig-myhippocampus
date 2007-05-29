@@ -9,6 +9,9 @@ import com.aavu.client.service.Manager;
 
 public class DetailsEther extends Ether {
 
+
+	private int zoneStart;
+	
 	public DetailsEther(Manager manager, int width, int height) {
 		super(manager, width, height);
 		addStyleName("H-TimelineDetail");
@@ -31,12 +34,19 @@ public class DetailsEther extends Ether {
 	}
 
 	//@Override
-	protected void newSection(int depth, int key, Date date, int left) {
-		System.out.println("time linebg height "+getHeight());
-		addObject(new TimelineBG(depth,key,date,left,getXSpan(),getHeight(),this));
+	protected int newSection(int depth, int key, Date date) {
 		
-		LabelWrapper startIntervalLabel = new LabelWrapper(TreeOfTime.getLabelForDepth(depth,key,date),left,getIntervalTop()); 			
+
+		zoneStart += getXSpan();			
+
+		
+		//System.out.println("DetailsEther.time linebg height "+getHeight());
+		addObject(new TimelineBG(depth,key,date,zoneStart,getXSpan(),getHeight(),this));
+		
+		LabelWrapper startIntervalLabel = new LabelWrapper(TreeOfTime.getLabelForDepth(depth,key,date),zoneStart,getIntervalTop()); 			
 		addObject(startIntervalLabel);
+		
+		return zoneStart;
 	}
 
 	//@Override
@@ -44,4 +54,17 @@ public class DetailsEther extends Ether {
 		addObject(getTLORepr(manager,tlo,left,top));
 	}
 
+	//@Override
+	protected int getRelLeft(double pct) {
+		return (int) (getXSpan() * pct) + zoneStart;
+	}
+	
+	
+	//@Override
+	public void init() {
+		super.init();
+		zoneStart = -getXSpan();
+	}
+
+	
 }

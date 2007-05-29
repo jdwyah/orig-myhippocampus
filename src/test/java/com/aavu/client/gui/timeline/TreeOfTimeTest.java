@@ -4,13 +4,24 @@ import java.util.Date;
 
 import com.aavu.client.gui.timeline.draggable.TreeOfTime;
 import com.aavu.client.gui.timeline.draggable.Visitor;
+import com.google.gwt.junit.client.GWTTestCase;
 
 import junit.framework.TestCase;
 
 public class TreeOfTimeTest extends TestCase {
+	
+//	extends GWTTestCase {
+//
+//
+//	@Override
+//	public String getModuleName() {	
+//		return "com.aavu.HippoTest";
+//	}
+	
+	private int maxDepth;
 	public void testTree(){
 
-		TreeOfTime tree = new TreeOfTime(1,0,10);
+		TreeOfTime tree = new TreeOfTime(1,0,9,10);
 
 		tree.add(new DateW(1995,5,17));
 		tree.add(new DateW(1995,5,16));
@@ -78,7 +89,7 @@ public class TreeOfTimeTest extends TestCase {
 	
 	public void testMinDepthTree(){
 
-		TreeOfTime tree = new TreeOfTime(1,2,10);
+		TreeOfTime tree = new TreeOfTime(1,2,9,10);
 
 		tree.add(new DateW(1995,5,17));
 		tree.add(new DateW(1995,5,16));
@@ -93,7 +104,7 @@ public class TreeOfTimeTest extends TestCase {
 				assertEquals("Depth Should be 2",depth, 2);
 			}});
 		
-		tree = new TreeOfTime(1,4,10);
+		tree = new TreeOfTime(1,4,9,10);
 
 		tree.add(new DateW(1995,5,17));
 		tree.add(new DateW(1995,5,16));
@@ -109,6 +120,78 @@ public class TreeOfTimeTest extends TestCase {
 		
 	}
 	
+	/**
+	 * show that we can control max depth
+	 */
+	public void testMaxDepthTree(){
+
+		TreeOfTime tree = new TreeOfTime(1,2,3,4);
+		
+		tree.add(new DateW(1995,5,17));
+		tree.add(new DateW(1995,5,16));
+		tree.add(new DateW(1995,5,15));
+		tree.add(new DateW(1995,5,1));
+		tree.add(new DateW(1995,5,17));
+		tree.add(new DateW(1995,5,16));
+		tree.add(new DateW(1995,5,15));
+		tree.add(new DateW(1995,5,1));
+		
+		System.out.println(tree.toPrettyString());
+		
+		tree.visit(new Visitor(){
+			public void found(Object object, int depth, int key) {
+				System.out.println("yooooooooooooooo depth "+depth);
+				assertEquals("Depth Should be 3",3, depth);
+			}});
+		
+		
+		tree = new TreeOfTime(1,2,9,10);
+		addMany(tree);		
+		maxDepth = 0;
+		tree.visit(new Visitor(){
+			public void found(Object object, int depth, int key) {
+				System.out.println(depth);
+				if(depth > maxDepth){
+					maxDepth = depth;
+				}
+		
+			}});
+		assertEquals("Depth Should be 6",6,maxDepth);
+		
+		System.out.println(tree.toPrettyString());
+		
+		tree = new TreeOfTime(1,2,4,10);
+		addMany(tree);		
+		tree.visit(new Visitor(){
+			public void found(Object object, int depth, int key) {
+				assertEquals("Depth Should be 4",4, depth);
+			}});
+		
+		System.out.println(tree.toPrettyString());
+		
+		
+	}
+	private void addMany(TreeOfTime tree){
+		
+		tree.add(new DateW(1995,5,12));
+		tree.add(new DateW(1995,5,11));
+		tree.add(new DateW(1995,5,7));
+		tree.add(new DateW(1995,5,6));
+		tree.add(new DateW(1995,5,5));
+		tree.add(new DateW(1995,5,4,10,5));
+		tree.add(new DateW(1995,5,4,11,4));
+		tree.add(new DateW(1995,5,4,12,6));//
+		tree.add(new DateW(1995,5,4,13,7));
+		tree.add(new DateW(1995,5,4,14,8));
+		tree.add(new DateW(1995,5,4,15,9));
+		tree.add(new DateW(1995,5,4,16,10));
+		tree.add(new DateW(1995,5,4,17,11));
+		tree.add(new DateW(1995,5,4,17,12));
+		tree.add(new DateW(1995,5,4,17,13));
+		tree.add(new DateW(1995,5,4,13,14));
+		tree.add(new DateW(1995,5,4,12,15));
+				
+	}
 
 	private class DateW implements HasDate {
 
@@ -176,4 +259,5 @@ public class TreeOfTimeTest extends TestCase {
 		assertEquals(1.0/60,TreeOfTime.getPctAtDepth(8, d));
 
 	}
+
 }

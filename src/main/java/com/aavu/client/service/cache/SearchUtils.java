@@ -7,7 +7,7 @@ import java.util.Map;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.TopicIdentifier;
 
-public class CacheUtils {
+public class SearchUtils {
 
 	public static TopicIdentifier searchTopics(List topicIdentifiers, String linkTo) {
 		int index = indexedBinarySearch(topicIdentifiers, linkTo);
@@ -31,6 +31,10 @@ public class CacheUtils {
 		return searchTopics(map.getKeyList(), linkTo);
 	}
 
+//	public static int searchEther(GWTSortedMap map, Date date) {		
+//		return searchTopics(map.getKeyList(), linkTo);
+//	}
+	
 	private static int indexedBinarySearch(List list, Comparable key)
 	{
 		int low = 0;

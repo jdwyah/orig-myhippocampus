@@ -110,7 +110,7 @@ public class NewHippoTimeLine extends Composite implements ChangeListener, Hippo
 				
 		clear();
 		
-		TreeOfTime tree = new TreeOfTime(1,3,detailView.getNumberOfSlots());
+		TreeOfTime tree = new TreeOfTime(1,3,5,detailView.getNumberOfSlots());
 		
 		for (Iterator iter = timelines.iterator(); iter.hasNext();) {
 			TimeLineObj tlo = (TimeLineObj) iter.next();
@@ -122,7 +122,7 @@ public class NewHippoTimeLine extends Composite implements ChangeListener, Hippo
 				add((TimeLineObj) date, depth, key);
 			}});
 		
-		System.out.println(tree.toPrettyString());
+		//System.out.println(tree.toPrettyString());
 		
 		redraw();
 	}
@@ -135,13 +135,17 @@ public class NewHippoTimeLine extends Composite implements ChangeListener, Hippo
 			
 			//System.out.println("overView.getCurbackX() "+overView.getCurbackX());
 			
-			detailView.moveTo((int) (overView.getCurbackX()*DETAIL_SCALE),0);
+			detailView.centerOn(overView.getCenterDate());
+			
+			//detailView.moveTo(overView.getLeft(),0);
 			
 		}else if(sender == detailView){			
 			
 			//System.out.println("detailView.getCurbackX() "+detailView.getCurbackX());
 			
-			overView.moveTo((int) (detailView.getCurbackX()/DETAIL_SCALE),0);
+			overView.centerOn(detailView.getCenterDate());
+			
+			//overView.moveTo(detailView.getLeft(),0);
 			
 		}
 	}

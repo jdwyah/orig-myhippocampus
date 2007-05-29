@@ -72,7 +72,7 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 		createdB.setSelected(true);
 		
 		timeline = new NewHippoTimeLine(manager,width - 110,height-70,window);		
-		timeline = new SimpleTimeLine(manager,width - 110,height-70,window);
+		//timeline = new SimpleTimeLine(manager,width - 110,height-70,window);
 	
 		mainP.add(typeSelector);
 		mainP.add(timeline.getWidget());		

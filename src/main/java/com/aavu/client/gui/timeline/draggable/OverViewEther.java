@@ -8,6 +8,7 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.datepicker.DateUtil;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -15,7 +16,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class OverViewEther extends Ether {
 	
 	private transient static final DateTimeFormat df = DateTimeFormat.getFormat("MMM dd yyyy");	
+	private transient static final DateTimeFormat overviewF = DateTimeFormat.getFormat("MMM yyyy");	
 
+	
 	public class Dot extends Composite implements RemembersPosition {
 
 		private int left;
@@ -42,6 +45,10 @@ public class OverViewEther extends Ether {
 			return this;
 		}
 	}
+
+	private int left;
+	private int lastMonth;
+	private int lastYear;
 	
 	public OverViewEther(Manager manager, int width, int height) {
 		super(manager, width, height);
@@ -64,17 +71,55 @@ public class OverViewEther extends Ether {
 		return new Dot(tlo,left,top);
 	}
 
-	protected void newSection(int depth, int key, Date date, int left) {		
-		addObject(new TimelineBG(depth,key,date,left,getXSpan(),getHeight(),this));
+	private int getWidthForDepth(int depth){
+		if(depth <=3){
+			return 100;
+		}else if(depth == 4){
+			return 65;			
+		}else{
+			return 35;
+		}
+			
+	}
+	
+	protected int newSection(int depth, int key, Date date) {	
 		
-		LabelWrapper startIntervalLabel = new LabelWrapper(df.format(date),left,getIntervalTop()); 			
+		addObject(new TimelineBG(depth,key,date,left,getWidthForDepth(depth),getHeight(),this));
+		
+		
+		if(lastYear != date.getYear() || lastMonth != date.getMonth()){
+			LabelWrapper startIntervalLabel = new LabelWrapper(overviewF.format(date),left,getIntervalTop() - 20);		 		
+			addObject(startIntervalLabel);
+		}
+		
+		LabelWrapper startIntervalLabel = new LabelWrapper(TreeOfTime.getShortLabelForDepth(depth,key,date),left,getIntervalTop());		 		
 		addObject(startIntervalLabel);
 		
+		lastYear = date.getYear();
+		lastMonth = date.getMonth();
+		
+		
+		left += getWidthForDepth(depth);
+		
+		return left;
 	}
 
 	//@Override
 	protected void newObject(Manager manager,TimeLineObj tlo, int left, int top) {
 		
 	}
-	
+
+	//@Override
+	protected int getRelLeft(double pct) {
+		return left;
+	}
+	protected int getLeft() {
+		return getCurbackX();
+	}
+
+	public void init() {
+		super.init();		
+		left = 0;
+	}
+
 }

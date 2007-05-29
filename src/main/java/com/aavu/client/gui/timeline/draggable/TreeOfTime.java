@@ -16,14 +16,15 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class TreeOfTime {
 
-	private static final DateTimeFormat df = DateTimeFormat.getFormat("EE, MMM dd");
-		
-	
+	//private static final DateTimeFormat df = DateTimeFormat.getFormat("EE, MMM dd");
+	private static final SimpleDateFormat df = new SimpleDateFormat("EE, MMM dd");
+
+
 	public static final double HOURS_IN_MONTH = 24.0*31.0;
 	public static final double HOURS_IN_WEEK = 24.0*7.0;
 	public static final double MIN_PER_DAY = 24.0*60.0;
 	public static final double SEC_PER_HOUR = 60.0*60.0;
-	
+
 	private Set members;
 	private Map leafs;
 
@@ -31,56 +32,62 @@ public class TreeOfTime {
 
 	private int maxMembers;
 	private int minDepth;
-	
-	public TreeOfTime(int depth, int minDepth, int maxMembers){
+	private int maxDepth;
+
+	public TreeOfTime(int depth, int minDepth, int maxDepth,int maxMembers){
 		this.depth = depth;
 		this.minDepth = minDepth;
+		this.maxDepth = maxDepth;
 		this.maxMembers = maxMembers;
 		members = new HashSet();
 		leafs = new GWTSortedMap();
 	}
-	
+
 	public void add(HasDate d){
-		
+
 		//we'd previously hit the limit
 		if(!leafs.isEmpty()){
-			System.out.println(depth+" Add POST limit "+d);
+			//System.out.println("TreeOfTime."+depth+" Add POST limit "+d);
 			distributeElementToLeafs(d);
 
 		}else{
 
 			//hit the limit, break into subsections
 			//
-			if(members.size() >= maxMembers || depth <= minDepth){
-				System.out.println(depth+" Add ON THE limit "+d);
+			if(depth <= maxDepth
+					&&
+					(members.size() >= maxMembers 
+							|| 
+							depth <= minDepth)){
+				//System.out.println("TreeOfTime."+depth+" Add ON THE limit "+d);
 				for (Iterator iterator = members.iterator(); iterator.hasNext();) {
 					HasDate member = (HasDate) iterator.next();
 					distributeElementToLeafs(member);
 				}
 				members.clear();
-				
+
 				distributeElementToLeafs(d);
 			}
 			//no limit yet
 			//
 			else{
-				System.out.println(depth+" Add PRE limit "+d);
+				//System.out.println("TreeOfTime."+depth+" Add PRE limit "+d);
 				members.add(d);
 			}
 		}		
 	}
-	
-	
+
+
 	private void distributeElementToLeafs(HasDate member) {
-		
+
 		int val = getSortValue(depth, member.getDate());
-		
+
 		TreeOfTime leaf = (TreeOfTime) leafs.get(new Integer(val));
 		if(leaf == null){
-			leaf = new TreeOfTime(depth + 1,minDepth,maxMembers);
+			leaf = new TreeOfTime(depth + 1,minDepth,maxDepth,maxMembers);
 			leafs.put(new Integer(val), leaf);
 		}
-		
+
 		leaf.add(member);
 	}
 
@@ -108,10 +115,10 @@ public class TreeOfTime {
 			return d.getMinutes();		
 		default:
 			System.out.println("ACK depth "+depth);
-			return d.getSeconds();
+		return d.getSeconds();
 		}
 	}
-	
+
 	/**
 	 * getTime() % interval / interval approach held many thorns, I believe because sorting out the interval 
 	 * was actually much more difficult than it appears & leap years etc rose their heads. 
@@ -123,11 +130,11 @@ public class TreeOfTime {
 	 * @return
 	 */
 	public static double getPctAtDepth(int depth,Date d){
-		
-		
+
+
 		double num = d.getSeconds();
 		double denom = 60;
-		
+
 		switch (depth) {
 		case 1:				
 			System.out.println("YEAR Mod "+d.getYear() % 10);
@@ -167,24 +174,25 @@ public class TreeOfTime {
 		default:			
 			return (d.getSeconds() / 60.0);
 		}
-		
-		System.out.println("DEPTH "+depth + " num "+num +" denom "+denom+" quot "+num/denom);
-		
+
+		//System.out.println("TreeOfTime. DEPTH "+depth + " num "+num +" denom "+denom+" quot "+num/denom);
+
 		return num / denom;
 	}
 	private static String getDayStr(int key){
-		if(key == 1)
-			return "1st";
-		if(key == 2)
-			return "2nd";
-		if(key == 3)
-			return "3nd";
+		int mod = key % 10;
+		if(mod == 1)
+			return key+"st";
+		if(mod == 2)
+			return key+"nd";
+		if(mod == 3)
+			return key+"nd";
 		return key+"th";
 	}
-	
+
 	public static String getLabelForDepth(int depth,int key, Date date){
-		
-		
+
+
 		switch (depth) {
 		case 1:
 			return "The "+key+"0's";
@@ -211,28 +219,57 @@ public class TreeOfTime {
 			return "PicoSeconds";
 		}
 	}
-	
+	public static String getShortLabelForDepth(int depth,int key, Date date){
+
+
+		switch (depth) {
+		case 1:
+			return "The "+key+"0's";
+		case 2:
+			return ""+(key+1900);
+		case 3:
+			return DateUtil.getMonth(key);
+		case 4:
+			if(4 == key){
+				return "28th-31st";
+			}else{
+				return getDayStr((7*key+1))+"-"+getDayStr((7*(key+1)));
+			}
+		case 5:
+						
+			return getDayStr(date.getDate());
+		case 6:
+			return ""+key;			
+		case 7:
+			return date.getHours()+":"+key;
+		case 8:
+			return ":"+key;	
+		default:			
+			return "PicoSeconds";
+		}
+	}
+
 //	private static int getSortBucketNum(int depth){
-//		switch (depth) {
-//		case 1:
-//			return 10;//decade
-//		case 2:
-//			return 10;//year
-//		case 3:
-//			return 12;//month
-//		case 4:
-//			return 4;//week
-//		case 5:
-//			return 7;//day of week
-//		case 6:
-//			return 24;//hour
-//		default:
-//			throw new RuntimeException();
-//		}
+//	switch (depth) {
+//	case 1:
+//	return 10;//decade
+//	case 2:
+//	return 10;//year
+//	case 3:
+//	return 12;//month
+//	case 4:
+//	return 4;//week
+//	case 5:
+//	return 7;//day of week
+//	case 6:
+//	return 24;//hour
+//	default:
+//	throw new RuntimeException();
+//	}
 //	}
 
-	
-	
+
+
 	public String toPrettyString() {
 		StringBuffer sb = new StringBuffer();
 		toPrettyString(sb,"",new Integer(0));
@@ -240,7 +277,7 @@ public class TreeOfTime {
 	}
 	private void toPrettyString(StringBuffer sb,String spacer,Integer yourkey) {		
 		for (Iterator iterator = leafs.keySet().iterator(); iterator.hasNext();) {
-			Integer key = (Integer) iterator.next();
+			Integer key = (Integer) iterator.next();		
 			sb.append(spacer);
 			sb.append(key + "->\n");
 			TreeOfTime subleaf = (TreeOfTime) leafs.get(key);
@@ -248,12 +285,12 @@ public class TreeOfTime {
 			sb.append("\n");
 		}
 		for (Iterator iterator = members.iterator(); iterator.hasNext();) {
-			HasDate date = (HasDate) iterator.next();
+			HasDate date = (HasDate) iterator.next();			
 			sb.append(spacer);
-			sb.append("= "+date.toString()+" "+getLabelForDepth(depth, yourkey.intValue(), date.getDate())+" depth "+depth+" key "+yourkey.intValue());
+			sb.append("= "+date.toString()+" "+getLabelForDepth(depth - 1, yourkey.intValue(), date.getDate())+" depth "+depth+" key "+yourkey.intValue());
 			sb.append("\n");
 		}
-		
+
 	}
 
 	public int getDepth() {
@@ -266,11 +303,11 @@ public class TreeOfTime {
 	private void visit(Visitor visitor, Integer key) {
 		for (Iterator iterator = leafs.keySet().iterator(); iterator.hasNext();) {
 			Integer nextKey = (Integer) iterator.next();
-			
+
 			TreeOfTime subleaf = (TreeOfTime) leafs.get(nextKey);
 			subleaf.visit(visitor,nextKey);			
 		}
-		
+
 		//members should be clear if we have leafs 
 		for (Iterator iterator = members.iterator(); iterator.hasNext();) {
 			HasDate date = (HasDate) iterator.next();
