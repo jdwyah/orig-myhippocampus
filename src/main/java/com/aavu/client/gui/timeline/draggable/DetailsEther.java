@@ -1,4 +1,4 @@
-package com.aavu.client.gui.timeline;
+package com.aavu.client.gui.timeline.draggable;
 
 import java.util.Date;
 

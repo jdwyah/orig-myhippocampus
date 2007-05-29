@@ -85,7 +85,7 @@ public class Manager implements TopicSaveListener, LoginListener  {
 	}
 	private void initConstants() {
 		ConstHolder.myConstants = (Consts) GWT.create(Consts.class);
-		ConstHolder.images = (Images) GWT.create(Images.class);
+		ConstHolder.images = (Images) GWT.create(Images.class);		
 	}	
 
 	

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.gui.timeline.HasDate;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
@@ -12,7 +13,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class TimeLineObj implements IsSerializable, HasDate {
 	
-	private transient static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private transient static final DateTimeFormat sdf = DateTimeFormat.getFormat("yyyy-MM-dd");
+	
 	public static String getDateInJSON(Date date) {
 		return sdf.format(date);
 	}

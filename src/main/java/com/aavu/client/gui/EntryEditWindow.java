@@ -38,8 +38,7 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 		this.manager = manager;
 
 		topicViewAndEditW = new TopicViewAndEditWidget(manager,this);
-		topicViewAndEditW.load(topic);
-		topicViewAndEditW.activateEditView();
+		
 		
 		saveButton = new SaveStopLight(new ClickListener(){
 				public void onClick(Widget sender) {
@@ -54,6 +53,9 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 		mainP.add(saveButton);
 		
 		setContent(mainP);
+		
+		topicViewAndEditW.load(topic);
+		topicViewAndEditW.activateEditView();
 		
 		frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
 		

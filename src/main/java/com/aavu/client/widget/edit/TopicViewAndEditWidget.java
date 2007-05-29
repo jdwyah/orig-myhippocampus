@@ -96,7 +96,7 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 	}
 
 
-	public void onChange(Widget sender) {
+	public void onChange(Widget sender) {		
 		saveNeeded.onChange(this);
 	}
 

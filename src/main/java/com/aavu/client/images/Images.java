@@ -1,7 +1,9 @@
 package com.aavu.client.images;
 
-import com.google.gwt.user.client.ImageBundle;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.user.client.ui.ImageBundle;
+
+
 
 public interface Images extends ImageBundle {
 

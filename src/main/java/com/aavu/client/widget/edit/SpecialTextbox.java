@@ -47,6 +47,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	private TopicCache topicCache;
 
 	private ChangeListenerCollection listeners;
+	private String text;
 
 	public SpecialTextbox(TopicCache topicC){
 		super();
@@ -105,31 +106,8 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		initWidget(mainPanel);
 		
 		
-		ChangeTimer t = new ChangeTimer();
-		t.scheduleRepeating(2000);
 	}
 
-	/**
-	 * TODO take this out once the ChangeListener works correctly. 
-	 * 
-	 * @author Jeff Dwyer
-	 *
-	 */
-	private class ChangeTimer extends Timer {
-		private String lastText;
-		//@Override
-		public void run() {
-			try{
-				String cur = textArea.getText();
-				if(lastText != null && !cur.equals(lastText)){
-					listeners.fireChange(SpecialTextbox.this);
-				}
-				lastText = cur;
-			}catch(Exception e){
-				Logger.debug("Caught "+e);
-			}
-		}
-	}
 
 
 	public void keyCodeEvent(int i,boolean ctrl) {
@@ -147,6 +125,7 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	 * @param text
 	 */
 	public void setText(final String text) {
+		this.text = text;
 		DeferredCommand.addCommand(new Command(){
 			public void execute(){
 				textArea.setHTML(text);	
@@ -256,7 +235,9 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	}
 	public void onKeyUp(Widget sender, char keyCode, int modifiers) {
 		
-		listeners.fireChange(sender);
+		if(!textArea.getHTML().equals(text)){		
+			listeners.fireChange(sender);
+		}
 		
 //		System.out.println("UP KEY_CTRL "+KEY_CTRL+" mod "+modifiers+" "+keyCode+" "+KEY_PIPE_FF+" "+KEY_PIPE_IE);
 //		

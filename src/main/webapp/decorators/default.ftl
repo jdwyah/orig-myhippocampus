@@ -7,8 +7,8 @@
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <meta name="description" content="Personal HD" />
-  <meta name="keywords" content="personal,knowledge,management,visualization,collection,GWT" />
+  <meta name="description" content="Tame information anxiety. Connect your thoughts, Write your novel, Start your business" />
+  <meta name="keywords" content="personal,knowledge,management,visualization,collection,GWT,information,anxiety" />
   <meta name="author" content="Jeff Dwyer/" />
   
   <link rel="stylesheet" type="text/css" href="<@spring.url "/css/style.css"/>"/>

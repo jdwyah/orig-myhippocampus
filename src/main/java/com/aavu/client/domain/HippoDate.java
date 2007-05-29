@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
@@ -16,7 +17,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class HippoDate extends MetaValue implements IsSerializable, Serializable{
 	
-	private transient static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");	
+	private transient static DateTimeFormat df;	
 	
 	public HippoDate(){
 		setPublicVisible(false);
@@ -51,6 +52,9 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 	
 	public void setStartDate(Date date){
 		if(getTitle() == null || getTitle().equals("")){
+			if(df == null){
+				 df = DateTimeFormat.getFormat("M/d/yyyy");
+			}
 			setTitle(df.format(date));
 		}
 		setCreated(date);

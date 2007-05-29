@@ -346,6 +346,35 @@ a:visited {
 .H-TimelineBG {
 	background-color: #9DC3D1;
 }
+.H-TimeBar {
+	border: 1px solid blue;
+	width: 4px;
+	height: 1px;
+	line-height: 1px;
+	margin-left: 2px;
+	background-color: #17E9FB;	
+	/*
+	height: 6px;
+	margin-bottom: 2px;	
+	line-height: 6px;
+	font-size:1px;	
+	background-color: #17E9FB;*/
+	
+}
+.H-TimeDisplay {
+	/*position: absolute;
+	left: 200px;	
+	border: 2px solid green;*/
+	
+	height: 50px;
+	border-bottom: 1px solid black;	
+	
+}
+.H-TimeLabel-Hover{
+	background-color: #D4F9FA;
+	text-decoration: underline;
+}
+
 .H-Ocean { /*background-color: #CCE6FF;*/
 	position: absolute;	
 	background-repeat: repeat;	

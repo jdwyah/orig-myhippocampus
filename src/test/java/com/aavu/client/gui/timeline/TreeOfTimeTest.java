@@ -2,6 +2,9 @@ package com.aavu.client.gui.timeline;
 
 import java.util.Date;
 
+import com.aavu.client.gui.timeline.draggable.TreeOfTime;
+import com.aavu.client.gui.timeline.draggable.Visitor;
+
 import junit.framework.TestCase;
 
 public class TreeOfTimeTest extends TestCase {

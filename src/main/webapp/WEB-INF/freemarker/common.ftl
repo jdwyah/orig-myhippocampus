@@ -16,7 +16,14 @@
 	  document.getElementById('openIDForm').style.display='none';
       document.getElementById('upForm').style.display='block';
   }
-  
+  function formvalidation(){  
+  	if(document.getElementById('j_username2').value.indexOf('.') > -1){  
+  		document.getElementById('openIDForm').submit();
+  	}else{
+  		document.getElementById('j_username').value = document.getElementById('j_username2').value;
+  		doUsernamePassword();
+  	}
+  }
    
 </script>
 
@@ -42,7 +49,7 @@
 			 </label>		 		 
 		 <p>
 		 <input type="hidden" name="password"/>
-		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
+		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit" onclick="javascript:formvalidation();return false;" >
 		</fieldset>
 	 </form>	
 </#macro>

@@ -1,4 +1,4 @@
-package com.aavu.client.gui.timeline;
+package com.aavu.client.gui.timeline.draggable;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -9,13 +9,15 @@ import java.util.Set;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import com.aavu.client.collections.GWTSortedMap;
+import com.aavu.client.gui.timeline.HasDate;
 import com.aavu.client.widget.datepicker.DateConstants;
 import com.aavu.client.widget.datepicker.DateUtil;
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class TreeOfTime {
 
-	private static final SimpleDateFormat df = new SimpleDateFormat("EE, MMM dd");
-
+	private static final DateTimeFormat df = DateTimeFormat.getFormat("EE, MMM dd");
+		
 	
 	public static final double HOURS_IN_MONTH = 24.0*31.0;
 	public static final double HOURS_IN_WEEK = 24.0*7.0;

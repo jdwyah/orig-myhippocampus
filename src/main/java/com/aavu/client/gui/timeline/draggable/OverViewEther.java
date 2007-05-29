@@ -1,4 +1,4 @@
-package com.aavu.client.gui.timeline;
+package com.aavu.client.gui.timeline.draggable;
 
 import java.util.Date;
 
@@ -8,12 +8,13 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 public class OverViewEther extends Ether {
 	
-	private static final SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy");
+	private transient static final DateTimeFormat df = DateTimeFormat.getFormat("MMM dd yyyy");	
 
 	public class Dot extends Composite implements RemembersPosition {
 

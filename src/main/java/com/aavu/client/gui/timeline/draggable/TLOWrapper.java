@@ -1,4 +1,4 @@
-package com.aavu.client.gui.timeline;
+package com.aavu.client.gui.timeline.draggable;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;

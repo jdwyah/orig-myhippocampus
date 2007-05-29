@@ -1,4 +1,4 @@
-package com.aavu.client.gui.timeline;
+package com.aavu.client.gui.timeline.draggable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,6 +9,8 @@ import org.gwm.client.event.GFrameEvent;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.timeline.CloseListener;
+import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -18,7 +20,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class NewHippoTimeLine extends Composite implements ChangeListener {
+public class NewHippoTimeLine extends Composite implements ChangeListener, HippoTimeline {
 
 	
 	
@@ -155,7 +157,11 @@ public class NewHippoTimeLine extends Composite implements ChangeListener {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
+	public Widget getWidget() {
+		return this;
+	}
+
 	
 	
 }

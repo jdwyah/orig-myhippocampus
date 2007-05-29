@@ -14,8 +14,10 @@ import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.timeline.NewHippoTimeLine;
+import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.gui.timeline.TimeLineConst;
+import com.aavu.client.gui.timeline.draggable.NewHippoTimeLine;
+import com.aavu.client.gui.timeline.simple.SimpleTimeLine;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ButtonGroup;
@@ -42,7 +44,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGroup {
 
-	private NewHippoTimeLine timeline;
+	private HippoTimeline timeline;
 	
 	
 	private HorizontalPanel typeSelector;
@@ -70,10 +72,10 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 		createdB.setSelected(true);
 		
 		timeline = new NewHippoTimeLine(manager,width - 110,height-70,window);		
-		
+		timeline = new SimpleTimeLine(manager,width - 110,height-70,window);
 	
 		mainP.add(typeSelector);
-		mainP.add(timeline);		
+		mainP.add(timeline.getWidget());		
 		
 		window.addInternalFrameListener(new GFrameAdapter(){
 			//@Override

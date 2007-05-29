@@ -17,6 +17,7 @@ import com.aavu.client.gui.explorer.FTICachingExplorerPanel;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -44,10 +45,8 @@ public class BlogView extends FTICachingExplorerPanel {
 			return -o.getLastUpdated().compareTo(oo.getLastUpdated());
 		}};
 
+	private static final DateTimeFormat df = DateTimeFormat.getFormat("EE, MMM dd");
 	
-	private static final SimpleDateFormat df = new SimpleDateFormat("EE, MMM dd");
-
-
 	private static final int MAX_PER_PAGE = 10;
 
 

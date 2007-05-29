@@ -30,7 +30,7 @@
 					
 					<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 				</configuration>
-			</plugin>        
+			</plugin>         
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -61,7 +61,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<scanIntervalSeconds>30</scanIntervalSeconds>
+					<scanIntervalSeconds>9999</scanIntervalSeconds>
 					<contextPath>/</contextPath>
 				</configuration>
 			</plugin>
@@ -71,19 +71,19 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>1.4.0.build1120</version>
+			<version>1.4.0.build1177</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-dev-windows</artifactId>
-			<version>1.4.0.build1120</version>
+			<version>1.4.0.build1177</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>1.4.0.build1120</version>
+			<version>1.4.0.build1177</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

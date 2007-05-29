@@ -1,4 +1,4 @@
-package com.aavu.client.gui.timeline;
+package com.aavu.client.gui.timeline.draggable;
 
 import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.google.gwt.user.client.ui.Label;

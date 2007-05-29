@@ -2,13 +2,13 @@ package com.aavu.client.widget.RichText;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.Constants;
-import com.google.gwt.user.client.ImageBundle;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
@@ -29,7 +29,7 @@ public class RichTextToolbar extends Composite {
    * bundle allows all of these images to be packed into a single image, which
    * saves a lot of HTTP requests, drastically improving startup time.
    */
-  public interface Images extends ImageBundle {
+  public interface RTImages extends ImageBundle {
 
     /**
      * @gwt.resource bold.gif
@@ -295,7 +295,7 @@ public class RichTextToolbar extends Composite {
       RichTextArea.FontSize.LARGE, RichTextArea.FontSize.X_LARGE,
       RichTextArea.FontSize.XX_LARGE};
 
-  private Images images = (Images) GWT.create(Images.class);
+  private RTImages images = (RTImages) GWT.create(RTImages.class);
   private Strings strings = (Strings) GWT.create(Strings.class);
   private EventListener listener = new EventListener();
 
