@@ -1,15 +1,13 @@
 package com.aavu.server.service.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
@@ -17,12 +15,11 @@ import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.UserDAO;
-import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.UserService;
 import com.aavu.server.util.CryptUtils;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, InitializingBean {
 
 	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
@@ -31,6 +28,15 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDAO;
 
 	private int maxUsers;
+
+	private int startingInvitations;
+	
+
+	public void afterPropertiesSet() throws Exception {
+		Assert.notNull(this.startingInvitations, "startingInvitations must be set.");
+		Assert.notNull(this.maxUsers, "maxUsers must be set.");
+		Assert.notNull(this.userDAO, "userDAO must be set.");
+	}
 
 	public User getCurrentUser() throws UsernameNotFoundException {
 
@@ -180,6 +186,7 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(username.toLowerCase());		
 		user.setEmail(email);
 		user.setSupervisor(superV);
+		user.setInvitations(startingInvitations);
 		
 		if(userpass != null){
 			user.setPassword(CryptUtils.hashString(userpass));
@@ -269,6 +276,10 @@ public class UserServiceImpl implements UserService {
 
 	public void setMaxUsers(int maxUsers) {
 		this.maxUsers = maxUsers;
+	}
+
+	public void setStartingInvitations(int startingInvitations) {
+		this.startingInvitations = startingInvitations;
 	}
 	
 

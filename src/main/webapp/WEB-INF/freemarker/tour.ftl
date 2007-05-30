@@ -9,6 +9,8 @@
   		  
       <div class="middle-column-box-white">
         <div class="middle-column-box-title-green"><@spring.message "tour.1"/></div>
+		  <p class="subheading"><@spring.message "tour.0.0"/></p>					
+		  			<p><@spring.message "tour.0.1"/></p>
 		  <p class="subheading"><@spring.message "tour.1.0"/></p>					
 		  			<p><@spring.message "tour.1.1"/></p>
 		  			<p><@spring.message "tour.1.2"/></p>
@@ -19,8 +21,8 @@
 		  			<p><@spring.message "tour.2.1"/></p>
           <p class="subheading"><@spring.message "tour.3.0"/></p>      
 		  			<p><@spring.message "tour.3.1"/></p>
-          <p class="subheading"><@spring.message "tour.4.0"/></p>      
-		  			<p><@spring.message "tour.4.1"/></p>  			
+          <#--<p class="subheading"><@spring.message "tour.4.0"/></p>      
+		  			<p><@spring.message "tour.4.1"/></p>-->  			
       
 		  <p><@spring.message "manifesto1.5.1"/> <a href="<@spring.url "/site/manifesto2.html"/>"/><@spring.message "manifesto1.5.2"/></a></p>
      

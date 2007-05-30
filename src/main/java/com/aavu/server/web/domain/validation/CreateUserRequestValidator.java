@@ -103,7 +103,7 @@ public class CreateUserRequestValidator implements Validator{
 		
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "randomkey","required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email","required");
+		
 		
 		CreateUserRequestCommand comm = (CreateUserRequestCommand) command;
 		

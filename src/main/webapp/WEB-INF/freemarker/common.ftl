@@ -9,12 +9,16 @@
 <script language="javascript" type="text/javascript"> 
   
   function doOpenID(){
-      document.getElementById('openIDForm').style.display='block';
-      document.getElementById('upForm').style.display='none';      
+      document.getElementById('openIDForm').style.display='inline-block';
+      document.getElementById('upForm').style.display='none';              
   }
+ 
   function doUsernamePassword(){
 	  document.getElementById('openIDForm').style.display='none';
       document.getElementById('upForm').style.display='block';
+      
+      <#--Both this and css prop are necessary for IE to not display this in narrow width-->
+      document.getElementById('remember_me').style.display='inline-block';
   }
   function formvalidation(){  
   	if(document.getElementById('j_username2').value.indexOf('.') > -1){  
@@ -36,7 +40,7 @@
 			 <label for="j_password"><input type='password' name='j_password' id = 'j_password'><@spring.message "login.1.pass"/>
 			 </label>
 		 <p>
-		 	<label for="_acegi_security_remember_me"><input type="checkbox" name="_acegi_security_remember_me"><@spring.message "login.1.dontask"/>
+		 	 <label id="remember_me" for="_acegi_security_remember_me"><input type="checkbox" name="_acegi_security_remember_me"><@spring.message "login.1.dontask"/>
 			 </label>
 		 <p>
 		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
@@ -55,7 +59,7 @@
 </#macro>
 
 <#macro signupNow>
-	<h2>
+	<h2 id="signupNow">
 	 	<a href="<@spring.url "/site/signupIfPossible.html"/>"><@spring.message "login.signup"/></a>
 	</h2>
 </#macro>

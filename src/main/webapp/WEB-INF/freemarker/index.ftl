@@ -106,9 +106,9 @@
 		 ["190","-20","2"],	
 		 
 		 ["-10","100","2"], 	 
-		 ["80","100","2"],		 
-		 ["110","100","1"],		 
-		 ["170","100","2"],	
+		 ["65","100","1"],		 
+		 ["90","100","1"],		 
+		 ["140","100","1"],	
 		 ["210","-20","1"]	
 
  		 ]/>
@@ -118,7 +118,7 @@
 	<div id="signupIsland" class="island">
 
 		  <div class="islandOverlay">		    		    
-			    <h2>
+			    <h2 id="tryItNow">
 	    		<a href="<@spring.url "/site/signupIfPossible.html"/>"><@spring.message "login.signup"/></a>
 	    		</h2>		    
 		  </div>
