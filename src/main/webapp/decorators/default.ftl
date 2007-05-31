@@ -30,29 +30,25 @@
 	      <@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
 	      
 	       <ul>
-	       	<li><a href="<@spring.url "/site/index.html"/>"><@spring.message "sidebar.frontPage"/></a></li>
-	       	<li><a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a></li>
+	       <#if user?exists>
+				<li><a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a></li>
+				<li><a href="<@spring.url "/site/secure/account.html"/>"><@spring.message "sidebar.account"/></a></li>
+				<li><a href="<@spring.url "/site/j_acegi_logout"/>">Logout</a></li>
+			<#else>
+				<li><a href="<@spring.url "/site/index.html"/>"><@spring.message "sidebar.frontPage"/></a></li>
+				<li><a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a></li>
+			</#if>	       	
   			<li><a href="<@spring.url "/site/tour.html"/>"><@spring.message "sidebar.tour"/></a></li>
 			<li><a href="<@spring.url "/site/screencasts.html"/>"><@spring.message "sidebar.screencasts"/></a></li>			
   			<li><a href="<@spring.url "/site/manifesto.html"/>"><@spring.message "sidebar.manifestos"/></a></li>
 			<li><a href="<@spring.url "/site/manifesto2.html"/>"><@spring.message "sidebar.manifesto2"/></a></li>
-			<#if user?exists>
-<li><a href="<@spring.url "/site/secure/account.html"/>"><@spring.message "sidebar.account"/></a></li>
-			</#if>
+			
 		   </ul>
 	      
 		</div>
      
 	    <div id="header">
-    		<@common.pngImage src="/img/myhippocampusLogo.png" width="552" height="82"/>
-			<#if user?exists>
-				<#--<span class="slashUser">/${user.username}</span>-->
-				<a href="<@spring.url "/site/j_acegi_logout"/>">(Logout)</a>
-			<#else>
-				<#--><div id="loginBox">
-				 <@common.loginForm/>
-				</div>		-->
-			</#if>
+    		<@common.pngImage src="/img/myhippocampusLogo.png" width="552" height="82"/>			
 	    </div>
 
 
@@ -82,8 +78,9 @@ urchinTracker();
 </script>
 
 
-<!--Preloader.-->
-<iframe src="<@spring.url "/com.aavu.HippoTest/HippoPreLoad.html"/>" style="visibility: hidden;"><\/iframe>
+<#--<!--Preloader.-->
+<#--<iframe src="<@spring.url "/com.aavu.HippoTest/HippoPreLoad.html"/>" style="visibility: hidden;"><\/iframe>
+-->
 
 </body>
 </html>

@@ -8,7 +8,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<build>
-		<plugins>     
+		<plugins>      
   			 <plugin>
 				<groupId>org.xi8ix</groupId>				
 				<artifactId>xi8ix-gwtc</artifactId>
@@ -61,7 +61,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<scanIntervalSeconds>9999</scanIntervalSeconds>
+					<scanIntervalSeconds>30</scanIntervalSeconds>
 					<contextPath>/</contextPath>
 				</configuration>
 			</plugin>
@@ -71,19 +71,19 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>1.4.0.build1177</version>
+			<version>1.4.10</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-dev-windows</artifactId>
-			<version>1.4.0.build1177</version>
+			<version>1.4.10</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>1.4.0.build1177</version>
+			<version>1.4.10</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

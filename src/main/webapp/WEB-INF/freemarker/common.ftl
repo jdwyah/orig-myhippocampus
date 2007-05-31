@@ -9,7 +9,7 @@
 <script language="javascript" type="text/javascript"> 
   
   function doOpenID(){
-      document.getElementById('openIDForm').style.display='inline-block';
+      document.getElementById('openIDForm').style.display='block';
       document.getElementById('upForm').style.display='none';              
   }
  
@@ -34,6 +34,7 @@
 	 <form id="upForm" action="/j_acegi_security_check" method="POST" style="display: none">
 		<fieldset>
 			<legend><@spring.message "login.1.header"/> <a class="link" onclick="javascript:doOpenID();">Use OpenID</a></legend>
+		 <p>
 			 <label for="j_username"><input type='text' name='j_username' id = 'j_username'><@spring.message "login.1.user"/>
 			 </label>
 		 <p>
