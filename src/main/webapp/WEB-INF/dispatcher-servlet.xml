@@ -43,6 +43,10 @@
 		<property name="view" value="acknowledgments" />
 		<property name="userService" ref="userService" />
 	</bean>
+	<bean id="termsController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="terms" />
+		<property name="userService" ref="userService" />
+	</bean>
 	<bean id="addLinkController" class="com.aavu.server.web.controllers.AddLinkController">
 		<property name="formView" value="secure/addLink" />
 		<property name="successView" value="closeWindow" />
@@ -229,7 +233,7 @@
 				<prop key="/site/manifesto2.html">manifestoController2</prop>
 				<prop key="/site/contact.html">contactController</prop>		
 				<prop key="/site/acknowledgments.html">acknowledgmentsController</prop>						
-
+				<prop key="/site/terms.html">termsController</prop>
 
 				<prop key="/site/accessDenied.html">errorController</prop>
 				<prop key="/site/servletErrorView.html">errorController</prop>						

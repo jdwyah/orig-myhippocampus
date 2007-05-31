@@ -9,10 +9,6 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.util.SetUtils;
 import com.aavu.client.widget.autocompletion.Completable;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -34,13 +30,6 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		setCreated(new Date());
 		setTitle("");		
 	}
-
-	public Topic(JSONObject value) {
-		setId((long) ((JSONNumber)value.get("id")).getValue());
-		setTitle(((JSONString)value.get("title")).stringValue());
-		setTitle(((JSONString)value.get("data")).stringValue());
-	}
-
 	
 	public Topic(User u, String title) {
 		this();

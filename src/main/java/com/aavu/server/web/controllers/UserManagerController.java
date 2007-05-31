@@ -22,7 +22,7 @@ public class UserManagerController extends MultiActionController {
 	
 	public ModelAndView list(HttpServletRequest request, HttpServletResponse response){
 		
-		
+		log.debug("Servername: "+request.getServerName());
 		
 		List<User> users = userService.getAllUsers();		
 		return new ModelAndView(viewUserList,"users",users);

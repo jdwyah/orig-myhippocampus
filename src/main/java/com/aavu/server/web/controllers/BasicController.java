@@ -33,7 +33,7 @@ public class BasicController extends AbstractController {
 			HttpServletResponse arg1) throws Exception {
 
 		//log.debug("SERVLET PATH: "+req.getServletPath()+" "+req.getPathInfo()+" "+req.getQueryString());
-
+		
 		return new ModelAndView(getView(),getDefaultModel(req));
 		
 	}

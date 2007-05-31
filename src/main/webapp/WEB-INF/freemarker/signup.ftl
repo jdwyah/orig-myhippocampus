@@ -51,9 +51,29 @@
 			<tr><td>Special Key:</td><td><@spring.formInput "command.randomkey"/><@common.regError/></td></tr>
 		</#if>
 
-		<tr><td>Email:</td><td><@spring.formInput "command.email"/><@common.regError/></td></tr>
+	<tr><td colspan="4" align="left">Email:<@spring.formInput "command.email"/><@common.regError/></td></tr>
 
-        <tr><td colspan='2'><input name="submit" type="submit" value="Create Account"></td></tr>
+		
+	<tr><td colspan="4" align="left">
+		<table cellpadding="5" align="left" cellspacing="0" border="0">
+			<th>Terms Of Service</th>
+		 <tr valign="middle"> 
+		  <td align="left">
+		   <textarea readonly rows="8" cols="30" name="tosbox">
+			 <@common.terms/>
+		   </textarea>
+		 
+		  <br>
+		     <a href="<@spring.url "/site/terms.html"/>">Printable Version</a>
+		  <p>
+		    By clicking on '<@spring.message "signup.createAccount"/>' below you are agreeing to the Terms of Service above.
+		 </td> 
+		</tr>
+		</table>
+    </td></tr>
+		
+		
+        <tr><td colspan='4' align="left"><input name="submit" type="submit" value="<@spring.message "signup.createAccount"/>"></td></tr>
       </table>
 
     </form>
@@ -66,8 +86,9 @@
 	 </#if>
 
 		
-	</form>
-
+		
 
 </body>
 </html>
+
+

@@ -209,7 +209,7 @@ input.openid-identifier {
 #sidebar li {
 	line-height: 2.5ex; 
 	list-style-type: none;	
-	background: #F2F2AA url("../img/sidebar_black_fade.png") repeat-y; 	
+	background: black url("../img/sidebar_black_fade.png") repeat-y; 	
 	display: block; 	
 	margin-bottom: 5px;
 	padding: 5px 0px 5px 5px;

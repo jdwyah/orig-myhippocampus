@@ -26,8 +26,8 @@
     	<div id="sidebar">
     	
     	<a href="<@spring.url "/site/index.html"/>"><@common.pngImage src="/img/sideSeaHorse.png" width="129" height="225"/></a>
-	      <br>
-	      <@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>
+	      <p>
+	      <#--<@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>-->
 	      
 	       <ul>
 	       <#if user?exists>
