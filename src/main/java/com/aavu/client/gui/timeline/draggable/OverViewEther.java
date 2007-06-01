@@ -121,5 +121,6 @@ public class OverViewEther extends Ether {
 		super.init();		
 		left = 0;
 	}
-
+	//@Override
+	protected void setBackground(double scale) {}
 }

@@ -271,7 +271,9 @@ public abstract class Ether extends ViewPanel {
 	protected int getHeight() {
 		return height;
 	}
-
+	protected int getWidth() {
+		return width;
+	}
 	protected int getIntervalTop() {
 		return intervalTop;
 	}

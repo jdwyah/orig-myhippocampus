@@ -14,22 +14,28 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelVelocity;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesChangeEvents {
+public abstract class ViewPanel extends AbsolutePanel implements MouseListener, SourcesChangeEvents, MouseWheelListener  {
 
-	
+
 	protected int backX = 0;
 	protected int backY = 0;
+	private ChangeListenerCollection changeCollection = new ChangeListenerCollection();
 	private int curbackX = 0;
-	private int curbackY = 0;
 
+
+	private int curbackY = 0;
 
 	protected double currentScale = 1;
 
 	private boolean doYTranslate = true;
+
+	private boolean doZoom;
 
 	private boolean dragging;
 
@@ -39,11 +45,11 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 
 	protected EventBackdrop focusBackdrop;
 
+
 	protected boolean islandDrag;
-
-
+	private int lastx;
+	private int lasty;
 	protected List objects = new ArrayList();
-	private ChangeListenerCollection changeCollection = new ChangeListenerCollection();
 
 	public ViewPanel(){
 		super();
@@ -54,7 +60,7 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 		focusBackdrop.addMouseListener(this);
 		add(focusBackdrop,0,0);
 
-		
+
 		/*
 		 * override the AbsolutePanel position: relative
 		 * otherwise we got a left: 8px; top: 8px;
@@ -63,16 +69,20 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 
 	}
 
-	public void addObject(RemembersPosition rp) {		
-		add(rp.getWidget(),rp.getLeft(),rp.getTop());
+	public void addChangeListener(ChangeListener listener) {
+		changeCollection.add(listener);
+	}
+	public void addObject(RemembersPosition rp) {				
+		add(rp.getWidget(),(int) rp.getLeft(),rp.getTop());
 		objects.add(rp);
 	}
+
 	protected void centerOn(int x, int y){
 
 		//System.out.println("centering on "+x+" "+ y);
 
-		int width = Window.getClientWidth();
-		int height = Window.getClientHeight();
+		int width = getWidth();
+		int height = getHeight();
 
 		int halfWidth = width/2;
 		int halfHeight = height/2;
@@ -84,9 +94,36 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 //		System.out.println("left "+left+" top "+top);
 
 		//intuitively this is (left - curbackX) but things are reversed			
+//		int dx = left + curbackX;
+//		int dy = top + curbackY;
+		
 		int dx = left + curbackX;
 		int dy = top + curbackY;
 		moveBy(dx, dy);
+		
+		
+	}
+
+	protected abstract int getWidth();
+	protected abstract int getHeight();
+	
+	/**
+	 *
+	 */
+	protected void centerOnMouse() {
+
+
+		int halfWidth = getWidth()/2;
+		int halfHeight = getHeight()/2;
+
+		int dx =  lastx - halfWidth;
+		int dy =  lasty - halfHeight;
+		
+//		System.out.println("last x "+lastx+" mousex "+0+" curbackx "+curbackX+" dx "+dx);
+//		System.out.println("last y "+lasty+" mousey "+0+" curbacky "+curbackY+" dy "+dy);
+
+		moveBy(dx, dy);
+
 	}
 
 	/**
@@ -100,7 +137,6 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 			iter.remove();
 		}	
 	}
-	
 	private void endDrag() {
 		if(dragging){
 //			System.out.println("(old)back x "+backX+" cur(new) "+curbackX);
@@ -111,66 +147,81 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 		dragging = false;
 	}
 
+
+
+	protected void finishZoom(double oldScale) {
+
+		
+		setBackground(currentScale);		
+
+		
+		int width = getWidth();
+		int height = getHeight();
+
+		int centerX = getCenterX(oldScale,width);
+		int centerY = getCenterY(oldScale,height);
+
+//		moveTo(centerX, centerY);
+		
+		int halfWidth = width/2;
+		int halfHeight = height/2;
+		reCenter(centerX,centerY,currentScale,halfWidth,halfHeight);
+
+
+		postZoomCallback(currentScale);
+
+		redraw();
+
+	}
+
 	public int getBackX() {		
 		return backX;
 	}
+
 	public int getBackY() {		
 		return backY;
 	}
 
 
-
-	public int getCurbackX() {
-		return curbackX;
-	}
-
-	public int getCurbackY() {
-		return curbackY;
-	}
-
 	protected int getCenterX(){
-		return getCenterX(currentScale,Window.getClientWidth());
+		return getCenterX(currentScale,getWidth());
 	}
-
 
 	protected int getCenterX(double scaleToUse,int width){		
 		int halfWidth = width/2;		
-		int centerX = (int)((-curbackX + halfWidth)/scaleToUse);
+		int centerX = (int)((-curbackX + halfWidth)/(scaleToUse));
+		
+		System.out.println("get Center X "+scaleToUse+" "+(-curbackX + halfWidth)+" "+centerX);
 		return centerX;
 	}
-
 	protected int getCenterY(){
-		return getCenterY(currentScale,Window.getClientHeight());
+		return getCenterY(currentScale,getHeight());
 	}
+
+
 	protected int getCenterY(double scaleToUse,int height){		
 		int halfHeight = height/2;
 		int centerY = (int)((-curbackY + halfHeight)/scaleToUse);
 		return centerY;
 	}
 
+	public int getCurbackX() {
+		return curbackX;
+	}
 
+
+	public int getCurbackY() {
+		return curbackY;
+	}
 	public boolean isDoYTranslate() {
 		return doYTranslate;
 	}
-	
-	/**
-	 * Do an absolute move
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void moveTo(int x, int y) {
-		int dx = backX - x;
-		int dy = backY - y;
-		
-		moveByDelta(dx, dy);
 
-		//this was normally set in finishDrag()
-		backX = curbackX;
-		backY = curbackY;
-	}
-	
-	
+	public boolean isDoZoom() {
+		return doZoom;
+	}		
+
+
 	/**
 	 * This moves the background and then sets the back position.
 	 * Call this when you want a move.
@@ -180,11 +231,12 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 	 */
 	public void moveBy(int dx, int dy) {
 		moveByDelta(dx, dy);
-
+		
 		//this was normally set in finishDrag()
 		backX = curbackX;
 		backY = curbackY;
 	}
+
 	/**
 	 * Internal move method. Doesn't actually 'finish' the move. This helps
 	 * us make dragging smoother. 
@@ -198,20 +250,23 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 	 */
 	protected void moveByDelta(int dx, int dy) {
 		curbackX = -dx + backX;
+		
+		double yScale = 1;
 		if(isDoYTranslate()){
 			curbackY = -dy + backY;
+			yScale = currentScale;
 		}
 
 		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX+"px "+curbackY+"px");	
 
-		int width = Window.getClientWidth();
-		int height = Window.getClientHeight();
+		int width = getWidth();
+		int height = getHeight();
 
 		int halfWidth = width/2;
 		int halfHeight = height/2;
 
 		int centerX = getCenterX(currentScale,width);
-		int centerY = getCenterY(currentScale,height);
+		int centerY = getCenterY(yScale,height);
 
 //		System.out.println("centerX "+centerX+" centerY "+centerY);
 
@@ -225,16 +280,45 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 //			System.out.println("cur "+curbackX+" cury "+curbackY);
 
 			//setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale), (int)((rp.getTop()+curbackY)*currentScale));				
-			setWidgetPosition(rp.getWidget(),(int)((rp.getLeft())*currentScale)+curbackX, (int)((rp.getTop())*currentScale)+curbackY);
+
+			//System.out.println("move "+rp.getLeft()+" "+(int)((rp.getLeft())*currentScale)+" "+(int)((rp.getLeft())*currentScale*getXSpread())+" cs "+currentScale);
+			setWidgetPosition(rp.getWidget(),(int)((rp.getLeft())*currentScale*getXSpread())+curbackX, (int)((rp.getTop())*yScale)+curbackY);
 
 			objectHasMoved(rp,halfWidth,halfHeight,centerX,centerY);
-						
+
 		}
-		
-		
+
+		moveOccurredCallback();
+		//System.out.println("moved "+curbackX+" "+curbackY);
+
 
 	}
+
+
+	protected int getXSpread() {
+		return 1;
+	}
 	
+	
+	protected void moveOccurredCallback() {}
+
+	/**
+	 * Do an absolute move
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void moveTo(int x, int y) {
+		int dx = backX - x;
+		int dy = backY - y;
+
+		moveByDelta(dx, dy);
+
+		//this was normally set in finishDrag()
+		backX = curbackX;
+		backY = curbackY;
+	}
+
 	/**
 	 * Override this if you want object move event processing 
 	 * 
@@ -244,8 +328,7 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 	 * @param centerX
 	 * @param centerY
 	 */
-	protected void objectHasMoved(RemembersPosition o, int halfWidth, int halfHeight, int centerX, int centerY) {}		
-	
+	protected void objectHasMoved(RemembersPosition o, int halfWidth, int halfHeight, int centerX, int centerY) {}
 
 	public void onMouseDown(Widget sender, int x, int y) {		
 		//System.out.println("down "+(sender instanceof Island) +" x "+x+" y "+y +" "+dragging);
@@ -258,8 +341,7 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 		dragStartY = y;
 
 		unselect();
-	}
-
+	} 
 	public void onMouseEnter(Widget sender) {}
 
 
@@ -268,6 +350,8 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
+		lastx = x;
+		lasty = y;
 		//System.out.println("move "+(sender instanceof Island) +" x "+x+" y "+y +" "+dragging);		
 		if (dragging) {			
 			moveByDelta(dragStartX - x, dragStartY - y);	
@@ -278,25 +362,100 @@ public class ViewPanel extends AbsolutePanel implements MouseListener, SourcesCh
 	public void onMouseUp(Widget sender, int x, int y) {	
 		//System.out.println("up "+(sender instanceof Island) +" x "+x+" y "+y +" "+dragging);
 		endDrag();
-	} 
-	public void setDoYTranslate(boolean doYTranslate) {
-		this.doYTranslate = doYTranslate;
 	}
 
+	public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
+		if(velocity.isSouth()){
+			zoomOut();
+		}else{
+			centerOnMouse();
+			zoomIn();
+		}		
+	}
 
-	protected void unselect() {
+	protected void postZoomCallback(double currentScale){}
+
+	private void reCenter(int centerX, int centerY, double scale, int halfWidth, int halfHeight) {
+
+		//System.out.println("back X "+backX+"  backy "+backY);
+		//System.out.println("center X "+centerX+"  cy "+centerY);
+
+
+
+		//System.out.println("hw "+halfWidth+" hh "+halfHeight);
+		//backX = halfWidth - halfWidth/currentScale;
+
+		int newCenterX = (int) (centerX * scale);
+		int newCenterY = (int) (centerY * scale);
+
+		//System.out.println("new center X "+newCenterX+" "+newCenterY);
+
+		backX = -(newCenterX - halfWidth);
+		backY = -(newCenterY - halfHeight);
+
+		//System.out.println("Newback X "+backX+"  NEWbacky "+backY);
+
 
 	}
 
 	public void redraw() {
 		moveBy(0, 0);
 	}
-
-	public void addChangeListener(ChangeListener listener) {
-		changeCollection.add(listener);
-	}
-
 	public void removeChangeListener(ChangeListener listener) {
 		changeCollection.remove(listener);
 	}
+
+	protected abstract void setBackground(double scale);
+
+
+
+	
+	
+	public void setDoYTranslate(boolean doYTranslate) {
+		this.doYTranslate = doYTranslate;
+	}
+
+
+
+	public void setDoZoom(boolean doZoom) {
+		this.doZoom = doZoom;
+
+		if(doZoom){
+			focusBackdrop.addMouseWheelListener(this);
+		}else{
+			focusBackdrop.removeMouseWheelListener(this);
+		}
+
+	}
+	protected void unselect() {
+
+	}
+	public void zoomIn() {		
+		double oldScale = currentScale;
+		
+		currentScale *= 2;
+
+		finishZoom(oldScale);
+	}
+
+
+	public void zoomOut() {
+		double oldScale = currentScale;
+
+		currentScale /= 2;
+
+		finishZoom(oldScale);
+	}
+	public void zoomTo(double scale) {
+		if(scale == currentScale){
+			return;
+		}
+		double oldScale = currentScale;
+
+		currentScale = scale;
+
+		finishZoom(oldScale);
+
+	}
+
 }

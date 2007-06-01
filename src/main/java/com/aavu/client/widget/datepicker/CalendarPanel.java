@@ -66,6 +66,7 @@ public class CalendarPanel extends AbsolutePanel {
 	 */
 	private void init(){
 		this.setHeight("100%");
+		setPixelSize(168, 153);
 		this.setStyleName("calendarPanel");
 		currentMonth.addTableListener(new DateClickListener(this));
 		this.add(this.drawCalendar());

@@ -18,6 +18,7 @@ import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.gui.timeline.TimeLineConst;
 import com.aavu.client.gui.timeline.draggable.NewHippoTimeLine;
 import com.aavu.client.gui.timeline.simple.SimpleTimeLine;
+import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ButtonGroup;
@@ -71,9 +72,10 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 
 		createdB.setSelected(true);
 		
-		timeline = new NewHippoTimeLine(manager,width - 110,height-70,window);		
+		//timeline = new NewHippoTimeLine(manager,width - 110,height-70,window);		
 		//timeline = new SimpleTimeLine(manager,width - 110,height-70,window);
-	
+		timeline = new ZoomableTimeline(manager,width - 110,height-70,window);
+		
 		mainP.add(typeSelector);
 		mainP.add(timeline.getWidget());		
 		

@@ -81,4 +81,29 @@ public class TimeLineObj implements IsSerializable, HasDate {
 	public Date getDate() {
 		return getStart();
 	}
+
+	
+	private static final long DIV= 60000;
+	/**
+	 * convert time from seconds before 1970 to minutes.
+	 * signed int goes to 2,147,483,648 == ~68 Years in seconds
+	 * doing it in minutes instead gives us 1970 +/- 4085 years so 2115 BC in minute precision.
+	 * Probably enough for now.
+	 * 
+	 * @return
+	 */
+	public int getLeft() {
+		long div = (getStart().getTime() / DIV);
+		
+		int left = (int) div;
+		
+		if(div != left){
+			System.out.println("TLO Fail"+(div == left)+"div "+div+" left "+left);	
+		}		
+		
+		return (int) (getStart().getTime() / DIV);	
+	}
+	public static Date getDateForLeft(int left){
+		return new Date(left * DIV);
+	}
 }

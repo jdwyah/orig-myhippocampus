@@ -66,5 +66,10 @@ public class DetailsEther extends Ether {
 		zoneStart = -getXSpan();
 	}
 
+	//@Override
+	protected void setBackground(double scale) {
+		
+	}
+
 	
 }

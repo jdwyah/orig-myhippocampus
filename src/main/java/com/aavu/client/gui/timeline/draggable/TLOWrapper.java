@@ -5,6 +5,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.glossary.SimpleTopicDisplay;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -60,6 +61,9 @@ public class TLOWrapper extends Composite implements RemembersPosition {
 					}});					
 			}});
 
+
+		label.addMouseListener(new TooltipListener(tlo.getStart()+" "+left));
+		
 		initWidget(panel);
 	}
 

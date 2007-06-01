@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedListener, MouseWheelListener {
+public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedListener {
 
 	private static final int CLOUD_MOVE_MSEC = 7000;
 
@@ -92,6 +92,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		//
 		decorate();
 
+		setDoZoom(true);
+		
 		clouds();
 
 		
@@ -101,7 +103,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		 * otherwise we got a left: 8px; top: 8px;
 		 */		
 		DOM.setStyleAttribute(getElement(), "position", "absolute");	
-		setBackground();
+		setBackground(currentScale);
 		//url("../img/bluecheck-bullet-14.gif");
 	}	
 
@@ -269,45 +271,16 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 
 			if(isle != null){
 
-				centerOn((int)isle.getCenterXAtScale(),(int)isle.getCenterYAtScale());
+//				System.out.println("isle "+isle.getLeft()+" "+isle.getTop());
+//				System.out.println("topic center on "+isle.getCenterXAtScale()+ " "+isle.getCenterYAtScale());				
 				
-//				int left = (int) ((isle.getCenterXAtScale() * currentScale) - halfWidth);
-//				int top = (int) ((isle.getCenterYAtScale() * currentScale) - halfHeight);
-
-
-				//intuitively this is (left - curbackX) but things are reversed			
-//				int dx = left + curbackX;
-//				int dy = top + curbackY;
-//				moveBy(dx, dy);
-
-				
-//				SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);
-//				System.out.println("p.y "+p.y+" hw "+halfHeight+" "+top);
-
-//				System.out.println("dx "+dx+" curbackX "+curbackX+" ");
-//				System.out.println("dy "+dy+" curbackY "+curbackY+" ");			
-
+				centerOn((int)isle.getCenterXAtScale(),(int)isle.getCenterYAtScale());				
 			}
 		}
 		return true;
 	}
 
 
-	/**
-	 * TODO fix 
-	 *
-	 */
-	private void centerOnMouse() {
-				
-//		int mouseX = (int) (lastx/currentScale + curbackX);
-//		int mouseY = (int) (lasty/currentScale + curbackY);
-//		
-//		System.out.println("last x "+lastx+" mousex "+mouseX+" curbackx "+curbackX);
-//		System.out.println("last y "+lasty+" mousey "+mouseY+" curbacky "+curbackY);
-//		
-//		centerOn(mouseX,mouseY);
-		
-	}
 
 
 	private void clearClouds() {
@@ -374,9 +347,6 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 
 		oceanKeyboardListener = new OceanKeyBoardListener(this);
 		
-		
-		focusBackdrop.addMouseWheelListener(this);
-		
 		focusBackdrop.addKeyboardListener(oceanKeyboardListener);
 		
 	}
@@ -414,43 +384,19 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		}
 		return currentScale;
 	}
-	private void finishZoom(double oldScale) {
-		
-		setBackground();
-		
-		int width = Window.getClientWidth();
-		int height = Window.getClientHeight();
-
-		int centerX = getCenterX(oldScale,width);
-		int centerY = getCenterY(oldScale,height);
-
-		int halfWidth = width/2;
-		int halfHeight = height/2;
-		reCenter(centerX,centerY,currentScale,halfWidth,halfHeight);
-
-
-		setIslandsToZoom();
-
-		//move all objects
-		moveByDelta(0,0);
-		
-		if(currentScale >= NO_ISLAND_DRAG_AT_THIS_ZOOM){
-			islandDrag = false;
-						
-		}else{			
-			islandDrag = true;
-		}
-		dragHandler.setIslandDrag(islandDrag);
-		
-		manager.zoomTo(currentScale);
-	}
-
+	
 
 
 	public Widget getWidget() {
 		return this;
 	}
-	
+
+	protected int getWidth(){
+		return Window.getClientWidth();
+	}
+	protected int getHeight(){
+		return Window.getClientHeight();
+	}
 	
 
 	public void growIsland(Tag tag) {
@@ -572,28 +518,23 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 	}
 
 
-	private void reCenter(int centerX, int centerY, double scale, int halfWidth, int halfHeight) {
 
-		//System.out.println("back X "+backX+"  backy "+backY);
-		//System.out.println("center X "+centerX+"  cy "+centerY);
+	//@Override
+	protected void postZoomCallback(double currentScale){
 
-
-
-		//System.out.println("hw "+halfWidth+" hh "+halfHeight);
-		//backX = halfWidth - halfWidth/currentScale;
-
-		int newCenterX = (int) (centerX * scale);
-		int newCenterY = (int) (centerY * scale);
-
-		//System.out.println("new center X "+newCenterX+" "+newCenterY);
-
-		backX = -(newCenterX - halfWidth);
-		backY = -(newCenterY - halfHeight);
-
-		//System.out.println("Newback X "+backX+"  NEWbacky "+backY);
-
-
+		setIslandsToZoom();
+		
+		if(currentScale >= NO_ISLAND_DRAG_AT_THIS_ZOOM){
+			islandDrag = false;
+						
+		}else{			
+			islandDrag = true;
+		}
+		dragHandler.setIslandDrag(islandDrag);
+		
+		manager.zoomTo(currentScale);
 	}
+
 
 	public void removeIsland(long id) {
 		Island isle = (Island) islands.get(new Long(id));
@@ -606,10 +547,9 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		}
 	}
 
-
-
-	private void setBackground(){
-		int pix = (int) (currentScale * 100);
+	//@Override
+	protected void setBackground(double scale) {
+		int pix = (int) (scale * 100);
 		if(pix > 1600 || pix < 6){
 			return;
 		}			
@@ -620,6 +560,11 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean"+pix+".png)");
 		}
 	}
+
+	
+	
+
+
 
 	private void setIslandsToZoom() {
 
@@ -637,11 +582,6 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 
 	}
 
-	
-	
-
-
-
 	//@Override
 	protected void unselect() {
 		if(selectedIsland != null){
@@ -651,6 +591,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		manager.unselect();
 	}
 
+	
 	public void update(Tag t, AbstractCommand command) {
 		Island isle = (Island) islands.get(new Long(t.getId()));
 		
@@ -660,66 +601,9 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		}else{			
 			growIsland(t);			
 		}
-	}
-
-	public void zoomIn() {		
-		//System.out.println("zoom in from "+currentScale);
-
-		centerOnMouse();
-		
-		double oldScale = currentScale;
-
-		currentScale *= 2;
-//		if(currentScale <= 1){
-//			currentScale *= 2;		
-//		}else{
-//			currentScale++;
-//		}
-
-		finishZoom(oldScale);
-	}
-
-
-
-	public void zoomOut() {
-		//System.out.println("zoom up from "+currentScale);
-		
-		double oldScale = currentScale;
-
-		
-		currentScale /= 2;
-		
-//		if(currentScale <= 1){
-//			currentScale /= 2;		
-//		}else{
-//			currentScale--;
-//		}
-
-		finishZoom(oldScale);
-	}
+	};
 	
-	
-	
-	public void zoomTo(double scale) {
-		if(scale == currentScale){
-			return;
-		}
-		double oldScale = currentScale;
-		
-		currentScale = scale;
-		
-		finishZoom(oldScale);
-		
-	}
 
-
-	public void onMouseWheel(Widget sender, MouseWheelVelocity velocity) {
-		if(velocity.isSouth()){
-			zoomOut();
-		}else{
-			zoomIn();
-		}		
-	}
 
 
 }
