@@ -53,14 +53,15 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		zoomList.add(new Double(1/MIN_MILL));
 		
-		System.out.println("\n\n\nMin Day "+MIN_DAY+" "+zoomList.get(1));
-		System.out.println("\n\n\nMin Year "+MIN_YEAR+" "+zoomList.get(4));
-		System.out.println("\n\n\nMin Decade "+MIN_DECADE+" "+zoomList.get(5));
-		
+//		System.out.println("\n\n\nMin Day "+MIN_DAY+" "+zoomList.get(1));
+//		System.out.println("\n\n\nMin Year "+MIN_YEAR+" "+zoomList.get(4));
+//		System.out.println("\n\n\nMin Decade "+MIN_DECADE+" "+zoomList.get(5));		
 	}
 
 	static{
-		backGroundList.add("minute");
+		
+		//need new image
+		backGroundList.add("hour");
 		
 		backGroundList.add("hour");
 		backGroundList.add("day");
@@ -141,8 +142,10 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	}
 	//@Override
 	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo,
-			int left, int top) {		
-		return new TLOWrapper(manager,tlo,left,top);
+			int left, int top) {
+		TLOWrapper tlow = new TLOWrapper(manager,tlo,left,top);
+		tlow.addMouseWheelListener(this);
+		return tlow;
 	}
 	public Widget getWidget() {
 		return this;
@@ -182,12 +185,13 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 			addObject(ll);
 		}
 		
-//		TimeLineObj last = (TimeLineObj) timelines.get(timelines.size()-1);
-//		System.out.println("last "+last);
-//		if(last != null){
-//			System.out.println("move to "+last.getLeft());
-//			moveTo(-last.getLeft(), 0);
-//		}
+		TimeLineObj last = (TimeLineObj) timelines.get(timelines.size()-1);
+		System.out.println("last "+last);
+		if(last != null){
+			
+			System.out.println("move to "+last.getLeft()+" "+TimeLineObj.getDateForLeft(last.getLeft()));
+			centerOn(last.getLeft(), 0);			
+		}
 		
 		updateLabels();
 		redraw();
@@ -225,13 +229,12 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		whenlabel.setText(((DateTimeFormat)labelFormatters.get(3)).format(d2));
 		
-		double higherScale = ((Double)zoomList.get(index - 1)).doubleValue();
-		System.out.println("curback "+-getCurbackX()+" "+"      "+d2+" ii "+ii+" "+higherScale+" "+backGroundList.get(index));
+		//System.out.println("curback "+-getCurbackX()+" "+"      "+d2+" ii "+ii+" "+backGroundList.get(index));
 		
 		DateTimeFormat format = (DateTimeFormat) labelFormatters.get(index);
 		for (Iterator iterator = labelList.iterator(); iterator.hasNext();) {
 			ProteanLabel label = (ProteanLabel) iterator.next();
-			label.setCenter(d2,higherScale,index,format);
+			label.setCenter(d2,index,format);
 		}
 	}
 

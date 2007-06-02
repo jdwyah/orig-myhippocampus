@@ -87,7 +87,7 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener, 
 		int halfWidth = width/2;
 		int halfHeight = height/2;
 
-		int left = (int) (x * currentScale) - halfWidth;
+		int left = (int) (x * currentScale*getXSpread()) - halfWidth;
 		int top = (int) (y * currentScale) - halfHeight;
 
 //		SYSTEM.OUT.PRINTLN("P.X "+P.X+" HW "+HALFWIDTH+" "+LEFT);

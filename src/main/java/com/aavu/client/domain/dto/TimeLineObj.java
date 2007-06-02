@@ -2,22 +2,12 @@ package com.aavu.client.domain.dto;
 
 import java.util.Date;
 
-import org.gwtwidgets.client.util.SimpleDateFormat;
-
 import com.aavu.client.gui.timeline.HasDate;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class TimeLineObj implements IsSerializable, HasDate {
 	
-	private transient static final DateTimeFormat sdf = DateTimeFormat.getFormat("yyyy-MM-dd");
 	
-	public static String getDateInJSON(Date date) {
-		return sdf.format(date);
-	}
 	private TopicIdentifier topic;
 		
 	private Date start;
@@ -35,6 +25,10 @@ public class TimeLineObj implements IsSerializable, HasDate {
 		return end;
 	}
 	/*
+	 * WARN!!!!!!!!! 
+	 * DO not use this code, since it will include JSON package which is not available on 
+	 * the server
+	 * 
 	 * 		{
 	 *		'dateTimeFormat': 'iso8601',
 	 *		'events' : [
@@ -46,16 +40,16 @@ public class TimeLineObj implements IsSerializable, HasDate {
 	 *		        },
 	 *
 	 */
-	public JSONValue getJSONObj() {
-		JSONObject jo = new JSONObject();
-
-		jo.put("start", new JSONString(getDateInJSON(getStart())));
-		jo.put("title", new JSONString(topic.getTopicTitle()));
-		jo.put("description", new JSONString(getTopic().getTopicID()+""));
-		jo.put("link", new JSONString("HippoTest.html#"+getTopic().getTopicID()));
-
-		return jo;
-	}
+//	public JSONValue getJSONObj() {
+//		JSONObject jo = new JSONObject();
+//
+//		jo.put("start", new JSONString(getDateInJSON(getStart())));
+//		jo.put("title", new JSONString(topic.getTopicTitle()));
+//		jo.put("description", new JSONString(getTopic().getTopicID()+""));
+//		jo.put("link", new JSONString("HippoTest.html#"+getTopic().getTopicID()));
+//
+//		return jo;
+//	}
 	public Date getStart() {
 		return start;
 	}

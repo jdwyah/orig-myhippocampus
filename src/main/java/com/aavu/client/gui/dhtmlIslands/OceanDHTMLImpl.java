@@ -190,11 +190,14 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 	private void addIsland(TagInfo info,Island isle){			
 
 
+		
 		dragHandler.add(isle,this);
 
 		//isle.addMouseListener(this);
 		isle.addKeyboardListener(oceanKeyboardListener);
 
+		isle.addMouseWheelListener(this);
+		
 		//dragHandler.add(isle,isle,banner);				
 		//add(banner,isle.getLeft(),isle.getTop());
 

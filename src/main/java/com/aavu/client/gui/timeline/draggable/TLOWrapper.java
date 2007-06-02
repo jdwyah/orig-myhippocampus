@@ -10,14 +10,20 @@ import com.aavu.client.gui.glossary.SimpleTopicDisplay;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
+import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class TLOWrapper extends Composite implements RemembersPosition {
+public class TLOWrapper extends Composite implements RemembersPosition, SourcesMouseWheelEvents {
 	
 	private DateTimeFormat format = DateTimeFormat.getFormat("MMM, d yyyy");
 	private class PreviewPopup extends PopupWindow {
@@ -36,6 +42,8 @@ public class TLOWrapper extends Composite implements RemembersPosition {
 	private int left;
 	private TimeLineObj tlo;
 	private int top;
+	private Label label;
+	private Image image;	
 
 	public TLOWrapper(final Manager manager, final TimeLineObj tlo,int left, int top){
 		this.tlo = tlo;
@@ -44,9 +52,10 @@ public class TLOWrapper extends Composite implements RemembersPosition {
 
 		HorizontalPanel panel = new HorizontalPanel();
 
-		Label label = new Label(tlo.getTopic().getTopicTitle());
+		label = new Label(tlo.getTopic().getTopicTitle());
 
-		panel.add(ConstHolder.images.bullet_blue().createImage());
+		image = ConstHolder.images.bullet_blue().createImage();
+		panel.add(image);
 		panel.add(label);
 
 		label.addClickListener(new ClickListener(){
@@ -65,7 +74,7 @@ public class TLOWrapper extends Composite implements RemembersPosition {
 
 		label.addMouseListener(new TooltipListener(format.format(tlo.getStart())));
 		
-		initWidget(panel);
+		initWidget(panel);		
 	}
 
 	public int getLeft() {
@@ -80,4 +89,15 @@ public class TLOWrapper extends Composite implements RemembersPosition {
 
 		return this;
 	}
+
+	public void addMouseWheelListener(MouseWheelListener listener) {
+		label.addMouseWheelListener(listener);
+		image.addMouseWheelListener(listener);
+	}
+
+	public void removeMouseWheelListener(MouseWheelListener listener) {
+		image.removeMouseWheelListener(listener);
+		label.removeMouseWheelListener(listener);
+	}
+	
 }

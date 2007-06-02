@@ -22,6 +22,8 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.KeyboardListenerCollection;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
+import com.google.gwt.user.client.ui.MouseWheelListener;
+import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
 import com.google.gwt.user.client.ui.SourcesKeyboardEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
@@ -62,7 +64,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 
 	private DraggableTopicLabel selectedTopic;
 
-
+	private MouseWheelListenerCollection mouseWheelListeners;
 	private KeyboardListenerCollection keyboardListeners;
 	
 	public Island(TagInfo stat, OceanDHTMLImpl ocean, User user,Manager manager) {
@@ -71,7 +73,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		this.ocean = ocean;
 		this.manager = manager;
 		
-		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS | Event.ONDBLCLICK | Event.KEYEVENTS);	    
+		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS | Event.ONDBLCLICK | Event.KEYEVENTS | Event.ONMOUSEWHEEL);	    
 			
 		
 		setStyleName("H-Island");
@@ -290,7 +292,11 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			onClick(this);
 			break;
 		}
-
+		case Event.ONMOUSEWHEEL:
+			if (mouseWheelListeners != null) {
+				mouseWheelListeners.fireMouseWheelEvent(this, event);
+			}
+			break;
 
 		case Event.ONMOUSEUP:
 			wasMouseUp = true;	    	
@@ -676,5 +682,16 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		if (mouseListeners != null)
 			mouseListeners.remove(listener);
 	}
-	
+	public void addMouseWheelListener(MouseWheelListener listener) {
+		if(mouseWheelListeners == null){
+			mouseWheelListeners = new MouseWheelListenerCollection();
+		}
+		mouseWheelListeners.add(listener);
+	}
+
+	public void removeMouseWheelListener(MouseWheelListener listener) {
+		if(mouseWheelListeners != null){
+			mouseWheelListeners.remove(listener);
+		}
+	}
 }
