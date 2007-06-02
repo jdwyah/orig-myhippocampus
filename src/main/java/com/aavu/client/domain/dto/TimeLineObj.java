@@ -92,18 +92,22 @@ public class TimeLineObj implements IsSerializable, HasDate {
 	 * 
 	 * @return
 	 */
-	public int getLeft() {
-		long div = (getStart().getTime() / DIV);
-		
-		int left = (int) div;
-		
-		if(div != left){
-			System.out.println("TLO Fail"+(div == left)+"div "+div+" left "+left);	
-		}		
-		
-		return (int) (getStart().getTime() / DIV);	
+	public int getLeft() {		
+		return getLeftForDate(getStart());
 	}
 	public static Date getDateForLeft(int left){
 		return new Date(left * DIV);
+	}
+	public static int getLeftForDate(Date date){
+		long div = (date.getTime() / DIV);		
+		int left = (int) div;
+		if(div != left){
+			System.out.println("TLO Fail"+(div == left)+"div "+div+" left "+left);	
+		}	
+		return left;
+	}
+
+	public static long scale(long d) {
+		return d * DIV;		
 	}
 }

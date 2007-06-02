@@ -14,24 +14,27 @@ import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.gui.timeline.draggable.TLOWrapper;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
-	private static final DateTimeFormat weekFormat = DateTimeFormat.getFormat("MMM, d yyyy");
 	
 	
 	private static List backGroundList = new ArrayList();
+	private static List labelFormatters = new ArrayList();
+	
 	static final String IMG_LOC = "img/timeline/";
 	
 	static final double MIN_HOUR = 60;	
 	static final double MIN_DAY = MIN_HOUR*24;	
 	static final double MIN_WEEK = MIN_DAY*7;
-	static final double MIN_MONTH = MIN_DAY*30;
+	static final double MIN_MONTH = MIN_DAY*31;
 	static final double MIN_YEAR = MIN_DAY*365;
 	static final double MIN_DECADE = MIN_YEAR*10;
 	static final double MIN_CENTURY = MIN_YEAR*100;
@@ -70,11 +73,28 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		//backGroundList.add("mill");
 	}
 
-
+	static{
+		labelFormatters.add(DateTimeFormat.getFormat("HH:MM"));
+		labelFormatters.add(DateTimeFormat.getFormat("HH"));
+		labelFormatters.add(DateTimeFormat.getFormat("d"));
+		labelFormatters.add(DateTimeFormat.getFormat("MMM, d yyyy"));
+		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
+		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
+		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
+		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
+	}
+	
+	private List labelList = new ArrayList();
+	
 	private int height;
 	private Manager manager;
 	private int width;
 	private Label whenlabel;
+	
+	private ProteanLabel ll;
+	private int yEnd;
+	private int ySpread;
+	private int yStart;
 	
 	public ZoomableTimeline(Manager manager,int width, int height, CloseListener window){
 		super();
@@ -98,7 +118,26 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	}
 	private void decorate() {
 		whenlabel = new Label();
-		add(whenlabel,width/2,height - 40);
+				
+		Image magBig = ConstHolder.images.magnifyingBig().createImage();
+		magBig.addClickListener(new ClickListener(){
+			public void onClick(Widget arg0) {
+				zoomIn();
+			}});
+		
+		Image magSmall = ConstHolder.images.magnifyingSmall().createImage();
+		magSmall.addClickListener(new ClickListener(){
+			public void onClick(Widget arg0) {
+				zoomOut();
+			}});
+				
+		
+		int center = width/2 - 50;
+		int y = yEnd + 30;
+		
+		add(magSmall,center - 40,y - 15);
+		add(whenlabel,center,y);
+		add(magBig,center + 70,y - 15);
 	}
 	//@Override
 	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo,
@@ -109,39 +148,39 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		return this;
 	}
 	public void init() {		
-//		startDate = null;
-//		intervalTop = height - 20;
-//		lastDepth = 0;
-//		lastKey = 0;		
-//		slots = new int[(int)Math.floor(height / getYPush()) - 1];		
-//		for (int i = 0; i < slots.length; i++) {
-//			slots[i] = -getXSpan() -1;//leave room for 0's
-//		}
-	}
-	
-//	private static List double[] zooms = {
-//			1/MIN_HOUR,
-//			1/MIN_DAY,
-//			1/MIN_WEEK,
-//			1/MIN_MONTH,
-//			1/MIN_YEAR,
-//			1/MIN_DECADE,
-//			1/MIN_CENTURY};
+		yStart = 25;
+		yEnd = height - 60;
+		ySpread = 15;
+		
+	}	
 	
 	public void load(List timelines) {
 		clear();
+		
+		int top = yStart;
 		
 		for (Iterator iter = timelines.iterator(); iter.hasNext();) {
 			TimeLineObj tlo = (TimeLineObj) iter.next();
 			
 			
 			
-			int top = (int) (Math.random()*(double)height);
+			//int top = (int) (Math.random()*(double)height);
 			
 			newObject(manager, tlo, top);
 			
+			top += ySpread;
+			
+			if(top > yEnd){
+				top = yStart;
+			}
+			
 		}
 		
+		for(int i = -6; i < 6; i++){
+			ProteanLabel ll = new ProteanLabel(i,yStart - 15);
+			labelList.add(ll);
+			addObject(ll);
+		}
 		
 //		TimeLineObj last = (TimeLineObj) timelines.get(timelines.size()-1);
 //		System.out.println("last "+last);
@@ -150,6 +189,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 //			moveTo(-last.getLeft(), 0);
 //		}
 		
+		updateLabels();
 		redraw();
 	}
 	//@Override
@@ -170,16 +210,29 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		//600, otherwise 1 pixel per SCALE length
 		
-		int index = zoomList.indexOf(new Double(currentScale)); 
-		double higherScale = ((Double)zoomList.get(index)).doubleValue();
-
 		
-		int ii = (int) (-getCurbackX()/higherScale/getXSpread());
+		
+		updateLabels();
+		
+		//setWidgetPosition(ll.getWidget(), ll.getLeft(), ll.getTop());
+	}
+	private void updateLabels() {
+		
+		int index = zoomList.indexOf(new Double(currentScale)); 
+		
+		int ii = getCenterX();
 		Date d2 = TimeLineObj.getDateForLeft(ii);
 		
+		whenlabel.setText(((DateTimeFormat)labelFormatters.get(3)).format(d2));
+		
+		double higherScale = ((Double)zoomList.get(index - 1)).doubleValue();
 		System.out.println("curback "+-getCurbackX()+" "+"      "+d2+" ii "+ii+" "+higherScale+" "+backGroundList.get(index));
 		
-		whenlabel.setText(weekFormat.format(d2));
+		DateTimeFormat format = (DateTimeFormat) labelFormatters.get(index);
+		for (Iterator iterator = labelList.iterator(); iterator.hasNext();) {
+			ProteanLabel label = (ProteanLabel) iterator.next();
+			label.setCenter(d2,higherScale,index,format);
+		}
 	}
 
 	/**
@@ -190,7 +243,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	 * @param top
 	 */
 	protected void newObject(Manager manager,TimeLineObj tlo, int top) {
-		System.out.println("add "+tlo.getDate()+" "+tlo.getLeft()+" "+TimeLineObj.getDateForLeft(tlo.getLeft()));
+		//System.out.println("add "+tlo.getDate()+" "+tlo.getLeft()+" "+TimeLineObj.getDateForLeft(tlo.getLeft()));
 		addObject(getTLORepr(manager,tlo,tlo.getLeft(),top));
 	}
 	
@@ -209,8 +262,6 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		System.out.println("setBack "+scale+" "+index+" "+img);		
 		
-		//decade = 60 * 3
-		DOM.setStyleAttribute(getElement(), "background-position","80px 0px");
 		DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+img+".png)");		
 	}
 	
@@ -234,9 +285,17 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		currentScale = ((Double)zoomList.get(index)).doubleValue();
 	
+		
 		finishZoom(oldScale);
+				
 	}
 	
+	//@Override
+	protected void postZoomCallback(double currentScale) {
+		
+		System.out.println("POST ZOOM CALLBACk");
+		updateLabels();
+	}
 	//@Override
 	public void zoomIn() {
 

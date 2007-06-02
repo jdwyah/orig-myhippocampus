@@ -7,11 +7,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class LabelWrapper extends Label implements RemembersPosition {
 
-	private int left;
+	protected int left;
 	private int top;
 
 	public LabelWrapper(String s,int left, int top){
-		super(s);
+		super(s,false);
 		this.left = left;
 		this.top = top;
 		JSUtil.disableSelect(getElement());

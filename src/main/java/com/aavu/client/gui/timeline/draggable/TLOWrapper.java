@@ -9,6 +9,7 @@ import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.glossary.SimpleTopicDisplay;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -18,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TLOWrapper extends Composite implements RemembersPosition {
 	
-
+	private DateTimeFormat format = DateTimeFormat.getFormat("MMM, d yyyy");
 	private class PreviewPopup extends PopupWindow {
 
 		private static final int HEIGHT = 200;
@@ -62,7 +63,7 @@ public class TLOWrapper extends Composite implements RemembersPosition {
 			}});
 
 
-		label.addMouseListener(new TooltipListener(tlo.getStart()+" "+left));
+		label.addMouseListener(new TooltipListener(format.format(tlo.getStart())));
 		
 		initWidget(panel);
 	}

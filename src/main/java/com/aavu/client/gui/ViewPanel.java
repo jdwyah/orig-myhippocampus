@@ -167,11 +167,12 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener, 
 		int halfHeight = height/2;
 		reCenter(centerX,centerY,currentScale,halfWidth,halfHeight);
 
-
+		redraw();		
+		
 		postZoomCallback(currentScale);
 
 		redraw();
-
+		
 	}
 
 	public int getBackX() {		
@@ -189,9 +190,9 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener, 
 
 	protected int getCenterX(double scaleToUse,int width){		
 		int halfWidth = width/2;		
-		int centerX = (int)((-curbackX + halfWidth)/(scaleToUse));
+		int centerX = (int)((-curbackX + halfWidth)/(scaleToUse*getXSpread()));
 		
-		System.out.println("get Center X "+scaleToUse+" "+(-curbackX + halfWidth)+" "+centerX);
+		//System.out.println("get Center X "+scaleToUse+" "+(-curbackX + halfWidth)+" "+centerX);
 		return centerX;
 	}
 	protected int getCenterY(){
@@ -377,15 +378,15 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener, 
 
 	private void reCenter(int centerX, int centerY, double scale, int halfWidth, int halfHeight) {
 
-		//System.out.println("back X "+backX+"  backy "+backY);
-		//System.out.println("center X "+centerX+"  cy "+centerY);
+		//System.out.println("recenter\nback X "+backX+"  backy "+backY);
+		//System.out.println("center X "+centerX+"  cy "+centerY+" scale "+scale);
 
 
 
 		//System.out.println("hw "+halfWidth+" hh "+halfHeight);
 		//backX = halfWidth - halfWidth/currentScale;
 
-		int newCenterX = (int) (centerX * scale);
+		int newCenterX = (int) (centerX * scale * getXSpread());
 		int newCenterY = (int) (centerY * scale);
 
 		//System.out.println("new center X "+newCenterX+" "+newCenterY);
