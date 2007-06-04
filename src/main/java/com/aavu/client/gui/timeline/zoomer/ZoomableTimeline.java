@@ -77,7 +77,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	static{
 		labelFormatters.add(DateTimeFormat.getFormat("HH:MM"));
 		labelFormatters.add(DateTimeFormat.getFormat("HH"));
-		labelFormatters.add(DateTimeFormat.getFormat("d"));
+		labelFormatters.add(DateTimeFormat.getFormat("MMM d"));
 		labelFormatters.add(DateTimeFormat.getFormat("MMM, d yyyy"));
 		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
 		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));

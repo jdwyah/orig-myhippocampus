@@ -22,21 +22,21 @@
 }
 .gwm-alphacube-Frame-TopBar{
   width: 100%;
-  cursor:move;
+  cursor:move;  
 }
 
 .gwm-alphacube-DialogOverlay{
-	background-color: #85BBEF;
+	/*background-color: #85BBEF;
 	filter:alpha(opacity=60);
 	-moz-opacity: 	0.6;
-	opacity: 0.6;
+	opacity: 0.6;*/
 }
 
 .gwm-alphacube-ActionOverlay{
-	background-color: #000000;
+	/*background-color: #000000;
 	filter:alpha(opacity=15);
 	-moz-opacity: 	0.15;
-	opacity: 0.15;
+	opacity: 0.15;*/
 }
 
 .gwm-alphacube-Frame-OutlineDrag{
@@ -50,7 +50,7 @@
 	overflow:auto;
 	color: #000;
 	font-family: Tahoma, Arial, sans-serif;
-	background:#FFFFFF;
+	background:#FFFFFF;	
 }
 
 .gwm-alphacube-DeskTop-MinimizedFrameBar{

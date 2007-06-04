@@ -30,14 +30,14 @@ public class ProteanLabel extends LabelWrapper {
 	 * 
 	 * @param d2
 	 * @param currentScale
-	 * @param index
+	 * @param zoomIndex
 	 * @param format
 	 */
-	public void setCenter(final Date d2, final int index,final DateTimeFormat format) {
+	public void setCenter(final Date d2, final int zoomIndex,final DateTimeFormat format) {
 				
 		Date newD = new Date(d2.getTime());
 
-		switch (index) {
+		switch (zoomIndex) {
 		case 6:
 			newD.setYear((newD.getYear() - (newD.getYear() % 10))  + idx*10);	
 			newD.setMonth(0);
@@ -53,9 +53,8 @@ public class ProteanLabel extends LabelWrapper {
 			newD.setMonth(0);
 			newD.setDate(1);
 			break;
-		case 3:
-			newD.setMonth(newD.getMonth() + idx);
-			newD.setDate(1);
+		case 3:						
+			newD.setDate(1+7*idx);
 			newD.setHours(0);
 			newD.setMinutes(0);	
 			break;
@@ -79,7 +78,7 @@ public class ProteanLabel extends LabelWrapper {
 		}
 		
 		
-		//System.out.println(index+" "+idx+"d2 "+d2+" "+newD+" "+TimeLineObj.getLeftForDate(newD));
+		//System.out.println(zoomIndex+" "+idx+"d2 "+d2+" "+newD+" "+TimeLineObj.getLeftForDate(newD));
 		
 		
 		int llleft = TimeLineObj.getLeftForDate(newD);				

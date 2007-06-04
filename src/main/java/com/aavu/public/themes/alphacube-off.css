@@ -26,17 +26,17 @@
 }
 
 .gwm-alphacube-off-DialogOverlay{
-	background-color: #85BBEF;
+	/*background-color: #85BBEF;
 	filter:alpha(opacity=60);
 	-moz-opacity: 	0.6;
-	opacity: 0.6;
+	opacity: 0.6;*/
 }
 
 .gwm-alphacube-off-ActionOverlay{
-	background-color: white;
+	/*background-color: white;
 	filter:alpha(opacity=15);
 	-moz-opacity: 	0.15;
-	opacity: 0.15;
+	opacity: 0.15;*/
 }
 
 .gwm-alphacube-off-Frame-OutlineDrag{

@@ -7,6 +7,7 @@ import java.util.List;
 import org.gwm.client.GDesktopPane;
 import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
+import org.gwm.client.impl.DefaultGDesktopPane;
 import org.gwm.client.impl.DefaultGFrame;
 import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwm.client.impl.SelectBoxManagerImpl;
@@ -21,12 +22,13 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MainMap extends Composite implements GDesktopPane {
+public class MainMap extends HippoDesktopPane {
 
 	//private Sidebar sideBar;	
 	private Manager manager;
@@ -39,20 +41,20 @@ public class MainMap extends Composite implements GDesktopPane {
 	private CenterTopicDisplayer centerDisplayer;
 	
 	private Zoomer zoomer;
-	private List frames;
-
+	
 	private MultiDivPanel mainP;
 
 	private Dashboard dashboard;
 
-	private GInternalFrame activeFrame;
-
-	private String theme;
+//	private List frames;
+//	private GInternalFrame activeFrame;
+//	private String theme;
 	
 	public MainMap(final Manager manager){
+		super();
 		this.manager = manager;
 		
-		this.frames = new ArrayList();
+		//this.frames = new ArrayList();
 		
 		Window.enableScrolling(false);
 		
@@ -212,140 +214,50 @@ public class MainMap extends Composite implements GDesktopPane {
 	public void zoomOut() {
 		ocean.zoomOut();
 	}
-	
-	
-	
-	
-	
-	/**
-	 * Not sure what the problem is here (something about MultiDivPanel?) but super.getOffsetHeight()
-	 * is totally off. It returns something like 0-180px when it should be 500px.
-	 * 
-	 * This manifested itself as a problem when TopBar does some logic to ensure that it hasn't 
-	 * been dragged off the screen. It would freak out a bit and we'd be limitted to where 
-	 * we could move the window.
-	 * 
-	 * Happily we want this to be the client height, so we're all set.
-	 * 
-	 */
+
 	//@Override
-	public int getOffsetHeight() {
-		//int superH = super.getOffsetHeight();		
-		return Window.getClientHeight();	
+	public void addButton(GFrame frame) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	//
-	public void addFrame(GInternalFrame internalFrame) {
-		internalFrame.setDesktopPane(this);
+	//@Override
+	public LocationSettingWidget getFrame() {
 		
-				
-		int spos = (frames.size() + 1) * 30;
-		
-		mainP.add((DefaultGFrame) internalFrame);		
-		
-		//System.out.println("add at spos "+spos+" "+(mainP.getAbsoluteLeft() + spos)+" "+(mainP.getAbsoluteTop() + spos));
-		
-		internalFrame.setLocation(mainP.getAbsoluteLeft() + spos,
-				mainP.getAbsoluteTop() + spos);
-		
-		
-		DOM.setStyleAttribute(((DefaultGInternalFrame)internalFrame).getElement(), "position","absolute");
-				
-		frames.add(internalFrame);
-		
-		activeFrame = internalFrame;
-	}
-
-	 /**
-     * Closes all GInternalFrames contained in this GDesktopPane.
-     */
-    public void closeAllFrames() {
-        for (int i = 0; i < frames.size(); i++) {
-            ((GFrame) frames.get(i)).attemptClose();
-        }
-    }
-    public void iconify(GFrame frame) {
-        frame.setVisible(false);
-        //buttonBar.addFrame(frame);
-    }
-
-    public void deIconify(GFrame frame) {
-        //buttonBar.removeFrame(frame);
-        frame.restore();
-    }
-
-	public List getAllFrames() {
-		return frames;
-	}
-
-//	public void setLocation(DefaultGInternalFrame frame, int left, int top) {
-//		
-//		//System.out.println("set location "+left+" "+top);
-//		
-//		DOM.setStyleAttribute(frame.getElement(), "left", left+"px");
-//		DOM.setStyleAttribute(frame.getElement(), "top", top+"px");
-//		
-//	}
-	
-	public void addWidget(Widget widget, int left, int top) {
-        mainP.remove(widget);
-        mainP.add(widget);
-    	setWidgetPosition(widget, left, top);
-    }
-
-
-	public Widget getFramesContainer() {
 		return mainP;
 	}
 
-	public void removeFrame(GInternalFrame internalFrame) {
-		mainP.remove((Widget)internalFrame);
-        SelectBoxManagerImpl selectBoxManager = ((DefaultGFrame) internalFrame)
-        .getSelectBoxManager();
-        if (selectBoxManager instanceof SelectBoxManagerImplIE6) {
-        	mainP.remove(selectBoxManager.getBlockerWidget());
-        }
-        frames.remove(internalFrame);
-        //buttonBar.removeFrame(internalFrame);
-        
-    }
-
-	public void setActivateFrame(GInternalFrame internalFrame) {
-    	System.out.println("set active frame "+activeFrame);
-		activeFrame = internalFrame;
-    }
-
-	/**
-	 * returning the activeFrame somehow makes us get no theme!
-	 * 
-	 * I believe what we're currently getting is actually the 'off' theme
-	 * 
-	 */
-    public GInternalFrame getActiveFrame() {
-    	//System.out.println("get active frame "+activeFrame+"  rtn null!");
-        return null;
-    }
-
-    public void setTheme(String theme) {
-        this.theme = theme;
-                
-        System.out.println("MainMap.set theme  "+theme+" "+frames.size());
-        
-        for (int x = 0; x < frames.size(); x++) {
-            GInternalFrame theFrame = (GInternalFrame) frames.get(x);
-            theFrame.setTheme(theme);
-        }
-//        frameContainer.setStyleName("gwm-"+ theme + "-GDesktopPane-FrameContainer");
-//
-//        desktopWidget.getFlexCellFormatter().setStyleName(1, 0,
-//                "gwm-"+ theme + "-GDesktopPane-TaskBar");
-        setStyleName("gwm-"+ theme + "-GDesktopPane");
-     }
-
-	public void setWidgetPosition(Widget widget, int left, int top) {
-		DOM.setStyleAttribute(widget.getElement(), "left", left+"px");
-		DOM.setStyleAttribute(widget.getElement(), "top", top+"px");		
+	//@Override
+	public void onWindowResized(int width, int height) {
+		// TODO Auto-generated method stub		
 	}
+
+	//@Override
+	public void removeButton(GFrame frame) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+//	
+//	
+//	/**
+//	 * Not sure what the problem is here (something about MultiDivPanel?) but super.getOffsetHeight()
+//	 * is totally off. It returns something like 0-180px when it should be 500px.
+//	 * 
+//	 * This manifested itself as a problem when TopBar does some logic to ensure that it hasn't 
+//	 * been dragged off the screen. It would freak out a bit and we'd be limitted to where 
+//	 * we could move the window.
+//	 * 
+//	 * Happily we want this to be the client height, so we're all set.
+//	 * 
+//	 */
+//	//@Override
+//	public int getOffsetHeight() {
+//		//int superH = super.getOffsetHeight();		
+//		return Window.getClientHeight();	
+//	}
 
 
 
