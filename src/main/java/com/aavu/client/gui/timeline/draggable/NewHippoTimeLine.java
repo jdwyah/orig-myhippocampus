@@ -157,7 +157,7 @@ public class NewHippoTimeLine extends Composite implements ChangeListener, Hippo
 		overView.redraw();		
 	}
 
-	public void resize(GFrameEvent evt) {
+	public void resize(int newWidth, int newHeight) {
 		// TODO Auto-generated method stub
 		
 	}

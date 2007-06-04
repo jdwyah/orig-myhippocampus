@@ -898,3 +898,150 @@ a:visited {
 }
 .gwt-SuggestBoxPopup .item-selected {	
 }
+
+ .progressbar-text {
+     font-weight: bold;
+ }
+ 
+ .progressbar-remaining {
+     font-size: 12px;
+     font-style: italic;
+ }
+ 
+ .progressbar-outer {
+     border: 1px solid black;
+ }
+ 
+ .progressbar-inner {
+     border: 1px solid black;
+     margin: 1px;
+ }
+ 
+ .progressbar-bar {
+     width: 5px;
+     height: 15px;
+     margin: 1px;
+ }
+ 
+ .progressbar-fullbar {
+     background: blue;
+ }
+ 
+ .progressbar-blankbar {
+     background: #eee;
+ }
+ 
+ TABLE.monthDates TD {
+	text-align:center;
+}
+TABLE.longRange TD {
+	text-align:center;
+	border-top: 1px solid gray
+	cursor:pointer;cursor:hand;
+}
+.longRange {
+	border-bottom: 1px solid gray;
+	border-right: 1px solid gray;
+	border-left: 1px solid gray;	
+}	
+
+.txtbox	{
+	font-family:tahoma,sans-serif;
+	font-size:11px;
+	color:#104A7B;
+	background: #FFFFFF;
+	border-bottom: 1px solid #336699;
+	border-right: 1px solid #336699;
+	border-left: 1px solid #336699;
+	border-top:1px solid #336699;
+}
+	
+.date_DisplayPanel	{
+	font-family:tahoma,sans-serif;
+	font-size:11px;
+	background-image: url("../img/blueFade.png");
+	background-repeat: repeat-x;
+	background-position: 0px -20px;
+	background-color: #CFE0F5;
+	/*background: #9393AF;*/
+	z-index: 9999;
+}
+	
+.calendarPanel	{
+	border-right: 1px solid gray;
+	border-left: 1px solid gray;
+	border-top:1px solid gray;
+ }
+.date_popupPanel {
+	z-index: 9999;
+}
+.todayPanel	{
+	font-family:tahoma,sans-serif;font-size:11px;
+	/*float: right;*/
+	font-weight:bold;
+	color:white;
+	text-align:center;
+	border-right: 1px solid gray;
+	border-left: 1px solid gray;
+	text-decoration:underline;
+	cursor:pointer;cursor:hand;	
+	text-align:center;
+} 
+ 
+
+.monthHeader {
+ 	font-family:tahoma,sans-serif;
+ 	font-size:10px;
+ 	font-weight:BOLD;
+ 	text-align:center;
+}
+ 
+.monthHeaderHoliday {
+ 	font-family:tahoma,sans-serif;
+ 	font-size:10px;
+ 	font-weight:BOLD;
+ 	color: CCCCCC;
+ 	text-align:center;
+}
+ 
+.holiday {
+ 	font-family:Arial,tahoma,sans-serif;
+ 	font-size:10px;
+ 	color: grey;
+ 	text-align:center;
+ } 
+.holidaySelectable {
+	color: CCCCCC;
+}
+.calendarDate {
+	font-family:Arial,tahoma,sans-serif;
+	font-size:10px;
+	text-decoration:none;
+	cursor:pointer;cursor:hand;
+}
+.selectedDate {	
+	color: white;
+	/*background-color: #B2C4F2;*/
+}
+
+.monthYearTraversorBtn	{
+	color: white;
+	font-family:tahoma,sans-serif;font-size:11px;
+	background: #104A7B;
+	font-weight:bold;
+	border-right: 0px solid gray;
+	border-left: 0px solid gray;
+	border-bottom: 0px solid gray;
+	border-top: 0px solid gray;
+	cursor:pointer;cursor:hand;
+}
+	
+.monthYearTraversor	{
+	font-family:Arial,tahoma,sans-serif;font-size:11px;
+	background: #104A7B;
+	color: #FFFFFF;
+	font-weight:bold;
+	
+}	
+	
+  

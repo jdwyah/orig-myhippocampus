@@ -57,6 +57,7 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 		topicViewAndEditW.load(topic);
 		topicViewAndEditW.activateEditView();
 		
+
 		frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
 		
 		frame.addFrameListener(new GFrameAdapter(){

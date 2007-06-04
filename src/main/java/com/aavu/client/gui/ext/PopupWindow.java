@@ -29,6 +29,7 @@ public class PopupWindow implements CloseListener {
     
     	this.frame = frame;
 		
+    	System.out.println("PopupWindow.setting theme !!!");
 		//This must be called before anything else.
     	//NOTE: don't forget to add the css file to the html.
 		frame.setTheme("alphacube");
@@ -59,7 +60,7 @@ public class PopupWindow implements CloseListener {
 		
 		frame.setCaption(title);
 		
-		
+				
 		//frame.setDestroyOnClose();
     }
 	

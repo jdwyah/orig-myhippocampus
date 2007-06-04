@@ -45,6 +45,12 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGroup {
 
+	private static final int W_GUTTER = 110;
+
+
+	private static final int H_GUTTER = 70;
+
+
 	private HippoTimeline timeline;
 	
 	
@@ -72,9 +78,9 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 
 		createdB.setSelected(true);
 		
-		//timeline = new NewHippoTimeLine(manager,width - 110,height-70,window);		
-		//timeline = new SimpleTimeLine(manager,width - 110,height-70,window);
-		timeline = new ZoomableTimeline(manager,width - 110,height-70,window);
+		//timeline = new NewHippoTimeLine(manager,width - W_GUTTER,height-H_GUTTER,window);		
+		//timeline = new SimpleTimeLine(manager,width - W_GUTTER,height-H_GUTTER,window);
+		timeline = new ZoomableTimeline(manager,width - W_GUTTER,height-H_GUTTER,window);
 		
 		mainP.add(typeSelector);
 		mainP.add(timeline.getWidget());		
@@ -90,7 +96,7 @@ public class TimeLineWrapper extends FTICachingExplorerPanel implements ButtonGr
 	}
 	
 	private void resize(GFrameEvent evt) {
-		timeline.resize(evt);
+		timeline.resize(evt.getGFrame().getWidth() - W_GUTTER,evt.getGFrame().getHeight()-H_GUTTER);
 	}
 	
 	/**

@@ -96,6 +96,8 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	private int yEnd;
 	private int ySpread;
 	private int yStart;
+	private Image magSmall;
+	private Image magBig;
 	
 	public ZoomableTimeline(Manager manager,int width, int height, CloseListener window){
 		super();
@@ -112,33 +114,37 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		currentScale = ((Double) zoomList.get(4)).doubleValue();
 		
-		decorate();
-		
+		createDecorations();
+		drawHUD();
 		setBackground(currentScale);
 
 	}
-	private void decorate() {
+	private void createDecorations() {
 		whenlabel = new Label();
 				
-		Image magBig = ConstHolder.images.magnifyingBig().createImage();
+		magBig = ConstHolder.images.magnifyingBig().createImage();
 		magBig.addClickListener(new ClickListener(){
 			public void onClick(Widget arg0) {
 				zoomIn();
 			}});
 		
-		Image magSmall = ConstHolder.images.magnifyingSmall().createImage();
+		magSmall = ConstHolder.images.magnifyingSmall().createImage();
 		magSmall.addClickListener(new ClickListener(){
 			public void onClick(Widget arg0) {
 				zoomOut();
 			}});
-				
 		
+		add(magSmall);
+		add(whenlabel);
+		add(magBig);
+		
+	}
+	private void drawHUD() {
 		int center = width/2 - 50;
 		int y = yEnd + 30;
-		
-		add(magSmall,center - 40,y - 15);
-		add(whenlabel,center,y);
-		add(magBig,center + 70,y - 15);
+		setWidgetPosition(magSmall,center - 40,y - 15);
+		setWidgetPosition(whenlabel,center,y);
+		setWidgetPosition(magBig,center + 70,y - 15);
 	}
 	//@Override
 	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo,
@@ -153,8 +159,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	public void init() {		
 		yStart = 25;
 		yEnd = height - 60;
-		ySpread = 15;
-		
+		ySpread = 15;		
 	}	
 	
 	public void load(List timelines) {
@@ -250,8 +255,18 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		addObject(getTLORepr(manager,tlo,tlo.getLeft(),top));
 	}
 	
-	public void resize(GFrameEvent evt) {
-		// TODO Auto-generated method stub
+	public void resize(int newWidth, int newHeight) {
+
+		width = newWidth;
+		height = newHeight;
+		
+		init();
+		
+		setPixelSize(width, height);
+		
+		drawHUD();
+		
+		redraw();
 		
 	}
 	

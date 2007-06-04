@@ -3,6 +3,7 @@ package com.aavu.client.service;
 import java.util.List;
 
 import org.gwm.client.GInternalFrame;
+import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.HippoTest;
@@ -23,7 +24,6 @@ import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.ViewMemberWindow;
-import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.glossary.Glossary;
@@ -316,7 +316,7 @@ public class Manager implements TopicSaveListener, LoginListener  {
 	}
 	private GInternalFrame newFrame(String title) {
 		
-		GInternalFrame frame = new DefaultGInternalFrameHippoExt(title,map);
+		GInternalFrame frame = new DefaultGInternalFrame(title);
 
 		map.addFrame(frame);
 		

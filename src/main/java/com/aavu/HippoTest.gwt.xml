@@ -13,6 +13,8 @@
 	<entry-point class='com.aavu.client.HippoTest'/>
 	<!-- <entry-point class='com.aavu.client.HippoPreLoad'/>-->
 	
+	<stylesheet src="css/HippoTest.css" /> 	
+	
 <!-- 	<servlet path="/topicService" class="com.aavu.server.TopicServiceImpl" />-->
     <servlet path="/topicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl" />
     <servlet path="/tagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl" />

@@ -1,17 +1,13 @@
 package com.aavu.client;
 
-import java.util.List;
-
-import org.gwm.client.GDesktopPane;
-import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
+import org.gwm.client.impl.DefaultGDesktopPane;
 import org.gwm.client.impl.DefaultGFrame;
+import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwtwidgets.client.util.WindowUtils;
 
 import com.aavu.client.LinkPlugin.AddLinkManager;
 import com.aavu.client.domain.User;
-import com.aavu.client.gui.ext.DefaultGInternalFrameHippoExt;
-import com.aavu.client.gui.ext.LocationSetter;
 import com.aavu.client.service.LoginListener;
 import com.aavu.client.service.LoginService;
 import com.aavu.client.service.remote.GWTTagService;
@@ -213,17 +209,13 @@ public class AddLink implements EntryPoint {
 	 * 
 	 */
 	private void doLogin(){		
-		GInternalFrame frame = new DefaultGInternalFrameHippoExt("",new LocationSetter(){
-			public void setLocation(DefaultGInternalFrameHippoExt ext, int left, int top) {}
-				});
+//		GInternalFrame frame = new DefaultGInternalFrameHippoExt("",new LocationSetter(){
+//			public void setLocation(DefaultGInternalFrameHippoExt ext, int left, int top) {}
+//				});
 		
-		frame.setDesktopPane(new GDesktopPane(){
-			public void addFrame(GInternalFrame internalFrame) {}
-			public void closeAllFrames() {}
-			public void deIconify(GFrame minimizedWindow) {}
-			public List getAllFrames() {return null;}
-			public void iconify(GFrame internalFrame) {}
-			});
+		GInternalFrame frame = new DefaultGInternalFrame();
+		
+		frame.setDesktopPane(new DefaultGDesktopPane());		
 		
 		RootPanel.get(FRAME_DIV).add((DefaultGFrame) frame);
 		

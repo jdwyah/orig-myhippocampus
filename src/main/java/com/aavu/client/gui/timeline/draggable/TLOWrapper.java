@@ -4,6 +4,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.glossary.SimpleTopicDisplay;
@@ -74,7 +75,9 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 
 		label.addMouseListener(new TooltipListener(format.format(tlo.getStart())));
 		
-		initWidget(panel);		
+		initWidget(panel);
+		
+		JSUtil.disableSelect(getElement());
 	}
 
 	public int getLeft() {

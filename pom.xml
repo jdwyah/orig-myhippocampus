@@ -8,7 +8,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<build>
-		<plugins>      
+		<plugins>       
   			 <plugin>
 				<groupId>org.xi8ix</groupId>				
 				<artifactId>xi8ix-gwtc</artifactId>
@@ -30,7 +30,7 @@
 					
 					<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 				</configuration>
-			</plugin>         
+			</plugin>          
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -61,8 +61,14 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<scanIntervalSeconds>30</scanIntervalSeconds>
+					<scanIntervalSeconds>9999</scanIntervalSeconds>
 					<contextPath>/</contextPath>
+					 <systemProperties>
+            		  <systemProperty>
+                       <name>maven.test.skip</name>
+                       <value>true</value>
+                      </systemProperty>            
+                     </systemProperties>					
 				</configuration>
 			</plugin>
 		</plugins>
@@ -83,8 +89,7 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>1.4.10</version>
-			<scope>compile</scope>
+			<version>1.4.10</version>			
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
@@ -94,7 +99,7 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwm</artifactId>
-			<version>1.0.0.build1006</version>
+			<version>0.6.6-SNAPSHOT</version>
 		</dependency>				
 		<dependency>
 			<groupId>gwt-widgets</groupId>

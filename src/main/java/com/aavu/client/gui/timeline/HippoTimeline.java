@@ -10,7 +10,7 @@ public interface HippoTimeline {
 
 	Widget getWidget();
 
-	void resize(GFrameEvent evt);
+	void resize(int newWidth, int newHeight);
 
 	void load(List result);
 
