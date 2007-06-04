@@ -85,7 +85,7 @@
 		
 	<div class="middle-column-box-title-green">Browser Plugins</div>		
 	<p>Don't forget to install a browser plugin. You don't need one, but it will let you bookmark a web page right into your Hippo.</p>
-    <p>For the Firefox plugin (v1.8 3/19/07) (<A HREF="<@spring.url "/resources/myhippo.xpi"/>">click here</A>)</p>
+    <p>For the Firefox plugin (v1.8 3/19/07) (<A HREF="<@spring.url "/resources/myhippo21.xpi"/>">click here</A>)</p>
     <p>For the Internet Explorer plugin (new 3/13/07) (<A HREF="<@spring.url "/resources/MyHippocampusIE.msi"/>">click here</A>)
     <br>(note: It may appear under your toolbar's ">>". Right-Click "Customize Command Bar" to make it more visible.</p>
 
