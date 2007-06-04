@@ -240,24 +240,24 @@ public class MainMap extends HippoDesktopPane {
 	
 	
 	
-//	
-//	
-//	/**
-//	 * Not sure what the problem is here (something about MultiDivPanel?) but super.getOffsetHeight()
-//	 * is totally off. It returns something like 0-180px when it should be 500px.
-//	 * 
-//	 * This manifested itself as a problem when TopBar does some logic to ensure that it hasn't 
-//	 * been dragged off the screen. It would freak out a bit and we'd be limitted to where 
-//	 * we could move the window.
-//	 * 
-//	 * Happily we want this to be the client height, so we're all set.
-//	 * 
-//	 */
-//	//@Override
-//	public int getOffsetHeight() {
-//		//int superH = super.getOffsetHeight();		
-//		return Window.getClientHeight();	
-//	}
+	
+	
+	/**
+	 * Not sure what the problem is here (something about MultiDivPanel?) but super.getOffsetHeight()
+	 * is totally off. It returns something like 0-180px when it should be 500px.
+	 * 
+	 * This manifested itself as a problem when TopBar does some logic to ensure that it hasn't 
+	 * been dragged off the screen. It would freak out a bit and we'd be limitted to where 
+	 * we could move the window.
+	 * 
+	 * Happily we want this to be the client height, so we're all set.
+	 * 
+	 */
+	//@Override
+	public int getOffsetHeight() {
+		//int superH = super.getOffsetHeight();		
+		return Window.getClientHeight();	
+	}
 
 
 
