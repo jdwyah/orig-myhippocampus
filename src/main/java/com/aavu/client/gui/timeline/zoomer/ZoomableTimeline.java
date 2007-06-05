@@ -34,10 +34,17 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	static final double MIN_HOUR = 60;	
 	static final double MIN_DAY = MIN_HOUR*24;	
 	static final double MIN_WEEK = MIN_DAY*7;
-	static final double MIN_MONTH = MIN_DAY*31;
-	static final double MIN_YEAR = MIN_DAY*365;
+	
+	
+	static final double MIN_MONTH = MIN_DAY*30.43;
+	static final double MIN_3MONTH = MIN_DAY*91.31;
+	
+	static final double MIN_YEAR = MIN_DAY*365.25;
+	static final double MIN_3YEAR = MIN_YEAR*3;
+	
 	static final double MIN_DECADE = MIN_YEAR*10;
 	static final double MIN_CENTURY = MIN_YEAR*100;
+	static final double MIN_3CENTURY = MIN_CENTURY*3;
 	static final double MIN_MILL = MIN_YEAR*1000;
 	
 	private static List zoomList = new ArrayList();
@@ -46,16 +53,22 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		zoomList.add(new Double(1/MIN_HOUR));
 		zoomList.add(new Double(1/MIN_DAY));
 		zoomList.add(new Double(1/MIN_WEEK));
+		
 		zoomList.add(new Double(1/MIN_MONTH));
+		zoomList.add(new Double(1/MIN_3MONTH));
+		
 		zoomList.add(new Double(1/MIN_YEAR));
+		zoomList.add(new Double(1/MIN_3YEAR));
 		zoomList.add(new Double(1/MIN_DECADE));
 		zoomList.add(new Double(1/MIN_CENTURY));
 		
+		zoomList.add(new Double(1/MIN_3CENTURY));
+		
 		zoomList.add(new Double(1/MIN_MILL));
 		
-//		System.out.println("\n\n\nMin Day "+MIN_DAY+" "+zoomList.get(1));
-//		System.out.println("\n\n\nMin Year "+MIN_YEAR+" "+zoomList.get(4));
-//		System.out.println("\n\n\nMin Decade "+MIN_DECADE+" "+zoomList.get(5));		
+		System.out.println("\n\n\nMin Day "+MIN_DAY+" "+zoomList.get(1));
+		System.out.println("\n\n\nMin Year "+MIN_YEAR+" "+zoomList.get(4));
+		System.out.println("\n\n\nMin Decade "+MIN_DECADE+" "+zoomList.get(5));		
 	}
 
 	static{
@@ -66,19 +79,23 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		backGroundList.add("hour");
 		backGroundList.add("day");
 		backGroundList.add("week");
-		backGroundList.add("month");
+		backGroundList.add("3way");
+		backGroundList.add("month");						
+		backGroundList.add("3way");
 		backGroundList.add("year");
-		backGroundList.add("decade");
-		backGroundList.add("century");
+		backGroundList.add("decade");//1970 30 yr offset
+		backGroundList.add("3century");//1970 20 yr offset
 		
-		//backGroundList.add("mill");
 	}
 
 	static{
-		labelFormatters.add(DateTimeFormat.getFormat("HH:MM"));
+		labelFormatters.add(DateTimeFormat.getFormat("HH:mm"));
 		labelFormatters.add(DateTimeFormat.getFormat("HH"));
 		labelFormatters.add(DateTimeFormat.getFormat("MMM d"));
-		labelFormatters.add(DateTimeFormat.getFormat("MMM, d yyyy"));
+		labelFormatters.add(DateTimeFormat.getFormat("MMM, d yyyy"));//week
+		labelFormatters.add(DateTimeFormat.getFormat("MMMM yyyy"));
+		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
+		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
 		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
 		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
 		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
@@ -112,7 +129,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		setDoZoom(true);
 		
-		currentScale = ((Double) zoomList.get(4)).doubleValue();
+		currentScale = ((Double) zoomList.get(5)).doubleValue();
 		
 		createDecorations();
 		drawHUD();
@@ -303,15 +320,18 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		currentScale = ((Double)zoomList.get(index)).doubleValue();
 	
-		
+		System.out.println("cur "+currentScale+" old "+oldScale+" "+currentScale/oldScale);
+		System.out.println("cur "+getZoomStr(currentScale)+" old "+getZoomStr(oldScale));
 		finishZoom(oldScale);
 				
 	}
+	private String getZoomStr(double scale){
+		int index = zoomList.indexOf(new Double(scale)); 
+		return (String)backGroundList.get(index);
+	}
 	
 	//@Override
-	protected void postZoomCallback(double currentScale) {
-		
-		System.out.println("POST ZOOM CALLBACk");
+	protected void postZoomCallback(double currentScale) {		
 		updateLabels();
 	}
 	//@Override

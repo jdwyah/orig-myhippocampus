@@ -2,6 +2,7 @@ package com.aavu.client.gui.ext;
 
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.event.GFrameListener;
+import org.gwm.client.impl.DefaultGFrame;
 
 import com.aavu.client.gui.timeline.CloseListener;
 import com.google.gwt.user.client.Window;
@@ -49,8 +50,8 @@ public class PopupWindow implements CloseListener {
 		}
 		frame.setMinimizable(false);
 		frame.setMaximizable(true);
-		frame.setDraggable(true);
-		
+		frame.setDraggable(true);			
+		((DefaultGFrame)frame).setEffects(false);
 	
 		
 		frame.setVisible(true);

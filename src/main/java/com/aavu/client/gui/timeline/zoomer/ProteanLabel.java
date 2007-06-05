@@ -38,22 +38,36 @@ public class ProteanLabel extends LabelWrapper {
 		Date newD = new Date(d2.getTime());
 
 		switch (zoomIndex) {
-		case 6:
+		case 9:
+			newD.setYear((newD.getYear() - (newD.getYear() % 100))  + idx*100);	
+			newD.setMonth(0);
+			newD.setDate(1);
+			break;
+		case 8:
 			newD.setYear((newD.getYear() - (newD.getYear() % 10))  + idx*10);	
 			newD.setMonth(0);
 			newD.setDate(1);
 			break;
-		case 5:
+		case 7:
 			newD.setYear(newD.getYear() + idx);	
 			newD.setMonth(0);
-			newD.setDate(1);
+			newD.setDate(1);			
 			break;
-		case 4:
+		case 6: //3 years			
+			newD.setYear(newD.getYear() + idx);	
+			newD.setMonth(0);
+			newD.setDate(1);		
+			break;	
+		case 5://month
 			newD.setYear(newD.getYear() + idx);
 			newD.setMonth(0);
 			newD.setDate(1);
 			break;
-		case 3:						
+		case 4://3 month			
+			newD.setMonth(newD.getMonth() + idx);
+			newD.setDate(1);
+			break;
+		case 3://week					
 			newD.setDate(1+7*idx);
 			newD.setHours(0);
 			newD.setMinutes(0);	
@@ -68,17 +82,17 @@ public class ProteanLabel extends LabelWrapper {
 			newD.setMinutes(0);
 			newD.setSeconds(0);
 			break;
-		case 0:
-			newD.setHours(newD.getHours() + idx);			
+		case 0:			
+			newD.setDate(newD.getDate() + idx);//only show 1
 			newD.setMinutes(newD.getMinutes() + idx);
-			newD.setSeconds(0);
+			newD.setSeconds(0);			
 			break;
 		default:
 			break;
 		}
 		
 		
-		//System.out.println(zoomIndex+" "+idx+"d2 "+d2+" "+newD+" "+TimeLineObj.getLeftForDate(newD));
+		System.out.println(zoomIndex+" "+idx+"d2 "+d2+" "+newD+" "+TimeLineObj.getLeftForDate(newD));
 		
 		
 		int llleft = TimeLineObj.getLeftForDate(newD);				

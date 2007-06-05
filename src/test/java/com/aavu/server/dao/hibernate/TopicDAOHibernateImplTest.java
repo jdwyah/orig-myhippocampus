@@ -723,6 +723,125 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
+	public void testTimelineWithOldDates() throws HippoBusinessException{
+
+		//Add a topic w/ 2 meta dates. 
+		//Make sure that 'limitToTheseMetas' works
+		//
+		Topic t1 = new Topic(u,C);
+
+		MetaDate md = new MetaDate();
+		md.setTitle("Date Seen");
+		HippoDate date = new HippoDate();
+		
+		Date oldDate = new Date();
+		oldDate.setYear(-300);
+		
+		date.setStartDate(oldDate);						
+		t1.addMetaValue(md, date);		
+		t1  = topicDAO.save(t1);
+
+		MetaDate md2 = new MetaDate();
+		md2.setTitle("Date Read");
+		HippoDate date2 = new HippoDate();
+		
+		Date oldDate2 = new Date();
+		oldDate2.setYear(-500);
+		oldDate2.setMonth(-40);
+		date2.setStartDate(oldDate2);						
+		t1.addMetaValue(md2, date2);
+
+		assertEquals(2, t1.getAllMetas(new MetaDate()).size());
+
+		t1  = topicDAO.save(t1);
+
+		List<TimeLineObj> list = topicDAO.getTimeline(u);
+		assertEquals(2, list.size());
+
+		//Use fuzzyEq, bc DB seems to truncate milliseconds
+		for (TimeLineObj timeLine : list) {			
+			assertTrue(fuzzyDateEq(timeLine.getStart(),oldDate2)
+			||
+			fuzzyDateEq(timeLine.getStart(),oldDate));
+		}
+
+		System.out.println("2");		
+
+
+
+		//
+		//add a second topic, with a meta date for each meta
+		//
+		Topic t2 = new Topic(u,E);
+		Tag tag = new Tag(u,D);
+		t2.tagTopic(tag);
+
+		for (Iterator iter = t1.getMetas().iterator(); iter.hasNext();) {
+			Meta m = (Meta) iter.next();
+
+			HippoDate adate = new HippoDate();
+			
+			Date oldDate3 = new Date();
+			oldDate3.setYear(-800);//1100AD
+			adate.setStartDate(oldDate3);						
+			t2.addMetaValue(m, adate);		
+			t2  = topicDAO.save(t2);
+		}		
+
+		list = topicDAO.getTimeline(u);		
+		assertEquals(4, list.size());
+
+		Tag tt = (Tag) t2.getTags().iterator().next();
+
+		list = topicDAO.getTimeline(tt.getId(),u);		
+		assertEquals(2, list.size());
+
+		//huh, not sure why this works
+		//http://dev.mysql.com/doc/refman/5.0/en/datetime.html
+		//The supported range is '1000-01-01 00:00:00' to '9999-12-31 23:59:59'. 
+		Topic tooOld = new Topic(u,G);
+		Date tooOldDate = new Date();
+		tooOldDate.setYear(-1850);//50AD
+		tooOld.setCreated(tooOldDate);
+		
+		topicDAO.save(tooOld);
+		
+		Topic saved = topicDAO.getForName(u, G);
+		
+		System.out.println("Too Old  "+saved.getCreated()+" "+tooOldDate);
+				
+		assertTrue(fuzzyDateEq(tooOldDate, saved.getCreated()));
+		
+		//finally we get something that's really too old, but this is a JAVA too old,
+		//not a DB too old.
+		//
+		Topic waytooOld = new Topic(u,F);
+		Date waytooOldDate = new Date();
+		waytooOldDate.setYear(-2100);//200BC
+		waytooOld.setCreated(waytooOldDate);
+		
+		topicDAO.save(waytooOld);
+		
+		Topic nsaved = topicDAO.getForName(u, F);
+		
+		System.out.println("old "+oldDate2.getYear()+" "+oldDate2);
+		System.out.println("Way Too Old "+nsaved.getCreated()+" "+waytooOldDate+" "+nsaved.getCreated().getYear()+" "+waytooOldDate.getYear());
+				
+		assertTrue(fuzzyDateEq(waytooOldDate, nsaved.getCreated()));	
+		
+		//BUT! we've wrapped at year 0, so 200BC --> 200AD
+		assertTrue(nsaved.getCreated().getYear() > -2100);
+
+		
+	}
+	private boolean fuzzyDateEq(Date d1, Date d2){
+		System.out.println("d1 "+d1);
+		System.out.println("d2 "+d2);
+		System.out.println("diff "+Math.abs(d1.getTime() - d2.getTime()));
+		return Math.abs(d1.getTime() - d2.getTime()) < 2000;
+	}
+	
+	
 	public void testGetMapAll_1() throws HippoBusinessException{
 
 		Topic t1 = new Topic(u,C);
