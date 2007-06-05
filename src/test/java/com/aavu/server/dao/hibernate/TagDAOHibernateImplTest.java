@@ -37,8 +37,6 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	private String S = "SUBJECT Paris";
 	private String G = "*(DY8932kl";
 	
-	private int publicTagNumber;
-
 	
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
@@ -57,9 +55,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		super.onSetUpInTransaction();
 
 		u = userDAO.getUserByUsername("junit");
-
-		publicTagNumber = tagDAO.getPublicTags().size();
-
+		
 	}
 
 	private Tag[] add3() throws HippoBusinessException{
@@ -90,7 +86,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<Tag> list = tagDAO.getAllTags(u);
 
-		assertEquals(3 + publicTagNumber, list.size());
+		assertEquals(3, list.size());
 		
 				
 	}
@@ -112,7 +108,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		topicDAO.save(t1);		
 		
 		List<Tag> list = tagDAO.getAllTags(u);
-		assertEquals(3 + publicTagNumber, list.size());
+		assertEquals(3, list.size());
 		
 		Tag savedTag = tagDAO.getTag(u, A);
 		
@@ -135,7 +131,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		topicDAO.save(t5);
 		
 		list = tagDAO.getAllTags(u);
-		assertEquals(3 + publicTagNumber, list.size());
+		assertEquals(3, list.size());
 		for (Iterator iter = list.iterator(); iter.hasNext();) {
 			Tag tag = (Tag) iter.next();
 			System.out.println("r_tag "+tag.getId()+" "+tag.getTitle());
@@ -194,7 +190,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 			}
 		}
 		
-		assertEquals(2+publicTagNumber, list.size());
+		assertEquals(2, list.size());
 	}
 
 	public void testSave() throws HippoBusinessException {
@@ -211,14 +207,14 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.addTagProperty(meta);
 
 
-		System.out.println("before: "+t2.getId());
+		System.out.println("before: "+t2.getId()+" "+t2);
 		topicDAO.save(t2);
 
-		System.out.println("after: "+t2.getId());
+		System.out.println("after: "+t2.getId()+" "+t2);
 
 		List<Tag> tagL = tagDAO.getAllTags(u);
 
-		assertEquals(1+publicTagNumber, tagL.size());
+		assertEquals(1, tagL.size());
 
 		Tag saved = tagDAO.getTag(u, B);
 
@@ -241,7 +237,11 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		tagL = tagDAO.getAllTags(u);
 
+		assertEquals(1, tagL.size());
+		
 		Tag savedNumber2 = tagL.get(0);
+				
+		System.out.println(savedNumber2.toPrettyString());
 		assertEquals(2,savedNumber2.getTagProperties().size());
 
 	}

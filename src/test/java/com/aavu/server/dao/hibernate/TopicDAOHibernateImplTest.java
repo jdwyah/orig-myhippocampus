@@ -377,7 +377,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		
 		assertEquals(list.get(1).getTopicTitle(),D);
-		assertEquals(list.get(2).getTopicTitle(),C);
+		assertEquals(list.get(0).getTopicTitle(),C);
 
 
 	}

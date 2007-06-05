@@ -279,7 +279,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		clean();
 		
-		Tag tag = new Tag(u,B);		
+		Tag tag = new Tag(u,D);		
 		tag = (Tag) topicService.save(tag);
 		
 		System.out.println("SAVED TAG "+B);
@@ -297,7 +297,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		assertEquals(tag.getId(), tagRef.getId());
 		
 		
-		Topic t3 = new Topic(u,D);
+		Topic t3 = new Topic(u,G);
 		t3 = (Topic) topicService.save(t3);	
 		topicService.executeAndSaveCommand(new SaveSeeAlsoCommand(topic,t3));		
 		

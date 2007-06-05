@@ -33,8 +33,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	public List<Tag> getAllTags(User user) {
 		DetachedCriteria crit  = TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
 		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-		.add(Expression.or(
-				Expression.eq("user", user),Expression.eq("publicVisible", true))));
+		.add(Expression.eq("user", user)));
 		
 		return getHibernateTemplate().findByCriteria(crit);	
 	}
@@ -44,9 +43,8 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	 */
 	public Tag getTag(User user, String tagName) {
 		DetachedCriteria crit  =  TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
-		.add(Expression.and(Expression.eq("title", tagName),
-				Expression.or(
-				Expression.eq("user", user),Expression.eq("publicVisible", true)))));
+		.add(Expression.and(Expression.eq("title", tagName),				
+				Expression.eq("user", user))));
 		
 		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 	}
@@ -56,9 +54,8 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	}
 	public List<TopicIdentifier> getTagsStarting(User user, String match,int max) {
 		DetachedCriteria crit  = DetachedCriteria.forClass(Tag.class)		
-		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),
-				Expression.or(
-				Expression.eq("user", user),Expression.eq("publicVisible", true))))
+		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),				
+				Expression.eq("user", user)))
 		.setProjection(Projections.projectionList()
 		.add(Property.forName("title"))
 		.add(Property.forName("id")));			
