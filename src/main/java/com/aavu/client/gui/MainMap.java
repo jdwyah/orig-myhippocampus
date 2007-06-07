@@ -145,7 +145,7 @@ public class MainMap extends HippoDesktopPane {
 		System.out.println("MainMap update "+t+" "+command);
 		
 		if(t instanceof Tag){
-			System.out.println("is tag ");
+			System.out.println("is tag "+command);
 			ocean.update((Tag) t,command);
 		}
 		/*

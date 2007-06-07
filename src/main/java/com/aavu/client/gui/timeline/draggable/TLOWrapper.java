@@ -53,7 +53,7 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 
 		HorizontalPanel panel = new HorizontalPanel();
 
-		label = new Label(tlo.getTopic().getTopicTitle());
+		label = new Label(tlo.getTopic().getTopicTitle(),false);
 
 		image = ConstHolder.images.bullet_blue().createImage();
 		panel.add(image);

@@ -241,9 +241,8 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		TimeLineObj last = (TimeLineObj) sorted.getKeyList().get(sorted.size() - 1);
 		System.out.println("last "+last);
-		if(last != null){
-			
-			System.out.println("move to "+last.getLeft()+" "+TimeLineObj.getDateForLeft(last.getLeft()));
+		if(last != null){			
+			//System.out.println("move to "+last.getLeft()+" "+TimeLineObj.getDateForLeft(last.getLeft()));
 			centerOn(last.getLeft(), 0);			
 		}
 		
@@ -311,15 +310,14 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 				int slot = getBestSlotFor(tlw.getTlo());
 
-				//System.out.println("best top "+slot+" "+tlw.getTlo().getTopic().getTopicTitle());
+				//System.out.println("best top "+slot+" "+tlw.getTlo().getTopic().getTopicTitle()+" "+(yStart + (slot * ySpread)));
 
-				if(slot > 0){
+				if(slot < 0){
+					o.getWidget().setVisible(false);
+				}else{
 					tlw.setTop(yStart + (slot * ySpread));
 
 					o.getWidget().setVisible(true);
-
-				}else{
-					o.getWidget().setVisible(false);
 				}
 
 			}

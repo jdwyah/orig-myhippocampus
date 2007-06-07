@@ -415,7 +415,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 			System.out.println("was null");
 			
 			//center the island
-
+			System.out.println("CENTERING THE ISLAND");
+			
 			tag.setLatitude(getCenterY());
 			tag.setLongitude(getCenterX());
 			
@@ -606,9 +607,10 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 		Island isle = (Island) islands.get(new Long(t.getId()));
 		
 		if(isle != null){
-			System.out.println("Ocean.update "+isle.getTitle());
+			System.out.println("Ocean.update redraw Title:"+t.getTitle()+" ID "+t.getId());
 			isle.redraw(t);
 		}else{			
+			System.out.println("Ocean.update new grow Title:"+t.getTitle()+" ID "+t.getId());
 			growIsland(t);			
 		}
 	}

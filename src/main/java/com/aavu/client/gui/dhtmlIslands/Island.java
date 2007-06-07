@@ -216,7 +216,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 				tagStat.getLongitude() == 0){
 			
 			
-			System.out.println("Setting to random!!");
+			System.out.println("\n\n\nSetting to random!! "+tagStat.getTagName());
 			//avoid putting it on the edge
 			
 //			int longi = (int) (120 + pr.nextDouble() * 800);
@@ -240,6 +240,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	 *
 	 */
 	public void grow() {
+
 		
 		theSize++;
 		setTypeAndSpacing();
@@ -256,9 +257,9 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		add(banner,0,0);
 		doIslandType(1);
 		doIslandType(2);		
-		
+
 		zoomToScale(scale);		
-		
+	
 		//doPositioning(banner.setToZoom(scale));
 		//System.out.println("set to left "+left+" top "+top);
 		//ocean.setWidgetPosition(this, left, top);		
@@ -364,7 +365,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
     			absTop != top + oceanTop){
     		int newLeft = absLeft - oceanLeft;
     		int newTop = absTop - oceanTop;
-    		System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!! Scale "+scale+" newLeft "+newLeft+" newTop "+newTop+" "+oceanLeft+" "+oceanTop);
+    		System.out.println("\n\n\n\nMove DETECTED!!!!!!!!!!!! "+tagStat.getTagName()+" Scale "+scale+" newLeft "+newLeft+" newTop "+newTop+" "+oceanLeft+" "+oceanTop);
     		//ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
     		left = (int) (newLeft / scale);
     		top = (int) (newTop / scale);
@@ -395,9 +396,10 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 
 
 	public void zoomToScale(double currentScale) {
+		
 		scale = currentScale;
 		setTypeAndSpacing();			
-		
+
 		for (Iterator iter = levels.keySet().iterator(); iter.hasNext();) {
 			Level level = (Level) iter.next();
 			level.setToScale(currentScale);
@@ -410,7 +412,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 			setWidgetPosition(level, corrected_x, corrected_y);
 		}
 		
-
+	
 		Widget minDimensionWidget = banner.setToZoom(currentScale);
 
 		doPositioning(minDimensionWidget);
@@ -423,7 +425,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 //			System.out.println("Person left: "+left+" top "+top);
 //			System.out.println(" ("+winLeft+", "+winTop+")  ("+winRight+", "+winBottom+")");
 //		}
-				
+	
 		if(haveShownTopics && topicLabelList != null){
 			for (Iterator iter = topicLabelList.iterator(); iter.hasNext();) {
 				DraggableLabel label = (DraggableLabel) iter.next();
@@ -629,9 +631,12 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	 */
 	public void redraw(Tag t) {
 		
-		System.out.println("redraw");
+		System.out.println("redraw "+tagStat.getLatitude()+" "+tagStat.getLongitude()+" to "+t.getLatitude()+" "+t.getLongitude());
 		
-		tagStat = new TagStat(t);
+		//NOTE. This makes some sense, but doesn't work, because the tag passed in is often just a shell,
+		//created from a TopicIdentifier in command.getAffectedTopics()
+		//problem exposes itself as 0,0 lat/long when creating a new topic then adding it to an island.
+		//tagStat = new TagStat(t);
 
 		banner.setText(t.getTitle());
 	
