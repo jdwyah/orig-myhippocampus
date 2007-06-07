@@ -95,7 +95,7 @@ public abstract class AbstractCommand implements IsSerializable {
 		}
 	}
 	public void setTopic(int i,Topic t) {
-		System.out.println("topics.size "+topics.size()+" setting "+i);
+		//System.out.println("AbstractCommand topics.size "+topics.size()+" setting "+i);
 		if(topics.size() > i){
 			topics.set(i, t);
 		}else if(i == topics.size()){

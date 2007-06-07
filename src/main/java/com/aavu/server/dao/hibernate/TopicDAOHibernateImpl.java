@@ -553,12 +553,15 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 		for (Object topic : ll) {
 			Object[] oa = (Object[]) topic;
-			for (int i = 0; i < oa.length; i++) {
-				Object object = oa[i];
-				if(object != null){
-					System.out.println(" "+i+" "+object+" "+object.getClass());
-				}else{
-					System.out.println(" "+i+" "+object+" ");
+			
+			if(log.isDebugEnabled()){
+				for (int i = 0; i < oa.length; i++) {
+					Object object = oa[i];
+					if(object != null){
+						log.debug(" "+i+" "+object+" "+object.getClass());
+					}else{
+						log.debug(" "+i+" "+object+" ");
+					}
 				}
 			}
 			//?BigInteger topic_id = (BigInteger) oa[0];
@@ -761,7 +764,7 @@ public class TopicDAOHibernateImpl extends HibernateDaoSupport implements TopicD
 
 
 	public Topic save(Topic t) throws HippoBusinessException {
-		System.out.println("SAVE "+t.getTitle());
+		log.info("SAVE "+t.getTitle()+" "+t.getUser().getUsername());
 
 		//
 		//Save the subject. If they've just added the subject it will be unsaved,

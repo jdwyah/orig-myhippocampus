@@ -86,16 +86,16 @@ public class TopicServiceImpl implements TopicService {
 
 	public Topic createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
 
-
-		log.debug("create New: "+title+" "+topicOrTagOrMeta.getClass());
-
 		if(userIsOverSubscriptionLimit()){
+			log.info("User over Subscription Limit "+userService.getCurrentUser().getUsername());
 			throw new HippoSubscriptionException("Too many topics for your subscription.");
 		}
 
 		topicOrTagOrMeta.setTitle(title);
 
 		topicOrTagOrMeta = save(topicOrTagOrMeta);
+
+		log.info("create New: "+title+" "+topicOrTagOrMeta.getClass()+" "+userService.getCurrentUser().getUsername());
 
 		return topicOrTagOrMeta;
 	}
@@ -143,6 +143,9 @@ public class TopicServiceImpl implements TopicService {
 	 * 3) Save.
 	 */
 	public void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException {
+		
+		log.info(command+" "+userService.getCurrentUser().getUsername());
+		
 		hydrateCommand(command);
 		command.executeCommand();		
 		saveCommand(command);
@@ -362,8 +365,6 @@ public class TopicServiceImpl implements TopicService {
 		}
 
 		//log.debug("save "+topic.toPrettyString());
-
-		log.debug("Topic Save Setting User "+userService.getCurrentUser());
 
 
 		Set<Occurrence> occs = topic.getOccurences();

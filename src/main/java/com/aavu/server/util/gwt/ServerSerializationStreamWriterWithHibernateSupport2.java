@@ -339,15 +339,15 @@ public final class ServerSerializationStreamWriterWithHibernateSupport2 extends
 	 else if (value != null && value.getClass().getName().contains("CGLIB")) {
 
 		 if(Hibernate.isInitialized(value)){
-			 if(value instanceof ReallyCloneable){
-				 System.out.println(value.getClass().getName()+" CGLIBBB!! Cloning "+value);						  
+			 if(value instanceof ReallyCloneable){				 
+				 //System.out.println(value.getClass().getName()+" CGLIBBB!! Cloning "+value);						  
 				 writeObject(((ReallyCloneable)value).clone());
 			 }else{
-				 System.out.println("Uninitialized but doesn't implement ReallyCloneable"+value.getClass());
+				 System.out.println("ServerSerializationStreamWriterWithHibernateSupport2.Uninitialized but doesn't implement ReallyCloneable"+value.getClass());
 				 throw new CouldntFixCGLIBException(value.getClass()+" must implement ReallyCloneable if we're to fix it.");
 			 }
 		 }else{
-			 System.out.println("Uninitialized CGLIB");
+			 System.out.println("ServerSerializationStreamWriterWithHibernateSupport2.Uninitialized CGLIB");
 			 writeObject(null);
 		 }
 	 }

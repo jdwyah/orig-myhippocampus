@@ -99,6 +99,7 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 		return tagDAO.getTag(userService.getCurrentUser(),completeText);
 	}
 	public List<TagStat> getTagStats() {
+		log.info("getting tag stats "+userService.getCurrentUser().getUsername());
 		return tagDAO.getTagStats(userService.getCurrentUser());
 	}
 

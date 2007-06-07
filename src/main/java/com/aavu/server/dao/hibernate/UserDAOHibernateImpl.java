@@ -60,7 +60,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 			log.debug("load user success "+list.get(0));
 			User u = (User) list.get(0);
 			log.debug("user: "+u);
-			log.debug("u "+u.getUsername());
+			log.info("u "+u.getUsername());
 			return u;
 		}
 		
@@ -147,7 +147,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 	}
 
 	public UserDetails getUserDetails(String username) throws AuthenticationException {
-		log.info("getting userdetails "+username);
+		log.debug("getting userdetails "+username);
 //		try {
 			return loadUserByUsername(username);	
 //		} catch (UsernameNotFoundException e) {

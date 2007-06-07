@@ -35,7 +35,7 @@ public class Converter {
 //		serialize(object);
 		
 		
-		log.info("CGLib: "+str.contains("CGLIB")+
+		log.debug("CGLib: "+str.contains("CGLIB")+
 				" Persistent "+str.contains("Persistent")+
 				" Timestamp "+str.contains("java.sql.Timestamp")+
 				" EX: "+str.contains("{EX}"));
@@ -94,7 +94,10 @@ public class Converter {
 			isException = true;
 		}
 		String bufferStr = (isException ? "{EX}" : "{OK}") + stream.toString();
-		System.out.println("HIBSUPPORT2 "+bufferStr);
+		if(isException){
+			log.warn("IsException: "+bufferStr);
+		}
+		//System.out.println("HIBSUPPORT2 "+bufferStr);
 		return bufferStr;
 	}
 
