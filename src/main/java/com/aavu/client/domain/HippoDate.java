@@ -4,7 +4,8 @@ package com.aavu.client.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
+import org.gwtwidgets.client.util.SimpleDateFormat;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
@@ -15,7 +16,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class HippoDate extends MetaValue implements IsSerializable, Serializable{
 	
-	private transient static DateTimeFormat df;	
+	private transient static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");	
+		
 	
 	public HippoDate(){
 		setPublicVisible(false);
@@ -50,25 +52,9 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 	
 	public void setStartDate(Date date){
 		if(getTitle() == null || getTitle().equals("")){
-			try{
-				if(df == null){
-					df = DateTimeFormat.getFormat("M/d/yyyy");
-				}
-				setTitle(df.format(date));		
-			}catch(Exception e){
-				//NoClassDefFoundError || ExceptionInInitializerError
-				//TODO silent exception for when this gets called on Server and GWT isn't loaded
-				makeTitleWithoutGWT(date);
-			}
+			setTitle(df.format(date));			
 		}
 		setCreated(date);
 	}
 
-	/**
-	 * PEND HIGH
-	 * @param date
-	 */
-	private void makeTitleWithoutGWT(Date date){		
-		setTitle((date.getMonth()+1)+"/"+date.getDate()+(1900+date.getYear()));
-	}
 }
