@@ -334,7 +334,9 @@ a:visited {
 	height: 100%;
 	width: 100%;
 }
-
+.H-DatePickerTimeline {
+	color: black;
+}
 .H-TimelineDetail {	
 	/*background-image: url("../img/timelinebg.png");
 	background-repeat: repeat;*/	

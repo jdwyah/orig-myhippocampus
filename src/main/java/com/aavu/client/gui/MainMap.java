@@ -119,12 +119,13 @@ public class MainMap extends HippoDesktopPane {
 	
 	/**
 	 * Do things that require a login / data
+	 * @param loadFinished 
 	 *
 	 */
-	public void load(){
+	public void load(LoadFinishedListener loadFinished){
 		//sideBar.load();
 		dashboard.load();
-		ocean.load();		
+		ocean.load(loadFinished);		
 	}
 
 	public void growIsland(Tag tag) {

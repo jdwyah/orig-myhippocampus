@@ -19,7 +19,9 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.EditMetaWindow;
 import com.aavu.client.gui.EntryEditWindow;
+import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.MainMap;
+import com.aavu.client.gui.Preloader;
 import com.aavu.client.gui.SearchResultsWindow;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
@@ -42,7 +44,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Manager implements TopicSaveListener, LoginListener  {
+public class Manager implements TopicSaveListener, LoginListener, LoadFinishedListener  {
 	
 	private HippoCache hippoCache;	
 	private MainMap map;
@@ -368,7 +370,8 @@ public class Manager implements TopicSaveListener, LoginListener  {
 	 *
 	 */
 	private void loadGUI() {		
-		map.load();
+		map.load(this);
+		
 	}
 	
 	/**
@@ -538,6 +541,9 @@ public class Manager implements TopicSaveListener, LoginListener  {
 	
 	public void userNeedsToUpgrade() {
 		displayInfo(ConstHolder.myConstants.userNeedsToUpgrade());		
+	}
+	public void loadFinished() {
+		Preloader.preload("HippoPreLoad.html");
 	}
 	
 	

@@ -16,6 +16,7 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveLatLongCommand;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.Ocean;
 import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.GUIEffects;
@@ -38,7 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedListener {
+public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListener {
 
 	private static final int CLOUD_MOVE_MSEC = 7000;
 
@@ -76,6 +77,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 	private Panel rightCloud;
 	
 	private Island selectedIsland;
+
+	private LoadFinishedListener loadFinishedListener;
 
 
 	public OceanDHTMLImpl(Manager manager) {
@@ -363,7 +366,9 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 			public void run() {
 				manager.fireOceanLoaded(size);		
 			}};
-		t.schedule(CLOUD_REMOVE);	
+		t.schedule(CLOUD_REMOVE);
+		
+		loadFinishedListener.loadFinished();
 	}
 
 
@@ -374,7 +379,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 			islandMoved(island.getStat().getTagId(), island.getLeft(), island.getTop());
 		}
 	}
-
+	public void dragged(Widget dragging, int newX, int newY) {}
+	
 
 	/**
 	 * Make sure that we're zoomed to 'scale' or higher
@@ -483,7 +489,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 
 	}
 
-	public void load() {
+	public void load(LoadFinishedListener loadFinishedListener) {
+		this.loadFinishedListener = loadFinishedListener;
 		manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
@@ -604,8 +611,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragFinishedLis
 		}else{			
 			growIsland(t);			
 		}
-	};
-	
+	}
+
 
 
 

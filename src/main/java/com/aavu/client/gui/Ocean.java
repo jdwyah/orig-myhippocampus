@@ -12,7 +12,7 @@ public interface Ocean {
 	 * Will init after async "getTagStats()" call
 	 *
 	 */
-	public void load();
+	public void load(LoadFinishedListener loadFinished);
 
 	public void growIsland(Tag tag);
 	

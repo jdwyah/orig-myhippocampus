@@ -5,7 +5,7 @@ import java.util.Date;
 import com.aavu.client.gui.timeline.HasDate;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TimeLineObj implements IsSerializable, HasDate {
+public class TimeLineObj implements IsSerializable, HasDate, Comparable {
 	
 	
 	private TopicIdentifier topic;
@@ -103,5 +103,10 @@ public class TimeLineObj implements IsSerializable, HasDate {
 
 	public static long scale(long d) {
 		return d * DIV;		
+	}
+
+	public int compareTo(Object o) {
+		TimeLineObj tl = (TimeLineObj) o;
+		return getDate().compareTo(tl.getDate());
 	}
 }

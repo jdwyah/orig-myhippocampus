@@ -5,6 +5,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
 
@@ -14,7 +15,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
  * @author Jeff Dwyer
  *
  */
-public class HDatePicker extends SimpleDatePicker {
+public class HDatePicker extends SimpleDatePicker implements DatePickerInterface {
 
 	private static final int WIDTH = 530;
 	
@@ -109,4 +110,8 @@ public class HDatePicker extends SimpleDatePicker {
 //    	}
 //    	return left + $doc.body.scrollLeft; 	  
 //  }-*/;
+
+	public Widget getWidget() {
+		return this;
+	}
 }

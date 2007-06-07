@@ -2,8 +2,6 @@ package com.aavu.client.gui;
 
 import java.util.Date;
 
-import org.gwtwidgets.client.util.SimpleDateFormat;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveDateCreatedCommand;
@@ -15,8 +13,10 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.datepicker.DateFormatter;
+import com.aavu.client.widget.datepicker.DatePickerInterface;
 import com.aavu.client.widget.datepicker.HDatePicker;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
+import com.aavu.client.widget.datepickertimeline.DatePickerTimeline;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.CellPanel;
@@ -32,7 +32,7 @@ public class TitleGadget extends Gadget {
 	private EditableLabelExtension titleBox;
 	private Topic topic;
 	private StatusPicker picker;
-	private HDatePicker datePicker;
+	private DatePickerInterface datePicker;
 
 	//private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 	
@@ -46,6 +46,8 @@ public class TitleGadget extends Gadget {
 			}			
 		});
 		
+		//datePicker = new DatePickerTimeline(manager,400,200,null);
+		
 	datePicker = new HDatePicker(HorizontalPanel.ALIGN_RIGHT);	    
 	    datePicker.setWeekendSelectable(true);
 	    datePicker.setDateFormat(DateFormatter.DATE_FORMAT_MMDDYYYY);
@@ -54,9 +56,9 @@ public class TitleGadget extends Gadget {
 	    	    
 	    datePicker.addChangeListener(new ChangeListener(){
 			public void onChange(final Widget sender) {
-				SimpleDatePicker dp = (SimpleDatePicker) sender;
+				DatePickerInterface dp = (DatePickerInterface) sender;
 				System.out.println("cur "+dp.getCurrentDate());
-				System.out.println("dp "+dp.getText());
+				//System.out.println("dp "+dp.getText());
 				System.out.println("dp "+dp.getSelectedDate());
 				
 				DeferredCommand.add(new Command(){
@@ -89,7 +91,7 @@ public class TitleGadget extends Gadget {
 		
 		CellPanel dateP = new HorizontalPanel();
 		dateP.add(new HeaderLabel(ConstHolder.myConstants.date()));
-		dateP.add(datePicker);
+		dateP.add(datePicker.getWidget());
 		
 		VerticalPanel mainP = new VerticalPanel();
 		mainP.add(titleP);

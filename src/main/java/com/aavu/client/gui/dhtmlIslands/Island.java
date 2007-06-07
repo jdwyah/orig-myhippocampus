@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.SourcesKeyboardEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, SourcesKeyboardEvents, RemembersPosition, DragFinishedListener {
+public class Island extends AbstractIsland implements ClickListener, SourcesMouseEvents, SourcesKeyboardEvents, RemembersPosition, DragEventListener {
 	
 		
 	private static final int MIN_HEIGHT = 15;
@@ -580,6 +580,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		}
 		//System.out.println("finished dragging "+label.getText()+" "+label.getXPct()+" "+label.getYPct());
 	}
+	public void dragged(Widget dragging, int newX, int newY) {}
 	
 	private void topicMoved(DraggableTopicLabel label){
 

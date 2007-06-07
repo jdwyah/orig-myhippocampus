@@ -17,11 +17,12 @@ public class DragHandler implements MouseListener {
 	
 	private AbsolutePanel absolutePanel;
 	//private Map dragBuddy = new HashMap();
-	private DragFinishedListener dragFinishedListener;
+	private DragEventListener dragFinishedListener;
 	
 	private int panelOffsetX;
 	private int panelOffsetY;
 	private boolean islandDrag = true;
+	private boolean doYTranslate = true;
 
 
 	/**
@@ -34,7 +35,7 @@ public class DragHandler implements MouseListener {
 		
 	}
 
-	public void add(SourcesMouseEvents w,DragFinishedListener listener) {
+	public void add(SourcesMouseEvents w,DragEventListener listener) {
 		w.addMouseListener(this);
 		this.dragFinishedListener = listener;
 	}
@@ -75,7 +76,7 @@ public class DragHandler implements MouseListener {
 		panelOffsetX = absolutePanel.getAbsoluteLeft();
 		panelOffsetY = absolutePanel.getAbsoluteTop();
 		
-		System.out.println("dragStartX "+dragStartX+" dragStartY "+dragStartY);
+		//System.out.println("dragStartX "+dragStartX+" dragStartY "+dragStartY);
 		
 	}
 
@@ -95,7 +96,7 @@ public class DragHandler implements MouseListener {
 //		if(GWT.getTypeName(sender).equals("com.aavu.client.gui.dhtmlIslands.DraggableLabel")){
 //			System.out.println("Label dragging = "+(dragging != null));
 //		}
-		
+		//System.out.println("DragHandle.onMouseMove "+(dragging!= null));
 		if (dragging!=null) {
 			
 			int absX = x + dragging.getAbsoluteLeft();
@@ -111,13 +112,22 @@ public class DragHandler implements MouseListener {
 //				System.out.println("dragStartX "+dragStartX+" dragStartY "+dragStartY+" absX "+absX+" absY "+absY+" ");
 //			}
 			
+			//System.out.println("draggin  "+GWT.getTypeName(dragging));			
+			
+			int newX = absX - dragStartX - panelOffsetX;
+			int newY = absY - dragStartY - panelOffsetY;
+			if(!doYTranslate){
+				newY = dragStartY;
+			}
 			
 			absolutePanel.setWidgetPosition(dragging,
-					absX - dragStartX - panelOffsetX,
-					absY - dragStartY - panelOffsetY);
+					newX,
+					newY);
 						
 			
 			dragging.addStyleName(DRAGGING_STYLE);
+			
+			dragFinishedListener.dragged(dragging,newX,newY);
 		}
 	}
 
@@ -141,5 +151,9 @@ public class DragHandler implements MouseListener {
 
 	public void setIslandDrag(boolean islandDrag) {
 		this.islandDrag = islandDrag;
+	}
+
+	public void setDoYTranslate(boolean doYTranslate) {
+		this.doYTranslate = doYTranslate;
 	}
 }

@@ -102,5 +102,13 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 		image.removeMouseWheelListener(listener);
 		label.removeMouseWheelListener(listener);
 	}
+
+	public void setTop(int top) {
+		this.top = top;
+	}
+
+	public TimeLineObj getTlo() {
+		return tlo;
+	}
 	
 }
