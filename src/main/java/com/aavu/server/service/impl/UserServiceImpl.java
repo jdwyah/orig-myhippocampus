@@ -129,7 +129,13 @@ public class UserServiceImpl implements UserService, InitializingBean {
 	}
 
 	public List<User> getAllUsers() {
-		return userDAO.getAllUsers();
+		List<User> users = userDAO.getAllUsers();
+		if(log.isInfoEnabled()){
+			for (User user : users) {
+				log.info(user.getUsername()+" "+user.isSupervisor());
+			}
+		}
+		return users;
 	}
 
 	public void setUserDAO(UserDAO userDAO) {
@@ -139,7 +145,8 @@ public class UserServiceImpl implements UserService, InitializingBean {
 	/**
 	 * TODO LOW AOP this security concern
 	 */
-	public void toggleEnabled(Integer id) throws PermissionDeniedException {			
+	public void toggleEnabled(Integer id) throws PermissionDeniedException {	
+		log.info("toggleEnabled "+getCurrentUser().getUsername()+" "+getCurrentUser().isSupervisor());
 		if(getCurrentUser().isSupervisor()){
 			User user = userDAO.getUserForId(id);
 			user.setEnabled(!user.isEnabled());

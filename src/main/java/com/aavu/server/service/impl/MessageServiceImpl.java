@@ -131,14 +131,14 @@ public class MessageServiceImpl implements MessageService {
 			return new MessageServiceReturn(true,"Success!",topic.getId());
 
 		} catch (UsernameNotFoundException e) {
-			log.warn("User Exception "+e.getMessage());
+			log.warn("User Exception "+username+" "+subject);
 			
 			//TODO replace with declarative based on exception type 
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			
 			return new MessageServiceReturn(false,"Couldn't find user: "+username,-1);
 		} catch (HippoException e) {
-			log.warn("HippoException "+e.getMessage());
+			log.warn("HippoException "+e.getMessage()+username+" "+subject);
 			e.printStackTrace();
 			
 			//TODO replace with declarative based on exception type
