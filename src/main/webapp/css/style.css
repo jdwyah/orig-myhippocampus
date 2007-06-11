@@ -90,7 +90,9 @@ fieldset {
 #signupForm legend {
 	color: white;
 }
-
+#openIDSignup {
+	width: 300px;
+}
 #loginForm input {
 	margin-left: 10px;
 }
@@ -303,5 +305,4 @@ input.openid-identifier {
 .hid a:hover {
 	color: rgb(90, 90, 90);
 	text-decoration: none;
-}
 }

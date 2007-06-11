@@ -16,12 +16,13 @@
             
       		<tr>
       		<td colspan="2" valign="top">
-      			<fieldset>
-					<legend>OpenID</legend>
+      			<fieldset id="openIDSignup">
+					<legend>Have an OpenID?</legend>
 			 		<label for="openIDusername"><@spring.formInput "command.openIDusername", "class=\"openid-identifier\""/><@common.regError/>OpenID
 			 		</label>
 		 			<p>
-		 			What is <a href="http://openid.net/">OpenID</a>?<p>
+		 			If you have an existing OpenID you can use that to access MyHippocampus.
+		 			<p>What is <a href="http://openid.net/">OpenID</a>?<p>
 		 			Get an OpenID from <a href="https://www.myopenid.com/">myOpenID.com</a>
 				</fieldset>
 			</td>
@@ -30,7 +31,7 @@
 			</td>
 			<td>
 			<fieldset>
-					<legend>Standard</legend>
+					<legend>Create a new username & password</legend>
 			 		<label for="username"><@spring.formInput "command.username"/><@common.regError/>User
 			 		</label>
 		 		<p>

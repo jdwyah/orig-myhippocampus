@@ -1,6 +1,6 @@
 package com.aavu.server.web.domain.validation;
 
-import org.springframework.util.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -11,7 +11,8 @@ import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public class CreateUserRequestValidator implements Validator{
-
+	private static final Logger log = Logger.getLogger(CreateUserRequestValidator.class);
+	
 	private static final int MIN_LENGTH = 3;
 	
 	
@@ -25,12 +26,15 @@ public class CreateUserRequestValidator implements Validator{
 	
 	private void doOpenIDValidation(CreateUserRequestCommand comm, Errors errors) {		
 		//Normalization happens in this getter
-		if(!comm.getOpenIDusername().contains(".")){
+		if(!userService.couldBeOpenID(comm.getOpenIDusername())){		
 			errors.rejectValue("openIDusername","invalid.openIDusername.nodots");
 		}
-		if(userService.exists(comm.getOpenIDusername())){
+		if(userService.exists(comm.getOpenIDusernameDoNormalization())){
 			errors.rejectValue("openIDusername","invalid.username.exists");
 		}	
+		if(comm.getOpenIDusername().contains("=")){
+			errors.rejectValue("openIDusername","invalid.openIDusername.noinames");
+		}
 	}
 
 
@@ -40,9 +44,9 @@ public class CreateUserRequestValidator implements Validator{
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password","required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password2","required");		
 		
-		//username must have no '.' for openid compatibility
-		if(comm.getUsername().contains(".")){
-			errors.rejectValue("username","invalid.username.nodots");
+		//username must have no '.' || '=' for openid compatibility
+		if(userService.couldBeOpenID(comm.getUsername())){
+			errors.rejectValue("username","invalid.username");
 		}		
 		
 		//spaces would break email functionality
@@ -51,7 +55,7 @@ public class CreateUserRequestValidator implements Validator{
 		}	
 		
 		//generalemail compatibility
-		if(!comm.getUsername().matches("([a-zA-Z0-9_\\.\\-])+")){
+		if(!comm.getUsername().matches("([a-zA-Z0-9_\\-])+")){
 			errors.rejectValue("username","invalid.username");
 		}
 		if(comm.getUsername().length() < MIN_LENGTH){
@@ -107,7 +111,7 @@ public class CreateUserRequestValidator implements Validator{
 		
 		CreateUserRequestCommand comm = (CreateUserRequestCommand) command;
 		
-		System.out.println("COMMAND VALIDATE "+comm.getRandomkey());
+		log.info(comm.getOpenIDusername()+" "+comm.getUsername()+" "+comm.getRandomkey());
 		
 		boolean standard = comm.isStandard();
 		boolean openID = comm.isOpenID();

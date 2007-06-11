@@ -31,11 +31,18 @@ public class CreateUserRequestCommand {
 	}
 	
 	/**
-	 * NOTE: this getter does OpenID normalization
+	 * NOTE: this getter does NOT OpenID normalize
 	 * @return
 	 */
 	public String getOpenIDusername() {				
-		return com.janrain.openid.Util.normalizeUrl(openIDusername);
+		return openIDusername;
+	}
+	/**
+	 * NOTE: this getter does OpenID normalization
+	 * @return
+	 */
+	public String getOpenIDusernameDoNormalization() {
+		return com.janrain.openid.Util.normalizeUrl(openIDusername);		
 	}
 	public void setOpenIDusername(String openIDusername) {
 		this.openIDusername = openIDusername;

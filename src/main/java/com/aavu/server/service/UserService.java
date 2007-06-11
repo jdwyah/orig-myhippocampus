@@ -43,6 +43,8 @@ public interface UserService {
 
 	boolean nowAcceptingSignups();
 
+	boolean couldBeOpenID(String openIDusername);
+
 
 	
 }

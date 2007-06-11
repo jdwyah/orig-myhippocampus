@@ -123,4 +123,9 @@ public class MockUserService implements UserService {
 		return null;
 	}
 
+	public boolean couldBeOpenID(String openIDusername) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -118,7 +118,7 @@
         longitude integer not null,
         dateUpdated timestamp,
         dateCreated timestamp,
-        public_visible bit,
+        public_visible tinyint(1),
         subject bigint,
         subject_id bigint,
         primary key (topic_id)
@@ -128,8 +128,8 @@
         user_id bigint not null auto_increment,
         user_name varchar(255) not null,
         password varchar(255) not null,
-        enabled bit not null DEFAULT '1',
-        supervisor bit not null DEFAULT '0',
+        `enabled` tinyint(1) NOT NULL default '1',
+  		`supervisor` tinyint(1) NOT NULL default '0',
         subscription_id BIGINT NOT NULL DEFAULT '0';
 		paypalID varchar(255) default NULL,        
         primary key (user_id)

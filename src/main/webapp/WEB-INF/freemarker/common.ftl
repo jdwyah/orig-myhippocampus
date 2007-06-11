@@ -20,8 +20,13 @@
       <#--Both this and css prop are necessary for IE to not display this in narrow width-->
       document.getElementById('remember_me').style.display='inline-block';
   }
-  function formvalidation(){  
-  	if(document.getElementById('j_username2').value.indexOf('.') > -1){  
+  function isOpenID(){  
+    var p = (document.getElementById('j_username2').value.indexOf('.') > -1);    
+    var e = (document.getElementById('j_username2').value.indexOf('=') > -1);      	
+  	return p || e;
+  }
+  function formvalidation(){    
+  	if(isOpenID()){  
   		document.getElementById('openIDForm').submit();
   	}else{
   		document.getElementById('j_username').value = document.getElementById('j_username2').value;
@@ -47,14 +52,14 @@
 		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
 		</fieldset>
 	 </form>	
-	 <form id="openIDForm" action="/site/j_acegi_openid_start" method="POST" style="display: block">
+	 <form id="openIDForm" action="/site/j_acegi_openid_start" method="POST" style="display: block" onSubmit="javascript:formvalidation();return false;" >
 		<fieldset>
 			<legend><@spring.message "login.1.header"/> <a class="link" onclick="javascript:doUsernamePassword();">Use username / password</a></legend>
 			 <label for="j_username2"><input type='text' name='j_username' id = 'j_username2' class="openid-identifier">OpenID
 			 </label>		 		 
 		 <p>
 		 <input type="hidden" name="password"/>
-		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit" onclick="javascript:formvalidation();return false;" >
+		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
 		</fieldset>
 	 </form>	
 </#macro>

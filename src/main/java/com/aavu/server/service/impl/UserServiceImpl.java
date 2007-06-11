@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
 		if(comm.isStandard()){
 			return createUser(comm.getUsername(),comm.getPassword(),comm.getEmail());
 		}else if(comm.isOpenID()){
-			return createUser(comm.getOpenIDusername(),null,comm.getEmail());
+			return createUser(comm.getOpenIDusernameDoNormalization(),null,comm.getEmail());
 		}else{
 			throw new RuntimeException("Command Neither standard nor open");
 		}
@@ -115,13 +115,17 @@ public class UserServiceImpl implements UserService, InitializingBean {
 		}		
 	}
 
+	public boolean couldBeOpenID(String username){
+		return username.contains(".") || username.contains("=");
+	}
+	
 	/**
-	 * only openID users are allowed '.' and all openID usernames must have a '.'
-	 * so, if it's got a '.' janrain.normalize() before the lookup
+	 * only openID users are allowed '.' || '=' and all openID usernames must have a '.' || '='
+	 * so, if it's got a '.' || '=' janrain.normalize() before the lookup
 	 */
 	public User getUserWithNormalization(String username)  throws UsernameNotFoundException {
 
-		if(username.contains(".")){
+		if(couldBeOpenID(username)){
 			return userDAO.getUserByUsername(com.janrain.openid.Util.normalizeUrl(username));
 		}else{
 			return userDAO.getUserByUsername(username);
@@ -130,11 +134,11 @@ public class UserServiceImpl implements UserService, InitializingBean {
 
 	public List<User> getAllUsers() {
 		List<User> users = userDAO.getAllUsers();
-		if(log.isInfoEnabled()){
-			for (User user : users) {
-				log.info(user.getUsername()+" "+user.isSupervisor());
-			}
-		}
+//		if(log.isDebugEnabled()){
+//			for (User user : users) {
+//				log.info(user.getUsername()+" "+user.isSupervisor());
+//			}
+//		}
 		return users;
 	}
 
@@ -193,6 +197,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
 		user.setUsername(username.toLowerCase());		
 		user.setEmail(email);
 		user.setSupervisor(superV);
+		user.setEnabled(true);
 		user.setInvitations(startingInvitations);
 		
 		if(userpass != null){
