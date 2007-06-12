@@ -2,6 +2,7 @@
 
     <excludes>
 	  <pattern>*com.aavu.HippoTest*</pattern> 
+	  <pattern>/site/secure/mindscape.html</pattern><!-- Ajax Straight HTML <UL> -->
       <pattern>/site/secure/getTopics.html</pattern><!-- Ajax Straight HTML <UL> -->
 	</excludes>
     

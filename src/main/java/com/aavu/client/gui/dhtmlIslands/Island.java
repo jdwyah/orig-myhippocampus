@@ -574,13 +574,24 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 		
 		double xPct = getWidgetLeft(label) / (double)width;
 		double yPct = getWidgetTop(label) / (double)height;
+				
+		//System.out.println("finished dragging "+label.getText()+" "+label.getXPct()+" "+label.getYPct()+" "+xPct+" "+yPct);
 		
 		if(xPct != label.getXPct() || yPct != label.getYPct()){
+			//System.out.println("diff "+(xPct != label.getXPct())+" "+(yPct != label.getYPct()));
 			label.setXPct(xPct);
-			label.setYPct(yPct);			
-			topicMoved((DraggableTopicLabel) label);
+			label.setYPct(yPct);
+			
+
+			//PEND find better fix
+			//bogus, but if we don't have something like this it's too easy to 
+			//click a topic, accidentally drag it, and screw up the naive auto-spacing
+			if(label.getXPct() > .05){
+				//System.out.println("movin it");
+				topicMoved((DraggableTopicLabel) label);
+			}
 		}
-		//System.out.println("finished dragging "+label.getText()+" "+label.getXPct()+" "+label.getYPct());
+		
 	}
 	public void dragged(Widget dragging, int newX, int newY) {}
 	

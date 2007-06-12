@@ -6,7 +6,7 @@ import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
 
-import com.aavu.client.HippoTest;
+import com.aavu.client.Interactive;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
@@ -414,7 +414,7 @@ public class Manager implements TopicSaveListener, LoginListener, LoadFinishedLi
 			public void onFailure(Throwable caught) {	
 				
 				System.out.println("failed for "+caller);
-				Logger.log("GetCurrentUser failed! "+caught+" \nEP:"+HippoTest.getRelativeURL(""));
+				Logger.log("GetCurrentUser failed! "+caught+" \nEP:"+Interactive.getRelativeURL(""));
 				doLogin();										
 			}						
 		});		

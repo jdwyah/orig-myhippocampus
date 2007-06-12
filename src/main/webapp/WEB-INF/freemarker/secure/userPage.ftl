@@ -36,7 +36,7 @@
 	<#assign height= width / 1.47 />
 
 	<p>	
-    <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/><img id="enterButton" width="${width}" height="${height}" src="<@spring.url "/img/enterMyHippocampus.png"/>"><br>Enter!</a>
+    <a href="<@spring.url "mindscape.html"/>"/><img id="enterButton" width="${width}" height="${height}" src="<@spring.url "/img/enterMyHippocampus.png"/>"><br>Enter!</a>
 	<div id="userDetails">
 		Number of Islands: ${bean.numberOfIslands}<BR>
 		Number of Links: ${bean.numberOfLinks}<BR>

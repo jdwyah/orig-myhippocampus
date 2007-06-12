@@ -11,6 +11,8 @@ import org.gwm.client.event.GFrameEvent;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ViewPanel;
+import com.aavu.client.gui.dhtmlIslands.ImageHolder;
+import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.aavu.client.gui.explorer.TimeLineWrapper;
 import com.aavu.client.gui.timeline.CloseListener;
@@ -32,7 +34,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	private static List backGroundList = new ArrayList();
 	private static List labelFormatters = new ArrayList();
 	
-	static final String IMG_LOC = "img/timeline/";
+	static final String IMG_POSTFIX = "timeline/";
 	
 	static final double MIN_HOUR = 60;	
 	static final double MIN_DAY = MIN_HOUR*24;	
@@ -371,7 +373,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		
 		System.out.println("setBack "+scale+" "+index+" "+img);		
 		
-		DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+img+".png)");		
+		DOM.setStyleAttribute(getElement(), "backgroundImage","url("+ImageHolder.getImgLoc(IMG_POSTFIX)+img+".png)");		
 	}
 	
 	

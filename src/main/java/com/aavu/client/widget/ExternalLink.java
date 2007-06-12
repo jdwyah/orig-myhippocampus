@@ -1,6 +1,6 @@
 package com.aavu.client.widget;
 
-import com.aavu.client.HippoTest;
+import com.aavu.client.Interactive;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.URI;
@@ -55,7 +55,7 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 	public void init(S3File file){
 		init((URI) file);	
 				
-		String link = HippoTest.getRelativeURL(HippoTest.FILE_PATH+urlEncode(file.getUri()));
+		String link = Interactive.getRelativeURL(Interactive.FILE_PATH+urlEncode(file.getUri()));
 		
 		System.out.println("EXTERNAL LINK S3 PRE "+file.getUri());
 		System.out.println("EXTERNAL LINK FOR S3 "+link);

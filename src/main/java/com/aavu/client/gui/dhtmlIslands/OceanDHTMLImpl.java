@@ -24,6 +24,7 @@ import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -43,7 +44,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 
 	private static final int CLOUD_MOVE_MSEC = 7000;
 
-	//static final String IMG_LOC = "img/simplicityHighRes/";
+	//static final String IMG_LOC = "../../../../webapp/img/simplicityHighRes/";
 	
 	private static final int CLOUD_MOVE_PX = 2000;
 
@@ -52,7 +53,8 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 	private static final int CLOUD_REMOVE = 8000;
 
 	
-	static final String IMG_LOC = "img/simplicity/";	
+	
+	
 	//static final String IMG_LOC = "img/oldmapStyle/";
 
 	private static final double NO_ISLAND_DRAG_AT_THIS_ZOOM = 8;
@@ -565,10 +567,10 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 			return;
 		}			
 		if(pix > 400){
-			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean"+pix+".jpg)");
+			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+ImageHolder.getImgLoc()+"ocean"+pix+".jpg)");
 		}
 		else{
-			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+IMG_LOC+"ocean"+pix+".png)");
+			DOM.setStyleAttribute(getElement(), "backgroundImage","url("+ImageHolder.getImgLoc()+"ocean"+pix+".png)");
 		}
 	}
 

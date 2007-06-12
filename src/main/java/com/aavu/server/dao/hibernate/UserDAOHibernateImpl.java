@@ -59,8 +59,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements UserDAO
 		}else{			
 			log.debug("load user success "+list.get(0));
 			User u = (User) list.get(0);
-			log.debug("user: "+u);
-			log.info("u "+u.getUsername());
+			log.debug("user: "+u);			
 			return u;
 		}
 		

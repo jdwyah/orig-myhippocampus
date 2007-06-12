@@ -1,9 +1,12 @@
+
+<#macro gwtURL str>../../com.aavu.HippoTest/${str}</#macro>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
 	<head>
 		<meta name='gwt:module' content='com.aavu.HippoTest'>
 		
-		<link href="themes/alphacube.css" rel="stylesheet" type="text/css"></link>
-  		<link href="themes/alphacube-off.css" rel="stylesheet" type="text/css"></link>
+		<link href="<@gwtURL "themes/alphacube.css"/>" rel="stylesheet" type="text/css"></link>
+  		<link href="<@gwtURL "themes/alphacube-off.css"/>" rel="stylesheet" type="text/css"></link>
 
     	
     		
@@ -42,9 +45,7 @@
     		   	   
     		 //-->
 	    </script>
-
-
-
+ 
 <style type="text/css">
 			v\:* {
 			 behavior:url(#default#VML);
@@ -59,7 +60,8 @@
 			};
 		</script>
 		
-		<script language='javascript' src='com.aavu.Interactive.nocache.js'></script>
+		
+		<script language='javascript' src='<@gwtURL "com.aavu.Interactive.nocache.js"/>'></script>
 
 		<iframe id='__gwt_historyFrame' style='width:0;height:0;border:0'></iframe>
 		<div id="slot1"></div>

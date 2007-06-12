@@ -23,6 +23,7 @@ public class DragHandler implements MouseListener {
 	private int panelOffsetY;
 	private boolean islandDrag = true;
 	private boolean doYTranslate = true;
+	private boolean actuallyDragged;
 
 
 	/**
@@ -78,6 +79,7 @@ public class DragHandler implements MouseListener {
 		
 		//System.out.println("dragStartX "+dragStartX+" dragStartY "+dragStartY);
 		
+		actuallyDragged = false;
 	}
 
 	public void onMouseEnter(Widget sender) {
@@ -128,6 +130,9 @@ public class DragHandler implements MouseListener {
 			dragging.addStyleName(DRAGGING_STYLE);
 			
 			dragFinishedListener.dragged(dragging,newX,newY);
+			
+
+			actuallyDragged = true;
 		}
 	}
 
@@ -138,8 +143,9 @@ public class DragHandler implements MouseListener {
 			
 			dragging.removeStyleName(DRAGGING_STYLE);
 			
-			if(dragFinishedListener != null)
-			dragFinishedListener.dragFinished(dragging);
+			if(dragFinishedListener != null){
+				dragFinishedListener.dragFinished(dragging);
+			}
 			
 //			Widget buddy = (Widget) dragBuddy.get(sender);
 //			if(null != buddy){

@@ -1,6 +1,6 @@
 package com.aavu.client.gui;
 
-import com.aavu.client.HippoTest;
+import com.aavu.client.Interactive;
 import com.aavu.client.domain.User;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -30,15 +30,15 @@ public class UserWidget extends Composite {
 		
 		userPanel = new HorizontalPanel();
 
-		userPanel.add(new ExternalLink(ConstHolder.myConstants.userw_site(),HippoTest.getRelativeURL(ConstHolder.myConstants.userw_site_url())));
-		userPanel.add(new ExternalLink(ConstHolder.myConstants.userw_logout(),HippoTest.getRelativeURL(ConstHolder.myConstants.userw_logout_url())));		
+		userPanel.add(new ExternalLink(ConstHolder.myConstants.userw_site(),Interactive.getRelativeURL(ConstHolder.myConstants.userw_site_url())));
+		userPanel.add(new ExternalLink(ConstHolder.myConstants.userw_logout(),Interactive.getRelativeURL(ConstHolder.myConstants.userw_logout_url())));		
 		userPanel.setVisible(false);
 		userPanel.setSpacing(5);
 				
 		mainP.add(userPanel);
 		
 		noUserPanel = new HorizontalPanel();		
-		noUserPanel.add(new ExternalLink(ConstHolder.myConstants.userw_signup(),HippoTest.getRelativeURL(ConstHolder.myConstants.userw_logout_url())));
+		noUserPanel.add(new ExternalLink(ConstHolder.myConstants.userw_signup(),Interactive.getRelativeURL(ConstHolder.myConstants.userw_logout_url())));
 		mainP.add(noUserPanel);
 		
 		

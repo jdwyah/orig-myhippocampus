@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import org.gwtwidgets.client.ui.ImageButton;
 
-import com.aavu.client.HippoTest;
+import com.aavu.client.Interactive;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -50,7 +50,7 @@ public class UploadBoard extends Gadget {
 			
 
 			public void onClick(Widget sender) {
-				UploadWidget widg = new UploadWidget(manager,topic,UploadBoard.this,HippoTest.getRelativeURL(HippoTest.UPLOAD_PATH));		
+				UploadWidget widg = new UploadWidget(manager,topic,UploadBoard.this,Interactive.getRelativeURL(Interactive.UPLOAD_PATH));		
 				mainPanel.add(widg);				
 			}});
 		rowOne.add(addOne);		

@@ -8,7 +8,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<build>
-		<plugins>        
+		<plugins>         
   			 <plugin>
 				<groupId>org.xi8ix</groupId>				
 				<artifactId>xi8ix-gwtc</artifactId>
@@ -23,7 +23,7 @@
 				</executions>
 				<configuration>
 					<modules>
-						<module>com.aavu.HippoTest</module>
+						<module>com.aavu.Interactive</module>
 						<module>com.aavu.AddLink</module>
 					</modules>
 					<maxMemory>512</maxMemory>

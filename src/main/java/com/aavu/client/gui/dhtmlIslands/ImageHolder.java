@@ -1,6 +1,8 @@
 package com.aavu.client.gui.dhtmlIslands;
 
+import com.aavu.client.Interactive;
 import com.aavu.client.util.PsuedoRandom;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
 
 public class ImageHolder {
@@ -91,11 +93,38 @@ public class ImageHolder {
 //		i.setPixelSize(100, 100);
 //		return i;//slandImages.island_s().createImage();
 		
-		
+System.out.println(getImgLoc()+"type"+type.prefix+"_"+(1+random.nextInt(type.numImages))+"_"+extension+".png");		
 		//return new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+(id+(x-5)*y)%type.numImages)+"_"+extension+".png");
-		return new Image(OceanDHTMLImpl.IMG_LOC+"type"+type.prefix+"_"+(1+random.nextInt(type.numImages))+"_"+extension+".png");
+		return new Image(getImgLoc()+"type"+type.prefix+"_"+(1+random.nextInt(type.numImages))+"_"+extension+".png");
 	}
 
+	
+	//static final String IMG_LOC = "file://C:/workspace/RealHippo/src/main/webapp/img/simplicity/";	
+
+	public static String getImgLoc(){
+		return getImgLoc("simplicity/");
+	}
+	/**
+	 * PEND LOW relative ../../../../webapp/ doesn't seem to work.
+	 * 
+	 * Moved these out of public to the basic web tier. This makes life easier for
+	 * multiple modules, loading in other contexts etc, with the only downside being
+	 * that hosted mode needs this file:// url
+	 * 
+	 * Note, only the images used for backgrounds or being scaled should be calling this.
+	 * All other images should be in ImageBundles, which will get loaded correctly by the.
+	 * 
+	 * @param img_postfix
+	 * @return
+	 */
+	public static String getImgLoc(String img_postfix){
+		if(GWT.isScript()){
+			return Interactive.getRelativeURL("img/"+img_postfix);
+		}else{
+			return "file://C:/workspace/RealHippo/src/main/webapp/img/"+img_postfix;			
+		}
+		
+	}
 
 	
 }

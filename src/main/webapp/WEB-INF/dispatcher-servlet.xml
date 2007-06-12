@@ -136,6 +136,19 @@
 		<property name="userService" ref="userService" />
 	</bean>
 
+	<bean id="interactiveController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="secure/mindscape" />
+		<property name="userService" ref="userService" />
+	</bean>
+	
+	<!-- PEND MED blech. GWT loads the image bundles from the right spot, but
+	goes looking for this clear.cache.gif from where the .js was called.  -->
+	<bean id="forwardClearCacheController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="redirect:/com.aavu.HippoTest/clear.cache.gif" />
+		<property name="userService" ref="userService" />
+	</bean>
+	
+	
 	<bean id="invitationController" class="com.aavu.server.web.controllers.InvitationController">
 		<property name="view" value="redirect:/site/secure/userPage.html" />
 		<property name="invitationService" ref="invitationService"/>
@@ -241,6 +254,9 @@
 				<prop key="/site/secure/search.html">searchController</prop>
 				<prop key="/site/secure/userPage.html">userPageController</prop>
 				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
+
+				<prop key="/site/secure/mindscape.html">interactiveController</prop>
+				<prop key="/site/secure/clear.cache.gif">forwardClearCacheController</prop>
 
 				<prop key="/site/secure/invite.html">invitationController</prop>						
 				<prop key="/site/secure/account.html">accountController</prop>	

@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class HippoTest implements EntryPoint, HistoryListener {
+public class Interactive implements EntryPoint, HistoryListener {
 
 	public static final String EMPTY = "-1";
 	public static final String UPLOAD_PATH = "service/upload.html";//"site/secure/upload.html";

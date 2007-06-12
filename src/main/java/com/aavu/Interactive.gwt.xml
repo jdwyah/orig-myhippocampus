@@ -10,7 +10,7 @@
 	<inherits name="com.google.gwt.json.JSON"/> 
 
 	<!-- Specify the app entry point class.                   -->
-	<entry-point class='com.aavu.client.HippoTest'/>
+	<entry-point class='com.aavu.client.Interactive'/>
 	<!-- <entry-point class='com.aavu.client.HippoPreLoad'/>-->
 	
 	<stylesheet src="css/HippoTest.css" /> 	

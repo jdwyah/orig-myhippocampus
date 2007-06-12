@@ -126,6 +126,10 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 		createPoint(locObj,partOfAmalgam);		
 	}
 	
+	/**
+	 * NOTE PEND MED replace with a generalized TreeOfTime
+	 * @param locations
+	 */
 	public void addAmalgam(Set locations) {
 
 		double totalLat = 0;

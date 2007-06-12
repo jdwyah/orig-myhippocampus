@@ -67,6 +67,7 @@ encrypt the whole button on the fly. See code stublets in com.aavu.service.paypa
 	<div class="middle-column-box-title-green">
 		<@spring.message "account.about"/>
 	</div>
+		<p>
 		<@spring.message "account.about.0"/>
 		<p>
 		<@spring.message "account.about.1"/>

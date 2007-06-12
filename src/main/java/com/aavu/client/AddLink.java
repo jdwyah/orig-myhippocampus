@@ -76,7 +76,7 @@ public class AddLink implements EntryPoint {
 		
 		//realModuleBase = "";
 	
-		String pre = HippoTest.getRelativeURL("service/");
+		String pre = Interactive.getRelativeURL("service/");
 		
 		//Window.alert("3");
 		

@@ -4,7 +4,7 @@ import org.gwm.client.GInternalFrame;
 import org.gwm.client.event.GFrameAdapter;
 import org.gwm.client.event.GFrameEvent;
 
-import com.aavu.client.HippoTest;
+import com.aavu.client.Interactive;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.LoginListener;
 import com.aavu.client.strings.ConstHolder;
@@ -75,7 +75,7 @@ public class LoginWindow extends PopupWindow {
 				}
 			}};
 		
-		form.setAction(HippoTest.getRelativeURL(SECURITY_URL));
+		form.setAction(Interactive.getRelativeURL(SECURITY_URL));
 
 		form.setMethod(FormPanel.METHOD_POST);
 
@@ -181,11 +181,11 @@ public class LoginWindow extends PopupWindow {
 	private void setToOpenID(boolean toOpenID) {
 		if(toOpenID){
 			toggleL.setText(ConstHolder.myConstants.login_Standard());
-			form.setAction(HippoTest.getRelativeURL(SECURITY_URL_OPENID));
+			form.setAction(Interactive.getRelativeURL(SECURITY_URL_OPENID));
 			passPanel.setVisible(false);
 		}else{
 			toggleL.setText(ConstHolder.myConstants.login_OpenID());
-			form.setAction(HippoTest.getRelativeURL(SECURITY_URL));
+			form.setAction(Interactive.getRelativeURL(SECURITY_URL));
 			passPanel.setVisible(true);
 		}
 		
