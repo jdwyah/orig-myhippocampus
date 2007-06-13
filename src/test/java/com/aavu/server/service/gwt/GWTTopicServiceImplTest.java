@@ -17,7 +17,8 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.service.remote.GWTTopicService;
-import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.dao.EditDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.service.UserService;
 
@@ -27,7 +28,8 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 	
 	private GWTTopicService topicService;
 	private UserDAO userDAO;	
-	private TopicDAO topicDAO;
+	private SelectDAO selectDAO;
+	private EditDAO editDAO;
 	private UserService userService;
 
 	private User u;
@@ -44,8 +46,11 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 	public void setTopicService(GWTTopicService topicService) {
 		this.topicService = topicService;
 	}
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	public void setSelectDAO(SelectDAO SelectDAO) {
+		this.selectDAO = SelectDAO;
+	}
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
 	}
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -85,15 +90,15 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		author.setTitle(B);
 		author.setUser(u);
 		
-		Meta savedAuthor = (Meta) topicDAO.save(author);
+		Meta savedAuthor = (Meta) editDAO.save(author);
 		
 		book.addTagProperty(savedAuthor);
 
-		Topic savedBook = topicDAO.save(book);
+		Topic savedBook = editDAO.save(book);
 
 		Topic tomClancy = new Topic(u,E);
 		
-		Topic savedTomClancy = topicDAO.save(tomClancy);
+		Topic savedTomClancy = editDAO.save(tomClancy);
 
 //		/Topic savedAuthor = (Topic) savedBook.getMetas().iterator().next();
 		
@@ -167,10 +172,10 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 		book.addTagProperty(author);
 				
-		book = (Tag) topicDAO.save(book);
+		book = (Tag) editDAO.save(book);
 		
 		Topic tomClancy = new Topic(u,E);
-		topicDAO.save(tomClancy);
+		editDAO.save(tomClancy);
 		
 		System.out.println("book: "+book);
 		//System.out.println("book "+book.getInstances());
@@ -180,8 +185,8 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 		System.out.println("before: "+patriotGames.getId());
 		
-		topicDAO.save(patriotGames);
-		topicDAO.save(book);
+		editDAO.save(patriotGames);
+		editDAO.save(book);
 		
 		
 		Topic savePatriot = topicService.getTopicForName(C);
@@ -196,9 +201,9 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		Topic b = (Topic) savePatriot.getTags().iterator().next();
 		//assertEquals(0, b.getInstances().size());
 		
-		Topic save2 = topicDAO.save(savePatriot);
+		Topic save2 = editDAO.save(savePatriot);
 		
-		Topic savedBook3 = topicDAO.save(savedBook);
+		Topic savedBook3 = editDAO.save(savedBook);
 		
 		//System.out.println("book "+book.getId()+" i.sz "+book.getInstances().size()+" "+" sb "+savedBook.getId()+" ");
 		

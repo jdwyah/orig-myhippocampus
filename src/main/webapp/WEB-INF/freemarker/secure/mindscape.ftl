@@ -3,14 +3,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
 	<head>
-		<meta name='gwt:module' content='com.aavu.HippoTest'>
-		
+				
 		<link href="<@gwtURL "themes/alphacube.css"/>" rel="stylesheet" type="text/css"></link>
   		<link href="<@gwtURL "themes/alphacube-off.css"/>" rel="stylesheet" type="text/css"></link>
-
     	
     		
-		<title>MyHippocampus</title>
+		<title>MyHippocampus Mindscape</title>
 	
 		<script language="JavaScript">
 			<!--
@@ -56,7 +54,7 @@
 	<body onunload="GUnload()">
 		<script language="JavaScript">
 			var Vars = {
-				page: "userMind"
+				page: "MyMindscape"
 			};
 		</script>
 		
@@ -68,13 +66,6 @@
 		<div id="loading" class="loading"><p>Loading...</p></div>
 		<div id="preload"></div>
 	
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct = "UA-1880676-1";
-urchinTracker();
-</script>
-
  
 	</body>
 </html>

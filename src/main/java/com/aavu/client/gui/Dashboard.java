@@ -58,11 +58,11 @@ public class Dashboard extends SimplePanel {
 			}});
 		addNewIslandButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.island_new()));
 
-		Button addDeliciousTags = new Button("Add Delicious Tags");
-		addDeliciousTags.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				DeliciousWidget widg = new DeliciousWidget(manager); 				
-			}});
+//		Button addDeliciousTags = new Button("Add Delicious Tags");
+//		addDeliciousTags.addClickListener(new ClickListener(){
+//			public void onClick(Widget sender) {
+//				DeliciousWidget widg = new DeliciousWidget(manager); 				
+//			}});
 
 //		ImageButton timeLine = new ImageButton(ConstHolder.myConstants.timeline_image(),40,60);
 //		timeLine.addClickListener(new ClickListener(){

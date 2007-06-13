@@ -1,0 +1,166 @@
+package com.aavu.client.service;
+
+import java.util.List;
+
+import org.gwm.client.GInternalFrame;
+
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.SearchResultsWindow;
+import com.aavu.client.gui.StatusCode;
+import com.aavu.client.gui.gadgets.GadgetManager;
+import com.aavu.client.images.Images;
+import com.aavu.client.service.cache.HippoCache;
+import com.aavu.client.service.cache.TagCache;
+import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.service.remote.GWTSubjectServiceAsync;
+import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.strings.Consts;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+public abstract class AbstractManager implements Manager {
+	
+	private GadgetManager gadgetManager;	
+	private HippoCache hippoCache;
+	
+	public AbstractManager(HippoCache hippoCache){
+		this.hippoCache = hippoCache;
+		gadgetManager = new GadgetManager(this);
+		
+		initConstants();
+		
+	}
+	public void bringUpChart(long id) {
+		getHippoCache().getTopicCache().getTopicByIdA(id,new StdAsyncCallback(ConstHolder.myConstants.topic_lookupAsync()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				bringUpChart((Topic) result);				
+			}});
+	}	
+	
+	
+	public void bringUpChart(Topic topic) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void bringUpChart(TopicIdentifier ident) {
+		
+		//TODO
+		//map.clearForLoading();
+		
+		getHippoCache().getTopicCache().getTopic(ident,new StdAsyncCallback(ConstHolder.myConstants.topic_lookupAsync()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				bringUpChart((Topic) result);				
+			}});
+
+	}
+	
+	public void changeState(Topic topic, boolean b, StdAsyncCallback callback) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void delete(Topic topic, AsyncCallback callback) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	public void displayInfo(String gadget_not_available) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void doSearch(String text) {
+		System.out.println("Search "+text);
+		getHippoCache().getTopicCache().search(text,new StdAsyncCallback(ConstHolder.myConstants.searchCallback()){
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				System.out.println("ssss");
+				List searchRes = (List) result;
+				
+				SearchResultsWindow tw = new SearchResultsWindow(AbstractManager.this,searchRes);
+					
+			}			
+		});
+	}
+	public void editEntry(Topic topic) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void editMetas(AsyncCallback callback, Meta type) {
+		// TODO Auto-generated method stub
+		
+	}
+	public GadgetManager getGadgetManager() {
+		return gadgetManager;
+	}
+	
+	public HippoCache getHippoCache() {
+		return hippoCache;
+	}
+	public GWTSubjectServiceAsync getSubjectService() {
+		return getHippoCache().getSubjectService();
+	}
+	public TagCache getTagCache() {
+		return getHippoCache().getTagCache();
+	}
+	public TopicCache getTopicCache() {
+		return getHippoCache().getTopicCache();
+	}
+	public User getUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private void initConstants() {
+		ConstHolder.myConstants = (Consts) GWT.create(Consts.class);
+		ConstHolder.images = (Images) GWT.create(Images.class);		
+	}
+	
+	
+	public GInternalFrame newFrame() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void newIsland() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void newMeta(Meta meta, AsyncCallback callback) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void newTopic() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setHippoCache(HippoCache hippoCache) {
+		this.hippoCache = hippoCache;
+	}
+	public void showGlossary() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void showPreviews(long int0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void updateStatus(int myNum, String string, StatusCode fail) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void userNeedsToUpgrade() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void viewMembers(Topic myTag, List topics) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+}

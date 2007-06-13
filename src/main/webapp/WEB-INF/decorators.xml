@@ -29,4 +29,9 @@
     <decorator name="none" page="none.ftl">
     	<pattern>/site/secure/addLink.html</pattern>
     </decorator>
+    
+    <decorator name="noSidebar" page="noSidebar.ftl">
+    	<pattern>/site/browser.html</pattern>
+    </decorator>
+    
 </decorators>

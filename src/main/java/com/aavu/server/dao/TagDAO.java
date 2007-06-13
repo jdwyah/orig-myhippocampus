@@ -12,7 +12,6 @@ public interface TagDAO {
 
 	Tag getTag(User user,String tagName);
 
-
 	List<Tag> getAllTags(User user);
 	
 	List<TopicIdentifier> getTagsStarting(User user,String match);
@@ -20,6 +19,5 @@ public interface TagDAO {
 	List<Tag> getPublicTags();
 	
 	List<TagStat> getTagStats(User user);
-
 	
 }

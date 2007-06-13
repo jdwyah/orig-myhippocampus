@@ -92,7 +92,10 @@
 		<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>
 
-	<bean id="topicDAO" class="com.aavu.server.dao.hibernate.TopicDAOHibernateImpl">
+	<bean id="selectDAO" class="com.aavu.server.dao.hibernate.SelectDAOHibernateImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="editDAO" class="com.aavu.server.dao.hibernate.EditDAOHibernateImpl">
 		<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>
 	

@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoException;
-import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.dao.EditDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.domain.PersistedFile;
 import com.aavu.server.service.FilePersistanceService;
 import com.aavu.server.service.UserService;
@@ -27,17 +29,24 @@ public class FilePersistanceServiceImplTest extends BaseTestWithTransaction {
 	
 	public FilePersistanceService fileService;
 	public UserService userService;
-	public TopicDAO topicDAO;
+	public SelectDAO selectDAO;
+	public EditDAO editDAO;
 	
-	
+	@Required
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
+	}
+	@Required
 	public void setFileService(FilePersistanceService fileService) {
 		this.fileService = fileService;
 	}
+	@Required
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	@Required
+	public void setSelectDAO(SelectDAO selectDAO) {
+		this.selectDAO = selectDAO;
 	}
 
 	
@@ -61,7 +70,7 @@ public class FilePersistanceServiceImplTest extends BaseTestWithTransaction {
 	public void testSaveFileStringIntInputStreamStringUser() throws HippoException, IOException {
 		Topic t = new Topic(userService.getCurrentUser(),TOPIC_TITLE);
 		
-		t = topicDAO.save(t);
+		t = editDAO.save(t);
 		
 //		File f = new File("build.xml");
 //		System.out.println(f.getAbsolutePath());
@@ -75,7 +84,7 @@ public class FilePersistanceServiceImplTest extends BaseTestWithTransaction {
 			
 			fileService.saveFileToTopic(fileToSave, t, userService.getCurrentUser());
 			
-			t = topicDAO.getForName(userService.getCurrentUser(), TOPIC_TITLE);
+			t = selectDAO.getForName(userService.getCurrentUser(), TOPIC_TITLE);
 
 			assertEquals(1, t.getOccurences().size());
 

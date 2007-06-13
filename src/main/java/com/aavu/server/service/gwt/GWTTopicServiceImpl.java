@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
+import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
@@ -377,9 +378,12 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e.getMessage());
 		}
 	}
+	
+	@Required
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
 	}
+	@Required
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
 	}

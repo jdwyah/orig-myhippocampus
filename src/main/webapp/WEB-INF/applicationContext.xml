@@ -6,9 +6,14 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
+	<!-- Turn on HostPrecedingPropertyPlaceholderConfigurer -->
+	<!-- http://jdwyah.blogspot.com/2006/12/updated-spring-configuration.html -->
 	<bean id="propertyConfigurer" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:config.properties" />
 	</bean>
+	
+	<!-- Turn on @Required -->
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
 		<property name="topicService" ref="topicService" />
@@ -34,26 +39,28 @@
 		<property name="startingInvitations" value="3"/>
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
-		<property name="topicDAO" ref="topicDAO" />
+		<property name="selectDAO" ref="selectDAO" />
+		<property name="editDAO" ref="editDAO"></property>
 		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="tagService" class="com.aavu.server.service.impl.TagServiceImpl">
 		<property name="tagDAO" ref="tagDAO"></property>
-		<property name="topicDAO" ref="topicDAO"></property>
+		<property name="selectDAO" ref="selectDAO" />
+		<property name="editDAO" ref="editDAO"></property>
 		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="searchService" class="com.aavu.server.service.impl.SearchServiceImpl">
 		<property name="compass" ref="compass" />
 		<property name="compassGPS" ref="compassGPS"></property>
 		<property name="mirrorGPS" ref="hibernateGpsDevice" />
-		<property name="topicDAO" ref="topicDAO"></property>
+		<property name="selectDAO" ref="selectDAO"></property>
 		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="messageService" class="com.aavu.server.service.impl.MessageServiceImpl">
 		<property name="userService" ref="userService" />
 		<property name="tagDAO" ref="tagDAO" />
-		<property name="topicDAO" ref="topicDAO" />
-		<property name="fileService" ref="fileService" />
+		<property name="selectDAO" ref="selectDAO" />
+		<property name="fileService" ref="fileService" />		
 	</bean>
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
 		<property name="userService" ref="userService" />
@@ -68,7 +75,7 @@
 
 	<bean id="fileService" class="com.aavu.server.service.impl.FilePersistanceServiceImpl">
 		<property name="awsConnection" ref="awsConnection" />
-		<property name="topicDAO" ref="topicDAO" />
+		<property name="editDAO" ref="editDAO" />
 	</bean>
 
 
@@ -111,11 +118,14 @@
 	</tx:advice>
 
 	<!-- ensure that the above transactional advice runs for any execution
-		of an operation defined by the FooService interface -->
-	<aop:config>
-		<aop:pointcut id="transactionalServices" expression="execution(* com.aavu.server.service.*.*(..))" />
-		<!-- <aop:pointcut id="transactionalMessages" expression="execution(* com.aavu.server.service.impl.MessageServiceImpl.*(..))" />-->
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="transactionalServices" />
+		of an operation defined by the FooService interface.
+		Odd SprindIDE 2.0 errors if these are in the same aop:config -->
+	 <aop:config>
+		<aop:pointcut id="servicesPointcut" expression="execution(* com.aavu.server.service.*.*(..))" />
 	</aop:config>
+	
+	<aop:config>
+		<aop:advisor pointcut-ref="servicesPointcut" advice-ref="txAdvice" />
+	</aop:config> 	
 
 </beans>

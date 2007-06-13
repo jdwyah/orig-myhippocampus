@@ -1,6 +1,7 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.service.Manager;
+import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -18,7 +19,7 @@ public class Zoomer extends SimplePanel implements MouseListener {
 	private static final int TOT_INCR = 7;
 	private static final int NUM_BELOW_1 = 4;
 	
-	private Manager manager;
+	private MindscapeManager manager;
 	private int curLevel;
 
 	private AbsolutePanel absPanel = new AbsolutePanel();
@@ -30,7 +31,7 @@ public class Zoomer extends SimplePanel implements MouseListener {
 	 * 
 	 * @param manager
 	 */
-	public Zoomer(final Manager manager){		
+	public Zoomer(final MindscapeManager manager){		
 		this.manager = manager;
 		
 		//addStyleName("H-AbsolutePanel");		

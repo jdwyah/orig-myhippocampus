@@ -16,8 +16,9 @@ import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
+import com.aavu.server.dao.EditDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.dao.TagDAO;
-import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.dao.UserDAO;
 
 public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
@@ -25,7 +26,8 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	private TagDAO tagDAO;
 	private UserDAO userDAO;
-	private TopicDAO topicDAO;
+	private SelectDAO selectDAO;
+	private EditDAO editDAO;
 	
 	private User u;	
 
@@ -44,10 +46,12 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	public void setSelectDAO(SelectDAO selectDAO) {
+		this.selectDAO = selectDAO;
 	}
-
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
+	}
 	
 	@Override
 	protected void onSetUpInTransaction() throws Exception {
@@ -64,19 +68,19 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t1.setName(A);
 		t1.setUser(u);
 
-		t1 = (Tag) topicDAO.save(t1);
+		t1 = (Tag) editDAO.save(t1);
 
 		Tag t2 = new Tag();
 		t2.setName(B);
 		t2.setUser(u);
 
-		t2 = (Tag) topicDAO.save(t2);
+		t2 = (Tag) editDAO.save(t2);
 
 		Tag t3 = new Tag();
 		t3.setName(B2);
 		t3.setUser(u);
 
-		t3 = (Tag) topicDAO.save(t3);
+		t3 = (Tag) editDAO.save(t3);
 		
 		return new Tag[] {t1,t2,t3};
 	}
@@ -105,7 +109,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Topic t1 = new Topic(u,"FOO");		
 		t1.tagTopic(tags[0]);		
-		topicDAO.save(t1);		
+		editDAO.save(t1);		
 		
 		List<Tag> list = tagDAO.getAllTags(u);
 		assertEquals(3, list.size());
@@ -114,21 +118,21 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		Topic t2 = new Topic(u,"BAR");		
 		t2.tagTopic(savedTag);		
-		topicDAO.save(t2);
+		editDAO.save(t2);
 		
 		Topic t3 = new Topic(u,"SHMEE");		
 		t3.tagTopic(tags[1]);		
-		topicDAO.save(t3);
+		editDAO.save(t3);
 		
 		Topic t4 = new Topic(u,"foobee");
 		t4.setUser(u);
 		t4.tagTopic(tags[1]);		
-		topicDAO.save(t4);
+		editDAO.save(t4);
 		
 		Topic t5 = new Topic(u,"fee");
 		t5.setUser(u);
 		t5.tagTopic(savedTag);		
-		topicDAO.save(t5);
+		editDAO.save(t5);
 		
 		list = tagDAO.getAllTags(u);
 		assertEquals(3, list.size());
@@ -171,7 +175,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		Tag t = tagDAO.getTag(u, A);
 		assertEquals(A,t.getName());
 
-		topicDAO.delete(t);
+		editDAO.delete(t);
 
 		List<Tag> list = tagDAO.getAllTags(u);		
 		
@@ -208,7 +212,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 
 		System.out.println("before: "+t2.getId()+" "+t2);
-		topicDAO.save(t2);
+		editDAO.save(t2);
 
 		System.out.println("after: "+t2.getId()+" "+t2);
 
@@ -233,7 +237,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		saved.addTagProperty(meta2);
 
-		topicDAO.save(saved);
+		editDAO.save(saved);
 
 		tagL = tagDAO.getAllTags(u);
 
@@ -264,7 +268,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t.setUser(u);
 		t.tagTopic(three[0]);
 					
-		t = topicDAO.save(t);
+		t = editDAO.save(t);
 		
 		//test
 		//tag 0 should have one topic
@@ -287,11 +291,11 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setUser(u);				
 		t2.tagTopic(three[1]);				
 		t2.tagTopic(three[0]);
-		t2 = topicDAO.save(t2);
+		t2 = editDAO.save(t2);
 		
 		//add tag 2 to topic 1
 		t.tagTopic(three[2]);
-		t = topicDAO.save(t);
+		t = editDAO.save(t);
 		
 		//test 
 		//
@@ -340,7 +344,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t.tagTopic(three[0]);
 		t.setSubject(subj1);
 					
-		t = topicDAO.save(t);
+		t = editDAO.save(t);
 		
 		//test
 		//tag 0 should have one topic
@@ -375,7 +379,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.tagTopic(three[1]);				
 		t2.tagTopic(three[0]);
 		t2.setSubject(subj1);
-		topicDAO.save(t2);
+		editDAO.save(t2);
 		
 		Topic topic3 = new Topic(u, G);
 		//add tag 2 to topic 1
@@ -389,7 +393,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		topic3.setSubject(subj2);
 		
 		System.out.println("subj "+topic3.getSubject()+"  ID "+topic3.getSubject().getId());
-		topicDAO.save(topic3);
+		editDAO.save(topic3);
 		
 		//test 
 		//

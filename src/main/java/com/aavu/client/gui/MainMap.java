@@ -1,37 +1,25 @@
 package com.aavu.client.gui;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import org.gwm.client.GDesktopPane;
 import org.gwm.client.GFrame;
-import org.gwm.client.GInternalFrame;
-import org.gwm.client.impl.DefaultGDesktopPane;
-import org.gwm.client.impl.DefaultGFrame;
-import org.gwm.client.impl.DefaultGInternalFrame;
-import org.gwm.client.impl.SelectBoxManagerImpl;
-import org.gwm.client.impl.SelectBoxManagerImplIE6;
 
 import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.gui.ext.MultiDivPanel;
-import com.aavu.client.service.Manager;
+import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MainMap extends HippoDesktopPane {
 
 	//private Sidebar sideBar;	
-	private Manager manager;
+	private MindscapeManager manager;
 	//private TagSearch tagSearch;
 		
 	private Ocean ocean;
@@ -50,7 +38,7 @@ public class MainMap extends HippoDesktopPane {
 //	private GInternalFrame activeFrame;
 //	private String theme;
 	
-	public MainMap(final Manager manager){
+	public MainMap(final MindscapeManager manager){
 		super();
 		this.manager = manager;
 		
@@ -101,9 +89,9 @@ public class MainMap extends HippoDesktopPane {
 		centerDisplayer = new CenterTopicDisplayer(manager);
 		mainP.add(centerDisplayer);
 		
-		gadgetDisplayer = new GadgetDisplayer(manager);
+		gadgetDisplayer = new GadgetDisplayerBarImpl(manager);
 		
-		mainP.add(gadgetDisplayer);
+		mainP.add(gadgetDisplayer.getWidget());
 		
 		//mainP.add(tagSearch);
 		

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.aavu.client.domain.Entry;
@@ -15,8 +16,9 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
+import com.aavu.server.dao.EditDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.dao.TagDAO;
-import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.domain.MessageServiceReturn;
 import com.aavu.server.domain.PersistedFile;
 import com.aavu.server.service.FilePersistanceService;
@@ -35,7 +37,10 @@ public class MessageServiceImpl implements MessageService {
 	/**
 	 * Doesn't use Topic Service bc that uses the SecurityContext getCurrentUser() and we're not really logged in
 	 */
-	private TopicDAO topicDAO;
+	private EditDAO editDAO;
+	
+	private SelectDAO selectDAO;
+	
 	/**
 	 * Doesn't use Topic Service bc that uses the SecurityContext getCurrentUser() and we're not really logged in
 	 */
@@ -51,7 +56,7 @@ public class MessageServiceImpl implements MessageService {
 			t.setName(tagName);
 			t.setPublicVisible(false);
 			t.setUser(user);
-			topicDAO.save(t);
+			editDAO.save(t);
 
 			log.debug("created: "+t.getId());
 			return t;
@@ -100,7 +105,7 @@ public class MessageServiceImpl implements MessageService {
 			String newTitle = subject;
 			int i = 0;
 			do{
-				oldTopic = topicDAO.getForName(u, newTitle);
+				oldTopic = selectDAO.getForName(u, newTitle);
 				if(oldTopic != null){
 					log.debug("Collision! "+newTitle);
 					newTitle = subject+"("+i+")";
@@ -120,7 +125,7 @@ public class MessageServiceImpl implements MessageService {
 			
 			topic.tagTopic(inbox);
 			
-			topic = topicDAO.save(topic);
+			topic = editDAO.save(topic);
 			
 			for (PersistedFile file : attachements) {	
 				log.debug("Saving attachement "+file+" "+file.getFilename());
@@ -151,19 +156,23 @@ public class MessageServiceImpl implements MessageService {
 
 	
 	
-
+	@Required
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-
+	@Required
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
-
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	@Required
+	public void setSelectDAO(SelectDAO selectDAO) {
+		this.selectDAO = selectDAO;
 	}
-
+	@Required
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
+	}
+	@Required
 	public void setFileService(FilePersistanceService fileService) {
 		this.fileService = fileService;
 	}

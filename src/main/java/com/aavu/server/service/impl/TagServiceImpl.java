@@ -1,43 +1,43 @@
 package com.aavu.server.service.impl;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Required;
 
-import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
-import com.aavu.client.exception.PermissionDeniedException;
+import com.aavu.server.dao.EditDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.dao.TagDAO;
-import com.aavu.server.dao.TopicDAO;
 import com.aavu.server.service.UserService;
 
 public class TagServiceImpl implements com.aavu.server.service.TagService {
 	private static final Logger log = Logger.getLogger(TagServiceImpl.class);
 
 	private TagDAO tagDAO;
-	private TopicDAO topicDAO;
+	private EditDAO editDAO;
+	private SelectDAO selectDAO;
 	private UserService userService;
 	
-
+	@Required
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	@Required
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	@Required
+	public void setSelectDAO(SelectDAO selectDAO) {
+		this.selectDAO = selectDAO;
 	}
-
-	
-	
-	
-	
+	@Required
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
+	}
 	public List<Tag> getAllTags() {
 		return tagDAO.getAllTags(userService.getCurrentUser());
 	}
@@ -57,7 +57,7 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 			t.setName(tagName);
 			t.setPublicVisible(false);
 			t.setUser(userService.getCurrentUser());
-			topicDAO.save(t);
+			editDAO.save(t);
 
 			log.debug("created: "+t.getId());
 			return t;
@@ -92,7 +92,7 @@ public class TagServiceImpl implements com.aavu.server.service.TagService {
 		selectedTag.setUser(userService.getCurrentUser());
 
 		
-		return (Tag) topicDAO.save(selectedTag);
+		return (Tag) editDAO.save(selectedTag);
 	}
 	
 	public Tag getTagForName(String completeText) {

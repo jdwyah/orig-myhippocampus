@@ -31,7 +31,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	private static final int DEFAULT_TAG_AUTOCOMPLETE_MAX = 7;
 	
 	public List<Tag> getAllTags(User user) {
-		DetachedCriteria crit  = TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
+		DetachedCriteria crit  = SelectDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
 		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
 		.add(Expression.eq("user", user)));
 		
@@ -42,7 +42,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 	 * 
 	 */
 	public Tag getTag(User user, String tagName) {
-		DetachedCriteria crit  =  TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
+		DetachedCriteria crit  =  SelectDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
 		.add(Expression.and(Expression.eq("title", tagName),				
 				Expression.eq("user", user))));
 		
@@ -149,7 +149,7 @@ public class TagDAOHibernateImpl extends HibernateDaoSupport implements TagDAO {
 		
 		getHibernateTemplate().evict(t);
 		
-		DetachedCriteria crit  =  TopicDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
+		DetachedCriteria crit  =  SelectDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
 				.add(Expression.eq("id", t.getId())));
 		
 		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));		

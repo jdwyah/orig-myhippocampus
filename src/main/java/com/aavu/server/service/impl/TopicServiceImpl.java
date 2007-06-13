@@ -30,7 +30,8 @@ import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoPermissionException;
 import com.aavu.client.exception.HippoSubscriptionException;
-import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.dao.EditDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.UserPageBean;
@@ -44,8 +45,10 @@ public class TopicServiceImpl implements TopicService {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 
 	private static MetaSeeAlso seealsoSingleton;
-	private TopicDAO topicDAO;
-
+	private SelectDAO selectDAO;
+	private EditDAO editDAO;
+	
+	
 	private UserService userService;
 
 	//private SearchService searchService;
@@ -76,11 +79,11 @@ public class TopicServiceImpl implements TopicService {
 	 * @throws HippoPermissionException 
 	 */
 	public void changeState(long topicID, boolean toIsland) throws HippoPermissionException {
-		Topic t = topicDAO.get(topicID);
+		Topic t = selectDAO.get(topicID);
 		if(t.getUser() != userService.getCurrentUser()){
 			throw new HippoPermissionException();
 		}
-		topicDAO.changeState(t, toIsland);
+		editDAO.changeState(t, toIsland);
 	}
 
 
@@ -108,7 +111,7 @@ public class TopicServiceImpl implements TopicService {
 	 */
 	public void delete(Topic topic) throws HippoBusinessException {
 		if(userService.getCurrentUser().equals(topic.getUser())){
-			topicDAO.delete(topic);
+			editDAO.delete(topic);
 
 			//TODO delete S3Files 
 			//TODO delete Weblinks that were only referenced by us
@@ -130,11 +133,11 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 	public void deleteOccurrence(long id) throws HippoPermissionException {
-		Occurrence o = topicDAO.getOccurrrence(id);
+		Occurrence o = selectDAO.getOccurrrence(id);
 		if(o.getUser() != userService.getCurrentUser()){
 			throw new HippoPermissionException();
 		}
-		topicDAO.deleteOccurrence(o);
+		editDAO.deleteOccurrence(o);
 	}
 
 	/**
@@ -158,49 +161,49 @@ public class TopicServiceImpl implements TopicService {
 
 
 	public List<LocationDTO> getAllLocations() {	
-		return topicDAO.getLocations(userService.getCurrentUser());
+		return selectDAO.getLocations(userService.getCurrentUser());
 	}
 
 
 	public List<Meta> getAllMetas() {		
-		return topicDAO.getAllMetas(userService.getCurrentUser());
+		return selectDAO.getAllMetas(userService.getCurrentUser());
 	}
 
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
-		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),false);
+		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(),false);
 	}
 
 	
 
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
-		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
+		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(),all);
 	}
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr) {
-		return topicDAO.getAllTopicIdentifiers(userService.getCurrentUser(),start,max,startStr);
+		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(),start,max,startStr);
 	}
 	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username,int start, int max, String startStr) {		
-		return topicDAO.getAllTopicIdentifiers(userService.getUserWithNormalization(username),start,max,startStr);
+		return selectDAO.getAllTopicIdentifiers(userService.getUserWithNormalization(username),start,max,startStr);
 	}	
 	public Topic getForID(long topicID) {
-		return topicDAO.getForID(userService.getCurrentUser(),topicID);
+		return selectDAO.getForID(userService.getCurrentUser(),topicID);
 	}
 	public Topic getForName(String string) {
-		return topicDAO.getForName(userService.getCurrentUser(),string);
+		return selectDAO.getForName(userService.getCurrentUser(),string);
 	}
 
 	public List<TopicIdentifier> getLinksTo(Topic topic) {
-		return topicDAO.getLinksTo(topic, userService.getCurrentUser());
+		return selectDAO.getLinksTo(topic, userService.getCurrentUser());
 	}
 	public List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList) {
 		List<List<LocationDTO>> rtn = new ArrayList<List<LocationDTO>>(shoppingList.size());
 
 		for (TopicIdentifier tag : shoppingList) {
-			rtn.add(topicDAO.getLocations(tag.getTopicID(),userService.getCurrentUser()));
+			rtn.add(selectDAO.getLocations(tag.getTopicID(),userService.getCurrentUser()));
 		}		
 		return rtn;		
 	}
 	public Topic getPublicTopic(String userString, String topicString) throws HippoBusinessException {		
-		Topic t = topicDAO.getPublicForName(userString, topicString);
+		Topic t = selectDAO.getPublicForName(userString, topicString);
 		if(t != null){
 			return t;
 		}else{
@@ -212,20 +215,20 @@ public class TopicServiceImpl implements TopicService {
 		}		
 	}
 	public List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id){
-		return connectorsToTIs(topicDAO.getTopicIdsWithTag(id));
+		return connectorsToTIs(selectDAO.getTopicIdsWithTag(id));
 	}
 	
 	public MetaSeeAlso getSeeAlsoMetaSingleton() throws HippoBusinessException{		
 		if(seealsoSingleton == null){
 			log.info("seealso single == null. Finding... ");
 
-			seealsoSingleton = topicDAO.getSeeAlsoSingleton();
+			seealsoSingleton = selectDAO.getSeeAlsoSingleton();
 
 			if(seealsoSingleton == null){
 				log.info("seealso single == null. Creating. First time DB?");
 
 				seealsoSingleton =  new MetaSeeAlso();
-				seealsoSingleton = (MetaSeeAlso) topicDAO.save(seealsoSingleton);
+				seealsoSingleton = (MetaSeeAlso) editDAO.save(seealsoSingleton);
 
 			}
 		}
@@ -234,19 +237,19 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 	public List<TimeLineObj> getTimeline() {
-		return topicDAO.getTimeline(userService.getCurrentUser());
+		return selectDAO.getTimeline(userService.getCurrentUser());
 	}
 	public List<List<TimeLineObj>>  getTimelineWithTags(List<TopicIdentifier> shoppingList) {
 		List<List<TimeLineObj>> rtn = new ArrayList<List<TimeLineObj>>(shoppingList.size());
 
 		for (TopicIdentifier tag : shoppingList) {
-			rtn.add(topicDAO.getTimeline(tag.getTopicID(),userService.getCurrentUser()));
+			rtn.add(selectDAO.getTimeline(tag.getTopicID(),userService.getCurrentUser()));
 		}		
 		return rtn;		
 	}
 	public List<FullTopicIdentifier> getTopicIdsWithTag(long id) {
 
-		List<TopicTypeConnector> conns = topicDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
+		List<TopicTypeConnector> conns = selectDAO.getTopicIdsWithTag(id,userService.getCurrentUser());
 
 		return connectorsToTIs(conns);
 				
@@ -276,7 +279,7 @@ public class TopicServiceImpl implements TopicService {
 	}
 	public List<TopicIdentifier> getTopicsStarting(String match) {
 
-		return topicDAO.getTopicsStarting(userService.getCurrentUser(),match);
+		return selectDAO.getTopicsStarting(userService.getCurrentUser(),match);
 	}
 
 
@@ -285,15 +288,15 @@ public class TopicServiceImpl implements TopicService {
 
 
 	public MindTree getTree(MindTreeOcc occ) {
-		return topicDAO.getTree(occ);
+		return selectDAO.getTree(occ);
 	}
 	public UserPageBean getUserPageBean(User su) {		
-		return topicDAO.getUsageStats(su);
+		return selectDAO.getUsageStats(su);
 	}
 
 	public LinkAndUser getWebLinkForURLAndUser(String url) {
 		User u = userService.getCurrentUser();
-		return new LinkAndUser(topicDAO.getWebLinkForURI(url,u),u);		
+		return new LinkAndUser(selectDAO.getWebLinkForURI(url,u),u);		
 	}
 	/**
 	 * PEND Would prefer to make these loads instead of gets, 
@@ -310,7 +313,7 @@ public class TopicServiceImpl implements TopicService {
 		int i = 0;
 		for (Iterator iter = ids.iterator(); iter.hasNext();) {
 			Long id = (Long) iter.next();
-			command.setTopic(i, topicDAO.get(id));
+			command.setTopic(i, selectDAO.get(id));
 			i++;
 		}
 
@@ -325,7 +328,7 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 	public Occurrence save(Occurrence link) {
-		return topicDAO.save(link);
+		return editDAO.save(link);
 	}
 	/**
 	 * TODO I don't really like setting the user here, but it's tricky 
@@ -346,7 +349,7 @@ public class TopicServiceImpl implements TopicService {
 			log.debug("Getting same named");
 
 			try {
-				Topic sameNamed = (Topic) topicDAO.getForName(topic.getUser(), topic.getTitle());
+				Topic sameNamed = (Topic) selectDAO.getForName(topic.getUser(), topic.getTitle());
 				log.debug("Rec "+sameNamed);		
 
 				if(sameNamed != null && sameNamed.getId() != topic.getId()){
@@ -376,7 +379,7 @@ public class TopicServiceImpl implements TopicService {
 
 
 
-		return topicDAO.save(topic);
+		return editDAO.save(topic);
 	}
 
 	private void saveCommand(AbstractCommand command) throws HippoBusinessException {
@@ -388,20 +391,23 @@ public class TopicServiceImpl implements TopicService {
 		}		
 	}
 	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) {
-		topicDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
+		editDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
 	}
 	public MindTree saveTree(MindTree tree) {
-		return topicDAO.save(tree);
+		return editDAO.save(tree);
 	}
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	public void setSelectDAO(SelectDAO selectDAO) {
+		this.selectDAO = selectDAO;
+	}
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
 	}
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 	private boolean userIsOverSubscriptionLimit(){
 		User u = userService.getCurrentUser();		
-		int curTopics = topicDAO.getTopicCount(u);		
+		int curTopics = selectDAO.getTopicCount(u);		
 		return u.getSubscription().getMaxTopics() < curTopics;
 	}
 

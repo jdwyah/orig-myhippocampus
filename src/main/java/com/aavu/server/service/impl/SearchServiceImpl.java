@@ -26,6 +26,7 @@ import org.compass.core.engine.SearchEngineException;
 import org.compass.gps.CompassGps;
 import org.compass.gps.MirrorDataChangesGpsDevice;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
@@ -34,7 +35,7 @@ import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.SearchResult;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.UserService;
 
@@ -49,21 +50,26 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 	
 	private MirrorDataChangesGpsDevice mirrorGPS;
 	private CompassGps compassGPS;
-	private TopicDAO topicDAO;
+	private SelectDAO selectDAO;
 	private UserService userService;
 	
+	@Required
 	public void setMirrorGPS(MirrorDataChangesGpsDevice mirrorGPS) {
 		this.mirrorGPS = mirrorGPS;
 	}
+	@Required
 	public void setCompass(Compass compass) {
 		this.compass = compass;
 	}	
+	@Required
 	public void setCompassGPS(CompassGps compassGPS) {
 		this.compassGPS = compassGPS;
 	}
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	@Required
+	public void setSelectDAO(SelectDAO selectDAO) {
+		this.selectDAO = selectDAO;
 	}
+	@Required
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}	
@@ -193,7 +199,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				
 				System.out.println("id: "+entry.getId());
 
-				List<TopicIdentifier> topicIDList = topicDAO.getTopicForOccurrence(entry.getId());
+				List<TopicIdentifier> topicIDList = selectDAO.getTopicForOccurrence(entry.getId());
 				
 				if(topicIDList.size() > 0){
 					//TODO what if it has multiple refs?
@@ -210,7 +216,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				}
 			}else if (obj instanceof URI) {
 				URI uri = (URI) obj;
-				List<TopicIdentifier> topicIDList = topicDAO.getTopicForOccurrence(uri.getId());
+				List<TopicIdentifier> topicIDList = selectDAO.getTopicForOccurrence(uri.getId());
 				
 				//PEND errored when we searched for a username... ie "test"
 				if(topicIDList.size() > 0){

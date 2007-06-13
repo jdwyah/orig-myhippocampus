@@ -2,6 +2,7 @@ package com.aavu.client.gui;
 
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -29,7 +30,7 @@ public class CreateNewWindow extends PopupWindow {
 	 * 
 	 * @param manager
 	 */
-	public CreateNewWindow(Manager _manager, String title, AsyncCallback after) {
+	public CreateNewWindow(MindscapeManager _manager, String title, AsyncCallback after) {
 		
 		super(_manager.newFrame(),
 				title,

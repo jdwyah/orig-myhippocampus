@@ -50,4 +50,10 @@ public class User extends AbstractUser implements IsSerializable {
 		return 2000+66*numberOfTags;
 	}
 
+	//@Override
+	public String toString() {		
+		return getId()+" "+getUsername();
+	}
+	
+
 }

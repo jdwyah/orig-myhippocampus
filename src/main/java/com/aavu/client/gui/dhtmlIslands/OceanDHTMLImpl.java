@@ -22,14 +22,11 @@ import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.service.Manager;
+import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.MouseWheelListener;
-import com.google.gwt.user.client.ui.MouseWheelVelocity;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -68,7 +65,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 
 	private Panel leftCloud;
 
-	private Manager manager;
+	private MindscapeManager manager;
 
 
 
@@ -83,7 +80,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 	private LoadFinishedListener loadFinishedListener;
 
 
-	public OceanDHTMLImpl(Manager manager) {
+	public OceanDHTMLImpl(MindscapeManager manager) {
 		super();
 		this.manager = manager;
 

@@ -3,8 +3,8 @@ package com.aavu.client.gui;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
+import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.util.LorumIpsum;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -16,11 +16,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class DeliciousWidget extends PopupWindow {
 
-	private Manager manager;
+	private MindscapeManager manager;
 	private PasswordTextBox password;
 	private TextBox username;
 
-	public DeliciousWidget(Manager _manager) {
+	public DeliciousWidget(MindscapeManager _manager) {
 		super(_manager.newFrame(),ConstHolder.myConstants.deliciousPopupTitle());
 		this.manager = _manager;
 

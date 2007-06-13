@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
@@ -17,7 +18,8 @@ import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.HippoInfrastructureException;
-import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.dao.EditDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.domain.PersistedFile;
 import com.aavu.server.s3.com.amazon.s3.AWSAuthConnection;
 import com.aavu.server.s3.com.amazon.s3.GetResponse;
@@ -33,12 +35,14 @@ public class FilePersistanceServiceImpl implements FilePersistanceService {
 	private static final Logger log = Logger.getLogger(FilePersistanceServiceImpl.class);
 
 	private AWSAuthConnection awsConnection;
-
-	private TopicDAO topicDAO; 	
-
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
+	
+	private EditDAO editDAO;
+	
+	@Required
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
 	}
+	@Required
 	public void setAwsConnection(AWSAuthConnection awsConnection) {
 		this.awsConnection = awsConnection;
 	}
@@ -114,7 +118,7 @@ public class FilePersistanceServiceImpl implements FilePersistanceService {
 		S3File fileObj = new S3File(user,file.getFilename(),key);
 		topic.getOccurences().add(fileObj);
 
-		topicDAO.save(topic);
+		editDAO.save(topic);
 
 	}
 	

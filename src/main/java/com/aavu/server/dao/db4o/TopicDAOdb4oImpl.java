@@ -15,7 +15,7 @@ import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.server.dao.TopicDAO;
+import com.aavu.server.dao.SelectDAO;
 import com.db4o.query.Predicate;
 
 public class TopicDAOdb4oImpl extends Db4oDaoSupport{// implements TopicDAO{
