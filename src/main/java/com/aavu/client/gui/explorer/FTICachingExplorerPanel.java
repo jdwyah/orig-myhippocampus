@@ -7,9 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
-import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;

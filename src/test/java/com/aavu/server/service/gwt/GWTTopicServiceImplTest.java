@@ -1,18 +1,15 @@
 package com.aavu.server.service.gwt;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaTopic;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
-import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
@@ -83,7 +80,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		Topic patriotGames = new Topic(u,C);
 		patriotGames.getLatestEntry().setData(B);
 		
-		Tag book = new Tag(u,D);
+		Topic book = new Topic(u,D);
 		
 
 		MetaTopic author = new MetaTopic();
@@ -164,7 +161,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		Topic patriotGames = new Topic(u,C);
 		patriotGames.getLatestEntry().setData(B);
 				
-		Tag book = new Tag(u,D);
+		Topic book = new Topic(u,D);
 						
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
@@ -172,7 +169,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction  {
 		
 		book.addTagProperty(author);
 				
-		book = (Tag) editDAO.save(book);
+		book = (Topic) editDAO.save(book);
 		
 		Topic tomClancy = new Topic(u,E);
 		editDAO.save(tomClancy);

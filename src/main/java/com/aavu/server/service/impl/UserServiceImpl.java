@@ -7,36 +7,36 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.Assert;
 
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Subscription;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
+import com.aavu.server.dao.EditDAO;
 import com.aavu.server.dao.UserDAO;
 import com.aavu.server.service.UserService;
 import com.aavu.server.util.CryptUtils;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
-public class UserServiceImpl implements UserService, InitializingBean {
+public class UserServiceImpl implements UserService {
 
 	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
 	private static final long CANCELLED_SUBSCRIPTION_ID = 1;
-
+	
 	private UserDAO userDAO;
 
+	private EditDAO editDAO;
+	
 	private int maxUsers;
 
 	private int startingInvitations;
 	
-
-	public void afterPropertiesSet() throws Exception {
-		Assert.notNull(this.startingInvitations, "startingInvitations must be set.");
-		Assert.notNull(this.maxUsers, "maxUsers must be set.");
-		Assert.notNull(this.userDAO, "userDAO must be set.");
-	}
 
 	public User getCurrentUser() throws UsernameNotFoundException {
 
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
 		
 	}
 
-	public User createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
+	public User createUser(CreateUserRequestCommand comm) throws DuplicateUserException, HippoBusinessException {
 
 		if(comm.isStandard()){
 			return createUser(comm.getUsername(),comm.getPassword(),comm.getEmail());
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
 
 	}
 
-	private User createUser(String username,String userpass,String email) throws DuplicateUserException{
+	private User createUser(String username,String userpass,String email) throws DuplicateUserException, HippoBusinessException{
 		return createUser(username,userpass,email,false);
 	}
 
@@ -142,9 +142,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
 		return users;
 	}
 
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
+	
 
 	/**
 	 * TODO LOW AOP this security concern
@@ -183,8 +181,9 @@ public class UserServiceImpl implements UserService, InitializingBean {
 	/**
 	 * lowercase usernames before creation
 	 * @return 
+	 * @throws HippoBusinessException 
 	 */
-	public User createUser(String username, String userpass, String email, boolean superV) {
+	public User createUser(String username, String userpass, String email, boolean superV) throws HippoBusinessException {
 
 		//hmm a bit odd having the logic catch in the 
 		//
@@ -204,9 +203,30 @@ public class UserServiceImpl implements UserService, InitializingBean {
 			user.setPassword(CryptUtils.hashString(userpass));
 		}
 		
-		return userDAO.save(user);
+		User createdU = userDAO.save(user);
 		
+		setup(createdU);
+		
+		return createdU;
+	}
 
+	private void setup(User createdU) throws HippoBusinessException {
+		Root r = new Root(createdU);
+		
+		r = (Root)editDAO.save(r);
+		
+		Topic movies = new Topic(createdU,"Movies");		
+		movies.addType(r, 100,100);		
+		movies = editDAO.save(movies);
+		
+		
+		
+		Topic people = new Topic(createdU,"People");		
+		people.addType(r, 400,400);		
+		people = editDAO.save(people);
+		
+		
+		
 	}
 
 	public void changeToSubscriptionAndSave(User user, Subscription subscription, String paypalID) {
@@ -286,12 +306,22 @@ public class UserServiceImpl implements UserService, InitializingBean {
 		return userDAO.getUserCount() <  maxUsers;
 	}
 
+	@Required
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+	@Required
 	public void setMaxUsers(int maxUsers) {
 		this.maxUsers = maxUsers;
 	}
 
+	@Required
 	public void setStartingInvitations(int startingInvitations) {
 		this.startingInvitations = startingInvitations;
+	}
+	@Required
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
 	}
 	
 

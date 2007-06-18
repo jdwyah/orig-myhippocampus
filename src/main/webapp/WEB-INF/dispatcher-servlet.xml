@@ -6,6 +6,11 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
+	<!-- Turn on @Required -->
+	<!-- not precisely sure why this is neccessary, since we do it in appContext too.. -->
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+
 	<bean id="indexController" class="com.aavu.server.web.controllers.IndexController">
 		<property name="view" value="index"/>
 		<property name="loggedInView" value="redirect:/site/secure/userPage.html"/>
@@ -85,15 +90,21 @@
 	</bean>
 
 
-	<bean id="manageMailingListController" class="com.aavu.server.web.controllers.ManageMailingListController">
+	<bean id="manageMailingListController" class="com.aavu.server.web.controllers.secure.extreme.ManageMailingListController">
 		<property name="invitationService" ref="invitationService"/>
 		<property name="view" value="secure/extreme/mailingList" />
 		<property name="methodNameResolver" ref="userManagerResolver" />
 	</bean>
 
-	<bean id="userManagerController" class="com.aavu.server.web.controllers.UserManagerController">
+	<bean id="userManagerController" class="com.aavu.server.web.controllers.secure.extreme.UserManagerController">
 		<property name="userService" ref="userService" />
 		<property name="viewUserList" value="secure/extreme/userList" />
+		<property name="methodNameResolver" ref="userManagerResolver" />
+	</bean>
+	<bean id="scriptsController" class="com.aavu.server.web.controllers.secure.extreme.ScriptsController">
+		<property name="userService" ref="userService" />
+		<property name="view" value="secure/extreme/scripts" />
+		<property name="initDAO" ref="initDAO" />
 		<property name="methodNameResolver" ref="userManagerResolver" />
 	</bean>
 
@@ -234,6 +245,7 @@
 				<prop key="/site/mailinglist.html">mailingListController</prop>
 				<prop key="/site/signup.html">createUserController</prop>
 
+				<prop key="/site/secure/extreme/scripts.html">scriptsController</prop>
 				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
 				<prop key="/site/secure/extreme/mailingList.html">manageMailingListController</prop>
 

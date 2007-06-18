@@ -4,21 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaDate;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
-import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.DeleteButton;
-import com.aavu.client.widget.tags.MetaTypeChooser;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -33,7 +27,7 @@ public class TagPropertyPanel extends Gadget {
 	private List metas = new ArrayList();  //list of meta chooser objects of current tag
 	
 	
-	private Tag tag;
+	private Topic myTopic;
 	private Manager manager;
 	private Button saveB;	
 	
@@ -98,27 +92,25 @@ public class TagPropertyPanel extends Gadget {
 	}
 	
 	public int load(Topic topic){
-		if(topic instanceof Tag){
-			setVisible(true);
 
-			this.tag = (Tag) topic;
+		setVisible(true);
 
-			metaListPanel.clear();			
-			metas.clear();
-			saveB.setVisible(false);
+		this.myTopic = topic;
 
-			if(tag.getTagProperties() != null){
-				if(tag.getTagProperties().size() > 0){
-					saveB.setVisible(true);
-				}
-				for (Iterator iter = tag.getTagProperties().iterator(); iter.hasNext();) {
-					Meta element = (Meta) iter.next();
-					addMWidg(element);					
-				}
+		metaListPanel.clear();			
+		metas.clear();
+		saveB.setVisible(false);
+
+		if(myTopic.getTagProperties() != null){
+			if(myTopic.getTagProperties().size() > 0){
+				saveB.setVisible(true);
 			}
-		}else{
-			setVisible(false);
+			for (Iterator iter = myTopic.getTagProperties().iterator(); iter.hasNext();) {
+				Meta element = (Meta) iter.next();
+				addMWidg(element);					
+			}
 		}
+		
 		return 0;
 	}
 		
@@ -127,7 +119,7 @@ public class TagPropertyPanel extends Gadget {
 		
 		
 		Meta[] toSave = new Meta[metas.size()];
-		tag.getTagProperties().clear();
+		myTopic.getTagProperties().clear();
 		int i = 0;
 		for (Iterator iter = metas.iterator(); iter.hasNext();) {			
 			Meta meta = (Meta) iter.next();
@@ -138,15 +130,15 @@ public class TagPropertyPanel extends Gadget {
 		}
 		//selectedTag.setMetas(metaChoosers);
 		
-		System.out.println("Tag: " + tag.getName());
-		System.out.println("metas: "+tag.getTagProperties().size());
-		for (Iterator iter = tag.getTagProperties().iterator(); iter.hasNext();) {
+		System.out.println("Tag: " + myTopic.getTitle());
+		System.out.println("metas: "+myTopic.getTagProperties().size());
+		for (Iterator iter = myTopic.getTagProperties().iterator(); iter.hasNext();) {
 			Meta element = (Meta) iter.next();
 			System.out.println(element.getName());
 		}
 		
 		
-		manager.getTopicCache().executeCommand(tag,new SaveTagPropertiesCommand(tag,toSave),
+		manager.getTopicCache().executeCommand(myTopic,new SaveTagPropertiesCommand(myTopic,toSave),
 				new StdAsyncCallback("tagService saveTag"){});
 	}
 

@@ -11,13 +11,13 @@ public class AbstractTopicTypeConnector implements Serializable, IsSerializable 
 	private long id;
 	private Topic topic;
 	private Topic type;
-	private double latitude;
-	private double longitude;
+	private int latitude;
+	private int longitude;
 	
 	public AbstractTopicTypeConnector(){}
 	
 	
-	public AbstractTopicTypeConnector(Topic topic, Topic type, double latitude, double longitude) {
+	public AbstractTopicTypeConnector(Topic topic, Topic type, int latitude, int longitude) {
 		super();
 		this.topic = topic;
 		this.type = type;
@@ -31,16 +31,16 @@ public class AbstractTopicTypeConnector implements Serializable, IsSerializable 
 	public void setId(long id) {
 		this.id = id;
 	}
-	public double getLatitude() {
+	public int getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(double latitude) {
+	public void setLatitude(int latitude) {
 		this.latitude = latitude;
 	}
-	public double getLongitude() {
+	public int getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(double longitude) {
+	public void setLongitude(int longitude) {
 		this.longitude = longitude;
 	}
 	public Topic getTopic() {

@@ -1,7 +1,6 @@
 package com.aavu.client.gui.gadgets;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
@@ -84,11 +83,11 @@ public class StatusPicker extends Composite {
 
 	public void load(Topic topic) {
 		this.topic = topic;
-		if(topic instanceof Tag){
-			visualize(CHANGE_TO_ISLAND_ACTION);
-		}else{
-			visualize(CHANGE_TO_TOPIC_ACTION);
-		}
+//		if(topic instanceof Tag){
+//			visualize(CHANGE_TO_ISLAND_ACTION);
+//		}else{
+//			visualize(CHANGE_TO_TOPIC_ACTION);
+//		}
 	}
 
 	/**
@@ -105,11 +104,11 @@ public class StatusPicker extends Composite {
 		
 		if(action_command == CHANGE_TO_ISLAND_ACTION){
 			callback.setCall(ConstHolder.myConstants.topic_picker_island_tooltip());
-			manager.changeState(topic,true,callback);
+			//manager.changeState(topic,true,callback);
 		}
 		else if(action_command == CHANGE_TO_TOPIC_ACTION){
 			callback.setCall(ConstHolder.myConstants.topic_picker_topic_tooltip());
-			manager.changeState(topic,false,callback);
+			//manager.changeState(topic,false,callback);
 		}
 		else if(action_command == DELETE_ACTION){
 			callback.setCall(ConstHolder.myConstants.topic_picker_delete_tooltip());

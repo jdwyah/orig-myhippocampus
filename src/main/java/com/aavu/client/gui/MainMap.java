@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.gwm.client.GFrame;
 
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
@@ -116,7 +115,7 @@ public class MainMap extends HippoDesktopPane {
 		ocean.load(loadFinished);		
 	}
 
-	public void growIsland(Tag tag) {
+	public void growIsland(Topic tag) {
 		ocean.growIsland(tag);
 	}
 
@@ -132,10 +131,10 @@ public class MainMap extends HippoDesktopPane {
 
 		System.out.println("MainMap update "+t+" "+command);
 		
-		if(t instanceof Tag){
-			System.out.println("is tag "+command);
-			ocean.update((Tag) t,command);
-		}
+		
+		System.out.println("MainMap.ocean.update "+command);
+		ocean.update( t,command);
+		
 		/*
 		 * affectedTag() is true if 
 		 */
@@ -144,9 +143,9 @@ public class MainMap extends HippoDesktopPane {
 		for (Iterator iter = command.getAffectedTopics().iterator(); iter.hasNext();) {
 						
 			Topic top = (Topic) iter.next();
-			if(top instanceof Tag){
-				ocean.update((Tag) top, command);
-			}
+			
+			ocean.update(top, command);
+			
 		}
 		
 //		if(command.affectedTag()){

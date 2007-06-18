@@ -2,7 +2,6 @@ package com.aavu.client.domain.commands;
 
 import java.util.Set;
 
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -11,16 +10,13 @@ public class SaveTagtoTopicCommand extends AbstractCommand implements IsSerializ
 
 	public SaveTagtoTopicCommand(){};
 	
-	public SaveTagtoTopicCommand(Topic topic, Tag tag){
+	public SaveTagtoTopicCommand(Topic topic, Topic tag){
 		super(topic,tag);
 	}
 
 	//@Override
 	public void executeCommand() throws HippoBusinessException {
-				
-		if(!(getTopic(1) instanceof Tag)){
-			throw new HippoBusinessException("Can't tag with nontag: "+getTopic(1));
-		}
+	
 		
 		getTopic(0).tagTopic(getTopic(1));		
 		

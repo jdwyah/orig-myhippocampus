@@ -9,7 +9,6 @@ import org.gwtwidgets.client.ui.PNGImage;
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -238,7 +237,10 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 	
 			
 		Topic centerTopic = null;		
-		if(topic instanceof Tag){
+		
+		//TODO TAG
+		if(9==9){
+		//if(topic instanceof Tag){
 			centerTopic = topic;
 		}else{
 					
@@ -407,7 +409,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 	}
 	
 
-	public void growIsland(Tag tag) {
+	public void growIsland(Topic tag) {
 		Island isle = (Island) islands.get(new Long(tag.getId()));
 				
 		if(isle == null){
@@ -602,7 +604,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 	}
 
 	
-	public void update(Tag t, AbstractCommand command) {
+	public void update(Topic t, AbstractCommand command) {
 		Island isle = (Island) islands.get(new Long(t.getId()));
 		
 		if(isle != null){

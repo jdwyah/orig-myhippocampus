@@ -17,7 +17,6 @@ public interface TopicVisitor {
 
 	void visit(MetaSeeAlso meta);
 	void visit(Meta meta);
-	void visit(Topic topic);
-	void visit(Tag tag);
+	void visit(Topic topic);	
 
 }

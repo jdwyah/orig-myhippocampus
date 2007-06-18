@@ -1,4 +1,4 @@
-package com.aavu.server.web.controllers;
+package com.aavu.server.web.controllers.secure.extreme;
 
 import java.util.HashMap;
 import java.util.List;

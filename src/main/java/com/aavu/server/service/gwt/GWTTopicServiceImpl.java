@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.TestObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.LinkAndUser;
@@ -357,8 +355,8 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		log.info("command "+command.getClass()+" "+command);		
 		topicService.executeAndSaveCommand(command);
 	}
-	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException {
-		topicService.saveTopicLocation(tagId,topicId,xpct,ypct);		
+	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException {
+		topicService.saveTopicLocation(tagId,topicId,lat,lng);		
 	}
 	public MindTree saveTree(MindTree tree) throws HippoException {
 		try{
@@ -386,18 +384,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	@Required
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
-	}
-	
-	
-	public TestObj test() {
-				
-		TestObj t = new TestObj();
-		TestObj t2 = new TestObj();
-		
-		t.addConn(t2);
-		
-		
-		return t;
 	}
 	
 	

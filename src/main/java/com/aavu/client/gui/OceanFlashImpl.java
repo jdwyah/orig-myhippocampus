@@ -1,13 +1,11 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
-import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
 
@@ -116,7 +114,7 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 	/* (non-Javadoc)
 	 * @see com.aavu.client.gui.Ocean#growIsland(com.aavu.client.domain.Tag)
 	 */
-	public void growIsland(Tag tag) {
+	public void growIsland(Topic tag) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<invoke name=\"grow\" returntype=\"javascript\"><arguments>");
 		sb.append(number(tag.getId()));				
@@ -126,7 +124,7 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 		sb = new StringBuffer();
 		sb.append("<invoke name=\"rename\" returntype=\"javascript\"><arguments>");
 		sb.append(number(tag.getId()));				
-		sb.append(string(tag.getName()));
+		sb.append(string(tag.getTitle()));
 		sb.append("</arguments></invoke>");    						
 		runCommandDeferred(sb.toString());		
 	}
@@ -157,7 +155,7 @@ public class OceanFlashImpl extends FlashContainer implements Ocean {
 		throw new UnsupportedOperationException("Not Yet Implemented");
 	}	
 
-	public void update(Tag t, AbstractCommand command) {
+	public void update(Topic t, AbstractCommand command) {
 		throw new UnsupportedOperationException("Not Yet Implemented");		
 	}
 

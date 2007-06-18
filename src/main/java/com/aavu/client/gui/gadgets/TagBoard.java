@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
@@ -21,7 +19,6 @@ import com.aavu.client.widget.edit.CompleteListener;
 import com.aavu.client.widget.edit.DeletableTopicLabel;
 import com.aavu.client.widget.edit.RemoveListener;
 import com.aavu.client.widget.edit.TagAutoCompleteBox;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -95,7 +92,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 
 	public void completed(TopicIdentifier topicID) {
-		Tag tag = new Tag();
+		Topic tag = new Topic();
 		tag.setId(topicID.getTopicID());
 		tag.setTitle(topicID.getTopicTitle());
 		
@@ -112,15 +109,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 */
 	public int load(Topic topic){
 		
-		//this isn't really true, and we may end up hiding information,
-		//but I think it's confusing that islands can be on islands.
-		//
-		if(topic instanceof Tag){
-			setVisible(false);
-		}else{
-			setVisible(true);
-		}
-		
+				
 		header.setText(ConstHolder.myConstants.tags());
 		
 		tagPanel.clear();
@@ -133,17 +122,20 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			//TODO o will not be a Tag when we are a topic that is another 
 			//topic's MetaTopic value. capiche? 
 			//TODO make getTags deal with that.
+			
+			//TODO TAG
 			Object o = iter.next();
-			if(o instanceof Tag){
-				Tag tag = (Tag) o;		
-				showTag(tag);
-				rtnSize++;	
-			}						
+
+
+			Topic tag = (Topic) o;		
+			showTag(tag);
+			rtnSize++;	
+									
 		}		
 		return rtnSize;
 	}
 	
-	private void showTag(final Tag tag){
+	private void showTag(final Topic tag){
 		
 		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag,this);
 				
@@ -184,7 +176,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 * PEND this will require a trip to server. Would be nice to make this more targetted.		
 	 * @param tag
 	 */
-	private void addTag(final Tag tag) {
+	private void addTag(final Topic tag) {
 
 		if(cur_topic.tagTopic(tag)){
 			showTag(tag);			

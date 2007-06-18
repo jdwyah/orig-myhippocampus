@@ -6,9 +6,7 @@ import java.util.Map;
 
 import org.gwm.client.GInternalFrame;
 
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.gui.explorer.Explorer;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;

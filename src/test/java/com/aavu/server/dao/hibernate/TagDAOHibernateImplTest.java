@@ -7,9 +7,10 @@ import org.apache.log4j.Logger;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaTopic;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.subjects.AmazonBook;
@@ -18,13 +19,12 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.EditDAO;
 import com.aavu.server.dao.SelectDAO;
-import com.aavu.server.dao.TagDAO;
 import com.aavu.server.dao.UserDAO;
 
 public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	private static final Logger log = Logger.getLogger(TagDAOHibernateImplTest.class);
 
-	private TagDAO tagDAO;
+	
 	private UserDAO userDAO;
 	private SelectDAO selectDAO;
 	private EditDAO editDAO;
@@ -40,9 +40,6 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	private String G = "*(DY8932kl";
 	
 	
-	public void setTagDAO(TagDAO tagDAO) {
-		this.tagDAO = tagDAO;
-	}
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
@@ -62,33 +59,33 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 	}
 
-	private Tag[] add3() throws HippoBusinessException{
+	private Topic[] add3() throws HippoBusinessException{
 
-		Tag t1 = new Tag();
-		t1.setName(A);
+		Topic t1 = new Topic();
+		t1.setTitle(A);
 		t1.setUser(u);
 
-		t1 = (Tag) editDAO.save(t1);
+		t1 =  editDAO.save(t1);
 
-		Tag t2 = new Tag();
-		t2.setName(B);
+		Topic t2 = new Topic();
+		t2.setTitle(B);
 		t2.setUser(u);
 
-		t2 = (Tag) editDAO.save(t2);
+		t2 =  editDAO.save(t2);
 
-		Tag t3 = new Tag();
-		t3.setName(B2);
+		Topic t3 = new Topic();
+		t3.setTitle(B2);
 		t3.setUser(u);
 
-		t3 = (Tag) editDAO.save(t3);
+		t3 =  editDAO.save(t3);
 		
-		return new Tag[] {t1,t2,t3};
+		return new Topic[] {t1,t2,t3};
 	}
 
 	public void testGetAllTags() throws HippoBusinessException {
 		add3();
 
-		List<Tag> list = tagDAO.getAllTags(u);
+		List<TopicTypeConnector> list = selectDAO.getRootTopics(u);
 
 		assertEquals(3, list.size());
 		
@@ -105,16 +102,16 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	 * @throws HippoBusinessException 
 	 */
 	public void testGetAllTagsNoDupes() throws HippoBusinessException {
-		Tag[] tags = add3();
+		Topic[] tags = add3();
 
 		Topic t1 = new Topic(u,"FOO");		
 		t1.tagTopic(tags[0]);		
 		editDAO.save(t1);		
 		
-		List<Tag> list = tagDAO.getAllTags(u);
-		assertEquals(3, list.size());
+		List<TopicTypeConnector> list = selectDAO.getRootTopics(u);
+		assertEquals(4, list.size());
 		
-		Tag savedTag = tagDAO.getTag(u, A);
+		Topic savedTag = selectDAO.getForName(u, A);
 		
 		Topic t2 = new Topic(u,"BAR");		
 		t2.tagTopic(savedTag);		
@@ -134,63 +131,67 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t5.tagTopic(savedTag);		
 		editDAO.save(t5);
 		
-		list = tagDAO.getAllTags(u);
-		assertEquals(3, list.size());
+		list = selectDAO.getRootTopics(u);
+		
+		List<DatedTopicIdentifier> all = selectDAO.getAllTopicIdentifiers(u, false);
+		assertEquals(8, all.size());
+		
+		assertEquals(8, list.size());
 		for (Iterator iter = list.iterator(); iter.hasNext();) {
-			Tag tag = (Tag) iter.next();
+			Topic tag = (Topic) iter.next();
 			System.out.println("r_tag "+tag.getId()+" "+tag.getTitle());
 		}
 		
 		
 	}
 	
-	public void testGetTag() throws HippoBusinessException {
+	public void testGetTopic() throws HippoBusinessException {
 		add3();
-		Tag t = tagDAO.getTag(u, A);
-		assertEquals(A,t.getName());
+		Topic t = selectDAO.getForName(u, A);
+		assertEquals(A,t.getTitle());
 	}
 
 	public void testGetTagsStarting() throws HippoBusinessException {
 
 		add3();
 
-		List<TopicIdentifier> l1 = tagDAO.getTagsStarting(u, "Z");
+		List<TopicIdentifier> l1 = selectDAO.getTagsStarting(u, "Z");
 		assertEquals(0, l1.size());
 
-		l1 = tagDAO.getTagsStarting(u, "X");
+		l1 = selectDAO.getTagsStarting(u, "X");
 		assertEquals(2, l1.size());
 
-		l1 = tagDAO.getTagsStarting(u, "XVN");
+		l1 = selectDAO.getTagsStarting(u, "XVN");
 		assertEquals(2, l1.size());
 
-		l1 = tagDAO.getTagsStarting(u, "XVNS");
+		l1 = selectDAO.getTagsStarting(u, "XVNS");
 		assertEquals(1, l1.size());
 
 	}
 
-	public void testRemoveTag() throws PermissionDeniedException, HippoBusinessException {
+	public void testRemoveTopic() throws PermissionDeniedException, HippoBusinessException {
 
 		add3();
 
-		Tag t = tagDAO.getTag(u, A);
-		assertEquals(A,t.getName());
+		Topic t = selectDAO.getForName(u, A);
+		assertEquals(A,t.getTitle());
 
 		editDAO.delete(t);
 
-		List<Tag> list = tagDAO.getAllTags(u);		
+		List<TopicTypeConnector> list = selectDAO.getRootTopics(u);		
 		
-		for (Tag tag : list) {
-			if(tag.getName().equals(A)){
+		for (TopicTypeConnector conn : list) {
+			if(conn.getType().getTitle().equals(A)){
 				System.out.println("A");	
 			}
-			else if(tag.getName().equals(B)){
+			else if(conn.getType().getTitle().equals(B)){
 				System.out.println("B");	
 			}
-			else if(tag.getName().equals(B2)){
+			else if(conn.getType().getTitle().equals(B2)){
 				System.out.println("B2");	
 			}
 			else{
-				System.out.println("Other "+tag.getName());
+				System.out.println("Other "+conn.getType().getTitle());
 			}
 		}
 		
@@ -201,8 +202,8 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		String name = "metaname";
 		String name2 = "mname2";
 
-		Tag t2 = new Tag();
-		t2.setName(B);
+		Topic t2 = new Topic();
+		t2.setTitle(B);
 		t2.setUser(u);
 
 		Meta meta = new MetaTopic();
@@ -216,19 +217,19 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println("after: "+t2.getId()+" "+t2);
 
-		List<Tag> tagL = tagDAO.getAllTags(u);
+		List<TopicTypeConnector> tagL = selectDAO.getRootTopics(u);
 
 		assertEquals(1, tagL.size());
 
-		Tag saved = tagDAO.getTag(u, B);
+		Topic saved = selectDAO.getForName(u, B);
 
 		assertEquals(1,saved.getTagProperties().size());
 
 		Meta savedM = (Meta) saved.getTagProperties().iterator().next();
 
-		assertEquals(name, savedM.getName());
+		assertEquals(name, savedM.getTitle());
 
-		System.out.println(savedM.getName());
+		System.out.println(savedM.getTitle());
 
 		//now add another meta
 		//
@@ -239,24 +240,26 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(saved);
 
-		tagL = tagDAO.getAllTags(u);
+		tagL = selectDAO.getRootTopics(u);
 
 		assertEquals(1, tagL.size());
 		
-		Tag savedNumber2 = tagL.get(0);
+		TopicTypeConnector conn = tagL.get(0);
 				
-		System.out.println(savedNumber2.toPrettyString());
+		Topic savedNumber2 = selectDAO.get(conn.getType().getId());
+		
+		//System.out.println(savedNumber2.toPrettyString());
 		assertEquals(2,savedNumber2.getTagProperties().size());
 
 	}
 
 	public void testTagStat() throws HippoBusinessException{
-		Tag[] three = add3();
+		Topic[] three = add3();
 
 		//test
 		//tag stats shoudl all be 0
 		//
-		List<TagStat> stats = tagDAO.getTagStats(u);
+		List<TagStat> stats = selectDAO.getTagStats(u);
 		for (TagStat ts : stats){
 			assertEquals(0,ts.getNumberOfTopics());
 			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics());		
@@ -273,7 +276,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		//test
 		//tag 0 should have one topic
 		//
-		stats = tagDAO.getTagStats(u);
+		stats = selectDAO.getTagStats(u);
 		for (TagStat ts : stats){
 			if(ts.getTagId() == three[0].getId()){
 				assertEquals(1,ts.getNumberOfTopics());
@@ -299,7 +302,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		//test 
 		//
-		stats = tagDAO.getTagStats(u);
+		stats = selectDAO.getTagStats(u);
 		for (TagStat ts : stats){
 			if(ts.getTagId() == three[0].getId()){
 				assertEquals(2,ts.getNumberOfTopics());
@@ -322,12 +325,12 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	 * @throws HippoBusinessException
 	 */
 	public void testTagStatWithSubjects() throws HippoBusinessException{
-		Tag[] three = add3();
+		Topic[] three = add3();
 
 		//test
 		//tag stats shoudl all be 0
 		//
-		List<TagStat> stats = tagDAO.getTagStats(u);
+		List<TagStat> stats = selectDAO.getTagStats(u);
 		for (TagStat ts : stats){
 			assertEquals(0,ts.getNumberOfTopics());
 			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics()+" lat "+ts.getLatitude()+" long "+ts.getLongitude());		
@@ -349,7 +352,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		//test
 		//tag 0 should have one topic
 		//
-		stats = tagDAO.getTagStats(u);
+		stats = selectDAO.getTagStats(u);
 		
 		for (TagStat ts : stats){
 			log.debug("stat "+ts.getTagId()+" "+ts.getNumberOfTopics()+" "+ts.getTagName());
@@ -397,7 +400,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		//test 
 		//
-		stats = tagDAO.getTagStats(u);
+		stats = selectDAO.getTagStats(u);
 		
 		////tag 1,2,3 & 2*AmazonBook makes 4. (Not 5!)
 		//tag 1,2,3 & 2*AmazonBook makes 3!. (Subjects don't count anymore!)

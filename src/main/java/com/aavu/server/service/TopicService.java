@@ -13,6 +13,7 @@ import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -44,6 +45,11 @@ public interface TopicService {
 	List<LocationDTO> getAllLocations();
 
 	List<Meta> getAllMetas();
+	
+	List<TopicIdentifier> getTagsStarting(String match);
+
+	
+	List<TagStat> getTagStats();
 	
 	/**
 	 * Filter out Dates/Locaitons/Metas.
@@ -99,7 +105,8 @@ public interface TopicService {
 	LinkAndUser getWebLinkForURLAndUser(String url);
 	Occurrence save(Occurrence link);
 	Topic save(Topic topic) throws HippoBusinessException;
-	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct);
+	void saveTopicLocation(long tagId, long topicId, int lat, int lng);
 	MindTree saveTree(MindTree tree);
+	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
 	
 }

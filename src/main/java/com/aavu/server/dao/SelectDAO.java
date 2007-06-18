@@ -6,12 +6,14 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -33,7 +35,14 @@ public interface SelectDAO {
 	List<LocationDTO> getLocations(long tagID, User user);
 
 	
+	List<TopicTypeConnector> getRootTopics(User user);
 	
+	List<TopicIdentifier> getTagsStarting(User user,String match);
+
+	List<TagStat> getTagStats(User user);
+	
+	
+	Root getRoot(User user);
 	
 	Topic get(long topicID);
 	

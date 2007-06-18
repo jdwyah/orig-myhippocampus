@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.server.service.TagService;
 import com.aavu.server.service.TopicService;
 
 public class AjaxController extends MultiActionController {

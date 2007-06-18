@@ -13,9 +13,9 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public interface UserService {
 
-	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException;
+	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException, HippoBusinessException;
 
-	User createUser(String user, String pass, String email, boolean superV);
+	User createUser(String user, String pass, String email, boolean superV) throws HippoBusinessException;
 
 	void delete(Integer id) throws PermissionDeniedException;
 

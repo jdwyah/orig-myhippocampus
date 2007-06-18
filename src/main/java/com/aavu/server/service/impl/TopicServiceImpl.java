@@ -13,7 +13,6 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -24,6 +23,7 @@ import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -64,7 +64,7 @@ public class TopicServiceImpl implements TopicService {
 				Topic t = getForName(clipped);			
 				if(null == t){
 					log.debug("was null, creating as Tag ");
-					t = new Tag();
+					t = new Topic();
 					t.setTitle(clipped);				
 					t.setUser(userService.getCurrentUser());							
 				}			
@@ -390,8 +390,8 @@ public class TopicServiceImpl implements TopicService {
 			save(topic);
 		}		
 	}
-	public void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) {
-		editDAO.saveTopicsLocation(tagId, topicId, xpct, ypct);
+	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) {
+		editDAO.saveTopicsLocation(tagId, topicId, lat, lng);
 	}
 	public MindTree saveTree(MindTree tree) {
 		return editDAO.save(tree);
@@ -409,6 +409,24 @@ public class TopicServiceImpl implements TopicService {
 		User u = userService.getCurrentUser();		
 		int curTopics = selectDAO.getTopicCount(u);		
 		return u.getSubscription().getMaxTopics() < curTopics;
+	}
+	
+	
+	public List<TagStat> getTagStats() {
+		log.info("getting tag stats "+userService.getCurrentUser().getUsername());
+		return selectDAO.getTagStats(userService.getCurrentUser());
+	}
+
+	public List<TopicIdentifier> getTagsStarting(String match) {
+		return selectDAO.getTagsStarting(userService.getCurrentUser(),match);
+	}
+	public Topic createNewIfNonExistent(String tagName) throws HippoBusinessException {
+		
+		Topic cur = getForName(tagName);
+		if(cur == null){
+			cur = createNew(tagName, new Topic());
+		}
+		return cur;
 	}
 
 

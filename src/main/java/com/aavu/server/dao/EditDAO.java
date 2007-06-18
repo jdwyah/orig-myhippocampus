@@ -24,7 +24,7 @@ public interface EditDAO {
 
 	Long saveSimple(Topic t);
 
-	void saveTopicsLocation(long tagID, long topicID, double longitude, double latitude);
+	void saveTopicsLocation(long tagID, long topicID, int longitude, int latitude);
 
 
 }

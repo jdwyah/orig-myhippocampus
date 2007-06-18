@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
@@ -25,12 +25,14 @@ import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -44,6 +46,7 @@ import com.aavu.server.web.domain.UserPageBean;
  */
 public class SelectDAOHibernateImpl extends HibernateDaoSupport implements SelectDAO{
 	private static final int DEFAULT_AUTOCOMPLET_MAX = 7;
+	private static final int DEFAULT_TAG_AUTOCOMPLETE_MAX = 7;
 	private static final Logger log = Logger.getLogger(SelectDAOHibernateImpl.class);
 
 	/**
@@ -143,7 +146,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 			.add(Expression.ne("class", "metalocation"))
 			.add(Expression.ne("class", "date"))
 			.add(Expression.ne("class", "text"))
-			.add(Expression.ne("class", "location"));
+			.add(Expression.ne("class", "location"))
+			.add(Expression.ne("class", "root"));
 		}
 		if(startStr != null){
 			crit.add(Expression.ilike("title", startStr, MatchMode.START));
@@ -594,4 +598,111 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 
 
+
+	public List<TopicTypeConnector> getRootTopics(User user) {
+	
+//		if(userRoot == null){
+//			userRoot = new Root(user);
+//			userRoot = save(userRoot);
+//		}
+		
+		
+//		DetachedCriteria crit  = SelectDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Topic.class)
+//		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+//		.add(Expression.eq("user", user)));	
+//		return getHibernateTemplate().findByCriteria(crit);
+		
+		
+		return getTopicIdsWithTag(getRoot(user).getId(),user);
+	}
+
+
+	public List<TagStat> getTagStats(User user) {
+		
+		List<Object[]> list = getHibernateTemplate().find(""+
+				"select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from Tag tag "+
+				"where  user is ? order by tag.title"
+				,user);
+		
+		//This is the query if we decide to get rid of the instances mapping again.
+		//
+//		List<Object[]> list = getHibernateTemplate().find(""+
+//				"select conn.type.id, count(conn.type), conn.type.title, conn.type.latitude, conn.type.longitude from TopicTypeConnector conn "+
+//				//"left join topic "+
+//				"where  conn.topic.user is ? and conn.type.class = Tag "+
+//				"group by conn.type"
+//				,user);
+		
+		
+		
+//		List<Object[]> subjectList = getHibernateTemplate().find(""+
+//				"select top.subject.class.id, top.subject.class, count(top.subject.class) from Topic top "+
+//				"where top.user is ? "+
+//				"group by top.subject.class"
+//				,user);
+		
+		log.debug("tagstats size "+list.size());		
+//		log.debug("subject list: "+subjectList.size());
+		
+//		List<TagStat> rtn = new ArrayList<TagStat>(subjectList.size() + list.size());
+		List<TagStat> rtn = new ArrayList<TagStat>(list.size());
+		
+//		for (Object[] o : subjectList){
+//			if(log.isDebugEnabled()){
+//				log.debug("SUBJECT "+o[0]+" "+o[1]+" "+o[2]);				
+//			}
+//			rtn.add(new TagStat((Long)o[0],(String)o[1],(Integer)o[2]));			
+//		}
+		
+		
+		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list){
+//			if(log.isDebugEnabled()){
+//				log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);	
+//				//log.debug("TagStat "+o[0].getClass()+" "+o[1].getClass()+" "+o[2].getClass()+" "+o[3].getClass()+" "+o[4].getClass());
+//			}			
+			
+			rtn.add(new TagStat((Long)o[0],(Integer)o[1],(String)o[2],(Integer) o[3],(Integer) o[4]));			
+		}
+		
+		return rtn;		 				
+	}
+
+
+	public List<TopicIdentifier> getTagsStarting(User user, String match) {
+		return getTagsStarting(user, match, DEFAULT_TAG_AUTOCOMPLETE_MAX);		
+	}
+	public List<TopicIdentifier> getTagsStarting(User user, String match,int max) {
+		DetachedCriteria crit  = DetachedCriteria.forClass(Topic.class)		
+		.add(Expression.and(Expression.ilike("title", match, MatchMode.START),				
+				Expression.eq("user", user)))
+		.setProjection(Projections.projectionList()
+		.add(Property.forName("title"))
+		.add(Property.forName("id")));			
+		log.debug("USER: "+user+" USER ID "+user.getId()+" NAME "+user.getUsername()+" MATCH|"+match+"|");
+		
+		List<Object[]> list = getHibernateTemplate().findByCriteria(crit,0,max);
+		
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+
+		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list){
+			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
+		}		
+		return rtn;				
+	}
+
+
+
+	public Root getRoot(User user) {
+		DetachedCriteria crit  = DetachedCriteria.forClass(Root.class)
+		.add(Expression.eq("user", user));			
+		Root userRoot = (Root) DataAccessUtils.requiredSingleResult(getHibernateTemplate().findByCriteria(crit));		
+		return userRoot;		
+	}
+
+
+	
 }

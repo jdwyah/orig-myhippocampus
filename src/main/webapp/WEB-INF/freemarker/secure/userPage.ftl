@@ -47,9 +47,10 @@
 	<#if bean.user?exists>
 		<#if bean.user.supervisor>
 			<p>
-			<ul>
+			<ul>				
 				<li><a href="<@spring.url "/site/secure/extreme/userManager.html?action=list"/>"/>Admin</a></li>
 	     	 	<li><a href="<@spring.url "/site/secure/extreme/mailingList.html?action=list"/>"/>Mailing List</a></li>
+	     	 	<li><a href="<@spring.url "/site/secure/extreme/scripts.html?action=list"/>"/>Scripts</a></li>
 	     	</ul>
         </#if>
 

@@ -2,8 +2,6 @@ package com.aavu.client.domain.commands;
 
 import java.util.Set;
 
-import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -20,13 +18,10 @@ public class RemoveTagFromTopicCommand extends AbstractCommand implements IsSeri
 	//@Override
 	public void executeCommand() throws HippoBusinessException {
 		
-		if(!(getTopic(1) instanceof Tag)){
-			throw new HippoBusinessException("Can't remove nontag: "+getTopic(1));
-		}
 		
-		boolean res = getTopic(0).removeTag((Tag) getTopic(1));
+		boolean res = getTopic(0).removeType(getTopic(1));
 		if(!res){								
-			throw new HippoBusinessException("Error Removing Tag");
+			throw new HippoBusinessException("Error Removing Type");
 		}				
 	}
 

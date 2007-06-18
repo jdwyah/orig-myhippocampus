@@ -99,9 +99,6 @@
 		<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>
 	
-	<bean id="tagDAO" class="com.aavu.server.dao.hibernate.TagDAOHibernateImpl">
-		<property name="sessionFactory" ref="mySessionFactory" />
-	</bean>	
 	<bean id="userDAO" class="com.aavu.server.dao.hibernate.UserDAOHibernateImpl">
 		<property name="sessionFactory" ref="mySessionFactory" />
 		<property name="initDAO" ref="initDAO"/>
@@ -110,6 +107,8 @@
 	<bean id="initDAO" class="com.aavu.server.dao.hibernate.InitDAOHibernateImpl">
 		<property name="sessionFactory" ref="mySessionFactory" />
 		<property name="userService" ref="userService"/>
+		<property name="editDAO" ref="editDAO" />
+		<property name="selectDAO" ref="selectDAO" />
 	</bean>
 	
 	<bean id="mailingListDAO" class="com.aavu.server.dao.hibernate.MailingListDAOHibernateImpl">

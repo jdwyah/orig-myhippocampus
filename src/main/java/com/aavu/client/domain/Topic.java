@@ -76,9 +76,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		else if(this instanceof HippoLocation)
 			o = new HippoLocation();		
 		else if(this instanceof Association)
-			o = new Association();
-		else if(this instanceof Tag)
-			o = new Tag();
+			o = new Association();		
+		else if(this instanceof Root)
+			o = new Root();
 		else {
 			o = new Topic();
 		}
@@ -255,23 +255,6 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	}
 
-	/**
-	 * 
-	 * @param tag
-	 * @return
-	 */
-	public boolean removeTag(Tag tag) {
-
-//		System.out.println("REMOVE-------------------");
-//		System.out.println(tag.toPrettyString());
-//		System.out.println("FROM-------------------");
-//		System.out.println(toPrettyString());
-		
-		//boolean b = true;//tag.getInstances().remove(this);
-		
-		return removeType(tag);
-		
-	}
 	
 	/**
 	 * wack the association.
@@ -433,7 +416,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 //			instanceStr.append(indent+"Instances:\n"+indent);
 //			for (Iterator iter = getInstances().iterator(); iter.hasNext();) {
 //				TopicTypeConnector conn = (TopicTypeConnector) iter.next();
-//				Topic instance = conn.getTopic();
+//			Topic instance = conn.getTopic();
 //				instanceStr.append("Instance: "+instance.getTitle()+" "+instance.getId()+"\n"+indent);							
 //			}
 //		}catch(Exception e){
@@ -737,14 +720,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 
+	public boolean addType(Topic type) {
+		return addType(type,-1,-1);
+	}
 	/**
 	 * do we need to update both sides of this association? 
 	 * 
 	 * @param type
 	 * @return
 	 */
-	public boolean addType(Topic type) {
-		TopicTypeConnector conn = new TopicTypeConnector(this,type,-1.0,-1.0);
+	public boolean addType(Topic type,int lat,int lng) {
+		TopicTypeConnector conn = new TopicTypeConnector(this,type,lat,lng);
 		//type.getInstances().add(conn);
 		return getTypes().add(conn);
 		//return getTypes().add(new Topic(topic,-1,-1));		
@@ -897,7 +883,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return !getFiles().isEmpty();
 	}
 	public boolean hasTagProperties(){
-		return (this instanceof Tag) && !getTagProperties().isEmpty();
+		return !getTagProperties().isEmpty();
 	}
 
 	public boolean hasMetas(Meta type) {		

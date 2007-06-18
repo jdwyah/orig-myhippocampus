@@ -17,9 +17,7 @@ import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
@@ -34,7 +32,6 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestNoTransaction;
-import com.mapitz.gwt.googleMaps.client.GLatLng;
 
 public class TopicServiceImplTest extends BaseTestNoTransaction {
 	
@@ -114,8 +111,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		t.setTitle(C);
 		t.setUser(u);
 
-		Tag tag = new Tag();
-		tag.setName(D);
+		Topic tag = new Topic();
+		tag.setTitle(D);
 
 		topicService.save(tag);
 
@@ -158,7 +155,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
-		Tag book = new Tag(u,D);		
+		Topic book = new Topic(u,D);		
 
 		MetaText ss = new MetaText();
 		MetaTopic author = new MetaTopic();
@@ -244,10 +241,10 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		t.setTitle(C);
 		t.setUser(u);
 
-		Tag tag = new Tag();
-		tag.setName(D);
+		Topic tag = new Topic();
+		tag.setTitle(D);
 
-		tag = (Tag) topicService.save(tag);
+		tag =  topicService.save(tag);
 
 		t.tagTopic(tag);
 
@@ -279,8 +276,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		clean();
 		
-		Tag tag = new Tag(u,D);		
-		tag = (Tag) topicService.save(tag);
+		Topic tag = new Topic(u,D);		
+		tag = topicService.save(tag);
 		
 		System.out.println("SAVED TAG "+B);
 		
@@ -293,7 +290,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		Topic topicS = topicService.getForID(topic.getId());
 		assertEquals(1, topicS.getTypes().size());
-		Tag tagRef = (Tag) topicS.getTypesAsTopics().iterator().next();
+		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
 		assertEquals(tag.getId(), tagRef.getId());
 		
 		
@@ -319,8 +316,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		clean();
 		
-		Tag tag = new Tag(u,B);		
-		tag = (Tag) topicService.save(tag);
+		Topic tag = new Topic(u,B);		
+		tag = topicService.save(tag);
 		
 		System.out.println("SAVED TAG "+B);
 		
@@ -373,8 +370,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		clean();
 		
-		Tag tag = new Tag(u,B);		
-		tag = (Tag) topicService.save(tag);
+		Topic tag = new Topic(u,B);		
+		tag =  topicService.save(tag);
 		
 		System.out.println("SAVED TAG "+B);
 		
@@ -735,8 +732,8 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		clean();
 		
-		Tag tag = new Tag(u,C);
-		tag = (Tag) topicService.save(tag);
+		Topic tag = new Topic(u,C);
+		tag =  topicService.save(tag);
 				
 		
 		MetaDate metaDate = new MetaDate();
@@ -802,11 +799,11 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		
 		clean();
 		
-		Tag tag = new Tag(u,C);
-		tag = (Tag) topicService.save(tag);
+		Topic tag = new Topic(u,C);
+		tag = topicService.save(tag);
 				
 		
-		Topic topic = new Tag(u,D);
+		Topic topic = new Topic(u,D);
 		topic = topicService.save(topic);
 		
 		AbstractCommand comm = new SaveTagtoTopicCommand(topic,tag);
@@ -831,7 +828,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		assertEquals(0, topicS.getTypes().size());
 		
 		
-		Tag tagS = (Tag) topicService.getForID(tag.getId());		
+		Topic tagS = (Topic) topicService.getForID(tag.getId());		
 		assertEquals(0, topicService.getTopicIdsWithTag(tagS.getId()).size());
 				
 	}

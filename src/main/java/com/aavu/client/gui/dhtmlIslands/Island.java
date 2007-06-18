@@ -5,11 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.TagInfo;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
-import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;
 import com.aavu.client.service.Manager;
@@ -597,7 +596,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	
 	private void topicMoved(DraggableTopicLabel label){
 
-		manager.getTopicCache().saveTopicLocationA(tagStat.getTagId(),label.getTopicId(),label.getXPct(),label.getYPct(),
+		manager.getTopicCache().saveTopicLocationA(tagStat.getTagId(),label.getTopicId(),(int)(label.getXPct() * width),(int)(label.getYPct() * height),
 				new StdAsyncCallback(ConstHolder.myConstants.save_async()));
 	}
 
@@ -640,7 +639,7 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 	 * 
 	 * @param t
 	 */
-	public void redraw(Tag t) {
+	public void redraw(Topic t) {
 		
 		System.out.println("redraw "+tagStat.getLatitude()+" "+tagStat.getLongitude()+" to "+t.getLatitude()+" "+t.getLongitude());
 		

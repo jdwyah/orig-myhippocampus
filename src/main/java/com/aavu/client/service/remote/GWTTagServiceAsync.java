@@ -9,11 +9,9 @@ public interface GWTTagServiceAsync {
 
 	//void removeTag(Tag selectedTag, AsyncCallback callback) throws PermissionDeniedException;;
 
-	void getAllTags(AsyncCallback callback);
 
 	void match(String match, AsyncCallback call);
 
-	void getTagForName(String completeText, AsyncCallback call);
 	
 	void getTagStats(AsyncCallback callback);
 

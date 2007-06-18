@@ -35,10 +35,10 @@
 		<!-- TOPIC -->
 		<many-to-one name="topic" column="from_id" class="com.aavu.client.domain.Topic" cascade="save-update"></many-to-one>
 	
-		<property name="latitude" type="double" column="latitude">
+		<property name="latitude" type="int" column="latitude">
 			<meta attribute="use-in-equals">true</meta>		
 		</property>
-		<property name="longitude" type="double" column="longitude">
+		<property name="longitude" type="int" column="longitude">
 			<meta attribute="use-in-equals">true</meta>		
 		</property>		
 	

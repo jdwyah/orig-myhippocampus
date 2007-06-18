@@ -126,6 +126,11 @@
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
 		</subclass>
 		
+		<!-- The user's root node -->
+		<!-- meaningless from DB perspective. only usefull for differentiation -->
+		<subclass name="Root" discriminator-value="root">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
+		</subclass>			
 			
 		<!-- meaningless from DB perspective. only usefull for differentiation -->
 		<!-- Do Note that Date Created & Date Updated have different meanings for classes of this type -->

@@ -3,7 +3,6 @@ package com.aavu.client.domain.commands;
 import java.util.Set;
 
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
 import com.google.gwt.user.client.rpc.IsSerializable;

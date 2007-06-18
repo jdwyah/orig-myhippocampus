@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -144,7 +143,7 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 		if(topic.getTags().size() > 0){
 			mainP.add(new HeaderLabel(ConstHolder.myConstants.tags()));
 			for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
-				Tag tag = (Tag) iter.next();
+				Topic tag = (Topic) iter.next();
 				showTag(tag);						
 			}		
 		}
@@ -154,7 +153,7 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 	 * TODO not working when wrapped in GoogleMap. Needs GWTInfoWidgetWrapping?
 	 * @param tag
 	 */
-	private void showTag(final Tag tag){
+	private void showTag(final Topic tag){
 		
 		TopicLink tagLink = new TopicLink(tag);				
 		mainP.add(tagLink);	
@@ -162,7 +161,7 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 		displayMetas(tag);
 		
 	}
-	private void displayMetas(final Tag tag) {
+	private void displayMetas(final Topic tag) {
 		Set metas = tag.getTagProperties();		
 //		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
 //			Meta element = (Meta) iter.next();

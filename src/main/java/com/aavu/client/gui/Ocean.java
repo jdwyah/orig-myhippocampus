@@ -1,9 +1,7 @@
 package com.aavu.client.gui;
 
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface Ocean {
@@ -14,7 +12,7 @@ public interface Ocean {
 	 */
 	public void load(LoadFinishedListener loadFinished);
 
-	public void growIsland(Tag tag);
+	public void growIsland(Topic tag);
 	
 	public Widget getWidget();
 
@@ -26,7 +24,7 @@ public interface Ocean {
 	public void zoomIn();
 	public void zoomOut();
 
-	public void update(Tag t, AbstractCommand command);
+	public void update(Topic t, AbstractCommand command);
 
 	/**
 	 * 

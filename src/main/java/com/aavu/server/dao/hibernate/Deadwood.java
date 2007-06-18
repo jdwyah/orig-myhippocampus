@@ -1,27 +1,5 @@
 package com.aavu.server.dao.hibernate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.hibernate.FetchMode;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
-import org.springframework.dao.support.DataAccessUtils;
-
-import com.aavu.client.domain.HippoDate;
-import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.MetaDate;
-import com.aavu.client.domain.Tag;
-import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.User;
-import com.aavu.client.domain.dto.TimeLineObj;
-import com.aavu.client.domain.dto.TopicIdentifier;
 
 public class Deadwood {
 
@@ -430,6 +408,24 @@ public class Deadwood {
 //		return rtn;	
 //	}
 
-	
-	
+//	public Tag upgradeToTag(final Topic t) {
+//
+//		int res = (Integer) getHibernateTemplate().execute(new HibernateCallback(){
+//			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+//				String hqlUpdate = "update Topic set discriminator = 'tag' where topic_id = :id";
+//				int updatedEntities = sess.createQuery( hqlUpdate )
+//				.setLong( "id", t.getId() )	                            
+//				.executeUpdate();				
+//				return updatedEntities;				
+//			}});
+//		log.debug("res: "+res);
+//		
+//		getHibernateTemplate().evict(t);
+//		
+//		DetachedCriteria crit  =  SelectDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Tag.class)
+//				.add(Expression.eq("id", t.getId())));
+//		
+//		return (Tag) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));		
+//		
+//	}
 }

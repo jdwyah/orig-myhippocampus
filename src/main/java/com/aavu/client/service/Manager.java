@@ -24,9 +24,7 @@ public interface Manager {
 	void bringUpChart(Topic topic);
 
 	void bringUpChart(TopicIdentifier ident);
-
-	void changeState(Topic topic, boolean b, StdAsyncCallback callback);
-
+	
 	void delete(Topic topic, AsyncCallback callback);
 
 	void displayInfo(String gadget_not_available);

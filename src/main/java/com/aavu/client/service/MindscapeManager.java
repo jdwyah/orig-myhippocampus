@@ -11,7 +11,6 @@ import com.aavu.client.Interactive;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -136,7 +135,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 				TopicIdentifier res = (TopicIdentifier) result;				
 								
 				if(isIsland){
-					Tag newIsland = new Tag();
+					Topic newIsland = new Topic();
 					newIsland.setId(res.getTopicID());
 					newIsland.setTitle(res.getTopicTitle());
 					map.growIsland(newIsland);
@@ -231,7 +230,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 	
 
-	public void growIsland(Tag tag) {
+	public void growIsland(Topic tag) {
 		map.growIsland(tag);
 	}
 	/**
@@ -246,7 +245,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		System.out.println("TOPIC SAVED");
 		if(command instanceof SaveTagtoTopicCommand){
 			System.out.println("TAG COMMAND");
-			Tag tag = (Tag) command.getTopic(1);
+			Topic tag = (Topic) command.getTopic(1);
 			System.out.println("GROW "+tag);
 			map.growIsland(tag);
 		}
@@ -377,9 +376,9 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 				super.onSuccess(result);
 				callback.onSuccess(result);
 				
-				if(topic instanceof Tag){
-					map.removeIsland(topic.getId());
-				}
+				
+				map.removeIsland(topic.getId());
+				
 				unselect();
 				refreshAll();
 			}				
@@ -438,36 +437,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			userActionListener.topicCreated();
 		}
 	}
-	public void changeState(final Topic topic, final boolean toIsland, final StdAsyncCallback callback) {
-
-		AsyncCallback wrapper = new AsyncCallback(){
-			public void onFailure(Throwable caught) {				
-				callback.onFailure(caught);
-			}
-
-			public void onSuccess(Object result) {				
-				callback.onSuccess(result);
-				
-				if(toIsland){
-					Tag newIsland = new Tag();
-					topic.copyPropsIntoParam(newIsland);					
-					growIsland(newIsland);
-					
-					map.displayTopic(newIsland);						
-				}else{
-					map.removeIsland(topic.getId());
-					
-					//change type to topic 
-					Topic notAnIsland = new Topic();
-					topic.copyPropsIntoParam(notAnIsland);
-					map.displayTopic(notAnIsland);						
-				}
-				
-				
-			}};
-		
-		getTopicCache().changeState(topic.getId(), toIsland, wrapper);	
-	}
+	
 	
 	public void showHelp() {
 		HelpWindow hw = new HelpWindow(this,newFrame());

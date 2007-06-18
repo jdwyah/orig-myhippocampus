@@ -1,7 +1,7 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.async.EZCallback;
-import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.service.cache.TagCache;
 import com.aavu.client.widget.autocompletion.RemoteTAGAutoCompletionItems;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,7 +25,7 @@ public class TagAutoCompleteBox extends AutoCompleteTextBoxWithCompleteCallback 
 		//need to convert Tag to TopicIdentifier
 		cache.getTagAddIfNew(completeText, new EZCallback(){
 			public void onSuccess(Object result) {
-				Tag tag = (Tag) result;
+				Topic tag = (Topic) result;
 				callback.onSuccess(tag.getIdentifier());
 			}});	
 	}

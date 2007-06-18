@@ -2,25 +2,16 @@ package com.aavu.client.service.remote;
 
 import java.util.List;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MindTreeOcc;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.dto.TimeLineObj;
-import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
-import com.aavu.client.exception.HippoBusinessException;
-import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface GWTTopicServiceAsync {
 
 	//remember, these MUST BE VOID! returns
 	//
-
-	void test(AsyncCallback callback);
 
 	void changeState(long topicID, boolean toIsland,AsyncCallback callback);
 
@@ -70,7 +61,7 @@ public interface GWTTopicServiceAsync {
 	void saveCommand(AbstractCommand command, AsyncCallback callback);
 
 
-	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct, AsyncCallback callback);
+	void saveTopicLocation(long tagId, long topicId, int lat, int lng, AsyncCallback callback);
 
 	//MindTree 
 	void saveTree(MindTree tree,AsyncCallback callback);

@@ -3,7 +3,6 @@ package com.aavu.client.service.remote;
 import java.util.List;
 
 import com.aavu.client.domain.MindTreeOcc;
-import com.aavu.client.domain.TestObj;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.LinkAndUser;
@@ -15,8 +14,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 
 
 public interface GWTTopicService extends RemoteService {
-
-	TestObj test();
+	
 	
 	void changeState(long topicID, boolean toIsland) throws HippoException;
 		
@@ -101,7 +99,7 @@ public interface GWTTopicService extends RemoteService {
 	
 	void saveCommand(AbstractCommand command) throws HippoBusinessException;
 	
-	void saveTopicLocation(long tagId, long topicId, double xpct, double ypct) throws HippoException;
+	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
 	
 	MindTree saveTree(MindTree tree) throws HippoException;
 

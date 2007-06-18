@@ -9,12 +9,12 @@ public class TopicTypeConnector extends AbstractTopicTypeConnector implements Se
 
 	public TopicTypeConnector(){}
 
-	public TopicTypeConnector(Topic topic, Topic type, double lat, double longi) {
+	public TopicTypeConnector(Topic topic, Topic type, int lat, int longi) {
 		super(topic,type,lat,longi);
 	}
-	public TopicTypeConnector(Topic topic, Topic type) {
-		super(topic,type,-1.0,-1.0);
-	}
+//	public TopicTypeConnector(Topic topic, Topic type) {
+//		super(topic,type,-1.0,-1.0);
+//	}
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}

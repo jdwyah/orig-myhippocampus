@@ -7,20 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
-import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -188,11 +184,7 @@ public class TopicCache {
 	 */
 	public void createNew(String title, boolean isIsland, AsyncCallback callback) {
 				
-		if(isIsland){
-			createNew(title, new Tag(),callback);
-		}else{
-			createNew(title, new Topic(),callback);
-		}
+		createNew(title, new Topic(),callback);		
 	}
 
 	public void createNew(String title, Topic topicOrTagOrMeta, AsyncCallback callback) {
@@ -379,8 +371,8 @@ public class TopicCache {
 
 
 
-	public void saveTopicLocationA(long tagId, long topicId, double xpct, double ypct, StdAsyncCallback callback) {
-		topicService.saveTopicLocation(tagId,topicId,xpct,ypct,callback);
+	public void saveTopicLocationA(long tagId, long topicId, int lat, int lng, StdAsyncCallback callback) {
+		topicService.saveTopicLocation(tagId,topicId,lat,lng,callback);
 	}
 
 
@@ -393,10 +385,10 @@ public class TopicCache {
 		topicService.search(text, callback);		
 	}
 
-
-	public void test(StdAsyncCallback stdAsyncCallback) {
-		topicService.test(stdAsyncCallback);
-	}
+//
+//	public void test(StdAsyncCallback stdAsyncCallback) {
+//		topicService.test(stdAsyncCallback);
+//	}
 
 
 

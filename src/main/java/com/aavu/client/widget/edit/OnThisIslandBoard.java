@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
@@ -94,8 +93,10 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	public int load(Topic topic){
 
 		//System.out.println("\n\n\nLOAD "+(topic instanceof Tag)+"  "+topic.getTypes().size());
-				
-		if(topic instanceof Tag){
+			
+		
+		
+		//if(!topic.getInstances().isEmpty()){
 			setVisible(true);
 
 			this.myTag = (Topic) topic;
@@ -110,10 +111,10 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 					addTopicLabels(topics);				
 				}					
 			});
-		}		
-		else{
-			setVisible(false);
-		}
+//		}		
+//		else{
+//			setVisible(false);
+//		}
 		return 0;
 	}
 
@@ -158,7 +159,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 
 		onThisIslandPanel.insert(new TopicLink(newTopic),0);				
 
-		topicService.executeCommand(newTopic, new SaveTagtoTopicCommand(newTopic,(Tag) myTag),
+		topicService.executeCommand(newTopic, new SaveTagtoTopicCommand(newTopic, myTag),
 				new StdAsyncCallback(ConstHolder.myConstants.save_async()){});				
 
 

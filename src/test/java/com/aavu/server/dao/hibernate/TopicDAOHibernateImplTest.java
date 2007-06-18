@@ -5,10 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Expression;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.dao.support.DataAccessUtils;
 
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
@@ -20,8 +17,6 @@ import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
-import com.aavu.client.domain.MindTreeOcc;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -30,8 +25,6 @@ import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.domain.mapper.MindTree;
-import com.aavu.client.domain.mapper.MindTreeElement;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
@@ -100,12 +93,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t.setUser(u);
 
 		//explicitly not setting user, this happens in service layer
-		Tag tag = new Tag();		
-		tag.setName(D);
+		Topic tag = new Topic();		
+		tag.setTitle(D);
 
 		System.out.println("tag "+tag);
 		
-		tag = (Tag) editDAO.save(tag);
+		tag = (Topic) editDAO.save(tag);
 
 		t.tagTopic(tag);
 
@@ -142,7 +135,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		assertEquals(D,	savedTag.getTitle());
 
-		//Tag's user will still not be initialized, this happens in service
+		//Topic's user will still not be initialized, this happens in service
 		assertEquals(null, savedTag.getUser());
 
 
@@ -155,13 +148,13 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
-		Tag book = new Tag(u,D);		
+		Topic book = new Topic(u,D);		
 
 		MetaText ss = new MetaText();
 		MetaTopic author = new MetaTopic();
 
 		author.setTitle(B);
-		author.setUser(u);
+		author.setUser(u);		
 		book.addTagProperty(author);
 
 		editDAO.save(book);
@@ -197,9 +190,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertNotNull(savedPatriotGames);
 
 		assertEquals(1, savedPatriotGames.getTypesAsTopics().size());		
-		Topic savedBookTag = (Topic) savedPatriotGames.getTypesAsTopics().iterator().next();
-		assertEquals(D, savedBookTag.getTitle());
-		assertEquals(1, savedBookTag.getTagProperties().size());
+		Topic savedBookTopic = (Topic) savedPatriotGames.getTypesAsTopics().iterator().next();
+		assertEquals(D, savedBookTopic.getTitle());
+		assertEquals(1, savedBookTopic.getTagProperties().size());
 
 		assertEquals(1, savedPatriotGames.getMetaValuesFor(author).size());
 		assertEquals(0, savedPatriotGames.getTagProperties().size());
@@ -213,7 +206,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(E,savedTomClancy.getTitle());
 
 
-		//assertEquals(savedBookTag., false)
+		//assertEquals(savedBookTopic., false)
 
 
 		for(TopicIdentifier saved : savedL){
@@ -229,12 +222,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 			System.out.println(top.toPrettyString());
 		}
-		//t.setTags(tags);
+		//t.setTopics(tags);
 
 
 	}
 
-	public void testGetTopicsWithTag() throws HippoBusinessException{
+	public void testGetTopicsWithTopic() throws HippoBusinessException{
 
 
 		Topic t = new Topic();
@@ -247,8 +240,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setTitle(B);
 		t2.setUser(u);
 
-		Tag tag = new Tag();
-		tag.setName("testtagAAA");					
+		Topic tag = new Topic();
+		tag.setTitle("testtagAAA");					
 
 		editDAO.save(tag);
 
@@ -297,7 +290,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	 * @throws HippoBusinessException
 	 * @throws InterruptedException 
 	 */
-	public void testGetTopicsWithTag2() throws HippoBusinessException, InterruptedException{
+	public void testGetTopicsWithTopic2() throws HippoBusinessException, InterruptedException{
 
 		Topic t = new Topic();
 		t.getLatestEntry().setData(B);
@@ -309,8 +302,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setTitle(B);
 		t2.setUser(u);
 
-		Tag tag = new Tag();
-		tag.setName("testtagAAA");					
+		Topic tag = new Topic();
+		tag.setTitle("testtagAAA");					
 
 		editDAO.save(tag);
 
@@ -539,7 +532,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic patriotGames = new Topic(u,C);
 		patriotGames.getLatestEntry().setData(B);
 
-		Tag book = new Tag(u,D);
+		Topic book = new Topic(u,D);
 
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
@@ -628,7 +621,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		MetaDate md = new MetaDate();
 		md.setId(9);
 
-		Tag tag = new Tag();
+		Topic tag = new Topic();
 		tag.setId(3);
 
 		List<TimeLineObj> list = selectDAO.getTimeline(0,u);
@@ -706,7 +699,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//add a second topic, with a meta date for each meta
 		//
 		Topic t2 = new Topic(u,E);
-		Tag tag = new Tag(u,D);
+		Topic tag = new Topic(u,D);
 		t2.tagTopic(tag);
 
 		for (Iterator iter = t1.getMetas().iterator(); iter.hasNext();) {
@@ -721,7 +714,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		list = selectDAO.getTimeline(u);		
 		assertEquals(4, list.size());
 
-		Tag tt = (Tag) t2.getTags().iterator().next();
+		Topic tt = (Topic) t2.getTags().iterator().next();
 
 		list = selectDAO.getTimeline(tt.getId(),u);		
 		assertEquals(2, list.size());
@@ -780,7 +773,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//add a second topic, with a meta date for each meta
 		//
 		Topic t2 = new Topic(u,E);
-		Tag tag = new Tag(u,D);
+		Topic tag = new Topic(u,D);
 		t2.tagTopic(tag);
 
 		for (Iterator iter = t1.getMetas().iterator(); iter.hasNext();) {
@@ -798,7 +791,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		list = selectDAO.getTimeline(u);		
 		assertEquals(4, list.size());
 
-		Tag tt = (Tag) t2.getTags().iterator().next();
+		Topic tt = (Topic) t2.getTags().iterator().next();
 
 		list = selectDAO.getTimeline(tt.getId(),u);		
 		assertEquals(2, list.size());
@@ -934,7 +927,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//add a second topic, with a meta date for each meta
 		//
 		Topic t2 = new Topic(u,E);
-		Tag tag = new Tag(u,D);
+		Topic tag = new Topic(u,D);
 		t2.tagTopic(tag);
 
 
@@ -954,7 +947,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		list = selectDAO.getLocations(u);
 		assertEquals(4, list.size());
 
-		Tag tt = (Tag) t2.getTags().iterator().next();
+		Topic tt = (Topic) t2.getTags().iterator().next();
 
 		list = selectDAO.getLocations(tt.getId(),u);		
 		assertEquals(2, list.size());
@@ -1054,8 +1047,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic t = selectDAO.getForName(u, string);			
 
 		if(null == t){
-			log.debug("was null, creating as Tag ");
-			t = new Tag();
+			log.debug("was null, creating as Topic ");
+			t = new Topic();
 			t.setTitle(string);				
 			t.setUser(u);							
 		}			
@@ -1094,8 +1087,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		}
 		Topic t = selectDAO.getForName(u, string);			
 		if(null == t){
-			log.debug("was null, creating as Tag ");
-			t = new Tag();
+			log.debug("was null, creating as Topic ");
+			t = new Topic();
 			t.setTitle(string);				
 			t.setUser(u);							
 		}			
@@ -1152,7 +1145,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
-		Tag book = new Tag(u,D);		
+		Topic book = new Topic(u,D);		
 
 		editDAO.save(book);
 
@@ -1172,7 +1165,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(2, savedL.size());
 
 
-		book = (Tag) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForName(u, D);
 
 		System.out.println("patgames "+patriotGames.toPrettyString());
 		System.out.println("book "+book.toPrettyString());
@@ -1184,7 +1177,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		savedL = selectDAO.getAllTopicIdentifiers(u,false);
 		assertEquals(1, savedL.size());
 
-		book = (Tag) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForName(u, D);
 		//assertEquals(0,book.getInstances().size());
 
 
@@ -1195,7 +1188,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
-		Tag book = new Tag(u,D);		
+		Topic book = new Topic(u,D);		
 
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
@@ -1227,7 +1220,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(3, savedL.size());
 
 
-		book = (Tag) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForName(u, D);
 		//assertEquals(1,book.getInstances().size());
 
 		editDAO.delete(patriotGames);
@@ -1235,7 +1228,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		savedL = selectDAO.getAllTopicIdentifiers(u,false);
 		assertEquals(2, savedL.size());
 
-		book = (Tag) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForName(u, D);
 		//assertEquals(0,book.getInstances().size());
 
 		//TODO assert that lastEntry has been deleted
@@ -1251,7 +1244,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		forWhomTheBellTolls.setTitle(F);
 		forWhomTheBellTolls.setUser(u);
 
-		Tag book = new Tag(u,D);		
+		Topic book = new Topic(u,D);		
 
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
@@ -1286,7 +1279,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(4, savedL.size());
 
 
-		book = (Tag) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForName(u, D);
 		//assertEquals(2,book.getInstances().size());
 
 		editDAO.delete(patriotGames);
@@ -1294,20 +1287,20 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		savedL = selectDAO.getAllTopicIdentifiers(u,false);
 		assertEquals(3, savedL.size());
 
-		book = (Tag) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForName(u, D);
 		//assertEquals(1,book.getInstances().size());
 
 
 
 
 	}
-	public void testDeleteTag() throws HippoBusinessException{
+	public void testDeleteTopic() throws HippoBusinessException{
 		Topic patriotGames = new Topic();
 		patriotGames.getLatestEntry().setData(B);
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
-		Tag book = new Tag(u,D);		
+		Topic book = new Topic(u,D);		
 
 		MetaTopic author = new MetaTopic();
 		author.setTitle(B);
@@ -1339,7 +1332,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(3, savedL.size());
 
 
-		book = (Tag) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForName(u, D);
 		//assertEquals(1,book.getInstances().size());
 
 		editDAO.delete(book);
@@ -1371,10 +1364,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setTitle(B);
 		t2.setUser(u);
 
-		Tag tag = new Tag();
-		tag.setName("testtagAAA");					
+		Topic tag = new Topic();
+		tag.setTitle("testtagAAA");					
 
-		tag = (Tag) editDAO.save(tag);
+		tag = (Topic) editDAO.save(tag);
 
 		t.addType(tag);
 
@@ -1404,20 +1397,20 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 
 
-		List<TopicTypeConnector> topicsWithTag = selectDAO.getTopicIdsWithTag(tag.getId(), u);
-		assertEquals(1, topicsWithTag.size());
-		TopicTypeConnector fti = topicsWithTag.get(0);
-		assertEquals(-1.0, fti.getLatitude());
-		assertEquals(-1.0, fti.getLongitude());
+		List<TopicTypeConnector> topicsWithTopic = selectDAO.getTopicIdsWithTag(tag.getId(), u);
+		assertEquals(1, topicsWithTopic.size());
+		TopicTypeConnector fti = topicsWithTopic.get(0);
+		assertEquals(-1, fti.getLatitude());
+		assertEquals(-1, fti.getLongitude());
 
 		//sysout
-		editDAO.saveTopicsLocation(tag.getId(), t.getId(), .23, .47);
+		editDAO.saveTopicsLocation(tag.getId(), t.getId(), 23, 47);
 
-		topicsWithTag = selectDAO.getTopicIdsWithTag(tag.getId(), u);
-		assertEquals(1, topicsWithTag.size());
-		fti = topicsWithTag.get(0);
-		assertEquals(.23, fti.getLongitude());
-		assertEquals(.47, fti.getLatitude());
+		topicsWithTopic = selectDAO.getTopicIdsWithTag(tag.getId(), u);
+		assertEquals(1, topicsWithTopic.size());
+		fti = topicsWithTopic.get(0);
+		assertEquals(23, fti.getLongitude());
+		assertEquals(47, fti.getLatitude());
 
 
 
@@ -1550,7 +1543,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
-		Tag book = new Tag(u,D);		
+		Topic book = new Topic(u,D);		
 
 		MetaText ss = new MetaText();
 		MetaTopic author = new MetaTopic();
@@ -1622,11 +1615,11 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t = editDAO.save(t);
 
 
-		Tag tag = new Tag(u,D);
+		Topic tag = new Topic(u,D);
 		tag.setPublicVisible(true);
 		t.tagTopic(tag);
 
-		tag = (Tag) editDAO.save(tag);
+		tag = (Topic) editDAO.save(tag);
 
 		List<TopicTypeConnector> saved = selectDAO.getTopicIdsWithTag(tag.getId());
 

@@ -11,20 +11,26 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.Tag;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.server.dao.EditDAO;
 import com.aavu.server.dao.SelectDAO;
-import com.aavu.server.dao.TagDAO;
 import com.aavu.server.domain.MessageServiceReturn;
 import com.aavu.server.domain.PersistedFile;
 import com.aavu.server.service.FilePersistanceService;
 import com.aavu.server.service.MessageService;
 import com.aavu.server.service.UserService;
 
+/**
+ * Process messages that go to username@hipcamp.com
+ * 
+ * PEND LOW add sender whitelist
+ * 
+ * @author Jeff Dwyer
+ *
+ */
 public class MessageServiceImpl implements MessageService {
 	private static final Logger log = Logger.getLogger(MessageServiceImpl.class);
 
@@ -41,21 +47,18 @@ public class MessageServiceImpl implements MessageService {
 	
 	private SelectDAO selectDAO;
 	
-	/**
-	 * Doesn't use Topic Service bc that uses the SecurityContext getCurrentUser() and we're not really logged in
-	 */
-	private TagDAO tagDAO;
 
-	private Tag createTagIfNeeded(String tagName,User user) throws HippoBusinessException {
+	private Topic createTagIfNeeded(String tagName,User user) throws HippoBusinessException {
 		log.debug("load tag named: "+tagName);
 
-		Tag rt = tagDAO.getTag(user,tagName);
+		Topic rt = selectDAO.getForName(user,tagName);
 		if(null == rt){
 			log.debug("was null, creating ");
-			Tag t = new Tag();
-			t.setName(tagName);
+			Topic t = new Topic();
+			t.setTitle(tagName);
 			t.setPublicVisible(false);
 			t.setUser(user);
+			
 			editDAO.save(t);
 
 			log.debug("created: "+t.getId());
@@ -121,7 +124,7 @@ public class MessageServiceImpl implements MessageService {
 			entry.setUser(u);
 			entry.setInnerHTML(text);
 			
-			Tag inbox = createTagIfNeeded(INBOX,u);
+			Topic inbox = createTagIfNeeded(INBOX,u);
 			
 			topic.tagTopic(inbox);
 			
@@ -160,10 +163,7 @@ public class MessageServiceImpl implements MessageService {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	@Required
-	public void setTagDAO(TagDAO tagDAO) {
-		this.tagDAO = tagDAO;
-	}
+	
 	@Required
 	public void setSelectDAO(SelectDAO selectDAO) {
 		this.selectDAO = selectDAO;
