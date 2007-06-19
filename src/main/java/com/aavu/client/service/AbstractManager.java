@@ -43,10 +43,8 @@ public abstract class AbstractManager implements Manager {
 	}	
 	
 	
-	public void bringUpChart(Topic topic) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void bringUpChart(Topic topic);
+	
 	public void bringUpChart(TopicIdentifier ident) {
 		
 		//TODO

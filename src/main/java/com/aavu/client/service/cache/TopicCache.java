@@ -10,6 +10,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -383,6 +384,11 @@ public class TopicCache {
 
 	public void search(String text, StdAsyncCallback callback) {		
 		topicService.search(text, callback);		
+	}
+
+
+	public void getRootTopics(User user, AsyncCallback callback) {
+		topicService.getRootTopics(user,callback);
 	}
 
 //

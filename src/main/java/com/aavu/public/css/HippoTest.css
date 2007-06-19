@@ -46,8 +46,7 @@ a:visited {
 	
 }
 
-.H-AbsolutePanel {
-	/*background: #FF0000;
+.H-AbsolutePanel { /*background: #FF0000;
 	border: 2px solid #000;*/
 	position: absolute;
 	z-index: 1;
@@ -59,7 +58,8 @@ a:visited {
 }*/
 .H-Sidebar {
 	background: transparent;
-	margin-left: 600px;/*careful of this, can wreak havoc on getabsoluteleft*/
+	margin-left: 600px;
+	/*careful of this, can wreak havoc on getabsoluteleft*/
 	top: 0px;
 	right: 0px;
 	border: 0px;
@@ -80,13 +80,12 @@ a:visited {
 	background-repeat: repeat-x;
 	/*background-color: #666699;*/
 	background-color: #576B93;
-	filter: alpha(opacity =           88);
+	filter: alpha(opacity =             88);
 	-moz-opacity: .88;
 	opacity: .88;
 	-khtml-opacity: .88;
 	/*background: red;*/
 	border: 2px solid #D8E3FD;
-
 	border-style: ridge;
 	color: white;
 	width: 100%;
@@ -132,10 +131,12 @@ a:visited {
 .H-Gadget .gwt-StackPanel {
 	background-color: #647CB5;
 }
-.H-Gadget .H-StatusPicker {	
+
+.H-Gadget .H-StatusPicker {
 	margin-left: 18px;
 }
-.H-Gadget .H-StatusPickerOptions {	
+
+.H-Gadget .H-StatusPickerOptions {
 	border: 1px solid #D8E3FD;
 	border-style: ridge;
 }
@@ -156,11 +157,13 @@ a:visited {
 .H-GadgetPicker {
 	width: auto;
 	right: 0px;
-	padding: 4px;	
+	padding: 4px;
 }
+
 .H-AddButton {
 	border: 0px;
 }
+
 .H-SelectableButton {
 	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
@@ -175,11 +178,12 @@ a:visited {
 	padding-bottom: 3px;
 	padding-left: 3px;
 }
+
 .H-SelectableButton-Selected {
 	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
 	background-position: 0px -10px;
-	background-color: #CFE0F5;	
+	background-color: #CFE0F5;
 	font-weight: bold;
 	padding-top: 3px;
 	padding-right: 3px;
@@ -189,28 +193,34 @@ a:visited {
 	border-style: groove;
 	color: white;
 }
+
 .H-ExplorerButton {
 	width: 100%;
 }
+
 .H-BlogView {
 	background-color: #ffffff;
 	border-bottom: 1px solid black;
 }
+
 .H-BlogViewOdd {
 	background-color: #669999;
 	border-bottom: 1px solid black;
 }
+
 .H-BlogLink {
 	margin-left: 100px;
 }
+
 .H-Blog-Date {
 	font-size: .6em;
 	color: #444444;
 }
+
 .H-Blog-NextPage {
 	margin: 1em;
 	color: blue;
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 
 .H-MetaEditorWidget {
@@ -254,7 +264,7 @@ a:visited {
 }
 
 .H-StatusLabels {
-	filter: alpha(opacity =           40);
+	filter: alpha(opacity =             40);
 	-moz-opacity: .40;
 	opacity: .40;
 	-khtml-opacity: .4;
@@ -312,11 +322,12 @@ a:visited {
 	height: 25x;
 	z-index: 1;
 }
+
 .H-QuestionHorse {
 	bottom: 0px;
-    left: 0px;
-    width: 44px;
-    height: 80px;
+	left: 0px;
+	width: 44px;
+	height: 80px;
 }
 
 .H-Zoomer {
@@ -330,56 +341,66 @@ a:visited {
 	z-index: 1;
 }
 
-.H-ViewPanel {	
+.H-ViewPanel {
 	height: 100%;
 	width: 100%;
 }
+
 .H-DatePickerTimeline {
 	color: black;
 }
-.H-TimelineDetail {	
-	/*background-image: url("../img/timelinebg.png");
-	background-repeat: repeat;*/	
+
+.H-TimelineDetail { /*background-image: url("../img/timelinebg.png");
+	background-repeat: repeat;*/
+	
 }
-.H-TimelineOverview {
-	/*background-image: url("../img/timelinebg.png");
-	background-repeat: repeat;*/	
+
+.H-TimelineOverview { /*background-image: url("../img/timelinebg.png");
+	background-repeat: repeat;*/
+	
 }
+
 .H-TimelineBG {
 	background-color: #9DC3D1;
 }
+
 .H-TimeBar {
 	border: 1px solid blue;
 	width: 4px;
 	height: 1px;
 	line-height: 1px;
 	margin-left: 2px;
-	background-color: #17E9FB;	
+	background-color: #17E9FB;
 	/*
 	height: 6px;
 	margin-bottom: 2px;	
 	line-height: 6px;
 	font-size:1px;	
 	background-color: #17E9FB;*/
-	
 }
-.H-TimeDisplay {
-	/*position: absolute;
+
+.H-TimeDisplay { /*position: absolute;
 	left: 200px;	
 	border: 2px solid green;*/
-	
 	height: 50px;
-	border-bottom: 1px solid black;	
-	
+	border-bottom: 1px solid black;
 }
-.H-TimeLabel-Hover{
+
+.H-TimeLabel-Hover {
 	background-color: #D4F9FA;
 	text-decoration: underline;
 }
 
 .H-Ocean { /*background-color: #CCE6FF;*/
-	position: absolute;	
-	background-repeat: repeat;	
+	position: absolute;
+	background-repeat: repeat;
+	left: 0px;
+	top: 0px;
+	z-index: 0;
+}
+.H-Hierarchy { /*background-color: #CCE6FF;*/
+	position: absolute;
+	background-repeat: repeat;
 	left: 0px;
 	top: 0px;
 	z-index: 0;
@@ -451,7 +472,6 @@ a:visited {
 	text-decoration: underline;
 }
 
-
 .H-TopicBanner {
 	cursor: pointer;
 	cursor: -moz-grab;
@@ -484,19 +504,18 @@ a:visited {
 	border-style: solid;
 	border-color: transparent;
 	border-width: 2px;
-
 }
 
 .H-TagPicker-Checked {
 	color: white;
 	background-color: #576B93;
 }
+
 .H-TagPicker-Hover {
 	border-style: dashed;
 	border-width: 2px;
 	border-color: gray;
 }
-
 
 .H-HelpPicker {
 	padding: 5px;
@@ -507,6 +526,7 @@ a:visited {
 	font-size: 1.3em;
 	font-weight: bold;
 }
+
 .H-Help-Hover {
 	text-decoration: underline;
 }
@@ -590,7 +610,7 @@ a:visited {
 	background-repeat: repeat-x;
 	/*background-color: #666699;*/
 	background-color: #CFE0F5;
-	filter: alpha(opacity =           88);
+	filter: alpha(opacity =             88);
 	-moz-opacity: .88;
 	opacity: .88;
 	-khtml-opacity: .88;
@@ -739,7 +759,7 @@ a:visited {
 	background-position: 0px -10px;
 	/*background-color: #666699;*/
 	background-color: #CFE0F5;
-	filter: alpha(opacity =           88);
+	filter: alpha(opacity =             88);
 	-moz-opacity: .88;
 	opacity: .88;
 	-khtml-opacity: .88;
@@ -891,76 +911,82 @@ a:visited {
 .gwt-SuggestBox {
 	z-index: 9999;
 }
+
 .gwt-SuggestBoxPopup {
 	z-index: 9999;
 	background-color: white;
 }
+
 .gwt-SuggestBoxPopup .item {
 	font-size: small;
 }
-.gwt-SuggestBoxPopup .item-selected {	
+
+.gwt-SuggestBoxPopup .item-selected {
+	
 }
 
- .progressbar-text {
-     font-weight: bold;
- }
- 
- .progressbar-remaining {
-     font-size: 12px;
-     font-style: italic;
- }
- 
- .progressbar-outer {
-     border: 1px solid black;
- }
- 
- .progressbar-inner {
-     border: 1px solid black;
-     margin: 1px;
- }
- 
- .progressbar-bar {
-     width: 5px;
-     height: 15px;
-     margin: 1px;
- }
- 
- .progressbar-fullbar {
-     background: blue;
- }
- 
- .progressbar-blankbar {
-     background: #eee;
- }
- 
- TABLE.monthDates TD {
-	text-align:center;
+.progressbar-text {
+	font-weight: bold;
 }
+
+.progressbar-remaining {
+	font-size: 12px;
+	font-style: italic;
+}
+
+.progressbar-outer {
+	border: 1px solid black;
+}
+
+.progressbar-inner {
+	border: 1px solid black;
+	margin: 1px;
+}
+
+.progressbar-bar {
+	width: 5px;
+	height: 15px;
+	margin: 1px;
+}
+
+.progressbar-fullbar {
+	background: blue;
+}
+
+.progressbar-blankbar {
+	background: #eee;
+}
+
+TABLE.monthDates TD {
+	text-align: center;
+}
+
 TABLE.longRange TD {
-	text-align:center;
-	border-top: 1px solid gray
-	cursor:pointer;cursor:hand;
+	text-align: center;
+	border-top: 1px solid gray cursor : pointer;
+	cursor: hand;
 }
+
 .longRange {
 	border-bottom: 1px solid gray;
 	border-right: 1px solid gray;
-	border-left: 1px solid gray;	
-}	
+	border-left: 1px solid gray;
+}
 
-.txtbox	{
-	font-family:tahoma,sans-serif;
-	font-size:11px;
-	color:#104A7B;
+.txtbox {
+	font-family: tahoma, sans-serif;
+	font-size: 11px;
+	color: #104A7B;
 	background: #FFFFFF;
 	border-bottom: 1px solid #336699;
 	border-right: 1px solid #336699;
 	border-left: 1px solid #336699;
-	border-top:1px solid #336699;
+	border-top: 1px solid #336699;
 }
-	
-.date_DisplayPanel	{
-	font-family:tahoma,sans-serif;
-	font-size:11px;
+
+.date_DisplayPanel {
+	font-family: tahoma, sans-serif;
+	font-size: 11px;
 	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
 	background-position: 0px -20px;
@@ -968,82 +994,111 @@ TABLE.longRange TD {
 	/*background: #9393AF;*/
 	z-index: 9999;
 }
-	
-.calendarPanel	{
+
+.calendarPanel {
 	border-right: 1px solid gray;
 	border-left: 1px solid gray;
-	border-top:1px solid gray;
- }
+	border-top: 1px solid gray;
+}
+
 .date_popupPanel {
 	z-index: 9999;
 }
-.todayPanel	{
-	font-family:tahoma,sans-serif;font-size:11px;
+
+.todayPanel {
+	font-family: tahoma, sans-serif;
+	font-size: 11px;
 	/*float: right;*/
-	font-weight:bold;
-	color:white;
-	text-align:center;
+	font-weight: bold;
+	color: white;
+	text-align: center;
 	border-right: 1px solid gray;
 	border-left: 1px solid gray;
-	text-decoration:underline;
-	cursor:pointer;cursor:hand;	
-	text-align:center;
-} 
- 
+	text-decoration: underline;
+	cursor: pointer;
+	cursor: hand;
+	text-align: center;
+}
 
 .monthHeader {
- 	font-family:tahoma,sans-serif;
- 	font-size:10px;
- 	font-weight:BOLD;
- 	text-align:center;
+	font-family: tahoma, sans-serif;
+	font-size: 10px;
+	font-weight: BOLD;
+	text-align: center;
 }
- 
+
 .monthHeaderHoliday {
- 	font-family:tahoma,sans-serif;
- 	font-size:10px;
- 	font-weight:BOLD;
- 	color: CCCCCC;
- 	text-align:center;
+	font-family: tahoma, sans-serif;
+	font-size: 10px;
+	font-weight: BOLD;
+	color: CCCCCC;
+	text-align: center;
 }
- 
+
 .holiday {
- 	font-family:Arial,tahoma,sans-serif;
- 	font-size:10px;
- 	color: grey;
- 	text-align:center;
- } 
+	font-family: Arial, tahoma, sans-serif;
+	font-size: 10px;
+	color: grey;
+	text-align: center;
+}
+
 .holidaySelectable {
 	color: CCCCCC;
 }
+
 .calendarDate {
-	font-family:Arial,tahoma,sans-serif;
-	font-size:10px;
-	text-decoration:none;
-	cursor:pointer;cursor:hand;
+	font-family: Arial, tahoma, sans-serif;
+	font-size: 10px;
+	text-decoration: none;
+	cursor: pointer;
+	cursor: hand;
 }
-.selectedDate {	
+
+.selectedDate {
 	color: white;
 	/*background-color: #B2C4F2;*/
 }
 
-.monthYearTraversorBtn	{
+.monthYearTraversorBtn {
 	color: white;
-	font-family:tahoma,sans-serif;font-size:11px;
+	font-family: tahoma, sans-serif;
+	font-size: 11px;
 	background: #104A7B;
-	font-weight:bold;
+	font-weight: bold;
 	border-right: 0px solid gray;
 	border-left: 0px solid gray;
 	border-bottom: 0px solid gray;
 	border-top: 0px solid gray;
-	cursor:pointer;cursor:hand;
+	cursor: pointer;
+	cursor: hand;
 }
-	
-.monthYearTraversor	{
-	font-family:Arial,tahoma,sans-serif;font-size:11px;
+
+.monthYearTraversor {
+	font-family: Arial, tahoma, sans-serif;
+	font-size: 11px;
 	background: #104A7B;
 	color: #FFFFFF;
-	font-weight:bold;
-	
-}	
-	
-  
+	font-weight: bold;
+}
+
+.dragdrop-dropTarget {
+	/*border: 1px solid blue;
+	background-color: #FFFFFF;*/
+}
+
+.dragdrop-dropTarget.dragdrop-engage {
+	background-color: #E0E8FF;
+}
+.dragdrop-movable-panel {
+	width: 55px;/*w/o this movable panel picks random width*/  
+	height: 50px;
+}
+.getting-started-label {
+	border: 1px solid #99AACC;
+	background-color: #AACCFF;
+	padding: 0.1em;
+}
+
+.getting-started-blue {
+	border: 1px solid blue;
+}

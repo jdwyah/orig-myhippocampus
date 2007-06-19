@@ -599,7 +599,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 
 
-	public List<TopicTypeConnector> getRootTopics(User user) {
+	public List<TopicTypeConnector> getRootTopics(User forUser,User currentUser) {
 	
 //		if(userRoot == null){
 //			userRoot = new Root(user);
@@ -613,7 +613,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 //		return getHibernateTemplate().findByCriteria(crit);
 		
 		
-		return getTopicIdsWithTag(getRoot(user).getId(),user);
+		return getTopicIdsWithTag(getRoot(forUser).getId(),forUser);
 	}
 
 

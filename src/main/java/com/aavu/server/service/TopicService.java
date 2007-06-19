@@ -86,6 +86,8 @@ public interface TopicService {
 	List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList);
 
 	Topic getPublicTopic(String userString, String topicString) throws HippoBusinessException;
+	
+	List<FullTopicIdentifier> getRootTopics(User forUser);
 	List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id);
 	
 	List<TimeLineObj> getTimeline();

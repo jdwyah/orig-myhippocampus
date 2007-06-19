@@ -538,10 +538,10 @@ public class Island extends AbstractIsland implements ClickListener, SourcesMous
 				//just try to space them out a bit if they don't have real values
 				//magic numbers try to make sure it's not under the banner, but
 				//also not squished against the right side.
-				fti.setLongitudeOnIsland(unset_longitude);
+				fti.setLongitudeOnIsland((int) (unset_longitude * 100));
 			}
 			if(fti.getLatitudeOnIsland() < 0){
-				fti.setLatitudeOnIsland(unset_latitude);
+				fti.setLatitudeOnIsland((int) (unset_latitude * 100));
 				unset_latitude += latitude_budge;
 				if(unset_latitude > max_unset_lat){
 					unset_latitude = unset_latitude_start + latitude_budge/2;

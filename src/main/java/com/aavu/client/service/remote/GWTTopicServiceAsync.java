@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.mapper.MindTree;
+import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface GWTTopicServiceAsync {
@@ -48,6 +50,9 @@ public interface GWTTopicServiceAsync {
 
 	//List<TopicIdentifier>
 	void getTopicsWithTags(List shoppingList, AsyncCallback callback);
+	
+	//List<FullTopicIdentifier>
+	void getRootTopics(User forUser, AsyncCallback callback);
 
 	//MindTree
 	void getTree(MindTreeOcc occ,AsyncCallback callback);

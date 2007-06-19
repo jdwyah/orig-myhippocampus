@@ -217,6 +217,9 @@ public class TopicServiceImpl implements TopicService {
 	public List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id){
 		return connectorsToTIs(selectDAO.getTopicIdsWithTag(id));
 	}
+	public List<FullTopicIdentifier> getRootTopics(User forUser){
+		return connectorsToTIs(selectDAO.getRootTopics(forUser,userService.getCurrentUser()));
+	}
 	
 	public MetaSeeAlso getSeeAlsoMetaSingleton() throws HippoBusinessException{		
 		if(seealsoSingleton == null){

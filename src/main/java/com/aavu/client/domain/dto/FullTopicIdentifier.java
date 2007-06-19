@@ -7,8 +7,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class FullTopicIdentifier extends DatedTopicIdentifier implements IsSerializable {
 
-	private double latitudeOnIsland;
-	private double longitudeOnIsland;
+	private int latitudeOnIsland;
+	private int longitudeOnIsland;
 	
 	public FullTopicIdentifier(){}
 	
@@ -29,19 +29,19 @@ public class FullTopicIdentifier extends DatedTopicIdentifier implements IsSeria
 		this.longitudeOnIsland = conn.getLongitude();
 	}
 
-	public double getLatitudeOnIsland() {
+	public int getLatitudeOnIsland() {
 		return latitudeOnIsland;
 	}
 
-	public void setLatitudeOnIsland(double latitude) {
+	public void setLatitudeOnIsland(int latitude) {
 		this.latitudeOnIsland = latitude;
 	}
 
-	public double getLongitudeOnIsland() {
+	public int getLongitudeOnIsland() {
 		return longitudeOnIsland;
 	}
 
-	public void setLongitudeOnIsland(double d) {
+	public void setLongitudeOnIsland(int d) {
 		this.longitudeOnIsland = d;
 	}
 

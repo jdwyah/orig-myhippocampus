@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TimeLineObj;
@@ -313,6 +314,17 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		try {
 
 			return topicService.getTopicIdsWithTag(id);
+
+		} catch (Exception e) {
+			log.error("FAILURE: "+e);
+			e.printStackTrace();
+			throw new HippoException(e);		
+		}
+	}
+	public List getRootTopics(User forUser) throws HippoException {
+		try {
+
+			return topicService.getRootTopics(forUser);
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);

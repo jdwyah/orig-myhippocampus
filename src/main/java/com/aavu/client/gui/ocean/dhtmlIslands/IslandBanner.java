@@ -1,5 +1,6 @@
 package com.aavu.client.gui.ocean.dhtmlIslands;
 
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -49,7 +50,7 @@ public class IslandBanner extends AbsolutePanel {
 		this.size = size;
 				
 		double font_size = getFontFor(size);
-		System.out.println("FONT "+getFontFor(size)+" "+size);
+		Logger.debug("IslandBanner.FONT "+getFontFor(size)+" "+size);
 		shdw = new Label(text,true);
 		DOM.setStyleAttribute(shdw.getElement(), "fontSize", font_size+"em");
 		shdw.addStyleName("Shadow");
@@ -74,7 +75,7 @@ public class IslandBanner extends AbsolutePanel {
 			}	
 		});
 				
-		System.out.println("reg "+reg.getOffsetWidth()+" "+reg.getOffsetHeight());
+		Logger.debug("IslandBanner.reg "+reg.getOffsetWidth()+" "+reg.getOffsetHeight());
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
 		
 	}

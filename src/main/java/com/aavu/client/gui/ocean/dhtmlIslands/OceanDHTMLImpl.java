@@ -20,7 +20,7 @@ import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.ocean.Ocean;
+import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListener {
+public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay,  DragEventListener {
 
 	private static final int CLOUD_MOVE_MSEC = 7000;
 
@@ -383,17 +383,7 @@ public class OceanDHTMLImpl extends ViewPanel implements Ocean,  DragEventListen
 	public void dragged(Widget dragging, int newX, int newY) {}
 	
 
-	/**
-	 * Make sure that we're zoomed to 'scale' or higher
-	 * 
-	 * return the value that we settle on
-	 */
-	public double ensureZoomOfAtLeast(double scale) {
-		if(scale > currentScale){
-			zoomTo(scale);
-		}
-		return currentScale;
-	}
+	
 	
 
 

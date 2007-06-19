@@ -66,7 +66,8 @@ public class Interactive implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		try{
-			
+			//TODO not a bad idea
+			//GWT.setUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
 			
 			Dictionary theme = Dictionary.getDictionary("Vars");
 

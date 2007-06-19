@@ -85,7 +85,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testGetAllTags() throws HippoBusinessException {
 		add3();
 
-		List<TopicTypeConnector> list = selectDAO.getRootTopics(u);
+		List<TopicTypeConnector> list = selectDAO.getRootTopics(u,u);
 
 		assertEquals(3, list.size());
 		
@@ -108,7 +108,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t1.tagTopic(tags[0]);		
 		editDAO.save(t1);		
 		
-		List<TopicTypeConnector> list = selectDAO.getRootTopics(u);
+		List<TopicTypeConnector> list = selectDAO.getRootTopics(u,u);
 		assertEquals(4, list.size());
 		
 		Topic savedTag = selectDAO.getForName(u, A);
@@ -131,7 +131,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		t5.tagTopic(savedTag);		
 		editDAO.save(t5);
 		
-		list = selectDAO.getRootTopics(u);
+		list = selectDAO.getRootTopics(u,u);
 		
 		List<DatedTopicIdentifier> all = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(8, all.size());
@@ -178,7 +178,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.delete(t);
 
-		List<TopicTypeConnector> list = selectDAO.getRootTopics(u);		
+		List<TopicTypeConnector> list = selectDAO.getRootTopics(u,u);		
 		
 		for (TopicTypeConnector conn : list) {
 			if(conn.getType().getTitle().equals(A)){
@@ -217,7 +217,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		System.out.println("after: "+t2.getId()+" "+t2);
 
-		List<TopicTypeConnector> tagL = selectDAO.getRootTopics(u);
+		List<TopicTypeConnector> tagL = selectDAO.getRootTopics(u,u);
 
 		assertEquals(1, tagL.size());
 
@@ -240,7 +240,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(saved);
 
-		tagL = selectDAO.getRootTopics(u);
+		tagL = selectDAO.getRootTopics(u,u);
 
 		assertEquals(1, tagL.size());
 		

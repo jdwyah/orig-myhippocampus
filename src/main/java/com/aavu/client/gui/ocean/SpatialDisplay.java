@@ -5,7 +5,7 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public interface Ocean {
+public interface SpatialDisplay {
 
 	/**
 	 * Will init after async "getTagStats()" call

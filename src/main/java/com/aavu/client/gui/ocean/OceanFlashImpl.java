@@ -10,7 +10,7 @@ import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
 
-public class OceanFlashImpl extends FlashContainer implements Ocean {
+public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 
 	private Manager manager;
 

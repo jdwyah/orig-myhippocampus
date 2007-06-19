@@ -18,6 +18,7 @@ import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.StatusPanel;
 import com.aavu.client.gui.Zoomer;
 import com.aavu.client.gui.ext.MultiDivPanel;
+import com.aavu.client.gui.hierarchy.HierarchyDisplay;
 import com.aavu.client.gui.ocean.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
@@ -32,7 +33,7 @@ public class MainMap extends HippoDesktopPane {
 	private MindscapeManager manager;
 	//private TagSearch tagSearch;
 		
-	private Ocean ocean;
+	private SpatialDisplay spatialDisplay;
 	private StatusPanel statusPanel;
 	private SearchBox searchBox;
 	private GadgetDisplayer gadgetDisplayer;
@@ -67,8 +68,9 @@ public class MainMap extends HippoDesktopPane {
 		//tagSearch = new TagSearch(manager);
 		
 		
-		//ocean = new OceanFlashImpl(manager);
-		ocean = new OceanDHTMLImpl(manager);
+		//spatialDisplay = new OceanFlashImpl(manager);
+		//spatialDisplay = new OceanDHTMLImpl(manager);
+		spatialDisplay = new HierarchyDisplay(manager);
 		
 
 		
@@ -85,7 +87,7 @@ public class MainMap extends HippoDesktopPane {
 		
 		searchBox = new SearchBox(manager);
 		mainP.add(searchBox);
-		mainP.add(ocean.getWidget());//,0,0);
+		mainP.add(spatialDisplay.getWidget());//,0,0);
 		
 		//mainP.add(sideBar);
 		dashboard = new Dashboard(manager);
@@ -123,15 +125,15 @@ public class MainMap extends HippoDesktopPane {
 	public void load(LoadFinishedListener loadFinished){
 		//sideBar.load();
 		dashboard.load();
-		ocean.load(loadFinished);		
+		spatialDisplay.load(loadFinished);		
 	}
 
 	public void growIsland(Topic tag) {
-		ocean.growIsland(tag);
+		spatialDisplay.growIsland(tag);
 	}
 
 	public void removeIsland(long id) {
-		ocean.removeIsland(id);	
+		spatialDisplay.removeIsland(id);	
 	}
 	public void refreshIslands(){
 		//TODO
@@ -144,7 +146,7 @@ public class MainMap extends HippoDesktopPane {
 		
 		
 		System.out.println("MainMap.ocean.update "+command);
-		ocean.update( t,command);
+		spatialDisplay.update( t,command);
 		
 		/*
 		 * affectedTag() is true if 
@@ -155,7 +157,7 @@ public class MainMap extends HippoDesktopPane {
 						
 			Topic top = (Topic) iter.next();
 			
-			ocean.update(top, command);
+			spatialDisplay.update(top, command);
 			
 		}
 		
@@ -187,7 +189,7 @@ public class MainMap extends HippoDesktopPane {
 	}
 	
 	public boolean centerOn(Topic topic){
-		return ocean.centerOn(topic);		
+		return spatialDisplay.centerOn(topic);		
 	}
 
 	public void unselect() {
@@ -196,22 +198,22 @@ public class MainMap extends HippoDesktopPane {
 	}
 
 	public void zoomTo(double scale) {		
-		ocean.zoomTo(scale);
+		spatialDisplay.zoomTo(scale);
 		zoomer.setToScale(scale);
 	}
 
 	public void ensureZoomOfAtLeast(double scale) {
-		zoomer.setToScale(ocean.ensureZoomOfAtLeast(scale));
+		zoomer.setToScale(spatialDisplay.ensureZoomOfAtLeast(scale));
 	}
 	
 	
 
 	public void zoomIn() {
-		ocean.zoomIn();
+		spatialDisplay.zoomIn();
 	}
 
 	public void zoomOut() {
-		ocean.zoomOut();
+		spatialDisplay.zoomOut();
 	}
 
 	//@Override
@@ -245,7 +247,7 @@ public class MainMap extends HippoDesktopPane {
 	 * Not sure what the problem is here (something about MultiDivPanel?) but super.getOffsetHeight()
 	 * is totally off. It returns something like 0-180px when it should be 500px.
 	 * 
-	 * This manifested itself as a problem when TopBar does some logic  in setMovingGuard() 
+	 * This manifested itself as a GWM problem when TopBar does some logic  in setMovingGuard() 
 	 * to ensure that it hasn't 
 	 * been dragged off the screen. It would freak out a bit and we'd be limitted to where 
 	 * we could move the window.

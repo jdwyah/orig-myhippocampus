@@ -1,6 +1,6 @@
 package com.aavu.client.gui.ocean.dhtmlIslands;
 
-import com.aavu.client.gui.ocean.Ocean;
+import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -15,13 +15,13 @@ public class OceanKeyBoardListener implements KeyboardListener {
 	private Timer movementTimer;
 	private boolean tracking = false;
 
-	private Ocean ocean;
+	private SpatialDisplay ocean;
 
 	private Timer cancelTimer;
 	
 	
 
-	public OceanKeyBoardListener(Ocean _ocean) {
+	public OceanKeyBoardListener(SpatialDisplay _ocean) {
 		this.ocean = _ocean;
 		movementTimer = new Timer(){
 			public void run() {
