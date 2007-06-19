@@ -1,7 +1,7 @@
 package com.aavu.client.gui.timeline.draggable;
 
-import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.aavu.client.gui.ext.JSUtil;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 

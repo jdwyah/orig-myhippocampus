@@ -1,6 +1,6 @@
-package com.aavu.client.gui.dhtmlIslands;
+package com.aavu.client.gui.ocean.dhtmlIslands;
 
-import com.aavu.client.gui.Ocean;
+import com.aavu.client.gui.ocean.Ocean;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.KeyboardListener;

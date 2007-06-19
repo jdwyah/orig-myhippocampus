@@ -1,4 +1,4 @@
-package com.aavu.client.gui.dhtmlIslands;
+package com.aavu.client.gui.ocean.dhtmlIslands;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;

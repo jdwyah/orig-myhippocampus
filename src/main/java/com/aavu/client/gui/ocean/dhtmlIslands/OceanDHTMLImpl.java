@@ -1,4 +1,4 @@
-package com.aavu.client.gui.dhtmlIslands;
+package com.aavu.client.gui.ocean.dhtmlIslands;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,11 +16,11 @@ import com.aavu.client.domain.commands.SaveLatLongCommand;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.LoadFinishedListener;
-import com.aavu.client.gui.Ocean;
 import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.ocean.Ocean;
 import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;

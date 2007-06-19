@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.aavu.client.gui.dhtmlIslands.EventBackdrop;
-import com.aavu.client.gui.dhtmlIslands.Island;
-import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.EventBackdrop;
+import com.aavu.client.gui.ocean.dhtmlIslands.Island;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;

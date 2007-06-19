@@ -1,4 +1,4 @@
-package com.aavu.client.gui;
+package com.aavu.client.gui.ocean;
 
 import java.util.Iterator;
 
@@ -6,8 +6,19 @@ import org.gwm.client.GFrame;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.gui.dhtmlIslands.OceanDHTMLImpl;
+import com.aavu.client.gui.CenterTopicDisplayer;
+import com.aavu.client.gui.Dashboard;
+import com.aavu.client.gui.GadgetDisplayer;
+import com.aavu.client.gui.GadgetDisplayerBarImpl;
+import com.aavu.client.gui.HippoDesktopPane;
+import com.aavu.client.gui.LoadFinishedListener;
+import com.aavu.client.gui.LocationSettingWidget;
+import com.aavu.client.gui.SearchBox;
+import com.aavu.client.gui.StatusCode;
+import com.aavu.client.gui.StatusPanel;
+import com.aavu.client.gui.Zoomer;
 import com.aavu.client.gui.ext.MultiDivPanel;
+import com.aavu.client.gui.ocean.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;

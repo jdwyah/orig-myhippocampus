@@ -1,6 +1,6 @@
 package com.aavu.client.gui.ext;
 
-import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;

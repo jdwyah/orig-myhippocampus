@@ -1,4 +1,4 @@
-package com.aavu.client.gui.dhtmlIslands;
+package com.aavu.client.gui.ocean.dhtmlIslands;
 
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.ext.DraggableLabel;

@@ -1,4 +1,4 @@
-package com.aavu.client.gui;
+package com.aavu.client.gui.ocean;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
@@ -6,6 +6,7 @@ import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
 

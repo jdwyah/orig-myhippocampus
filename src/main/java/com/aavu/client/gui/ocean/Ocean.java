@@ -1,7 +1,8 @@
-package com.aavu.client.gui;
+package com.aavu.client.gui.ocean;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.gui.LoadFinishedListener;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface Ocean {

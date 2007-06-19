@@ -8,7 +8,7 @@ import org.gwm.client.event.GFrameEvent;
 
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ViewPanel;
-import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.service.Manager;

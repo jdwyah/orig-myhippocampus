@@ -1,4 +1,4 @@
-package com.aavu.client.gui.dhtmlIslands;
+package com.aavu.client.gui.ocean.dhtmlIslands;
 
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;

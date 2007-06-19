@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.dhtmlIslands.DragEventListener;
-import com.aavu.client.gui.dhtmlIslands.DragHandler;
-import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.DragEventListener;
+import com.aavu.client.gui.ocean.dhtmlIslands.DragHandler;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
 import com.aavu.client.service.Manager;

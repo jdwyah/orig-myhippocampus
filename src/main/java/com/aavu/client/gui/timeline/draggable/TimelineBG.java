@@ -2,7 +2,7 @@ package com.aavu.client.gui.timeline.draggable;
 
 import java.util.Date;
 
-import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.MouseListener;

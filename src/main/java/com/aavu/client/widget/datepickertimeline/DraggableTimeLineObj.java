@@ -1,9 +1,9 @@
 package com.aavu.client.widget.datepickertimeline;
 
 import com.aavu.client.domain.dto.TimeLineObj;
-import com.aavu.client.gui.dhtmlIslands.RemembersPosition;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.TooltipListener;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.i18n.client.DateTimeFormat;

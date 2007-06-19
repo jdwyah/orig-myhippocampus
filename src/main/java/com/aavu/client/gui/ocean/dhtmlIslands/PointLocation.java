@@ -1,4 +1,4 @@
-package com.aavu.client.gui.dhtmlIslands;
+package com.aavu.client.gui.ocean.dhtmlIslands;
 
 public class PointLocation {
 
