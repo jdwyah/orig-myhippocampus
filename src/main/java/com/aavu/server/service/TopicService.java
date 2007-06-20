@@ -5,6 +5,7 @@ import java.util.List;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
@@ -87,7 +88,7 @@ public interface TopicService {
 
 	Topic getPublicTopic(String userString, String topicString) throws HippoBusinessException;
 	
-	List<FullTopicIdentifier> getRootTopics(User forUser);
+	Root getRootTopic(User forUser);
 	List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id);
 	
 	List<TimeLineObj> getTimeline();

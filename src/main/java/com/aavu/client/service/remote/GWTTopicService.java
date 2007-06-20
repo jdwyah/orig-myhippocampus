@@ -3,10 +3,10 @@ package com.aavu.client.service.remote;
 import java.util.List;
 
 import com.aavu.client.domain.MindTreeOcc;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
@@ -82,9 +82,9 @@ public interface GWTTopicService extends RemoteService {
 	List getTopicIdsWithTag(long id) throws HippoException;
 	
 	/**
-     * @gwt.typeArgs <com.aavu.client.domain.dto.FullTopicIdentifier>
+     * 
      */
-	List getRootTopics(User forUser) throws HippoException;
+	Root getRootTopic(User forUser) throws HippoException;
 	
 	//List<TopicIdentifier>
 	//List<List<FullTopicIdentifier>>

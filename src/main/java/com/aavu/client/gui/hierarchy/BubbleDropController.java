@@ -19,8 +19,7 @@ public class BubbleDropController extends SimpleDropController {
 
 	  public DragEndEvent onDrop(Widget reference, Widget draggable, DragController dragController) {
 	    DragEndEvent event = super.onDrop(reference, draggable, dragController);
-	    draggable.removeStyleName(STYLE_ENGAGE);
-	    
+	  
 	    System.out.println("Bubble Drop Controller onDrop");
 	    
 	    //getDropTarget().
@@ -29,7 +28,7 @@ public class BubbleDropController extends SimpleDropController {
 	    
 	    //bin.eatWidget(draggable);
 	    
-	    
+	    bubble.receivedDrop(draggable);
 	    
 	    //currentDragController = null;
 	    return makeDragEndEvent(reference, draggable, dragController);
@@ -39,12 +38,12 @@ public class BubbleDropController extends SimpleDropController {
 
 	  public void onEnter(Widget reference, Widget draggable, DragController dragController) {
 	    super.onEnter(reference, draggable, dragController);
-	    draggable.addStyleName(STYLE_ENGAGE);
+	  
 	  }
 
 	  public void onLeave(Widget draggable, DragController dragController) {
 	    super.onLeave(draggable, dragController);
-	    draggable.removeStyleName(STYLE_ENGAGE);
+
 	  }
 
 	  public void onPreviewDrop(Widget reference, Widget draggable, DragController dragController) throws VetoDropException {

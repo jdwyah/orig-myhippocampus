@@ -75,6 +75,8 @@ a:visited {
 	width: 200px;
 }
 
+
+
 .H-Gadget {
 	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
@@ -1087,7 +1089,7 @@ TABLE.longRange TD {
 }
 
 .dragdrop-dropTarget.dragdrop-engage {
-	background-color: #E0E8FF;
+	background-color: #FCFFA0;
 }
 .dragdrop-movable-panel {
 	width: 55px;/*w/o this movable panel picks random width*/  

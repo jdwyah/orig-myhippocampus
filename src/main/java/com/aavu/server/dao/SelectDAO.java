@@ -35,14 +35,12 @@ public interface SelectDAO {
 	List<LocationDTO> getLocations(long tagID, User user);
 
 	
-	List<TopicTypeConnector> getRootTopics(User forUser, User currentUser);
-	
 	List<TopicIdentifier> getTagsStarting(User user,String match);
 
 	List<TagStat> getTagStats(User user);
 	
 	
-	Root getRoot(User user);
+	Root getRoot(User user, User currentUser);
 	
 	Topic get(long topicID);
 	
@@ -80,6 +78,7 @@ public interface SelectDAO {
 
 	
 	void tester();
+	List<TopicTypeConnector> getRootTopics(User forUser, User currentUser);
 
 	
 

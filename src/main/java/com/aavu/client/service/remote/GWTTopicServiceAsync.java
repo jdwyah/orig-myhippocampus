@@ -51,8 +51,8 @@ public interface GWTTopicServiceAsync {
 	//List<TopicIdentifier>
 	void getTopicsWithTags(List shoppingList, AsyncCallback callback);
 	
-	//List<FullTopicIdentifier>
-	void getRootTopics(User forUser, AsyncCallback callback);
+	//Root
+	void getRootTopic(User forUser, AsyncCallback callback);
 
 	//MindTree
 	void getTree(MindTreeOcc occ,AsyncCallback callback);

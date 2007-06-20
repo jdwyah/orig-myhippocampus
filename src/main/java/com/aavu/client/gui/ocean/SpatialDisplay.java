@@ -11,7 +11,7 @@ public interface SpatialDisplay {
 	 * Will init after async "getTagStats()" call
 	 *
 	 */
-	public void load(LoadFinishedListener loadFinished);
+	public void load(Topic topic, LoadFinishedListener loadFinished);
 
 	public void growIsland(Topic tag);
 	

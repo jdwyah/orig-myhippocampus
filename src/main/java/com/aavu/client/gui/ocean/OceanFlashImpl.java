@@ -24,7 +24,7 @@ public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 	/* (non-Javadoc)
 	 * @see com.aavu.client.gui.Ocean#load()
 	 */
-	public void load(LoadFinishedListener listener){
+	public void load(Topic topic,LoadFinishedListener listener){
 		System.out.println("Init Islands...");		
 				
 		manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){

@@ -1,20 +1,21 @@
 package com.aavu.client.gui.hierarchy;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
+import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicBubble extends FocusPanel implements RemembersPosition {
+public class TopicBubble extends FocusPanel implements RemembersPosition, ClickListener {
 	
 	private static final int MIN_HEIGHT = 15;
-
 
 	
 	private int left;
@@ -24,15 +25,26 @@ public class TopicBubble extends FocusPanel implements RemembersPosition {
 	
 	private int unscaledWidth;
 	private int unscaledHeight;
-	private double scale;
-	private ViewPanel display;
+
+	private HierarchyDisplay display;
 	private IslandBanner banner;
 
+
+
+	private FullTopicIdentifier fti;
+
+
+
+	private DropController dropController;
+
 	
-	public TopicBubble(FullTopicIdentifier fti,ViewPanel display) {
+	public TopicBubble(FullTopicIdentifier fti,HierarchyDisplay display) {
 		left = fti.getLatitudeOnIsland();
 		top = fti.getLongitudeOnIsland();
+		
 		this.display = display;
+		this.fti = fti;
+		
 		
 		unscaledWidth = 50;
 		unscaledHeight = 50; 
@@ -40,7 +52,7 @@ public class TopicBubble extends FocusPanel implements RemembersPosition {
 		mainPanel = new AbsolutePanel();
 		mainPanel.setPixelSize(unscaledWidth,unscaledHeight);
 		
-		image = new Image(ImageHolder.getImgLoc("hierarchy/")+"ball_aqua.png");		
+		image = new Image(ImageHolder.getImgLoc("hierarchy/")+"ball_white.png");		
 		image.setPixelSize(unscaledWidth, unscaledHeight);
 		
 		
@@ -50,6 +62,8 @@ public class TopicBubble extends FocusPanel implements RemembersPosition {
 		mainPanel.add(banner,0,0);
 		
 		setWidget(mainPanel);		
+		
+		addClickListener(this);
 		
 	}
 
@@ -67,19 +81,16 @@ public class TopicBubble extends FocusPanel implements RemembersPosition {
 
 	public void zoomToScale(double currentScale) {
 		
-		scale = currentScale;
-		
-		Widget minimumWidget = banner.setToZoom(currentScale);
-		
 		
 					
 		image.setPixelSize((int)(unscaledWidth * currentScale),(int)( unscaledHeight * currentScale));
 		
 		
+		Widget minimumWidget = banner.setToZoom(currentScale);
 		
 		int correctedWidth = (minimumWidget.getOffsetWidth() > (int)(unscaledWidth * currentScale)) ? minimumWidget.getOffsetWidth() : (int)(unscaledWidth * currentScale);
 		
-		int correctedHeight = ((int)( unscaledHeight * currentScale) < MIN_HEIGHT) ? MIN_HEIGHT : (int)( unscaledHeight * currentScale);
+		int correctedHeight = ((int)( unscaledHeight * currentScale) < minimumWidget.getOffsetHeight()) ? minimumWidget.getOffsetHeight() : (int)( unscaledHeight * currentScale);
 		
 		//System.out.println("w "+correctedWidth+" h "+correctedHeight);
 		
@@ -87,7 +98,7 @@ public class TopicBubble extends FocusPanel implements RemembersPosition {
 		
 	}
 
-	public boolean possibleMoveOccurred() {
+	public boolean possibleMoveOccurred(double currentScale) {
 		System.out.println("possible move occurred");
 		
 		int absLeft = getAbsoluteLeft();
@@ -99,10 +110,10 @@ public class TopicBubble extends FocusPanel implements RemembersPosition {
     			absTop != top + oceanTop){
     		int newLeft = absLeft - oceanLeft;
     		int newTop = absTop - oceanTop;
-    		System.out.println("\nMove DETECTED!!!!!!!!!!!! "+" Scale "+scale+" newLeft "+newLeft+" newTop "+newTop+" "+oceanLeft+" "+oceanTop);
+    		System.out.println("\nMove DETECTED!!!!!!!!!!!! "+" Scale "+currentScale+" newLeft "+newLeft+" newTop "+newTop+" "+oceanLeft+" "+oceanTop);
     		//ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
-    		left = (int) (newLeft / scale);
-    		top = (int) (newTop / scale);
+    		left = (int) (newLeft / currentScale);
+    		top = (int) (newTop / currentScale);
     		
     		  
     		//tagStat.setLongitude(left);
@@ -112,6 +123,39 @@ public class TopicBubble extends FocusPanel implements RemembersPosition {
     	}else{
     		return false;
     	}
+	}
+
+	public void receivedDrop(Widget draggable) {
+		TopicBubble received = (TopicBubble) draggable;
+		
+		display.processDrop(this,received);
+		
+		
+	}
+
+	public FullTopicIdentifier getFTI() {
+		return fti;
+	}
+
+	public void setDropController(DropController dropController) {
+		this.dropController = dropController;
+	}
+
+	public DropController getDropController() {
+		return dropController;
+	}
+
+	public void onClick(Widget sender) {
+		
+		display.navigateTo(getFTI());
+	}
+
+	/**
+	 * NOTE: just wrapping the FTI. Not a fully loaded topic.
+	 * @return
+	 */
+	public Topic getTopic() {
+		return new Topic(getFTI());
 	}
 
 }

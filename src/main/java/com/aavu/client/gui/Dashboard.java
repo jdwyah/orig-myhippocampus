@@ -86,7 +86,7 @@ public class Dashboard extends SimplePanel {
 		Image explorerButton = ConstHolder.images.bookAZ().createImage();
 		explorerButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				manager.showGlossary();
+				manager.explore();
 			}});
 		explorerButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.explorer_tooltip()));
 		

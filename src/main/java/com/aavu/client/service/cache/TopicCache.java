@@ -387,8 +387,8 @@ public class TopicCache {
 	}
 
 
-	public void getRootTopics(User user, AsyncCallback callback) {
-		topicService.getRootTopics(user,callback);
+	public void getRootTopic(User user, AsyncCallback callback) {
+		topicService.getRootTopic(user, callback);		
 	}
 
 //

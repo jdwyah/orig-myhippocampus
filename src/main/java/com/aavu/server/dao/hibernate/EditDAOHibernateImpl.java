@@ -240,7 +240,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 		return (Long) getHibernateTemplate().save(t);
 	}
 
-	public void saveTopicsLocation(long tagID, long topicID, int longitude, int latitude){
+	public void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude){
 
 		log.debug("-------------SAVE TOPICS LOCATION---------------");
 		log.debug("-------------tag "+tagID+" topic "+topicID+"---------------");	

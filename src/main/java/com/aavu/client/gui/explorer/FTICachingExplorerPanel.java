@@ -89,7 +89,7 @@ public abstract class FTICachingExplorerPanel extends Composite implements Explo
 							drawTags(tags);
 						}});
 		}else{
-			System.out.println("no shopping needed");
+			System.out.println("FTICaching.no shopping needed");
 			
 			System.out.println("draw(tags)");
 			drawTags(tags);

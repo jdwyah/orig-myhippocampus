@@ -6,28 +6,25 @@ import com.aavu.client.gui.gadgets.TagPropertyPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.edit.OnThisIslandBoard;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CenterTopicDisplayer extends Composite {
 	
 	private TagBoard tagBoard;
-	private OnThisIslandBoard onThisIslandBoard;	
-	private TagPropertyPanel tagProperties;
-	
+	private TitleGadget titleG;	
 		
 	private Topic topic;
 	private Manager manager;
-	private TitleGadget titleG;
+
 	
 	public CenterTopicDisplayer(final Manager manager){
 			
 		this.manager = manager;
 		
 		tagBoard = new TagBoard(manager);		
-		onThisIslandBoard  = new OnThisIslandBoard(manager);
-		tagProperties = new TagPropertyPanel(manager);
 		
-		VerticalPanel mainPanel = new VerticalPanel();
+		HorizontalPanel mainPanel = new HorizontalPanel();
 		
 		
 		
@@ -38,8 +35,6 @@ public class CenterTopicDisplayer extends Composite {
 		
 				
 		mainPanel.add(tagBoard);
-		mainPanel.add(onThisIslandBoard);
-		mainPanel.add(tagProperties);
 		
 		initWidget(mainPanel);
 		
@@ -59,8 +54,6 @@ public class CenterTopicDisplayer extends Composite {
 		titleG.load(topic);
 				
 		tagBoard.load(topic);
-		onThisIslandBoard.load(topic);
-		tagProperties.load(topic);
 		
 	}
 

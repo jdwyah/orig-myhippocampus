@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.ViewMemberWindow;
 import com.aavu.client.gui.blog.BlogView;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ext.tabbars.Orientation;
@@ -51,12 +53,18 @@ public class Explorer extends Composite implements ButtonGroup {
 
 
 	public Explorer(Manager manager, int width, int height, PopupWindow window) {
-		this(new HashMap(),manager,width,height,window);
+		this(new HashMap(),null,manager,width,height,window);
+	}
+
+	public Explorer(TopicIdentifier myTag, Manager manager, int width, int height, PopupWindow window) {
+		this(new HashMap(),myTag,manager,width,height,window);
 	}
 
 	
 	/**
 	 * NOTE: you can't put a timeline in a TabPanel. Weird JS problem from the timeline.js
+	 * 
+	 * CTOR for when you've already got results for the tag
 	 * 
 	 * @param myTag
 	 * @param topics
@@ -65,7 +73,7 @@ public class Explorer extends Composite implements ButtonGroup {
 	 * @param width 
 	 * @param frame
 	 */
-	public Explorer(Map defaultMap, Manager manager, int width, int height, PopupWindow window) {
+	public Explorer(Map defaultMap, TopicIdentifier myTag, Manager manager, int width, int height, PopupWindow window) {
 		
 		this.manager = manager;
 		//this.tagToIdentifierMap = defaultMap;
@@ -106,7 +114,12 @@ public class Explorer extends Composite implements ButtonGroup {
 		//carfeull, tags = defaultMap.keySet() makes tags a HashMap.KeySet obj and .add() is unsopported
 		tags.addAll(defaultMap.keySet());
 		
-		if(defaultMap.isEmpty()){
+		
+		//should be duplicate safe 
+		tags.add(myTag);
+		
+		
+		if(tags.isEmpty()){
 			allmode = true;
 		}
 		
@@ -127,6 +140,8 @@ public class Explorer extends Composite implements ButtonGroup {
 		recentB.onClick(azB);
 	}
 
+
+	
 
 	public void loadAll() {
 		allmode = true;

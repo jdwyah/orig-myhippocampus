@@ -13,6 +13,7 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -217,8 +218,8 @@ public class TopicServiceImpl implements TopicService {
 	public List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id){
 		return connectorsToTIs(selectDAO.getTopicIdsWithTag(id));
 	}
-	public List<FullTopicIdentifier> getRootTopics(User forUser){
-		return connectorsToTIs(selectDAO.getRootTopics(forUser,userService.getCurrentUser()));
+	public Root getRootTopic(User forUser){
+		return selectDAO.getRoot(forUser, userService.getCurrentUser());		
 	}
 	
 	public MetaSeeAlso getSeeAlsoMetaSingleton() throws HippoBusinessException{		

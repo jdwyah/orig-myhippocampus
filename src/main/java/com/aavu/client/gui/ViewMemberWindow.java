@@ -7,6 +7,7 @@ import java.util.Map;
 import org.gwm.client.GInternalFrame;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.explorer.Explorer;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
@@ -29,18 +30,20 @@ public class ViewMemberWindow extends PopupWindow {
 	public ViewMemberWindow(Manager manager, GInternalFrame frame) {
 		this(ConstHolder.myConstants.explorer_tooltip(),null, null, manager, frame);
 	}
-	public ViewMemberWindow(Topic myTag, List topics, Manager manager, GInternalFrame frame) {
-		this(myTag.getTitle(),myTag, topics, manager, frame);
+	public ViewMemberWindow(TopicIdentifier myTag, List topics, Manager manager, GInternalFrame frame) {
+		this(myTag.getTopicTitle(),myTag, topics, manager, frame);
 	}
-	public ViewMemberWindow(String windowTitle,Topic myTag, List topics, Manager manager, GInternalFrame frame) {
+	public ViewMemberWindow(String windowTitle,TopicIdentifier myTag, List topics, Manager manager, GInternalFrame frame) {
 		super(frame,windowTitle,WIDTH,HEIGHT);		
 		
 		
 		Explorer explorer;
-		if(myTag != null){
+		if(myTag != null && topics != null){
 			Map defMap = new HashMap();						
-			defMap.put(myTag.getIdentifier(), topics);
-			explorer = new Explorer(defMap,manager,WIDTH,HEIGHT,this);
+			defMap.put(myTag, topics);
+			explorer = new Explorer(defMap,myTag,manager,WIDTH,HEIGHT,this);
+		}else if(myTag != null){				
+			explorer = new Explorer(myTag,manager,WIDTH,HEIGHT,this);			
 		}else{
 			explorer = new Explorer(manager,WIDTH,HEIGHT,this);
 		}

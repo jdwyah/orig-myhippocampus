@@ -7,6 +7,7 @@ import java.util.List;
 import com.aavu.client.gui.ocean.dhtmlIslands.EventBackdrop;
 import com.aavu.client.gui.ocean.dhtmlIslands.Island;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -468,6 +469,12 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener, 
 
 		finishZoom(oldScale);
 
+	}
+
+
+	public boolean removeObj(Widget w) {
+		System.out.println("ViewPanel.remove "+GWT.getTypeName(w));
+		return objects.remove(w);
 	}
 
 }

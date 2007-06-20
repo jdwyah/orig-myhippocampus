@@ -17,5 +17,9 @@ public class BrowserManager extends AbstractManager {
 		// TODO Auto-generated method stub
 		
 	}
+	public void explore() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

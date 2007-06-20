@@ -12,7 +12,6 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.commands.SaveLatLongCommand;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.LoadFinishedListener;
@@ -473,15 +472,15 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay,  DragEv
 				t.setLatitude(latitude);
 				t.setLongitude(longitude);
 				
-				manager.getTopicCache().executeCommand(t,new SaveLatLongCommand(t,latitude,
-						longitude),
-						new StdAsyncCallback("SaveLatLong"){});								
+//				manager.getTopicCache().executeCommand(t,new SaveLatLongCommand(t,latitude,
+//						longitude),
+//						new StdAsyncCallback("SaveLatLong"){});								
 			}
 		});
 
 	}
 
-	public void load(LoadFinishedListener loadFinishedListener) {
+	public void load(Topic topic,LoadFinishedListener loadFinishedListener) {
 		this.loadFinishedListener = loadFinishedListener;
 		manager.getTagCache().getTagStats(new StdAsyncCallback("Get Tag Stats"){
 			public void onSuccess(Object result) {

@@ -155,7 +155,7 @@ public abstract class AbstractManager implements Manager {
 		// TODO Auto-generated method stub
 		
 	}
-	public void viewMembers(Topic myTag, List topics) {
+	public void explore(Topic myTag, List topics) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -63,7 +63,7 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 		
 		for (User user : users) {
 		
-			Root root = selectDAO.getRoot(user);
+			Root root = selectDAO.getRoot(user,user);
 			
 		
 			List<TopicTypeConnector> rootConn = selectDAO.getTopicIdsWithTag(root.getId(), user);
@@ -82,7 +82,7 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 		for (User user : users) {
 		
 			log.info("User: "+user);
-			Root root = selectDAO.getRoot(user);
+			Root root = selectDAO.getRoot(user,user);
 			
 			log.info("Root: "+root);
 			

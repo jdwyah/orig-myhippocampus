@@ -1409,9 +1409,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		topicsWithTopic = selectDAO.getTopicIdsWithTag(tag.getId(), u);
 		assertEquals(1, topicsWithTopic.size());
 		fti = topicsWithTopic.get(0);
-		assertEquals(23, fti.getLongitude());
-		assertEquals(47, fti.getLatitude());
-
+		assertEquals(23, fti.getLatitude());
+		assertEquals(47, fti.getLongitude());
 
 
 

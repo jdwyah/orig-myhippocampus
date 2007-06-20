@@ -63,7 +63,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			}
 		});
 
-		CellPanel mainPanel = new VerticalPanel();
+		CellPanel mainPanel = new HorizontalPanel();
 		
 		header = new HeaderLabel(ConstHolder.myConstants.tags());
 		mainPanel.add(header);

@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import org.gwm.client.GFrame;
 
+import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.gui.CenterTopicDisplayer;
@@ -122,10 +124,12 @@ public class MainMap extends HippoDesktopPane {
 	 * @param loadFinished 
 	 *
 	 */
-	public void load(LoadFinishedListener loadFinished){
+	public void load(final LoadFinishedListener loadFinished){
 		//sideBar.load();
+			
 		dashboard.load();
-		spatialDisplay.load(loadFinished);		
+			
+				
 	}
 
 	public void growIsland(Topic tag) {
@@ -180,6 +184,7 @@ public class MainMap extends HippoDesktopPane {
 	
 	public void displayTopic(Topic topic) {
 		
+		spatialDisplay.load(topic, null);
 		centerDisplayer.load(topic);
 		manager.getGadgetManager().load(topic);		
 				

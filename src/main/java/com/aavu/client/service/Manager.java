@@ -55,7 +55,7 @@ public interface Manager {
 
 	void newTopic();
 
-	void showGlossary();
+	void explore();
 
 	void showPreviews(long int0);
 
@@ -63,7 +63,7 @@ public interface Manager {
 
 	void userNeedsToUpgrade();
 
-	void viewMembers(Topic myTag, List topics);
+	void explore(Topic myTag, List topics);
 
 	
 }

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
@@ -590,32 +589,13 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		}
 
 	}
-
+	public List<TopicTypeConnector> getRootTopics(User forUser,User currentUser) {		
+		return getTopicIdsWithTag(getRoot(forUser,currentUser).getId(),forUser);
+	}
 	public void tester() {
 		// TODO Auto-generated method stub
 
 	}
-
-
-
-
-	public List<TopicTypeConnector> getRootTopics(User forUser,User currentUser) {
-	
-//		if(userRoot == null){
-//			userRoot = new Root(user);
-//			userRoot = save(userRoot);
-//		}
-		
-		
-//		DetachedCriteria crit  = SelectDAOHibernateImpl.loadEmAll(DetachedCriteria.forClass(Topic.class)
-//		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-//		.add(Expression.eq("user", user)));	
-//		return getHibernateTemplate().findByCriteria(crit);
-		
-		
-		return getTopicIdsWithTag(getRoot(forUser).getId(),forUser);
-	}
-
 
 	public List<TagStat> getTagStats(User user) {
 		
@@ -695,8 +675,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 
-
-	public Root getRoot(User user) {
+	public Root getRoot(User user, User currentUser){	
 		DetachedCriteria crit  = DetachedCriteria.forClass(Root.class)
 		.add(Expression.eq("user", user));			
 		Root userRoot = (Root) DataAccessUtils.requiredSingleResult(getHibernateTemplate().findByCriteria(crit));		

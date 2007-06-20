@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -321,10 +322,10 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e);		
 		}
 	}
-	public List getRootTopics(User forUser) throws HippoException {
+	public Root getRootTopic(User forUser) throws HippoException {
 		try {
 
-			return topicService.getRootTopics(forUser);
+			return topicService.getRootTopic(forUser);
 
 		} catch (Exception e) {
 			log.error("FAILURE: "+e);

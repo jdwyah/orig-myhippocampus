@@ -136,13 +136,14 @@ public class MyMindscape extends AbstractClientApp implements HistoryListener {
 		if(historyToken != EMPTY && manager != null){
 			manager.gotoTopic(historyToken);
 			
-			/* huh... seems to be fine in IE, but FF fires a reload and the request fails.
-			 * change to "-1"
-			 * 
-			 * also if we open topic 193. then close the window. then open 193, it will think we've
-			 * already opened it. 		
-			 */
-			History.newItem(EMPTY);
+			//was giving us an endless loop..
+//			/* huh... seems to be fine in IE, but FF fires a reload and the request fails.
+//			 * change to "-1"
+//			 * 
+//			 * also if we open topic 193. then close the window. then open 193, it will think we've
+//			 * already opened it. 		
+//			 */
+//			History.newItem(EMPTY);
 		}
 	  }
 
