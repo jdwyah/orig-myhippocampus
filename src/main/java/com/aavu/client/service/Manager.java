@@ -49,7 +49,6 @@ public interface Manager {
 
 	GInternalFrame newFrame();
 
-	void newIsland();
 
 	void newMeta(Meta meta, AsyncCallback callback);
 

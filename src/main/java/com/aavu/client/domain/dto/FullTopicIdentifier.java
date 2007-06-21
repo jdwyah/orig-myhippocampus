@@ -1,7 +1,6 @@
 package com.aavu.client.domain.dto;
 
-import java.util.Date;
-
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -27,6 +26,18 @@ public class FullTopicIdentifier extends DatedTopicIdentifier implements IsSeria
 		super(conn.getTopic().getId(),conn.getTopic().getTitle(),conn.getTopic().getCreated(),conn.getTopic().getLastUpdated());
 		this.latitudeOnIsland = conn.getLatitude();
 		this.longitudeOnIsland = conn.getLongitude();
+	}
+
+	/**
+	 * NOTE: This will NOT give you real lat's & longs, since we don't specify what topic that would be relative to.
+	 * Use only for contructing new bubbles. 
+	 *  
+	 * @param topic
+	 */
+	public FullTopicIdentifier(Topic topic) {
+		super(topic.getId(),topic.getTitle(),topic.getCreated(),topic.getLastUpdated());
+		this.latitudeOnIsland = -1;
+		this.longitudeOnIsland = -1;
 	}
 
 	public int getLatitudeOnIsland() {

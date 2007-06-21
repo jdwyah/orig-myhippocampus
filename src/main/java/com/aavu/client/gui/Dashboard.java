@@ -49,15 +49,6 @@ public class Dashboard extends SimplePanel {
 			}});
 		addNewButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.topic_new()));
 		
-
-		Image addNewIslandButton = ConstHolder.images.newIsland().createImage();
-		 
-		addNewIslandButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
-				manager.newIsland();
-			}});
-		addNewIslandButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.island_new()));
-
 //		Button addDeliciousTags = new Button("Add Delicious Tags");
 //		addDeliciousTags.addClickListener(new ClickListener(){
 //			public void onClick(Widget sender) {
@@ -92,8 +83,7 @@ public class Dashboard extends SimplePanel {
 		
 		
 		
-		mainPanel.add(addNewButton);
-		mainPanel.add(addNewIslandButton);		
+		mainPanel.add(addNewButton);				
 		mainPanel.add(explorerButton);		
 		mainPanel.add(userW);
 		

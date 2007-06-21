@@ -190,7 +190,7 @@
         dateUpdated timestamp,
         dateCreated timestamp,
         MindTree bigint,
-        uri varchar(255),
+        uri varchar(2048),
         primary key (occurrence_id)
     ) type=InnoDB;
 

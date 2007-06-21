@@ -104,7 +104,7 @@ public class UploadWidget extends Composite {
 					manager.getTopicCache().executeCommand(topic,new SaveOccurrenceCommand(topics, fileObj),
 							new StdAsyncCallback(ConstHolder.myConstants.save()){});
 					
-					topic.getOccurences().add(fileObj);					
+					topic.addOccurence(fileObj);					
 					
 					board.addS3File(fileObj);
 				}

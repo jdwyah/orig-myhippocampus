@@ -487,7 +487,7 @@ public class NewConverter {
 		
 		topic.setTypes(tags(topic.getTypes()));
 		topic.setAssociations(assocSet(topic.getAssociations()));
-		topic.setOccurences(simpleSet(topic.getOccurences()));
+		//topic.setOccurences(simpleSet(topic.getOccurenceObjs()));
 		
 		return topic;
 	}	

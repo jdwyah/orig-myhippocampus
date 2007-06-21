@@ -124,41 +124,7 @@ public abstract class AbstractManager implements Manager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	public void newIsland() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void newMeta(Meta meta, AsyncCallback callback) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void newTopic() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void setHippoCache(HippoCache hippoCache) {
-		this.hippoCache = hippoCache;
-	}
-	public void showGlossary() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void showPreviews(long int0) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateStatus(int myNum, String string, StatusCode fail) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void userNeedsToUpgrade() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void explore(Topic myTag, List topics) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 	
 }

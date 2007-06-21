@@ -65,7 +65,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		.setFetchMode("types.type.associations.types", FetchMode.JOIN)
 		.setFetchMode("types.type.associations.members", FetchMode.JOIN)		
 		.setFetchMode("occurences", FetchMode.JOIN)
-		.setFetchMode("occurences.topics", FetchMode.JOIN)
+		//.setFetchMode("occurences.topics", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN)
 		.setFetchMode("associations.members", FetchMode.JOIN)	
 		.setFetchMode("associations.types", FetchMode.JOIN);
@@ -441,13 +441,13 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 	/**
-	 * NOTE: no user check. is that ok?
+	 * TODO NOTE: no user check. is that ok?
 	 */
 	public List<TopicIdentifier> getTopicForOccurrence(long id) {
 
 		List<Object[]> list = getHibernateTemplate().find(""+
 				"select title, id from Topic top "+		
-				"where ? in elements(top.occurences) "						
+				"where ? in elements(top.occurences.occurrence) "						
 				,id);
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());

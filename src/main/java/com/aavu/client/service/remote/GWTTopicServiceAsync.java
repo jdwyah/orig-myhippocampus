@@ -18,7 +18,7 @@ public interface GWTTopicServiceAsync {
 	void changeState(long topicID, boolean toIsland,AsyncCallback callback);
 
 	
-	void createNew(String title,Topic topicOrTagOrMeta, AsyncCallback callback);	
+	void createNew(String title,Topic topicOrTagOrMeta, Topic parent, AsyncCallback callback);	
 
 	void delete(Topic topic, AsyncCallback callback);
 	void deleteOccurrence(long id, AsyncCallback callback);

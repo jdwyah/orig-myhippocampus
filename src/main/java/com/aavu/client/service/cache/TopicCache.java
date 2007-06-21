@@ -9,6 +9,7 @@ import java.util.Map;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
@@ -87,7 +88,7 @@ public class TopicCache {
 			}
 			else{
 				System.out.println("Create New! ");
-				createNew(linkTo, false, originalCallback);
+				createNew(linkTo, new Root(),originalCallback);
 								
 			}
 		}
@@ -183,14 +184,14 @@ public class TopicCache {
 	 * @param isIsland
 	 * @param callback
 	 */
-	public void createNew(String title, boolean isIsland, AsyncCallback callback) {
+	public void createNew(String title, Topic parent, AsyncCallback callback) {
 				
-		createNew(title, new Topic(),callback);		
+		createNew(title, new Topic(),parent,callback);		
 	}
 
-	public void createNew(String title, Topic topicOrTagOrMeta, AsyncCallback callback) {
+	public void createNew(String title, Topic topicOrTagOrMeta, Topic parent, AsyncCallback callback) {
 				
-		topicService.createNew(title, topicOrTagOrMeta, callback);		
+		topicService.createNew(title, topicOrTagOrMeta, parent, callback);		
 	}	
 	
 	public void delete(Topic topic, StdAsyncCallback callback) {

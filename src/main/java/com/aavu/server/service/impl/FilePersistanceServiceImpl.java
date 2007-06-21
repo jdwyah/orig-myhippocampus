@@ -116,7 +116,7 @@ public class FilePersistanceServiceImpl implements FilePersistanceService {
 		String key = saveFile(file.getContentType(), topic.getId(), file.getContent(), file.getFilename(), user);
 
 		S3File fileObj = new S3File(user,file.getFilename(),key);
-		topic.getOccurences().add(fileObj);
+		topic.addOccurence(fileObj);
 
 		editDAO.save(topic);
 

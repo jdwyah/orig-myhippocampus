@@ -109,30 +109,22 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		History.newItem(""+topic.getId());
 		
 	}
-	public void createTopic(final String name,final boolean isIsland) {
+	public void createTopic(final String name,final Topic currentTopic) {
 
-		getTopicCache().createNew(name, isIsland, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
+		getTopicCache().createNew(name, currentTopic, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);				
 				TopicIdentifier res = (TopicIdentifier) result;				
 								
-				if(isIsland){
+				
 					Topic newIsland = new Topic();
 					newIsland.setId(res.getTopicID());
 					newIsland.setTitle(res.getTopicTitle());
 					map.growIsland(newIsland);
 					
-					map.displayTopic(newIsland);
 					
 					fireIslandCreated();
-				}else{
-					Topic newTopic = new Topic();
-					newTopic.setId(res.getTopicID());
-					newTopic.setTitle(res.getTopicTitle());
-					bringUpChart(newTopic);
-					
-					fireTopicCreated();
-				}				
+				
 			}			
 		});						
 	}
@@ -332,16 +324,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 	
 	
-	/*
-	 * window will call createIsland
-	 */
-	public void newIsland(){
-		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.island_new(), new EZCallback(){
-			public void onSuccess(Object result) {
-				createTopic((String) result, true);
-			}});			
-	}
-	
 	/**
 	 * pass the type of meta you'd like created and. 
 	 * 1) we'll put up the create window box.
@@ -364,7 +346,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		
 		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.topic_new(), new EZCallback(){
 			public void onSuccess(Object result) {
-				createTopic((String) result, false);
+				createTopic((String) result, currentTopic);
 			}});			
 	}
 	public void refreshAll(){		

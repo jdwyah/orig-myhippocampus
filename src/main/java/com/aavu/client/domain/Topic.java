@@ -277,7 +277,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	
 	public Set getEntries(){
 		Set rtn = new HashSet();
-		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
 			Occurrence occur = (Occurrence) iter.next();
 			if(occur instanceof Entry){
 				rtn.add((Entry) occur);
@@ -286,13 +286,27 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		return rtn;
 	}
 	
+	/**
+	 * wrap the getOccurrencesGetter for methods that don't want OccurrenceWithLocation objects.
+     * PEND move everyone away from this.
+	 * @return
+	 */
+	public Set getOccurenceObjs() {	
+		Set rtn = new HashSet();
+		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+			OccurrenceWithLocation twl = (OccurrenceWithLocation) iter.next();
+			rtn.add(twl.getOccurrence());
+		}
+		return rtn;
+    }
+	
 	public Entry getLatestEntry(){
 		
 		Set entries = getEntries();
 		
 		if(entries.isEmpty()){
 			Entry initialEntry = new Entry();
-			getOccurences().add(initialEntry);
+			addOccurence(initialEntry);
 			initialEntry.getTopics().add(this);
 			return initialEntry;
 		}else{
@@ -301,6 +315,17 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 	}
 
+//	public Set<Occurrence> getOccurences() {
+//
+//		Set rtn = new HashSet();
+//		for (Iterator iter = super.getOccurences().iterator(); iter.hasNext();) {
+//			OccurrenceWithLocation twl = (OccurrenceWithLocation) iter.next();
+//			rtn.add(twl.getOccurrence());
+//		}
+//		return rtn;
+//
+//    }
+	
 	/**
 	 * limitted to just 1 for now.
 	 * 
@@ -308,7 +333,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 */
 	public MindTreeOcc getMindTree() {
 		MindTreeOcc rtn = null;
-		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
 			Occurrence occur = (Occurrence) iter.next();
 			if(occur instanceof MindTreeOcc){
 				rtn = (MindTreeOcc) occur;
@@ -318,7 +343,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		if(rtn == null){
 			MindTreeOcc initialTree = new MindTreeOcc(this);
 						
-			//getOccurences().add(initialTree);
+			//addOccurrence(initialTree);
 			
 			return initialTree;
 		}
@@ -425,7 +450,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 //		}
 		try{			
 			occurencesStr.append(indent+"Occurrences:\n"+indent);
-			for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+			for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
 				Occurrence occurence = (Occurrence) iter.next();
 				
 				occurencesStr.append("Occurrence: "+occurence.getTitle()+" "+occurence.getId()+" "+occurence.getData()+"\n"+indent);							
@@ -782,7 +807,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	public Set getWebLinks() {
 		Set rtn = new HashSet();
-		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
 			Occurrence occ = (Occurrence) iter.next();			
 			if(occ instanceof WebLink){
 				rtn.add(occ);
@@ -792,7 +817,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 	public Set getFiles(){
 		Set rtn = new HashSet();
-		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
 			Occurrence occ = (Occurrence) iter.next();
 			if(occ instanceof S3File){
 				rtn.add(occ);				
@@ -888,6 +913,10 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 
 	public boolean hasMetas(Meta type) {		
 		return !getAllMetas(type).isEmpty();
+	}
+
+	public void addOccurence(Occurrence link) {
+		getOccurences().add(new OccurrenceWithLocation(link));
 	}
 	
 

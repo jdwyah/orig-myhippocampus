@@ -106,7 +106,7 @@ public abstract class AbstractCommand implements IsSerializable {
 	}
 
 	protected long getTopicID(int i) {
-		if(topicIDs.size() >= i){
+		if(topicIDs.size() > i){
 			return ((Long) topicIDs.get(i)).longValue();
 		}else{
 			return -1;

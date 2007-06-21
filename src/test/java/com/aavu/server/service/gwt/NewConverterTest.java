@@ -119,7 +119,7 @@ public class NewConverterTest extends TestCase {
 		assertEquals(1, t2_p.getTags().size());
 		
 		Topic t3_p = (Topic) t2_p.getTags().iterator().next();
-		assertEquals(HashSet.class,t3_p.getOccurences().getClass());
+		assertEquals(HashSet.class,t3_p.getOccurenceObjs().getClass());
 	}
 	
 	

@@ -51,7 +51,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 				Topic topic = (Topic) iter.next();
 				
 				//temp, make sure to set higher scoped 'existing'
-				Occurrence exhist = (Occurrence) SetUtils.getFromSetById(topic.getOccurences(), occurrence.getId());				
+				Occurrence exhist = (Occurrence) SetUtils.getFromSetById(topic.getOccurenceObjs(), occurrence.getId());				
 				
 				if(exhist != null){
 					
@@ -74,10 +74,10 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 				for (Iterator iter = newTopics.iterator(); iter.hasNext();) {
 					Topic topic = (Topic) iter.next();
 					if(existing != null){
-						topic.getOccurences().add(existing);
+						topic.addOccurence(existing);
 					}else{
 						System.out.println("SaveOccurrenceCommand WARN No existing occurrence");
-						topic.getOccurences().add(occurrence);
+						topic.addOccurence(occurrence);
 					}
 					occurrence.getTopics().add(topic);
 				}
@@ -88,8 +88,8 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 			for (Iterator iter = getRemoveItems().iterator(); iter.hasNext();) {
 				Topic inLink = (Topic) iter.next();
 				System.out.println("still has link"+inLink);
-				Occurrence exist2 = (Occurrence) SetUtils.getFromSetById(inLink.getOccurences(), occurrence.getId());
-				boolean r1 = inLink.getOccurences().remove(exist2);								
+				Occurrence exist2 = (Occurrence) SetUtils.getFromSetById(inLink.getOccurenceObjs(), occurrence.getId());
+				boolean r1 = inLink.getOccurenceObjs().remove(exist2);								
 				boolean r2 = occurrence.getTopics().remove(inLink);
 				if(!(r1 && r2)){
 					System.out.println("WARN SaveOccurrence Not Removing "+r1+" "+r2);
@@ -99,7 +99,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 		}else{			
 			for (Iterator iter = getAddTopics().iterator(); iter.hasNext();) {
 				Topic topic = (Topic) iter.next();
-				topic.getOccurences().add(occurrence);	
+				topic.addOccurence(occurrence);	
 				
 				occurrence.getTopics().add(topic);
 			}			
@@ -121,7 +121,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 //			
 //			if(null == getFromSetById(topic.getOccurences(), occurrence.getId())){
 //				System.out.println("Didn't contain "+occurrence+" ADD");		
-//				topic.getOccurences().add(occurrence);				
+//				topic.addOccurrence(occurrence);				
 //			}			
 //			else{
 //				System.out.println("Contained. do nothing");

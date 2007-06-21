@@ -34,11 +34,11 @@ public class SaveOccurrenceCommandTest extends CommandTestCase {
 		
 
 		Topic tt = comm.getTopic(0);
-		assertTrue(tt.getOccurences().contains(weblink));
+		assertTrue(tt.getOccurenceObjs().contains(weblink));
 		
 
 		Topic tt2 = comm.getTopic(1);
-		assertTrue(tt2.getOccurences().contains(weblink));
+		assertTrue(tt2.getOccurenceObjs().contains(weblink));
 		
 		assertTrue(comm.getOccurrence().getTopics().contains(tt));
 		assertTrue(comm.getOccurrence().getTopics().contains(tt2));
@@ -69,11 +69,11 @@ public class SaveOccurrenceCommandTest extends CommandTestCase {
 		
 
 		Topic tt = comm.getTopic(0);
-		assertTrue(tt.getOccurences().contains(weblink));
+		assertTrue(tt.getOccurenceObjs().contains(weblink));
 		
 
 		Topic tt2 = comm.getTopic(1);
-		assertTrue(tt2.getOccurences().contains(weblink));
+		assertTrue(tt2.getOccurenceObjs().contains(weblink));
 		
 		assertTrue(comm.getOccurrence().getTopics().contains(tt));
 		assertTrue(comm.getOccurrence().getTopics().contains(tt2));
@@ -98,7 +98,7 @@ public class SaveOccurrenceCommandTest extends CommandTestCase {
 		comm.executeCommand();
 		
 		Topic t = comm.getTopic(0);
-		assertTrue(t.getOccurences().contains(weblink));
+		assertTrue(t.getOccurenceObjs().contains(weblink));
 		
 		assertTrue(comm.getOccurrence().getTopics().contains(t));
 		
@@ -139,14 +139,14 @@ public class SaveOccurrenceCommandTest extends CommandTestCase {
 		
 
 		Topic tt = comm.getTopic(0);
-		assertTrue(tt.getOccurences().contains(weblink));
+		assertTrue(tt.getOccurenceObjs().contains(weblink));
 		
 
 		Topic tt2 = comm.getTopic(1);
-		assertTrue(tt2.getOccurences().contains(weblink));
+		assertTrue(tt2.getOccurenceObjs().contains(weblink));
 		
 		Topic tt3 = comm.getTopic(2);
-		assertFalse(tt3.getOccurences().contains(weblink));
+		assertFalse(tt3.getOccurenceObjs().contains(weblink));
 		
 		assertTrue(comm.getOccurrence().getTopics().contains(t1));
 		assertTrue(comm.getOccurrence().getTopics().contains(t2));

@@ -69,7 +69,7 @@ public class TopicServiceImpl implements TopicService {
 					t.setTitle(clipped);				
 					t.setUser(userService.getCurrentUser());							
 				}			
-				t.getOccurences().add(link);
+				t.addOccurence(link);
 				Topic st = save(t);
 			}
 
@@ -88,7 +88,13 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 
-	public Topic createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException {
+	/**
+	 * If parent is null, that's ok, we're saving a Meta or something. 
+	 * Pass new Root(), to do a lookup and get the actual root element. 
+	 * Pass parent to get tagged.
+	 * 
+	 */
+	public Topic createNew(String title, Topic topicOrTagOrMeta, Topic parent) throws HippoBusinessException {
 
 		if(userIsOverSubscriptionLimit()){
 			log.info("User over Subscription Limit "+userService.getCurrentUser().getUsername());
@@ -99,6 +105,15 @@ public class TopicServiceImpl implements TopicService {
 
 		topicOrTagOrMeta = save(topicOrTagOrMeta);
 
+		if(parent != null){		
+			if(parent instanceof Root){
+				topicOrTagOrMeta.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService.getCurrentUser()));
+			}else{
+				topicOrTagOrMeta.tagTopic(parent);
+			}
+			topicOrTagOrMeta = save(topicOrTagOrMeta);
+		}
+		
 		log.info("create New: "+title+" "+topicOrTagOrMeta.getClass()+" "+userService.getCurrentUser().getUsername());
 
 		return topicOrTagOrMeta;
@@ -374,7 +389,7 @@ public class TopicServiceImpl implements TopicService {
 		//log.debug("save "+topic.toPrettyString());
 
 
-		Set<Occurrence> occs = topic.getOccurences();
+		Set<Occurrence> occs = topic.getOccurenceObjs();
 		for(Occurrence o : occs){
 			o.setUser(userService.getCurrentUser());
 		}
@@ -428,7 +443,7 @@ public class TopicServiceImpl implements TopicService {
 		
 		Topic cur = getForName(tagName);
 		if(cur == null){
-			cur = createNew(tagName, new Topic());
+			cur = createNew(tagName, new Topic(),new Root());
 		}
 		return cur;
 	}

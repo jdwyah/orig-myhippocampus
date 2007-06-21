@@ -61,7 +61,9 @@
 		<subclass name="URI" discriminator-value="uri">
 			<meta attribute="generated-class" inherit="false">AbstractURI</meta>
 		
-			<property name="uri" type="string" column="uri"/>
+			<property name="uri" type="string">
+				<column name="uri" sql-type="varchar(2048)"></column>
+			</property>
 			
 			<subclass name="WebLink" discriminator-value="link">
 				<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>

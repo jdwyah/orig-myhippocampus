@@ -28,6 +28,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, DragEventListener{
 
+	private static final int UNSET_LAT_START = 50;
+	private static final int UNSET_LAT_INCR = 110;
+
 	private DropController backdropDropController;
 
 	
@@ -41,6 +44,9 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 
 
 	private Manager manager;
+
+
+	private int unsetLatitude;
 	
 
 	public HierarchyDisplay(Manager manager){
@@ -62,14 +68,19 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 		setBackground(currentScale);
 	}
 	
+	/**
+	 * if their position is unset, space them out incrementally in latitude
+	 * @param fti
+	 */
 	private void add(FullTopicIdentifier fti){
 		
-		if(fti.getLatitudeOnIsland() == -1 || fti.getLatitudeOnIsland() == 0){
-			fti.setLatitudeOnIsland((int) (Math.random()*400.0));			
+		if(fti.getLatitudeOnIsland() == -1 || fti.getLatitudeOnIsland() == 0){			
+			System.out.println(fti.getTopicTitle()+"incr unsetLatitude "+unsetLatitude+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
+			fti.setLatitudeOnIsland(unsetLatitude);			
+			unsetLatitude += UNSET_LAT_INCR;
+			
 		}
-		if(fti.getLongitudeOnIsland() == -1 || fti.getLongitudeOnIsland() == 0){
-			fti.setLongitudeOnIsland((int) (Math.random()*400.0));			
-		}
+		
 
 //		fti.setLongitudeOnIsland((int) (Math.random()*400.0));
 		
@@ -86,7 +97,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 		
 		addObject(tb);	
 		
-		
+		tb.zoomToScale(currentScale);
 		
 		bubbles.put(new Long(fti.getTopicID()), tb);
 	}
@@ -101,6 +112,8 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 	//@Override
 	public void clear() {		
 		super.clear();
+		
+		unsetLatitude = UNSET_LAT_START;
 		
 		for (Iterator iter = bubbles.keySet().iterator(); iter.hasNext();) {
 			Long e = (Long) iter.next();
@@ -123,7 +136,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 						
 			System.out.println("HierarchyDisplay.Drag Finished Saving "+tb.getLeft()+" "+tb.getTop());
 			
-			manager.getTopicCache().saveTopicLocationA(currentRoot.getId(), tb.getFTI().getTopicID(), tb.getLeft(), tb.getTop(), 
+			manager.getTopicCache().saveTopicLocationA(currentRoot.getId(), tb.getFTI().getTopicID(), tb.getTop(), tb.getLeft(), 
 					new StdAsyncCallback("SaveLatLong"){});
 			
 				
@@ -152,8 +165,19 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 		return Window.getClientWidth();
 	}
 	
+	/**
+	 * create a dummy FullFTI
+	 */
 	public void growIsland(Topic tag) {
-		// TODO Auto-generated method stub
+		
+		TopicBubble bubble = (TopicBubble) bubbles.get(new Long(tag.getId()));
+		if(null != bubble){
+			bubble.grow();
+		}else{
+			FullTopicIdentifier fti = new FullTopicIdentifier(tag);		
+			add(fti);
+			redraw();
+		}
 		
 	}
 	

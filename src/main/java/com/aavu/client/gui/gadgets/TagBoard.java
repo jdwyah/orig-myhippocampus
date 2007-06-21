@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
@@ -109,6 +110,11 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 */
 	public int load(Topic topic){
 		
+		if(topic instanceof Root){
+			setVisible(false);
+		}else{
+			setVisible(true);
+		}
 				
 		header.setText(ConstHolder.myConstants.tags());
 		

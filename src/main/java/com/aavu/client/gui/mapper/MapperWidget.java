@@ -58,7 +58,7 @@ public class MapperWidget extends PopupWindow implements ChangeListener{
 						super.onSuccess(result);
 						MindTree res = (MindTree) result;
 						mindTreeOcc.setMindTree(res);
-						topic.getOccurences().add(mindTreeOcc);						
+						topic.addOccurence(mindTreeOcc);						
 					}					
 				});
 			}});	    

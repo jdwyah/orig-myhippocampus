@@ -18,6 +18,7 @@ import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.OccurrenceWithLocation;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.mapper.MindTree;
@@ -115,8 +116,10 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 
 
-				for (Occurrence occurence : (Set<Occurrence>)topic.getOccurences()) {
-
+				for (OccurrenceWithLocation owl : (Set<OccurrenceWithLocation>)topic.getOccurences()) {
+					
+					Occurrence occurence = owl.getOccurrence();
+					
 					//TODO delete S3Files 
 					//TODO delete Weblinks that were only referenced by us					
 
@@ -128,6 +131,8 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 					if(occurence instanceof MindTreeOcc){
 						sess.delete(occurence);
 					}
+					
+					
 				}
 				topic.getOccurences().clear();
 

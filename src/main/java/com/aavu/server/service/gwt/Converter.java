@@ -31,7 +31,7 @@ public class Converter {
 		log.debug("scanning with hibernate support ");
 		String str = serializeWithHibernateSupport(object);
 		
-//		log.debug("scanning REGULAR");
+		log.debug("serialized "+str);
 //		serialize(object);
 		
 		

@@ -36,7 +36,12 @@ public class BubbleDropController extends SimpleDropController {
 	    //return event;
 	  }
 
-	  public void onEnter(Widget reference, Widget draggable, DragController dragController) {
+	//@Override
+	public Widget getDropTarget() {
+		return bubble.getDropTarget();
+	}
+
+	public void onEnter(Widget reference, Widget draggable, DragController dragController) {
 	    super.onEnter(reference, draggable, dragController);
 	  
 	  }

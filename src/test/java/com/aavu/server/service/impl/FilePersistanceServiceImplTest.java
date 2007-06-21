@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.OccurrenceWithLocation;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoException;
@@ -86,9 +87,9 @@ public class FilePersistanceServiceImplTest extends BaseTestWithTransaction {
 			
 			t = selectDAO.getForName(userService.getCurrentUser(), TOPIC_TITLE);
 
-			assertEquals(1, t.getOccurences().size());
-
-			Occurrence o = (Occurrence) t.getOccurences().iterator().next();
+			assertEquals(1, t.getOccurenceObjs().size());
+			
+			Occurrence o = (Occurrence)t.getOccurenceObjs().iterator().next();
 			assertTrue(o instanceof S3File);
 			s3 = (S3File) o;
 

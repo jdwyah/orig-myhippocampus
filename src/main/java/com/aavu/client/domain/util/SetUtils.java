@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.OccurrenceWithLocation;
 import com.aavu.client.domain.Topic;
 
 public class SetUtils {
@@ -56,6 +57,14 @@ public class SetUtils {
 			if (o instanceof Occurrence) {
 				Occurrence occ = (Occurrence) o;
 				if(occ.getId() == id){
+					//System.out.println("REMOVE!! "+o.hashCode()+" "+occ.hashCode());
+					iter.remove();
+					foundOne = true;		
+				}
+			}
+			if (o instanceof OccurrenceWithLocation) {
+				OccurrenceWithLocation occ = (OccurrenceWithLocation) o;
+				if(occ.getOccurrence().getId() == id){
 					//System.out.println("REMOVE!! "+o.hashCode()+" "+occ.hashCode());
 					iter.remove();
 					foundOne = true;		

@@ -24,6 +24,7 @@ import com.aavu.client.gui.hierarchy.HierarchyDisplay;
 import com.aavu.client.gui.ocean.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
@@ -183,10 +184,15 @@ public class MainMap extends HippoDesktopPane {
 
 	
 	public void displayTopic(Topic topic) {
-		
+		if(topic == null){
+			Logger.error("MainMap.displayTopic null ");
+			manager.displayInfo("That Topic cannot be found");
+			return;
+		}
 		spatialDisplay.load(topic, null);
 		centerDisplayer.load(topic);
-		manager.getGadgetManager().load(topic);		
+		manager.getGadgetManager().load(topic);
+		
 				
 	}
 	public void clearForLoading() {

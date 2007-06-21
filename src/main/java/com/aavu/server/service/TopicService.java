@@ -35,7 +35,7 @@ public interface TopicService {
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
-	Topic createNew(String title, Topic topicOrTagOrMeta) throws HippoBusinessException;
+	Topic createNew(String title, Topic topicOrTagOrMeta, Topic parent) throws HippoBusinessException;
 
 	void delete(Topic topic) throws HippoBusinessException;
 

@@ -180,7 +180,7 @@ public class AddLinkContent extends Composite implements CompleteListener {
 						
 						
 						if(loader != null && myTopic != null){
-							myTopic.getOccurences().add(link);
+							myTopic.addOccurence(link);
 							System.out.println("WIDGET LOAD ");
 							loader.load(myTopic);
 						}				

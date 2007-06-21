@@ -39,8 +39,8 @@ public class TopicBubble extends FocusPanel implements RemembersPosition, ClickL
 
 	
 	public TopicBubble(FullTopicIdentifier fti,HierarchyDisplay display) {
-		left = fti.getLatitudeOnIsland();
-		top = fti.getLongitudeOnIsland();
+		left = fti.getLongitudeOnIsland();
+		top = fti.getLatitudeOnIsland();
 		
 		this.display = display;
 		this.fti = fti;
@@ -55,6 +55,7 @@ public class TopicBubble extends FocusPanel implements RemembersPosition, ClickL
 		image = new Image(ImageHolder.getImgLoc("hierarchy/")+"ball_white.png");		
 		image.setPixelSize(unscaledWidth, unscaledHeight);
 		
+		System.out.println("TopicBubble left "+left+" top "+top);
 		
 		banner = new IslandBanner(fti.getTopicTitle(),5);
 		
@@ -156,6 +157,15 @@ public class TopicBubble extends FocusPanel implements RemembersPosition, ClickL
 	 */
 	public Topic getTopic() {
 		return new Topic(getFTI());
+	}
+
+	public void grow() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Widget getDropTarget() {
+		return image;
 	}
 
 }

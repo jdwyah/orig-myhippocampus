@@ -561,8 +561,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		//System.out.println(savedClancy.toPrettyString());
 
 		List<Topic> allTopics = selectDAO.getAllTopics(u);
-		//should be six. PatGames, Book, Author, TomClancy. and the two associations
-		assertEquals(6,allTopics.size());
+
+		for (Topic topic2 : allTopics) {
+			System.out.println("topic "+topic2);
+		}
+		//should be seven. Root, PatGames, Book, Author, TomClancy. and the two associations
+		assertEquals(7,allTopics.size());
 
 		Topic recommender = new Topic(u,F);
 		recommender = editDAO.save(recommender);
@@ -576,8 +580,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (Topic topic : allTopics) {
 			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		////should be eight. 6 from before plus:  Recommender, Patriot->Recommender 
-		assertEquals(8,allTopics.size());
+		////should be nine. 7 from before plus:  Recommender, Patriot->Recommender 
+		assertEquals(9,allTopics.size());
 
 
 		Topic anotherBook = new Topic(u,G);
@@ -593,9 +597,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (Topic topic : allTopics) {
 			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		////should be just 9. 8 from before plus: Another 
+		////should be just 10. 9 from before plus: Another 
 		//
-		assertEquals(9,allTopics.size());
+		assertEquals(10,allTopics.size());
 
 
 		Topic anotherRecommender = new Topic(u,H);
@@ -609,8 +613,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (Topic topic : allTopics) {
 			System.out.println("topic "+topic+" "+topic.getId()+" "+topic.getClass());
 		}
-		////should be just 11. 9 from before plus: AnotherRecommender & AnotherRecomender's Association 
-		assertEquals(11,allTopics.size());
+		////should be just 12. 10 from before plus: AnotherRecommender & AnotherRecomender's Association 
+		assertEquals(12,allTopics.size());
 	}
 
 
@@ -1053,16 +1057,16 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			t.setUser(u);							
 		}			
 
-		assertEquals(0, t.getOccurences().size());
+		assertEquals(0, t.getOccurenceObjs().size());
 
-		t.getOccurences().add(link);
-		assertEquals(1, t.getOccurences().size());
+		t.addOccurence(link);
+		assertEquals(1, t.getOccurenceObjs().size());
 
 		System.out.println("-----t-----"+t.toPrettyString());
 		Topic st = editDAO.save(t);
 		System.out.println("-----st-----"+st.toPrettyString());
 
-		assertEquals(1, st.getOccurences().size());
+		assertEquals(1, st.getOccurenceObjs().size());
 
 	}
 
@@ -1092,9 +1096,9 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			t.setTitle(string);				
 			t.setUser(u);							
 		}			
-		assertEquals(0, t.getOccurences().size());
-		t.getOccurences().add(link);
-		assertEquals(1, t.getOccurences().size());
+		assertEquals(0, t.getOccurenceObjs().size());
+		t.addOccurence(link);
+		assertEquals(1, t.getOccurenceObjs().size());
 		Topic st = editDAO.save(t);
 
 		System.out.println("ling "+link.getId());
@@ -1122,7 +1126,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 ////	//save occ explicitly?
 ////	topicDAO.save(occ);		
 
-//	t.getOccurences().add(occ);
+//	t.addOccurrence(occ);
 
 //	Topic saved = topicDAO.save(t);
 
@@ -1525,7 +1529,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		System.out.println("SAVED 2: "+savedTopic2.getLatestEntry().getId());
 		System.out.println("SAVED 2: "+savedTopic2.getLatestEntry().getTopics());
 		System.out.println("SAVED 2: "+savedTopic2.getLatestEntry().getTopics().size());
-		System.out.println("saved "+savedTopic2.getOccurences().size());
+		System.out.println("saved "+savedTopic2.getOccurenceObjs().size());
 
 		editDAO.deleteOccurrence(savedTopic2.getLatestEntry());
 
