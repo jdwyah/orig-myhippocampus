@@ -111,5 +111,6 @@ public interface TopicService {
 	void saveTopicLocation(long tagId, long topicId, int lat, int lng);
 	MindTree saveTree(MindTree tree);
 	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,int lng);
 	
 }

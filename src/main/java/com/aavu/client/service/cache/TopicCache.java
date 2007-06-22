@@ -392,6 +392,11 @@ public class TopicCache {
 		topicService.getRootTopic(user, callback);		
 	}
 
+
+	public void saveOccLocationA(long topicID, long occurrenceID, int lat, int lng,AsyncCallback callback) {
+		topicService.saveOccurrenceLocation(topicID,occurrenceID,lat,lng,callback);
+	}
+
 //
 //	public void test(StdAsyncCallback stdAsyncCallback) {
 //		topicService.test(stdAsyncCallback);

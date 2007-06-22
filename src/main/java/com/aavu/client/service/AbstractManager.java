@@ -46,7 +46,7 @@ public abstract class AbstractManager implements Manager {
 	public abstract void bringUpChart(Topic topic);
 	
 	public void bringUpChart(TopicIdentifier ident) {
-		
+		System.out.println("bring up chart Ident "+ident);
 		//TODO
 		//map.clearForLoading();
 		

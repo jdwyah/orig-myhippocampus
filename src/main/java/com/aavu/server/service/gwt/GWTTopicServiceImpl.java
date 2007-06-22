@@ -26,6 +26,7 @@ import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.util.gwt.GWTSpringControllerReplacement;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implements GWTTopicService {
@@ -371,6 +372,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException {
 		topicService.saveTopicLocation(tagId,topicId,lat,lng);		
 	}
+	public void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng) throws HippoException {
+		topicService.saveOccurrenceLocation(topicID,occurrenceID,lat,lng);		
+	}
 	public MindTree saveTree(MindTree tree) throws HippoException {
 		try{
 			return  convertTree(topicService.saveTree(tree));
@@ -398,6 +402,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
 	}
+	
 	
 	
 

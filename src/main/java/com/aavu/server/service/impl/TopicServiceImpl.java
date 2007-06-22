@@ -409,8 +409,13 @@ public class TopicServiceImpl implements TopicService {
 			save(topic);
 		}		
 	}
+	//TODO secure
 	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) {
 		editDAO.saveTopicsLocation(tagId, topicId, lat, lng);
+	}
+	//TODO secure
+	public void saveOccurrenceLocation(long topicID, long occurrenceID,int lat, int lng) {
+		editDAO.saveOccurrenceLocation(topicID, occurrenceID, lat, lng);
 	}
 	public MindTree saveTree(MindTree tree) {
 		return editDAO.save(tree);
@@ -447,6 +452,7 @@ public class TopicServiceImpl implements TopicService {
 		}
 		return cur;
 	}
+	
 
 
 }

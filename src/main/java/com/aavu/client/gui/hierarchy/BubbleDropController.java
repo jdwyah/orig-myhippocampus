@@ -10,10 +10,10 @@ public class BubbleDropController extends SimpleDropController {
 
 	private static final String STYLE_ENGAGE = "dragdrop-engage";
 	
-	private TopicBubble bubble;
+	private Bubble bubble;
 
-	public BubbleDropController(TopicBubble bubble) {
-	    super(bubble);
+	public BubbleDropController(Bubble bubble) {
+	    super(bubble.getWidget());
 	    this.bubble = bubble;
 	  }
 
@@ -28,7 +28,7 @@ public class BubbleDropController extends SimpleDropController {
 	    
 	    //bin.eatWidget(draggable);
 	    
-	    bubble.receivedDrop(draggable);
+	    bubble.receivedDrop((Bubble)draggable);
 	    
 	    //currentDragController = null;
 	    return makeDragEndEvent(reference, draggable, dragController);

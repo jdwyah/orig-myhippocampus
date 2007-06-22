@@ -278,6 +278,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 
 
+
 //		List<Object[]> list = getHibernateTemplate().find(""+
 //		"select title, id, lastUpdated, top.types.latitude, top.types.longitude from Topic top "+
 //		"where top.types.id is ? "+
@@ -289,5 +290,18 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	}
 
+
+	public void saveOccurrenceLocation(long topicID, long occurrenceID,int lat, int lng) {
+		Topic t = (Topic) getHibernateTemplate().get(Topic.class, topicID);
+		Set<OccurrenceWithLocation> owls = t.getOccurences();
+		for (OccurrenceWithLocation owl : owls) {
+			if(owl.getOccurrence().getId() == occurrenceID){
+				owl.setLatitude(lat);
+				owl.setLongitude(lng);
+				break;
+			}
+		}
+		getHibernateTemplate().save(t);
+	}
 	
 }

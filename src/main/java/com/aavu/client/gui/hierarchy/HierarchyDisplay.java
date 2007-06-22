@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.OccurrenceWithLocation;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -26,7 +27,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, DragEventListener{
+public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 
 	private static final int UNSET_LAT_START = 50;
 	private static final int UNSET_LAT_INCR = 110;
@@ -34,19 +35,22 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 	private DropController backdropDropController;
 
 	
+	
 	//<long,TopicBubble>
-	private Map bubbles = new HashMap();
+	/**
+	 * Not all bubbles, just topic bubbles. If you want all, use objects.
+	 */
+	private Map topicBubbles = new HashMap();
 	
 	private Topic currentRoot;
 
 
 	private DragController dragController;
 
-
 	private Manager manager;
 
-
 	private int unsetLatitude;
+	
 	
 
 	public HierarchyDisplay(Manager manager){
@@ -68,40 +72,59 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 		setBackground(currentScale);
 	}
 	
+	private void addOWLBubble(OccurrenceWithLocation owl){
+
+		OccBubble occB = new OccBubble(owl,this);		
+					
+//		DropController dropController = new BubbleDropController(tb);		
+//		tb.setDropController(dropController);
+				
+		//System.out.println("HierarchyAdd "+fti.getTopicTitle()+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
+				
+		addBubble(occB);
+	}
+	
+	private void addTopicBubble(FullTopicIdentifier fti){
+		
+		TopicBubble tb = new TopicBubble(fti,this);		
+					
+		DropController dropController = new BubbleDropController(tb);		
+		tb.setDropController(dropController);
+				
+		addBubble(tb);
+		
+		//System.out.println("HierarchyAdd "+fti.getTopicTitle()+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
+				
+		topicBubbles.put(new Long(fti.getTopicID()), tb);
+	}
+
+
 	/**
 	 * if their position is unset, space them out incrementally in latitude
 	 * @param fti
 	 */
-	private void add(FullTopicIdentifier fti){
+	private void addBubble(Bubble bubble){
 		
-		if(fti.getLatitudeOnIsland() == -1 || fti.getLatitudeOnIsland() == 0){			
-			System.out.println(fti.getTopicTitle()+"incr unsetLatitude "+unsetLatitude+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
-			fti.setLatitudeOnIsland(unsetLatitude);			
+		if(bubble.getLeft() == -1 || bubble.getLeft() == 0){			
+			//System.out.println(fti.getTopicTitle()+"incr unsetLatitude "+unsetLatitude+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
+			bubble.setTop(unsetLatitude);			
 			unsetLatitude += UNSET_LAT_INCR;
 			
+		}		
+		
+		bubble.getFocusPanel().addMouseWheelListener(this);
+				
+		dragController.makeDraggable(bubble.getWidget());
+		
+		if(bubble.getDropController() != null){
+			dragController.registerDropController(bubble.getDropController());
 		}
 		
-
-//		fti.setLongitudeOnIsland((int) (Math.random()*400.0));
+		addObject(bubble);	
 		
-		TopicBubble tb = new TopicBubble(fti,this);		
-		tb.addMouseWheelListener(this);
+		bubble.zoomToScale(currentScale);
 		
-		dragController.makeDraggable(tb);
-				
-		DropController dropController = new BubbleDropController(tb);		
-		tb.setDropController(dropController);
-		dragController.registerDropController(dropController);
-		
-		//System.out.println("HierarchyAdd "+fti.getTopicTitle()+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
-		
-		addObject(tb);	
-		
-		tb.zoomToScale(currentScale);
-		
-		bubbles.put(new Long(fti.getTopicID()), tb);
 	}
-
 	
 
 	public boolean centerOn(Topic topic) {
@@ -111,17 +134,27 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 
 	//@Override
 	public void clear() {		
-		super.clear();
+		
+		
 		
 		unsetLatitude = UNSET_LAT_START;
 		
-		for (Iterator iter = bubbles.keySet().iterator(); iter.hasNext();) {
-			Long e = (Long) iter.next();
-			TopicBubble bubble = (TopicBubble) bubbles.get(e);
+		
+		for (Iterator iterator = objects.iterator(); iterator.hasNext();) {
+		
+			Bubble bubble = (Bubble) iterator.next();
+			
+		
 			dragController.unregisterDropController(bubble.getDropController());
 		}
-		bubbles.clear();
 		
+		
+		topicBubbles.clear();
+		
+		//needs to be after we iter over objects
+		super.clear();
+		
+		System.out.println("HDisplay.clear() DragController"+dragController);
 	}
 
 	/**
@@ -129,24 +162,26 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 	 */
 	public void dragFinished(Widget dragging) {
 		System.out.println("HierarchyDisplay.Drag Finished");
-		TopicBubble tb = (TopicBubble) dragging;
+		Bubble tb = (Bubble) dragging;
 		
-		if(tb.possibleMoveOccurred(currentScale)){
-			
-						
-			System.out.println("HierarchyDisplay.Drag Finished Saving "+tb.getLeft()+" "+tb.getTop());
-			
-			manager.getTopicCache().saveTopicLocationA(currentRoot.getId(), tb.getFTI().getTopicID(), tb.getTop(), tb.getLeft(), 
-					new StdAsyncCallback("SaveLatLong"){});
-			
-				
-		}
+		tb.processDrag(currentScale);
+		
+//		if(tb.possibleMoveOccurred(currentScale)){
+//			
+//						
+//			System.out.println("HierarchyDisplay.Drag Finished Saving "+tb.getLeft()+" "+tb.getTop());
+//			
+//			manager.getTopicCache().saveTopicLocationA(currentRoot.getId(), tb.getFTI().getTopicID(), tb.getTop(), tb.getLeft(), 
+//					new StdAsyncCallback("SaveLatLong"){});
+//			
+//				
+//		}
 	}
 	
-	public void dragged(Widget dragging, int newX, int newY) {
-		// TODO Auto-generated method stub
-		
-	}
+//	public void dragged(Widget dragging, int newX, int newY) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 	
 	
 	//@Override
@@ -170,12 +205,12 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 	 */
 	public void growIsland(Topic tag) {
 		
-		TopicBubble bubble = (TopicBubble) bubbles.get(new Long(tag.getId()));
+		TopicBubble bubble = (TopicBubble) topicBubbles.get(new Long(tag.getId()));
 		if(null != bubble){
 			bubble.grow();
 		}else{
 			FullTopicIdentifier fti = new FullTopicIdentifier(tag);		
-			add(fti);
+			addTopicBubble(fti);
 			redraw();
 		}
 		
@@ -185,20 +220,37 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 
 
 	public void load(final Topic t,final LoadFinishedListener loadFinished){
+		System.out.println("Hdisplay.load DragController"+dragController);
+
+		clear();
+		loadTopicOcc(t);
+		
+		loadChildTopics(t,loadFinished);
+		
+		
+	}
+	private void loadTopicOcc(Topic t) {
+		System.out.println("Load "+t+" occs "+t.getOccurences().size());
+		
+		for (Iterator iterator = t.getOccurences().iterator(); iterator.hasNext();) {
+			OccurrenceWithLocation owl = (OccurrenceWithLocation) iterator.next();
+			
+			addOWLBubble(owl);
+		}
+	}
+
+	private void loadChildTopics(final Topic t, final LoadFinishedListener loadFinished) {
 		manager.getTopicCache().getTopicsWithTag(t.getId(),new StdAsyncCallback(ConstHolder.myConstants.getRoot_async()){
 			//@Override
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
-				
-				clear();
-				
 				
 				List all_ftis = (List) result;
 				
 				for (Iterator iterator = all_ftis.iterator(); iterator.hasNext();) {
 					
 					FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();					
-					add(fti);
+					addTopicBubble(fti);
 				}				
 				
 				currentRoot = t;
@@ -214,30 +266,33 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 			}			
 		});
 	}
+
 	//@Override
 	protected void postZoomCallback(double currentScale){
 
 		setIslandsToZoom();
 		
 	}
-	//@Override
-	public void processDrop(TopicBubble receiver, TopicBubble received) {
-		Logger.debug("HierarchyDisplay.removeBubble ");
-		
-		bubbles.remove(new Long(received.getFTI().getTopicID()));
-		dragController.unregisterDropController(received.getDropController());
-		removeObj(received);
-		
-		manager.getTopicCache().executeCommand(received.getTopic(),new SaveTagtoTopicCommand(received.getTopic(),receiver.getTopic(),currentRoot), 
-				new StdAsyncCallback(ConstHolder.myConstants.save()){
-					//@Override
-					public void onSuccess(Object result) {
-						super.onSuccess(result);						
-					}			
-		});		
-		
-		
-	}
+//	//@Override
+//	public void processDrop(Bubble receiver, Bubble received) {
+//		Logger.debug("HierarchyDisplay.removeBubble ");
+//		
+//		
+//		
+//		topicBubbles.remove(new Long(received.getFTI().getTopicID()));
+//		dragController.unregisterDropController(received.getDropController());
+//		removeObj(received);
+//		
+//		manager.getTopicCache().executeCommand(received.getTopic(),new SaveTagtoTopicCommand(received.getTopic(),receiver.getTopic(),currentRoot), 
+//				new StdAsyncCallback(ConstHolder.myConstants.save()){
+//					//@Override
+//					public void onSuccess(Object result) {
+//						super.onSuccess(result);						
+//					}			
+//		});		
+//		
+//		
+//	}
 
 	public void removeIsland(long id) {
 		// TODO Auto-generated method stub
@@ -260,12 +315,11 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 
 	private void setIslandsToZoom() {
 
-		//System.out.println("Setting all islands to zoom level "+currentScale);
+		System.out.println("Setting "+objects.size()+" islands to zoom level "+currentScale);
 
-		for (Iterator iter = bubbles.keySet().iterator(); iter.hasNext();) {
-			Long e = (Long) iter.next();
+		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 
-			TopicBubble bubble = (TopicBubble) bubbles.get(e);
+			Bubble bubble = (Bubble) iter.next();
 
 			bubble.zoomToScale(currentScale);		
 
@@ -281,6 +335,20 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay, Drag
 
 	public void navigateTo(FullTopicIdentifier fti) {
 		manager.bringUpChart(fti);
+	}
+
+	public void removeTopicBubble(TopicBubble received) {
+		topicBubbles.remove(new Long(received.getFTI().getTopicID()));
+		dragController.unregisterDropController(received.getDropController());
+		removeObj(received.getWidget());
+	}
+
+	public Topic getCurrentRoot() {		
+		return currentRoot;
+	}
+
+	public Manager getManager() {		
+		return manager;
 	}
 
 }

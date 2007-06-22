@@ -99,6 +99,8 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void bringUpChart(Topic topic) {		
 		currentTopic = topic;
 		
+		System.out.println("bring up chart Topic "+topic);
+		
 		map.displayTopic(topic);
 		
 		//only zoom if we find something good to center on

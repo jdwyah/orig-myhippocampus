@@ -17,6 +17,7 @@ import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
+import com.aavu.client.domain.OccurrenceWithLocation;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -1420,6 +1421,29 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
+	public void testSaveOccLocation() throws HippoBusinessException{
+
+		Topic t = new Topic();
+		t.getLatestEntry().setData(B);
+		t.setTitle(C);
+		t.setUser(u);
+
+		t = editDAO.save(t);
+		
+		Entry e = t.getLatestEntry();
+		
+		int Y = 4545;
+		int X = 232;
+		editDAO.saveOccurrenceLocation(t.getId(), e.getId(), Y, X);
+				
+		Topic saved = selectDAO.getForID(u, t.getId());
+		
+		OccurrenceWithLocation owl = (OccurrenceWithLocation) saved.getOccurences().iterator().next();
+		
+		assertEquals(Y, owl.getLatitude());
+		assertEquals(X, owl.getLongitude());
+	}
+	
 	public void testPopualateUsageStats(){
 
 		UserPageBean bean = selectDAO.getUsageStats(u);

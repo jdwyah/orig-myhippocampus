@@ -26,5 +26,7 @@ public interface EditDAO {
 
 	void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude);
 
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,int lng);
+
 
 }

@@ -79,6 +79,10 @@ public interface GWTTopicServiceAsync {
 
 
 	void getLocationsForTags(List shoppingList, AsyncCallback callback);
+
+
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,
+			int lng, AsyncCallback callback);
 }
 
 
