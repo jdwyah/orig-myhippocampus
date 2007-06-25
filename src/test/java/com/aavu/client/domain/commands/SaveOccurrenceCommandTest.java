@@ -111,7 +111,7 @@ public class SaveOccurrenceCommandTest extends CommandTestCase {
 		
 		WebLink weblink = new WebLink();
 		weblink.setId(99);
-		weblink.getTopics().add(t3);
+		t3.addOccurence(weblink);
 		
 		List testTopics = new ArrayList();
 		

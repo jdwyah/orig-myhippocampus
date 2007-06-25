@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
@@ -201,6 +203,7 @@ public class TopicServiceImpl implements TopicService {
 		return selectDAO.getAllTopicIdentifiers(userService.getUserWithNormalization(username),start,max,startStr);
 	}	
 	public Topic getForID(long topicID) {
+		
 		return selectDAO.getForID(userService.getCurrentUser(),topicID);
 	}
 	public Topic getForName(String string) {

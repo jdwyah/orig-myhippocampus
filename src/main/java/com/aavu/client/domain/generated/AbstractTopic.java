@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.aavu.client.domain.OccurrenceWithLocation;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.subjects.Subject;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -67,7 +67,7 @@ public abstract class AbstractTopic  implements IsSerializable, java.io.Serializ
       */
      private Set types = new HashSet();
      /**
-      * @gwt.typeArgs <com.aavu.client.domain.OccurrenceWithLocation>
+      * @gwt.typeArgs <com.aavu.client.domain.TopicOccurrenceConnector>
       */
      private Set occurences = new HashSet();
      /**

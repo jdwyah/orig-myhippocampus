@@ -24,10 +24,11 @@
 			<column name="data" sql-type="text"></column>
 		</property>
 				
-		<!-- backwards, names are switched -->		
-		<set name="topics" table="topic_occurences" inverse="true">
-			<key column="topic_id"></key>
-			<many-to-many column="occurrence_id" class="Topic" />
+		<!-- backwards, names are switched -->
+		<!-- no cascade, no update. Only use this field in hibernate queries. -->
+		<set name="topics" inverse="true">
+			<key column="topic_id" />
+			<one-to-many class="TopicOccurrenceConnector"/>
 		</set>
 
 		<property name="lastUpdated" type="java.util.Date">

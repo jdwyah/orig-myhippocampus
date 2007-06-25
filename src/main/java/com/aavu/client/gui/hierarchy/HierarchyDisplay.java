@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.OccurrenceWithLocation;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -45,7 +45,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 	private Topic currentRoot;
 
 
-	private DragController dragController;
+	private PickupDragController dragController;
 
 	private Manager manager;
 
@@ -61,6 +61,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		
 		//passing (this,true) kinda worked, but we'd often miss entry events which led to problems.
 		dragController = new PickupDragController(null, true);
+		//dragController.setDragProxyEnabled(true);
 
 		backdropDropController = new BackdropDropController(this);		
 		dragController.registerDropController(backdropDropController);
@@ -72,7 +73,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		setBackground(currentScale);
 	}
 	
-	private void addOWLBubble(OccurrenceWithLocation owl){
+	private void addOWLBubble(TopicOccurrenceConnector owl){
 
 		OccBubble occB = new OccBubble(owl,this);		
 					
@@ -233,7 +234,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		System.out.println("Load "+t+" occs "+t.getOccurences().size());
 		
 		for (Iterator iterator = t.getOccurences().iterator(); iterator.hasNext();) {
-			OccurrenceWithLocation owl = (OccurrenceWithLocation) iterator.next();
+			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator.next();
 			
 			addOWLBubble(owl);
 		}
@@ -315,7 +316,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 
 	private void setIslandsToZoom() {
 
-		System.out.println("Setting "+objects.size()+" islands to zoom level "+currentScale);
+		//System.out.println("Setting "+objects.size()+" islands to zoom level "+currentScale);
 
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 

@@ -1,6 +1,7 @@
 package com.aavu.client.service;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.gwm.client.GInternalFrame;
@@ -11,6 +12,7 @@ import com.aavu.client.Interactive;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -106,6 +108,16 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		//only zoom if we find something good to center on
 		if(map.centerOn(topic)){
 			map.ensureZoomOfAtLeast(4);
+		}
+		
+		if(topic.getId() == 2081){
+			System.out.println("2081 size "+topic.getOccurences().size());
+			
+			for (Iterator iterator = topic.getOccurenceObjs().iterator(); iterator.hasNext();) {
+				Occurrence link = (Occurrence) iterator.next();
+				System.out.println("link "+link.getTopics().size());
+				//assertEquals(1, link.getTopics().size());
+			}
 		}
 		
 		History.newItem(""+topic.getId());

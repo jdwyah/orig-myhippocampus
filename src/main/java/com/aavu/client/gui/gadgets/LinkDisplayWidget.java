@@ -2,16 +2,15 @@ package com.aavu.client.gui.gadgets;
 
 import java.util.Iterator;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
 import com.aavu.client.LinkPlugin.AddLinkPopup;
-import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.util.Logger;
 import com.aavu.client.widget.ExternalLink;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -61,7 +60,7 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 	private void newLink(){
 		WebLink newL = new WebLink();
 		newL.setUser(myTopic.getUser());
-		newL.getTopics().add(myTopic);
+		myTopic.addOccurence(newL);
 		
 		editLink(newL);
 	}
@@ -75,7 +74,14 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 		size = 0;
 		FlexTable table = new FlexTable();
 
-		System.out.println("loading size "+topic.getWebLinks().size());
+		Logger.debug("LinkDisplayWidget.loading size "+topic.getWebLinks().size());
+		
+		System.out.println("LDW "+topic.getId()+" size "+topic.getOccurences().size());		
+		for (Iterator iterator = topic.getOccurenceObjs().iterator(); iterator.hasNext();) {
+			Occurrence link = (Occurrence) iterator.next();
+			System.out.println("LDW link "+link.getTopics().size());
+			//assertEquals(1, link.getTopics().size());
+		}
 		
 		for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
 			WebLink occ = (WebLink) iter.next();			
@@ -126,10 +132,10 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 			popupText.append(occ.getData());
 		}							
 		for (Iterator topicIter = occ.getTopics().iterator(); topicIter.hasNext();) {
-			Topic top = (Topic) topicIter.next();
-			if(top != myTopic){
+			TopicOccurrenceConnector top = (TopicOccurrenceConnector) topicIter.next();
+			if(top.getTopic().equals(myTopic)){
 				popupText.append("<BR>");
-				popupText.append(top.getTitle());
+				popupText.append(top.getTopic().getTitle());
 			}
 		}
 		return popupText.toString();

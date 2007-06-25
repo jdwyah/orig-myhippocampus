@@ -65,7 +65,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		.setFetchMode("types.type.associations.types", FetchMode.JOIN)
 		.setFetchMode("types.type.associations.members", FetchMode.JOIN)		
 		.setFetchMode("occurences", FetchMode.JOIN)
-		//.setFetchMode("occurences.topics", FetchMode.JOIN)
+		.setFetchMode("occurences.occurrence", FetchMode.JOIN)
+		.setFetchMode("occurences.occurrence.topics", FetchMode.JOIN)
 		.setFetchMode("associations", FetchMode.JOIN)
 		.setFetchMode("associations.members", FetchMode.JOIN)	
 		.setFetchMode("associations.types", FetchMode.JOIN);
@@ -174,20 +175,20 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 
-	public Topic getForID(User user, long topicID) {
+	public Topic getForID(User currentUser, long topicID) {
 
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
-				.add(Expression.eq("user", user))
+				//.add(Expression.eq("user", currentUser))
 				.add(Expression.eq("id", topicID)));
 
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));			
 	}
-	public Topic getForName(User user, String string) {
+	public Topic getForName(User currentUser, String string) {
 
-		log.debug("user "+user.getUsername()+" string "+string);
+		log.debug("user "+currentUser.getUsername()+" string "+string);
 
 		DetachedCriteria crit  = loadEmAll(DetachedCriteria.forClass(Topic.class)
-				.add(Expression.eq("user", user))
+				.add(Expression.eq("user", currentUser))
 				.add(Expression.eq("title", string)));
 
 

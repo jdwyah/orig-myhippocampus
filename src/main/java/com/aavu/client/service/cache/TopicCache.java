@@ -9,6 +9,7 @@ import java.util.Map;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -103,12 +104,12 @@ public class TopicCache {
 	 * @author Jeff Dwyer
 	 *
 	 */
-	private class TopicNameCallBack implements AsyncCallback {
+	private class TopicGetCallBack implements AsyncCallback {
 
 		private AsyncCallback callback;
 		private ReturnTypeConstant rtn;
 
-		public TopicNameCallBack(ReturnTypeConstant rtn, AsyncCallback callback) {
+		public TopicGetCallBack(ReturnTypeConstant rtn, AsyncCallback callback) {
 			this.callback = callback;	
 			this.rtn = rtn;
 		}
@@ -120,8 +121,15 @@ public class TopicCache {
 			if(rtn == TOPIC){
 				
 				System.out.println("res "+result);
-				
+								
 				Topic t = (Topic) result;
+				
+				System.out.println("TC "+t.getId()+" size "+t.getOccurences().size());		
+				for (Iterator iterator = t.getOccurenceObjs().iterator(); iterator.hasNext();) {
+					Occurrence link = (Occurrence) iterator.next();
+					System.out.println("TC link "+link.getTopics().size());
+					//assertEquals(1, link.getTopics().size());
+				}
 				
 				System.out.println("rec "+t);
 				if(t != null){
@@ -280,7 +288,7 @@ public class TopicCache {
 			callback.onSuccess(t);
 		}else{
 			System.out.println("ti - miss "+ident.getTopicTitle());
-			topicService.getTopicForName(ident.getTopicTitle(), new TopicNameCallBack(TOPIC,callback));			
+			topicService.getTopicByID(ident.getTopicID(), new TopicGetCallBack(TOPIC,callback));			
 		}			
 	}
 
@@ -296,7 +304,7 @@ public class TopicCache {
 			callback.onSuccess(t);
 		}else{
 			System.out.println("miss "+topicID);
-			topicService.getTopicByID(topicID, new TopicNameCallBack(TOPIC,callback));			
+			topicService.getTopicByID(topicID, new TopicGetCallBack(TOPIC,callback));			
 		}			
 
 	}
@@ -313,7 +321,7 @@ public class TopicCache {
 			callback.onSuccess(t);
 		}else{
 			System.out.println("miss "+topicName);
-			topicService.getTopicForName(topicName, new TopicNameCallBack(TOPIC,callback));			
+			topicService.getTopicForName(topicName, new TopicGetCallBack(TOPIC,callback));			
 		}			
 
 	}

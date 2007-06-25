@@ -18,7 +18,7 @@ import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.OccurrenceWithLocation;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.mapper.MindTree;
@@ -115,22 +115,24 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 //				topic.getTypes().clear();
 
 
-
-				for (OccurrenceWithLocation owl : (Set<OccurrenceWithLocation>)topic.getOccurences()) {
+				//TODO PEND will leave danglers!
+				for (TopicOccurrenceConnector owl : (Set<TopicOccurrenceConnector>)topic.getOccurences()) {
+										
+					sess.delete(owl);
 					
-					Occurrence occurence = owl.getOccurrence();
-					
-					//TODO delete S3Files 
-					//TODO delete Weblinks that were only referenced by us					
-
-					log.debug("remove occurrence: "+occurence.getId()+" "+occurence.getTitle()+" "+occurence.getData());
-
-					if(occurence instanceof Entry){
-						sess.delete(occurence);
-					}
-					if(occurence instanceof MindTreeOcc){
-						sess.delete(occurence);
-					}
+//					Occurrence occurence = owl.getOccurrence();
+//					
+//					//TODO delete S3Files 
+//					//TODO delete Weblinks that were only referenced by us					
+//
+//					log.debug("remove occurrence: "+occurence.getId()+" "+occurence.getTitle()+" "+occurence.getData());
+//
+//					if(occurence instanceof Entry){
+//						sess.delete(occurence);
+//					}
+//					if(occurence instanceof MindTreeOcc){
+//						sess.delete(occurence);
+//					}
 					
 					
 				}
@@ -182,15 +184,12 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 				log.debug("going to delete "+o+" "+o.getId()+" "+o.getData());
 
-				Set<Topic> topics = o.getTopics();				
-				for (Topic t : topics) {
-					log.debug("remove "+t);
+				Set<TopicOccurrenceConnector> topics = o.getTopics();				
+				for (TopicOccurrenceConnector toccConnector : topics) {
+					log.debug("remove "+toccConnector);
 
-					boolean fnd = SetUtils.removeFromSetById(t.getOccurences(), o.getId());	
-
-					if(!fnd){
-						log.error("Problem removing occ "+o.getId()+" from "+t.getId());
-					}
+					toccConnector.getTopic().getOccurences().remove(toccConnector);
+					sess.delete(toccConnector);
 
 				}
 				sess.delete(o);
@@ -293,8 +292,8 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	public void saveOccurrenceLocation(long topicID, long occurrenceID,int lat, int lng) {
 		Topic t = (Topic) getHibernateTemplate().get(Topic.class, topicID);
-		Set<OccurrenceWithLocation> owls = t.getOccurences();
-		for (OccurrenceWithLocation owl : owls) {
+		Set<TopicOccurrenceConnector> owls = t.getOccurences();
+		for (TopicOccurrenceConnector owl : owls) {
 			if(owl.getOccurrence().getId() == occurrenceID){
 				owl.setLatitude(lat);
 				owl.setLongitude(lng);

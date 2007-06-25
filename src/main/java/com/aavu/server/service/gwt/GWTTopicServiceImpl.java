@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -49,6 +50,8 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		log.debug("New Converter "+t.getId()+" "+t.getTitle());
 		
 		//NewConverter.convertInPlace(t);
+		
+		
 		
 		try{
 			log.debug("Scan turned up persistent: "+Converter.scan(t));

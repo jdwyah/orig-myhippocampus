@@ -40,7 +40,7 @@ public abstract class AbstractBubble extends FocusPanel implements Bubble {
 		this.image = image;		
 		this.image.setPixelSize(unscaledWidth, unscaledHeight);
 		
-		System.out.println("AbstractBubble left "+left+" top "+top);
+		//System.out.println("AbstractBubble left "+left+" top "+top);
 		
 		banner = new IslandBanner(title,5);
 		

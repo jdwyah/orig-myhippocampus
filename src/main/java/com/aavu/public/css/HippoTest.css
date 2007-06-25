@@ -1092,8 +1092,8 @@ TABLE.longRange TD {
 	background-color: #FCFFA0;
 }
 .dragdrop-movable-panel {
-	width: 55px;/*w/o this movable panel picks random width*/  
-	height: 50px;
+	width: 5px;/*w/o this movable panel picks random width*/  
+	height: 5px;
 }
 .getting-started-label {
 	border: 1px solid #99AACC;

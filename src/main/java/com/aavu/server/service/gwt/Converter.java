@@ -5,10 +5,10 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.generated.AbstractTopicTypeConnector;
-import com.aavu.server.util.gwt.ServerSerializationStreamWriterWithHibernateEscaping;
 import com.aavu.server.util.gwt.ServerSerializationStreamWriterWithHibernateSupport2;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
@@ -33,6 +33,13 @@ public class Converter {
 		
 		log.debug("serialized "+str);
 //		serialize(object);
+		
+//		try{
+//			TopicOccurrenceConnector owl = (TopicOccurrenceConnector)((Topic)object).getOccurences().iterator().next();				
+//			System.out.println("SCANNER Topic Link Topics Size: "+owl.getOccurrence().getTopics().size());
+//		}catch (Exception e) {
+//			System.out.println("SCANNER NG "+e);
+//		}
 		
 		
 		log.debug("CGLib: "+str.contains("CGLIB")+

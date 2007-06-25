@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -21,7 +22,7 @@ public abstract class AbstractOccurrence  implements IsSerializable, java.io.Ser
      private String title;
      private String data;
      /**
-      * @gwt.typeArgs <com.aavu.client.domain.Topic>
+      * @gwt.typeArgs <com.aavu.client.domain.TopicOccurrenceConnector>
       */     
      private Set topics = new HashSet();
      
@@ -111,6 +112,7 @@ public abstract class AbstractOccurrence  implements IsSerializable, java.io.Ser
 
 
     public Set getTopics() {
+    	System.out.println("calling get Topics");
 		return topics;
 	}
 	public void setTopics(Set topics) {
@@ -149,6 +151,7 @@ public boolean equals(Object other) {
          result = 37 * result + ( getTitle() == null ? 0 : this.getTitle().hashCode() );
 
          //?????????????
+         //PEND HIGH
          //this screws up removing the occurrence from a set EVEN if the int returned is the 
          //same. I dunno.
          //result = 37 * result + ( getData() == null ? 0 : this.getData().hashCode() );

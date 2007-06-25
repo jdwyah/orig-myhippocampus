@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.util.SetUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -79,7 +80,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 						System.out.println("SaveOccurrenceCommand WARN No existing occurrence");
 						topic.addOccurence(occurrence);
 					}
-					occurrence.getTopics().add(topic);
+					
 				}
 			}
 			
@@ -88,8 +89,8 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 			for (Iterator iter = getRemoveItems().iterator(); iter.hasNext();) {
 				Topic inLink = (Topic) iter.next();
 				System.out.println("still has link"+inLink);
-				Occurrence exist2 = (Occurrence) SetUtils.getFromSetById(inLink.getOccurenceObjs(), occurrence.getId());
-				boolean r1 = inLink.getOccurenceObjs().remove(exist2);								
+				TopicOccurrenceConnector exist2 = (TopicOccurrenceConnector) SetUtils.getFromSetById(inLink.getOccurences(), occurrence.getId());
+				boolean r1 = inLink.getOccurences().remove(exist2);								
 				boolean r2 = occurrence.getTopics().remove(inLink);
 				if(!(r1 && r2)){
 					System.out.println("WARN SaveOccurrence Not Removing "+r1+" "+r2);
@@ -101,7 +102,6 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 				Topic topic = (Topic) iter.next();
 				topic.addOccurence(occurrence);	
 				
-				occurrence.getTopics().add(topic);
 			}			
 		}
 		

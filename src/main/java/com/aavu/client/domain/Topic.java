@@ -9,6 +9,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.util.SetUtils;
 import com.aavu.client.widget.autocompletion.Completable;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -277,12 +278,14 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	
 	public Set getEntries(){
 		Set rtn = new HashSet();
+		
 		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
-			Occurrence occur = (Occurrence) iter.next();
+			Occurrence occur = (Occurrence) iter.next();		
 			if(occur instanceof Entry){
 				rtn.add((Entry) occur);
 			}
 		}
+		//System.out.println("get entries "+rtn.size()+" "+getOccurenceObjs().size());
 		return rtn;
 	}
 	
@@ -294,7 +297,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	public Set getOccurenceObjs() {	
 		Set rtn = new HashSet();
 		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
-			OccurrenceWithLocation twl = (OccurrenceWithLocation) iter.next();
+			TopicOccurrenceConnector twl = (TopicOccurrenceConnector) iter.next();
 			rtn.add(twl.getOccurrence());
 		}
 		return rtn;
@@ -306,8 +309,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 		
 		if(entries.isEmpty()){
 			Entry initialEntry = new Entry();
-			addOccurence(initialEntry);
-			initialEntry.getTopics().add(this);
+			addOccurence(initialEntry);			
 			return initialEntry;
 		}else{
 			return (Entry) entries.iterator().next();
@@ -916,7 +918,9 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	}
 
 	public void addOccurence(Occurrence link) {
-		getOccurences().add(new OccurrenceWithLocation(link));
+		TopicOccurrenceConnector conn = new TopicOccurrenceConnector(this,link);
+		getOccurences().add(conn);
+		link.getTopics().add(conn);
 	}
 	
 

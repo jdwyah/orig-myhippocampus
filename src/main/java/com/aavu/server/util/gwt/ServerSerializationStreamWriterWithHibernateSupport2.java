@@ -30,7 +30,9 @@ import java.util.Set;
 import org.hibernate.Hibernate;
 import org.hibernate.collection.PersistentSet;
 
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.ReallyCloneable;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.exception.CouldntFixCGLIBException;
 import com.google.gwt.user.client.rpc.SerializationException;
@@ -246,13 +248,42 @@ public final class ServerSerializationStreamWriterWithHibernateSupport2 extends
     stringTable.clear();
   }
 
+  private void debug(Object value,Class type){
+	  if(value != null){		  
+		  
+//		  if(value instanceof Topic){
+//			try{
+//				TopicOccurrenceConnector owl = (TopicOccurrenceConnector)((Topic)value).getOccurences().iterator().next();				
+//				System.out.println("SERIALIZE Topic Link Topics ID "+owl.getOccurrence().getId()+" Size: "+owl.getOccurrence().getTopics().size());
+//			}catch (Exception e) {
+//				System.out.println("SERIALIZE NG "+e);
+//			}
+//		  }
+		  
+		  if (type != java.util.Set.class) {			 					 
+			  System.out.println("serialize: "+value.getClass().getName()+" "+value+" "+type);
+		  }else{
+			  if (value instanceof PersistentSet) {												
+					 PersistentSet persSet = (PersistentSet) value;						
+					 if(persSet.wasInitialized()){					
+						 System.out.println("serialize: "+value.getClass().getName()+" "+value+" "+type);
+					 }
+					 else{
+						 System.out.println("Lazy set "+type);
+					 }
+			  }else{
+				  Set s = (Set) value;
+				  System.out.println("regular set "+type+" "+value+" "+s.size());
+			  }
+		  }
+	  }
+  }
+  
   public void serializeValue(Object value, Class type)
       throws SerializationException {
-//	  if(value != null){		  
-//		  if (type != java.util.Set.class) {			 					 
-//			  System.out.println("serialize: "+value.getClass().getName()+" "+value+" "+type);
-//		  }
-//	  }
+	 
+	  //debug(value,type);
+	 
     if (type == boolean.class) {
       writeBoolean(((Boolean) value).booleanValue());
     } else if (type == byte.class) {
@@ -299,14 +330,14 @@ public final class ServerSerializationStreamWriterWithHibernateSupport2 extends
 //		 
 //		 writeObject(value);
 //	 }
-	 else if (type == java.util.Set.class) {			 
+	 else if (type == java.util.Set.class) {	
 		 Set hashSet = new HashSet();
-		 if (value instanceof PersistentSet) {												
+		 if (value instanceof PersistentSet) {		
 			 PersistentSet persSet = (PersistentSet) value;						
-			 if(persSet.wasInitialized()){																													
+			 if(persSet.wasInitialized()){
 				 hashSet.addAll(persSet);
 			 }
-		 } else{
+		 } else{			 
 			 hashSet = (Set) value;
 		 }
 		 writeObject(hashSet);
@@ -443,7 +474,7 @@ public final class ServerSerializationStreamWriterWithHibernateSupport2 extends
         // Override the access restrictions
         declField.setAccessible(true);
       }
-
+      //System.out.println("Field "+declField.getName());
       Object value;
       try {
         value = declField.get(instance);

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.cache.TopicCache;
@@ -70,11 +71,11 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 		if(w != null){
 			Logger.log("found "+w.getTopics().size()+" Tags for this link");
 			for (Iterator iter = w.getTopics().iterator(); iter.hasNext();) {
-				Topic t = (Topic) iter.next();
+				TopicOccurrenceConnector t = (TopicOccurrenceConnector) iter.next();
 				
-				DeletableTopicLabel tagLabel = new DeletableTopicLabel(t,this);
+				DeletableTopicLabel tagLabel = new DeletableTopicLabel(t.getTopic(),this);
 				
-				add(t.getIdentifier(),tagLabel);
+				add(t.getTopic().getIdentifier(),tagLabel);
 				
 			}		
 		}

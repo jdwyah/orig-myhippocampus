@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.OccurrenceWithLocation;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoException;

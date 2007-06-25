@@ -2,7 +2,7 @@ package com.aavu.client.util;
 
 public class Logger {
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	public static void log(String msg){
 		System.out.println("Warn: "+msg);	
