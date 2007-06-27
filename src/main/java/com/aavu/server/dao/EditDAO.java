@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 
@@ -24,9 +25,9 @@ public interface EditDAO {
 
 	Long saveSimple(Topic t);
 
-	void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude);
+	void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude,User currentUser) throws HippoBusinessException;
 
-	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,int lng);
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,int lng,User currentUser) throws HippoBusinessException;
 
 
 }

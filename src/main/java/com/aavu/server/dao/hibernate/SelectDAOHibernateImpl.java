@@ -26,10 +26,12 @@ import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TimeLineObj;
@@ -442,22 +444,23 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 	/**
-	 * TODO NOTE: no user check. is that ok?
+	 * 
 	 */
-	public List<TopicIdentifier> getTopicForOccurrence(long id) {
+	public List<TopicIdentifier> getTopicForOccurrence(long id,User currentUser) {
+		
+		Object[] pm = {new Long(id),currentUser};		
+		
+		List<TopicOccurrenceConnector> conns = getHibernateTemplate().find("from TopicOccurrenceConnector conn "+
+				"where conn.occurrence.id = ? and conn.topic.user = ?",pm);
 
-		List<Object[]> list = getHibernateTemplate().find(""+
-				"select title, id from Topic top "+		
-				"where ? in elements(top.occurences.occurrence) "						
-				,id);
-
-		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
-
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(conns.size());
+		
+		for (TopicOccurrenceConnector conn : conns) {
+			rtn.add(new DatedTopicIdentifier(conn.getTopic().getId(),conn.getTopic().getTitle(),conn.getTopic().getCreated(),conn.getTopic().getLastUpdated()));
+		}
 		//TODO http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
-		for (Object[] o : list){
-			rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));			
-		}
+	
 
 		return rtn;
 

@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GadgetPicker extends Composite {
+public class Ribbon extends Composite {
 	
 	private HorizontalPanel gadgetOptionsP;
 	private boolean open;
@@ -26,7 +26,7 @@ public class GadgetPicker extends Composite {
 	 * 
 	 * @param gadgetManager
 	 */
-	public GadgetPicker(final GadgetManager gadgetManager) {
+	public Ribbon(final GadgetManager gadgetManager) {
 		
 		gadgetOptionsP = new HorizontalPanel();
 		
@@ -36,7 +36,7 @@ public class GadgetPicker extends Composite {
 			Image imgButton = gadget.getPickerButton();
 			imgButton.addClickListener(new ClickListener(){
 				public void onClick(Widget sender) {
-					gadgetManager.show(gadget);
+					gadgetManager.fireGadgetClick(gadget);
 					close();
 				}				
 			});
@@ -63,6 +63,7 @@ public class GadgetPicker extends Composite {
 		
 		gadgetOptionsP.addStyleName("H-Gadget");
 		
+		addStyleName("H-AbsolutePanel");		
 		addStyleName("H-GadgetPicker");
 		
 	}

@@ -1,5 +1,7 @@
 package com.aavu.client.gui.hierarchy;
 
+import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.domain.generated.AbstractTopicOccurrenceConnector;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -22,5 +24,7 @@ public interface Bubble extends RemembersPosition {
 	void setTop(int latitude);
 
 	String getTitle();
+
+	TopicIdentifier getIdentifier();
 
 }

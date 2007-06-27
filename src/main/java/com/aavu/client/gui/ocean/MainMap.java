@@ -20,6 +20,7 @@ import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.StatusPanel;
 import com.aavu.client.gui.Zoomer;
 import com.aavu.client.gui.ext.MultiDivPanel;
+import com.aavu.client.gui.gadgets.Ribbon;
 import com.aavu.client.gui.hierarchy.HierarchyDisplay;
 import com.aavu.client.gui.ocean.dhtmlIslands.OceanDHTMLImpl;
 import com.aavu.client.service.MindscapeManager;
@@ -39,7 +40,7 @@ public class MainMap extends HippoDesktopPane {
 	private SpatialDisplay spatialDisplay;
 	private StatusPanel statusPanel;
 	private SearchBox searchBox;
-	private GadgetDisplayer gadgetDisplayer;
+
 	private CenterTopicDisplayer centerDisplayer;
 	
 	private Zoomer zoomer;
@@ -103,11 +104,15 @@ public class MainMap extends HippoDesktopPane {
 		centerDisplayer = new CenterTopicDisplayer(manager);
 		mainP.add(centerDisplayer);
 		
-		gadgetDisplayer = new GadgetDisplayerBarImpl(manager);
+		
+		Ribbon ribbon = new Ribbon(manager.getGadgetManager());
+		
+		//gadgetDisplayer = new GadgetDisplayerBarImpl(manager);
 		
 		
 		
-		mainP.add(gadgetDisplayer.getWidget());
+		
+		mainP.add(ribbon);
 		
 		//mainP.add(tagSearch);
 		
@@ -206,7 +211,7 @@ public class MainMap extends HippoDesktopPane {
 
 	public void unselect() {
 		centerDisplayer.unload();
-		gadgetDisplayer.unload();
+		
 	}
 
 	public void zoomTo(double scale) {		

@@ -80,4 +80,9 @@ public class ReferenceBoard extends Gadget {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	//@Override
+	public void onClick(Manager manager) {
+		throw new UnsupportedOperationException();
+	}
 }

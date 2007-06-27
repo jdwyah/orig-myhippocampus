@@ -10,27 +10,26 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.Association;
-import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.TopicTypeConnector;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.domain.subjects.Subject;
-import com.aavu.client.domain.util.SetUtils;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.EditDAO;
 
 public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO {
-	
+
 	private static final Logger log = Logger.getLogger(EditDAOHibernateImpl.class);
-	
+
 
 	/**
 	 * PEND MED a bit fragile. Note the capitalization. Is there another way to do this?
@@ -117,24 +116,24 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 				//TODO PEND will leave danglers!
 				for (TopicOccurrenceConnector owl : (Set<TopicOccurrenceConnector>)topic.getOccurences()) {
-										
+
 					sess.delete(owl);
-					
+
 //					Occurrence occurence = owl.getOccurrence();
-//					
+
 //					//TODO delete S3Files 
 //					//TODO delete Weblinks that were only referenced by us					
-//
+
 //					log.debug("remove occurrence: "+occurence.getId()+" "+occurence.getTitle()+" "+occurence.getData());
-//
+
 //					if(occurence instanceof Entry){
-//						sess.delete(occurence);
+//					sess.delete(occurence);
 //					}
 //					if(occurence instanceof MindTreeOcc){
-//						sess.delete(occurence);
+//					sess.delete(occurence);
 //					}
-					
-					
+
+
 				}
 				topic.getOccurences().clear();
 
@@ -201,9 +200,9 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 	public void evict(Serializable obj) {
 		getHibernateTemplate().evict(obj);	
 	}
-	
 
-	
+
+
 
 	public MindTree save(MindTree tree) {
 		getHibernateTemplate().saveOrUpdate(tree);
@@ -217,7 +216,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 
 	public Topic save(Topic t) throws HippoBusinessException {
-		
+
 		log.info("SAVE "+t.getTitle()+" "+t.getUser());
 
 		//
@@ -244,63 +243,46 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 		return (Long) getHibernateTemplate().save(t);
 	}
 
-	public void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude){
+	public void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude,User currentUser) throws HippoBusinessException{
 
 		log.debug("-------------SAVE TOPICS LOCATION---------------");
 		log.debug("-------------tag "+tagID+" topic "+topicID+"---------------");	
-		Topic t = (Topic) getHibernateTemplate().get(Topic.class, topicID);
 
+		Object[] pms = {new Long(tagID),new Long(topicID),currentUser};
 
-
-		Set<TopicTypeConnector> types = t.getTypes();
-
-		//System.out.println(t.toPrettyString());
-
-		log.debug("Types size "+t.getTypesAsTopics().size());
-		log.debug("TypesWith loc size "+types.size());
-
-		for(TopicTypeConnector twl : types){
-
-			//System.out.println("Found "+twl.getTopic().getTitle()+" lat "+twl.getLatitude()+" long "+twl.getLongitude());
-
-			if(twl.getTopic().getId() == topicID){
-
-				//System.out.println("updating "+topicID);
-
-				twl.setLatitude(latitude);
-				twl.setLongitude(longitude);
-
-				getHibernateTemplate().save(twl);
-				break;
-			}
+		try{
+			TopicTypeConnector ttc = (TopicTypeConnector) DataAccessUtils.requiredUniqueResult(getHibernateTemplate().find(
+					"from TopicTypeConnector ttc where ttc.type.id = ? and ttc.topic.id = ? and ttc.topic.user = ?",pms));
+			
+			ttc.setLatitude(latitude);
+			ttc.setLongitude(longitude);
+			getHibernateTemplate().save(ttc);
+			
+		}catch (IncorrectResultSizeDataAccessException e) {
+			throw new HippoBusinessException("Missing Connection to save Topic Location");
 		}
 
-
-
-
-//		List<Object[]> list = getHibernateTemplate().find(""+
-//		"select title, id, lastUpdated, top.types.latitude, top.types.longitude from Topic top "+
-//		"where top.types.id is ? "+
-//		"and user is ? "
-//		,params);
-
-//		Topic t = (Topic) getHibernateTemplate().get(Topic.class, topicID);
-//		t.getTypes().
 
 	}
 
 
-	public void saveOccurrenceLocation(long topicID, long occurrenceID,int lat, int lng) {
-		Topic t = (Topic) getHibernateTemplate().get(Topic.class, topicID);
-		Set<TopicOccurrenceConnector> owls = t.getOccurences();
-		for (TopicOccurrenceConnector owl : owls) {
-			if(owl.getOccurrence().getId() == occurrenceID){
-				owl.setLatitude(lat);
-				owl.setLongitude(lng);
-				break;
-			}
+	public void saveOccurrenceLocation(long topicID, long occurrenceID,int latitude, int longitude,User currentUser) throws HippoBusinessException {
+		
+		Object[] pms = {new Long(occurrenceID),new Long(topicID),currentUser};
+
+		try{
+			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) DataAccessUtils.requiredUniqueResult(getHibernateTemplate().find(
+					"from TopicOccurrenceConnector toc where toc.occurrence.id = ? and toc.topic.id = ? and toc.topic.user = ?",pms));
+			
+			toc.setLatitude(latitude);
+			toc.setLongitude(longitude);
+			getHibernateTemplate().save(toc);
+			
+		}catch (IncorrectResultSizeDataAccessException e) {
+			throw new HippoBusinessException("Missing Connection to save Occurrence Location");
 		}
-		getHibernateTemplate().save(t);
+		
+		
 	}
-	
+
 }

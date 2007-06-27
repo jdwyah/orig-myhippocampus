@@ -8,7 +8,7 @@ import com.aavu.client.domain.generated.AbstractOccurrence;
 import com.aavu.client.domain.subjects.Subject;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Occurrence extends AbstractOccurrence implements Serializable,IsSerializable, ReallyCloneable, OccurrenceI {
+public class Occurrence extends AbstractOccurrence implements Serializable,IsSerializable, ReallyCloneable {
 	
 	public Occurrence(){
 		
@@ -38,9 +38,7 @@ public class Occurrence extends AbstractOccurrence implements Serializable,IsSer
 		return o;
 	}
 	
-	public Occurrence(User user, String title, String data, Date lastUpdated, Date created) {
-		super(user,title,data,lastUpdated,created);
-	}
+	
 
 	
 

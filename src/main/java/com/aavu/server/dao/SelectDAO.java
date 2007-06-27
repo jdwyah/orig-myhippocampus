@@ -65,7 +65,7 @@ public interface SelectDAO {
 
 	int getTopicCount(final User user);
 	
-	List<TopicIdentifier> getTopicForOccurrence(long id);
+	List<TopicIdentifier> getTopicForOccurrence(long id,User currentUser);
 
 	List<TopicTypeConnector> getTopicIdsWithTag(long id);
 

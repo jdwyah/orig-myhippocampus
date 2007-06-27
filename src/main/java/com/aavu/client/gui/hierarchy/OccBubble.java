@@ -2,6 +2,7 @@ package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.TopicOccurrenceConnector;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -31,13 +32,18 @@ public class OccBubble extends AbstractBubble implements Bubble {
 	//@Override
 
 	protected void saveLocation() {
+		
 		getDisplay().getManager().getTopicCache().saveOccLocationA(getDisplay().getCurrentRoot().getId(), owl.getOccurrence().getId(), getTop(), getLeft(), 
-				new StdAsyncCallback("SaveLatLong"){});
+				new StdAsyncCallback("Save Occurrence LatLong"){});
 	}
 
 	public void receivedDrop(Bubble bubble) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public TopicIdentifier getIdentifier() {		
+		return owl.getOccurrence().getIdentifier();
 	}
 
 

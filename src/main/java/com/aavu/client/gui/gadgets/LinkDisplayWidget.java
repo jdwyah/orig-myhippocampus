@@ -179,4 +179,9 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 	}
 	
 
+	//@Override
+	public void onClick(Manager manager) {
+		throw new UnsupportedOperationException();
+	}
+	
 }

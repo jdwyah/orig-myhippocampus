@@ -10,8 +10,8 @@ public class TopicOccurrenceConnector extends AbstractTopicOccurrenceConnector i
 	
 	public TopicOccurrenceConnector(){}
 
-	public TopicOccurrenceConnector(Topic topic, Occurrence link) {
-		super(topic, link, -1, -1);
+	public TopicOccurrenceConnector(Topic topic, Occurrence occurrence) {
+		super(topic, occurrence, -1, -1);
 	}
 
 

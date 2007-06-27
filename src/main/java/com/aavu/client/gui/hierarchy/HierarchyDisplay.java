@@ -73,32 +73,6 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		setBackground(currentScale);
 	}
 	
-	private void addOWLBubble(TopicOccurrenceConnector owl){
-
-		OccBubble occB = new OccBubble(owl,this);		
-					
-//		DropController dropController = new BubbleDropController(tb);		
-//		tb.setDropController(dropController);
-				
-		//System.out.println("HierarchyAdd "+fti.getTopicTitle()+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
-				
-		addBubble(occB);
-	}
-	
-	private void addTopicBubble(FullTopicIdentifier fti){
-		
-		TopicBubble tb = new TopicBubble(fti,this);		
-					
-		DropController dropController = new BubbleDropController(tb);		
-		tb.setDropController(dropController);
-				
-		addBubble(tb);
-		
-		//System.out.println("HierarchyAdd "+fti.getTopicTitle()+" "+fti.getLatitudeOnIsland()+" "+fti.getLongitudeOnIsland());
-				
-		topicBubbles.put(new Long(fti.getTopicID()), tb);
-	}
-
 
 	/**
 	 * if their position is unset, space them out incrementally in latitude
@@ -123,7 +97,11 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		
 		addObject(bubble);	
 		
+		topicBubbles.put(new Long(bubble.getIdentifier().getTopicID()), bubble);
+		
 		bubble.zoomToScale(currentScale);
+	
+		
 		
 	}
 	
@@ -204,16 +182,23 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 	/**
 	 * create a dummy FullFTI
 	 */
-	public void growIsland(Topic tag) {
+	public void growIsland(Topic thought) {
 		
-		TopicBubble bubble = (TopicBubble) topicBubbles.get(new Long(tag.getId()));
+		TopicBubble bubble = (TopicBubble) topicBubbles.get(new Long(thought.getId()));
+		
+		
 		if(null != bubble){
 			bubble.grow();
 		}else{
-			FullTopicIdentifier fti = new FullTopicIdentifier(tag);		
-			addTopicBubble(fti);
+			System.out.println("Grow "+thought.getId()+" Bubble: "+bubble);			
+			
+			Bubble newBubble = BubbleFactory.createBubbleFor(thought,currentRoot,this);		
+			addBubble(newBubble);
 			redraw();
+			
 		}
+		
+		
 		
 	}
 	
@@ -236,7 +221,8 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		for (Iterator iterator = t.getOccurences().iterator(); iterator.hasNext();) {
 			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator.next();
 			
-			addOWLBubble(owl);
+			addBubble(BubbleFactory.createBubbleFor(owl,this));
+			
 		}
 	}
 
@@ -251,7 +237,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 				for (Iterator iterator = all_ftis.iterator(); iterator.hasNext();) {
 					
 					FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();					
-					addTopicBubble(fti);
+					addBubble(BubbleFactory.createBubbleFor(fti, HierarchyDisplay.this));
 				}				
 				
 				currentRoot = t;

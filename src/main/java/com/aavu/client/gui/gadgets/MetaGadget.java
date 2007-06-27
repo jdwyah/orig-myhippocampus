@@ -148,6 +148,10 @@ public abstract class MetaGadget extends Gadget  {
 						metasPanel.remove(displayW);
 					}});
 	}			
-
+	
+	//@Override
+	public void onClick(Manager manager) {
+		throw new UnsupportedOperationException();
+	}
 	
 }

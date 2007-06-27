@@ -306,5 +306,10 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 		makeVisible();
 	}
 
+	
+	//@Override
+	public void onClick(Manager manager) {
+		throw new UnsupportedOperationException();
+	}
 
 }

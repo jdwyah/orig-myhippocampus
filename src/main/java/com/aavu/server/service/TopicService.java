@@ -19,6 +19,7 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.HippoPermissionException;
 import com.aavu.server.web.domain.UserPageBean;
 
@@ -35,7 +36,7 @@ public interface TopicService {
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
-	Topic createNew(String title, Topic topicOrTagOrMeta, Topic parent) throws HippoBusinessException;
+	Topic createNew(String title, Topic prototype, Topic parent) throws HippoBusinessException;
 
 	void delete(Topic topic) throws HippoBusinessException;
 
@@ -108,9 +109,9 @@ public interface TopicService {
 	LinkAndUser getWebLinkForURLAndUser(String url);
 	Occurrence save(Occurrence link);
 	Topic save(Topic topic) throws HippoBusinessException;
-	void saveTopicLocation(long tagId, long topicId, int lat, int lng);
+	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
 	MindTree saveTree(MindTree tree);
 	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
-	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,int lng);
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,int lng) throws HippoException;
 	
 }

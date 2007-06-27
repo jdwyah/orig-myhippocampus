@@ -94,7 +94,10 @@ public class EntryPreview extends Gadget {
 		return topic.hasEntry();
 	}
 	
-	
+	//@Override
+	public void onClick(Manager manager) {
+		manager.createNew(new Entry());	
+	}
 
 	
 

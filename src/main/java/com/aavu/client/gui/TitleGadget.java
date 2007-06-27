@@ -123,6 +123,9 @@ public class TitleGadget extends Gadget {
 		return true;
 	}
 	
-	
+	//@Override
+	public void onClick(Manager manager) {
+		throw new UnsupportedOperationException();
+	}
 	
 }

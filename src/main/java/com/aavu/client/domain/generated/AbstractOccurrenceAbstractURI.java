@@ -24,11 +24,7 @@ public abstract class AbstractOccurrenceAbstractURI extends com.aavu.client.doma
     public AbstractOccurrenceAbstractURI() {
     }
 
-    /** full constructor */
-    public AbstractOccurrenceAbstractURI(User user, String title, String data, Date lastUpdated, Date created, String uri) {
-        super(user, title, data, lastUpdated, created);        
-       this.uri = uri;
-    }
+    
     
     protected AbstractOccurrenceAbstractURI copyProps(AbstractOccurrenceAbstractURI o){
     	AbstractOccurrenceAbstractURI m = (AbstractOccurrenceAbstractURI)super.copyPropsIntoParam(o);

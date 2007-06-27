@@ -2,10 +2,8 @@ package com.aavu.client.gui;
 
 import java.util.Map;
 
-import org.gwtwidgets.client.ui.ImageButton;
-
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
@@ -45,7 +43,7 @@ public class Dashboard extends SimplePanel {
 		Image addNewButton = ConstHolder.images.newTopic().createImage();
 		addNewButton.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				manager.newTopic();
+				manager.createNew(new Topic());
 			}});
 		addNewButton.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.topic_new()));
 		

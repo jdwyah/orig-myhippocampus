@@ -38,7 +38,7 @@ public class BrowserManager extends AbstractManager {
 		// TODO Auto-generated method stub
 		
 	}
-	public void newTopic() {
+	public void createNew(Topic t) {
 		// TODO Auto-generated method stub
 		
 	}

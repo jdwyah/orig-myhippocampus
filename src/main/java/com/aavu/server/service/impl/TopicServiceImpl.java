@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -31,6 +32,7 @@ import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.HippoPermissionException;
 import com.aavu.client.exception.HippoSubscriptionException;
 import com.aavu.server.dao.EditDAO;
@@ -95,30 +97,42 @@ public class TopicServiceImpl implements TopicService {
 	 * Pass new Root(), to do a lookup and get the actual root element. 
 	 * Pass parent to get tagged.
 	 * 
+	 * If prototype is an occurrence, use addOccurrence()
 	 */
-	public Topic createNew(String title, Topic topicOrTagOrMeta, Topic parent) throws HippoBusinessException {
+	public Topic createNew(String title, Topic prototype, Topic parent) throws HippoBusinessException {
 
 		if(userIsOverSubscriptionLimit()){
 			log.info("User over Subscription Limit "+userService.getCurrentUser().getUsername());
 			throw new HippoSubscriptionException("Too many topics for your subscription.");
 		}
 
-		topicOrTagOrMeta.setTitle(title);
+		log.debug("Prototype "+prototype.getId()+" "+prototype.getClass());
+		
+		prototype.setTitle(title);
 
-		topicOrTagOrMeta = save(topicOrTagOrMeta);
+		prototype = save(prototype);
 
+		log.debug("Prototype "+prototype.getId()+" "+prototype.getClass());
+		
 		if(parent != null){		
-			if(parent instanceof Root){
-				topicOrTagOrMeta.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService.getCurrentUser()));
+			if(prototype instanceof Occurrence){
+				log.debug("adding occurrence");
+				Topic loadedParent = selectDAO.getForID(userService.getCurrentUser(), parent.getId());
+				loadedParent.addOccurence((Occurrence) prototype);
+				save(loadedParent);
 			}else{
-				topicOrTagOrMeta.tagTopic(parent);
+				if(parent instanceof Root){
+					prototype.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService.getCurrentUser()));
+				}else{
+					prototype.tagTopic(parent);
+				}
 			}
-			topicOrTagOrMeta = save(topicOrTagOrMeta);
+			prototype = save(prototype);
 		}
 		
-		log.info("create New: "+title+" "+topicOrTagOrMeta.getClass()+" "+userService.getCurrentUser().getUsername());
+		log.info("create New: "+title+" "+prototype.getClass()+" "+userService.getCurrentUser().getUsername());
 
-		return topicOrTagOrMeta;
+		return prototype;
 	}
 
 	/*
@@ -412,13 +426,13 @@ public class TopicServiceImpl implements TopicService {
 			save(topic);
 		}		
 	}
-	//TODO secure
-	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) {
-		editDAO.saveTopicsLocation(tagId, topicId, lat, lng);
+
+	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException {
+		editDAO.saveTopicsLocation(tagId, topicId, lat, lng,userService.getCurrentUser());
 	}
-	//TODO secure
-	public void saveOccurrenceLocation(long topicID, long occurrenceID,int lat, int lng) {
-		editDAO.saveOccurrenceLocation(topicID, occurrenceID, lat, lng);
+
+	public void saveOccurrenceLocation(long topicID, long occurrenceID,int lat, int lng) throws HippoException {
+		editDAO.saveOccurrenceLocation(topicID, occurrenceID, lat, lng,userService.getCurrentUser());
 	}
 	public MindTree saveTree(MindTree tree) {
 		return editDAO.save(tree);

@@ -7,20 +7,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import com.aavu.client.domain.CopyOfEntry;
-import com.aavu.client.domain.CopyOfOccurrence;
-import com.aavu.client.domain.CopyOfS3File;
-import com.aavu.client.domain.CopyOfWebLink;
-import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
-import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.TopicTypeConnector;
-import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
-import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.EditDAO;
@@ -165,13 +157,13 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 					
 					Occurrence o = (Occurrence)toc.getOccurrence();
 					
-					CopyOfOccurrence coo = getNewOcc(o);
-					
-					getHibernateTemplate().save(coo);
-				
-					System.out.println("post save "+coo.getId());
-					
-					toc.setOccurrence(coo);
+//					CopyOfOccurrence coo = getNewOcc(o);
+//					
+//					getHibernateTemplate().save(coo);
+//				
+//					System.out.println("post save "+coo.getId());
+//					
+//					toc.setOccurrence(coo);
 					
 					getHibernateTemplate().save(toc);
 					
@@ -186,32 +178,32 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 	
 	}
 
-	private CopyOfOccurrence getNewOcc(Occurrence o){
-		CopyOfOccurrence newOcc = null;
-		if (o instanceof Entry) {
-			Entry e = (Entry) o;
-			newOcc = new CopyOfEntry();
-		}		
-		else if(o instanceof S3File){
-			newOcc = new CopyOfS3File();	
-			CopyOfS3File c = (CopyOfS3File) newOcc;
-			c.setUri(((URI)o).getUri());
-			
-		}
-		else if(o instanceof WebLink){
-			newOcc = new CopyOfWebLink();
-			CopyOfWebLink c = (CopyOfWebLink) newOcc;
-			c.setUri(((URI)o).getUri());			
-		}
-		
-		newOcc.setCreated(o.getCreated());
-		newOcc.setData(o.getData());
-		newOcc.setTitle(o.getTitle());
-		newOcc.setUser(o.getUser());
-		newOcc.setLastUpdated(o.getLastUpdated());
-		
-		return newOcc;
-	}
+//	private CopyOfOccurrence getNewOcc(Occurrence o){
+//		CopyOfOccurrence newOcc = null;
+//		if (o instanceof Entry) {
+//			Entry e = (Entry) o;
+//			newOcc = new CopyOfEntry();
+//		}		
+//		else if(o instanceof S3File){
+//			newOcc = new CopyOfS3File();	
+//			CopyOfS3File c = (CopyOfS3File) newOcc;
+//			c.setUri(((URI)o).getUri());
+//			
+//		}
+//		else if(o instanceof WebLink){
+//			newOcc = new CopyOfWebLink();
+//			CopyOfWebLink c = (CopyOfWebLink) newOcc;
+//			c.setUri(((URI)o).getUri());			
+//		}
+//		
+//		newOcc.setCreated(o.getCreated());
+//		newOcc.setData(o.getData());
+//		newOcc.setTitle(o.getTitle());
+//		newOcc.setUser(o.getUser());
+//		newOcc.setLastUpdated(o.getLastUpdated());
+//		
+//		return newOcc;
+//	}
 
 
 	

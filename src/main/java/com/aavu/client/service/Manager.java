@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.gwm.client.GInternalFrame;
 
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -54,9 +55,7 @@ public interface Manager {
 
 
 	void newMeta(Meta meta, AsyncCallback callback);
-
-	void newTopic();
-
+	
 	void explore();
 
 	void showPreviews(long int0);
@@ -64,6 +63,9 @@ public interface Manager {
 	void updateStatus(int myNum, String string, StatusCode fail);
 
 	void userNeedsToUpgrade();
+
+	void createNew(Topic topic);
+	
 
 //	void explore(Topic myTag, List topics);
 

@@ -89,7 +89,7 @@ public class TopicCache {
 			}
 			else{
 				System.out.println("Create New! ");
-				createNew(linkTo, new Root(),originalCallback);
+				createNew(linkTo, new Root(),null,originalCallback);
 								
 			}
 		}
@@ -185,21 +185,10 @@ public class TopicCache {
 	}
 
 
-	/**
-	 * All new topic creation shoudl route through here
-	 * 
-	 * @param title
-	 * @param isIsland
-	 * @param callback
-	 */
-	public void createNew(String title, Topic parent, AsyncCallback callback) {
-				
-		createNew(title, new Topic(),parent,callback);		
-	}
 
-	public void createNew(String title, Topic topicOrTagOrMeta, Topic parent, AsyncCallback callback) {
+	public void createNew(String title, Topic prototype, Topic parent, AsyncCallback callback) {
 				
-		topicService.createNew(title, topicOrTagOrMeta, parent, callback);		
+		topicService.createNew(title, prototype, parent, callback);		
 	}	
 	
 	public void delete(Topic topic, StdAsyncCallback callback) {

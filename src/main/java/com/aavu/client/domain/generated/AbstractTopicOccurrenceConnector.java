@@ -3,23 +3,21 @@ package com.aavu.client.domain.generated;
 import java.io.Serializable;
 
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.OccurrenceI;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.TopicTypeConnector;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class AbstractTopicOccurrenceConnector implements Serializable, IsSerializable {
 
 	private long id;
 	private Topic topic;
-	private OccurrenceI occurrence;
+	private Occurrence occurrence;
 	private int latitude;
 	private int longitude;
 	
 	public AbstractTopicOccurrenceConnector(){}
 	
 	
-	public AbstractTopicOccurrenceConnector(Topic topic, OccurrenceI occurrence, int latitude, int longitude) {
+	public AbstractTopicOccurrenceConnector(Topic topic, Occurrence occurrence, int latitude, int longitude) {
 		super();
 		this.topic = topic;
 		this.occurrence = occurrence;
@@ -54,12 +52,12 @@ public class AbstractTopicOccurrenceConnector implements Serializable, IsSeriali
 	
 
 
-	public OccurrenceI getOccurrence() {
+	public Occurrence getOccurrence() {
 		return occurrence;
 	}
 
 
-	public void setOccurrence(OccurrenceI occurrence) {
+	public void setOccurrence(Occurrence occurrence) {
 		this.occurrence = occurrence;
 	}
 

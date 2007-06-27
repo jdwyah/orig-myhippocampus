@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.gadgets.Gadget;
-import com.aavu.client.gui.gadgets.GadgetPicker;
+import com.aavu.client.gui.gadgets.Ribbon;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Composite;
@@ -17,7 +17,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 	private Manager manager;
 
 	private VerticalPanel gadgetPanel;
-	private GadgetPicker gadgetPicker;
+	private Ribbon gadgetPicker;
 
 	private Topic topic;
 	
@@ -33,7 +33,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 		gadgetPanel = new VerticalPanel();
 		gadgetPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);		
 		
-		gadgetPicker = new GadgetPicker(manager.getGadgetManager());
+		gadgetPicker = new Ribbon(manager.getGadgetManager());
 		manager.getGadgetManager().addGadgetClickListener(this);
 		
 		mainPanel.add(gadgetPicker);
@@ -44,7 +44,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 		addStyleName("H-AbsolutePanel");
 		addStyleName("H-RightInfo");		
 		
-		setVisible(false);
+		setVisible(true);
 	}
 
 

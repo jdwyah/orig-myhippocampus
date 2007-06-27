@@ -21,7 +21,7 @@ public class GadgetManager {
 	private MapGadget mapGadget;
 	//private TagPropertyPanel tagProperties;
 	private boolean initted = false;
-	private List listeners;
+	private List listeners = new ArrayList();
 
 
 	public GadgetManager(Manager manager){
@@ -62,7 +62,7 @@ public class GadgetManager {
 		return allGadgets;		
 	}
 
-	public void show(Gadget gadget) {
+	public void fireGadgetClick(Gadget gadget) {
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			GadgetClickListener listener = (GadgetClickListener) iterator.next();
 			listener.clicked(gadget);

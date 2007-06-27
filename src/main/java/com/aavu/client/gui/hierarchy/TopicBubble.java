@@ -4,6 +4,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
 import com.aavu.client.service.Manager;
@@ -32,7 +33,7 @@ public class TopicBubble extends AbstractBubble implements Bubble, ClickListener
 	
 		this.fti = fti;
 		
-		
+		setDropController(new BubbleDropController(this));
 		
 		addClickListener(this);
 		
@@ -108,5 +109,7 @@ public class TopicBubble extends AbstractBubble implements Bubble, ClickListener
 		super.setTop(top);
 		fti.setLatitudeOnIsland(top);
 	}
-
+	public TopicIdentifier getIdentifier() {		
+		return fti;
+	}
 }

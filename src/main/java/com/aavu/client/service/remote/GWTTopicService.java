@@ -21,7 +21,7 @@ public interface GWTTopicService extends RemoteService {
 	
 	void changeState(long topicID, boolean toIsland) throws HippoException;
 		
-	TopicIdentifier createNew(String title,Topic topicOrTagOrMeta, Topic parent) throws HippoBusinessException;
+	TopicIdentifier createNew(String title,Topic prototype, Topic parent) throws HippoBusinessException;
 	void delete(Topic topic) throws HippoException;
 	
 	void deleteOccurrence(long id) throws HippoException;

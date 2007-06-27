@@ -99,6 +99,9 @@ public class UploadBoard extends Gadget {
 	public boolean enabled(User user) {
 		return user.isPremiumAccount();
 	}
-	
+	//@Override
+	public void onClick(Manager manager) {
+		throw new UnsupportedOperationException();
+	}
 	
 }

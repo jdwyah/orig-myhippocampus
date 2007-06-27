@@ -1,8 +1,6 @@
 package com.aavu.client.service;
 
 
-import java.util.List;
-
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
@@ -10,11 +8,14 @@ import org.gwtwidgets.client.ui.ProgressBar;
 import com.aavu.client.Interactive;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.CreateNewWindow;
@@ -36,6 +37,7 @@ import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
@@ -117,9 +119,58 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		History.newItem(""+topic.getId());
 		
 	}
+	public void clicked(Gadget gadget) {
+		
+		gadget.onClick(this);
+		
+		
+		//map.growIsland();
+	}
+	
+	
+	/**
+	 * keeping it simple right now. probably want some sort of Action framework here...
+	 * 
+	 * trick is to get us the ID, so that if we do a create, then an edit, we don't dupe on server.
+	 * 
+	 */
+	public void createNew(final Topic t) {			
+		
+		if(t instanceof Occurrence){
+						
+			System.out.println("Create new "+t+" "+GWT.getTypeName(t));
+			getTopicCache().createNew("New Occ", t,getCurrentTopic(), new StdAsyncCallback(ConstHolder.myConstants.save_async()){
+				public void onSuccess(Object result) {
+						super.onSuccess(result);
+					
+						TopicIdentifier res = (TopicIdentifier) result;				
+						
+						t.setId(res.getTopicID());
+						t.setTitle(res.getTopicTitle());
+						
+						System.out.println("Received "+t+" "+GWT.getTypeName(t));
+						
+						getCurrentTopic().addOccurence((Occurrence) t);
+						
+						map.growIsland(t);
+						
+						fireIslandCreated();					
+				}			
+			});									
+			
+		}else{
+		
+			CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.topic_new(), new EZCallback(){
+				public void onSuccess(Object result) {
+					createTopic((String) result, getCurrentTopic());
+				}});
+		}
+		
+	}
+
 	public void createTopic(final String name,final Topic currentTopic) {
 
-		getTopicCache().createNew(name, currentTopic, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
+		getTopicCache().createNew(name, new Topic(),currentTopic, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
 			public void onSuccess(Object result) {
 				super.onSuccess(result);				
 				TopicIdentifier res = (TopicIdentifier) result;				
@@ -135,9 +186,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 				
 			}			
 		});						
-	}
-	
-	
+	}	
 	public void delete(final Topic topic,final AsyncCallback callback) {
 		getTopicCache().delete(topic,new StdAsyncCallback(ConstHolder.myConstants.delete_async()){
 			public void onSuccess(Object result) {
@@ -152,18 +201,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			}				
 		});
 	}
-	
-
-
-
-	
-//	public void showTagBoard() {
-//
-//		TagEditorWindow tw = new TagEditorWindow(hippoCache,newFrame());
-//		
-//	}
-	
-	
 
 	/**
 	 * Simple warning dialog wrapper
@@ -175,26 +212,22 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		GInternalFrame f = newFrame();
 		PopupWindow w = new PopupWindow(f,ConstHolder.myConstants.displayInfoTitle(),true);			
 		f.setContent(warning);
-	}	
+	}
+
+
+
 	public void doLogin(){
 		LoginService.doLogin(newFrame(),this);
 	}
+	
 
 	public void editEntry(Topic topic) {				
 		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());						
 	}
-
-
-
+	
 	public void editMetas(AsyncCallback callback,final Meta type) {
 		EditMetaWindow ew = new EditMetaWindow(this,newFrame(),type, callback);
 	}
-	
-
-	private Topic getCurrentTopic(){
-		return (Topic) currentObjs.get(0);
-	}
-	
 	public void explore() {
 		explore(getCurrentTopic());
 		
@@ -204,21 +237,25 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		ViewMemberWindow gw = new ViewMemberWindow(myTag.getTitle(),this,newFrame());
 		gw.load();
 	}
+	
 	public void fireIslandCreated() {	
 		if(userActionListener != null){
 			userActionListener.islandCreated();
 		}
 	}
-	
 	public void fireOceanLoaded(int num_islands) {		
 		if(userActionListener != null){
 			userActionListener.oceanLoaded(num_islands);
 		}
 	}
+	
 	public void fireTopicCreated() {		
 		if(userActionListener != null){
 			userActionListener.topicCreated();
 		}
+	}
+	private Topic getCurrentTopic(){
+		return (Topic) currentObjs.get(0);
 	}
 	
 	/**
@@ -235,6 +272,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 //		return p;
 		return map;
 	}
+	
 	public TagLocalService getTagLocalService() {
 		if(tagLocalService == null){
 			tagLocalService = new TagLocalService();
@@ -242,9 +280,13 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		return tagLocalService;
 	}
 	
+	
+	
+	
 	public User getUser() {
 		return user;
 	}
+	
 	
 	/**
 	 * we can goto a topic linked by either Name, or ID.
@@ -282,18 +324,13 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		}
 	}
 	
-	
-	
-	
 	public void growIsland(Topic tag) {
 		map.growIsland(tag);
 	}
 	
-	
 	public void loadFinished() {
 		Preloader.preload("HippoPreLoad.html");
 	}
-	
 	/**
 	 * User is logged in. Update GUI.
 	 *
@@ -313,7 +350,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		});			
 		
 	}
-	
 	/**
 	 * Call when we've been not logged in, but we've now logged in, and we need to setup the 
 	 * GUI elements.
@@ -323,9 +359,12 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void loginSuccess() {
 		setup("LOGIN SUCC");
 	}
+	
+	
 	public GInternalFrame newFrame() {
 		return newFrame("");
 	}
+	
 	private GInternalFrame newFrame(String title) {
 		
 		GInternalFrame frame = new DefaultGInternalFrame(title);
@@ -334,7 +373,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		
 		return frame;
 	}
-	
 	
 	/**
 	 * pass the type of meta you'd like created and. 
@@ -347,19 +385,12 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void newMeta(final Meta meta,final AsyncCallback callback) {
 		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.meta_new(), new EZCallback(){
 				public void onSuccess(Object result) {
-					getTopicCache().createNew((String)result, meta, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
+					getTopicCache().createNew((String)result, meta, null, new StdAsyncCallback(ConstHolder.myConstants.save_async()){
 						public void onSuccess(Object result) {
 							super.onSuccess(result);				
 							callback.onSuccess(result);										
 						}});
 				}});
-	}
-	public void newTopic() {			
-		
-		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.topic_new(), new EZCallback(){
-			public void onSuccess(Object result) {
-				createTopic((String) result, getCurrentTopic());
-			}});			
 	}
 	public void refreshAll(){		
 		map.refreshIslands();
@@ -367,6 +398,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void setMap(MainMap map) {
 		this.map = map;
 	}
+
 	/**
 	 * This will try to get the current user.
 	 * If it suceeds it will run the GUI load scripts.
@@ -411,11 +443,12 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 				}
 			}						
 		});		
-	}
-
+	}	
+	
 	public void showHelp() {
 		HelpWindow hw = new HelpWindow(this,newFrame());
-	}	
+	}
+	
 	
 	/*
 	 * 
@@ -434,8 +467,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 				//IslandDetailsWindow tcw = new IslandDetailsWindow(tag,topics,Manager.this);						
 			}});			
 	}
-	
-	
 	public PopupWindow showProgressBar(ProgressBar progressBar) {		
 		ProgressPopup win = new ProgressPopup(newFrame(progressBar.getTitle()),progressBar.getTitle(),progressBar);				
 		return win;
@@ -457,6 +488,8 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			map.growIsland(tag);
 		}
 	}
+	
+	
 	public void unselect() {
 		map.unselect();
 	}
@@ -466,27 +499,22 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		map.updateStatusWindow(i, call, send);
 	}
 	
-	
 	public void userNeedsToUpgrade() {
 		displayInfo(ConstHolder.myConstants.userNeedsToUpgrade());		
 	}
-	
 	public void zoomIn() {
 		map.zoomIn();
 	}
+
+
+
 	public void zoomOut() {
 		map.zoomOut();
 	}
 
 
-
 	public void zoomTo(double scale) {
 		map.zoomTo(scale);	
-	}
-
-
-	public void clicked(Gadget gadget) {
-		//map.growIsland(gadget.getNewHippoIdentifier());
 	}
 
 

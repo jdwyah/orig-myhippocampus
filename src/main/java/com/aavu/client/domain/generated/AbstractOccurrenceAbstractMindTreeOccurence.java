@@ -25,11 +25,7 @@ public abstract class AbstractOccurrenceAbstractMindTreeOccurence extends com.aa
     public AbstractOccurrenceAbstractMindTreeOccurence() {
     }
 
-    /** full constructor */
-    public AbstractOccurrenceAbstractMindTreeOccurence(User user, String title, String data, Date lastUpdated, Date created, MindTree MindTree) {
-        super(user, title, data, lastUpdated, created);        
-       this.MindTree = MindTree;
-    }
+   
     
    
     // Property accessors

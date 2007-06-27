@@ -199,7 +199,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				
 				System.out.println("id: "+entry.getId());
 
-				List<TopicIdentifier> topicIDList = selectDAO.getTopicForOccurrence(entry.getId());
+				List<TopicIdentifier> topicIDList = selectDAO.getTopicForOccurrence(entry.getId(),user);
 				
 				if(topicIDList.size() > 0){
 					//TODO what if it has multiple refs?
@@ -216,7 +216,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				}
 			}else if (obj instanceof URI) {
 				URI uri = (URI) obj;
-				List<TopicIdentifier> topicIDList = selectDAO.getTopicForOccurrence(uri.getId());
+				List<TopicIdentifier> topicIDList = selectDAO.getTopicForOccurrence(uri.getId(),user);
 				
 				//PEND errored when we searched for a username... ie "test"
 				if(topicIDList.size() > 0){

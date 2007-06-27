@@ -156,4 +156,9 @@ public class TagPropertyPanel extends Gadget {
 	}
 
 	
+	//@Override
+	public void onClick(Manager manager) {
+		throw new UnsupportedOperationException();
+	}
+	
 }

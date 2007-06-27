@@ -1103,7 +1103,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic st = editDAO.save(t);
 
 		System.out.println("ling "+link.getId());
-		List<TopicIdentifier> ident = selectDAO.getTopicForOccurrence(link.getId());
+		List<TopicIdentifier> ident = selectDAO.getTopicForOccurrence(link.getId(),u);
 		assertEquals(t.getId(),ident.get(0).getTopicID());
 
 	}
@@ -1409,7 +1409,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(-1, fti.getLongitude());
 
 		//sysout
-		editDAO.saveTopicsLocation(tag.getId(), t.getId(), 23, 47);
+		editDAO.saveTopicsLocation(tag.getId(), t.getId(), 23, 47,u);
 
 		topicsWithTopic = selectDAO.getTopicIdsWithTag(tag.getId(), u);
 		assertEquals(1, topicsWithTopic.size());
@@ -1434,7 +1434,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		
 		int Y = 4545;
 		int X = 232;
-		editDAO.saveOccurrenceLocation(t.getId(), e.getId(), Y, X);
+		editDAO.saveOccurrenceLocation(t.getId(), e.getId(), Y, X,u);
 				
 		Topic saved = selectDAO.getForID(u, t.getId());
 		
