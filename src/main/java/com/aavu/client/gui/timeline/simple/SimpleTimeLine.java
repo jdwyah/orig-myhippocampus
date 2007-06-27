@@ -169,9 +169,8 @@ public class SimpleTimeLine extends Composite implements HippoTimeline {
 
 
 	
-	public void load(List timelines) {
+	public void add(List timelines) {
 				
-		clear();
 		
 		//TreeOfTime tree = new TreeOfTime(1,3,MAX_MEMBERS);
 		

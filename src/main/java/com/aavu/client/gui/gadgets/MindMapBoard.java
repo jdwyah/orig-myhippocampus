@@ -50,7 +50,7 @@ public class MindMapBoard extends Composite {
 		
 		mainPanel.clear();
 		
-		treeOcc = topic.getMindTree();
+		treeOcc = topic.getMyMindTree();
 		
 		
 		Button mapB = new Button(ConstHolder.myConstants.mapperAddMap());

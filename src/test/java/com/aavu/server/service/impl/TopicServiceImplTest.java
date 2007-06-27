@@ -207,7 +207,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		}
 		TopicOccurrenceConnector owl = (TopicOccurrenceConnector) savedTopic.getOccurences().iterator().next();
 		
-		Occurrence occ = owl.getOccurrence();
+		Occurrence occ = (Occurrence) owl.getOccurrence();
 		for (Iterator iterator = occ.getTopics().iterator(); iterator.hasNext();) {
 			Topic top = (Topic) iterator.next();
 			System.out.println("Top "+top);

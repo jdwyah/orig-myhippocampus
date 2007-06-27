@@ -1,19 +1,20 @@
 package com.aavu.client.gui.explorer;
 
 import java.util.List;
-import java.util.Map;
 
 import com.aavu.client.gui.ext.tabbars.Orientation;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 
-public class ExplorerGlossary extends FTICachingExplorerPanel {
+public class ExplorerGlossary extends Composite implements ExplorerPanel {
 	
 	private Glossary myGlossary;
+	private Manager manager;
 
-	public ExplorerGlossary(Manager manager, Map defaultMap, Orientation orient) {
-		super(manager, defaultMap);
-		
+	public ExplorerGlossary(Manager manager, Orientation orient) {
+		this.manager = manager;
 		myGlossary = new Glossary(manager,orient);
 		initWidget(myGlossary);
 	}
@@ -30,6 +31,16 @@ public class ExplorerGlossary extends FTICachingExplorerPanel {
 
 	public void loadAll() {
 		myGlossary.doAdHoc();
+	}
+
+
+
+	public void load(List topics) {
+		// TODO Auto-generated method stub
+		
+	}
+	public Widget getWidget(){
+		return this;
 	}
 
 }

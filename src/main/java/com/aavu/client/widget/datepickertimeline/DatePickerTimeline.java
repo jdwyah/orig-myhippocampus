@@ -54,7 +54,7 @@ public class DatePickerTimeline extends ZoomableTimeline implements DragEventLis
 	public void setSelectedDate(Date created) {
 		List timelines = new ArrayList();
 		timelines.add(new TimeLineObj(new TopicIdentifier(),created,null));
-		load(timelines);
+		add(timelines);
 	}
 
 	public void dragged(Widget dragging, int newX, int newY) {

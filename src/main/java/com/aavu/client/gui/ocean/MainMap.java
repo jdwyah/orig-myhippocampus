@@ -74,7 +74,6 @@ public class MainMap extends HippoDesktopPane {
 		//spatialDisplay = new OceanFlashImpl(manager);
 		//spatialDisplay = new OceanDHTMLImpl(manager);
 		spatialDisplay = new HierarchyDisplay(manager);
-		
 
 		
 		statusPanel = new StatusPanel();
@@ -105,6 +104,8 @@ public class MainMap extends HippoDesktopPane {
 		mainP.add(centerDisplayer);
 		
 		gadgetDisplayer = new GadgetDisplayerBarImpl(manager);
+		
+		
 		
 		mainP.add(gadgetDisplayer.getWidget());
 		

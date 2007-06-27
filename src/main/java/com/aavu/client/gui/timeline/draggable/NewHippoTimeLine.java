@@ -106,10 +106,8 @@ public class NewHippoTimeLine extends Composite implements ChangeListener, Hippo
 		overView.init();
 	}
 	
-	public void load(List timelines) {
+	public void add(List timelines) {
 				
-		clear();
-		
 		TreeOfTime tree = new TreeOfTime(1,3,5,detailView.getNumberOfSlots());
 		
 		for (Iterator iter = timelines.iterator(); iter.hasNext();) {

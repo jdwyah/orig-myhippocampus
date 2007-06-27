@@ -168,6 +168,42 @@
 			</subclass>
 		</subclass>
 		
+		
+		<!-- No DB properties -->
+		<subclass name="CopyOfOccurrence" discriminator-value="occurrence">
+		
+			<property name="data" type="string">
+				<meta attribute="use-in-equals">true</meta>
+				<column name="data" sql-type="mediumtext"></column>
+			</property>
+		
+			<subclass name="CopyOfEntry" discriminator-value="entry">
+				<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>	
+			</subclass>
+
+			
+
+			<!-- Has a DB property! -->
+			<subclass name="CopyOfURI" discriminator-value="uri">
+				<meta attribute="generated-class" inherit="false">AbstractURI</meta>
+
+				<property name="uri" type="string">
+					<column name="uri" sql-type="varchar(2048)"></column>
+				</property>
+
+				<subclass name="CopyOfWebLink" discriminator-value="link">
+					<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+				</subclass>
+
+				<subclass name="CopyOfS3File" discriminator-value="file">
+					<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+				</subclass>
+
+				<!-- could have local HD links too.. -->
+
+			</subclass>
+		</subclass>
+
 		<!-- a real class has members -->
 		<subclass name="Association" discriminator-value="association">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractAssociation</meta>

@@ -333,7 +333,7 @@ public class Topic extends AbstractTopic  implements Completable, IsSerializable
 	 * 
 	 * @return
 	 */
-	public MindTreeOcc getMindTree() {
+	public MindTreeOcc getMyMindTree() {
 		MindTreeOcc rtn = null;
 		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
 			Occurrence occur = (Occurrence) iter.next();

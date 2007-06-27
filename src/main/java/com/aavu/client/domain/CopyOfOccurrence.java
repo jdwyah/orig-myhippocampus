@@ -2,15 +2,13 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 
-import com.aavu.client.domain.generated.AbstractOccurrence;
-import com.aavu.client.domain.subjects.Subject;
+import com.aavu.client.domain.generated.CopyOfAbstractOccurrence;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Occurrence extends AbstractOccurrence implements Serializable,IsSerializable, ReallyCloneable, OccurrenceI {
+public class CopyOfOccurrence extends CopyOfAbstractOccurrence implements Serializable,IsSerializable, ReallyCloneable, OccurrenceI {
 	
-	public Occurrence(){
+	public CopyOfOccurrence(){
 		
 	}
 
@@ -19,7 +17,7 @@ public class Occurrence extends AbstractOccurrence implements Serializable,IsSer
      */
 	//@Override
 	public Object clone() {				   		
-		return copyPropsIntoParam(new Occurrence());
+		return copyPropsIntoParam(new CopyOfOccurrence());
 	}
 	
 	/**
@@ -28,7 +26,7 @@ public class Occurrence extends AbstractOccurrence implements Serializable,IsSer
 	 * @param o
 	 * @return
 	 */
-	public Occurrence copyPropsIntoParam(Occurrence o){
+	public CopyOfOccurrence copyPropsIntoParam(CopyOfOccurrence o){
 		o.setId(getId());
 		o.setUser(getUser());
 		o.setTitle(getTitle());
@@ -38,10 +36,7 @@ public class Occurrence extends AbstractOccurrence implements Serializable,IsSer
 		return o;
 	}
 	
-	public Occurrence(User user, String title, String data, Date lastUpdated, Date created) {
-		super(user,title,data,lastUpdated,created);
-	}
-
+	
 	
 
 }

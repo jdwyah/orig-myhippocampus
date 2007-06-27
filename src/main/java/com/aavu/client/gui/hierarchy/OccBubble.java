@@ -25,7 +25,7 @@ public class OccBubble extends AbstractBubble implements Bubble {
 		this.owl = owl;
 		
 		
-		addMouseListener(new OccDisplayListener(owl.getOccurrence()));
+		//addMouseListener(new OccDisplayListener(owl.getOccurrence()));
 	}
 
 	//@Override

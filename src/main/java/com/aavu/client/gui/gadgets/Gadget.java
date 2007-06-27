@@ -67,5 +67,7 @@ public abstract class Gadget extends Composite {
 	public boolean enabled(User user) {
 		return true;
 	}
+
+	//public abstract Topic getNewHippoIdentifier();
 	
 }

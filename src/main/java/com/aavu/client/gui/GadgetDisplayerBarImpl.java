@@ -34,7 +34,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 		gadgetPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);		
 		
 		gadgetPicker = new GadgetPicker(manager.getGadgetManager());
-		manager.getGadgetManager().setGadgetDisplayer(this);
+		manager.getGadgetManager().addGadgetClickListener(this);
 		
 		mainPanel.add(gadgetPicker);
 		mainPanel.add(gadgetPanel);
@@ -78,7 +78,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 	}
 
 
-	public void addGadget(Gadget gadget) {
+	public void clicked(Gadget gadget) {
 		if(!gadget.enabled(manager.getUser())){
 			manager.displayInfo(ConstHolder.myConstants.gadget_not_available());
 			return;

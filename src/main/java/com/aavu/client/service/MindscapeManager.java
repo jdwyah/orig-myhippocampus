@@ -1,7 +1,6 @@
 package com.aavu.client.service;
 
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.gwm.client.GInternalFrame;
@@ -12,7 +11,6 @@ import com.aavu.client.Interactive;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
-import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -28,6 +26,8 @@ import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.gui.ViewMemberWindow;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.gadgets.Gadget;
+import com.aavu.client.gui.gadgets.GadgetClickListener;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.ocean.MainMap;
 import com.aavu.client.help.HelpWindow;
@@ -40,7 +40,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MindscapeManager extends AbstractManager implements Manager, TopicSaveListener, LoginListener, LoadFinishedListener  {
+public class MindscapeManager extends AbstractManager implements Manager, TopicSaveListener, LoginListener, LoadFinishedListener, GadgetClickListener  {
 	
 	
 	private class ProgressPopup extends PopupWindow{
@@ -50,7 +50,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			
 		}		
 	}
-	private Topic currentTopic;
+	
 	
 	//private FramesManager framesManager;
 	//private DefaultGDesktopPane desktop;
@@ -89,7 +89,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	    		
 		map = new MainMap(this);
 		
-		
+		getGadgetManager().addGadgetClickListener(this);
 	}
 	
 
@@ -98,8 +98,10 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void addDeliciousTags(String username, String password,AsyncCallback callback) {
 		getHippoCache().getSubjectService().addDeliciousTags(username, password, callback);		
 	}
-	public void bringUpChart(Topic topic) {		
-		currentTopic = topic;
+	public void bringUpChart(Topic topic) {
+		
+		currentObjs.clear();
+		currentObjs.add(topic);
 		
 		System.out.println("bring up chart Topic "+topic);
 		
@@ -109,16 +111,8 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		if(map.centerOn(topic)){
 			map.ensureZoomOfAtLeast(4);
 		}
+	
 		
-		if(topic.getId() == 2081){
-			System.out.println("2081 size "+topic.getOccurences().size());
-			
-			for (Iterator iterator = topic.getOccurenceObjs().iterator(); iterator.hasNext();) {
-				Occurrence link = (Occurrence) iterator.next();
-				System.out.println("link "+link.getTopics().size());
-				//assertEquals(1, link.getTopics().size());
-			}
-		}
 		
 		History.newItem(""+topic.getId());
 		
@@ -197,14 +191,18 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 	
 
+	private Topic getCurrentTopic(){
+		return (Topic) currentObjs.get(0);
+	}
+	
 	public void explore() {
-		explore(currentTopic,null);
+		explore(getCurrentTopic());
 		
 	}
-	public void explore(Topic myTag, List topics) {
+	public void explore(Topic myTag) {
 
-		ViewMemberWindow gw = new ViewMemberWindow(myTag.getIdentifier(), topics,this,newFrame());
-		
+		ViewMemberWindow gw = new ViewMemberWindow(myTag.getTitle(),this,newFrame());
+		gw.load();
 	}
 	public void fireIslandCreated() {	
 		if(userActionListener != null){
@@ -273,7 +271,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		}else if(l != -1){// == HippoTest.EMPTY
 			
 			//don't load if we're already loaded
-			if(currentTopic != null && currentTopic.getId() != l){
+			if(!currentObjs.isEmpty() && getCurrentTopic().getId() != l){
 				getHippoCache().getTopicCache().getTopicByIdA(l,new StdAsyncCallback("GotoTopicID "+l){
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
@@ -360,7 +358,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		
 		CreateNewWindow n = new CreateNewWindow(this,ConstHolder.myConstants.topic_new(), new EZCallback(){
 			public void onSuccess(Object result) {
-				createTopic((String) result, currentTopic);
+				createTopic((String) result, getCurrentTopic());
 			}});			
 	}
 	public void refreshAll(){		
@@ -485,7 +483,13 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void zoomTo(double scale) {
 		map.zoomTo(scale);	
 	}
-	
+
+
+	public void clicked(Gadget gadget) {
+		//map.growIsland(gadget.getNewHippoIdentifier());
+	}
+
+
 	
 
 

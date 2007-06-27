@@ -9,5 +9,7 @@ public interface InitDAO {
 	void upgradeRemoveTags() throws HippoBusinessException;
 	
 	void displayRootInfo() throws HippoBusinessException;
+
+	void convertToAllTopics();
 	
 }

@@ -133,6 +133,8 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	private int[] ySlots;
 	private boolean ySlotsDirty = false;
 	
+	private GWTSortedMap sorted = new GWTSortedMap();
+	
 	public ZoomableTimeline(Manager manager,int width, int height, CloseListener window){
 		super();
 		this.manager = manager;
@@ -204,16 +206,29 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		}
 	}
 	
-	public void load(List timelines) {
-		clear();
+	
+	
+	//@Override
+	public void clear() {
+		super.clear();
+		sorted.clear();
+		
+	}
+	public void add(List timelines) {
+		
+		System.out.println("!!!!!Zoom add "+timelines.size()+" sorted size "+sorted.size());
 		
 		
-		GWTSortedMap sorted = new GWTSortedMap();
 		
 		for (Iterator iter = timelines.iterator(); iter.hasNext();) {
 			TimeLineObj tlo = (TimeLineObj) iter.next();
 			sorted.put(tlo, null);
 		}
+		
+		super.clear();
+		
+		
+		System.out.println("addObj "+sorted.size());
 		
 		for (Iterator iter = sorted.keySet().iterator(); iter.hasNext();) {
 
@@ -240,12 +255,13 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 			addObject(ll);
 		}
 		
-		
-		TimeLineObj last = (TimeLineObj) sorted.getKeyList().get(sorted.size() - 1);
-		System.out.println("last "+last);
-		if(last != null){			
-			//System.out.println("move to "+last.getLeft()+" "+TimeLineObj.getDateForLeft(last.getLeft()));
-			centerOn(last.getLeft(), 0);			
+		if(!sorted.isEmpty()){
+			TimeLineObj last = (TimeLineObj) sorted.getKeyList().get(sorted.size() - 1);
+			System.out.println("last "+last);
+			if(last != null){			
+				//System.out.println("move to "+last.getLeft()+" "+TimeLineObj.getDateForLeft(last.getLeft()));
+				centerOn(last.getLeft(), 0);			
+			}
 		}
 		
 		updateLabels();

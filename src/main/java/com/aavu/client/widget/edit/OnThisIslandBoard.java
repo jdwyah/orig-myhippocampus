@@ -87,7 +87,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	
 
 	private void viewMembers() {
-		manager.explore(myTag,topics);				
+		manager.explore();				
 	}
 	
 	public int load(Topic topic){

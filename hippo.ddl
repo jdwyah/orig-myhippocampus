@@ -120,7 +120,9 @@
         dateCreated timestamp,
         public_visible tinyint(1),
         subject bigint,
-        subject_id bigint,
+        subject_id bigint,	
+	   `data` mediumtext collate utf8_bin,
+	   `uri` varchar(2048) collate utf8_bin default NULL,
         primary key (topic_id)
     ) type=InnoDB;
 
@@ -208,11 +210,17 @@
         primary key (association_id, topic_id)
     ) type=InnoDB;
 
-    create table topic_occurences (
-        occurrence_id bigint not null,
-        topic_id bigint not null,
-        primary key (occurrence_id, topic_id)
-    ) type=InnoDB;
+
+CREATE TABLE `topic_occurences` (
+  `connector_id` bigint(20) NOT NULL auto_increment,
+  `occurrence_id` bigint(20) NOT NULL,
+  `topic_id` bigint(20) NOT NULL,
+  `latitude` int(11) NOT NULL default '-1',
+  `longitude` int(11) NOT NULL default '-1',
+  PRIMARY KEY  (`connector_id`),
+  KEY `FK6F7A6BACCEFD292F` (`occurrence_id`),
+  KEY `FK6F7A6BAC479BD4A5` (`topic_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=177 ;
 
     create table topic_scopes (
         topic_id bigint not null,

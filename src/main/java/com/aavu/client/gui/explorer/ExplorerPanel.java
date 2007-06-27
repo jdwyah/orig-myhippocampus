@@ -1,9 +1,7 @@
 package com.aavu.client.gui.explorer;
 
-import java.util.Set;
+import java.util.List;
 
-import com.aavu.client.domain.dto.TagStat;
-import com.aavu.client.domain.dto.TopicIdentifier;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface ExplorerPanel {
@@ -13,6 +11,7 @@ public interface ExplorerPanel {
 	//Set<TopicIdentifier>
 	//all == null
 	void loadAll();
-	void load(Set tags);
+
+	void load(List tags);
 
 }

@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import sun.security.krb5.internal.crypto.t;
+
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.IntPair;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.explorer.ExplorerPanel;
 import com.aavu.client.gui.glossary.SimpleTopicDisplay;
 import com.aavu.client.gui.maps.ext.GWTInfoWidget;
@@ -120,11 +124,19 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		return this;
 	}
 
-	public void load(Set tags) {
-		List tagL = new ArrayList();
-		tagL.addAll(tags);
-
-		manager.getTopicCache().getLocationsFor(tagL,new StdAsyncCallback(ConstHolder.myConstants.bigmap_getall_async()){
+	private List converTopicToTI(List topics){
+		List ll = new ArrayList();
+		for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
+			Topic t = (Topic) iterator.next();
+			ll.add(t.getIdentifier());
+		}
+		return ll;
+	}
+	
+	public void load(List tags) {
+		
+		
+		manager.getTopicCache().getLocationsFor(converTopicToTI(tags),new StdAsyncCallback(ConstHolder.myConstants.bigmap_getall_async()){
 			//@Override
 			public void onSuccess(Object result) {
 				super.onSuccess(result);				
@@ -190,6 +202,8 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 				marker.openInfoWindow(gwtInfoWidg);				
 			}}); 		
 	}
+
+
 
 	
 

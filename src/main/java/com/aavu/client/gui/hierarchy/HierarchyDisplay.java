@@ -224,8 +224,8 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		System.out.println("Hdisplay.load DragController"+dragController);
 
 		clear();
-		loadTopicOcc(t);
 		
+		loadTopicOcc(t);		
 		loadChildTopics(t,loadFinished);
 		
 		

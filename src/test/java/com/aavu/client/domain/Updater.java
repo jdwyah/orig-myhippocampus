@@ -5,6 +5,7 @@ import com.aavu.server.dao.InitDAO;
 import com.aavu.server.dao.hibernate.HibernateTransactionalTest;
 
 public class Updater extends HibernateTransactionalTest {
+//public class Updater extends BaseTestNoTransaction {
 	
 	private InitDAO initDAO;
 
@@ -24,7 +25,20 @@ public class Updater extends HibernateTransactionalTest {
 	public void testrun() throws HippoBusinessException {
 		
 		
-		initDAO.upgradeRemoveTags();
+
+		initDAO.convertToAllTopics();
+		
 		
 	}
+	
+
+	public void testrunRemovetags() throws HippoBusinessException {
+		
+		
+		initDAO.upgradeRemoveTags();
+		
+		
+	}
+	
+
 }

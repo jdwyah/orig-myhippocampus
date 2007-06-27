@@ -1,5 +1,6 @@
 package com.aavu.client.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gwm.client.GInternalFrame;
@@ -10,7 +11,6 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.SearchResultsWindow;
-import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.images.Images;
 import com.aavu.client.service.cache.HippoCache;
@@ -24,8 +24,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public abstract class AbstractManager implements Manager {
 	
+	
+
 	private GadgetManager gadgetManager;	
 	private HippoCache hippoCache;
+	protected List currentObjs = new ArrayList();
 	
 	public AbstractManager(HippoCache hippoCache){
 		this.hippoCache = hippoCache;
@@ -93,6 +96,12 @@ public abstract class AbstractManager implements Manager {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public List getCurrentObjs() {
+		return currentObjs ;
+	}
+
+	
 	public GadgetManager getGadgetManager() {
 		return gadgetManager;
 	}

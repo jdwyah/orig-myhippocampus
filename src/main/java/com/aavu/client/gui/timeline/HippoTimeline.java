@@ -12,6 +12,7 @@ public interface HippoTimeline {
 
 	void resize(int newWidth, int newHeight);
 
-	void load(List result);
+	void add(List result);
+	void clear();
 
 }

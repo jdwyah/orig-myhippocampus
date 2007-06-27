@@ -3,7 +3,7 @@ package com.aavu.client.domain.dto;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TopicIdentifier implements IsSerializable, Comparable {
+public class TopicIdentifier implements HippoIdentifier, IsSerializable, Comparable {
 
 	private long topicID;
 	private String topicTitle;

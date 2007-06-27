@@ -41,24 +41,10 @@ public class Explorer extends Composite implements ButtonGroup {
 	
 	private Manager manager;
 	
-	//<Tag,FullTopicIdentifier>
-	
-	private TagChooser tagChooser;
 	
 	//<TopicIdentifier>
-	private Set tags = new HashSet();
 	private boolean allmode;
 	private SelectableButton currentButton;
-	
-
-
-	public Explorer(Manager manager, int width, int height, PopupWindow window) {
-		this(new HashMap(),null,manager,width,height,window);
-	}
-
-	public Explorer(TopicIdentifier myTag, Manager manager, int width, int height, PopupWindow window) {
-		this(new HashMap(),myTag,manager,width,height,window);
-	}
 
 	
 	/**
@@ -73,7 +59,7 @@ public class Explorer extends Composite implements ButtonGroup {
 	 * @param width 
 	 * @param frame
 	 */
-	public Explorer(Map defaultMap, TopicIdentifier myTag, Manager manager, int width, int height, PopupWindow window) {
+	public Explorer(Manager manager, int width, int height, PopupWindow window) {
 		
 		this.manager = manager;
 		//this.tagToIdentifierMap = defaultMap;
@@ -84,11 +70,11 @@ public class Explorer extends Composite implements ButtonGroup {
 		
 		currentView = new SimplePanel();		
 		
-		glossary = new ExplorerGlossary(manager,defaultMap,Orientation.HORIZONTAL);		
+		glossary = new ExplorerGlossary(manager,Orientation.HORIZONTAL);		
 						
-		timeline = new TimeLineWrapper(manager,defaultMap,width,height,window);
+		timeline = new TimeLineWrapper(manager,width,height,window);
 				
-		blogView = new BlogView(manager,defaultMap,width,height);
+		blogView = new BlogView(manager,width,height);
 		
 		bigMap = new BigMap(manager,window,width,height);
 		
@@ -108,25 +94,11 @@ public class Explorer extends Composite implements ButtonGroup {
 		optionsPanel.add(recentB);
 		optionsPanel.add(mapB);
 		//optionsPanel.add(lostNFoundB);
-		
-		tagChooser = new TagChooser(defaultMap,manager,this);
-		
-		//carfeull, tags = defaultMap.keySet() makes tags a HashMap.KeySet obj and .add() is unsopported
-		tags.addAll(defaultMap.keySet());
-		
-		
-		//should be duplicate safe 
-		tags.add(myTag);
-		
-		
-		if(tags.isEmpty()){
-			allmode = true;
-		}
+				
 		
 		CellPanel leftPanel = new VerticalPanel();
 		leftPanel.add(optionsPanel);
 		
-		leftPanel.add(tagChooser);
 		
 		mainP.add(leftPanel);
 		mainP.add(currentView);		
@@ -149,23 +121,14 @@ public class Explorer extends Composite implements ButtonGroup {
 	}
 	
 	//Set<TagStat>
-	public void load(Set tagstats) {
+	public void load() {
 		ExplorerPanel selectedPanel = selectedB.getExplorerP();
 		
 		allmode = false;
 		
-		System.out.println("explorer load "+tagstats.size());
-		tags.clear();
-		for (Iterator iter = tagstats.iterator(); iter.hasNext();) {
-			TopicIdentifier tag = (TopicIdentifier) iter.next();
-			System.out.println(" tag "+tag);
-			System.out.println("tags "+tags);
+		selectedB.getExplorerP().load(manager.getCurrentObjs());
 		
-			System.out.println(" type "+GWT.getTypeName(tags));
-			tags.add(tag);
-			
-		}				
-		selectedB.getExplorerP().load(tagstats);
+		
 	}
 
 	private class ExplorerB extends SelectableButton implements ClickListener{
@@ -189,13 +152,12 @@ public class Explorer extends Composite implements ButtonGroup {
 			super.onClick();
 			selectedB = (ExplorerB) sender;
 			
-			System.out.println("on click size "+tags.size()+" allmode "+allmode);
 			
 			currentView.clear();
 			if(allmode){
 				explorerP.loadAll();
 			}else{
-				explorerP.load(tags);
+				explorerP.load(manager.getCurrentObjs());
 			}
 			currentView.add(explorerP.getWidget());		
 			

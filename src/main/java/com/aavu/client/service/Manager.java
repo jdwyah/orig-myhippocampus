@@ -1,13 +1,14 @@
 package com.aavu.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.gwm.client.GInternalFrame;
 
-import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.gadgets.GadgetManager;
@@ -47,6 +48,8 @@ public interface Manager {
 
 	User getUser();
 
+	List getCurrentObjs();
+	
 	GInternalFrame newFrame();
 
 
@@ -62,7 +65,7 @@ public interface Manager {
 
 	void userNeedsToUpgrade();
 
-	void explore(Topic myTag, List topics);
+//	void explore(Topic myTag, List topics);
 
 	
 }

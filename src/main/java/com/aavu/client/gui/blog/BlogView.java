@@ -4,16 +4,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.gwtwidgets.client.util.SimpleDateFormat;
-
-import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.gui.TopicPreviewLink;
-import com.aavu.client.gui.explorer.FTICachingExplorerPanel;
+import com.aavu.client.gui.explorer.ExplorerPanel;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -33,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Jeff Dwyer
  *
  */
-public class BlogView extends FTICachingExplorerPanel {
+public class BlogView extends Composite implements ExplorerPanel  {
 	
 	/**
 	 * NOTE the - we want them in reverse chronological order.
@@ -64,10 +60,13 @@ public class BlogView extends FTICachingExplorerPanel {
 
 
 	private int loadAllStart = 0;
+
+	private boolean allMode;
+
+	private Manager manager;
 	
-	public BlogView(Manager manager, Map defaultMap, int width,int height) {
-		super(manager,defaultMap);	
-	
+	public BlogView(Manager manager, int width,int height) {
+		this.manager = manager;
 		
 		ScrollPanel scroll = new ScrollPanel(tagPanel);		
 		scroll.setHeight(height-100+"px");
@@ -126,7 +125,9 @@ public class BlogView extends FTICachingExplorerPanel {
 		
 		doLoadAll();
 	}
-	
+	public void load(List tags){
+		
+	}
 	private void doLoadAll(){
 		manager.getTopicCache().getAllTopicIdentifiers(loadAllStart, MAX_PER_PAGE, new StdAsyncCallback("Fetch Blog"){
 
@@ -283,6 +284,5 @@ public class BlogView extends FTICachingExplorerPanel {
 		}
 	}
 
-	
 	
 }

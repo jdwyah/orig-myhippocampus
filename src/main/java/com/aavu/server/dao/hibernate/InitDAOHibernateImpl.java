@@ -1,20 +1,26 @@
 package com.aavu.server.dao.hibernate;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.aavu.client.domain.CopyOfEntry;
+import com.aavu.client.domain.CopyOfOccurrence;
+import com.aavu.client.domain.CopyOfS3File;
+import com.aavu.client.domain.CopyOfWebLink;
+import com.aavu.client.domain.Entry;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
-import com.aavu.client.domain.Tag;
+import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.TopicTypeConnector;
+import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.dao.EditDAO;
@@ -82,7 +88,14 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 		for (User user : users) {
 		
 			log.info("User: "+user);
-			Root root = selectDAO.getRoot(user,user);
+			Root root= null;
+			try{
+				root = selectDAO.getRoot(user,user);
+			}catch (Exception e) {
+				root = new Root(user);
+				log.warn("No Root for "+user+" creating.");
+				getHibernateTemplate().save(root);								
+			}
 			
 			log.info("Root: "+root);
 			
@@ -114,10 +127,93 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 	
 	
 	
+	public void convertToAllTopics() {
+		List<User> users = userService.getAllUsers();
+		
+		for (User user : users) {
+		
+			log.info("User: "+user);
+			Root root= null;
+			try{
+				root = selectDAO.getRoot(user,user);
+			}catch (Exception e) {
+				root = new Root(user);
+				log.warn("No Root for "+user+" creating.");
+				getHibernateTemplate().save(root);								
+			}
+			
+			
+			log.info("Root: "+root);
+			
+			List<DatedTopicIdentifier> topics = selectDAO.getAllTopicIdentifiers(user, false);
+			
+			int count = 0;
+			log.info("Topics Size "+topics.size());
+			
+			for (DatedTopicIdentifier dti : topics) {
+		
+				Topic topic = selectDAO.getForID(user,dti.getTopicID());
+				
+				
+				Set<TopicOccurrenceConnector> s = topic.getOccurences();
+				
+				log.info("Topic: "+topic.getId()+" Occs: "+s.size());
+				
+				for(TopicOccurrenceConnector toc : s){
+					
+					//toc.getOccurrence()
+					
+					Occurrence o = (Occurrence)toc.getOccurrence();
+					
+					CopyOfOccurrence coo = getNewOcc(o);
+					
+					getHibernateTemplate().save(coo);
+				
+					System.out.println("post save "+coo.getId());
+					
+					toc.setOccurrence(coo);
+					
+					getHibernateTemplate().save(toc);
+					
+					
+				}
+				
+				
+			}
+			
+		}
+		
 	
-	
-	
-	
+	}
+
+	private CopyOfOccurrence getNewOcc(Occurrence o){
+		CopyOfOccurrence newOcc = null;
+		if (o instanceof Entry) {
+			Entry e = (Entry) o;
+			newOcc = new CopyOfEntry();
+		}		
+		else if(o instanceof S3File){
+			newOcc = new CopyOfS3File();	
+			CopyOfS3File c = (CopyOfS3File) newOcc;
+			c.setUri(((URI)o).getUri());
+			
+		}
+		else if(o instanceof WebLink){
+			newOcc = new CopyOfWebLink();
+			CopyOfWebLink c = (CopyOfWebLink) newOcc;
+			c.setUri(((URI)o).getUri());			
+		}
+		
+		newOcc.setCreated(o.getCreated());
+		newOcc.setData(o.getData());
+		newOcc.setTitle(o.getTitle());
+		newOcc.setUser(o.getUser());
+		newOcc.setLastUpdated(o.getLastUpdated());
+		
+		return newOcc;
+	}
+
+
 	
 	
 	

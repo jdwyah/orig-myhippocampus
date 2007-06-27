@@ -10,8 +10,7 @@ import com.aavu.client.service.Manager;
 
 public class GadgetManager {
 	private Manager manager;
-	private GadgetDisplayer displayer;
-
+	
 	private List allGadgets;
 	private UploadBoard uploadBoard;
 	private LinkDisplayWidget linkDisplayW;
@@ -22,6 +21,7 @@ public class GadgetManager {
 	private MapGadget mapGadget;
 	//private TagPropertyPanel tagProperties;
 	private boolean initted = false;
+	private List listeners;
 
 
 	public GadgetManager(Manager manager){
@@ -63,12 +63,16 @@ public class GadgetManager {
 	}
 
 	public void show(Gadget gadget) {
-		displayer.addGadget(gadget);
-		//gadget.
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			GadgetClickListener listener = (GadgetClickListener) iterator.next();
+			listener.clicked(gadget);
+		}
+		
 	}
 
-	public void setGadgetDisplayer(GadgetDisplayer displayer) {
-		this.displayer = displayer;
+	public void addGadgetClickListener(GadgetClickListener listener) {
+		listeners.add(listener);
+		
 	}
 
 	public void load(Topic topic) {
@@ -82,9 +86,11 @@ public class GadgetManager {
 			}
 		}
 
-		if(displayer != null){
-			displayer.load(topic,gadgetsToUse);
-		}
+		//TODO ?
+//		if(displayer != null){
+//			displayer.load(topic,gadgetsToUse);
+//		}
+		
 	}
 
 }

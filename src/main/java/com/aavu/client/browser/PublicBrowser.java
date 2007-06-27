@@ -31,7 +31,7 @@ public class PublicBrowser extends Composite implements GadgetDisplayer {
 		
 		panel = new FlexTable();
 
-		bmanager.getGadgetManager().setGadgetDisplayer(this);
+		bmanager.getGadgetManager().addGadgetClickListener(this);
 
 
 		initWidget(panel);
@@ -101,7 +101,7 @@ public class PublicBrowser extends Composite implements GadgetDisplayer {
 
 
 
-	public void addGadget(Gadget gadget) {
+	public void clicked(Gadget gadget) {
 		// TODO Auto-generated method stub		
 	}
 
