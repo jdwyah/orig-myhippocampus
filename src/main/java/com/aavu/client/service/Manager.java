@@ -7,6 +7,7 @@ import org.gwm.client.GInternalFrame;
 
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
@@ -35,7 +36,7 @@ public interface Manager {
 
 	void doSearch(String text);
 
-	void editEntry(Topic topic);
+	void editOccurrence(Occurrence topic);
 
 	void editMetas(AsyncCallback callback, Meta type);
 

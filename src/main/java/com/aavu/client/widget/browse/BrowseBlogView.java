@@ -81,7 +81,7 @@ public class BrowseBlogView extends Composite{
 				Topic topic = topics[i];	
 				//System.out.println(topic.getTitle()+" "+topic.getText()+" "+topic.getId());
 				TopicWidget topicWidget = new TopicWidget();
-				topicWidget.load(topic);
+				//topicWidget.load(topic);
 				//topicWidget.addStyleName("");
 				topicPanel.add(topicWidget);
 			}

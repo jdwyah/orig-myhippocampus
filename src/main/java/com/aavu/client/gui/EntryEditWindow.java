@@ -1,27 +1,20 @@
 package com.aavu.client.gui;
 
-import org.gwm.client.GDesktopPane;
-import org.gwm.client.GDialog;
 import org.gwm.client.GFrame;
 import org.gwm.client.GInternalFrame;
-import org.gwm.client.event.GDialogChoiceListener;
 import org.gwm.client.event.GFrameAdapter;
 import org.gwm.client.event.GFrameEvent;
-import org.gwm.client.event.GFrameListener;
-import org.gwm.client.impl.DefaultGDialog;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.SaveNeededListener;
 import com.aavu.client.widget.edit.TopicViewAndEditWidget;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
@@ -33,8 +26,8 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 	private TopicViewAndEditWidget topicViewAndEditW;
 	private HorizontalPanel mainP;
 	
-	public EntryEditWindow(Topic topic, Manager manager, GInternalFrame frame) {
-		super(frame,topic.getTitle(),WIDTH,HEIGHT);
+	public EntryEditWindow(Entry entry, Manager manager, GInternalFrame frame) {
+		super(frame,entry.getTitle(),WIDTH,HEIGHT);
 		this.manager = manager;
 
 		topicViewAndEditW = new TopicViewAndEditWidget(manager,this);
@@ -54,8 +47,7 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 		
 		setContent(mainP);
 		
-		topicViewAndEditW.load(topic);
-		topicViewAndEditW.activateEditView();
+		topicViewAndEditW.load(entry);
 		
 
 		frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
@@ -87,14 +79,12 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 	}
 	
 	private void save() {
-		manager.getTopicCache().executeCommand(topicViewAndEditW.getTopic(),topicViewAndEditW.getSaveCommand(),
+		manager.getTopicCache().executeCommand(topicViewAndEditW.getEntry(),topicViewAndEditW.getSaveCommand(),
 				new StdAsyncCallback(""){
 					public void onSuccess(Object result) {					
 						super.onSuccess(result);
 						saveButton.saveAccomplished();
-						topicViewAndEditW.load(topicViewAndEditW.getTopic());
-						topicViewAndEditW.activateMainView();	
-						manager.bringUpChart(topicViewAndEditW.getTopic());
+						frame.setCaption(topicViewAndEditW.getEntry().getTitle());
 					}});		
 	}			
 

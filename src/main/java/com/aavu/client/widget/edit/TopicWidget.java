@@ -25,7 +25,7 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 	private VerticalPanel panel = new VerticalPanel();
 
-	public Topic topic;
+	public Entry entry;
 
 	//protected String data;
 
@@ -64,8 +64,8 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 		});
 	}	
 
-	public void load(Topic topic){
-		this.topic = topic;
+	public void load(Entry entry){
+		this.entry = entry;
 
 		setup();
 		
@@ -73,7 +73,6 @@ public class TopicWidget extends FocusPanel implements ClickListener {
 
 	public void setup(){
 
-		Entry entry = topic.getLatestEntry();
 		
 		setText(entry);
 		

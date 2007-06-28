@@ -221,8 +221,11 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 	
 
-	public void editEntry(Topic topic) {				
-		EntryEditWindow gw = new EntryEditWindow(topic,this,newFrame());						
+	public void editOccurrence(Occurrence occurrence) {
+		System.out.println("edit occ "+GWT.getTypeName(occurrence));
+		if(occurrence instanceof Entry){		
+			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
+		}
 	}
 	
 	public void editMetas(AsyncCallback callback,final Meta type) {

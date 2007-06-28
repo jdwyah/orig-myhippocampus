@@ -23,6 +23,7 @@ import com.aavu.client.util.Logger;
 import com.allen_sauer.gwt.dragdrop.client.DragController;
 import com.allen_sauer.gwt.dragdrop.client.PickupDragController;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
@@ -190,7 +191,7 @@ public class HierarchyDisplay  extends ViewPanel implements SpatialDisplay {
 		if(null != bubble){
 			bubble.grow();
 		}else{
-			System.out.println("Grow "+thought.getId()+" Bubble: "+bubble);			
+			System.out.println("Grow "+thought.getId()+" "+GWT.getTypeName(thought));			
 			
 			Bubble newBubble = BubbleFactory.createBubbleFor(thought,currentRoot,this);		
 			addBubble(newBubble);

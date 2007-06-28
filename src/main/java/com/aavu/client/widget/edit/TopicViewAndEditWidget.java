@@ -1,29 +1,35 @@
 package com.aavu.client.widget.edit;
 
 
+import org.gwtwidgets.client.temp.TGrid;
+
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.commands.SaveEntryTextCommand;
+import com.aavu.client.domain.commands.SaveOccurrenceDataCommand;
+import com.aavu.client.domain.commands.SaveTitleCommand;
+import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicViewAndEditWidget extends Composite implements ClickListener, ChangeListener{
+public class TopicViewAndEditWidget extends Composite implements ChangeListener{
 	
 	
-	private TopicWidget topicWidget;
 	private TopicEditWidget topicEditWidget;
 
 	private VerticalPanel topicPanel;
 		
-	public Topic topic;
+	public Entry entry;
 	private Manager manager;
 	private SaveNeededListener saveNeeded;
+
+	private EditableLabelExtension titleBox;
 	
 	
 	public TopicViewAndEditWidget(Manager manager, SaveNeededListener saveNeeded) {
@@ -36,7 +42,6 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 		
 		topicPanel = new VerticalPanel();
 		
-		topicWidget = new TopicWidget();
 		
 		mainPanel.add(topicPanel);		
 		
@@ -46,46 +51,37 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 	}	
 	
 	
-	public void load(Topic topic){
-		this.topic = topic;
-		topicWidget.load(topic);
-		topicWidget.addClickListener(this);		
+	public void load(Entry entry){
+		this.entry = entry;
+		topicPanel.clear();
 		
-		topicEditWidget = new TopicEditWidget(this,manager,topic);
+		
+		
+		HorizontalPanel titleP = new HorizontalPanel();
+		
+		
+		titleBox = new EditableLabelExtension(entry.getTitle(),this);
+		
+		titleP.add(new HeaderLabel(ConstHolder.myConstants.title()));
+		titleP.add(titleBox);		
+		topicPanel.add(titleP);
+		
+		
+		
+		topicEditWidget = new TopicEditWidget(this,manager,entry);
 		topicEditWidget.addChangeListener(this);
 		
-		activateMainView();
-		System.out.println("############################## "+topic.getTitle());
+		
+		topicPanel.add(topicEditWidget);	
+		
+		System.out.println("############################## "+entry.getTitle());
 		
 		
 	}
 		
-	
-
-	public void onClick(Widget source){
-		if (source == topicWidget){			
-			activateEditView();
-		}				
-	}
-	
-
-
-	public void activateMainView(){
-	
-		topicPanel.clear();
-		topicPanel.add(topicWidget);				
-
-	}
-	
-	public void activateEditView() {
-		
-		topicPanel.clear();
-		topicPanel.add(topicEditWidget);				
-						
-	}
 
 	public Entry getEntry(){
-		return topic.getLatestEntry();
+		return entry;
 	}
 	public String getEntryText(){		
 		return getEditEntryText();
@@ -102,13 +98,8 @@ public class TopicViewAndEditWidget extends Composite implements ClickListener, 
 
 
 	public AbstractCommand getSaveCommand() {
-		return new SaveEntryTextCommand(topic,getEntryText());
+		return new SaveOccurrenceDataCommand(entry,titleBox.getText(),getEntryText());
 	}
 
-
-	public Topic getTopic() {
-		return topic;
-	}
-	
 	
 }

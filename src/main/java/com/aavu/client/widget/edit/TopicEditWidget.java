@@ -1,6 +1,6 @@
 package com.aavu.client.widget.edit;
 
-import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -14,17 +14,17 @@ public class TopicEditWidget extends Composite implements SourcesChangeEvents {
 	//private TagBoard tagBoard;
 	//private SubjectBoard subjectBoard;
 	
-	private Topic topic;
+	private Entry entry;
 	private TopicViewAndEditWidget topicViewAndEditWidget;	
 
 	private Manager manager;
 	
-	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, final Manager manager, Topic _topic){
-		this.topic = _topic;
+	public TopicEditWidget(TopicViewAndEditWidget topicViewAndEditWidget, final Manager manager, Entry entry){
+		this.entry = entry;
 		this.topicViewAndEditWidget = topicViewAndEditWidget;
 		this.manager = manager;
 		
-		System.out.println("topic edit widg "+topic);
+		System.out.println("topic edit widg "+entry);
 		
 		textArea = new SpecialTextbox(manager.getTopicCache());
 		
@@ -57,8 +57,8 @@ public class TopicEditWidget extends Composite implements SourcesChangeEvents {
 
 	private void setupTopic() {
 		System.out.println("setupTopic");
-		if(topic != null){		
-			textArea.setText(topic.getLatestEntry().getData());			
+		if(entry != null){		
+			textArea.setText(entry.getData());			
 		}
 	}
 

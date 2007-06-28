@@ -59,7 +59,7 @@ public class EntryPreview extends Gadget {
 		
 		entryPrev.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
-				manager.editEntry(topic);				
+				//manager.editOccurrence(topic);				
 			}});
 	
 		initWidget(entryPrev);
@@ -72,7 +72,7 @@ public class EntryPreview extends Gadget {
 	//@Override
 	public int load(Topic topic) {
 		this.topic = topic;
-		entryPrev.load(topic);
+		//entryPrev.load(topic);
 		return 1;
 	}
 
@@ -86,7 +86,7 @@ public class EntryPreview extends Gadget {
 	//@Override
 	public void showForFirstTime() {
 		super.showForFirstTime();
-		manager.editEntry(topic);
+		//manager.editOccurrence(topic);
 	}
 
 	//@Override

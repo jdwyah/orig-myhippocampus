@@ -88,10 +88,7 @@ public abstract class AbstractManager implements Manager {
 			}			
 		});
 	}
-	public void editEntry(Topic topic) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	public void editMetas(AsyncCallback callback, Meta type) {
 		// TODO Auto-generated method stub
 		

@@ -3,6 +3,7 @@ package com.aavu.client.service;
 import java.util.List;
 
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.service.cache.HippoCache;
@@ -51,6 +52,10 @@ public class BrowserManager extends AbstractManager {
 		
 	}
 	public void userNeedsToUpgrade() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void editOccurrence(Occurrence topic) {
 		// TODO Auto-generated method stub
 		
 	}
