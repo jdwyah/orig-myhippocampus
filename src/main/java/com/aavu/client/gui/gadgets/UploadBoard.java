@@ -3,6 +3,7 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 
 import com.aavu.client.Interactive;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -99,9 +100,11 @@ public class UploadBoard extends Gadget {
 	public boolean enabled(User user) {
 		return user.isPremiumAccount();
 	}
+	
 	//@Override
 	public void onClick(Manager manager) {
-		throw new UnsupportedOperationException();
+		manager.createNew(new S3File());	
 	}
+
 	
 }

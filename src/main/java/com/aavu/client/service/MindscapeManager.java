@@ -12,8 +12,10 @@ import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
+import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
@@ -121,7 +123,8 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 	public void clicked(Gadget gadget) {
 		
-		gadget.onClick(this);
+		gadget.onClick(this);	
+		
 		
 		
 		//map.growIsland();
@@ -223,9 +226,17 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	public void editOccurrence(Occurrence occurrence) {
 		System.out.println("edit occ "+GWT.getTypeName(occurrence));
+		
 		if(occurrence instanceof Entry){		
 			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
 		}
+		if(occurrence instanceof WebLink){		
+			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
+		}
+		if(occurrence instanceof S3File){		
+			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
+		}
+		
 	}
 	
 	public void editMetas(AsyncCallback callback,final Meta type) {

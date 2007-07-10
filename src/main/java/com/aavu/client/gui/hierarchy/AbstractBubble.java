@@ -1,5 +1,6 @@
 package com.aavu.client.gui.hierarchy;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
 import com.aavu.client.util.Logger;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
@@ -120,6 +121,12 @@ public abstract class AbstractBubble extends FocusPanel implements Bubble {
 		this.top = top;
 	}
 
+	public void update(Topic t) {
+		banner.setText(t.getTitle());		
+	}
+
+
+	
 	public void zoomToScale(double currentScale) {
 		
 		

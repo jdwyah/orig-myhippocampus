@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaLocation;
@@ -308,8 +309,8 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 
 	
 	//@Override
-	public void onClick(Manager manager) {
-		throw new UnsupportedOperationException();
+	public Topic getPrototypeObj() {		
+		return new MetaLocation();
 	}
 
 }

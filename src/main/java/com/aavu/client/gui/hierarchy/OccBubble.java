@@ -1,6 +1,7 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
@@ -56,6 +57,6 @@ public class OccBubble extends AbstractBubble implements Bubble, ClickListener {
 				new StdAsyncCallback("Save Occurrence LatLong"){});
 	}
 
-
+	
 
 }

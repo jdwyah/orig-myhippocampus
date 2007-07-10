@@ -3,7 +3,9 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 
 import com.aavu.client.LinkPlugin.AddLinkPopup;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.WebLink;
@@ -181,7 +183,7 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 
 	//@Override
 	public void onClick(Manager manager) {
-		throw new UnsupportedOperationException();
+		manager.createNew(new WebLink());
 	}
 	
 }

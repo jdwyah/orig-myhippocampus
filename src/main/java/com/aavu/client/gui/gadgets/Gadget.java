@@ -3,6 +3,7 @@ package com.aavu.client.gui.gadgets;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.service.Manager;
+import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -68,6 +69,7 @@ public abstract class Gadget extends Composite {
 	public boolean enabled(User user) {
 		return true;
 	}
+
 
 	public abstract void onClick(Manager manager);
 	

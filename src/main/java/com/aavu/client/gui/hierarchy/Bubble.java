@@ -1,5 +1,6 @@
 package com.aavu.client.gui.hierarchy;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopicOccurrenceConnector;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
@@ -26,5 +27,7 @@ public interface Bubble extends RemembersPosition {
 	String getTitle();
 
 	TopicIdentifier getIdentifier();
+
+	void update(Topic t);
 
 }

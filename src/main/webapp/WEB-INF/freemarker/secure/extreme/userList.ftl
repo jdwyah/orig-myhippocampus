@@ -15,6 +15,7 @@
     <table>
     <tr>
     <th>Name</th>
+    <th>Email</th>
     <th>NotExpired</th>    
     <th>NotLocked</th>    
     <th>Cred Not Expired</th>        
@@ -28,6 +29,7 @@
 	<#list users as user>
 		<tr>
 		<td>${user.username}</td>
+		<td>${user.email}</td>
 	    <td>${user.accountNonExpired?string}</td>
 	    <td>${user.accountNonLocked?string}</td>
 	    <td>${user.credentialsNonExpired?string}</td>

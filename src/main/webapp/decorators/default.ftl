@@ -11,6 +11,9 @@
   <meta name="keywords" content="personal,knowledge,management,visualization,collection,GWT,information,anxiety" />
   <meta name="author" content="Jeff Dwyer/" />
   
+<link rel="icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
+<link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
+
   <link rel="stylesheet" type="text/css" href="<@spring.url "/css/style.css"/>"/>
 
   <title>${title}</title>

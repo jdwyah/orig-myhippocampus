@@ -33,115 +33,110 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 	private VerticalPanel onThisIslandPanel;
 
 	private List topics;
-	
-	
-	public OnThisIslandBoard(Manager _manager) {		
-		this.manager = _manager;
-		
-		topicService = manager.getTopicCache();
-		
-		topicCompleter = new TopicCompleter(manager.getTopicCache());		
-		topicCompleter.addListener(this);
 
-		//alsos = new SeeAlsoWidget();
-		
-		
-		EnterInfoButton enterInfoButton = new EnterInfoButton();		
-		enterInfoButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender){
+	public OnThisIslandBoard(Manager _manager) {
+		this.manager = _manager;
+
+		topicService = manager.getTopicCache();
+
+		topicCompleter = new TopicCompleter(manager.getTopicCache());
+		topicCompleter.setCompleteListener(this);
+
+		// alsos = new SeeAlsoWidget();
+
+		EnterInfoButton enterInfoButton = new EnterInfoButton();
+		enterInfoButton.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
 				topicCompleter.complete();
 			}
 		});
 
-		
 		Button examineB = new Button(ConstHolder.myConstants.explorer_onthisisland());
-		examineB.addClickListener(new ClickListener(){
-			public void onClick(Widget sender){
-				viewMembers();				
+		examineB.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				viewMembers();
 			}
 		});
-		
-		
+
 		VerticalPanel mainP = new VerticalPanel();
-		
+
 		mainP.add(new HeaderLabel(ConstHolder.myConstants.island_topics_on()));
-		
+
 		HorizontalPanel cp = new HorizontalPanel();
 		cp.add(new Label(ConstHolder.myConstants.addTo()));
 		cp.add(topicCompleter);
 		cp.add(enterInfoButton);
-		
+
 		onThisIslandPanel = new VerticalPanel();
-		mainP.add(onThisIslandPanel);		
+		mainP.add(onThisIslandPanel);
 		mainP.add(cp);
-		
+
 		mainP.add(examineB);
-		//mainP.add(alsos);
-		
-		
+		// mainP.add(alsos);
+
 		initWidget(mainP);
-		
+
 		addStyleName("H-Gadget");
 		addStyleName("H-OnThisIsland");
 	}
-	
 
 	private void viewMembers() {
-		manager.explore();				
+		manager.explore();
 	}
-	
-	public int load(Topic topic){
 
-		//System.out.println("\n\n\nLOAD "+(topic instanceof Tag)+"  "+topic.getTypes().size());
-			
-		
-		
-		//if(!topic.getInstances().isEmpty()){
-			setVisible(true);
+	public int load(Topic topic) {
 
-			this.myTag = (Topic) topic;
+		// System.out.println("\n\n\nLOAD "+(topic instanceof Tag)+" "+topic.getTypes().size());
 
-			manager.getTopicCache().getTopicsWithTag(myTag.getId(), new StdAsyncCallback(ConstHolder.myConstants.tag_topicIsA()){
-				public void onSuccess(Object result) {
-					super.onSuccess(result);
-					List topics = (List) result;
+		// if(!topic.getInstances().isEmpty()){
+		setVisible(true);
 
-					System.out.println("Show Topics results "+topics.size());
+		this.myTag = (Topic) topic;
 
-					addTopicLabels(topics);				
-				}					
-			});
-//		}		
-//		else{
-//			setVisible(false);
-//		}
+		manager.getTopicCache().getTopicsWithTag(myTag.getId(),
+				new StdAsyncCallback(ConstHolder.myConstants.tag_topicIsA()) {
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+						List topics = (List) result;
+
+						System.out.println("Show Topics results " + topics.size());
+
+						addTopicLabels(topics);
+					}
+				});
+		// }
+		// else{
+		// setVisible(false);
+		// }
 		return 0;
 	}
 
 	protected void addTopicLabels(List topics) {
 		this.topics = topics;
 		onThisIslandPanel.clear();
-		
+
 		int i = 0;
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
 			FullTopicIdentifier fti = (FullTopicIdentifier) iter.next();
-			
-			onThisIslandPanel.add(new TopicLink(fti,null));
-			
-			if(i >= MAX_TO_SHOW){
-				Label l = new Label(ConstHolder.myConstants.on_this_island_more(topics.size() - MAX_TO_SHOW));
-				l.addClickListener(new ClickListener(){
+
+			onThisIslandPanel.add(new TopicLink(fti, null));
+
+			if (i >= MAX_TO_SHOW) {
+				Label l = new Label(ConstHolder.myConstants.on_this_island_more(topics.size()
+						- MAX_TO_SHOW));
+				l.addClickListener(new ClickListener() {
 					public void onClick(Widget sender) {
 						viewMembers();
-					}});
+					}
+				});
 				l.addStyleName("gwt-Hyperlink");
-				onThisIslandPanel.add(l);				
+				onThisIslandPanel.add(l);
 				break;
 			}
 			i++;
-		}		
-	}	
-	
+		}
+	}
+
 	/**
 	 * 
 	 * 
@@ -156,14 +151,12 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 
 		topicCompleter.setText("");
 
-
-		onThisIslandPanel.insert(new TopicLink(newTopic),0);				
+		onThisIslandPanel.insert(new TopicLink(newTopic), 0);
 
 		topicService.executeCommand(newTopic, new SaveTagtoTopicCommand(newTopic, myTag),
-				new StdAsyncCallback(ConstHolder.myConstants.save_async()){});				
-
+				new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
+				});
 
 	}
-
 
 }

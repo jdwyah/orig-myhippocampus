@@ -18,62 +18,64 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 
 	private Topic topic;
 	private MetaTopic meta;
-	private TopicCompleter completer; 
+	private TopicCompleter completer;
 	private ActionableTopicLabel topicDisplayLink;
 	private EnterInfoButton enterB;
 	private TopicCache topicCache;
-		
+
 	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic, TopicCache topicCache) {
-		
+
 		HorizontalPanel widget = new HorizontalPanel();
 
 		this.topic = topic;
 		this.meta = meta;
 		this.topicCache = topicCache;
-						
+
 		completer = new TopicCompleter(topicCache);
-		completer.addListener(this);
-		
-	
+		completer.setCompleteListener(this);
+
 		enterB = new EnterInfoButton();
-		enterB.addClickListener(new ClickListener(){
+		enterB.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
-				completer.complete();	
-			}});
-		
-		topicDisplayLink = new ActionableTopicLabel(ConstHolder.myConstants.editMe(),new ClickListener(){
-			public void onClick(Widget sender) {
-				setToEditMode();
-			}});
-						
+				completer.complete();
+			}
+		});
+
+		topicDisplayLink = new ActionableTopicLabel(ConstHolder.myConstants.editMe(),
+				new ClickListener() {
+					public void onClick(Widget sender) {
+						setToEditMode();
+					}
+				});
+
 		widget.add(new Label(meta.getName()));
 		widget.add(completer);
 		widget.add(topicDisplayLink);
 		widget.add(enterB);
-		
-		Topic mv = (Topic) topic.getSingleMetaValueFor(meta);		
-		if(mv != null){
-			completer.setText(mv.getTitle());	
+
+		Topic mv = (Topic) topic.getSingleMetaValueFor(meta);
+		if (mv != null) {
+			completer.setText(mv.getTitle());
 			setToShowMode(mv.getIdentifier());
 		}
-		
+
 		initWidget(widget);
 	}
 
-	private void setToEditMode(){
+	private void setToEditMode() {
 		completer.setVisible(true);
 		topicDisplayLink.setVisible(false);
-		enterB.setVisible(true);		
+		enterB.setVisible(true);
 	}
-	private void setToShowMode(TopicIdentifier to){
+
+	private void setToShowMode(TopicIdentifier to) {
 
 		topicDisplayLink.setTopicIdent(to);
 
-		topicDisplayLink.setVisible(true);				
+		topicDisplayLink.setVisible(true);
 		completer.setVisible(false);
-		enterB.setVisible(false);	
+		enterB.setVisible(false);
 	}
-	
 
 	/**
 	 * replaces the saveNowEvent
@@ -82,11 +84,11 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 	 * 
 	 */
 	public void completed(final TopicIdentifier topicID) {
-		
+
 		setToShowMode(topicID);
 
-		topicCache.executeCommand(topic,new SaveMetaTopicCommand(topic,meta,
-				new Topic(topicID)),
-				new StdAsyncCallback(ConstHolder.myConstants.save()){});
+		topicCache.executeCommand(topic, new SaveMetaTopicCommand(topic, meta, new Topic(topicID)),
+				new StdAsyncCallback(ConstHolder.myConstants.save()) {
+				});
 	}
 }

@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Meta;
+import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
 import com.aavu.client.gui.ext.TooltipListener;
@@ -155,7 +157,7 @@ public class TagPropertyPanel extends Gadget {
 		return topic.hasTagProperties();
 	}
 
-	
+
 	//@Override
 	public void onClick(Manager manager) {
 		throw new UnsupportedOperationException();

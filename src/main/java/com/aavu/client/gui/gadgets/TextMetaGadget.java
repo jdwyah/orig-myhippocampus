@@ -1,6 +1,7 @@
 package com.aavu.client.gui.gadgets;
 
 import com.aavu.client.domain.MetaText;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -28,6 +29,9 @@ public class TextMetaGadget extends MetaGadget  {
 		return b;
 	}
 
-
+	//@Override
+	public Topic getPrototypeObj() {		
+		return new MetaText();
+	}
 	
 }

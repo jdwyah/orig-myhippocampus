@@ -153,10 +153,7 @@
 	<bean id="openIDStore" class="com.janrain.openid.store.MemoryStore">
 		<constructor-arg value="secrethashvalue"/>
 	</bean>
-	<bean id="openIDConsumer" class="org.acegisecurity.ui.openid.consumers.JanRainOpenIDConsumer">
-		<property name="store" ref="openIDStore"/>
-		<!-- TODO This is necessary because the req.getServerName() returns localhost when we deploy. mod_jk problem?-->
-		<property name="trustRoot" value="${HOST.openID.trustRoot}"/>
+	<bean id="openIDConsumer" class="org.acegisecurity.ui.openid.consumers.OpenId4JavaConsumer">		
 	</bean>
 	<bean id="openIDResponseProcess" class="org.acegisecurity.ui.openid.OpenIDResponseProcessingFilter">
 		<property name="consumer" ref="openIDConsumer"/>

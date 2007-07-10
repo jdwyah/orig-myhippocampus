@@ -19,4 +19,7 @@
 <!-- 	<servlet path="/topicService" class="com.aavu.server.TopicServiceImpl" />-->
     <servlet path="/topicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl" />
     <servlet path="/tagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl" />
+
+	<!-- only compile 1 browser -->
+	<!-- <set-property name="user.agent" value="ie6"/> --> 
 </module>

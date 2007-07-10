@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
@@ -81,6 +82,7 @@ public class ReferenceBoard extends Gadget {
 		return false;
 	}
 	
+
 	//@Override
 	public void onClick(Manager manager) {
 		throw new UnsupportedOperationException();

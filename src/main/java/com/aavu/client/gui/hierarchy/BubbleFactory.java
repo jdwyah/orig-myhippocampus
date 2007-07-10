@@ -18,16 +18,27 @@ public class BubbleFactory {
 	/**
 	 * This should only be used for new topics, otherwise use one of the location aware methods.  
 	 * 
+	 * reminder, these methods will get called by Reference type, not the object's type. Could move these
+	 * to Topic and override in Occurrence, but then we get the GWT stuff in the domain which can explode
+	 * when not running in javascript. 6, 1/2 dozen.
+	 *  
+	 * http://www.velocityreviews.com/forums/t362644-polymorphic-method-call-from-third-class.html
+	 * 
 	 * @param tag
 	 * @param hierarchyDisplay
 	 * @return
 	 */
 	public static Bubble createBubbleFor(Topic thought,Topic current,HierarchyDisplay hierarchyDisplay) {
-		return new TopicBubble(new FullTopicIdentifier(thought),hierarchyDisplay);
+
+		if (thought instanceof Occurrence) {
+			
+			Occurrence occ = (Occurrence) thought;
+			return new OccBubble(new TopicOccurrenceConnector(current,occ),hierarchyDisplay);	
+			
+		}else{
+
+			return new TopicBubble(new FullTopicIdentifier(thought),hierarchyDisplay);
+		}
 	}
-	public static Bubble createBubbleFor(Occurrence occ,Topic current,HierarchyDisplay hierarchyDisplay) {
-		return new OccBubble(new TopicOccurrenceConnector(current,occ),hierarchyDisplay);
-	}
-	
 
 }

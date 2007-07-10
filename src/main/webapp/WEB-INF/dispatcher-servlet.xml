@@ -6,10 +6,13 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
+
 	<!-- Turn on @Required -->
 	<!-- not precisely sure why this is neccessary, since we do it in appContext too.. -->
 	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
-
+	<bean id="propertyConfigurer" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config.properties" />
+	</bean>
 
 	<bean id="indexController" class="com.aavu.server.web.controllers.IndexController">
 		<property name="view" value="index"/>
@@ -222,6 +225,7 @@
 
 	<bean id="openIDLoginStartController" class="com.aavu.server.web.controllers.OpenIDLoginController">
 		<property name="consumer" ref="openIDConsumer"/>
+		<property name="trustRoot" value="${HOST.openID.trustRoot}"/>
 	</bean>
 	
 
@@ -230,7 +234,6 @@
 		<property name="mappings">
 			<props>
 				<prop key="/service/topicService">GWTTopicService</prop>
-				<prop key="/service/tagService">GWTTagService</prop>
 				<prop key="/service/userService">GWTUserService</prop>
 				<prop key="/service/subjectService">GWTSubjectService</prop>
 				<prop key="/service/messageService">hessianMessageService</prop>
