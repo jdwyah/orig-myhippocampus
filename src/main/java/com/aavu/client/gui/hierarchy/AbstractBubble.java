@@ -1,22 +1,23 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
 import com.aavu.client.util.Logger;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class AbstractBubble extends FocusPanel implements Bubble {
+public abstract class AbstractBubble extends FocusPanel implements Bubble, MouseListener {
 
-	
 	private IslandBanner banner;
 	private HierarchyDisplay display;
 	private DropController dropController;
 	private Image image;
-	
+
 	private int left;
 	private AbsolutePanel mainPanel;
 
@@ -25,31 +26,33 @@ public abstract class AbstractBubble extends FocusPanel implements Bubble {
 
 	private int unscaledWidth;
 	private String title;
-	
-	public AbstractBubble(int longitude, int latitude, String title, Image image, HierarchyDisplay display) {
+
+	public AbstractBubble(int longitude, int latitude, String title, Image image,
+			HierarchyDisplay display) {
 		this.left = longitude;
 		this.top = latitude;
 		this.display = display;
 		this.title = title;
 
 		unscaledWidth = 50;
-		unscaledHeight = 50; 
-		
+		unscaledHeight = 50;
+
 		mainPanel = new AbsolutePanel();
-		mainPanel.setPixelSize(unscaledWidth,unscaledHeight);
-		
-		this.image = image;		
+		mainPanel.setPixelSize(unscaledWidth, unscaledHeight);
+
+		this.image = image;
 		this.image.setPixelSize(unscaledWidth, unscaledHeight);
-		
-		//System.out.println("AbstractBubble left "+left+" top "+top);
-		
-		banner = new IslandBanner(title,5);
-		
-		mainPanel.add(image,0,0);
-		mainPanel.add(banner,0,0);
-		
-		setWidget(mainPanel);				
-		
+
+		// System.out.println("AbstractBubble left "+left+" top "+top);
+
+		banner = new IslandBanner(title, 5);
+
+		mainPanel.add(image, 0, 0);
+		mainPanel.add(banner, 0, 0);
+
+		setWidget(mainPanel);
+
+		addMouseListener(this);
 	}
 
 	public HierarchyDisplay getDisplay() {
@@ -68,50 +71,50 @@ public abstract class AbstractBubble extends FocusPanel implements Bubble {
 		return this;
 	}
 
-	public int getLeft() {		
+	public int getLeft() {
 		return left;
 	}
-	public String getTitle(){
+
+	public String getTitle() {
 		return title;
 	}
+
 	public int getTop() {
 		return top;
 	}
-	
-	public Widget getWidget(){
+
+	public Widget getWidget() {
 		return this;
 	}
 
 	public void processDrag(double currentScale) {
 		int absLeft = getAbsoluteLeft();
-    	int absTop = getAbsoluteTop();
-    	int oceanLeft = getDisplay().getBackX();
-    	int oceanTop = getDisplay().getBackY();
-    	if(absLeft != left + oceanLeft
-    			||
-    			absTop != top + oceanTop){
-    		int newLeft = absLeft - oceanLeft;
-    		int newTop = absTop - oceanTop;
-    		System.out.println("\nMove DETECTED!!!!!!!!!!!! "+" Scale "+currentScale+" newLeft "+newLeft+" newTop "+newTop+" "+oceanLeft+" "+oceanTop);
-    		//ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
-    		left = (int) (newLeft / currentScale);
-    		top = (int) (newTop / currentScale);
-    		
-    		  
-    		//tagStat.setLongitude(left);
-    		//tagStat.setLatitude(top);
-    		
-    		saveLocation();
-    		
-    		
-			
-    	}else{
-    		Logger.debug("AbstractBubble no need to save drag");
-    	}
+		int absTop = getAbsoluteTop();
+		int oceanLeft = getDisplay().getBackX();
+		int oceanTop = getDisplay().getBackY();
+		if (absLeft != left + oceanLeft || absTop != top + oceanTop) {
+			int newLeft = absLeft - oceanLeft;
+			int newTop = absTop - oceanTop;
+			System.out.println("\nMove DETECTED!!!!!!!!!!!! " + " Scale " + currentScale
+					+ " newLeft " + newLeft + " newTop " + newTop + " " + oceanLeft + " "
+					+ oceanTop);
+			// ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
+			left = (int) (newLeft / currentScale);
+			top = (int) (newTop / currentScale);
+
+			// tagStat.setLongitude(left);
+			// tagStat.setLatitude(top);
+
+			saveLocation();
+
+		} else {
+			Logger.debug("AbstractBubble no need to save drag");
+		}
 	}
 
 	protected abstract void saveLocation();
 
+	protected abstract void hover();
 
 	public void setDropController(DropController dropController) {
 		this.dropController = dropController;
@@ -122,30 +125,54 @@ public abstract class AbstractBubble extends FocusPanel implements Bubble {
 	}
 
 	public void update(Topic t) {
-		banner.setText(t.getTitle());		
+		banner.setText(t.getTitle());
 	}
 
-
-	
 	public void zoomToScale(double currentScale) {
-		
-		
-					
-		image.setPixelSize((int)(unscaledWidth * currentScale),(int)( unscaledHeight * currentScale));
-		
-		
+
+		image.setPixelSize((int) (unscaledWidth * currentScale),
+				(int) (unscaledHeight * currentScale));
+
 		Widget minimumWidget = banner.setToZoom(currentScale);
-		
-		int correctedWidth = (minimumWidget.getOffsetWidth() > (int)(unscaledWidth * currentScale)) ? minimumWidget.getOffsetWidth() : (int)(unscaledWidth * currentScale);
-		
-		int correctedHeight = ((int)( unscaledHeight * currentScale) < minimumWidget.getOffsetHeight()) ? minimumWidget.getOffsetHeight() : (int)( unscaledHeight * currentScale);
-		
-		//System.out.println("w "+correctedWidth+" h "+correctedHeight);
-		
-		mainPanel.setPixelSize(correctedWidth,correctedHeight);
-		
+
+		int correctedWidth = (minimumWidget.getOffsetWidth() > (int) (unscaledWidth * currentScale)) ? minimumWidget
+				.getOffsetWidth()
+				: (int) (unscaledWidth * currentScale);
+
+		int correctedHeight = ((int) (unscaledHeight * currentScale) < minimumWidget
+				.getOffsetHeight()) ? minimumWidget.getOffsetHeight()
+				: (int) (unscaledHeight * currentScale);
+
+		// System.out.println("w "+correctedWidth+" h "+correctedHeight);
+
+		mainPanel.setPixelSize(correctedWidth, correctedHeight);
+
 	}
-	
-	
+
+	public TopicIdentifier getIdentifier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void receivedDrop(Bubble bubble) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onMouseDown(Widget sender, int x, int y) {
+	}
+
+	public void onMouseEnter(Widget sender) {
+		hover();
+	}
+
+	public void onMouseLeave(Widget sender) {
+	}
+
+	public void onMouseMove(Widget sender, int x, int y) {
+	}
+
+	public void onMouseUp(Widget sender, int x, int y) {
+	}
 
 }

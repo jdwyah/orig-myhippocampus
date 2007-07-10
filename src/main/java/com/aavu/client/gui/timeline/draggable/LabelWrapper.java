@@ -10,8 +10,8 @@ public class LabelWrapper extends Label implements RemembersPosition {
 	protected int left;
 	private int top;
 
-	public LabelWrapper(String s,int left, int top){
-		super(s,false);
+	public LabelWrapper(String s, int left, int top) {
+		super(s, false);
 		this.left = left;
 		this.top = top;
 		JSUtil.disableSelect(getElement());
@@ -28,6 +28,11 @@ public class LabelWrapper extends Label implements RemembersPosition {
 	public Widget getWidget() {
 
 		return this;
+	}
+
+	public void zoomToScale(double currentScale) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -328,7 +328,7 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 
 		oceanKeyboardListener = new OceanKeyBoardListener(this);
 
-		focusBackdrop.addKeyboardListener(oceanKeyboardListener);
+		getFocusBackdrop().addKeyboardListener(oceanKeyboardListener);
 
 	}
 
@@ -493,12 +493,12 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 		setIslandsToZoom();
 
 		if (currentScale >= NO_ISLAND_DRAG_AT_THIS_ZOOM) {
-			islandDrag = false;
+			dragEnabled = false;
 
 		} else {
-			islandDrag = true;
+			dragEnabled = true;
 		}
-		dragHandler.setIslandDrag(islandDrag);
+		dragHandler.setIslandDrag(dragEnabled);
 
 		manager.zoomTo(currentScale);
 	}

@@ -12,8 +12,11 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ViewPanel;
+import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
+import com.aavu.client.gui.ocean.dhtmlIslands.OceanLabel;
+import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.allen_sauer.gwt.dragdrop.client.PickupDragController;
@@ -21,6 +24,7 @@ import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 
 public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
@@ -43,6 +47,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	private Manager manager;
 
 	private int unsetLatitude;
+	private OceanLabel backdropLabel;
 
 	public HierarchyDisplay(Manager manager) {
 		super();
@@ -60,8 +65,27 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		setDoZoom(true);
 
+		decorate();
+
+		getFocusBackdrop().addClickListener(new BackdropClickListener());
+
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
 		setBackground(currentScale);
+	}
+
+	private void decorate() {
+		backdropLabel = new OceanLabel("HippoCampus Ocean", -200, 0);
+
+		makeThisADragHandle(backdropLabel);
+
+		JSUtil.disableSelect(backdropLabel.getElement());
+		addObject(backdropLabel);
+	}
+
+	private void decorateFor(Topic t) {
+		System.out.println("adding label " + t.getTitle());
+		backdropLabel.setText(t.getTitle());
+		addObject(backdropLabel);
 	}
 
 	/**
@@ -108,9 +132,13 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		for (Iterator iterator = objects.iterator(); iterator.hasNext();) {
 
-			Bubble bubble = (Bubble) iterator.next();
+			RemembersPosition rp = (RemembersPosition) iterator.next();
 
-			dragController.unregisterDropController(bubble.getDropController());
+			if (rp instanceof Bubble) {
+				Bubble bubble = (Bubble) rp;
+				dragController.unregisterDropController(bubble.getDropController());
+			}
+
 		}
 
 		topicBubbles.clear();
@@ -130,24 +158,24 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		tb.processDrag(currentScale);
 
-// if(tb.possibleMoveOccurred(currentScale)){
-//			
-//						
-// System.out.println("HierarchyDisplay.Drag Finished Saving "+tb.getLeft()+"
-// "+tb.getTop());
-//			
-// manager.getTopicCache().saveTopicLocationA(currentRoot.getId(),
-// tb.getFTI().getTopicID(), tb.getTop(), tb.getLeft(),
-// new StdAsyncCallback("SaveLatLong"){});
-//			
-//				
-// }
+		// if(tb.possibleMoveOccurred(currentScale)){
+		//			
+		//						
+		// System.out.println("HierarchyDisplay.Drag Finished Saving "+tb.getLeft()+"
+		// "+tb.getTop());
+		//			
+		// manager.getTopicCache().saveTopicLocationA(currentRoot.getId(),
+		// tb.getFTI().getTopicID(), tb.getTop(), tb.getLeft(),
+		// new StdAsyncCallback("SaveLatLong"){});
+		//			
+		//				
+		// }
 	}
 
-// public void dragged(Widget dragging, int newX, int newY) {
-// // TODO Auto-generated method stub
-//		
-// }
+	// public void dragged(Widget dragging, int newX, int newY) {
+	// // TODO Auto-generated method stub
+	//		
+	// }
 
 	// @Override
 	protected int getHeight() {
@@ -168,17 +196,14 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	 */
 	public void growIsland(Topic thought) {
 
-		TopicBubble bubble = (TopicBubble) topicBubbles.get(new Long(thought
-				.getId()));
+		TopicBubble bubble = (TopicBubble) topicBubbles.get(new Long(thought.getId()));
 
 		if (null != bubble) {
 			bubble.grow();
 		} else {
-			System.out.println("Grow " + thought.getId() + " "
-					+ GWT.getTypeName(thought));
+			System.out.println("Grow " + thought.getId() + " " + GWT.getTypeName(thought));
 
-			Bubble newBubble = BubbleFactory.createBubbleFor(thought,
-					currentRoot, this);
+			Bubble newBubble = BubbleFactory.createBubbleFor(thought, currentRoot, this);
 			addBubble(newBubble);
 			redraw();
 
@@ -191,6 +216,8 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		clear();
 
+		decorateFor(t);
+
 		loadTopicOcc(t);
 		loadChildTopics(t, loadFinished);
 
@@ -199,18 +226,15 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	private void loadTopicOcc(Topic t) {
 		System.out.println("Load " + t + " occs " + t.getOccurences().size());
 
-		for (Iterator iterator = t.getOccurences().iterator(); iterator
-				.hasNext();) {
-			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator
-					.next();
+		for (Iterator iterator = t.getOccurences().iterator(); iterator.hasNext();) {
+			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator.next();
 
 			addBubble(BubbleFactory.createBubbleFor(owl, this));
 
 		}
 	}
 
-	private void loadChildTopics(final Topic t,
-			final LoadFinishedListener loadFinished) {
+	private void loadChildTopics(final Topic t, final LoadFinishedListener loadFinished) {
 		manager.getTopicCache().getTopicsWithTag(t.getId(),
 				new StdAsyncCallback(ConstHolder.myConstants.getRoot_async()) {
 					// @Override
@@ -219,13 +243,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 						List all_ftis = (List) result;
 
-						for (Iterator iterator = all_ftis.iterator(); iterator
-								.hasNext();) {
+						for (Iterator iterator = all_ftis.iterator(); iterator.hasNext();) {
 
-							FullTopicIdentifier fti = (FullTopicIdentifier) iterator
-									.next();
-							addBubble(BubbleFactory.createBubbleFor(fti,
-									HierarchyDisplay.this));
+							FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();
+							addBubble(BubbleFactory.createBubbleFor(fti, HierarchyDisplay.this));
 						}
 
 						currentRoot = t;
@@ -249,27 +270,27 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 	}
 
-// //@Override
-// public void processDrop(Bubble receiver, Bubble received) {
-// Logger.debug("HierarchyDisplay.removeBubble ");
-//		
-//		
-//		
-// topicBubbles.remove(new Long(received.getFTI().getTopicID()));
-// dragController.unregisterDropController(received.getDropController());
-// removeObj(received);
-//		
-// manager.getTopicCache().executeCommand(received.getTopic(),new
-// SaveTagtoTopicCommand(received.getTopic(),receiver.getTopic(),currentRoot),
-// new StdAsyncCallback(ConstHolder.myConstants.save()){
-// //@Override
-// public void onSuccess(Object result) {
-// super.onSuccess(result);
-// }
-// });
-//		
-//		
-// }
+	// //@Override
+	// public void processDrop(Bubble receiver, Bubble received) {
+	// Logger.debug("HierarchyDisplay.removeBubble ");
+	//		
+	//		
+	//		
+	// topicBubbles.remove(new Long(received.getFTI().getTopicID()));
+	// dragController.unregisterDropController(received.getDropController());
+	// removeObj(received);
+	//		
+	// manager.getTopicCache().executeCommand(received.getTopic(),new
+	// SaveTagtoTopicCommand(received.getTopic(),receiver.getTopic(),currentRoot),
+	// new StdAsyncCallback(ConstHolder.myConstants.save()){
+	// //@Override
+	// public void onSuccess(Object result) {
+	// super.onSuccess(result);
+	// }
+	// });
+	//		
+	//		
+	// }
 
 	public void removeIsland(long id) {
 		// TODO Auto-generated method stub
@@ -283,11 +304,11 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 			return;
 		}
 		if (pix > 400) {
-			DOM.setStyleAttribute(getElement(), "backgroundImage", "url("
-					+ ImageHolder.getImgLoc() + "ocean" + pix + ".jpg)");
+			DOM.setStyleAttribute(getElement(), "backgroundImage", "url(" + ImageHolder.getImgLoc()
+					+ "ocean" + pix + ".jpg)");
 		} else {
-			DOM.setStyleAttribute(getElement(), "backgroundImage", "url("
-					+ ImageHolder.getImgLoc() + "ocean" + pix + ".png)");
+			DOM.setStyleAttribute(getElement(), "backgroundImage", "url(" + ImageHolder.getImgLoc()
+					+ "ocean" + pix + ".png)");
 		}
 	}
 
@@ -298,9 +319,9 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 
-			Bubble bubble = (Bubble) iter.next();
+			RemembersPosition rp = (RemembersPosition) iter.next();
 
-			bubble.zoomToScale(currentScale);
+			rp.zoomToScale(currentScale);
 
 		}
 
@@ -329,6 +350,23 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 	public Manager getManager() {
 		return manager;
+	}
+
+	private class BackdropClickListener implements ClickListener {
+
+		public void onClick(Widget sender) {
+
+			if (DOM.eventGetCtrlKey(getFocusBackdrop().getLastEvent())) {
+
+				int x = DOM.eventGetClientX(getFocusBackdrop().getLastEvent());
+				int y = DOM.eventGetClientY(getFocusBackdrop().getLastEvent());
+
+				ContextMenu p = new ContextMenu();
+				p.setPopupPosition(x, y);
+				p.show();
+
+			}
+		}
 	}
 
 }

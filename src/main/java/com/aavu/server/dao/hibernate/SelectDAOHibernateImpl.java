@@ -66,6 +66,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		.setFetchMode("types.type.associations", FetchMode.JOIN)
 		.setFetchMode("types.type.associations.types", FetchMode.JOIN)
 		.setFetchMode("types.type.associations.members", FetchMode.JOIN)		
+		.setFetchMode("instances", FetchMode.JOIN)
+		.setFetchMode("instances.topic", FetchMode.JOIN)
 		.setFetchMode("occurences", FetchMode.JOIN)
 		.setFetchMode("occurences.occurrence", FetchMode.JOIN)
 		.setFetchMode("occurences.occurrence.topics", FetchMode.JOIN)

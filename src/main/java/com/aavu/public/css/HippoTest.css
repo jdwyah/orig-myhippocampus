@@ -246,6 +246,27 @@ a:visited {
 	opacity: .40;
 	-khtml-opacity: .4;*/
 }
+.H-BreadCrumbs {
+	top: 100px;
+	left: 0px;	
+	z-index: 1;
+	width: 120px;
+}
+.H-BreadCrumbs .H-TopicLink {
+	font-size: .6em;
+}
+.H-BreadCrumbScroll {
+	height: 100px;
+}
+
+.H-ContextMenu {
+	border: 1px solid #000000;   	
+	background-color: #eeeeee;		
+}
+ 
+.H-ContextMenu .gwt-Label.hover{
+	background-color: lime;
+}
 
 .H-Dashboard {
 	bottom: 0px;
@@ -427,8 +448,9 @@ a:visited {
 
 .H-OceanLabel {
 	color: #91D9F8;
-	font-size: 1.3em;
+	font-weight: bolder;
 	text-transform: capitalize;
+	text-shadow: black;
 	text-align: center;
 	letter-spacing: 1ex;
 }
