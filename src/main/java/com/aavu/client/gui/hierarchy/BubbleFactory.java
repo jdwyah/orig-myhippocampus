@@ -7,11 +7,11 @@ import com.aavu.client.domain.dto.FullTopicIdentifier;
 
 public class BubbleFactory {
 
-	public static Bubble createBubbleFor(FullTopicIdentifier fti,HierarchyDisplay display) {		
+	public static TopicDisplayObj createBubbleFor(FullTopicIdentifier fti,HierarchyDisplay display) {		
 		return new TopicBubble(fti,display);
 	}
 
-	public static Bubble createBubbleFor(TopicOccurrenceConnector owl,HierarchyDisplay display) {
+	public static TopicDisplayObj createBubbleFor(TopicOccurrenceConnector owl,HierarchyDisplay display) {
 		return new OccBubble(owl,display);
 	}
 
@@ -28,7 +28,7 @@ public class BubbleFactory {
 	 * @param hierarchyDisplay
 	 * @return
 	 */
-	public static Bubble createBubbleFor(Topic thought,Topic current,HierarchyDisplay hierarchyDisplay) {
+	public static TopicDisplayObj createBubbleFor(Topic thought,Topic current,HierarchyDisplay hierarchyDisplay) {
 
 		if (thought instanceof Occurrence) {
 			

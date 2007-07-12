@@ -19,6 +19,7 @@ import com.aavu.client.gui.ocean.dhtmlIslands.OceanLabel;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.util.Logger;
 import com.allen_sauer.gwt.dragdrop.client.PickupDragController;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.core.client.GWT;
@@ -29,8 +30,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
-	private static final int UNSET_LAT_START = 50;
-	private static final int UNSET_LAT_INCR = 110;
+	private static final int THETA_START = 0;
+	private static final double THETA_INCR_START = .628;
+	private static final double THETA_DECR = .9;
+	private static final int SPIRAL_SCALE = 250;
+	private static final double PHI_SQUARED = Math.pow(1.61803399, 2);
+
+
+	private double thetaIncr = THETA_INCR_START;
 
 	private DropController backdropDropController;
 
@@ -46,7 +53,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 	private Manager manager;
 
-	private int unsetLatitude;
+	private double theta;
 	private OceanLabel backdropLabel;
 
 	public HierarchyDisplay(Manager manager) {
@@ -93,15 +100,16 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	 * 
 	 * @param fti
 	 */
-	private void addBubble(Bubble bubble) {
+	private void addBubble(TopicDisplayObj bubble) {
 
 		if (bubble.getLeft() == -1 || bubble.getLeft() == 0) {
 			// System.out.println(fti.getTopicTitle()+"incr unsetLatitude
 			// "+unsetLatitude+" "+fti.getLatitudeOnIsland()+"
 			// "+fti.getLongitudeOnIsland());
-			bubble.setTop(unsetLatitude);
-			unsetLatitude += UNSET_LAT_INCR;
+			// bubble.setTop(unsetLatitude);
+			// unsetLatitude += UNSET_LAT_INCR;
 
+			placeNextSpiral(bubble);
 		}
 
 		bubble.getFocusPanel().addMouseWheelListener(this);
@@ -120,6 +128,32 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 	}
 
+	/**
+	 * This spiral has the polar-coordinate (r, q) equation r = 2 (q)/p and describes mollusk-shell
+	 * spirals, galaxy arms of stars, and other phenomena.
+	 * http://www.edn.com/index.asp?layout=article&articleid=CA89630 r = phi^2 (theta) / pie
+	 * 
+	 * could change to an archimedean spiral http://www.liutaiomottola.com/myth/scroll.htm
+	 * 
+	 * then convert to rect coords
+	 */
+	private void placeNextSpiral(TopicDisplayObj bubble) {
+
+		double r = SPIRAL_SCALE * PHI_SQUARED * theta / Math.PI;
+
+		System.out.println(bubble.getTitle() + " r " + r + " theta " + theta + " l "
+				+ (r * Math.cos(theta)) + " " + (r * Math.sin(theta)));
+
+		bubble.setLeft((int) (r * Math.cos(theta)));
+		bubble.setTop((int) (r * Math.sin(theta)));
+
+
+		theta += thetaIncr;
+
+		// reduce incr over the life of the spiral, otherwise they start really spreading out.
+		thetaIncr *= THETA_DECR;
+	}
+
 	public boolean centerOn(Topic topic) {
 		// TODO Auto-generated method stub
 		return false;
@@ -128,14 +162,15 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	// @Override
 	public void clear() {
 
-		unsetLatitude = UNSET_LAT_START;
+		theta = THETA_START;
+		thetaIncr = THETA_INCR_START;
 
 		for (Iterator iterator = objects.iterator(); iterator.hasNext();) {
 
 			RemembersPosition rp = (RemembersPosition) iterator.next();
 
-			if (rp instanceof Bubble) {
-				Bubble bubble = (Bubble) rp;
+			if (rp instanceof TopicDisplayObj) {
+				TopicDisplayObj bubble = (TopicDisplayObj) rp;
 				dragController.unregisterDropController(bubble.getDropController());
 			}
 
@@ -154,7 +189,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	 */
 	public void dragFinished(Widget dragging) {
 		System.out.println("HierarchyDisplay.Drag Finished");
-		Bubble tb = (Bubble) dragging;
+		TopicDisplayObj tb = (TopicDisplayObj) dragging;
 
 		tb.processDrag(currentScale);
 
@@ -203,7 +238,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		} else {
 			System.out.println("Grow " + thought.getId() + " " + GWT.getTypeName(thought));
 
-			Bubble newBubble = BubbleFactory.createBubbleFor(thought, currentRoot, this);
+			TopicDisplayObj newBubble = BubbleFactory.createBubbleFor(thought, currentRoot, this);
 			addBubble(newBubble);
 			redraw();
 
@@ -229,6 +264,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		for (Iterator iterator = t.getOccurences().iterator(); iterator.hasNext();) {
 			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator.next();
 
+			// System.out.println("yoooooo");
+			//
+			// System.out.println("B " + BubbleFactory.class);
+			// System.out.println("D " + new BubbleFactory());
 			addBubble(BubbleFactory.createBubbleFor(owl, this));
 
 		}
@@ -330,8 +369,12 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	public void update(Topic t, AbstractCommand command) {
 		System.out.println("hierarchy display update " + t);
 
-		Bubble b = (Bubble) topicBubbles.get(new Long(t.getId()));
-		b.update(t);
+		TopicDisplayObj b = (TopicDisplayObj) topicBubbles.get(new Long(t.getId()));
+		if (b != null) {
+			b.update(t);
+		} else {
+			Logger.log("HierarchyDisplay: Told to Update NonExist");
+		}
 	}
 
 	public void navigateTo(FullTopicIdentifier fti) {
@@ -361,7 +404,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 				int x = DOM.eventGetClientX(getFocusBackdrop().getLastEvent());
 				int y = DOM.eventGetClientY(getFocusBackdrop().getLastEvent());
 
-				ContextMenu p = new ContextMenu();
+				ContextMenu p = new ContextMenu(getManager());
 				p.setPopupPosition(x, y);
 				p.show();
 

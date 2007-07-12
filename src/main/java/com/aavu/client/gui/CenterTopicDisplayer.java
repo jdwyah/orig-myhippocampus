@@ -2,59 +2,55 @@ package com.aavu.client.gui;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.gadgets.TagBoard;
-import com.aavu.client.gui.gadgets.TagPropertyPanel;
 import com.aavu.client.service.Manager;
-import com.aavu.client.widget.edit.OnThisIslandBoard;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CenterTopicDisplayer extends Composite {
-	
+
 	private TagBoard tagBoard;
-	private TitleGadget titleG;	
-		
+	// private TitleGadget titleG;
+
 	private Topic topic;
 	private Manager manager;
 
-	
-	public CenterTopicDisplayer(final Manager manager){
-			
+
+	public CenterTopicDisplayer(final Manager manager) {
+
 		this.manager = manager;
-		
-		tagBoard = new TagBoard(manager);		
-		
+
+		tagBoard = new TagBoard(manager);
+
 		HorizontalPanel mainPanel = new HorizontalPanel();
-		
-		
-		
-	
-		titleG = new TitleGadget(manager);
-		
-		mainPanel.add(titleG);
-		
-				
+
+
+
+		// titleG = new TitleGadget(manager);
+		//		
+		// mainPanel.add(titleG);
+
+
 		mainPanel.add(tagBoard);
-		
+
 		initWidget(mainPanel);
-		
+
 		addStyleName("H-AbsolutePanel");
-		addStyleName("H-CenterInfo");		
-		
+		addStyleName("H-CenterInfo");
+
 		setVisible(false);
 	}
 
 
 	public void load(Topic topic) {
-		
+
 		this.topic = topic;
-		
+
 		setVisible(true);
-		
-		titleG.load(topic);
-				
+
+		// titleG.load(topic);
+
 		tagBoard.load(topic);
-		
+
 	}
 
 	public void unload() {
@@ -65,6 +61,6 @@ public class CenterTopicDisplayer extends Composite {
 	public void clearForLoading() {
 		setVisible(false);
 	}
-	
-	
+
+
 }

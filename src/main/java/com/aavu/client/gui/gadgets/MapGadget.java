@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaLocation;
@@ -30,79 +29,79 @@ import com.mapitz.gwt.googleMaps.client.GMarker;
  * Google Map Gadget.
  * 
  * @author Jeff Dwyer
- *
+ * 
  */
 public class MapGadget extends MetaGadget implements TopicLoader, MapController {
-	
+
 	/**
-	 * store this because we need to center AFTER load() & setVisible() or we'll
-	 * end up just 'top-lefting' bc we center when size == (0,0)
+	 * store this because we need to center AFTER load() & setVisible() or we'll end up just
+	 * 'top-lefting' bc we center when size == (0,0)
 	 */
-	private HippoLocation centerLoc;		
-	
+	private HippoLocation centerLoc;
+
 	/**
 	 * 
 	 * @author Jeff Dwyer
-	 *
+	 * 
 	 */
-	private class LocationLabel extends Label implements ClickListener{
+	private class LocationLabel extends Label implements ClickListener {
 
 		public LocationLabel(HippoLocation mv) {
-			
-			setText(mv.toShortString());	
-			
+
+			setText(mv.toShortString());
+
 			addClickListener(this);
 		}
 
 		public void onClick(Widget sender) {
-			
-			//mapWidget.putInChooseMode();
-		}		
+
+			// mapWidget.putInChooseMode();
+		}
 	}
 
 	private class MetaW extends VerticalPanel implements ClickListener {
 
 		private MetaLocation meta;
 		private Label title;
-		
+
 
 		public MetaW(MetaLocation _meta, boolean showDelete) {
 			this.meta = _meta;
-			
+
 			Set locations = myTopic.getMetaValuesFor(meta);
-			
-			
+
+
 			HorizontalPanel titleP = new HorizontalPanel();
-			
+
 			title = new Label(meta.getTitle());
 			title.addClickListener(this);
 			titleP.add(title);
 
-			if(showDelete){
+			if (showDelete) {
 				DeleteButton deleteButton = new DeleteButton();
-				deleteButton.addClickListener(new ClickListener(){
+				deleteButton.addClickListener(new ClickListener() {
 					public void onClick(Widget sender) {
-						removeMeta(meta,myTopic,MetaW.this);
+						removeMeta(meta, myTopic, MetaW.this);
 					}
 				});
 				titleP.add(deleteButton);
 			}
-						
+
 			add(titleP);
-			
-			System.out.println("LOAD "+locations.size());
-						
+
+			System.out.println("LOAD " + locations.size());
+
 			for (Iterator iter = locations.iterator(); iter.hasNext();) {
 				HippoLocation location = (HippoLocation) iter.next();
-				
+
 				System.out.println("LOAD");
-				
+
 				add(new LocationLabel(location));
-				
-				LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(),location,meta);
-				
-				mapWidget.add(locObj,false);
-				
+
+				LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(), location, meta);
+
+				mapWidget.add(locObj, false);
+
 				centerLoc = location;
 
 			}
@@ -110,126 +109,128 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 
 		public void onClick(Widget sender) {
 			selectedMeta = meta;
-			//title.add
+			// title.add
 		}
-		
+
 	}
-	
-	private static final int DEFAULT_ZOOM = 1;	
+
+	private static final int DEFAULT_ZOOM = 1;
 	private MetaLocation selectedMeta;
 
 	private Topic myTopic;
-	
-	
+
+
 	private Manager manager;
-	
-	
-	
+
+
+
 	private HippoMapWidget mapWidget;
 
 
-	public MapGadget(Manager _manager) {		
+	public MapGadget(Manager _manager) {
 		super(_manager, ConstHolder.myConstants.gadget_map_title(), new MetaLocation());
-		
+
 		this.manager = _manager;
-		    
-		
-		mapWidget = new HippoMapWidget(this,200,200,DEFAULT_ZOOM);		
-		
-		
+
+
+		mapWidget = new HippoMapWidget(this, 200, 200, DEFAULT_ZOOM);
+
+
 		extraPanel.add(mapWidget);
 	}
 
 
 
-
-	//@Override
+	// @Override
 	protected void addMWidg(final Meta meta, boolean showDelete) {
-		
+
 		makeVisible();
-		
-		
-		MetaW metaWidge = new MetaW((MetaLocation)meta,showDelete);		
-		
+
+
+		MetaW metaWidge = new MetaW((MetaLocation) meta, showDelete);
+
 		metasPanel.add(metaWidge);
-		
+
 		selectedMeta = (MetaLocation) meta;
-		
-		//HippoLocation mv = (HippoLocation) myTopic.getSingleMetaValueFor(meta);
-		
+
+		// HippoLocation mv = (HippoLocation) myTopic.getSingleMetaValueFor(meta);
+
 	}
-	
+
 
 	public LocationDTO getNewLocationForPoint(GLatLng point) {
-		
-		if(selectedMeta != null){
-			
-			if(myTopic.getMetaValuesFor(selectedMeta).size() > 0){
+
+		if (selectedMeta != null) {
+
+			if (myTopic.getMetaValuesFor(selectedMeta).size() > 0) {
 				manager.displayInfo(ConstHolder.myConstants.gadget_map_onlyoneper());
 				return null;
 			}
-			
+
 			HippoLocation newLoc = new HippoLocation();
 			newLoc.setLocation(point);
-			
-			saveLocation(selectedMeta,newLoc);			
-			
-			LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(),newLoc,selectedMeta);
-			
-			
+
+			saveLocation(selectedMeta, newLoc);
+
+			LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(), newLoc, selectedMeta);
+
+
 			return locObj;
-		}else{
-			manager.displayInfo(ConstHolder.myConstants.gadget_map_clickToAdd());			
+		} else {
+			manager.displayInfo(ConstHolder.myConstants.gadget_map_clickToAdd());
 			return null;
 		}
 	}
 
-	//@Override
-	public Image getPickerButton() {		
+	// @Override
+	public Image getPickerButton() {
 		Image b = ConstHolder.images.gadgetMap().createImage();
-		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.gadget_map_title()));
+		b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
 		return b;
 	}
-	
-	public int load(Topic topic){
+
+	// @Override
+	public String getDisplayName() {
+		return ConstHolder.myConstants.gadget_map_title();
+	}
+
+	public int load(Topic topic) {
 		myTopic = topic;
 		mapWidget.clear();
-		
-		int size = super.load(topic);		
-		
-		System.out.println("SIZE "+size);
-		
-		if(size > 0){			
+
+		int size = super.load(topic);
+
+		System.out.println("SIZE " + size);
+
+		if (size > 0) {
 			makeVisible();
-		}else{
-			//extraPanel.setVisible(false);
+		} else {
+			// extraPanel.setVisible(false);
 		}
-		
+
 		return size;
 	}
 
-	
-	//@Override
+
+	// @Override
 	public void nowVisible() {
-		makeVisible();//necessary. otherwise we just get grey maps.
+		makeVisible();// necessary. otherwise we just get grey maps.
 		center();
 	}
 
 
 
-
 	/**
-	 * separate this because we need to center AFTER load() & setVisible() or we'll
-	 * end up just 'top-lefting' bc we center when size == (0,0)
+	 * separate this because we need to center AFTER load() & setVisible() or we'll end up just
+	 * 'top-lefting' bc we center when size == (0,0)
 	 */
 	private void center() {
-		
-//		System.out.println("about to center "+mapWidget.getOffsetWidth());
-//		System.out.println("about to center "+mapWidget.isVisible());
-		
+
+		// System.out.println("about to center "+mapWidget.getOffsetWidth());
+		// System.out.println("about to center "+mapWidget.isVisible());
+
 		mapWidget.centerOn(centerLoc);
 	}
-
 
 
 
@@ -241,75 +242,78 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 
 	private void saveLocation(Meta theSelectedMeta, HippoLocation newLoc) {
 
-		System.out.println("\n\n--------------------\n\nSave "+newLoc);
-		
-		Set locations = myTopic.getMetaValuesFor(theSelectedMeta);		
-		
-		System.out.println("bf Saving locations size "+locations.size());
-		
-		locations.add(newLoc);
-		
-		System.out.println("af Saving locations size "+locations.size());
-		for (Iterator iter = locations.iterator(); iter.hasNext();) {			
-			HippoLocation hl = (HippoLocation) iter.next();
-			System.out.println("hl "+hl);
-		}
-		
-		manager.getTopicCache().executeCommand(myTopic,new SaveMetaLocationCommand(myTopic,theSelectedMeta,locations),
-				new StdAsyncCallback(ConstHolder.myConstants.save()){});
+		System.out.println("\n\n--------------------\n\nSave " + newLoc);
 
-	
+		Set locations = myTopic.getMetaValuesFor(theSelectedMeta);
+
+		System.out.println("bf Saving locations size " + locations.size());
+
+		locations.add(newLoc);
+
+		System.out.println("af Saving locations size " + locations.size());
+		for (Iterator iter = locations.iterator(); iter.hasNext();) {
+			HippoLocation hl = (HippoLocation) iter.next();
+			System.out.println("hl " + hl);
+		}
+
+		manager.getTopicCache().executeCommand(myTopic,
+				new SaveMetaLocationCommand(myTopic, theSelectedMeta, locations),
+				new StdAsyncCallback(ConstHolder.myConstants.save()) {
+				});
+
+
 	}
 
 
 
 	public void update(LocationDTO dragged) {
-		System.out.println("Update "+dragged+" selectedMeta "+selectedMeta);
-		Set locations = myTopic.getMetaValuesFor(selectedMeta);		
-		locations.add(dragged.getLocation());		
-		
-		System.out.println("Updating locations size "+locations.size());
+		System.out.println("Update " + dragged + " selectedMeta " + selectedMeta);
+		Set locations = myTopic.getMetaValuesFor(selectedMeta);
+		locations.add(dragged.getLocation());
+
+		System.out.println("Updating locations size " + locations.size());
 		for (Iterator iter = locations.iterator(); iter.hasNext();) {
 			HippoLocation hl = (HippoLocation) iter.next();
-			System.out.println("hl "+hl);
+			System.out.println("hl " + hl);
 		}
-		
-		manager.getTopicCache().executeCommand(myTopic,new SaveMetaLocationCommand(myTopic,selectedMeta,locations),
-				new StdAsyncCallback(ConstHolder.myConstants.save()){});
+
+		manager.getTopicCache().executeCommand(myTopic,
+				new SaveMetaLocationCommand(myTopic, selectedMeta, locations),
+				new StdAsyncCallback(ConstHolder.myConstants.save()) {
+				});
 
 	}
 
 
 
 	public void userDoubleClicked(LocationDTO selected) {
-		System.out.println("selected "+selected);
-		
+		System.out.println("selected " + selected);
+
 	}
 
 
 
 	public void userSelected(LocationDTO selected, GMarker marker) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
 
-
 	/**
-	 * NOTE: Only necessary for IE. Without this, the map will load and display, but it 
-	 * won't play nicely with the other gadgets, in particular any EntryPreview with more than a few
-	 * lines of text in it. FF worked fine.
+	 * NOTE: Only necessary for IE. Without this, the map will load and display, but it won't play
+	 * nicely with the other gadgets, in particular any EntryPreview with more than a few lines of
+	 * text in it. FF worked fine.
 	 */
-	//@Override
+	// @Override
 	public void showForFirstTime() {
 		super.showForFirstTime();
 		makeVisible();
 	}
 
-	
-	//@Override
-	public Topic getPrototypeObj() {		
+
+	// @Override
+	public Topic getPrototypeObj() {
 		return new MetaLocation();
 	}
 

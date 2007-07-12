@@ -55,7 +55,7 @@
 	 <form id="openIDForm" action="/site/j_acegi_openid_start" method="POST" style="display: block" onSubmit="javascript:formvalidation();return false;" >
 		<fieldset>
 			<legend><@spring.message "login.1.header"/> <a class="link" onclick="javascript:doUsernamePassword();">Use username / password</a></legend>
-			 <label for="j_username2"><input type='text' name='j_username' id = 'j_username2' class="openid-identifier">OpenID
+			 <label for="j_username2"><input type='text' name='openid_url' id = 'j_username2' class="openid-identifier">OpenID
 			 </label>		 		 
 		 <p>
 		 <input type="hidden" name="password"/>

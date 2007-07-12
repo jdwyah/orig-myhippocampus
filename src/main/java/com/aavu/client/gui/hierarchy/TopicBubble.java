@@ -5,15 +5,16 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicBubble extends AbstractBubble implements Bubble, ClickListener {
+public class TopicBubble extends AbstractDraggableBubble implements TopicDisplayObj,
+		DblClickListener {
 
 	private FullTopicIdentifier fti;
 	private TopicDisplayOverlay overlay;
@@ -26,7 +27,7 @@ public class TopicBubble extends AbstractBubble implements Bubble, ClickListener
 
 		setDropController(new BubbleDropController(this));
 
-		addClickListener(this);
+		addDblClickListener(this);
 
 	}
 
@@ -52,12 +53,12 @@ public class TopicBubble extends AbstractBubble implements Bubble, ClickListener
 
 	}
 
-	public void onClick(Widget sender) {
-
+	public void onDblClick(Widget sender) {
+		unhover();
 		getDisplay().navigateTo(getFTI());
 	}
 
-	public void receivedDrop(Bubble bubble) {
+	public void receivedDrop(TopicDisplayObj bubble) {
 
 		if (bubble instanceof TopicBubble) {
 			TopicBubble received = (TopicBubble) bubble;
@@ -105,26 +106,13 @@ public class TopicBubble extends AbstractBubble implements Bubble, ClickListener
 
 	// @Override
 	protected void hover() {
-
-		if (overlay == null) {
-			getDisplay().getManager().getTopicCache().getTopic(fti,
-					new StdAsyncCallback("Get Display Overlay") {
-						// @Override
-						public void onSuccess(Object result) {
-							super.onSuccess(result);
-							overlay = new TopicDisplayOverlay((Topic) result);
-							showOverlay();
-						}
-					});
-
-		} else {
-			showOverlay();
-		}
-
+		HoverManager.showHover(getDisplay().getManager(), this, getFTI());
 	}
 
-	private void showOverlay() {
-		overlay.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop());
-		overlay.show();
+	// @Override
+	protected void unhover() {
+		HoverManager.hideHover(getFTI());
 	}
+
+
 }

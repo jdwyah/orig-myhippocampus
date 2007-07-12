@@ -11,27 +11,32 @@ import com.google.gwt.user.client.ui.Image;
  * Gadget to display a topic's metadate information
  * 
  * @author Jeff Dwyer
- *
+ * 
  */
-public class TimeGadget extends MetaGadget  {
-	
-	public TimeGadget(Manager _manager){		
+public class TimeGadget extends MetaGadget {
+
+	public TimeGadget(Manager _manager) {
 		super(_manager, ConstHolder.myConstants.gadget_time_title(), new MetaDate());
-		
-		addStyleName("H-TimeGadget");				
+
+		addStyleName("H-TimeGadget");
 	}
 
 
-	//@Override
-	public Image getPickerButton() {		
-		Image b = ConstHolder.images.hourglassbase().createImage();	
-		b.addMouseListener(new TooltipListener(0,40,ConstHolder.myConstants.gadget_time_title()));
+	// @Override
+	public Image getPickerButton() {
+		Image b = ConstHolder.images.hourglassbase().createImage();
+		b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
 		return b;
 	}
 
-	//@Override
-	public Topic getPrototypeObj() {		
+	// @Override
+	public String getDisplayName() {
+		return ConstHolder.myConstants.gadget_time_title();
+	}
+
+	// @Override
+	public Topic getPrototypeObj() {
 		return new MetaDate();
 	}
-	
+
 }

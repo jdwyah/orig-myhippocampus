@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OccBubble extends AbstractBubble implements Bubble, ClickListener {
+public class OccBubble extends AbstractDraggableBubble implements TopicDisplayObj, ClickListener {
 
 	private TopicOccurrenceConnector owl;
 
@@ -35,7 +35,7 @@ public class OccBubble extends AbstractBubble implements Bubble, ClickListener {
 		getDisplay().getManager().editOccurrence(owl.getOccurrence());
 	}
 
-	public void receivedDrop(Bubble bubble) {
+	public void receivedDrop(TopicDisplayObj bubble) {
 		// TODO Auto-generated method stub
 
 	}
@@ -50,6 +50,12 @@ public class OccBubble extends AbstractBubble implements Bubble, ClickListener {
 
 	// @Override
 	protected void hover() {
+		// TODO Auto-generated method stub
+
+	}
+
+	// @Override
+	protected void unhover() {
 		// TODO Auto-generated method stub
 
 	}

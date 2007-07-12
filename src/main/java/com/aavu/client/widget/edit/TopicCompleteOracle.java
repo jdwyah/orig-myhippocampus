@@ -8,11 +8,8 @@ import com.aavu.client.async.EZCallback;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.autocompletion.SuggestBoxExt;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SuggestOracle;
-import com.google.gwt.user.client.ui.Widget;
 
 public class TopicCompleteOracle extends SuggestOracle {
 
@@ -31,10 +28,9 @@ public class TopicCompleteOracle extends SuggestOracle {
 		}
 
 		/**
-		 * odd. can't return the TI, since .toString() is called on it and that
-		 * is put in the box. worse, there's no way to call suggestBox,
-		 * getSelectedValue() Just return the string and use the old
-		 * creataeOrNew() for now
+		 * odd. can't return the TI, since .toString() is called on it and that is put in the box.
+		 * worse, there's no way to call suggestBox, getSelectedValue() Just return the string and
+		 * use the old creataeOrNew() for now
 		 */
 		public Object getValue() {
 			return value.getTopicTitle();
@@ -49,15 +45,6 @@ public class TopicCompleteOracle extends SuggestOracle {
 		this.topicCache = topicCache;
 	}
 
-	/**
-	 * Convenience method to use our TopicService.
-	 * 
-	 * @param completeText
-	 * @param callback
-	 */
-	public void getTopicIdentForNameOrCreateNew(String completeText, AsyncCallback callback) {
-		topicCache.getTopicIdentForNameOrCreateNew(completeText, callback);
-	}
 
 	// @Override
 	public void requestSuggestions(final Request request, final Callback callback) {
@@ -78,26 +65,6 @@ public class TopicCompleteOracle extends SuggestOracle {
 		});
 	}
 
-	public void setCompleteListener(final SuggestBoxExt box, final CompleteListener completeListener) {
-
-		this.box = box;
-		this.completeListener = completeListener;
-
-		box.addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
-				System.out.println("ONCHANGE " + box.getText());
-				complete();
-			}
-		});
-	}
-
-	public void complete() {
-		getTopicIdentForNameOrCreateNew(box.getText(), new EZCallback() {
-			public void onSuccess(Object result) {
-				completeListener.completed((TopicIdentifier) result);
-			}
-		});
-	}
 
 	// @Override
 	public boolean isDisplayStringHTML() {
@@ -114,8 +81,8 @@ public class TopicCompleteOracle extends SuggestOracle {
 	}
 
 	/**
-	 * Simpler than the Google MultiWordSuggest highlighter in that it will only
-	 * highlight the first occurrence
+	 * Simpler than the Google MultiWordSuggest highlighter in that it will only highlight the first
+	 * occurrence
 	 * 
 	 * @param candidate
 	 * @param query

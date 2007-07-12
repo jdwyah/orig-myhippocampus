@@ -1,19 +1,18 @@
 package com.aavu.client.gui.gadgets;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.hierarchy.StationaryBubble;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.EnterInfoButton;
-import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.aavu.client.widget.edit.DeletableTopicLabel;
 import com.aavu.client.widget.edit.RemoveListener;
@@ -22,13 +21,14 @@ import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TagBoard extends Composite implements CompleteListener, RemoveListener {
 
-	private CellPanel tagPanel = new VerticalPanel();
+	private CellPanel tagPanel = new HorizontalPanel();
 
 	// private List tags = new ArrayList();
 	// private Map metaMap = new HashMap();
@@ -37,16 +37,17 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 	private Manager manager;
 
-	private Set tagsToSave = new HashSet();
-
-	private HeaderLabel header;
-
 	private TopicCompleter suggestBox;
+
+	private HorizontalPanel adderP;
+
 
 	// private SaveNeededListener saveNeeded;
 
 	public TagBoard(Manager manager) {
 		this.manager = manager;
+
+
 		// this.saveNeeded = saveNeeded;
 
 		// final TopicCompleteOracle oracle = new
@@ -65,8 +66,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 		CellPanel mainPanel = new HorizontalPanel();
 
-		header = new HeaderLabel(ConstHolder.myConstants.tags());
-		mainPanel.add(header);
+
+		// mainPanel.add(header);
 
 		//		
 		// CellPanel tagPanelS = new HorizontalPanel();
@@ -75,15 +76,28 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		mainPanel.add(tagPanel);
 
 		HorizontalPanel tagBoxP = new HorizontalPanel();
-		tagBoxP.add(new Label(ConstHolder.myConstants.addTag()));
-		tagBoxP.add(suggestBox);
-		tagBoxP.add(addTagButton);
+
+
+
+		Image ballAdd = ConstHolder.images.ballAdd().createImage();
+		ballAdd.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				toggle();
+			}
+		});
+		tagBoxP.add(ballAdd);
+
+		adderP = new HorizontalPanel();
+		adderP.add(new Label(ConstHolder.myConstants.addTag()));
+		adderP.add(suggestBox);
+		adderP.add(addTagButton);
+		adderP.setVisible(false);
+		tagBoxP.add(adderP);
 
 		mainPanel.add(tagBoxP);
 
 		initWidget(mainPanel);
 
-		addStyleName("H-Gadget");
 		addStyleName("H-TagBoard");
 
 	}
@@ -96,6 +110,13 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		addTag(tag);
 
 		suggestBox.setText("");
+
+		adderP.setVisible(false);
+	}
+
+
+	private void toggle() {
+		adderP.setVisible(!adderP.isVisible());
 	}
 
 	/**
@@ -104,6 +125,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 * @param topic
 	 */
 	public int load(Topic topic) {
+		adderP.setVisible(false);
 
 		if (topic instanceof Root) {
 			setVisible(false);
@@ -111,7 +133,6 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 			setVisible(true);
 		}
 
-		header.setText(ConstHolder.myConstants.tags());
 
 		tagPanel.clear();
 
@@ -137,18 +158,20 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 	private void showTag(final Topic tag) {
 
-		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
+		StationaryBubble topicBubble = new StationaryBubble(new FullTopicIdentifier(tag), manager);
 
-		TagGadget tg = new TagGadget(tagLabel);
+		tagPanel.add(topicBubble);
 
-		// displayMetas(tag,tg);
-
-		tagPanel.add(tg);
+		// DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
+		//
+		// TagGadget tg = new TagGadget(tagLabel);
+		//
+		// tagPanel.add(tg);
 	}
 
 	/**
-	 * Remove the tag and add the tag to the list of things that need to be
-	 * saved. Need to do a load to make sure that we have all necessary Data.
+	 * Remove the tag and add the tag to the list of things that need to be saved. Need to do a load
+	 * to make sure that we have all necessary Data.
 	 */
 	public void remove(Topic tag, final Widget widgetToRemoveOnSuccess) {
 
@@ -171,11 +194,10 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	}
 
 	/**
-	 * re-load the gadgets. If we've tagged it with something with metas, we'll
-	 * want to open those gadgets. ie tag Bob as Person opens Text:Email gadget.
+	 * re-load the gadgets. If we've tagged it with something with metas, we'll want to open those
+	 * gadgets. ie tag Bob as Person opens Text:Email gadget.
 	 * 
-	 * PEND this will require a trip to server. Would be nice to make this more
-	 * targetted.
+	 * PEND this will require a trip to server. Would be nice to make this more targetted.
 	 * 
 	 * @param tag
 	 */

@@ -181,7 +181,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	// @Override
 	public Image getPickerButton() {
 		Image b = ConstHolder.images.gadgetConnections().createImage();
-		b.addMouseListener(new TooltipListener(0, 40, ConstHolder.myConstants.connections()));
+		b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
 		return b;
 	}
 
@@ -197,6 +197,11 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	// @Override
 	public void onClick(Manager manager) {
 		throw new UnsupportedOperationException();
+	}
+
+	// @Override
+	public String getDisplayName() {
+		return ConstHolder.myConstants.connections();
 	}
 
 }

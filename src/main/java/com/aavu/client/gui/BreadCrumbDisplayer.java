@@ -70,4 +70,10 @@ public class BreadCrumbDisplayer extends Gadget {
 
 	}
 
+	// @Override
+	public String getDisplayName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

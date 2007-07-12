@@ -47,6 +47,7 @@ public class TopicCompleter extends SuggestBoxExt {
 	 * public so we can call this at any time
 	 */
 	public void complete() {
+
 		getTopicIdentForNameOrCreateNew(getText(), new EZCallback() {
 			public void onSuccess(Object result) {
 				completeListener.completed((TopicIdentifier) result);

@@ -17,7 +17,7 @@ public class OpenIDLoginController extends AbstractController {
 	private OpenIDConsumer consumer;
 
 	private static final String passwordField = "j_password";
-	private String identityField = "j_username";
+	private String identityField = "openid_url";
 	private String formLoginUrl = "/j_acegi_security_check";
 	private String errorPage = "acegilogin";
 
@@ -33,9 +33,13 @@ public class OpenIDLoginController extends AbstractController {
 		this.consumer = consumer;
 	}
 
+	public void setIdentityField(String identityField) {
+		this.identityField = identityField;
+	}
+
 	@Override
-	protected ModelAndView handleRequestInternal(HttpServletRequest req,
-			HttpServletResponse res) throws Exception {
+	protected ModelAndView handleRequestInternal(HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
 
 		// HttpUtils.getRequestURL(req).toString();
 		// get the submitted id field
@@ -49,8 +53,7 @@ public class OpenIDLoginController extends AbstractController {
 
 		if ((password != null) && (password.length() > 0)) {
 			System.out
-					.println("Attempting to authenticate using username/password "
-							+ formLoginUrl);
+					.println("Attempting to authenticate using username/password " + formLoginUrl);
 			System.out.println("user: " + req.getParameter("j_username") + " "
 					+ req.getParameter("j_password"));
 			logger.debug("Attempting to authenticate using username/password");
@@ -66,8 +69,7 @@ public class OpenIDLoginController extends AbstractController {
 			try {
 				String returnToURL = trustRoot + returnTo;
 
-				String redirect = consumer.beginConsumption(req, id,
-						returnToURL);
+				String redirect = consumer.beginConsumption(req, id, returnToURL);
 				logger.debug("Redirecting to: " + redirect);
 
 				return new ModelAndView("redirect:" + redirect);
@@ -79,11 +81,9 @@ public class OpenIDLoginController extends AbstractController {
 				Map<String, Object> model = new HashMap<String, Object>();
 				model.put("message", oice.getMessage());
 				if (oice.getCause() != null) {
-					model.put("login_error", "Cause: "
-							+ oice.getCause().getMessage());
+					model.put("login_error", "Cause: " + oice.getCause().getMessage());
 				} else {
-					model.put("login_error",
-							"Are you sure you have an OpenID account?");
+					model.put("login_error", "Are you sure you have an OpenID account?");
 				}
 
 				return new ModelAndView(errorPage, model);

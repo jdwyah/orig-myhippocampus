@@ -226,6 +226,7 @@
 	<bean id="openIDLoginStartController" class="com.aavu.server.web.controllers.OpenIDLoginController">
 		<property name="consumer" ref="openIDConsumer"/>
 		<property name="trustRoot" value="${HOST.openID.trustRoot}"/>
+		<property name="identityField" value="openid_url"/>			
 	</bean>
 	
 
