@@ -1,20 +1,20 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicBubble extends AbstractDraggableBubble implements TopicDisplayObj,
-		DblClickListener {
+public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj, ClickListener {
 
 	private FullTopicIdentifier fti;
 	private TopicDisplayOverlay overlay;
@@ -27,7 +27,7 @@ public class TopicBubble extends AbstractDraggableBubble implements TopicDisplay
 
 		setDropController(new BubbleDropController(this));
 
-		addDblClickListener(this);
+		addClickListener(this);
 
 	}
 
@@ -45,7 +45,7 @@ public class TopicBubble extends AbstractDraggableBubble implements TopicDisplay
 	 * @return
 	 */
 	public Topic getTopic() {
-		return new Topic(getFTI());
+		return new RealTopic(getFTI());
 	}
 
 	public void grow() {
@@ -53,7 +53,7 @@ public class TopicBubble extends AbstractDraggableBubble implements TopicDisplay
 
 	}
 
-	public void onDblClick(Widget sender) {
+	public void onClick(Widget sender) {
 		unhover();
 		getDisplay().navigateTo(getFTI());
 	}
@@ -112,6 +112,16 @@ public class TopicBubble extends AbstractDraggableBubble implements TopicDisplay
 	// @Override
 	protected void unhover() {
 		HoverManager.hideHover(getFTI());
+	}
+
+	// @Override
+	protected int getUnscaledHeight() {
+		return 50;
+	}
+
+	// @Override
+	protected int getUnscaledWidth() {
+		return 50;
 	}
 
 

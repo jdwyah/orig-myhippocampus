@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
@@ -145,7 +146,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 
 	public void completed(TopicIdentifier topicID) {
 
-		Topic newTopic = new Topic();
+		Topic newTopic = new RealTopic();
 		newTopic.setTitle(topicID.getTopicTitle());
 		newTopic.setId(topicID.getTopicID());
 

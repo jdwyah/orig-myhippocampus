@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.aavu.client.domain">
 
-	<class name="Topic" table="Topics" discriminator-value="Topic">
+	<class name="Topic" table="Topics" discriminator-value="absTopic">
 		<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractTopic</meta>
 		<meta attribute="scope-class">public abstract</meta>
 
@@ -122,6 +122,12 @@
 			<many-to-many column="topic_id" class="Association" />
 		</set>
 
+
+		<!-- meaningless from DB perspective. only usefull for differentiation -->
+		<subclass name="RealTopic" discriminator-value="Topic">
+			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>
+		</subclass>
+		
 		<!-- meaningless from DB perspective. only usefull for differentiation -->
 		<subclass name="Tag" discriminator-value="tag">
 			<meta attribute="generated-class" inherit="false">com.aavu.client.domain.generated.AbstractJUNK</meta>

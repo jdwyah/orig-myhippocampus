@@ -3,6 +3,7 @@ package com.aavu.client.gui.gadgets;
 import java.util.Iterator;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
@@ -103,7 +104,7 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	}
 
 	public void completed(TopicIdentifier topicID) {
-		Topic tag = new Topic();
+		Topic tag = new RealTopic();
 		tag.setId(topicID.getTopicID());
 		tag.setTitle(topicID.getTopicTitle());
 

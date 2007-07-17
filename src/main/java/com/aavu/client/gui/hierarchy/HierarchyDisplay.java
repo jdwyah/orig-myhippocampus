@@ -60,6 +60,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		super();
 		this.manager = manager;
 
+		// PEND MED NOTE: GWT bug? w/o this, we don't seem to import/compile this
+		System.out.println("BubbleF " + BubbleFactory.class);
+
+
 		addStyleName("H-Hierarchy");
 
 		// passing (this,true) kinda worked, but we'd often miss entry events
@@ -112,7 +116,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 			placeNextSpiral(bubble);
 		}
 
-		bubble.getFocusPanel().addMouseWheelListener(this);
+		bubble.addMouseWheelListener(this);
 
 		dragController.makeDraggable(bubble.getWidget());
 
@@ -237,6 +241,8 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 			bubble.grow();
 		} else {
 			System.out.println("Grow " + thought.getId() + " " + GWT.getTypeName(thought));
+
+
 
 			TopicDisplayObj newBubble = BubbleFactory.createBubbleFor(thought, currentRoot, this);
 			addBubble(newBubble);

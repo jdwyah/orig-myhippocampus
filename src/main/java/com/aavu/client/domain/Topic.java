@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Jeff Dwyer
  * 
  */
-public class Topic extends AbstractTopic implements IsSerializable, ReallyCloneable {
+public abstract class Topic extends AbstractTopic implements IsSerializable, ReallyCloneable {
 
 	public Topic() {
 		setLastUpdated(new Date());
@@ -77,7 +77,7 @@ public class Topic extends AbstractTopic implements IsSerializable, ReallyClonea
 		else if (this instanceof Root)
 			o = new Root();
 		else {
-			o = new Topic();
+			o = new RealTopic();
 		}
 
 		copyPropsIntoParam(o);
@@ -718,7 +718,7 @@ public class Topic extends AbstractTopic implements IsSerializable, ReallyClonea
 	public void addSeeAlso(TopicIdentifier identifier) {
 		Association cur = getSeeAlsoAssociation();
 
-		cur.getMembers().add(new Topic(identifier));
+		cur.getMembers().add(new RealTopic(identifier));
 
 		getAssociations().add(cur);
 	}

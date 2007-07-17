@@ -4,7 +4,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
-import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.MouseWheelListener;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface TopicDisplayObj extends RemembersPosition {
@@ -19,8 +19,6 @@ public interface TopicDisplayObj extends RemembersPosition {
 
 	Widget getDropTarget();
 
-	FocusPanel getFocusPanel();
-
 	void setTop(int latitude);
 
 	String getTitle();
@@ -30,5 +28,7 @@ public interface TopicDisplayObj extends RemembersPosition {
 	void update(Topic t);
 
 	void setLeft(int longitude);
+
+	void addMouseWheelListener(MouseWheelListener listener);
 
 }

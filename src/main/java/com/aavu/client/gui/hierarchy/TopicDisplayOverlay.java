@@ -9,7 +9,9 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
+import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
@@ -61,13 +63,7 @@ public class TopicDisplayOverlay extends PopupPanel implements MouseListener {
 		mainP.add(childrenP, 0, widget.getOffsetHeight());
 
 
-		associationP = new DisplayerPanel();
-		for (Iterator iterator = topic.getSeeAlsoAssociation().getMembers().iterator(); iterator
-				.hasNext();) {
-
-			Topic seeAlso = (Topic) iterator.next();
-			associationP.add(new TopicLink(seeAlso));
-		}
+		associationP = new SeeAlsoPanel(topic);
 		mainP.add(associationP, 0, 0);
 
 
@@ -156,6 +152,21 @@ public class TopicDisplayOverlay extends PopupPanel implements MouseListener {
 
 	}
 
+	private class SeeAlsoPanel extends DisplayerPanel {
+		public SeeAlsoPanel(Topic topic) {
+			TopicCompleter seeAlsoComplete = new TopicCompleter(manager.getTopicCache());
+			add(new Label(ConstHolder.myConstants.seeAlsos()));
+			add(seeAlsoComplete);
+
+
+			for (Iterator iterator = topic.getSeeAlsoAssociation().getMembers().iterator(); iterator
+					.hasNext();) {
+
+				Topic seeAlso = (Topic) iterator.next();
+				add(new TopicLink(seeAlso));
+			}
+		}
+	}
 
 
 	/**

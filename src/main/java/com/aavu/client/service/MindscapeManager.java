@@ -12,6 +12,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
@@ -180,14 +181,14 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	public void createTopic(final String name, final Topic currentTopic) {
 
-		getTopicCache().createNew(name, new Topic(), currentTopic,
+		getTopicCache().createNew(name, new RealTopic(), currentTopic,
 				new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
 						TopicIdentifier res = (TopicIdentifier) result;
 
 
-						Topic newIsland = new Topic();
+						Topic newIsland = new RealTopic();
 						newIsland.setId(res.getTopicID());
 						newIsland.setTitle(res.getTopicTitle());
 						map.growIsland(newIsland);

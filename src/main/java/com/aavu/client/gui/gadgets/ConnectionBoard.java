@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Association;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -143,8 +144,9 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		alsos.add(topicID);
 		topicCompleter.setText("");
 
-		topicService.executeCommand(myTopic, new SaveSeeAlsoCommand(myTopic, new Topic(topicID)),
-				new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
+		topicService.executeCommand(myTopic,
+				new SaveSeeAlsoCommand(myTopic, new RealTopic(topicID)), new StdAsyncCallback(
+						ConstHolder.myConstants.save_async()) {
 				});
 	}
 

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.WebLink;
@@ -98,9 +99,9 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 
 		// prepend
 		if (topics.size() > 0) {
-			topics.add(new Topic(to));
+			topics.add(new RealTopic(to));
 		} else {
-			topics.add(0, new Topic(to));
+			topics.add(0, new RealTopic(to));
 		}
 		topicM.put(to, w);
 

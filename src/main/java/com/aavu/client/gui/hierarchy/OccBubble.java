@@ -8,23 +8,33 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OccBubble extends AbstractDraggableBubble implements TopicDisplayObj, ClickListener {
+public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, ClickListener {
 
 	private TopicOccurrenceConnector owl;
+	private int unscaledWidth;
+	private int unscaledHeight;
 
+	/**
+	 * default to the green ball image
+	 * 
+	 * @param owl
+	 * @param display
+	 */
 	public OccBubble(TopicOccurrenceConnector owl, HierarchyDisplay display) {
-
-		super(owl.getLongitude(), owl.getLatitude(), owl.getOccurrence().getTitle(), new Image(
-				ImageHolder.getImgLoc("hierarchy/") + "ball_green.png"), display);
-
-		this.owl = owl;
-
-		addClickListener(this);
-
-		// addMouseListener(new OccDisplayListener(owl.getOccurrence()));
+		this(owl, ImageHolder.getImgLoc("hierarchy/") + "ball_green.png", 50, 50, display);
 	}
 
-	// @Override
+	public OccBubble(TopicOccurrenceConnector owl, String imgLocation, int width, int height,
+			HierarchyDisplay display) {
+		super(owl.getLongitude(), owl.getLatitude(), owl.getOccurrence().getTitle(), new Image(
+				imgLocation), display);
+
+		this.owl = owl;
+		this.unscaledWidth = width;
+		this.unscaledHeight = height;
+
+		addClickListener(this);
+	}
 
 	public TopicIdentifier getIdentifier() {
 		return owl.getOccurrence().getIdentifier();
@@ -58,6 +68,16 @@ public class OccBubble extends AbstractDraggableBubble implements TopicDisplayOb
 	protected void unhover() {
 		// TODO Auto-generated method stub
 
+	}
+
+	// @Override
+	protected int getUnscaledHeight() {
+		return unscaledHeight;
+	}
+
+	// @Override
+	protected int getUnscaledWidth() {
+		return unscaledWidth;
 	}
 
 }

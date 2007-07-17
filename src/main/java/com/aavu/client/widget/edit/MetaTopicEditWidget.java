@@ -2,6 +2,7 @@ package com.aavu.client.widget.edit;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaTopic;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveMetaTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -87,8 +88,8 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 
 		setToShowMode(topicID);
 
-		topicCache.executeCommand(topic, new SaveMetaTopicCommand(topic, meta, new Topic(topicID)),
-				new StdAsyncCallback(ConstHolder.myConstants.save()) {
-				});
+		topicCache.executeCommand(topic, new SaveMetaTopicCommand(topic, meta, new RealTopic(
+				topicID)), new StdAsyncCallback(ConstHolder.myConstants.save()) {
+		});
 	}
 }

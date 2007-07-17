@@ -1,7 +1,6 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.util.Logger;
-import com.google.gwt.user.client.ui.Image;
 
 public abstract class AbstractDraggableBubble extends AbstractBubble {
 
@@ -9,9 +8,9 @@ public abstract class AbstractDraggableBubble extends AbstractBubble {
 	private int top;
 	private int left;
 
-	public AbstractDraggableBubble(int longitude, int latitude, String title, Image image,
+	public AbstractDraggableBubble(int longitude, int latitude, String title,
 			HierarchyDisplay display) {
-		super(title, image, display.getManager());
+		super(title, display.getManager());
 
 		this.left = longitude;
 		this.top = latitude;
