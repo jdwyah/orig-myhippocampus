@@ -3,14 +3,14 @@ package com.aavu.client.gui.hierarchy;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OptionsPanel extends Composite {
+public class OptionsPanel extends DisplayPanel {
 
 	public OptionsPanel(Topic topic, Manager manager) {
+		super("Options");
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 
@@ -41,10 +41,10 @@ public class OptionsPanel extends Composite {
 		mainPanel.add(deleteL);
 
 
-		initWidget(mainPanel);
+		add(mainPanel);
 
-		setStyleName("H-OptionsPanel");
-		addStyleName("H-Gadget");
+		// setStyleName("H-OptionsPanel");
+		// addStyleName("H-Gadget");
 	}
 
 }

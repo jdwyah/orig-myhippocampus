@@ -12,33 +12,33 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.TopicCompleter;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicDisplayOverlay extends PopupPanel implements MouseListener {
+public class TopicDisplayOverlay implements MouseListener {
 
-	private static final int OPTION_P_OFFSET = -30;
+	private static final int OPTION_P_OFFSET = -60;
 	private Widget widget;
 	private Timer hideTimer;
-	private DisplayerPanel childrenP;
-	private DisplayerPanel webLinkP;
-	private DisplayerPanel entryP;
-	private DisplayerPanel filesP;
-	private AbsolutePanel mainP;
-	private DisplayerPanel associationP;
+	private DisplayPanel childrenP;
+	private DisplayPanel webLinkP;
+	private DisplayPanel entryP;
+	private DisplayPanel filesP;
+
+	private DisplayPanel associationP;
+
+	// private AbsolutePanel mainP;
+
 	private Manager manager;
+	private OptionsPanel optionsP;
+	private int top;
+	private int left;
 
 	public TopicDisplayOverlay(Topic topic, Widget widget, Manager manager) {
 
-		super(true);
+		// super(true);
 
 		this.widget = widget;
 		this.manager = manager;
@@ -47,12 +47,13 @@ public class TopicDisplayOverlay extends PopupPanel implements MouseListener {
 			public void run() {
 				hide();
 			}
+
 		};
 
-		mainP = new AbsolutePanel();
+		// mainP = new AbsolutePanel();
 
 
-		childrenP = new DisplayerPanel();
+		childrenP = new DisplayPanel("Children");
 		for (Iterator iterator = topic.getInstances().iterator(); iterator.hasNext();) {
 
 			TopicTypeConnector conn = (TopicTypeConnector) iterator.next();
@@ -60,104 +61,79 @@ public class TopicDisplayOverlay extends PopupPanel implements MouseListener {
 			childrenP.add(new TopicLink(child));
 
 		}
-		mainP.add(childrenP, 0, widget.getOffsetHeight());
+		// mainP.add(childrenP, 0, widget.getOffsetHeight());
 
 
 		associationP = new SeeAlsoPanel(topic);
-		mainP.add(associationP, 0, 0);
+		// mainP.add(associationP, 0, 0);
 
 
-		webLinkP = new DisplayerPanel();
+		webLinkP = new DisplayPanel("Links");
 
 		Set weblinks = topic.getWebLinks();
-		if (!weblinks.isEmpty()) {
-			webLinkP.add(new Label("Links"));
-		}
-		System.out.println("web links " + weblinks.isEmpty());
 		for (Iterator iterator = weblinks.iterator(); iterator.hasNext();) {
 			WebLink webL = (WebLink) iterator.next();
 			System.out.println("wlll " + webL.getTitle());
 			webLinkP.add(new Label(webL.getTitle()));
 		}
 
-		entryP = new DisplayerPanel();
+		entryP = new DisplayPanel("Entries");
 
 		Set entries = topic.getEntries();
-		if (!entries.isEmpty()) {
-			entryP.add(new Label("Entries"));
-		}
 		for (Iterator iterator = entries.iterator(); iterator.hasNext();) {
 			Entry entry = (Entry) iterator.next();
 			entryP.add(new Label(entry.getTitle()));
 		}
 
 
-		filesP = new DisplayerPanel();
+		filesP = new DisplayPanel("Files");
 		Set files = topic.getFiles();
-		if (!files.isEmpty()) {
-			filesP.add(new Label("Files"));
-		}
 		for (Iterator iterator = files.iterator(); iterator.hasNext();) {
 			S3File file = (S3File) iterator.next();
 			filesP.add(new Label(file.getTitle()));
 		}
 
 
-		OptionsPanel optionsP = new OptionsPanel(topic, manager);
-		mainP.add(optionsP, 0, OPTION_P_OFFSET);
+		optionsP = new OptionsPanel(topic, manager);
+		// mainP.add(optionsP, 0, OPTION_P_OFFSET);
 
 
-		FocusPanel focusPanel = new FocusPanel(mainP);
-		focusPanel.addMouseListener(this);
-		add(focusPanel);
+		webLinkP.addMouseListener(this);
+		entryP.addMouseListener(this);
+		filesP.addMouseListener(this);
+		optionsP.addMouseListener(this);
+		associationP.addMouseListener(this);
+		childrenP.addMouseListener(this);
 
+		// FocusPanel focusPanel = new FocusPanel(mainP);
+		// focusPanel.addMouseListener(this);
+		// add(focusPanel);
 
-	}
+		// setStyleName("H-TopicOverlayDisplayer");
 
-	// @Override
-	protected void onAttach() {
-		super.onAttach();
-
-		DeferredCommand.addCommand(new Command() {
-
-			public void execute() {
-				// place occurrences to the right of either the topicbubble or the childrenPanel,
-				// whichever
-				// is furthest right
-				int occurrenceX = childrenP.getOffsetWidth() > widget.getOffsetWidth() ? childrenP
-						.getOffsetWidth() : widget.getOffsetWidth();
-
-				System.out.println("2occX " + occurrenceX + " children "
-						+ childrenP.getOffsetWidth() + " bubble " + widget.getOffsetWidth());
-
-				// add occurrences on right
-				mainP.add(webLinkP, occurrenceX, 0);
-				mainP.add(entryP, occurrenceX, webLinkP.getOffsetHeight());
-				mainP.add(filesP, occurrenceX, entryP.getOffsetHeight()
-						+ webLinkP.getOffsetHeight());
-
-				// move associations left
-				mainP.setWidgetPosition(associationP, -associationP.getOffsetWidth(), 0);
-			}
-		});
+		// DOM.setStyleAttribute(mainP.getElement(), "position", "absolute");
 
 	}
 
-	private class DisplayerPanel extends VerticalPanel {
-		public DisplayerPanel() {
-			super();
-			setStyleName("H-TopicOverlayDisplayer");
-			addStyleName("H-Gadget");
-		}
 
+
+	private void hide() {
+		webLinkP.hide();
+		entryP.hide();
+		filesP.hide();
+		optionsP.hide();
+		associationP.hide();
+		childrenP.hide();
 	}
 
-	private class SeeAlsoPanel extends DisplayerPanel {
+
+
+	private class SeeAlsoPanel extends DisplayPanel {
 		public SeeAlsoPanel(Topic topic) {
+			super(ConstHolder.myConstants.seeAlsos());
 			TopicCompleter seeAlsoComplete = new TopicCompleter(manager.getTopicCache());
-			add(new Label(ConstHolder.myConstants.seeAlsos()));
-			add(seeAlsoComplete);
 
+			add(seeAlsoComplete);
 
 			for (Iterator iterator = topic.getSeeAlsoAssociation().getMembers().iterator(); iterator
 					.hasNext();) {
@@ -185,7 +161,45 @@ public class TopicDisplayOverlay extends PopupPanel implements MouseListener {
 	// @Override
 	public void show() {
 		hideTimer.cancel();
-		super.show();
+
+		if (!childrenP.isEmpty()) {
+			int wh = widget.getOffsetHeight();
+
+			// PEND safari hack, widget.getOffsetHeight is returning 0 there
+			if (wh < 1) {
+				wh = 50;
+			}
+			childrenP.setPopupPosition(left, top + wh);
+			childrenP.show();
+		}
+
+		associationP.setPopupPosition(left - associationP.getOffsetWidth(), top);
+		associationP.show();
+
+		int occurrenceX = childrenP.getOffsetWidth() > widget.getOffsetWidth() ? childrenP
+				.getOffsetWidth() : widget.getOffsetWidth();
+
+		int ctop = top;
+
+		if (!webLinkP.isEmpty()) {
+			webLinkP.setPopupPosition(left + occurrenceX, ctop);
+			webLinkP.show();
+			ctop += webLinkP.getOffsetHeight();
+		}
+		if (!entryP.isEmpty()) {
+			entryP.setPopupPosition(left + occurrenceX, ctop);
+			entryP.show();
+			ctop += entryP.getOffsetHeight();
+		}
+		if (!filesP.isEmpty()) {
+			filesP.setPopupPosition(left + occurrenceX, ctop);
+			filesP.show();
+			ctop += filesP.getOffsetHeight();
+		}
+		optionsP.setPopupPosition(left, top + OPTION_P_OFFSET);
+		optionsP.show();
+
+
 	}
 
 	public void onMouseLeave(Widget sender) {
@@ -203,6 +217,20 @@ public class TopicDisplayOverlay extends PopupPanel implements MouseListener {
 	}
 
 	public void onMouseUp(Widget sender, int x, int y) {
+	}
+
+
+
+	public void setPopupPosition(int left, int top) {
+		this.left = left;
+		this.top = top;
+		show();
+	}
+
+
+
+	public void hideImmediate() {
+		hide();
 	}
 
 }

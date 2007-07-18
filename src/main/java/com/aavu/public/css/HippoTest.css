@@ -283,12 +283,13 @@ a:visited {
 	padding-bottom: 3px;
 	padding-left: 3px;
 }
+
+
 .H-TopicOverlayDisplayer {
 	/*background-color: white;
 	border: 4px solid #eeeeee;	
 	border-style: ridge;
-	color: black;*/
-	z-index: 9999;
+	color: black;*/	
 }
 .H-TopicOverlayDisplayer .H-TopicLink {
 	font-size: small;

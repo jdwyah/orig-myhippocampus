@@ -17,8 +17,8 @@ import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.StatusPanel;
 import com.aavu.client.gui.Zoomer;
 import com.aavu.client.gui.ext.MultiDivPanel;
-import com.aavu.client.gui.gadgets.Ribbon;
 import com.aavu.client.gui.hierarchy.HierarchyDisplay;
+import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
@@ -46,6 +46,8 @@ public class MainMap extends HippoDesktopPane {
 	private MultiDivPanel mainP;
 
 	private Dashboard dashboard;
+
+	private HippoTimeline timeline;
 
 	// private List frames;
 	// private GInternalFrame activeFrame;
@@ -89,6 +91,19 @@ public class MainMap extends HippoDesktopPane {
 		mainP.add(searchBox);
 		mainP.add(spatialDisplay.getWidget());// ,0,0);
 
+		// timeline = new ZoomableTimeline(manager, Window.getClientWidth(),
+		// Window.getClientHeight(),
+		// null);
+		// mainP.add(timeline.getWidget());
+
+		// Timer t = new Timer() {
+		// // @Override
+		// public void run() {
+		// timeline.getWidget().setVisible(!timeline.getWidget().isVisible());
+		// }
+		// };
+		// t.scheduleRepeating(4000);
+
 		// mainP.add(sideBar);
 		dashboard = new Dashboard(manager);
 		mainP.add(dashboard);
@@ -104,11 +119,13 @@ public class MainMap extends HippoDesktopPane {
 		breadcrumbDisplayer = new BreadCrumbDisplayer();
 		mainP.add(breadcrumbDisplayer);
 
-		Ribbon ribbon = new Ribbon(manager.getGadgetManager());
+		// Ribbon ribbon = new Ribbon(manager.getGadgetManager());
+		//
+		// // gadgetDisplayer = new GadgetDisplayerBarImpl(manager);
+		//
+		// mainP.add(ribbon);
 
-		// gadgetDisplayer = new GadgetDisplayerBarImpl(manager);
 
-		mainP.add(ribbon);
 
 		// mainP.add(tagSearch);
 
