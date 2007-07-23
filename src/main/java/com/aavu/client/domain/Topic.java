@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
-import com.aavu.client.domain.util.SetUtils;
+import com.aavu.client.domain.util.CollectionUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -102,6 +102,7 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	}
 
 	public void copyPropsButNotIDIntoParam(Topic o) {
+		System.out.println("Topic copy props");
 		o.setCreated(getCreated());
 		o.setUser(getUser());
 		o.setLastUpdated(getLastUpdated());
@@ -258,7 +259,7 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 		if (assoc == null) {
 			return false;
 		}
-		return SetUtils.removeFromSetById(getAssociations(), assoc.getId());
+		return CollectionUtils.removeFromCollectionById(getAssociations(), assoc.getId());
 	}
 
 	public Set getEntries() {
@@ -777,6 +778,24 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 		return found;
 	}
 
+	public boolean removeOcc(Occurrence theOcc) {
+		boolean found = false;
+
+		System.out.println("remove occ from size" + getOccurences().size());
+		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+
+			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) iter.next();
+
+			System.out.println("toc " + toc);
+			if (toc.getOccurrence().equals(theOcc)) {
+				System.out.println("==");
+				iter.remove();
+				found = true;
+			}
+		}
+		return found;
+	}
+
 	public Set getTypesAsTopics() {
 
 		Set rtn = new HashSet();
@@ -912,5 +931,11 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 		getOccurences().add(conn);
 		link.getTopics().add(conn);
 	}
+
+	public String getDefaultName() {
+		return "New Topic";
+	}
+
+
 
 }

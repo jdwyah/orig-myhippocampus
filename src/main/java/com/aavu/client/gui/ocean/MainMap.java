@@ -105,7 +105,7 @@ public class MainMap extends HippoDesktopPane {
 		// t.scheduleRepeating(4000);
 
 		// mainP.add(sideBar);
-		dashboard = new Dashboard(manager);
+		dashboard = new Dashboard(manager, spatialDisplay);
 		mainP.add(dashboard);
 
 		mainP.add(statusPanel);
@@ -169,6 +169,10 @@ public class MainMap extends HippoDesktopPane {
 
 		System.out.println("MainMap.ocean.update " + command);
 		spatialDisplay.update(t, command);
+
+
+		System.out.println("MainMap.ocean.update AffectedTopics: "
+				+ command.getAffectedTopics().size());
 
 		/*
 		 * affectedTag() is true if

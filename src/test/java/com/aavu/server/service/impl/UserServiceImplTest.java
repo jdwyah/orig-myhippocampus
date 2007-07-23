@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
@@ -15,28 +16,34 @@ public class UserServiceImplTest extends BaseTestWithTransaction {
 	private static final String NAME = "userser";
 	private static final String PASS = "sdfmasiuh23490234n";
 	private static final String EMAIL = "sdfbnsdui@nfesd.co";
-	
+
 	private UserService userService;
 	private SelectDAO selectDAO;
-	
+
 	/**
-	 * test create user and the initial user "demo" setup 
+	 * test create user and the initial user "demo" setup
 	 * 
 	 * @throws HippoBusinessException
 	 */
 	public void testCreateUserCreateUserRequestCommand() throws HippoBusinessException {
-				
-		User u = userService.createUser(NAME,PASS,EMAIL,false);
-		
-		assertEquals(NAME,u.getUsername());
-		assertNotSame(PASS,u.getPassword());
-		assertEquals(CryptUtils.hashString(PASS),u.getPassword());
-		assertEquals(EMAIL,u.getEmail());
-		
-		
-		List<Topic> topics = selectDAO.getAllTopics(u);		
+
+		User u = userService.createUser(NAME, PASS, EMAIL, false);
+
+		assertEquals(NAME, u.getUsername());
+		assertNotSame(PASS, u.getPassword());
+		assertEquals(CryptUtils.hashString(PASS), u.getPassword());
+		assertEquals(EMAIL, u.getEmail());
+
+
+		List<Topic> topics = selectDAO.getAllTopics(u);
+
+		for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
+			Topic t = (Topic) iterator.next();
+			System.out.println("t " + t + " " + t.getId());
+		}
+
 		assertEquals(3, topics.size());
-				
+
 	}
 
 	public void setUserService(UserService userService) {
@@ -46,6 +53,6 @@ public class UserServiceImplTest extends BaseTestWithTransaction {
 	public void setSelectDAO(SelectDAO selectDAO) {
 		this.selectDAO = selectDAO;
 	}
-	
+
 
 }

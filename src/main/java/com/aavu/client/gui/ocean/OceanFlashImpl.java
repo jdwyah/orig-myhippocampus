@@ -75,12 +75,11 @@ public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 	}
 
 	/**
-	 * initLand(userID, islandArray, uniqueTopics, worldSize); where islandArray
-	 * contains elements containing: -id:Number -tag:String -size:Number
-	 * -xx:Number -yy:Number
+	 * initLand(userID, islandArray, uniqueTopics, worldSize); where islandArray contains elements
+	 * containing: -id:Number -tag:String -size:Number -xx:Number -yy:Number
 	 * 
-	 * when a user drags an island, the island transmits to the external
-	 * interface: isleMovedTo(islandID, xx, yy);
+	 * when a user drags an island, the island transmits to the external interface:
+	 * isleMovedTo(islandID, xx, yy);
 	 */
 	protected String getCommand(User user, TagStat[] tagStats, int totalNumberOfTopics) {
 		StringBuffer sb = new StringBuffer();
@@ -98,8 +97,7 @@ public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 			sb.append(listCount);
 			sb.append("'>");
 			/*
-			 * NOTE: stat.getNumberOfTopics() + 1 otherwise we have blank
-			 * islands
+			 * NOTE: stat.getNumberOfTopics() + 1 otherwise we have blank islands
 			 */
 			sb.append(islandObj(stat.getTagId(), stat.getTagName(), stat.getNumberOfTopics() + 1,
 					stat.getLongitude(), stat.getLatitude()));
@@ -192,5 +190,10 @@ public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 	public double ensureZoomOfAtLeast(double scale) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public int[] getLongLatForXY(int x, int y) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

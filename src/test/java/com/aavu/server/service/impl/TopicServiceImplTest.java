@@ -33,6 +33,7 @@ import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestNoTransaction;
@@ -194,7 +195,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
 
-		assertEquals(2, savedL.size());
+		assertEquals(3, savedL.size());
 
 		Topic savedTopic = topicService.getForID(t.getId());
 
@@ -212,11 +213,9 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 				.iterator().next();
 
 		Occurrence occ = (Occurrence) owl.getOccurrence();
-		for (Iterator iterator = occ.getTopics().iterator(); iterator.hasNext();) {
-			Topic top = (Topic) iterator.next();
-			System.out.println("Top " + top);
-		}
-		assertEquals(savedTopic, occ.getTopics().iterator().next());
+
+		TopicOccurrenceConnector toc = (TopicOccurrenceConnector) occ.getTopics().iterator().next();
+		assertEquals(savedTopic, toc.getTopic());
 
 		System.out.println();
 
@@ -355,7 +354,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
 
-		assertEquals(2, savedL.size());
+		assertEquals(3, savedL.size());
 
 		TopicIdentifier saved = savedL.get(1);
 
@@ -371,7 +370,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
-	public void testCommands() throws HippoBusinessException {
+	public void testCommands() throws HippoException {
 
 		clean();
 
@@ -412,7 +411,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 
-	public void testLocationCommand() throws HippoBusinessException {
+	public void testLocationCommand() throws HippoException {
 
 		clean();
 
@@ -467,7 +466,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 
-	public void testMultipleLocationCommand() throws HippoBusinessException {
+	public void testMultipleLocationCommand() throws HippoException {
 
 		clean();
 
@@ -540,7 +539,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
-	public void testMultipleLocationsInMultiplePassesCommand() throws HippoBusinessException {
+	public void testMultipleLocationsInMultiplePassesCommand() throws HippoException {
 
 		clean();
 
@@ -669,7 +668,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 
-	public void testMetaDateCommand() throws HippoBusinessException {
+	public void testMetaDateCommand() throws HippoException {
 
 		clean();
 
@@ -723,7 +722,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
-	public void testConnectionsInMultiplePassesCommand() throws HippoBusinessException {
+	public void testConnectionsInMultiplePassesCommand() throws HippoException {
 
 		clean();
 
@@ -826,7 +825,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
-	public void testTagPropertyCommand() throws HippoBusinessException {
+	public void testTagPropertyCommand() throws HippoException {
 
 		clean();
 
@@ -893,7 +892,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
-	public void testRemoveTagComand() throws HippoBusinessException {
+	public void testRemoveTagComand() throws HippoException {
 
 		clean();
 

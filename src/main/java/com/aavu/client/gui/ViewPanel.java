@@ -484,6 +484,7 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 	public boolean removeObj(Widget w) {
 		System.out.println("ViewPanel.remove " + GWT.getTypeName(w));
+		super.remove(w);
 		return objects.remove(w);
 	}
 
@@ -491,4 +492,18 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		return focusBackdrop;
 	}
 
+	public int[] getLongLatForXY(int absLeft, int absTop) {
+
+		int oceanLeft = getBackX();
+		int oceanTop = getBackY();
+
+		int newLeft = absLeft - oceanLeft;
+		int newTop = absTop - oceanTop;
+
+		int lng = (int) (newLeft / currentScale);
+		int lat = (int) (newTop / currentScale);
+
+		return new int[] { lng, lat };
+
+	}
 }

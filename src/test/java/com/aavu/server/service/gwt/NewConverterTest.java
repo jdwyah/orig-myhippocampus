@@ -163,7 +163,7 @@ public class NewConverterTest extends TestCase {
 		Iterator i = t2_p.getTags().iterator();
 		Topic t4_p = (Topic) i.next();
 
-		assertEquals(Topic.class, t4_p.getClass());
+		assertEquals(RealTopic.class, t4_p.getClass());
 
 	}
 

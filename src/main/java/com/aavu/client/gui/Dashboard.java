@@ -3,9 +3,10 @@ package com.aavu.client.gui;
 import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
-import com.aavu.client.domain.RealTopic;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.ext.TooltipListener;
+import com.aavu.client.gui.hierarchy.ContextMenu;
+import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Button;
@@ -27,8 +28,10 @@ public class Dashboard extends SimplePanel {
 	Map sidebarEntries = new GWTSortedMap();
 	private UserWidget userW;
 
+	private ContextMenu contextMenu;
 
-	public Dashboard(Manager _manager) {
+
+	public Dashboard(Manager _manager, SpatialDisplay display) {
 
 		this.manager = _manager;
 
@@ -40,14 +43,21 @@ public class Dashboard extends SimplePanel {
 		// manager.showTagBoard();
 		// }});
 
+		contextMenu = new ContextMenu(manager, display);
+
 		Image addNewButton = ConstHolder.images.newTopic().createImage();
 		addNewButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
-				manager.createNew(new RealTopic());
+
+				contextMenu.show();
+				System.out.println("con " + contextMenu.getOffsetHeight());
+				contextMenu.setPopupPosition(sender.getAbsoluteLeft(), sender.getAbsoluteTop()
+						- contextMenu.getOffsetHeight());
 			}
 		});
-		addNewButton.addMouseListener(new TooltipListener(0, -20, ConstHolder.myConstants
-				.topic_new()));
+
+		// addNewButton.addMouseListener(new TooltipListener(0, -20, ConstHolder.myConstants
+		// .topic_new()));
 
 		// Button addDeliciousTags = new Button("Add Delicious Tags");
 		// addDeliciousTags.addClickListener(new ClickListener(){

@@ -10,14 +10,14 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
-import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
-import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.util.Logger;
@@ -26,8 +26,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class TopicCache {
 
 	/**
-	 * Call the save listeners on success, then pass the results back to the
-	 * original caller.
+	 * Call the save listeners on success, then pass the results back to the original caller.
 	 * 
 	 * @author Jeff Dwyer
 	 * 
@@ -64,8 +63,8 @@ public class TopicCache {
 	 * CHANGED!! now call this with the found TI
 	 * 
 	 * 
-	 * //This callback expects to be onSuccessed once the topicIdentifiers have
-	 * been loaded //NOTE: onSuccess should be called with null.
+	 * //This callback expects to be onSuccessed once the topicIdentifiers have been loaded //NOTE:
+	 * onSuccess should be called with null.
 	 */
 	private class TopicLookupOrNewCallback implements AsyncCallback {
 
@@ -89,14 +88,14 @@ public class TopicCache {
 			// TopicIdentifier found =
 			// CacheUtils.searchTopics(topicIdentifiers,linkTo);
 
-			TopicIdentifier found = (TopicIdentifier) result;
+			Topic found = (Topic) result;
 
 			if (found != null) {
 				System.out.println("Found " + found);
-				originalCallback.onSuccess(found);
+				originalCallback.onSuccess(found.getIdentifier());
 			} else {
 				System.out.println("Create New! ");
-				createNew(linkTo, new Root(), null, originalCallback);
+				createNew(linkTo, new RealTopic(), new Root(), originalCallback);
 
 			}
 		}
@@ -193,26 +192,22 @@ public class TopicCache {
 	}
 
 	public void delete(Topic topic, StdAsyncCallback callback) {
-		topicService.delete(topic, callback);
+		topicService.delete(topic.getId(), callback);
 		// TODO update after delete
 	}
 
-	public void deleteOccurrence(WebLink link, AsyncCallback callback) {
-		topicService.deleteOccurrence(link.getId(), callback);
-	}
+
 
 	/**
-	 * Ok, here's how this works. We don't want to serialize the whole topic,
-	 * send it to the server and then hope/pray/hack that things get saved right
-	 * with respect to all of the lazy loading / persistent set / CGLIB etc
-	 * munging that we did on the way to the client.
+	 * Ok, here's how this works. We don't want to serialize the whole topic, send it to the server
+	 * and then hope/pray/hack that things get saved right with respect to all of the lazy loading /
+	 * persistent set / CGLIB etc munging that we did on the way to the client.
 	 * 
 	 * Instead we implement our logic in commands.
 	 * 
-	 * These nuggets have everything they need to affect the changes. We'll run
-	 * them here on the client, to update our local state, but then we'll
-	 * serialize them and send them over to the server where they will be
-	 * hydrated, run and saved.
+	 * These nuggets have everything they need to affect the changes. We'll run them here on the
+	 * client, to update our local state, but then we'll serialize them and send them over to the
+	 * server where they will be hydrated, run and saved.
 	 * 
 	 * @param topic
 	 * @param command
@@ -222,7 +217,7 @@ public class TopicCache {
 
 		try {
 			command.executeCommand();
-		} catch (HippoBusinessException e) {
+		} catch (HippoException e) {
 			Logger.log("command execution problem: " + e);
 		}
 
@@ -313,11 +308,11 @@ public class TopicCache {
 	/**
 	 * returns a topicID to callback
 	 * 
-	 * NOTE: this relies on the topicIdentifiers list being a correctly sorted
-	 * list, otherwise binary search won't work.
+	 * NOTE: this relies on the topicIdentifiers list being a correctly sorted list, otherwise
+	 * binary search won't work.
 	 * 
-	 * Since it's possible that we'll need to init the TopicIdentifiers list
-	 * first, create our own callback to wrap the functionality.
+	 * Since it's possible that we'll need to init the TopicIdentifiers list first, create our own
+	 * callback to wrap the functionality.
 	 * 
 	 * @param linkTo
 	 * @param callback

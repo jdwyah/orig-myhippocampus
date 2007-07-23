@@ -126,10 +126,9 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	}
 
-	public void clicked(Gadget gadget) {
+	public void clicked(Gadget gadget, int[] lngLat) {
 
 		gadget.onClick(this);
-
 
 
 		// map.growIsland();
@@ -142,26 +141,28 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * trick is to get us the ID, so that if we do a create, then an edit, we don't dupe on server.
 	 * 
 	 */
-	public void createNew(final Topic t) {
+	public void createNew(final Topic prototype) {
 
-		if (t instanceof Occurrence) {
+		if (prototype instanceof Occurrence) {
 
-			System.out.println("Create new " + t + " " + GWT.getTypeName(t));
-			getTopicCache().createNew("New Occ", t, getCurrentTopic(),
+			System.out.println("Create new " + prototype + " " + GWT.getTypeName(prototype));
+			getTopicCache().createNew(prototype.getDefaultName(), prototype, getCurrentTopic(),
 					new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
 						public void onSuccess(Object result) {
 							super.onSuccess(result);
 
 							TopicIdentifier res = (TopicIdentifier) result;
 
-							t.setId(res.getTopicID());
-							t.setTitle(res.getTopicTitle());
+							prototype.setId(res.getTopicID());
+							prototype.setTitle(res.getTopicTitle());
 
-							System.out.println("Received " + t + " " + GWT.getTypeName(t));
+							System.out.println("Received " + prototype + " "
+									+ GWT.getTypeName(prototype));
 
-							getCurrentTopic().addOccurence((Occurrence) t);
+							System.out.println("create occ getCurrentTopic().addOccurence()");
+							getCurrentTopic().addOccurence((Occurrence) prototype);
 
-							map.growIsland(t);
+							map.growIsland(prototype);
 
 							fireIslandCreated();
 						}
@@ -179,9 +180,14 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	}
 
-	public void createTopic(final String name, final Topic currentTopic) {
+	/**
+	 * 
+	 * @param name
+	 * @param parentTopic
+	 */
+	public void createTopic(final String name, final Topic parentTopic) {
 
-		getTopicCache().createNew(name, new RealTopic(), currentTopic,
+		getTopicCache().createNew(name, new RealTopic(), parentTopic,
 				new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
@@ -206,6 +212,8 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 				super.onSuccess(result);
 				callback.onSuccess(result);
 
+
+				System.out.println("Map.remove " + topic.getId());
 
 				map.removeIsland(topic.getId());
 
@@ -242,7 +250,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence, this, newFrame());
 		}
 		if (occurrence instanceof WebLink) {
-			AddLinkPopup pop = new AddLinkPopup(this, this, newFrame(), (WebLink) occurrence,
+			AddLinkPopup pop = new AddLinkPopup(null, this, newFrame(), (WebLink) occurrence,
 					getCurrentTopic(), null);
 
 			// EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
@@ -531,7 +539,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void topicSaved(Topic t, AbstractCommand command) {
 		map.update(t, command);
 
-		System.out.println("TOPIC SAVED");
+		System.out.println("MindscapeManager TOPIC SAVED " + t + " " + t.getId());
 		if (command instanceof SaveTagtoTopicCommand) {
 			System.out.println("TAG COMMAND");
 			Topic tag = (Topic) command.getTopic(1);

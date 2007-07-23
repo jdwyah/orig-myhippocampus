@@ -16,7 +16,7 @@ public class TopicCompleter extends SuggestBoxExt {
 
 	public TopicCompleter(TopicCache topicService) {
 		super();
-
+		this.topicService = topicService;
 		if (oracle == null) {
 			oracle = new TopicCompleteOracle(topicService);
 		}

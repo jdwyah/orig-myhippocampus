@@ -7,6 +7,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
+import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 public class HoverManager {
@@ -60,7 +61,15 @@ public class HoverManager {
 		}
 		currentOverlay = overlay;
 
-		overlay.setPopupPosition(w.getAbsoluteLeft(), w.getAbsoluteTop());
+
+		// Make the topic bubble activate & inactivate the overlay
+		//
+		if (w instanceof SourcesMouseEvents) {
+			SourcesMouseEvents sourcesEvents = (SourcesMouseEvents) w;
+			sourcesEvents.addMouseListener(overlay);
+		}
+
+
 		overlay.show();
 
 	}

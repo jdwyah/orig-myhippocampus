@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class TopicDisplayOverlay implements MouseListener {
 
 	private static final int OPTION_P_OFFSET = -60;
+	private static final int ASSOC_MIN_WIDTH = 200;
+	private static final int MAX_CHILDREN = 8;
 	private Widget widget;
 	private Timer hideTimer;
 	private DisplayPanel childrenP;
@@ -33,6 +35,7 @@ public class TopicDisplayOverlay implements MouseListener {
 
 	private Manager manager;
 	private OptionsPanel optionsP;
+
 	private int top;
 	private int left;
 
@@ -54,11 +57,14 @@ public class TopicDisplayOverlay implements MouseListener {
 
 
 		childrenP = new DisplayPanel("Children");
+		int childCount = 0;
 		for (Iterator iterator = topic.getInstances().iterator(); iterator.hasNext();) {
 
-			TopicTypeConnector conn = (TopicTypeConnector) iterator.next();
-			Topic child = conn.getTopic();
-			childrenP.add(new TopicLink(child));
+			if (childCount++ < MAX_CHILDREN) {
+				TopicTypeConnector conn = (TopicTypeConnector) iterator.next();
+				Topic child = conn.getTopic();
+				childrenP.add(new TopicLink(child));
+			}
 
 		}
 		// mainP.add(childrenP, 0, widget.getOffsetHeight());
@@ -82,7 +88,8 @@ public class TopicDisplayOverlay implements MouseListener {
 		Set entries = topic.getEntries();
 		for (Iterator iterator = entries.iterator(); iterator.hasNext();) {
 			Entry entry = (Entry) iterator.next();
-			entryP.add(new Label(entry.getTitle()));
+			// PEND MED whatever are we to do w/ "" titles?
+			entryP.add(new Label(" " + entry.getTitle()));
 		}
 
 
@@ -161,6 +168,7 @@ public class TopicDisplayOverlay implements MouseListener {
 	// @Override
 	public void show() {
 		hideTimer.cancel();
+		setPopupPosition(widget.getAbsoluteLeft(), widget.getAbsoluteTop());
 
 		if (!childrenP.isEmpty()) {
 			int wh = widget.getOffsetHeight();
@@ -173,7 +181,11 @@ public class TopicDisplayOverlay implements MouseListener {
 			childrenP.show();
 		}
 
-		associationP.setPopupPosition(left - associationP.getOffsetWidth(), top);
+		System.out.println("setting assoc P - " + associationP.getOffsetWidth());
+
+		int assocLeft = associationP.getOffsetWidth();
+		assocLeft = assocLeft < ASSOC_MIN_WIDTH ? ASSOC_MIN_WIDTH : assocLeft;
+		associationP.setPopupPosition(left - assocLeft, top);
 		associationP.show();
 
 		int occurrenceX = childrenP.getOffsetWidth() > widget.getOffsetWidth() ? childrenP
@@ -224,7 +236,6 @@ public class TopicDisplayOverlay implements MouseListener {
 	public void setPopupPosition(int left, int top) {
 		this.left = left;
 		this.top = top;
-		show();
 	}
 
 

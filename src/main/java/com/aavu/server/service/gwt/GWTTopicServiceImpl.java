@@ -35,10 +35,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	/**
 	 * Convert a topic to GWT serializable form.
 	 * 
-	 * This means; 1) Change org.hibernate.collection.PersistentList to
-	 * java.util.ArrayList -because GWT can't handle 2) Initialize an "proxy"
-	 * objects. We can't have any lazy references! Even if we won't peek on the
-	 * client. We can't transfer these it seems.
+	 * This means; 1) Change org.hibernate.collection.PersistentList to java.util.ArrayList -because
+	 * GWT can't handle 2) Initialize an "proxy" objects. We can't have any lazy references! Even if
+	 * we won't peek on the client. We can't transfer these it seems.
 	 * 
 	 * @param t
 	 * @return
@@ -59,8 +58,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 	/**
-	 * 1) Over-write dates 2) Null out the lazy loaded MindTree for
-	 * MindTreeOcc's
+	 * 1) Over-write dates 2) Null out the lazy loaded MindTree for MindTreeOcc's
 	 * 
 	 * @param in
 	 * @return
@@ -151,15 +149,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		return prototype.getIdentifier();
 	}
 
-	public void delete(Topic topic) throws HippoException {
-		try {
-			topicService.delete(topic);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
-	}
+
 
 	// private Map converter(Map metaValues) {
 	// return converter(metaValues,false);
@@ -169,8 +159,8 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	// return null;
 	// }
 
-	public void deleteOccurrence(long id) throws HippoException {
-		topicService.deleteOccurrence(id);
+	public void delete(long id) throws HippoException {
+		topicService.delete(id);
 	}
 
 	public List getAllLocations() throws HippoException {
@@ -373,7 +363,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		}
 	}
 
-	public void saveCommand(AbstractCommand command) throws HippoBusinessException {
+	public void saveCommand(AbstractCommand command) throws HippoException {
 		log.info("command " + command.getClass() + " " + command);
 		topicService.executeAndSaveCommand(command);
 	}

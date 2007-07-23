@@ -201,6 +201,10 @@ a:visited {
 	color: white;
 }
 
+.H-DisplayPanel {
+	z-index: 9999;
+}
+
 .H-ExplorerButton {
 	width: 100%;
 }

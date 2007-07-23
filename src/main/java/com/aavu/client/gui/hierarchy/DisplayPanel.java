@@ -26,6 +26,7 @@ public class DisplayPanel extends PopupPanel implements SourcesMouseEvents {
 
 		setWidget(focusPanel);
 
+		setStyleName("H-DisplayPanel");
 	}
 
 	public void add(Widget widget) {

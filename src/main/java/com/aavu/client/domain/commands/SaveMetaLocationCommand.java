@@ -11,7 +11,7 @@ import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.HippoText;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.util.SetUtils;
+import com.aavu.client.domain.util.CollectionUtils;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -67,12 +67,12 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 			//remove, found from curLocations, dregs will be deleted
 			if(location.getId() > 0){
 				System.out.println("SaveMetaLocationCommand ID>0 -> MODIFY");
-				HippoLocation curForThatID = (HippoLocation) SetUtils.getFromSetById(curLocations, location.getId());
+				HippoLocation curForThatID = (HippoLocation) CollectionUtils.getFromCollectionById(curLocations, location.getId());
 				
 				location.copyPropsButNotIDIntoParam(curForThatID);
 				
 				System.out.println("remove "+location.getId());
-				SetUtils.removeFromSetById(toDelete, location.getId());
+				CollectionUtils.removeFromCollectionById(toDelete, location.getId());
 			}
 			//new, add
 			else{

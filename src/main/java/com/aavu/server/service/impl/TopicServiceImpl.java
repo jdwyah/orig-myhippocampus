@@ -146,7 +146,13 @@ public class TopicServiceImpl implements TopicService {
 	 */
 	public void delete(Topic topic) throws HippoBusinessException {
 		if (userService.getCurrentUser().equals(topic.getUser())) {
-			editDAO.delete(topic);
+
+			if (topic instanceof Occurrence) {
+				Occurrence occ = (Occurrence) topic;
+				editDAO.deleteOccurrence(occ);
+			} else {
+				editDAO.delete(topic);
+			}
 
 			// TODO delete S3Files
 			// TODO delete Weblinks that were only referenced by us
@@ -168,19 +174,19 @@ public class TopicServiceImpl implements TopicService {
 		}
 	}
 
-	public void deleteOccurrence(long id) throws HippoPermissionException {
-		Occurrence o = selectDAO.getOccurrrence(id);
-		if (o.getUser() != userService.getCurrentUser()) {
+	public void delete(long id) throws HippoBusinessException {
+		Topic t = selectDAO.get(id);
+		if (t.getUser() != userService.getCurrentUser()) {
 			throw new HippoPermissionException();
 		}
-		editDAO.deleteOccurrence(o);
+		delete(t);
 	}
 
 	/**
 	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects. 2)
 	 * Execute. use the domain classes logic & the command to enact the change 3) Save.
 	 */
-	public void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException {
+	public void executeAndSaveCommand(AbstractCommand command) throws HippoException {
 
 		log.info(command + " " + userService.getCurrentUser().getUsername());
 
@@ -311,8 +317,8 @@ public class TopicServiceImpl implements TopicService {
 			rtn.add(new FullTopicIdentifier(conn));
 
 
-			log.debug("Topic on island Found " + conn.getId() + " " + conn.getLatitude() + " "
-					+ conn.getLongitude());
+			// log.debug("Topic on island Found " + conn.getId() + " " + conn.getLatitude() + " "
+			// + conn.getLongitude());
 
 		}
 		return rtn;
@@ -442,6 +448,13 @@ public class TopicServiceImpl implements TopicService {
 		List topics = command.getTopics();
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
 			Topic topic = (Topic) iter.next();
+			System.out.println("saveComand save " + topic);
+			if (topic instanceof Occurrence) {
+				Occurrence oc = (Occurrence) topic;
+				System.out.println("was occ Data " + oc.getData());
+			} else {
+				System.out.println("not oc");
+			}
 			save(topic);
 		}
 	}

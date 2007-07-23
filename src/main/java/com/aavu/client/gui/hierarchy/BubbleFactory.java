@@ -45,20 +45,13 @@ public class BubbleFactory {
 	public static TopicDisplayObj createBubbleFor(Topic thought, Topic current,
 			HierarchyDisplay hierarchyDisplay) {
 
-		if (thought instanceof Entry) {
-			Entry entry = (Entry) thought;
-
-			return new EntryDisplay(new TopicOccurrenceConnector(current, entry), hierarchyDisplay);
-
-		} else if (thought instanceof Occurrence) {
-
-			Occurrence occ = (Occurrence) thought;
-			return new OccBubble(new TopicOccurrenceConnector(current, occ), hierarchyDisplay);
-
+		if (thought instanceof Occurrence) {
+			return createBubbleFor(new TopicOccurrenceConnector(current, (Occurrence) thought),
+					hierarchyDisplay);
 		} else {
-
-			return new TopicBubble(new FullTopicIdentifier(thought), hierarchyDisplay);
+			return createBubbleFor(new FullTopicIdentifier(thought), hierarchyDisplay);
 		}
+
 	}
 
 }

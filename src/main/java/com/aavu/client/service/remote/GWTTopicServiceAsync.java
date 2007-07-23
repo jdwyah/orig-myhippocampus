@@ -18,9 +18,7 @@ public interface GWTTopicServiceAsync {
 
 	void createNew(String title, Topic prototype, Topic parent, AsyncCallback callback);
 
-	void delete(Topic topic, AsyncCallback callback);
-
-	void deleteOccurrence(long id, AsyncCallback callback);
+	void delete(long id, AsyncCallback callback);
 
 	void getAllMetas(AsyncCallback callback);
 

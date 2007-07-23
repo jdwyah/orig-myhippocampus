@@ -9,12 +9,12 @@ public interface SpatialDisplay {
 
 	/**
 	 * Will init after async "getTagStats()" call
-	 *
+	 * 
 	 */
 	public void load(Topic topic, LoadFinishedListener loadFinished);
 
 	public void growIsland(Topic tag);
-	
+
 	public Widget getWidget();
 
 
@@ -22,7 +22,9 @@ public interface SpatialDisplay {
 
 
 	public void zoomTo(double scale);
+
 	public void zoomIn();
+
 	public void zoomOut();
 
 	public void update(Topic t, AbstractCommand command);
@@ -37,5 +39,7 @@ public interface SpatialDisplay {
 	public void moveBy(int i, int j);
 
 	public double ensureZoomOfAtLeast(double scale);
+
+	public int[] getLongLatForXY(int x, int y);
 
 }

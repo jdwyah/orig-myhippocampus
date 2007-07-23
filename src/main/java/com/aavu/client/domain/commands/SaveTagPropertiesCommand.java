@@ -8,7 +8,7 @@ import java.util.Set;
 import com.aavu.client.domain.Association;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.util.SetUtils;
+import com.aavu.client.domain.util.CollectionUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SaveTagPropertiesCommand extends AbstractCommand implements IsSerializable {
@@ -44,7 +44,7 @@ public class SaveTagPropertiesCommand extends AbstractCommand implements IsSeria
 			
 				if(meta.getId() > 0){					
 					System.out.println("SaveTagProperties.ID > 0 "+meta+" "+meta.getId());
-					Meta saved = (Meta) SetUtils.getFromSetById(tagProperties.getMembers(), meta.getId());
+					Meta saved = (Meta) CollectionUtils.getFromCollectionById(tagProperties.getMembers(), meta.getId());
 										
 					//this is ok. remember all metas should have IDs
 					if(saved == null){
@@ -52,7 +52,7 @@ public class SaveTagPropertiesCommand extends AbstractCommand implements IsSeria
 						tagProperties.getMembers().add(meta);
 					}else{						
 						meta.copyPropsIntoParam(saved);										
-						SetUtils.removeFromSetById(noLongerPartOfUs, meta.getId());
+						CollectionUtils.removeFromCollectionById(noLongerPartOfUs, meta.getId());
 					}
 				}else{
 					//Not really a reqirement, we could save these, but the code should never
@@ -69,7 +69,7 @@ public class SaveTagPropertiesCommand extends AbstractCommand implements IsSeria
 		//
 		for (Iterator iter = noLongerPartOfUs.iterator(); iter.hasNext();) {
 			Meta meta = (Meta) iter.next();
-			SetUtils.removeFromSetById(tagProperties.getMembers(), meta.getId());
+			CollectionUtils.removeFromCollectionById(tagProperties.getMembers(), meta.getId());
 		}
 	
 		

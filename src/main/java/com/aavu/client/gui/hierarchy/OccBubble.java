@@ -80,4 +80,22 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 		return unscaledWidth;
 	}
 
+	// @Override
+	protected void hideDetails() {
+		// TODO Auto-generated method stub
+
+	}
+
+	// @Override
+	protected void showDetails() {
+		// TODO Auto-generated method stub
+
+	}
+
+	// @Override
+	protected boolean isDetailsShowing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

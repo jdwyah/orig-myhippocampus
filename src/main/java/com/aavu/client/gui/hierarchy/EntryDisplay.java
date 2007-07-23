@@ -6,7 +6,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.util.Logger;
-import com.aavu.client.widget.edit.EntryPreviewWidget;
+import com.aavu.client.widget.edit.TopicWidget;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -20,7 +20,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 
 	private int unscaledHeight;
 	private int unscaledWidth;
-	private EntryPreviewWidget entryPreview;
+	private TopicWidget entryPreview;
 	private AbsolutePanel mainPanel;
 
 	public EntryDisplay(TopicOccurrenceConnector topicOccurrenceConnector,
@@ -121,7 +121,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 
 	// @Override
 	protected Widget getOurWidget() {
-		entryPreview = new EntryPreviewWidget();
+		entryPreview = new TopicWidget();
 		entryPreview.load((Entry) owl.getOccurrence());
 
 		unscaledWidth = 150;

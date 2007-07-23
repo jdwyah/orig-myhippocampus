@@ -188,6 +188,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		System.out.println("HDisplay.clear() DragController" + dragController);
 	}
 
+
 	/**
 	 * on drag finish, update the lat/long of the topicBubble & save
 	 */
@@ -235,12 +236,15 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	 */
 	public void growIsland(Topic thought) {
 
+		System.out.println("grow " + thought + " " + thought.getId());
+
 		TopicBubble bubble = (TopicBubble) topicBubbles.get(new Long(thought.getId()));
 
 		if (null != bubble) {
+			System.out.println("grow found ");
 			bubble.grow();
 		} else {
-			System.out.println("Grow " + thought.getId() + " " + GWT.getTypeName(thought));
+			System.out.println("Grow not found" + thought.getId() + " " + GWT.getTypeName(thought));
 
 
 
@@ -338,8 +342,9 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	// }
 
 	public void removeIsland(long id) {
-		// TODO Auto-generated method stub
-
+		AbstractBubble bubble = (AbstractBubble) topicBubbles.get(new Long(id));
+		System.out.println("removing bubble " + bubble);
+		removeTopicBubble(bubble);
 	}
 
 	// @Override
@@ -377,9 +382,19 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		TopicDisplayObj b = (TopicDisplayObj) topicBubbles.get(new Long(t.getId()));
 		if (b != null) {
+			System.out.println("update " + b);
 			b.update(t);
 		} else {
-			Logger.log("HierarchyDisplay: Told to Update NonExist");
+			System.out.println("HD not found " + t + " " + t.getId());
+			for (Iterator iterator = topicBubbles.keySet().iterator(); iterator.hasNext();) {
+				Long l = (Long) iterator.next();
+				System.out.println("cont: " + l);
+			}
+
+			// Not necessarily problem. May be that we told a weblink to save, and it
+			// said, update my parent, which is this, which doesn't contain this.
+			//
+			Logger.debug("HierarchyDisplay: Told to Update NonExist " + t.getId());
 		}
 	}
 
@@ -387,10 +402,11 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		manager.bringUpChart(fti);
 	}
 
-	public void removeTopicBubble(TopicBubble received) {
-		topicBubbles.remove(new Long(received.getFTI().getTopicID()));
+	public void removeTopicBubble(AbstractBubble received) {
+		topicBubbles.remove(new Long(received.getIdentifier().getTopicID()));
 		dragController.unregisterDropController(received.getDropController());
 		removeObj(received.getWidget());
+
 	}
 
 	public Topic getCurrentRoot() {
@@ -410,9 +426,8 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 				int x = DOM.eventGetClientX(getFocusBackdrop().getLastEvent());
 				int y = DOM.eventGetClientY(getFocusBackdrop().getLastEvent());
 
-				ContextMenu p = new ContextMenu(getManager());
-				p.setPopupPosition(x, y);
-				p.show();
+				ContextMenu p = new ContextMenu(getManager(), HierarchyDisplay.this);
+				p.show(x, y);
 
 			}
 		}

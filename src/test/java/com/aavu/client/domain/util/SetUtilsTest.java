@@ -23,7 +23,7 @@ public class SetUtilsTest extends TestCase {
 
 		assertEquals(1, t.getOccurenceObjs().size());
 
-		SetUtils.removeFromSetById(t.getOccurenceObjs(), o1.getId());
+		CollectionUtils.removeFromCollectionById(t.getOccurences(), o1.getId());
 
 		assertEquals(0, t.getOccurenceObjs().size());
 
@@ -36,16 +36,16 @@ public class SetUtilsTest extends TestCase {
 		Entry o1 = new Entry();
 		o1.setId(5);
 		o1.setData("foo");
-		t.getOccurenceObjs().add(o1);
+		t.addOccurence(o1);
 
 		Entry o2 = new Entry();
 		o2.setId(6);
 		o2.setData("food");
-		t.getOccurenceObjs().add(o2);
+		t.addOccurence(o2);
 
 		assertEquals(2, t.getOccurenceObjs().size());
 
-		SetUtils.removeFromSetById(t.getOccurenceObjs(), o1.getId());
+		CollectionUtils.removeFromCollectionById(t.getOccurences(), o1.getId());
 
 		assertEquals(1, t.getOccurenceObjs().size());
 

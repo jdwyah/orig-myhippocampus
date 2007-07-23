@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.URI;
 import com.aavu.client.exception.HippoBusinessException;
 
 public abstract class CommandTestCase extends TestCase {
@@ -30,7 +31,11 @@ public abstract class CommandTestCase extends TestCase {
 	 * @throws HippoBusinessException
 	 */
 	protected void hydrateCommand(AbstractCommand command) throws HippoBusinessException {
+		hydrateCommand(command, false);
+	}
 
+	protected void hydrateCommand(AbstractCommand command, boolean occFirst)
+			throws HippoBusinessException {
 		// log.debug("Hydrate: "+command);
 
 		List ids = command.getTopicIDs();
@@ -38,7 +43,12 @@ public abstract class CommandTestCase extends TestCase {
 		for (Iterator iter = ids.iterator(); iter.hasNext();) {
 			Long id = (Long) iter.next();
 
-			Topic t = new RealTopic();
+			Topic t;
+			if (occFirst) {
+				t = new URI();
+			} else {
+				t = new RealTopic();
+			}
 			t.setId(id);
 			t.setTitle("Topic " + id);
 

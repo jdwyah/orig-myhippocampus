@@ -39,28 +39,19 @@ public abstract class AbstractDraggableBubble extends AbstractBubble {
 	}
 
 	public void processDrag(double currentScale) {
-		int absLeft = getAbsoluteLeft();
-		int absTop = getAbsoluteTop();
-		int oceanLeft = getDisplay().getBackX();
-		int oceanTop = getDisplay().getBackY();
-		if (absLeft != left + oceanLeft || absTop != top + oceanTop) {
-			int newLeft = absLeft - oceanLeft;
-			int newTop = absTop - oceanTop;
+
+		int[] lngLat = display.getLongLatForXY(getAbsoluteLeft(), getAbsoluteTop());
+
+		if (lngLat[0] != left || lngLat[1] != top) {
 			System.out.println("\nMove DETECTED!!!!!!!!!!!! " + " Scale " + currentScale
-					+ " newLeft " + newLeft + " newTop " + newTop + " " + oceanLeft + " "
-					+ oceanTop);
-			// ocean.islandMoved(tagStat.getTagId(), newLeft, newTop);
-			left = (int) (newLeft / currentScale);
-			top = (int) (newTop / currentScale);
-
-			// tagStat.setLongitude(left);
-			// tagStat.setLatitude(top);
-
+					+ " newLeft " + lngLat[0] + " newTop " + lngLat[1]);
+			left = lngLat[0];
+			top = lngLat[1];
 			saveLocation();
-
 		} else {
 			Logger.debug("AbstractBubble no need to save drag");
 		}
+
 	}
 
 }

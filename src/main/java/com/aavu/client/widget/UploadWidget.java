@@ -31,17 +31,17 @@ public class UploadWidget extends Composite {
 	private ProgressBar progressBar;
 	private Manager manager;
 	private FileUpload upload;
-	private Topic topic; 
+	private Topic topic;
 
 	/**
 	 * corresponds to FileUploadBean.java must have the same fields.
 	 * 
 	 * @param manager
-	 * @param board 
+	 * @param board
 	 * @param testTopic
 	 * @param path
 	 */
-	public UploadWidget(final Manager manager,Topic _topic,final UploadBoard board, String path){
+	public UploadWidget(final Manager manager, Topic _topic, final UploadBoard board, String path) {
 		this.manager = manager;
 		this.topic = _topic;
 		// Create a FormPanel and point it at a service.
@@ -57,27 +57,26 @@ public class UploadWidget extends Composite {
 		HorizontalPanel panel = new HorizontalPanel();
 		form.setWidget(panel);
 
-		//Create a TextBox, giving it a name so that it will be submitted.
-	    Hidden tb = new Hidden("topicID",topic.getId()+"");	    
-	    panel.add(tb);
-		
+		// Create a TextBox, giving it a name so that it will be submitted.
+		Hidden tb = new Hidden("topicID", topic.getId() + "");
+		panel.add(tb);
+
 		// Create a FileUpload widget.
 		upload = new FileUpload();
 		upload.setName("file");
 		panel.add(upload);
-		
+
 		// Add a 'submit' button.
 		panel.add(new Button(ConstHolder.myConstants.upload_submit(), new ClickListener() {
 			public void onClick(Widget sender) {
 				form.submit();
 			}
 		}));
-		
-		progressBar = new ProgressBar(20
-				,ProgressBar.SHOW_TEXT);
+
+		progressBar = new ProgressBar(20, ProgressBar.SHOW_TEXT);
 		initProgressBar();
 		panel.add(progressBar);
-				
+
 
 		// Add an event handler to the form.
 		form.addFormHandler(new FormHandler() {
@@ -88,32 +87,34 @@ public class UploadWidget extends Composite {
 				// further explanation).
 				progressBar.setProgress(100);
 				progressBar.setText(ConstHolder.myConstants.upload_complete());
-				
-				
-				
-				if(event.getResults().startsWith("Error")){				
+
+
+
+				if (event.getResults().startsWith("Error")) {
 					manager.displayInfo(event.getResults());
 					return;
-				}else{
+				} else {
 					String key = event.getResults().trim();
-					
-					S3File fileObj = new S3File(topic.getUser(),upload.getFilename(),key);
-										
+
+					S3File fileObj = new S3File(topic.getUser(), upload.getFilename(), key);
+
 					List topics = new ArrayList();
 					topics.add(topic);
-					manager.getTopicCache().executeCommand(topic,new SaveOccurrenceCommand(topics, fileObj),
-							new StdAsyncCallback(ConstHolder.myConstants.save()){});
-					
-					topic.addOccurence(fileObj);					
-					
+					manager.getTopicCache().executeCommand(topic,
+							new SaveOccurrenceCommand(fileObj, topics),
+							new StdAsyncCallback(ConstHolder.myConstants.save()) {
+							});
+
+					topic.addOccurence(fileObj);
+
 					board.addS3File(fileObj);
 				}
-				
-				//make it disappear
+
+				// make it disappear
 				//
 				Timer t = new Timer() {
 					public void run() {
-						initProgressBar();					
+						initProgressBar();
 					}
 				};
 				t.schedule(2000);
@@ -128,8 +129,9 @@ public class UploadWidget extends Composite {
 				progressBar.setVisible(true);
 				Timer t = new Timer() {
 					public void run() {
-						int progress = progressBar.getProgress()+4;
-						if (progress>100) cancel();
+						int progress = progressBar.getProgress() + 4;
+						if (progress > 100)
+							cancel();
 						progressBar.setProgress(progress);
 					}
 				};
@@ -139,8 +141,8 @@ public class UploadWidget extends Composite {
 
 		initWidget(form);
 	}
-	
-	private void initProgressBar(){
+
+	private void initProgressBar() {
 		progressBar.setProgress(0);
 		progressBar.setText(ConstHolder.myConstants.upload());
 		progressBar.setVisible(false);

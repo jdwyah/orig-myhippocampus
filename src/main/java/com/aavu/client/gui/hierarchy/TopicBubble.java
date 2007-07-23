@@ -17,7 +17,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj, ClickListener {
 
 	private FullTopicIdentifier fti;
-	private TopicDisplayOverlay overlay;
+
+	private boolean detailsShowing = false;
 
 	public TopicBubble(FullTopicIdentifier fti, HierarchyDisplay display) {
 		super(fti.getLongitudeOnIsland(), fti.getLatitudeOnIsland(), fti.getTopicTitle(),
@@ -106,12 +107,29 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	// @Override
 	protected void hover() {
-		HoverManager.showHover(getDisplay().getManager(), this, getFTI());
+		showDetailButton();
 	}
 
 	// @Override
 	protected void unhover() {
+		hideDetailButton();
+
+	}
+
+	protected void showDetails() {
+		detailsShowing = true;
+		HoverManager.showHover(getDisplay().getManager(), this, getFTI());
+
+	}
+
+	protected void hideDetails() {
+		detailsShowing = false;
+
 		HoverManager.hideHover(getFTI());
+	}
+
+	protected boolean isDetailsShowing() {
+		return detailsShowing;
 	}
 
 	// @Override

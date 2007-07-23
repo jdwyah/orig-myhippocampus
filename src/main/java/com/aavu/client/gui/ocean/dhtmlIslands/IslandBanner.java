@@ -47,12 +47,12 @@ public class IslandBanner extends AbsolutePanel {
 
 		double font_size = getFontFor(size);
 		Logger.debug("IslandBanner.FONT " + getFontFor(size) + " " + size);
-		shdw = new Label(text, true);
+		shdw = new Label(text, false);
 		DOM.setStyleAttribute(shdw.getElement(), "fontSize", font_size + "em");
 		shdw.addStyleName("Shadow");
 		add(shdw, 1, 1);
 
-		reg = new Label(text, true);
+		reg = new Label(text, false);
 		DOM.setStyleAttribute(reg.getElement(), "fontSize", font_size + "em");
 		reg.addStyleName("Text");
 		add(reg, 0, 0);

@@ -11,6 +11,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.domain.util.CollectionUtils;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.util.Logger;
 import com.aavu.client.widget.EnterInfoButton;
@@ -88,9 +89,19 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 			onPanel.remove(label);
 			topicM.remove(topic);
 
-			// append
-			topics.remove(topic);
-			topics.add(topic);
+			for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
+				Topic t = (Topic) iterator.next();
+				System.out.println("t " + t + " rem " + topic + " " + t.equals(topic));
+				System.out.println("HH " + t.hashCode() + " | " + topic.hashCode());
+			}
+			System.out.println();
+
+			boolean r1 = CollectionUtils.removeFromCollectionById(topics, topic.getId());
+			System.out.println("LTB rem " + r1 + " ");
+
+			// NOTE
+			// topics.add(topic);
+
 			removeNumber++;
 		}
 	}
@@ -98,11 +109,9 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 	public void add(TopicIdentifier to, Widget w) {
 
 		// prepend
-		if (topics.size() > 0) {
-			topics.add(new RealTopic(to));
-		} else {
-			topics.add(0, new RealTopic(to));
-		}
+
+		topics.add(new RealTopic(to));
+
 		topicM.put(to, w);
 
 		onPanel.add(w);

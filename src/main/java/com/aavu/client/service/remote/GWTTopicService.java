@@ -22,9 +22,7 @@ public interface GWTTopicService extends RemoteService {
 	TopicIdentifier createNew(String title, Topic prototype, Topic parent)
 			throws HippoBusinessException;
 
-	void delete(Topic topic) throws HippoException;
-
-	void deleteOccurrence(long id) throws HippoException;
+	void delete(long id) throws HippoException;
 
 	// List <LocationDTO>
 	/**
@@ -108,7 +106,7 @@ public interface GWTTopicService extends RemoteService {
 	 */
 	List match(String match);// List<String>
 
-	void saveCommand(AbstractCommand command) throws HippoBusinessException;
+	void saveCommand(AbstractCommand command) throws HippoBusinessException, HippoException;
 
 	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
 

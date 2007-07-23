@@ -13,63 +13,63 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer {
-	
+
 	private Manager manager;
 
 	private VerticalPanel gadgetPanel;
 	private Ribbon gadgetPicker;
 
 	private Topic topic;
-	
-	
-	public GadgetDisplayerBarImpl(final Manager manager){
-			
+
+
+	public GadgetDisplayerBarImpl(final Manager manager) {
+
 		this.manager = manager;
-		
-		
+
+
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		
+
 		gadgetPanel = new VerticalPanel();
-		gadgetPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);		
-		
+		gadgetPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+
 		gadgetPicker = new Ribbon(manager.getGadgetManager());
 		manager.getGadgetManager().addGadgetClickListener(this);
-		
+
 		mainPanel.add(gadgetPicker);
 		mainPanel.add(gadgetPanel);
-		
+
 		initWidget(mainPanel);
-		
+
 		addStyleName("H-AbsolutePanel");
-		addStyleName("H-RightInfo");		
-		
+		addStyleName("H-RightInfo");
+
 		setVisible(true);
 	}
 
 
 	public void load(Topic topic, List gadgets) {
-		
+
 		this.topic = topic;
-		
-		gadgetPanel.clear();		
-				
-		
+
+		gadgetPanel.clear();
+
+
 		for (Iterator iter = gadgets.iterator(); iter.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
-			
+
 			gadget.load(topic);
-			
-			gadgetPanel.add(gadget);			
+
+			gadgetPanel.add(gadget);
 		}
-		
+
 		setVisible(true);
-		
+
 		for (Iterator iter = gadgets.iterator(); iter.hasNext();) {
-			Gadget gadget = (Gadget) iter.next();			
-			gadget.nowVisible();			
+			Gadget gadget = (Gadget) iter.next();
+			gadget.nowVisible();
 		}
-				
+
 	}
 
 	public void unload() {
@@ -78,36 +78,35 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 	}
 
 
-	public void clicked(Gadget gadget) {
-		if(!gadget.enabled(manager.getUser())){
+	public void clicked(Gadget gadget, int[] lngLat) {
+		if (!gadget.enabled(manager.getUser())) {
 			manager.displayInfo(ConstHolder.myConstants.gadget_not_available());
 			return;
 		}
 		/*
 		 * if this is a first time add
 		 */
-		if(gadgetPanel.getWidgetIndex(gadget) == -1){
-			gadget.load(topic);			
+		if (gadgetPanel.getWidgetIndex(gadget) == -1) {
+			gadget.load(topic);
 			gadgetPanel.add(gadget);
 			gadget.showForFirstTime();
-		}else{		
-			if(gadget.isVisible()){
+		} else {
+			if (gadget.isVisible()) {
 				manager.displayInfo(ConstHolder.myConstants.gadget_already_showing());
-			}
-			else{
-				//This will force the ConnectionBoard to unhide itself 
+			} else {
+				// This will force the ConnectionBoard to unhide itself
 				gadget.setVisible(true);
 			}
 		}
 	}
 
-	public Widget getWidget(){
+	public Widget getWidget() {
 		return this;
 	}
 
-//	public void onClick(Widget sender) {
-//		if(sender == entryPreview){
-//			manager.editEntry(topic);
-//		}
-//	}
+	// public void onClick(Widget sender) {
+	// if(sender == entryPreview){
+	// manager.editEntry(topic);
+	// }
+	// }
 }

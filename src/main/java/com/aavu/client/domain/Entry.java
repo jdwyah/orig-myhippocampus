@@ -30,6 +30,11 @@ public class Entry extends Occurrence implements Serializable, IsSerializable, R
 				|| (getData().length() == INIT_STR.length() + INIT_STR_END.length());
 	}
 
+	// @Override
+	public String getDefaultName() {
+		return "New Entry";
+	}
+
 	/**
 	 * Strip all <body> <head> stuff. Used by Freemarker, bc otherwise sitemesh think we have
 	 * multiple body elements and that's not pretty.

@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class WebLink extends URI implements Serializable,IsSerializable, ReallyCloneable {
-	
-	public WebLink(){}
-	
+public class WebLink extends URI implements Serializable, IsSerializable, ReallyCloneable {
+
+	public WebLink() {
+	}
+
 	public WebLink(User user, String description, String url, String notes) {
 		setUser(user);
 		setTitle(description);
@@ -18,20 +19,27 @@ public class WebLink extends URI implements Serializable,IsSerializable, ReallyC
 	public String getDescription() {
 		return getTitle();
 	}
-	public String getNotes(){
+
+	public String getNotes() {
 		return getData();
 	}
 
 	public void setDescription(String text) {
-		setTitle(text);		
+		setTitle(text);
 	}
-	public void setNotes(String text){
+
+	public void setNotes(String text) {
 		setData(text);
 	}
 
-	//@Override
-	public Object clone() {				   		
+	// @Override
+	public Object clone() {
 		return copyProps(new WebLink());
+	}
+
+	// @Override
+	public String getDefaultName() {
+		return "New Weblink";
 	}
 
 }
