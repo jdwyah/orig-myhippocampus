@@ -28,7 +28,7 @@
 		<id name="id" />
 	</contract>
 
-	<class name="Topic" alias="Topic" extends="entity,userSecured">
+	<class name="RealTopic" alias="RealTopic" extends="entity,userSecured">
 
 		<property name="title">
 			<meta-data>${hippo.text}</meta-data>

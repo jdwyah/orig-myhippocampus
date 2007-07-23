@@ -16,6 +16,12 @@ public class HoverManager {
 	private static TopicDisplayOverlay currentOverlay;
 
 	public static void showHover(final Manager m, final Widget w, final TopicIdentifier ti) {
+		showHover(m, w, ti, false);
+	}
+
+	public static void showHover(final Manager m, final Widget w, final TopicIdentifier ti,
+			final boolean childrenOnly) {
+
 
 		TopicDisplayOverlay overlay = (TopicDisplayOverlay) hovers.get(ti);
 
@@ -26,7 +32,15 @@ public class HoverManager {
 				public void onSuccess(Object result) {
 					super.onSuccess(result);
 
-					TopicDisplayOverlay overlay = new TopicDisplayOverlay((Topic) result, w, m);
+					TopicDisplayOverlay overlay = new TopicDisplayOverlay((Topic) result, w, m,
+							childrenOnly);
+
+					// Make the topic bubble activate & inactivate the overlay
+					//
+					if (w instanceof SourcesMouseEvents) {
+						SourcesMouseEvents sourcesEvents = (SourcesMouseEvents) w;
+						sourcesEvents.addMouseListener(overlay);
+					}
 
 					hovers.put(ti, overlay);
 
@@ -62,16 +76,18 @@ public class HoverManager {
 		currentOverlay = overlay;
 
 
-		// Make the topic bubble activate & inactivate the overlay
-		//
-		if (w instanceof SourcesMouseEvents) {
-			SourcesMouseEvents sourcesEvents = (SourcesMouseEvents) w;
-			sourcesEvents.addMouseListener(overlay);
-		}
-
 
 		overlay.show();
 
+	}
+
+	public static void hideHoverIn1(TopicIdentifier ti) {
+
+		TopicDisplayOverlay overlay = (TopicDisplayOverlay) hovers.get(ti);
+
+		if (overlay != null) {
+			overlay.hideIn1();
+		}
 	}
 
 	public static void hideHover(TopicIdentifier ti) {
@@ -79,7 +95,7 @@ public class HoverManager {
 		TopicDisplayOverlay overlay = (TopicDisplayOverlay) hovers.get(ti);
 
 		if (overlay != null) {
-			overlay.hideIn1();
+			overlay.hideImmediate();
 		}
 	}
 

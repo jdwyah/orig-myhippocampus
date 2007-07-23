@@ -126,6 +126,12 @@ public class TopicCache {
 
 		public void onSuccess(Object result) {
 
+			// avoid NPE from debug sysouts
+			if (result == null) {
+				callback.onSuccess(result);
+				return;
+			}
+
 			if (rtn == TOPIC) {
 
 				System.out.println("res " + result);

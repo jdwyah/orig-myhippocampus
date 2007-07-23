@@ -257,10 +257,20 @@ a:visited {
 	width: 120px;
 }
 .H-BreadCrumbs .H-TopicLink {
-	font-size: .6em;
+	font-size: .8em;
 }
 .H-BreadCrumbScroll {
 	height: 100px;
+}
+
+.H-ConnectionBoard {
+	top: 300px;
+	left: 0px;	
+	z-index: 1;
+	width: 120px;
+}
+.H-ReferenceBoard .H-TopicLink {
+	font-size: .8em;
 }
 
 .H-ContextMenu {

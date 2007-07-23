@@ -351,7 +351,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 	public List match(String match) {
-		log.debug("match");
+		log.debug("match " + match);
 		try {
 
 			return topicService.getTopicsStarting(match);

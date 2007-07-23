@@ -25,6 +25,7 @@ import com.aavu.client.domain.MetaLocation;
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
@@ -138,21 +139,17 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	private List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, int start, int max,
 			String startStr, boolean all, boolean publicOnly) {
 
-		DetachedCriteria crit = DetachedCriteria.forClass(Topic.class);
+		DetachedCriteria crit;
+		if (all) {
+			crit = DetachedCriteria.forClass(Topic.class);
+		} else {
+			crit = DetachedCriteria.forClass(RealTopic.class);
+		}
 
 		crit.add(Expression.eq("user", user));
 
 
-		// never add seealso, this is the seeAlsoUber singleton
-		crit.add(Expression.ne("class", "seealso"));
 
-		if (!all) {
-			crit.add(Expression.ne("class", "association")).add(Expression.ne("class", "metadate"))
-					.add(Expression.ne("class", "metatext")).add(
-							Expression.ne("class", "metalocation")).add(
-							Expression.ne("class", "date")).add(Expression.ne("class", "text"))
-					.add(Expression.ne("class", "location")).add(Expression.ne("class", "root"));
-		}
 		if (startStr != null) {
 			crit.add(Expression.ilike("title", startStr, MatchMode.START));
 		}
@@ -192,7 +189,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		log.debug("user " + currentUser.getUsername() + " string " + string);
 
-		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Topic.class).add(
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(RealTopic.class).add(
 				Expression.eq("user", currentUser)).add(Expression.eq("title", string)));
 
 
@@ -206,7 +203,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		log.debug("Public user " + username + " string " + string);
 
-		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Topic.class).createAlias(
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(RealTopic.class).createAlias(
 				"user", "u").add(Expression.eq("u.username", username)).add(
 				Expression.eq("publicVisible", true)).add(Expression.eq("title", string)));
 
@@ -509,14 +506,10 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 	public List<TopicIdentifier> getTopicsStarting(User user, String match, int max) {
-		DetachedCriteria crit = DetachedCriteria.forClass(Topic.class).add(
+		DetachedCriteria crit = DetachedCriteria.forClass(RealTopic.class).add(
 				Expression.eq("user", user)).add(
-				Expression.ilike("title", match, MatchMode.ANYWHERE)).add(
-				Expression.ne("class", "association")).add(Expression.ne("class", "seealso")).add(
-				Expression.ne("class", "metadate")).add(Expression.ne("class", "text"))// this is
-				// correct,
-				// right?
-				.add(Expression.ne("class", "date")).addOrder(Order.asc("title")).setProjection(
+				Expression.ilike("title", match, MatchMode.ANYWHERE)).addOrder(Order.asc("title"))
+				.setProjection(
 						Projections.projectionList().add(Property.forName("title")).add(
 								Property.forName("id")));
 

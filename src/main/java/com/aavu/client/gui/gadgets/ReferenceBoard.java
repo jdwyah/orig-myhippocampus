@@ -40,6 +40,9 @@ public class ReferenceBoard extends Gadget {
 
 		initWidget(mainP);
 
+		addStyleName("H-AbsolutePanel");
+		addStyleName("H-ReferenceBoard");
+
 	}
 
 	public int load(Topic topic) {

@@ -55,7 +55,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 	}
 
 	public void onClick(Widget sender) {
-		unhover();
+		HoverManager.hideHover(getFTI());
 		getDisplay().navigateTo(getFTI());
 	}
 
@@ -125,7 +125,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 	protected void hideDetails() {
 		detailsShowing = false;
 
-		HoverManager.hideHover(getFTI());
+		HoverManager.hideHoverIn1(getFTI());
 	}
 
 	protected boolean isDetailsShowing() {

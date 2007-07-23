@@ -8,10 +8,11 @@ import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StationaryBubble extends AbstractBubble {
+public class StationaryBubble extends AbstractBubble implements ClickListener {
 
 	private TopicIdentifier ti;
 	private IslandBanner banner;
@@ -33,6 +34,8 @@ public class StationaryBubble extends AbstractBubble {
 
 		init();
 
+
+		addClickListener(this);
 		// System.out.println("Banner " + getBanner());
 
 	}
@@ -52,12 +55,13 @@ public class StationaryBubble extends AbstractBubble {
 
 	// @Override
 	protected void hover() {
-		HoverManager.showHover(getManager(), this, ti);
+
+		HoverManager.showHover(getManager(), this, ti, true);
 	}
 
 	// @Override
 	protected void unhover() {
-		HoverManager.hideHover(ti);
+		HoverManager.hideHoverIn1(ti);
 	}
 
 	// @Override
@@ -96,7 +100,6 @@ public class StationaryBubble extends AbstractBubble {
 	protected Widget getOurWidget() {
 
 		mainPanel = new AbsolutePanel();
-		mainPanel.setPixelSize(unscaledWidth, unscaledHeight);
 
 
 		this.image.setPixelSize(unscaledWidth, unscaledHeight);
@@ -105,8 +108,22 @@ public class StationaryBubble extends AbstractBubble {
 
 		banner = new IslandBanner(getTitle(), 5);
 
+		double currentScale = 1;
+		Widget minimumWidget = banner.setToZoom(currentScale);
+
+		int width = (minimumWidget.getOffsetWidth() > (int) (unscaledWidth * currentScale)) ? minimumWidget
+				.getOffsetWidth()
+				: (int) (unscaledWidth * currentScale);
+
+		int height = ((int) (unscaledHeight * currentScale) < minimumWidget.getOffsetHeight()) ? minimumWidget
+				.getOffsetHeight()
+				: (int) (unscaledHeight * currentScale);
+
 		mainPanel.add(image, 0, 0);
 		mainPanel.add(banner, 0, 0);
+
+		mainPanel.setPixelSize(width, height);
+
 
 		return mainPanel;
 	}
@@ -125,5 +142,13 @@ public class StationaryBubble extends AbstractBubble {
 		// TODO Auto-generated method stub
 
 	}
+
+
+	public void onClick(Widget sender) {
+		HoverManager.hideHover(ti);
+		getManager().bringUpChart(ti);
+
+	}
+
 
 }

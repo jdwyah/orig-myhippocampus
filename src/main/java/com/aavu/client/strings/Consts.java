@@ -454,4 +454,8 @@ public interface Consts extends Messages {
 
 	String breadcrumbs();
 
+	String remove();
+
+	String rename();
+
 }

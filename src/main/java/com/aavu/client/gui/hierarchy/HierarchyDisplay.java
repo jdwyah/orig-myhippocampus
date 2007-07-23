@@ -380,6 +380,15 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	public void update(Topic t, AbstractCommand command) {
 		System.out.println("hierarchy display update " + t);
 
+		if (t == null) {
+			Logger.error("update null");
+			try {
+				throw new Exception();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		TopicDisplayObj b = (TopicDisplayObj) topicBubbles.get(new Long(t.getId()));
 		if (b != null) {
 			System.out.println("update " + b);

@@ -38,13 +38,15 @@ public class TopicDisplayOverlay implements MouseListener {
 
 	private int top;
 	private int left;
+	private boolean childrenOnly;
 
-	public TopicDisplayOverlay(Topic topic, Widget widget, Manager manager) {
 
+	public TopicDisplayOverlay(Topic topic, Widget widget, Manager manager, boolean childrenOnly) {
 		// super(true);
 
 		this.widget = widget;
 		this.manager = manager;
+		this.childrenOnly = childrenOnly;
 
 		hideTimer = new Timer() {
 			public void run() {
@@ -60,8 +62,10 @@ public class TopicDisplayOverlay implements MouseListener {
 		int childCount = 0;
 		for (Iterator iterator = topic.getInstances().iterator(); iterator.hasNext();) {
 
+			TopicTypeConnector conn = (TopicTypeConnector) iterator.next();
+
 			if (childCount++ < MAX_CHILDREN) {
-				TopicTypeConnector conn = (TopicTypeConnector) iterator.next();
+				System.out.println("Child Count " + childCount);
 				Topic child = conn.getTopic();
 				childrenP.add(new TopicLink(child));
 			}
@@ -181,6 +185,9 @@ public class TopicDisplayOverlay implements MouseListener {
 			childrenP.show();
 		}
 
+		if (childrenOnly) {
+			return;
+		}
 		System.out.println("setting assoc P - " + associationP.getOffsetWidth());
 
 		int assocLeft = associationP.getOffsetWidth();

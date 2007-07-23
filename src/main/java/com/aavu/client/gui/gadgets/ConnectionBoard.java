@@ -81,6 +81,9 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		initWidget(mainP);
 
+		addStyleName("H-AbsolutePanel");
+		addStyleName("H-ConnectionBoard");
+
 		// System.out.println("P6 "+getParent(6, b.getElement()));
 		// System.out.println("P8 "+getParent(8, b.getElement()));
 		// System.out.println("P10 "+getParent(10, b.getElement()));

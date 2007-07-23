@@ -4,14 +4,17 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.FocusPanelExt;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
+	private static final int HIDE_DETAIL_BUTTON_IN = 800;
 	private IslandBanner banner;
 	private int currentHeight;
 	private int currentWidth;
@@ -24,6 +27,7 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 	private double lastScale;
 
 	private FocusPanelExt showDetailsP;
+	private Timer showDetailHideTimer;
 
 	public AbstractBubbleParent(int longitudeOnIsland, int latitudeOnIsland, String topicTitle,
 			Image image, HierarchyDisplay display) {
@@ -59,8 +63,23 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 				toggleDetails();
 			}
 		});
+
+		// don't let a scheduled hide hide us if the mouse has entered us
+		showDetailsP.addMouseListener(new MouseListenerAdapter() {
+			public void onMouseEnter(Widget sender) {
+				showDetailHideTimer.cancel();
+			}
+		});
 		showDetailsP.add(showDetailsB);
 		mainPanel.add(showDetailsP, 0, 0);
+
+		showDetailHideTimer = new Timer() {
+			// @Override
+			public void run() {
+				showDetailsB.setVisible(false);
+				zoomToScale(lastScale);
+			}
+		};
 
 		return mainPanel;
 	}
@@ -118,8 +137,7 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 	}
 
 	protected void hideDetailButton() {
-		showDetailsB.setVisible(false);
-		zoomToScale(lastScale);
+		showDetailHideTimer.schedule(HIDE_DETAIL_BUTTON_IN);
 	}
 
 	public void zoomToScale(double currentScale) {

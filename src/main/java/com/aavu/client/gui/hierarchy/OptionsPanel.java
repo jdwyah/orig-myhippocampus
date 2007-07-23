@@ -2,6 +2,7 @@ package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -14,21 +15,21 @@ public class OptionsPanel extends DisplayPanel {
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 
-		Label renameL = new Label("Rename");
+		Label renameL = new Label(ConstHolder.myConstants.rename());
 		renameL.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 
 			}
 		});
 
-		Label removeL = new Label("Remove");
+		Label removeL = new Label(ConstHolder.myConstants.remove());
 		removeL.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 
 			}
 		});
 
-		Label deleteL = new Label("Delete");
+		Label deleteL = new Label(ConstHolder.myConstants.delete());
 		deleteL.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 

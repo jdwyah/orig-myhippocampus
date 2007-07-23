@@ -57,6 +57,11 @@
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
 		<property name="userService" ref="userService" />
 		<property name="topicService" ref="topicService" />
+		<property name="restUserAgent" value="MyHippocampus.com Server" />
+		
+		<property name="delicousApiAuthURL" value="api.del.icio.us"/>
+		<property name="delicousApiUrlGet" value="https://api.del.icio.us/v1/posts/get?"/>
+		<property name="delicousApiUrlAll" value="https://api.del.icio.us/v1/posts/all?"/>
 	</bean>
 
 	<bean id="awsConnection" class="com.aavu.server.s3.com.amazon.s3.AWSAuthConnection">

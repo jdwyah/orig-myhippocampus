@@ -380,7 +380,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * 
 	 */
 	private void loadGUI() {
-		map.load(this);
+		map.onLoginComplete(this);
 
 		getTopicCache().getRootTopic(getUser(),
 				new StdAsyncCallback(ConstHolder.myConstants.getRoot_async()) {
