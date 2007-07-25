@@ -28,14 +28,12 @@ public class TagPropertyPanel extends Gadget {
 
 
 	private Topic myTopic;
-	private Manager manager;
+
 	private Button saveB;
 
 	public TagPropertyPanel(Manager _manager) {
 
-		super(ConstHolder.myConstants.island_property());
-
-		this.manager = _manager;
+		super(_manager);
 
 		VerticalPanel mainPanel = new VerticalPanel();
 

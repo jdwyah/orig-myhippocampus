@@ -1,15 +1,10 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.gui.ext.FocusPanelExt;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
@@ -23,10 +18,12 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
 
 	private AbsolutePanel mainPanel;
-	private Button showDetailsB;
+
+
 	private double lastScale;
 
-	private FocusPanelExt showDetailsP;
+	// private Button showDetailsB;
+	// private FocusPanelExt showDetailsP;
 	private Timer showDetailHideTimer;
 
 	public AbstractBubbleParent(int longitudeOnIsland, int latitudeOnIsland, String topicTitle,
@@ -53,33 +50,33 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 		mainPanel.add(image, 0, 0);
 		mainPanel.add(banner, 0, 0);
 
-		showDetailsB = new Button("+");
-		showDetailsB.setVisible(false);
-
-		showDetailsP = new FocusPanelExt();
-		showDetailsP.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				DOM.eventCancelBubble(showDetailsP.getLastEvent(), true);
-				toggleDetails();
-			}
-		});
-
-		// don't let a scheduled hide hide us if the mouse has entered us
-		showDetailsP.addMouseListener(new MouseListenerAdapter() {
-			public void onMouseEnter(Widget sender) {
-				showDetailHideTimer.cancel();
-			}
-		});
-		showDetailsP.add(showDetailsB);
-		mainPanel.add(showDetailsP, 0, 0);
-
-		showDetailHideTimer = new Timer() {
-			// @Override
-			public void run() {
-				showDetailsB.setVisible(false);
-				zoomToScale(lastScale);
-			}
-		};
+		// showDetailsB = new Button("+");
+		// showDetailsB.setVisible(false);
+		//
+		// showDetailsP = new FocusPanelExt();
+		// showDetailsP.addClickListener(new ClickListener() {
+		// public void onClick(Widget sender) {
+		// DOM.eventCancelBubble(showDetailsP.getLastEvent(), true);
+		// toggleDetails();
+		// }
+		// });
+		//
+		// // don't let a scheduled hide hide us if the mouse has entered us
+		// showDetailsP.addMouseListener(new MouseListenerAdapter() {
+		// public void onMouseEnter(Widget sender) {
+		// showDetailHideTimer.cancel();
+		// }
+		// });
+		// showDetailsP.add(showDetailsB);
+		// mainPanel.add(showDetailsP, 0, 0);
+		//
+		// showDetailHideTimer = new Timer() {
+		// // @Override
+		// public void run() {
+		// showDetailsB.setVisible(false);
+		// zoomToScale(lastScale);
+		// }
+		// };
 
 		return mainPanel;
 	}
@@ -113,27 +110,27 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
 	protected abstract void hideDetails();
 
-	private void toggleDetails() {
-		if (isDetailsShowing()) {
-			hideDetails();
-			showDetailsB.setText("+");
-		} else {
-			showDetails();
-			showDetailsB.setText("-");
-		}
-	}
+	// private void toggleDetails() {
+	// if (isDetailsShowing()) {
+	// hideDetails();
+	// // showDetailsB.setText("+");
+	// } else {
+	// showDetails();
+	// // showDetailsB.setText("-");
+	// }
+	// }
 
 	protected abstract boolean isDetailsShowing();
 
 	protected void showDetailButton() {
-		if (isDetailsShowing()) {
-			showDetailsB.setText("-");
-		} else {
-			showDetailsB.setText("+");
-		}
-		mainPanel.setWidgetPosition(showDetailsP, currentWidth, 0);
-		mainPanel.setPixelSize(currentWidth + 20, currentHeight);
-		showDetailsB.setVisible(true);
+		// if (isDetailsShowing()) {
+		// showDetailsB.setText("-");
+		// } else {
+		// showDetailsB.setText("+");
+		// }
+		// mainPanel.setWidgetPosition(showDetailsP, currentWidth, 0);
+		// mainPanel.setPixelSize(currentWidth + 20, currentHeight);
+		// showDetailsB.setVisible(true);
 	}
 
 	protected void hideDetailButton() {

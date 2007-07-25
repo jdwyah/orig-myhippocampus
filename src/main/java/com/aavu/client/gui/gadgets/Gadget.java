@@ -3,9 +3,7 @@ package com.aavu.client.gui.gadgets;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.service.Manager;
-import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -18,38 +16,61 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public abstract class Gadget extends Composite {
+	private GadgetHolder gadgetHolder;
+	protected Manager manager;
 
-	protected DisclosurePanel mainP;
+	// implements SourcesMouseEvents {
+
+
+	// private BorderThemedPanel borderPanel;
+	// private FocusPanel focusPanel;
+
 
 	/**
 	 * Child Gadget responsible for its own title bar w/ this constructor.
 	 * 
 	 */
-	public Gadget() {
+	public Gadget(Manager manager) {
+		this.manager = manager;
+		// borderPanel = new BorderThemedPanel();
+		// borderPanel.setCaption("unset");
+		//
+		//
+		// focusPanel = new FocusPanel();
+		// focusPanel.add(borderPanel);
+		//
+		// setWidget(focusPanel);
 
-		mainP = new DisclosurePanel();
-		super.initWidget(mainP);
-		mainP.setOpen(true);
+
+	}
+
+
+
+	public GadgetHolder getGadgetHolder() {
+		return gadgetHolder;
+	}
+
+
+	public void setGadgetHolder(GadgetHolder gadgetHolder) {
+		this.gadgetHolder = gadgetHolder;
+	}
+
+
+	private void init() {
+		// setStyleName("H-DisplayPanel");
+
 		addStyleName("H-Gadget");
 	}
 
-	public Gadget(String title) {
-		mainP = new DisclosurePanel();
-		mainP.setHeader(new HeaderLabel(title));
-		mainP.setOpen(true);
-
-		super.initWidget(mainP);
-
-		addStyleName("H-Gadget");
-	}
 
 	protected void setHeader(Widget widget) {
-		mainP.setHeader(widget);
+		setTitle("special set");
+
 	}
 
 	// @Override
 	protected void initWidget(Widget widget) {
-		mainP.add(widget);
+		super.initWidget(widget);
 	}
 
 	public abstract int load(Topic topic);
@@ -76,4 +97,35 @@ public abstract class Gadget extends Composite {
 
 	public abstract void onClick(Manager manager);
 
+	public void setVisible(boolean b) {
+		gadgetHolder.setVisible(b);
+	}
+
+	public boolean isVisible() {
+		return gadgetHolder.isVisible();
+	}
+
+
+
+	public Manager getManager() {
+		return manager;
+	}
+
+
+
+	public boolean isDisplayer() {
+		return false;
+	}
+
+	public boolean isOnContextMenu() {
+		return false;
+	}
+
+	// public void addMouseListener(MouseListener listener) {
+	// focusPanel.addMouseListener(listener);
+	// }
+	//
+	// public void removeMouseListener(MouseListener listener) {
+	// focusPanel.removeMouseListener(listener);
+	// }
 }

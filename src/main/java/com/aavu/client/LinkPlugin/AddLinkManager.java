@@ -13,7 +13,9 @@ import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.ext.GUIEffects;
+import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetManager;
+import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
@@ -168,6 +170,11 @@ public class AddLinkManager implements Manager, CloseListener {
 
 	public void userNeedsToUpgrade() {
 		throw new UnsupportedOperationException();
+	}
+
+	public GadgetPopup newFrameGadget(Gadget gadget) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

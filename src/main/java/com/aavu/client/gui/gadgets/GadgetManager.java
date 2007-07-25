@@ -12,9 +12,10 @@ public class GadgetManager {
 
 	private List allGadgets;
 
-	private LinkDisplayWidget linkDisplayW;
+	private LinkDisplayGadget linkDisplayW;
 	private ConnectionBoard connectionBoard;
-	private EntryPreview entryPreview;
+	private EntryGadget entryPreview;
+	private ChildrenGadget childGadget;
 	private CreateTopicGadget createTopicGadget;
 
 	// private UploadBoard uploadBoard;
@@ -39,11 +40,15 @@ public class GadgetManager {
 		if (!initted) {
 			allGadgets = new ArrayList();
 
+
+
 			// tagProperties = new TagPropertyPanel(manager);
-			entryPreview = new EntryPreview(manager);
+			entryPreview = new EntryGadget(manager);
 			connectionBoard = new ConnectionBoard(manager);
-			linkDisplayW = new LinkDisplayWidget(manager);
+			linkDisplayW = new LinkDisplayGadget(manager);
 			createTopicGadget = new CreateTopicGadget(manager);
+
+			childGadget = new ChildrenGadget(manager);
 
 			// uploadBoard = new UploadBoard(manager);
 			// timeGadget = new TimeGadget(manager);
@@ -57,6 +62,7 @@ public class GadgetManager {
 			allGadgets.add(connectionBoard);
 			allGadgets.add(entryPreview);
 			allGadgets.add(createTopicGadget);
+			allGadgets.add(childGadget);
 
 			// allGadgets.add(uploadBoard);
 			// allGadgets.add(mapGadget);
@@ -86,19 +92,12 @@ public class GadgetManager {
 
 	public void load(Topic topic) {
 		init();
-		List gadgetsToUse = new ArrayList();
 
 		for (Iterator iter = allGadgets.iterator(); iter.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
-			if (gadget.isOnForTopic(topic)) {
-				gadgetsToUse.add(gadget);
-			}
-		}
 
-		// TODO ?
-		// if(displayer != null){
-		// displayer.load(topic,gadgetsToUse);
-		// }
+			gadget.load(topic);
+		}
 
 	}
 

@@ -4,15 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.gui.gadgets.Gadget;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class BreadCrumbDisplayer extends Gadget {
+public class BreadCrumbDisplayer extends PopupWindow {
 
 	private VerticalPanel mainPanel;
 
@@ -20,17 +19,18 @@ public class BreadCrumbDisplayer extends Gadget {
 
 	private ScrollPanel scrollP;
 
-	public BreadCrumbDisplayer() {
-		super(ConstHolder.myConstants.breadcrumbs());
+	public BreadCrumbDisplayer(Manager manager) {
+		super(manager.newFrame(), ConstHolder.myConstants.breadcrumbs());
 		mainPanel = new VerticalPanel();
 		scrollP = new ScrollPanel(mainPanel);
 
 		scrollP.setStyleName("H-BreadCrumbScroll");
 
-		initWidget(scrollP);
+		setContent(scrollP);
+		frame.setLocation(300, 0);
+		frame.setClosable(false);
 
-		addStyleName("H-AbsolutePanel");
-		addStyleName("H-BreadCrumbs");
+		frame.getContent().addStyleName("H-BreadCrumbs");
 	}
 
 	/**
@@ -53,27 +53,6 @@ public class BreadCrumbDisplayer extends Gadget {
 		return 0;
 	}
 
-	// @Override
-	public Image getPickerButton() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	// @Override
-	public boolean isOnForTopic(Topic topic) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	// @Override
-	public void onClick(Manager manager) {
-
-	}
-
-	// @Override
-	public String getDisplayName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

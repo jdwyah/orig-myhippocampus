@@ -10,6 +10,8 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.JSUtil;
@@ -55,10 +57,12 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 	private double theta;
 	private OceanLabel backdropLabel;
+	private GUIManager guiManager;
 
-	public HierarchyDisplay(Manager manager) {
+	public HierarchyDisplay(Manager manager, GUIManager map) {
 		super();
 		this.manager = manager;
+		this.guiManager = map;
 
 		// PEND MED NOTE: GWT bug? w/o this, we don't seem to import/compile this
 		System.out.println("BubbleF " + BubbleFactory.class);
@@ -408,6 +412,8 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	}
 
 	public void navigateTo(FullTopicIdentifier fti) {
+		guiManager.hideCurrentHover();
+		// HoverManager.hideCurrentHover();
 		manager.bringUpChart(fti);
 	}
 
@@ -430,16 +436,27 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		public void onClick(Widget sender) {
 
-			if (DOM.eventGetCtrlKey(getFocusBackdrop().getLastEvent())) {
 
-				int x = DOM.eventGetClientX(getFocusBackdrop().getLastEvent());
-				int y = DOM.eventGetClientY(getFocusBackdrop().getLastEvent());
+			if (getFocusBackdrop().getLastClickEventCtrl()) {
+
+				int x = getFocusBackdrop().getLastClickClientX();
+				int y = getFocusBackdrop().getLastClickClientY();
 
 				ContextMenu p = new ContextMenu(getManager(), HierarchyDisplay.this);
 				p.show(x, y);
 
+			} else {
+				guiManager.hideCurrentHover();
 			}
+
 		}
 	}
 
+	public void showHover(TopicIdentifier ti) {
+		guiManager.showHover(ti);
+	}
+
+	public void hideHoverIn1(TopicIdentifier ti) {
+		guiManager.hideHoverIn1(ti);
+	}
 }

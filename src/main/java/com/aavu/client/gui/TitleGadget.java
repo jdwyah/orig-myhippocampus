@@ -36,7 +36,7 @@ public class TitleGadget extends Gadget {
 	// private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 	public TitleGadget(final Manager manager) {
-		super("");
+		super(manager);
 
 		titleBox = new EditableLabelExtension("", new ChangeListener() {
 			public void onChange(Widget sender) {

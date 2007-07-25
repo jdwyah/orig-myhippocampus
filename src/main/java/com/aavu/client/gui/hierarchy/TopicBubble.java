@@ -6,15 +6,15 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.ext.DblClickListener;
+import com.aavu.client.gui.ext.FocusPanelExt;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj, ClickListener {
+public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj, DblClickListener {
 
 	private FullTopicIdentifier fti;
 
@@ -28,11 +28,12 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 		setDropController(new BubbleDropController(this));
 
-		addClickListener(this);
+		addDblClickListener(this);
+
 
 	}
 
-	public FocusPanel getFocusPanel() {
+	public FocusPanelExt getFocusPanel() {
 		return this;
 	}
 
@@ -54,8 +55,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	}
 
-	public void onClick(Widget sender) {
-		HoverManager.hideHover(getFTI());
+	public void onDblClick(Widget sender) {
 		getDisplay().navigateTo(getFTI());
 	}
 
@@ -82,7 +82,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 	public void receivedDrop(Widget draggable) {
 		TopicBubble received = (TopicBubble) draggable;
 
-
+		System.out.println("TopicBubble recievedDrop widget");
 
 		// display.processDrop(this,received);
 
@@ -107,25 +107,28 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	// @Override
 	protected void hover() {
-		showDetailButton();
+		// showDetailButton();
+		showDetails();
 	}
 
 	// @Override
 	protected void unhover() {
-		hideDetailButton();
-
+		// hideDetailButton();
+		hideDetails();
 	}
 
 	protected void showDetails() {
 		detailsShowing = true;
-		HoverManager.showHover(getDisplay().getManager(), this, getFTI());
+		getDisplay().showHover(getFTI());
+		// HoverManager.showHover(getDisplay().getManager(), this, getFTI());
 
 	}
 
 	protected void hideDetails() {
 		detailsShowing = false;
 
-		HoverManager.hideHoverIn1(getFTI());
+		getDisplay().hideHoverIn1(getFTI());
+		// HoverManager.hideHoverIn1(getFTI());
 	}
 
 	protected boolean isDetailsShowing() {

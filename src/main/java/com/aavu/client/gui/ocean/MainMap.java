@@ -4,11 +4,15 @@ import java.util.Iterator;
 
 import org.gwm.client.GFrame;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.BreadCrumbDisplayer;
 import com.aavu.client.gui.CenterTopicDisplayer;
 import com.aavu.client.gui.Dashboard;
+import com.aavu.client.gui.GUIManager;
+import com.aavu.client.gui.GadgetDisplayer;
 import com.aavu.client.gui.HippoDesktopPane;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.LocationSettingWidget;
@@ -17,7 +21,7 @@ import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.StatusPanel;
 import com.aavu.client.gui.Zoomer;
 import com.aavu.client.gui.ext.MultiDivPanel;
-import com.aavu.client.gui.gadgets.ConnectionBoard;
+import com.aavu.client.gui.gadgets.GadgetDisplayerPopupImpl;
 import com.aavu.client.gui.hierarchy.HierarchyDisplay;
 import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.service.MindscapeManager;
@@ -28,9 +32,9 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MainMap extends HippoDesktopPane {
+public class MainMap extends HippoDesktopPane implements GUIManager {
 
-	// private Sidebar sideBar;
+
 	private MindscapeManager manager;
 	// private TagSearch tagSearch;
 
@@ -50,7 +54,11 @@ public class MainMap extends HippoDesktopPane {
 
 	private HippoTimeline timeline;
 
-	private ConnectionBoard connectionBoard;
+	// private ConnectionBoard connectionBoard;
+
+	private GadgetDisplayer gadgetDisplayer;
+
+	// private TopicDisplayOverlay topicDisplayOverlay;
 
 	// private List frames;
 	// private GInternalFrame activeFrame;
@@ -76,7 +84,7 @@ public class MainMap extends HippoDesktopPane {
 
 		// spatialDisplay = new OceanFlashImpl(manager);
 		// spatialDisplay = new OceanDHTMLImpl(manager);
-		spatialDisplay = new HierarchyDisplay(manager);
+		spatialDisplay = new HierarchyDisplay(manager, this);
 
 		statusPanel = new StatusPanel();
 
@@ -116,22 +124,26 @@ public class MainMap extends HippoDesktopPane {
 		zoomer = new Zoomer(manager);
 		mainP.add(zoomer);
 
-		centerDisplayer = new CenterTopicDisplayer(manager);
+		centerDisplayer = new CenterTopicDisplayer(manager, this);
 		mainP.add(centerDisplayer);
 
-		breadcrumbDisplayer = new BreadCrumbDisplayer();
-		mainP.add(breadcrumbDisplayer);
+		breadcrumbDisplayer = new BreadCrumbDisplayer(manager);
+		// mainP.add(breadcrumbDisplayer);
 
-		connectionBoard = new ConnectionBoard(manager);
-		mainP.add(connectionBoard);
-
+		// connectionBoard = new ConnectionBoard(manager);
+		// mainP.add(connectionBoard);
 		// Ribbon ribbon = new Ribbon(manager.getGadgetManager());
-		//
-		// // gadgetDisplayer = new GadgetDisplayerBarImpl(manager);
+
+		gadgetDisplayer = new GadgetDisplayerPopupImpl(manager);
+
 		//
 		// mainP.add(ribbon);
 
+		gadgetDisplayer.addTo(mainP);
 
+
+
+		// topicDisplayOverlay = new TopicDisplayOverlay(manager);
 
 		// mainP.add(tagSearch);
 
@@ -220,8 +232,8 @@ public class MainMap extends HippoDesktopPane {
 		spatialDisplay.load(topic, null);
 		centerDisplayer.load(topic);
 		breadcrumbDisplayer.load(topic);
-		connectionBoard.load(topic);
-		manager.getGadgetManager().load(topic);
+		// connectionBoard.load(topic);
+
 	}
 
 	public void clearForLoading() {
@@ -295,4 +307,30 @@ public class MainMap extends HippoDesktopPane {
 		return Window.getClientHeight();
 	}
 
+	public void hideCurrentHover() {
+
+		gadgetDisplayer.unload();
+
+	}
+
+	public void hideHoverIn1(TopicIdentifier ti) {
+
+		gadgetDisplayer.unload();
+
+	}
+
+	public void showHover(TopicIdentifier ti) {
+
+		manager.getTopicCache().getTopic(ti, new StdAsyncCallback("Get Display Overlay") {
+			// @Override
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+
+				gadgetDisplayer.load((Topic) result);
+				// topicDisplayOverlay.load((Topic) result);
+
+
+			}
+		});
+	}
 }

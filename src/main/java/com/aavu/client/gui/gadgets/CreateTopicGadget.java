@@ -18,13 +18,12 @@ public class CreateTopicGadget extends Gadget {
 
 
 	private Topic topic;
-	private Manager manager;
+
 
 	public CreateTopicGadget(Manager _manager) {
 
-		super(ConstHolder.myConstants.topic_new());
+		super(_manager);
 
-		this.manager = _manager;
 
 		// PEND shoudl never be displayed
 		initWidget(new Label("New Topic"));
@@ -35,6 +34,11 @@ public class CreateTopicGadget extends Gadget {
 	public int load(Topic topic) {
 		this.topic = topic;
 		return 1;
+	}
+
+	// @Override
+	public boolean isOnContextMenu() {
+		return true;
 	}
 
 	// @Override

@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LinkDisplayWidget extends Gadget implements TopicLoader {
+public class LinkDisplayGadget extends Gadget implements TopicLoader {
 
 	private static final String HEIGHT = "200px";
 	private static final int USE_SCROLL_HEIGHT_CUTOFF = 6;
@@ -28,14 +28,13 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 	private int size = 0;
 	private VerticalPanel linkPanel;
 	private Topic myTopic;
-	private Manager manager;
 
 
-	public LinkDisplayWidget(Manager _manager) {
 
-		super(ConstHolder.myConstants.link_add_title());
+	public LinkDisplayGadget(Manager _manager) {
 
-		this.manager = _manager;
+		super(_manager);
+
 
 		VerticalPanel mainPanel = new VerticalPanel();
 
@@ -68,6 +67,13 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 	private void editLink(WebLink link) {
 		AddLinkPopup pop = new AddLinkPopup(this, manager, manager.newFrame(), link, myTopic, null);
 	}
+
+
+	// @Override
+	public boolean isDisplayer() {
+		return true;
+	}
+
 
 	public int load(Topic topic) {
 		myTopic = topic;
@@ -123,6 +129,11 @@ public class LinkDisplayWidget extends Gadget implements TopicLoader {
 		}
 		linkPanel.add(scroll);
 		return size;
+	}
+
+	// @Override
+	public boolean isOnContextMenu() {
+		return true;
 	}
 
 	private String getPopupString(WebLink occ) {

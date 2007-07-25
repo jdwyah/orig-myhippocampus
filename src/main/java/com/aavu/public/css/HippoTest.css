@@ -78,17 +78,17 @@ a:visited {
 
 
 .H-Gadget {
-	background-image: url("../img/blueFade.png");
+	/*background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
-	/*background-color: #666699;*/
+	
 	background-color: #576B93;
 	filter: alpha(opacity =             88);
 	-moz-opacity: .88;
 	opacity: .88;
 	-khtml-opacity: .88;
-	/*background: red;*/
+	
 	border: 2px solid #D8E3FD;
-	border-style: ridge;
+	border-style: ridge;*/
 	color: white;
 	width: 100%;
 	padding-top: 3px;

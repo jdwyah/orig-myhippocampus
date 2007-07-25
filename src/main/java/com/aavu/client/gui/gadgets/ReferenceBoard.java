@@ -16,15 +16,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ReferenceBoard extends Gadget {
 
-	private Manager manager;
-
 	private VerticalPanel refPanel;
 
 	public ReferenceBoard(Manager manager) {
 
-		super(ConstHolder.myConstants.references());
-
-		this.manager = manager;
+		super(manager);
 
 
 		VerticalPanel mainP = new VerticalPanel();

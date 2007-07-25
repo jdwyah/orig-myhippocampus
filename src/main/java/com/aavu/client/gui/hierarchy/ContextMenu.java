@@ -26,6 +26,10 @@ public class ContextMenu extends PopupPanel {
 		for (Iterator iter = m.getGadgetManager().getFullGadgetList().iterator(); iter.hasNext();) {
 			final Gadget gadget = (Gadget) iter.next();
 
+			if (!gadget.isOnContextMenu()) {
+				continue;
+			}
+
 			Image imgButton = gadget.getPickerButton();
 			imgButton.addClickListener(new ClickListener() {
 				public void onClick(Widget sender) {

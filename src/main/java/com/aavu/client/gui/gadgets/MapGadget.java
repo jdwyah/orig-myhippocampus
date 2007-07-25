@@ -215,7 +215,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	// @Override
 	public void nowVisible() {
 		makeVisible();// necessary. otherwise we just get grey maps.
-		center();
+		centerMap();
 	}
 
 
@@ -224,7 +224,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	 * separate this because we need to center AFTER load() & setVisible() or we'll end up just
 	 * 'top-lefting' bc we center when size == (0,0)
 	 */
-	private void center() {
+	private void centerMap() {
 
 		// System.out.println("about to center "+mapWidget.getOffsetWidth());
 		// System.out.println("about to center "+mapWidget.isVisible());

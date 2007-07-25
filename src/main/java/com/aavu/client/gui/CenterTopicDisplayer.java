@@ -14,12 +14,15 @@ public class CenterTopicDisplayer extends Composite {
 	private Topic topic;
 	private Manager manager;
 
+	private GUIManager guiManager;
 
-	public CenterTopicDisplayer(final Manager manager) {
+
+	public CenterTopicDisplayer(final Manager manager, GUIManager guiManager) {
 
 		this.manager = manager;
+		this.guiManager = guiManager;
 
-		tagBoard = new TagBoard(manager);
+		tagBoard = new TagBoard(manager, guiManager);
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 

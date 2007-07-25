@@ -4,11 +4,12 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.FocusPanelExt;
 import com.aavu.client.service.Manager;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractBubble extends FocusPanelExt implements TopicDisplayObj,
-		MouseListener {
+		MouseListener, ClickListener {
 
 
 	private Manager manager;
@@ -27,7 +28,7 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 
 		addMouseListener(this);
 
-		// addClickListener(this);
+		addClickListener(this);
 	}
 
 	/**
@@ -68,11 +69,11 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 	}
 
 	public void onMouseEnter(Widget sender) {
-		hover();
+		// hover();
 	}
 
 	public void onMouseLeave(Widget sender) {
-		unhover();
+		// unhover();
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
@@ -103,8 +104,8 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 
 
 
-	// public void onClick(Widget sender) {
-	// hover();
-	// }
+	public void onClick(Widget sender) {
+		hover();
+	}
 
 }

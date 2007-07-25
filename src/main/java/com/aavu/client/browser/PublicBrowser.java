@@ -1,7 +1,6 @@
 package com.aavu.client.browser;
 
 import java.util.Iterator;
-import java.util.List;
 
 import com.aavu.client.HippocampusBrowser;
 import com.aavu.client.async.StdAsyncCallback;
@@ -13,6 +12,7 @@ import com.aavu.client.service.BrowserManager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class PublicBrowser extends Composite implements GadgetDisplayer {
@@ -106,23 +106,23 @@ public class PublicBrowser extends Composite implements GadgetDisplayer {
 		// TODO Auto-generated method stub
 	}
 
-	public void load(Topic topic, List gadgetsToUse) {
+	public void load(Topic topic) {
 		this.topic = topic;
 
 		panel.clear();
 
 
-		for (Iterator iter = gadgetsToUse.iterator(); iter.hasNext();) {
+		for (Iterator iter = gm.getFullGadgetList().iterator(); iter.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
 
 			gadget.load(topic);
 
-			panel.add(gadget);
+			gadget.setVisible(true);
 		}
 
 		setVisible(true);
 
-		for (Iterator iter = gadgetsToUse.iterator(); iter.hasNext();) {
+		for (Iterator iter = gm.getFullGadgetList().iterator(); iter.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
 			gadget.nowVisible();
 		}
@@ -131,6 +131,12 @@ public class PublicBrowser extends Composite implements GadgetDisplayer {
 
 	public void unload() {
 		panel.clear();
+	}
+
+
+
+	public void addTo(Panel mainP) {
+		mainP.add(getWidget());
 	}
 
 }

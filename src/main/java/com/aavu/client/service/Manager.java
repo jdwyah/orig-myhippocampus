@@ -10,7 +10,9 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.StatusCode;
+import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetManager;
+import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTSubjectServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -58,6 +60,8 @@ public interface Manager {
 	void userNeedsToUpgrade();
 
 	void createNew(Topic topic);
+
+	GadgetPopup newFrameGadget(Gadget gadget);
 
 	// void explore(Topic myTag, List topics);
 

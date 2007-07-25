@@ -32,6 +32,7 @@ import com.aavu.client.gui.ViewMemberWindow;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetClickListener;
+import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.gui.gadgets.TopicLoader;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.ocean.MainMap;
@@ -414,6 +415,15 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	private GInternalFrame newFrame(String title) {
 
 		GInternalFrame frame = new DefaultGInternalFrame(title);
+
+		map.addFrame(frame);
+
+		return frame;
+	}
+
+	public GadgetPopup newFrameGadget(Gadget gadget) {
+
+		GadgetPopup frame = new GadgetPopup(gadget);
 
 		map.addFrame(frame);
 

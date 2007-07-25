@@ -34,7 +34,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	private Topic myTopic;
 
 	private SeeAlsoWidget alsos;
-	private Manager manager;
+
 	private VerticalPanel refPanel;
 
 	/**
@@ -45,9 +45,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	 */
 	public ConnectionBoard(Manager manager) {
 
-		super(ConstHolder.myConstants.connections());
-
-		this.manager = manager;
+		super(manager);
 
 		topicService = manager.getTopicCache();
 
@@ -81,7 +79,6 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		initWidget(mainP);
 
-		addStyleName("H-AbsolutePanel");
 		addStyleName("H-ConnectionBoard");
 
 		// System.out.println("P6 "+getParent(6, b.getElement()));
@@ -103,7 +100,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	public int load(Topic topic) {
 		myTopic = topic;
 
-		setVisible(false);
+		// setVisible(false);
 
 		manager.getTopicCache().getLinksTo(topic, new StdAsyncCallback("GetLinksTo") {
 			public void onSuccess(Object result) {
@@ -117,7 +114,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 					// Label(ConstHolder.myConstants.references_none()));
 				} else {
 					refPanel.add(new HeaderLabel(ConstHolder.myConstants.references()));
-					setVisible(true);
+					// setVisible(true);
 				}
 
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
@@ -136,10 +133,15 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		int size = alsos.load(assoc);
 		if (size > 0) {
-			setVisible(true);
+			// setVisible(true);
 		}
 		return size;
 
+	}
+
+	// @Override
+	public boolean isDisplayer() {
+		return true;
 	}
 
 	public void completed(TopicIdentifier topicID) {

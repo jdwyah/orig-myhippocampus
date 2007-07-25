@@ -10,6 +10,7 @@ import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.hierarchy.StationaryBubble;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -42,12 +43,14 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 	private HorizontalPanel adderP;
 
+	private GUIManager guiManager;
+
 
 	// private SaveNeededListener saveNeeded;
 
-	public TagBoard(Manager manager) {
+	public TagBoard(Manager manager, GUIManager guiManager) {
 		this.manager = manager;
-
+		this.guiManager = guiManager;
 
 		// this.saveNeeded = saveNeeded;
 
@@ -159,7 +162,8 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 	private void showTag(final Topic tag) {
 
-		StationaryBubble topicBubble = new StationaryBubble(new FullTopicIdentifier(tag), manager);
+		StationaryBubble topicBubble = new StationaryBubble(new FullTopicIdentifier(tag), manager,
+				guiManager);
 
 		tagPanel.add(topicBubble);
 

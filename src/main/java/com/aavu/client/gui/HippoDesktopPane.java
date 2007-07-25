@@ -18,12 +18,13 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public abstract class  HippoDesktopPane extends Composite implements WindowResizeListener, GDesktopPane {
+public abstract class HippoDesktopPane extends Composite implements WindowResizeListener,
+		GDesktopPane {
 
-//	private AbsolutePanel frameContainer;
+	// private AbsolutePanel frameContainer;
 
-	//private FlexTable desktopWidget;
-	//private IconBar buttonBar;
+	// private FlexTable desktopWidget;
+	// private IconBar buttonBar;
 
 	private List frames;
 
@@ -33,10 +34,10 @@ public abstract class  HippoDesktopPane extends Composite implements WindowResiz
 
 	public HippoDesktopPane() {
 		initialize();
-		theme = Gwm.getDefaultTheme();
-		
+		theme = "alphacube";
+
 		setupListeners();
-		
+
 	}
 
 	private void initialize() {
@@ -48,6 +49,7 @@ public abstract class  HippoDesktopPane extends Composite implements WindowResiz
 	}
 
 	public abstract LocationSettingWidget getFrame();
+
 	public abstract void addButton(GFrame frame);
 
 	public abstract void removeButton(GFrame frame);
@@ -73,25 +75,26 @@ public abstract class  HippoDesktopPane extends Composite implements WindowResiz
 		int left = getFrame().getAbsoluteLeft() + spos;
 		int top = getFrame().getAbsoluteTop() + spos;
 		SelectBoxManagerImpl selectBoxManager = ((DefaultGFrame) internalFrame)
-		.getSelectBoxManager();
+				.getSelectBoxManager();
 		if (selectBoxManager instanceof SelectBoxManagerImplIE6) {
 			getFrame().add(selectBoxManager.getBlockerWidget(), left, top);
 		}
-		getFrame().add((Widget)internalFrame);
+		getFrame().add((Widget) internalFrame);
 		internalFrame.setLocation(left, top);
-		
-		//NOTE needed to add this to get the windwos to pop ontop of the ocean
-		DOM.setStyleAttribute(((DefaultGInternalFrame)internalFrame).getElement(), "position","absolute");
-		
+
+		// NOTE needed to add this to get the windwos to pop ontop of the ocean
+		DOM.setStyleAttribute(((DefaultGInternalFrame) internalFrame).getElement(), "position",
+				"absolute");
+
 		frames.add(internalFrame);
 		internalFrame.setTheme(theme);
 	}
 
 
 	public void removeFrame(GInternalFrame internalFrame) {
-		getFrame().remove((Widget)internalFrame);
+		getFrame().remove((Widget) internalFrame);
 		SelectBoxManagerImpl selectBoxManager = ((DefaultGFrame) internalFrame)
-		.getSelectBoxManager();
+				.getSelectBoxManager();
 		if (selectBoxManager instanceof SelectBoxManagerImplIE6) {
 			getFrame().remove(selectBoxManager.getBlockerWidget());
 		}
@@ -144,11 +147,11 @@ public abstract class  HippoDesktopPane extends Composite implements WindowResiz
 			GInternalFrame theFrame = (GInternalFrame) frames.get(x);
 			theFrame.setTheme(theme);
 		}
-		//getFrame()setStyleName("gwm-"+ theme + "-GDesktopPane-FrameContainer");
+		// getFrame()setStyleName("gwm-"+ theme + "-GDesktopPane-FrameContainer");
 
-//		desktopWidget.getFlexCellFormatter().setStyleName(1, 0,
-//				"gwm-"+ theme + "-GDesktopPane-TaskBar");
-		setStyleName("gwm-"+ theme + "-GDesktopPane");
+		// desktopWidget.getFlexCellFormatter().setStyleName(1, 0,
+		// "gwm-"+ theme + "-GDesktopPane-TaskBar");
+		setStyleName("gwm-" + theme + "-GDesktopPane");
 	}
 
 }

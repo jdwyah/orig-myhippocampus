@@ -177,6 +177,7 @@ public class BorderThemedPanel extends Composite {
 		topLabel.setText(title);
 	}
 
+
 	// @Override
 	public void setContent(Widget w) {
 		myContent = w;

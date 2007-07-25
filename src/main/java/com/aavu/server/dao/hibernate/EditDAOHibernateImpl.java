@@ -37,21 +37,20 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 	 * @param t
 	 * @param toIsland
 	 */
-	public void changeState(final Topic t,final boolean toIsland) {
-		int res = (Integer) getHibernateTemplate().execute(new HibernateCallback(){
+	public void changeState(final Topic t, final boolean toIsland) {
+		int res = (Integer) getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 				String newType = "Topic";
-				if(toIsland){
+				if (toIsland) {
 					newType = "tag";
-				}								
-				String hqlUpdate = "update Topic set discriminator = :newType where topic_id = :id";				
-				int updatedEntities = sess.createQuery( hqlUpdate )
-				.setString("newType", newType)
-				.setLong( "id", t.getId() )	                            
-				.executeUpdate();				
-				return updatedEntities;				
-			}});
-		log.debug("res: "+res+" Changed t:"+t.getId()+" Now an island "+toIsland);
+				}
+				String hqlUpdate = "update Topic set discriminator = :newType where topic_id = :id";
+				int updatedEntities = sess.createQuery(hqlUpdate).setString("newType", newType)
+						.setLong("id", t.getId()).executeUpdate();
+				return updatedEntities;
+			}
+		});
+		log.debug("res: " + res + " Changed t:" + t.getId() + " Now an island " + toIsland);
 
 		getHibernateTemplate().evict(t);
 
@@ -63,75 +62,81 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 	 */
 	public void delete(final Topic todelete) {
 
-		log.info("Deleting: "+todelete +" "+todelete.getId());
-		getHibernateTemplate().execute(new HibernateCallback(){
+		log.info("Deleting: " + todelete + " " + todelete.getId());
+		getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 
 				/*
-				 * load-ing here prevents an error where todelete has unsaved occurences, which we then try to delete causing an "expected row 1"
-				 * kind of error. If you want to delete todelete, there's no reason to save his associations first. 
-				 * NOTE: we could just change this method to take the long topic_id instead of a real Topic.class
-				 */				
-				Topic topic  = (Topic) sess.get(Topic.class,todelete.getId());
+				 * load-ing here prevents an error where todelete has unsaved occurences, which we
+				 * then try to delete causing an "expected row 1" kind of error. If you want to
+				 * delete todelete, there's no reason to save his associations first. NOTE: we could
+				 * just change this method to take the long topic_id instead of a real Topic.class
+				 */
+				Topic topic = (Topic) sess.get(Topic.class, todelete.getId());
 
 
 
-//				log.info("Instances: "+topic.getInstances().size());
+				// log.info("Instances: "+topic.getInstances().size());
 
-//				for (TopicTypeConnector conn : (Set<TopicTypeConnector>)topic.getInstances()) {
-//				getHibernateTemplate().delete(conn);
-//				}
+				// for (TopicTypeConnector conn : (Set<TopicTypeConnector>)topic.getInstances()) {
+				// getHibernateTemplate().delete(conn);
+				// }
 
 				/*
 				 * delete all type/instance references to this topic
 				 */
-				List<TopicTypeConnector> conns = sess.createCriteria(TopicTypeConnector.class, "conn")
-				.add(Expression.or((Expression.eq("conn.type", topic)),
-						Expression.eq("conn.topic", topic))).list();
+				List<TopicTypeConnector> conns = sess.createCriteria(TopicTypeConnector.class,
+						"conn").add(
+						Expression.or((Expression.eq("conn.type", topic)), Expression.eq(
+								"conn.topic", topic))).list();
 
 
-				System.out.println("found "+conns.size()+" connections.");
+				System.out.println("found " + conns.size() + " connections.");
 				for (TopicTypeConnector connector : conns) {
-					connector.getTopic().getTypes().remove(connector);					
-					System.out.println("Delete connection "+connector+" "+connector.getId()+" "+connector.getTopic().getId()+" to "+connector.getType().getId());
+					connector.getTopic().getTypes().remove(connector);
+					System.out.println("Delete connection " + connector + " " + connector.getId()
+							+ " " + connector.getTopic().getId() + " to "
+							+ connector.getType().getId());
 					sess.delete(connector);
-				}				
+				}
 				topic.getTypes().clear();
 
-				//System.out.println("after clear "+topic.toPrettyString());
+				// System.out.println("after clear "+topic.toPrettyString());
 
-//				for (TopicTypeConnector conn : (Set<TopicTypeConnector>)topic.getTypes()) {
-//				log.info("Was a tag. Removing instances "+instance);
-//				topic.getTypes().clear();					
-//				}
-				//topic.getInstances().clear();
+				// for (TopicTypeConnector conn : (Set<TopicTypeConnector>)topic.getTypes()) {
+				// log.info("Was a tag. Removing instances "+instance);
+				// topic.getTypes().clear();
+				// }
+				// topic.getInstances().clear();
 
-//				log.info("Types: "+topic.getTypes().size());
-//				for (Topic type : (Set<Topic>)topic.getTypes()) {
-//				log.info("Removing from type "+type);
-//				type.getInstances().remove(topic);
-//				}
-//				topic.getTypes().clear();
+				// log.info("Types: "+topic.getTypes().size());
+				// for (Topic type : (Set<Topic>)topic.getTypes()) {
+				// log.info("Removing from type "+type);
+				// type.getInstances().remove(topic);
+				// }
+				// topic.getTypes().clear();
 
 
-				//TODO PEND will leave danglers!
-				for (TopicOccurrenceConnector owl : (Set<TopicOccurrenceConnector>)topic.getOccurences()) {
+				// TODO PEND will leave danglers!
+				for (TopicOccurrenceConnector owl : (Set<TopicOccurrenceConnector>) topic
+						.getOccurences()) {
 
 					sess.delete(owl);
 
-//					Occurrence occurence = owl.getOccurrence();
+					// Occurrence occurence = owl.getOccurrence();
 
-//					//TODO delete S3Files 
-//					//TODO delete Weblinks that were only referenced by us					
+					// //TODO delete S3Files
+					// //TODO delete Weblinks that were only referenced by us
 
-//					log.debug("remove occurrence: "+occurence.getId()+" "+occurence.getTitle()+" "+occurence.getData());
+					// log.debug("remove occurrence: "+occurence.getId()+" "+occurence.getTitle()+"
+					// "+occurence.getData());
 
-//					if(occurence instanceof Entry){
-//					sess.delete(occurence);
-//					}
-//					if(occurence instanceof MindTreeOcc){
-//					sess.delete(occurence);
-//					}
+					// if(occurence instanceof Entry){
+					// sess.delete(occurence);
+					// }
+					// if(occurence instanceof MindTreeOcc){
+					// sess.delete(occurence);
+					// }
 
 
 				}
@@ -139,53 +144,52 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 
 				/*
-				 * Associations. 
-				 * First delete my associations.
-				 * Remember if Topic A has a seeAlso to Topic B
-				 * A has an association with B as a member & B.associations.size == 0 
-				 * So if we delete B, we need to go finding references in A. 
+				 * Associations. First delete my associations. Remember if Topic A has a seeAlso to
+				 * Topic B A has an association with B as a member & B.associations.size == 0 So if
+				 * we delete B, we need to go finding references in A.
 				 */
 				topic.getAssociations().clear();
-				for (Association assoc : (Set<Association>)topic.getAssociations()) {					
-					sess.delete(assoc);					
+				for (Association assoc : (Set<Association>) topic.getAssociations()) {
+					sess.delete(assoc);
 				}
 
 				/*
-				 * next delete any references to me in other's associations. 
-				 *  
+				 * next delete any references to me in other's associations.
+				 * 
 				 */
-				List<Association> associationsWithThisMember = sess.createCriteria(Association.class, "assoc")
-				.createAlias("assoc.members", "mem")
-				.add(Expression.eq("mem.id", topic.getId())).list();
+				List<Association> associationsWithThisMember = sess.createCriteria(
+						Association.class, "assoc").createAlias("assoc.members", "mem").add(
+						Expression.eq("mem.id", topic.getId())).list();
 
 
-				log.info("Associations With This Member: "+associationsWithThisMember.size());
-				for(Association assoc : associationsWithThisMember){
-					log.debug("removing "+topic+" from "+assoc);
+				log.info("Associations With This Member: " + associationsWithThisMember.size());
+				for (Association assoc : associationsWithThisMember) {
+					log.debug("removing " + topic + " from " + assoc);
 					assoc.getMembers().remove(topic);
 				}
 
 
-				System.out.println("last gasp "+topic.toPrettyString());
+				System.out.println("last gasp " + topic.toPrettyString());
 
-				sess.delete(topic);				
+				sess.delete(topic);
 				return true;
-			}});
+			}
+		});
 	}
 
 
 	public void deleteOccurrence(final Occurrence toDelete) {
 
-		getHibernateTemplate().execute(new HibernateCallback(){
+		getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 
-				Occurrence o  = (Occurrence) sess.get(Occurrence.class,toDelete.getId());
+				Occurrence o = (Occurrence) sess.get(Occurrence.class, toDelete.getId());
 
-				log.debug("going to delete "+o+" "+o.getId()+" "+o.getData());
+				log.debug("going to delete " + o + " " + o.getId() + " " + o.getData());
 
-				Set<TopicOccurrenceConnector> topics = o.getTopics();				
+				Set<TopicOccurrenceConnector> topics = o.getTopics();
 				for (TopicOccurrenceConnector toccConnector : topics) {
-					log.debug("remove "+toccConnector);
+					log.debug("remove " + toccConnector);
 
 					toccConnector.getTopic().getOccurences().remove(toccConnector);
 					sess.delete(toccConnector);
@@ -193,14 +197,14 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 				}
 				sess.delete(o);
 				return null;
-			}});
+			}
+		});
 
 	}
 
 	public void evict(Serializable obj) {
-		getHibernateTemplate().evict(obj);	
+		getHibernateTemplate().evict(obj);
 	}
-
 
 
 
@@ -217,72 +221,83 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	public Topic save(Topic t) throws HippoBusinessException {
 
-		log.info("SAVE "+t.getTitle()+" "+t.getUser());
+		log.info("SAVE " + t.getTitle() + " " + t.getUser());
 
 		//
-		//Save the subject. If they've just added the subject it will be unsaved,
-		//even if it's already in the DB, do a lookup.
+		// Save the subject. If they've just added the subject it will be unsaved,
+		// even if it's already in the DB, do a lookup.
 		//
-		Subject curSubj = t.getSubject();		
-		if(curSubj != null && curSubj.getId() == 0){
-			DetachedCriteria crit = DetachedCriteria.forClass(curSubj.getClass())
-			.add(Expression.eq("foreignID", curSubj.getForeignID()));
-			Subject saved = (Subject) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
-			if(saved == null){
+		Subject curSubj = t.getSubject();
+		if (curSubj != null && curSubj.getId() == 0) {
+			DetachedCriteria crit = DetachedCriteria.forClass(curSubj.getClass()).add(
+					Expression.eq("foreignID", curSubj.getForeignID()));
+			Subject saved = (Subject) DataAccessUtils.uniqueResult(getHibernateTemplate()
+					.findByCriteria(crit));
+			if (saved == null) {
 				getHibernateTemplate().save(curSubj);
-			}else{
+			} else {
 				t.setSubject(saved);
 			}
 		}
 
-		getHibernateTemplate().saveOrUpdate(t);		
+		getHibernateTemplate().saveOrUpdate(t);
 
-		return t;		
+		return t;
 	}
-	public Long saveSimple(Topic t){
+
+	public Long saveSimple(Topic t) {
 		return (Long) getHibernateTemplate().save(t);
 	}
 
-	public void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude,User currentUser) throws HippoBusinessException{
+	public void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude,
+			User currentUser) throws HippoBusinessException {
 
 		log.debug("-------------SAVE TOPICS LOCATION---------------");
-		log.debug("-------------tag "+tagID+" topic "+topicID+"---------------");	
+		log.debug("-------------tag " + tagID + " topic " + topicID + "---------------");
 
-		Object[] pms = {new Long(tagID),new Long(topicID),currentUser};
+		Object[] pms = { new Long(tagID), new Long(topicID), currentUser };
 
-		try{
-			TopicTypeConnector ttc = (TopicTypeConnector) DataAccessUtils.requiredUniqueResult(getHibernateTemplate().find(
-					"from TopicTypeConnector ttc where ttc.type.id = ? and ttc.topic.id = ? and ttc.topic.user = ?",pms));
-			
+		try {
+			TopicTypeConnector ttc = (TopicTypeConnector) DataAccessUtils
+					.requiredUniqueResult(getHibernateTemplate()
+							.find(
+									"from TopicTypeConnector ttc where ttc.type.id = ? and ttc.topic.id = ? and ttc.topic.user = ?",
+									pms));
+
 			ttc.setLatitude(latitude);
 			ttc.setLongitude(longitude);
 			getHibernateTemplate().save(ttc);
-			
-		}catch (IncorrectResultSizeDataAccessException e) {
-			throw new HippoBusinessException("Missing Connection to save Topic Location");
+
+		} catch (IncorrectResultSizeDataAccessException e) {
+			throw new HippoBusinessException("Error saving Topic Location. Connections: "
+					+ e.getActualSize());
 		}
 
 
 	}
 
 
-	public void saveOccurrenceLocation(long topicID, long occurrenceID,int latitude, int longitude,User currentUser) throws HippoBusinessException {
-		
-		Object[] pms = {new Long(occurrenceID),new Long(topicID),currentUser};
+	public void saveOccurrenceLocation(long topicID, long occurrenceID, int latitude,
+			int longitude, User currentUser) throws HippoBusinessException {
 
-		try{
-			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) DataAccessUtils.requiredUniqueResult(getHibernateTemplate().find(
-					"from TopicOccurrenceConnector toc where toc.occurrence.id = ? and toc.topic.id = ? and toc.topic.user = ?",pms));
-			
+		Object[] pms = { new Long(occurrenceID), new Long(topicID), currentUser };
+
+		try {
+			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) DataAccessUtils
+					.requiredUniqueResult(getHibernateTemplate()
+							.find(
+									"from TopicOccurrenceConnector toc where toc.occurrence.id = ? and toc.topic.id = ? and toc.topic.user = ?",
+									pms));
+
 			toc.setLatitude(latitude);
 			toc.setLongitude(longitude);
 			getHibernateTemplate().save(toc);
-			
-		}catch (IncorrectResultSizeDataAccessException e) {
+
+		} catch (IncorrectResultSizeDataAccessException e) {
 			throw new HippoBusinessException("Missing Connection to save Occurrence Location");
 		}
-		
-		
+
+
 	}
 
 }

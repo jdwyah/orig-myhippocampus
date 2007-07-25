@@ -23,20 +23,24 @@ public class UploadBoard extends Gadget {
 
 	private VerticalPanel mainPanel = new VerticalPanel();
 
-	private Manager manager;
 	private int size = 0;
 
 	// private SaveNeededListener saveNeeded;
 
 	public UploadBoard(final Manager manager) {
 
-		super(ConstHolder.myConstants.files());
-
-		this.manager = manager;
+		super(manager);
 
 		initWidget(mainPanel);
 
 	}
+
+
+	// @Override
+	public boolean isDisplayer() {
+		return true;
+	}
+
 
 	public int load(final Topic topic) {
 

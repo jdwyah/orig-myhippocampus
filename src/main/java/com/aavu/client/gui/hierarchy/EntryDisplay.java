@@ -38,7 +38,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 		setPixelSize(unscaledWidth, unscaledHeight);
 
 		setStyleName("H-EntryDisplay");
-		addStyleName("H-BlueFade");
+		// addStyleName("H-BlueFade");
 
 
 		addClickListener(this);

@@ -458,4 +458,6 @@ public interface Consts extends Messages {
 
 	String rename();
 
+	String children();
+
 }

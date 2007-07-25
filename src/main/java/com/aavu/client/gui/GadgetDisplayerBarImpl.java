@@ -1,7 +1,6 @@
 package com.aavu.client.gui;
 
 import java.util.Iterator;
-import java.util.List;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.gadgets.Gadget;
@@ -9,8 +8,8 @@ import com.aavu.client.gui.gadgets.Ribbon;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer {
 
@@ -48,24 +47,31 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 	}
 
 
-	public void load(Topic topic, List gadgets) {
+	public void load(Topic topic) {
 
 		this.topic = topic;
+
+		manager.getGadgetManager().load(topic);
 
 		gadgetPanel.clear();
 
 
-		for (Iterator iter = gadgets.iterator(); iter.hasNext();) {
+		for (Iterator iter = manager.getGadgetManager().getFullGadgetList().iterator(); iter
+				.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
 
-			gadget.load(topic);
+			if (!gadget.isDisplayer()) {
+				continue;
+			}
 
+			gadget.setVisible(true);
 			gadgetPanel.add(gadget);
 		}
 
 		setVisible(true);
 
-		for (Iterator iter = gadgets.iterator(); iter.hasNext();) {
+		for (Iterator iter = manager.getGadgetManager().getFullGadgetList().iterator(); iter
+				.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
 			gadget.nowVisible();
 		}
@@ -86,9 +92,13 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 		/*
 		 * if this is a first time add
 		 */
-		if (gadgetPanel.getWidgetIndex(gadget) == -1) {
+		if (!gadgetPanel.isVisible()) {
 			gadget.load(topic);
-			gadgetPanel.add(gadget);
+
+			gadget.setVisible(true);
+			// gadgetPanel.add(gadget);
+
+
 			gadget.showForFirstTime();
 		} else {
 			if (gadget.isVisible()) {
@@ -100,8 +110,10 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 		}
 	}
 
-	public Widget getWidget() {
-		return this;
+
+
+	public void addTo(Panel mainP) {
+		mainP.add(this);
 	}
 
 	// public void onClick(Widget sender) {

@@ -100,7 +100,7 @@ public class TopicServiceImpl implements TopicService {
 	public Topic createNew(String title, Topic prototype, Topic parent)
 			throws HippoBusinessException {
 
-		if (userIsOverSubscriptionLimit()) {
+		if ((prototype instanceof RealTopic) && userIsOverSubscriptionLimit()) {
 			log.info("User over Subscription Limit " + userService.getCurrentUser().getUsername());
 			throw new HippoSubscriptionException("Too many topics for your subscription.");
 		}

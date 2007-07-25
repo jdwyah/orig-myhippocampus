@@ -1,38 +1,33 @@
 package com.aavu.client.gui.gadgets;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.EntryPreviewWidget;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class EntryPreview extends Gadget {
+public class EntryGadget extends Gadget {
 
 
-	private EntryPreviewWidget entryPrev;
-	private Topic topic;
-	private Manager manager;
+	private VerticalPanel entryP;
 
-	public EntryPreview(Manager _manager) {
 
-		super(ConstHolder.myConstants.entry());
+	public EntryGadget(Manager _manager) {
 
-		this.manager = _manager;
+		super(_manager);
 
-		entryPrev = new EntryPreviewWidget();
 
-		entryPrev.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				// manager.editOccurrence(topic);
-			}
-		});
+		entryP = new VerticalPanel();
+		entryP.add(new Label(" "));
 
-		initWidget(entryPrev);
-
+		initWidget(entryP);
 
 		addStyleName("H-EntryPreview");
 
@@ -40,10 +35,37 @@ public class EntryPreview extends Gadget {
 
 	// @Override
 	public int load(Topic topic) {
-		this.topic = topic;
-		// entryPrev.load(topic);
-		return 1;
+
+		Set entries = topic.getEntries();
+		entryP.clear();
+
+		if (entries.size() < 1) {
+			entryP.add(new Label(" "));
+		}
+
+		for (Iterator iterator = entries.iterator(); iterator.hasNext();) {
+			Entry entry = (Entry) iterator.next();
+			// PEND MED whatever are we to do w/ "" titles?
+			entryP.add(new Label(" " + entry.getTitle()));
+			EntryPreviewWidget epw = new EntryPreviewWidget();
+			epw.load(entry);
+			entryP.add(epw);
+		}
+
+		return entries.size();
 	}
+
+	// @Override
+	public boolean isOnContextMenu() {
+		return true;
+	}
+
+
+	// @Override
+	public boolean isDisplayer() {
+		return true;
+	}
+
 
 	// @Override
 	public Image getPickerButton() {

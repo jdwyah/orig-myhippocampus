@@ -417,12 +417,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 	public int getTopicCount(User user) {
-		DetachedCriteria crit = DetachedCriteria.forClass(Topic.class).add(
-				Expression.eq("user", user)).add(Expression.ne("class", "association")).add(
-				Expression.ne("class", "metadate")).add(Expression.ne("class", "metatext")).add(
-				Expression.ne("class", "metalocation")).add(Expression.ne("class", "date")).add(
-				Expression.ne("class", "text")).add(Expression.ne("class", "location"))
-				.setProjection(Projections.rowCount());
+		DetachedCriteria crit = DetachedCriteria.forClass(RealTopic.class).add(
+				Expression.eq("user", user)).setProjection(Projections.rowCount());
 		return DataAccessUtils.intResult(getHibernateTemplate().findByCriteria(crit));
 	}
 

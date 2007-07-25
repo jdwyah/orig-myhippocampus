@@ -747,6 +747,8 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	/**
 	 * do we need to update both sides of this association?
 	 * 
+	 * TODO we need to check to make sure it's not already a member!
+	 * 
 	 * @param type
 	 * @return
 	 */

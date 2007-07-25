@@ -1,19 +1,17 @@
 package com.aavu.client.gui;
 
-import java.util.List;
-
 import com.aavu.client.domain.Topic;
-import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetClickListener;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Panel;
 
 public interface GadgetDisplayer extends GadgetClickListener {
 
-	
-	void load(Topic topic, List gadgetsToUse);
+
+	void load(Topic topic);
 
 	void unload();
 
-	Widget getWidget();
-	
+
+	void addTo(Panel mainP);
+
 }
