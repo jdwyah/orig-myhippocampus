@@ -14,12 +14,11 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
  * always returns unique == true
  * 
  * @author Jeff Dwyer
- *
+ * 
  */
 public class MockUserService implements UserService {
 
-	public User createUser(CreateUserRequestCommand comm)
-			throws DuplicateUserException {
+	public User createUser(CreateUserRequestCommand comm) throws DuplicateUserException {
 		// TODO Auto-generated method stub
 		return null;
 
@@ -61,7 +60,7 @@ public class MockUserService implements UserService {
 
 	public void changeToSubscription(Integer id, Subscription subscription) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public User getForPaypalID() {
@@ -71,27 +70,28 @@ public class MockUserService implements UserService {
 
 	public void subscriptionCancel(String paypalID) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void subscriptionNewSignup(String paypalID, long subscriptionID, String payerEmail) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void subscriptionRecordPayment(String paypalID) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID, String payerEmail) {
+	public void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID,
+			String payerEmail) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void subscriptionRecordPayment(long hippoID, String paypalID) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public List<Subscription> getAllUpgradeSubscriptions() {
@@ -99,9 +99,9 @@ public class MockUserService implements UserService {
 		return null;
 	}
 
-	public void addInvitationsTo(User inviter,int num) {
+	public void addInvitationsTo(User inviter, int num) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public User createUser(String user, String pass, String email, boolean superV) {
@@ -126,6 +126,11 @@ public class MockUserService implements UserService {
 	public boolean couldBeOpenID(String openIDusername) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void setDeliciousUpdate() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

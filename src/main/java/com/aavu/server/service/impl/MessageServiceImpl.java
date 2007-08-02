@@ -53,7 +53,7 @@ public class MessageServiceImpl implements MessageService {
 	private Topic createTagIfNeeded(String tagName, User user) throws HippoBusinessException {
 		log.debug("load tag named: " + tagName);
 
-		Topic rt = selectDAO.getForName(user, tagName);
+		Topic rt = selectDAO.getForNameCaseInsensitive(user, tagName);
 		if (null == rt) {
 			log.debug("was null, creating ");
 			Topic t = new RealTopic();
@@ -107,7 +107,7 @@ public class MessageServiceImpl implements MessageService {
 			String newTitle = subject;
 			int i = 0;
 			do {
-				oldTopic = selectDAO.getForName(u, newTitle);
+				oldTopic = selectDAO.getForNameCaseInsensitive(u, newTitle);
 				if (oldTopic != null) {
 					log.debug("Collision! " + newTitle);
 					newTitle = subject + "(" + i + ")";

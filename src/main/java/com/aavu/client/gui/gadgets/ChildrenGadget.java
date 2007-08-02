@@ -8,7 +8,7 @@ import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ChildrenGadget extends Gadget implements TopicLoader {
@@ -28,16 +28,16 @@ public class ChildrenGadget extends Gadget implements TopicLoader {
 		childPanel.addStyleName("H-ChildDisplay");
 
 
-		// PEND awkward. we'd really like to set scroll.setMaxHeight(),
-		// but that doesn't exist. setting it in all cases leads to excess space
-		ScrollPanel scroll = new ScrollPanel(childPanel);
-		scroll.setAlwaysShowScrollBars(false);
+		// // PEND awkward. we'd really like to set scroll.setMaxHeight(),
+		// // but that doesn't exist. setting it in all cases leads to excess space
+		// ScrollPanel scroll = new ScrollPanel(childPanel);
+		// scroll.setAlwaysShowScrollBars(false);
+		//
+		//
+		// scroll.setHeight(HEIGHT);
 
 
-		scroll.setHeight(HEIGHT);
-
-
-		initWidget(scroll);
+		initWidget(childPanel);
 
 
 	}
@@ -58,17 +58,18 @@ public class ChildrenGadget extends Gadget implements TopicLoader {
 
 			TopicTypeConnector conn = (TopicTypeConnector) iterator.next();
 
-
-			System.out.println("Child Count " + childCount);
 			Topic child = conn.getTopic();
 			childPanel.add(new TopicLink(child));
 
+			childCount++;
+		}
+
+		if (childCount < 1) {
+			childPanel.add(new Label(" "));
 		}
 
 		return childCount;
 	}
-
-
 
 	// @Override
 	public Image getPickerButton() {

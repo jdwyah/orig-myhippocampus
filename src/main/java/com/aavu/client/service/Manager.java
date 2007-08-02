@@ -14,7 +14,7 @@ import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.service.remote.GWTSubjectServiceAsync;
+import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface Manager {
@@ -39,7 +39,7 @@ public interface Manager {
 
 	GadgetManager getGadgetManager();
 
-	GWTSubjectServiceAsync getSubjectService();
+	GWTExternalServiceAsync getSubjectService();
 
 	TopicCache getTopicCache();
 
@@ -62,6 +62,10 @@ public interface Manager {
 	void createNew(Topic topic);
 
 	GadgetPopup newFrameGadget(Gadget gadget);
+
+	void addDeliciousTags(String username, String password, AsyncCallback callback);
+
+	void refreshAll();
 
 	// void explore(Topic myTag, List topics);
 

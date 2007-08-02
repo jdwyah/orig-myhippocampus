@@ -1,6 +1,6 @@
 package com.aavu.client.service.cache;
 
-import com.aavu.client.service.remote.GWTSubjectServiceAsync;
+import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.service.remote.GWTUserServiceAsync;
 
@@ -12,12 +12,12 @@ public class HippoCache {
 	private GWTTopicServiceAsync topicService;
 
 	private GWTUserServiceAsync userService;
-	private GWTSubjectServiceAsync subjectService;
+	private GWTExternalServiceAsync subjectService;
 
 	private TopicCache topicCache;
 
 	public HippoCache(GWTTopicServiceAsync topicService, GWTUserServiceAsync userService,
-			GWTSubjectServiceAsync subjectService2) {
+			GWTExternalServiceAsync subjectService2) {
 		this.topicService = topicService;
 		this.userService = userService;
 		this.subjectService = subjectService2;
@@ -34,7 +34,7 @@ public class HippoCache {
 		return userService;
 	}
 
-	public GWTSubjectServiceAsync getSubjectService() {
+	public GWTExternalServiceAsync getSubjectService() {
 		return subjectService;
 	}
 

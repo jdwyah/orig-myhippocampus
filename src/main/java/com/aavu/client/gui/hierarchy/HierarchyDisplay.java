@@ -34,7 +34,8 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 	private static final int THETA_START = 0;
 	private static final double THETA_INCR_START = .628;
-	private static final double THETA_DECR = .9;
+	private static final double THETA_DECR = .97;
+	private static final double THETA_INCR_MIN = .06;
 	private static final int SPIRAL_SCALE = 250;
 	private static final double PHI_SQUARED = Math.pow(1.61803399, 2);
 
@@ -58,6 +59,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	private double theta;
 	private OceanLabel backdropLabel;
 	private GUIManager guiManager;
+	private int i = 0;
 
 	public HierarchyDisplay(Manager manager, GUIManager map) {
 		super();
@@ -149,17 +151,22 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		double r = SPIRAL_SCALE * PHI_SQUARED * theta / Math.PI;
 
-		System.out.println(bubble.getTitle() + " r " + r + " theta " + theta + " l "
-				+ (r * Math.cos(theta)) + " " + (r * Math.sin(theta)));
+		// System.out.println(bubble.getTitle() + " r " + r + " theta " + theta + " l "
+		// + (r * Math.cos(theta)) + " " + (r * Math.sin(theta)));
+
+		System.out.println(bubble.getTitle() + " " + thetaIncr + i);
+		i++;
 
 		bubble.setLeft((int) (r * Math.cos(theta)));
 		bubble.setTop((int) (r * Math.sin(theta)));
+
 
 
 		theta += thetaIncr;
 
 		// reduce incr over the life of the spiral, otherwise they start really spreading out.
 		thetaIncr *= THETA_DECR;
+		thetaIncr = (thetaIncr < THETA_INCR_MIN) ? THETA_INCR_MIN : thetaIncr;
 	}
 
 	public boolean centerOn(Topic topic) {

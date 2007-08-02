@@ -165,8 +165,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(book);
 
-		Topic tomClancy = new RealTopic();
-		tomClancy.setTitle(E);
+		Topic tomClancy = new RealTopic(u, E);
 		editDAO.save(tomClancy);
 
 		patriotGames.tagTopic(book);
@@ -557,7 +556,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(patriotGames);
 
-		Topic savedPat = selectDAO.getForName(u, C);
+		Topic savedPat = selectDAO.getForNameCaseInsensitive(u, C);
 		assertEquals(1, savedPat.getAssociations().size());
 		assertNotNull(savedPat.getMetaValuesFor(author));
 		Topic savedClancy = (Topic) savedPat.getSingleMetaValueFor(author);
@@ -814,7 +813,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(tooOld);
 
-		Topic saved = selectDAO.getForName(u, G);
+		Topic saved = selectDAO.getForNameCaseInsensitive(u, G);
 
 		System.out.println("Too Old  " + saved.getCreated() + " " + tooOldDate);
 
@@ -830,7 +829,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(waytooOld);
 
-		Topic nsaved = selectDAO.getForName(u, F);
+		Topic nsaved = selectDAO.getForNameCaseInsensitive(u, F);
 
 		System.out.println("old " + oldDate2.getYear() + " " + oldDate2);
 		System.out.println("Way Too Old " + nsaved.getCreated() + " " + waytooOldDate + " "
@@ -917,7 +916,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		t1 = editDAO.save(t1);
 
-		Topic saved = selectDAO.getForName(u, C);
+		Topic saved = selectDAO.getForNameCaseInsensitive(u, C);
 		System.out.println("SAVED " + saved.toPrettyString());
 
 
@@ -977,7 +976,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(t);
 
-		Topic savedT = selectDAO.getForName(u, B);
+		Topic savedT = selectDAO.getForNameCaseInsensitive(u, B);
 
 		assertEquals(D, savedT.getSubject().getForeignID());
 
@@ -1000,8 +999,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		t2.setSubject(c_Subj);
 		editDAO.save(t2);
 
-		Topic s1 = selectDAO.getForName(u, B);
-		Topic s2 = selectDAO.getForName(u, C);
+		Topic s1 = selectDAO.getForNameCaseInsensitive(u, B);
+		Topic s2 = selectDAO.getForNameCaseInsensitive(u, C);
 
 		Subject ss1 = s1.getSubject();
 		Subject ss2 = s2.getSubject();
@@ -1025,7 +1024,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(t);
 
-		Topic savedT = selectDAO.getForName(u, B);
+		Topic savedT = selectDAO.getForNameCaseInsensitive(u, B);
 
 		Subject b_Subj = new AmazonBook();
 		b_Subj.setForeignID(D);
@@ -1035,7 +1034,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(t);
 
-		Topic savedTAgain = selectDAO.getForName(u, B);
+		Topic savedTAgain = selectDAO.getForNameCaseInsensitive(u, B);
 
 		assertEquals(D, savedTAgain.getSubject().getForeignID());
 
@@ -1054,7 +1053,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			string = C;
 			log.debug("blank tags, setting topic to; " + string);
 		}
-		Topic t = selectDAO.getForName(u, string);
+		Topic t = selectDAO.getForNameCaseInsensitive(u, string);
 
 		if (null == t) {
 			log.debug("was null, creating as Topic ");
@@ -1094,7 +1093,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			string = C;
 			log.debug("blank tags, setting topic to; " + string);
 		}
-		Topic t = selectDAO.getForName(u, string);
+		Topic t = selectDAO.getForNameCaseInsensitive(u, string);
 		if (null == t) {
 			log.debug("was null, creating as Topic ");
 			t = new RealTopic();
@@ -1174,7 +1173,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(2, savedL.size());
 
 
-		book = (Topic) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 
 		System.out.println("patgames " + patriotGames.toPrettyString());
 		System.out.println("book " + book.toPrettyString());
@@ -1186,7 +1185,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(1, savedL.size());
 
-		book = (Topic) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(0,book.getInstances().size());
 
 
@@ -1230,7 +1229,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(2, savedL.size());
 
 
-		book = (Topic) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(1,book.getInstances().size());
 
 		editDAO.delete(patriotGames);
@@ -1238,7 +1237,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(1, savedL.size());
 
-		book = (Topic) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(0,book.getInstances().size());
 
 		// TODO assert that lastEntry has been deleted
@@ -1264,8 +1263,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(book);
 
-		Topic tomClancy = new RealTopic();
-		tomClancy.setTitle(E);
+		Topic tomClancy = new RealTopic(u, E);
 		editDAO.save(tomClancy);
 
 		patriotGames.tagTopic(book);
@@ -1290,7 +1288,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(4, savedL.size());
 
 
-		book = (Topic) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(2,book.getInstances().size());
 
 		editDAO.delete(patriotGames);
@@ -1298,7 +1296,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(3, savedL.size());
 
-		book = (Topic) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(1,book.getInstances().size());
 
 
@@ -1320,8 +1318,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(book);
 
-		Topic tomClancy = new RealTopic();
-		tomClancy.setTitle(E);
+		Topic tomClancy = new RealTopic(u, E);
 		editDAO.save(tomClancy);
 
 		patriotGames.tagTopic(book);
@@ -1343,7 +1340,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(3, savedL.size());
 
 
-		book = (Topic) selectDAO.getForName(u, D);
+		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(1,book.getInstances().size());
 
 		editDAO.delete(book);
@@ -1356,7 +1353,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 			assertNotSame(D, identifier.getTopicTitle());
 		}
 
-		patriotGames = (Topic) selectDAO.getForName(u, C);
+		patriotGames = (Topic) selectDAO.getForNameCaseInsensitive(u, C);
 		assertEquals(0, patriotGames.getTypes().size());
 
 	}
@@ -1597,8 +1594,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(book);
 
-		Topic tomClancy = new RealTopic();
-		tomClancy.setTitle(E);
+		Topic tomClancy = new RealTopic(u, E);
 		editDAO.save(tomClancy);
 
 		patriotGames.tagTopic(book);

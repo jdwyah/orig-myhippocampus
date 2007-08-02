@@ -78,4 +78,9 @@ public class BrowserManager extends AbstractManager {
 		return null;
 	}
 
+	public void refreshAll() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

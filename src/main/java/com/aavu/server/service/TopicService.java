@@ -35,6 +35,8 @@ public interface TopicService {
 	 */
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 
+	void addLinkToTags(WebLink link, String[] tags, Topic parent) throws HippoBusinessException;
+
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
 	Topic createNew(String title, Topic prototype, Topic parent) throws HippoBusinessException;
@@ -89,7 +91,7 @@ public interface TopicService {
 
 	Topic getForID(long topicID);
 
-	Topic getForName(String string);
+	Topic getForNameCaseInsensitive(String string);
 
 	List<TopicIdentifier> getLinksTo(Topic topic);
 
@@ -126,6 +128,8 @@ public interface TopicService {
 	MindTree saveTree(MindTree tree);
 
 	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
+
+	Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException;
 
 	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng)
 			throws HippoException;

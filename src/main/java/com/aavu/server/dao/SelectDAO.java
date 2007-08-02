@@ -25,7 +25,7 @@ public interface SelectDAO {
 	
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user,int start, int max, String startStr);
 	Topic getForID(User currentUser, long topicID);
-	Topic getForName(User user,String string);
+	Topic getForNameCaseInsensitive(User user,String string);
 	List<TimeLineObj> getTimeline(long tagID, User user);
 	List<TimeLineObj> getTimeline(User user);
 	MetaSeeAlso getSeeAlsoSingleton();

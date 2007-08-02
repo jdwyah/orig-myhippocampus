@@ -221,7 +221,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	public Topic save(Topic t) throws HippoBusinessException {
 
-		log.info("SAVE " + t.getTitle() + " " + t.getUser());
+		log.debug("SAVE " + t.getTitle() + " User:" + t.getUser());
 
 		//
 		// Save the subject. If they've just added the subject it will be unsaved,
@@ -240,6 +240,10 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 			}
 		}
 
+		// return (Topic) getHibernateTemplate().merge(t);
+		// getHibernateTemplate().merge(t);
+
+		// getHibernateTemplate().replicate(t, replicationMode)
 		getHibernateTemplate().saveOrUpdate(t);
 
 		return t;
@@ -252,7 +256,6 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 	public void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude,
 			User currentUser) throws HippoBusinessException {
 
-		log.debug("-------------SAVE TOPICS LOCATION---------------");
 		log.debug("-------------tag " + tagID + " topic " + topicID + "---------------");
 
 		Object[] pms = { new Long(tagID), new Long(topicID), currentUser };

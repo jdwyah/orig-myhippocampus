@@ -1,7 +1,5 @@
 package com.aavu.server.service.gwt;
 
-import java.io.File;
-
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContext;
@@ -12,17 +10,22 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 public abstract class BaseTestNoTransaction extends AbstractDependencyInjectionSpringContextTests {
+
+
+
+	private String username = "test-with-data";
+
 	@Override
 	protected String[] getConfigLocations() {
 
-	
-		
-		
+
+
 		PropertyConfigurator.configure(getClass().getResource("/log4j.properties"));
-		
+
 		String path = "src/main/webapp/WEB-INF/";
-		String pathh = "file:"+path;
-		return new String[] {pathh+"applicationContext-hibernate.xml",pathh+"applicationContext.xml"};
+		String pathh = "file:" + path;
+		return new String[] { pathh + "applicationContext-hibernate.xml",
+				pathh + "applicationContext.xml" };
 
 	}
 
@@ -43,19 +46,22 @@ public abstract class BaseTestNoTransaction extends AbstractDependencyInjectionS
 	 */
 	private void createSecureContext() {
 
-		TestingAuthenticationToken auth = new TestingAuthenticationToken(getUName(), getPass(), new GrantedAuthority[] {
-				new GrantedAuthorityImpl("ROLE_TELLER"), new GrantedAuthorityImpl("ROLE_PERMISSION_LIST") });
-		
+		TestingAuthenticationToken auth = new TestingAuthenticationToken(getUsername(),
+				getUsername(), new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_TELLER"),
+						new GrantedAuthorityImpl("ROLE_PERMISSION_LIST") });
+
 		SecurityContext secureContext = new SecurityContextImpl();
 		secureContext.setAuthentication(auth);
 		SecurityContextHolder.setContext(secureContext);
 
 	}
-	protected String getUName(){
-		return "test-with-data";		
+
+	protected String getUsername() {
+		return username;
 	}
-	protected String getPass(){
-		return "test-with-data";		
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
@@ -64,6 +70,6 @@ public abstract class BaseTestNoTransaction extends AbstractDependencyInjectionS
 	private static void destroySecureContext() {
 		SecurityContextHolder.setContext(new SecurityContextImpl());
 	}
-	
-	
+
+
 }

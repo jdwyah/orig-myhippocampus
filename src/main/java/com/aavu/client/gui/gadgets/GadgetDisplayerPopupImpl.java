@@ -47,7 +47,8 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 			GadgetPopup popup = (GadgetPopup) iterator.next();
 			popup.setLocation(cTop, left);
 			System.out.println("normalize " + popup.getHeight());
-			cTop += popup.getHeight();
+
+			cTop += popup.getOffsetHeight();
 		}
 	}
 
@@ -61,20 +62,21 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
 			GadgetPopup popup = (GadgetPopup) iterator.next();
-
+			popup.nowShowTopic(topic);
 
 			// System.out.println("GadgetDisplayPopupImpl popup set vis " + popup.getLeft() + " " +
 			// popup.getTop());
 
 
-			popup.setWidth(100);
-			popup.setHeight(100);
-			System.out.println("w h " + getOffsetWidth() + " " + getOffsetHeight());
-			popup.setWidth(100);
+			// popup.setWidth(100);
+			// popup.setHeight(100);
+
+			System.out.println("w h " + popup.getOffsetWidth() + " " + popup.getOffsetHeight());
+
 			popup.setVisible(true);
 
 		}
-
+		normalize();
 	}
 
 	/**
@@ -84,7 +86,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 	}
 
 	public void unload() {
-		System.out.println("-----------GadgetDisplayPopup Unload");
+		// System.out.println("-----------GadgetDisplayPopup Unload");
 
 		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
 			GadgetPopup popup = (GadgetPopup) iterator.next();

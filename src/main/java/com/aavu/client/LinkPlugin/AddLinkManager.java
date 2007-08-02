@@ -19,7 +19,7 @@ import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.service.remote.GWTSubjectServiceAsync;
+import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -144,7 +144,7 @@ public class AddLinkManager implements Manager, CloseListener {
 		throw new UnsupportedOperationException();
 	}
 
-	public GWTSubjectServiceAsync getSubjectService() {
+	public GWTExternalServiceAsync getSubjectService() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -175,6 +175,16 @@ public class AddLinkManager implements Manager, CloseListener {
 	public GadgetPopup newFrameGadget(Gadget gadget) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void addDeliciousTags(String username, String password, AsyncCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void refreshAll() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

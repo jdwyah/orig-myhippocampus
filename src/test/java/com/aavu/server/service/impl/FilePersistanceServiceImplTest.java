@@ -90,7 +90,7 @@ public class FilePersistanceServiceImplTest extends BaseTestWithTransaction {
 
 			fileService.saveFileToTopic(fileToSave, t, userService.getCurrentUser());
 
-			t = selectDAO.getForName(userService.getCurrentUser(), TOPIC_TITLE);
+			t = selectDAO.getForNameCaseInsensitive(userService.getCurrentUser(), TOPIC_TITLE);
 
 			assertEquals(1, t.getOccurenceObjs().size());
 

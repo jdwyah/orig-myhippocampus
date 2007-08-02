@@ -1,0 +1,5 @@
+<?xml version="1.0" standalone="yes"?>
+<bundles>
+  <bundle name="cs" tags="ES ExecCommand Flash SemanticWeb Timeline WYSIWYG Web2.0 acegi ai ajax algorithms amazon aop api autocomplete aws c3p0 cache database db4o dojo dwr eclipse firefox gwt programming sitemesh spring tm4j topicmaps widget"/>
+  <bundle name="life" tags="ATypicalStory cooking cycling"/>
+</bundles>

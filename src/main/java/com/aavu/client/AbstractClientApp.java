@@ -1,8 +1,8 @@
 package com.aavu.client;
 
 import com.aavu.client.service.cache.HippoCache;
-import com.aavu.client.service.remote.GWTSubjectService;
-import com.aavu.client.service.remote.GWTSubjectServiceAsync;
+import com.aavu.client.service.remote.GWTExternalService;
+import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.aavu.client.service.remote.GWTTopicService;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.service.remote.GWTUserService;
@@ -28,7 +28,7 @@ public abstract class AbstractClientApp {
 		// Window.alert("1");
 		GWTTopicServiceAsync topicService;
 		GWTUserServiceAsync userService;
-		GWTSubjectServiceAsync subjectService;
+		GWTExternalServiceAsync subjectService;
 
 		topicService = (GWTTopicServiceAsync) GWT.create(GWTTopicService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) topicService;
@@ -48,7 +48,7 @@ public abstract class AbstractClientApp {
 		ServiceDefTarget endpointUser = (ServiceDefTarget) userService;
 		endpointUser.setServiceEntryPoint(pre + "userService");
 
-		subjectService = (GWTSubjectServiceAsync) GWT.create(GWTSubjectService.class);
+		subjectService = (GWTExternalServiceAsync) GWT.create(GWTExternalService.class);
 		ServiceDefTarget endpointSubject = (ServiceDefTarget) subjectService;
 		endpointSubject.setServiceEntryPoint(pre + "subjectService");
 

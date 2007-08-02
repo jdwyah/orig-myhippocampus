@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
  * Stores the ctrl key for before the event goes by and delays clickEvents until we're sure it's not
  * a double click before dispatching.
  * 
+ * TODO click stuff can be replaced because 1.4RC2 should have DOM.eventGetCurrentEvent()
  * 
  * @author Jeff Dwyer
  * 

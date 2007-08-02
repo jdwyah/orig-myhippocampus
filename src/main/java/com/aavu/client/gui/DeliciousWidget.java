@@ -3,7 +3,6 @@ package com.aavu.client.gui;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
-import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -16,12 +15,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class DeliciousWidget extends PopupWindow {
 
-	private MindscapeManager manager;
+	private Manager manager;
 	private PasswordTextBox password;
 	private TextBox username;
 
-	public DeliciousWidget(MindscapeManager _manager) {
-		super(_manager.newFrame(),ConstHolder.myConstants.deliciousPopupTitle());
+	public DeliciousWidget(Manager _manager) {
+		super(_manager.newFrame(), ConstHolder.myConstants.deliciousPopupTitle());
 		this.manager = _manager;
 
 		VerticalPanel mainPanel = new VerticalPanel();
@@ -42,22 +41,24 @@ public class DeliciousWidget extends PopupWindow {
 		mainPanel.add(pP);
 
 		Button godoitB = new Button(ConstHolder.myConstants.deliciousSubmit());
-		godoitB.addClickListener(new ClickListener(){
+		godoitB.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
-				manager.addDeliciousTags(username.getText(),password.getText(),new StdAsyncCallback("AddDeliciousTags"){
+				manager.addDeliciousTags(username.getText(), password.getText(),
+						new StdAsyncCallback("AddDeliciousTags") {
 
-					public void onSuccess(Object result) {
-						super.onSuccess(result);
-						manager.refreshAll();
-						DeliciousWidget.this.close();
-					}					
-				});	
-			}});
+							public void onSuccess(Object result) {
+								super.onSuccess(result);
+								manager.refreshAll();
+								DeliciousWidget.this.close();
+							}
+						});
+			}
+		});
 
 		mainPanel.add(godoitB);
 
 		setContent(mainPanel);
-	}	
+	}
 
 
 

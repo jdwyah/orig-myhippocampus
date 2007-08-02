@@ -11,21 +11,22 @@
 	<bean id="propertyConfigurer" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:config.properties" />
 	</bean>
-	
+
 	<!-- Turn on @Required -->
-	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
 		<property name="topicService" ref="topicService" />
 		<property name="searchService" ref="searchService" />
-	</bean>	
+	</bean>
 
 	<bean id="GWTUserService" class="com.aavu.server.service.gwt.GWTUserServiceImpl">
 		<property name="userService" ref="userService" />
 	</bean>
 
-	<bean id="GWTSubjectService" class="com.aavu.server.service.gwt.GWTSubjectServiceImpl">
-		<property name="externalServicesService" ref="externalServicesService" />
+	<bean id="GWTSubjectService" class="com.aavu.server.service.gwt.GWTExternalServiceImpl">
+		<property name="externalServicesService" ref="externalServicesService" />		
+		<property name="deliciousService" ref="deliciousService"/>
 	</bean>
 
 	<bean id="facebookService" class="com.aavu.server.service.facebook.impl.FacebookServiceImpl"></bean>
@@ -34,13 +35,13 @@
 		<property name="userDAO" ref="userDAO" />
 		<property name="editDAO" ref="editDAO" />
 		<property name="maxUsers" value="150" />
-		<property name="startingInvitations" value="3"/>
+		<property name="startingInvitations" value="3" />
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
 		<property name="selectDAO" ref="selectDAO" />
 		<property name="editDAO" ref="editDAO"></property>
 		<property name="userService" ref="userService" />
-	</bean>	
+	</bean>
 	<bean id="searchService" class="com.aavu.server.service.impl.SearchServiceImpl">
 		<property name="compass" ref="compass" />
 		<property name="compassGPS" ref="compassGPS"></property>
@@ -49,19 +50,22 @@
 		<property name="userService" ref="userService" />
 	</bean>
 	<bean id="messageService" class="com.aavu.server.service.impl.MessageServiceImpl">
-		<property name="userService" ref="userService" />		
+		<property name="userService" ref="userService" />
 		<property name="editDAO" ref="editDAO" />
 		<property name="selectDAO" ref="selectDAO" />
-		<property name="fileService" ref="fileService" />		
+		<property name="fileService" ref="fileService" />
 	</bean>
 	<bean id="externalServicesService" class="com.aavu.server.service.impl.ExternalServicesServiceImpl">
 		<property name="userService" ref="userService" />
 		<property name="topicService" ref="topicService" />
 		<property name="restUserAgent" value="MyHippocampus.com Server" />
-		
-		<property name="delicousApiAuthURL" value="api.del.icio.us"/>
-		<property name="delicousApiUrlGet" value="https://api.del.icio.us/v1/posts/get?"/>
-		<property name="delicousApiUrlAll" value="https://api.del.icio.us/v1/posts/all?"/>
+	</bean>
+	<bean id="deliciousService" class="com.aavu.server.service.impl.DeliciousServiceImpl">
+		<constructor-arg value="MyHippocampus.com Server" />
+		<constructor-arg value="api.del.icio.us" />
+
+		<property name="userService" ref="userService" />
+		<property name="topicService" ref="topicService" />
 	</bean>
 
 	<bean id="awsConnection" class="com.aavu.server.s3.com.amazon.s3.AWSAuthConnection">
@@ -91,7 +95,7 @@
 		</property>
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="k2smtpout.secureserver.net" /><!-- http://help.godaddy.com/article.php?article_id=122&topic_id=120 -->		
+		<property name="host" value="k2smtpout.secureserver.net" /><!-- http://help.godaddy.com/article.php?article_id=122&topic_id=120 -->
 	</bean>
 	<bean id="invitationService" class="com.aavu.server.service.impl.InvitationServiceImpl">
 		<property name="mailingListDAO" ref="mailingListDAO"></property>
@@ -117,12 +121,12 @@
 	<!-- ensure that the above transactional advice runs for any execution
 		of an operation defined by the FooService interface.
 		Odd SprindIDE 2.0 errors if these are in the same aop:config -->
-	 <aop:config>
+	<aop:config>
 		<aop:pointcut id="servicesPointcut" expression="execution(* com.aavu.server.service.*.*(..))" />
 	</aop:config>
-	
+
 	<aop:config>
 		<aop:advisor pointcut-ref="servicesPointcut" advice-ref="txAdvice" />
-	</aop:config> 	
+	</aop:config>
 
 </beans>

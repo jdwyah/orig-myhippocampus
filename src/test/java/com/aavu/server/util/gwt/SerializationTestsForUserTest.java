@@ -10,13 +10,9 @@ import com.aavu.server.service.gwt.Converter;
 public class SerializationTestsForUserTest extends BaseTestNoTransaction {
 
 
-	@Override
-	protected String getPass() {
-		return "test";
-	}
 
 	@Override
-	protected String getUName() {
+	protected String getUsername() {
 		return "test";
 	}
 

@@ -747,7 +747,7 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	/**
 	 * do we need to update both sides of this association?
 	 * 
-	 * TODO we need to check to make sure it's not already a member!
+	 * TODO we need to check to make sure it's not already a member! TODO unit test this code
 	 * 
 	 * @param type
 	 * @return
@@ -755,7 +755,23 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	public boolean addType(Topic type, int lat, int lng) {
 		TopicTypeConnector conn = new TopicTypeConnector(this, type, lat, lng);
 		// type.getInstances().add(conn);
-		return getTypes().add(conn);
+
+		boolean exists = false;
+		for (Iterator iterator = getTypes().iterator(); iterator.hasNext();) {
+			TopicTypeConnector ttc = (TopicTypeConnector) iterator.next();
+			if (ttc.getType().equals(type)) {
+				exists = true;
+			}
+		}
+
+		if (!exists) {
+			type.getInstances().add(conn);
+			return getTypes().add(conn);
+		} else {
+			return true;
+		}
+
+
 		// return getTypes().add(new Topic(topic,-1,-1));
 	}
 

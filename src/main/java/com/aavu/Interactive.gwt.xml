@@ -7,6 +7,7 @@
 	<inherits name='com.mapitz.gwt.googleMaps.GoogleMaps' /> 
     <inherits name='org.gwm.GwtWindowManager'/>
     <inherits name='com.allen_sauer.gwt.dragdrop.DragAndDrop'/>
+    
     <inherits name="com.google.gwt.i18n.I18N"/>
 	<inherits name="com.google.gwt.json.JSON"/> 
 

@@ -13,9 +13,11 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public interface UserService {
 
-	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException, HippoBusinessException;
+	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException,
+			HippoBusinessException;
 
-	User createUser(String user, String pass, String email, boolean superV) throws HippoBusinessException;
+	User createUser(String user, String pass, String email, boolean superV)
+			throws HippoBusinessException;
 
 	void delete(Integer id) throws PermissionDeniedException;
 
@@ -26,16 +28,17 @@ public interface UserService {
 	User getCurrentUser() throws UsernameNotFoundException;
 
 	User getUserWithNormalization(String username);
-	
+
 	boolean exists(String username);
-	
+
 	void subscriptionCancel(String paypalID);
 
-	void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID, String payerEmail) throws HippoBusinessException;
-	 	
-	void subscriptionRecordPayment(long hippoID,String paypalID);
+	void subscriptionNewSignup(long hippoUserID, String paypalID, long subscriptionID,
+			String payerEmail) throws HippoBusinessException;
 
-	void addInvitationsTo(User inviter,int num);
+	void subscriptionRecordPayment(long hippoID, String paypalID);
+
+	void addInvitationsTo(User inviter, int num);
 
 	void toggleEnabled(Integer id) throws PermissionDeniedException;
 
@@ -45,6 +48,8 @@ public interface UserService {
 
 	boolean couldBeOpenID(String openIDusername);
 
+	void setDeliciousUpdate();
 
-	
+
+
 }

@@ -29,6 +29,10 @@
 		<property name="paypalID" type="string" column="paypalID">
 		</property>
 				
+		<property name="lastDeliciousDate" type="java.util.Date">			
+			<meta attribute="field-description">Last DeliciousDate</meta>
+			<column name="lastDeliciousDate" sql-type="timestamp" />
+		</property>
 				
 				
 		<many-to-one name="subscription" class="Subscription" column="subscription_id" lazy="false"/>

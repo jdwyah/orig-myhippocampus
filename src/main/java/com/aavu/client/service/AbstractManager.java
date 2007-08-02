@@ -15,7 +15,7 @@ import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.images.Images;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.service.remote.GWTSubjectServiceAsync;
+import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.strings.Consts;
 import com.google.gwt.core.client.GWT;
@@ -110,13 +110,20 @@ public abstract class AbstractManager implements Manager {
 		return hippoCache;
 	}
 
-	public GWTSubjectServiceAsync getSubjectService() {
+	public GWTExternalServiceAsync getSubjectService() {
 		return getHippoCache().getSubjectService();
 	}
 
 	public TopicCache getTopicCache() {
 		return getHippoCache().getTopicCache();
 	}
+
+
+	public void addDeliciousTags(String username, String pass, AsyncCallback callback) {
+		getHippoCache().getSubjectService().addDeliciousTags(username, pass, callback);
+	}
+
+
 
 	public User getUser() {
 		// TODO Auto-generated method stub
@@ -132,5 +139,7 @@ public abstract class AbstractManager implements Manager {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 }

@@ -14,6 +14,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EntryDisplay extends AbstractDraggableBubble implements TopicDisplayObj, ClickListener {
 
+	private static final double MIN_FONT = .4;
+
+	private static final double MAX_FONT = .8;
+
+	private static final int DEF_WIDTH = 0;
+
+	private static final int DEF_HEIGHT = 0;
 
 	private TopicOccurrenceConnector owl;
 	private HierarchyDisplay display;
@@ -40,8 +47,6 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 		setStyleName("H-EntryDisplay");
 		// addStyleName("H-BlueFade");
 
-
-		addClickListener(this);
 
 	}
 
@@ -111,9 +116,22 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 		entryPreview.setPixelSize((int) (unscaledWidth * currentScale),
 				(int) (unscaledHeight * currentScale));
 
+
+		double font_size = getFontFor(1, currentScale);
+
+		entryPreview.setTextSize(font_size);
+
+
 	}
 
+	public double getFontFor(int size, double zoom) {
 
+		double s = MIN_FONT + .4 * zoom;
+
+		s = s > MAX_FONT ? MAX_FONT : s;
+
+		return s;
+	}
 
 	public Widget getWidget() {
 		return this;
@@ -122,15 +140,18 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 	// @Override
 	protected Widget getOurWidget() {
 		entryPreview = new TopicWidget();
-		entryPreview.load((Entry) owl.getOccurrence());
+		Entry e = (Entry) owl.getOccurrence();
+		entryPreview.load(e);
 
-		unscaledWidth = 150;
-		unscaledHeight = 50;
+		unscaledWidth = e.getWidth();
+		unscaledHeight = e.getHeight();
 
 
 		mainPanel = new AbsolutePanel();
 
 		mainPanel.add(entryPreview);
+
+
 
 		return mainPanel;
 	}

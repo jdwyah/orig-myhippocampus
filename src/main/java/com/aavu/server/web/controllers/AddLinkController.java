@@ -10,7 +10,6 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
-import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.LinkAndUser;
@@ -22,37 +21,37 @@ import com.aavu.server.web.domain.validation.AddLinkCommandValidator;
 public class AddLinkController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(AddLinkController.class);
 
-	
-	private UserService userService;	
+
+	private UserService userService;
 	private TopicService topicService;
 
-	public AddLinkController(){
-		setCommandClass(AddLinkCommand.class);	
+	public AddLinkController() {
+		setCommandClass(AddLinkCommand.class);
 		setValidator(new AddLinkCommandValidator());
-	}	
-	
+	}
+
 
 	@Override
 	protected Object formBackingObject(HttpServletRequest req) throws Exception {
 		log.debug("FormBackingObject");
-		
+
 		String url = req.getParameter("url");
 
 		AddLinkCommand command = new AddLinkCommand();
-		
+
 		LinkAndUser linkAndU = topicService.getWebLinkForURLAndUser(url);
-		
+
 		WebLink link = linkAndU.getWeblink();
-		
-		if(url != null && url.length() > 0 && link != null){
-			
+
+		if (url != null && url.length() > 0 && link != null) {
+
 			command.setCommand_url(url);
 
 			command.setCommand_description(link.getDescription());
 
 			command.setCommand_notes(link.getNotes());
-			
-		}else{
+
+		} else {
 
 			command.setCommand_url(url);
 
@@ -61,58 +60,59 @@ public class AddLinkController extends SimpleFormController {
 			command.setCommand_notes(req.getParameter("notes"));
 
 		}
-		
-		return command;		
+
+		return command;
 	}
 
 
 	@Override
-	protected void doSubmitAction(Object command) throws Exception {		
-		log.debug("command: "+command);
+	protected void doSubmitAction(Object command) throws Exception {
+		log.debug("command: " + command);
 		AddLinkCommand addLink = (AddLinkCommand) command;
-		
-		
-		log.debug("addLinkCommand: "+addLink);
-		
-		
-		WebLink link = new WebLink(userService.getCurrentUser(),addLink.getCommand_description(),addLink.getCommand_url(),addLink.getCommand_notes());
-		
+
+
+		log.debug("addLinkCommand: " + addLink);
+
+
+		WebLink link = new WebLink(userService.getCurrentUser(), addLink.getCommand_description(),
+				addLink.getCommand_url(), addLink.getCommand_notes());
+
 		link = (WebLink) topicService.save(link);
-		
+
 		String[] tags = addLink.getCommand_tags().split(";");
-		
-		log.debug("tags: "+Arrays.toString(tags));
-		
+
+		log.debug("tags: " + Arrays.toString(tags));
+
 		boolean found = false;
 		for (int i = 0; i < tags.length; i++) {
-			if(!tags[i].equals("")){
+			if (!tags[i].equals("")) {
 				found = true;
 			}
 		}
-		
-		if(!found){
-			log.debug("No tags, setting topic to; "+addLink.getCommand_description());		
+
+		if (!found) {
+			log.debug("No tags, setting topic to; " + addLink.getCommand_description());
 			tags[0] = addLink.getCommand_description();
 		}
-		
+
 		topicService.addLinkToTags(link, tags);
-		
+
 	}
 
 
 
 	@Override
-	protected Map referenceData(HttpServletRequest arg0) throws Exception {		
-		
+	protected Map referenceData(HttpServletRequest arg0) throws Exception {
+
 		Map reference = new HashMap<String, Object>();
-				
-		try{			
+
+		try {
 			User su = userService.getCurrentUser();
-			reference.put("user", su);			
-		}catch(UsernameNotFoundException e){
+			reference.put("user", su);
+		} catch (UsernameNotFoundException e) {
 			log.debug("No user logged in.");
 		}
-		
+
 		return reference;
 	}
 

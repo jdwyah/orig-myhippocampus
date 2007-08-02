@@ -7,11 +7,12 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.google.gwt.user.client.rpc.RemoteService;
 
-public interface GWTSubjectService extends RemoteService {
+public interface GWTExternalService extends RemoteService {
 
 	/**
-     * @gwt.typeArgs <com.aavu.client.domain.subjects.Subject>
-     */
+	 * @gwt.typeArgs <com.aavu.client.domain.subjects.Subject>
+	 */
 	List lookup(Subject type, String matchString) throws HippoBusinessException;
+
 	void addDeliciousTags(String username, String password) throws HippoException;
 }

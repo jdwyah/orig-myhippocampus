@@ -13,11 +13,13 @@ public class AbstractTopicOccurrenceConnector implements Serializable, IsSeriali
 	private Occurrence occurrence;
 	private int latitude;
 	private int longitude;
-	
-	public AbstractTopicOccurrenceConnector(){}
-	
-	
-	public AbstractTopicOccurrenceConnector(Topic topic, Occurrence occurrence, int latitude, int longitude) {
+
+	public AbstractTopicOccurrenceConnector() {
+	}
+
+
+	public AbstractTopicOccurrenceConnector(Topic topic, Occurrence occurrence, int latitude,
+			int longitude) {
 		super();
 		this.topic = topic;
 		this.occurrence = occurrence;
@@ -28,28 +30,35 @@ public class AbstractTopicOccurrenceConnector implements Serializable, IsSeriali
 	public long getId() {
 		return id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	public int getLatitude() {
 		return latitude;
 	}
+
 	public void setLatitude(int latitude) {
 		this.latitude = latitude;
 	}
+
 	public int getLongitude() {
 		return longitude;
 	}
+
 	public void setLongitude(int longitude) {
 		this.longitude = longitude;
 	}
+
 	public Topic getTopic() {
 		return topic;
 	}
+
 	public void setTopic(Topic topic) {
 		this.topic = topic;
 	}
-	
+
 
 
 	public Occurrence getOccurrence() {
@@ -62,32 +71,33 @@ public class AbstractTopicOccurrenceConnector implements Serializable, IsSeriali
 	}
 
 
-	//@Override
+	// @Override
 	public int hashCode() {
 		final int PRIME = 31;
-		int result = 1;		
-		result = PRIME * result + (int) (latitude * 1000);		
+		int result = 1;
+		result = PRIME * result + (int) (latitude * 1000);
 		result = PRIME * result + (int) (longitude * 1000);
 		result = PRIME * result + ((topic == null) ? 0 : topic.hashCode());
 		result = PRIME * result + ((occurrence == null) ? 0 : occurrence.hashCode());
 		return result;
 	}
-	//@Override
+
+	// @Override
 	public boolean equals(Object obj) {
-		
-		
-//		System.out.println(".equals");
-//		System.out.println("Me "+topic+" "+type);
-//		TopicTypeConnector him = (TopicTypeConnector) obj;
-//		System.out.println("Him "+him.getTopic()+" "+him.getType());
-//		
-//		
-//		System.out.println("2"+(!topic.equals(him.getTopic())));
-//		System.out.println("3"+());
-//		System.out.println("4"+(longitude != him.getLongitude()));
-//		System.out.println("5"+(!type.equals(him.getType())));
-		
-		
+
+
+		// System.out.println(".equals");
+		// System.out.println("Me "+topic+" "+type);
+		// TopicTypeConnector him = (TopicTypeConnector) obj;
+		// System.out.println("Him "+him.getTopic()+" "+him.getType());
+		//		
+		//		
+		// System.out.println("2"+(!topic.equals(him.getTopic())));
+		// System.out.println("3"+());
+		// System.out.println("4"+(longitude != him.getLongitude()));
+		// System.out.println("5"+(!type.equals(him.getType())));
+
+
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -102,21 +112,21 @@ public class AbstractTopicOccurrenceConnector implements Serializable, IsSeriali
 		if (topic == null) {
 			if (other.topic != null)
 				return false;
-		} else if (!topic.equals(other.topic)){
+		} else if (!topic.equals(other.topic)) {
 			System.out.println("dinging on top");
 			return false;
 		}
 		if (occurrence == null) {
 			if (other.occurrence != null)
 				return false;
-		} else if (!occurrence.equals(other.occurrence)){
-			System.out.println("dinging on type");
+		} else if (!occurrence.equals(other.occurrence)) {
+			// System.out.println("AbstractTopicOccurrence dinging on type");
 			return false;
 		}
-		
-		System.out.println("TopicType .eq rtn true");
+
+		// System.out.println("TopicOccurrence .eq rtn true");
 		return true;
 	}
-	
-	
+
+
 }

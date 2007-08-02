@@ -92,5 +92,13 @@ public class Entry extends Occurrence implements Serializable, IsSerializable, R
 		return false;
 	}
 
+	public int getWidth() {
+		return 200;
+	}
+
+	public int getHeight() {
+		return 100;
+	}
+
 
 }

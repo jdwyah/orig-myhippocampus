@@ -33,6 +33,8 @@
 		</property>-->
 
 		<!-- Note, this is also the pseudo property EndDate for HippoDate objs-->
+		<!-- for sql-type == timestamp see http://forum.hibernate.org/viewtopic.php?t=927602
+		and http://forum.hibernate.org/viewtopic.php?t=925275&postdays=0&postorder=asc&highlight=datetime+timestamp&start=15 -->
 		<property name="lastUpdated" type="java.util.Date">
 			<meta attribute="field-description">Last updated</meta>
 			<column name="dateUpdated" sql-type="timestamp" />
@@ -72,11 +74,12 @@
 		</set>-->
 		
 		<!-- no cascade, no update. Only use this field in hibernate queries. -->
-		<set name="instances" inverse="true">
+		<set name="instances" cascade="none" inverse="true">
 			<key column="topic_id" />
 			<one-to-many class="TopicTypeConnector"/>
 		</set>
 		
+		<!-- Reminder. inverse, bc this is the other side of TopicTypeConnector, not instances (directly at least) -->
 		<set name="types" cascade="all,delete-orphan" inverse="true">
 			<key column="from_id" />
 			<one-to-many class="TopicTypeConnector"/>

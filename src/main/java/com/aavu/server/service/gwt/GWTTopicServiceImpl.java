@@ -279,7 +279,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 	public Topic getTopicForName(String topicName) {
 		try {
-			Topic t = topicService.getForName(topicName);
+			Topic t = topicService.getForNameCaseInsensitive(topicName);
 
 			if (t != null) {
 				log.debug("orig " + t.getId() + " " + t.getTitle());

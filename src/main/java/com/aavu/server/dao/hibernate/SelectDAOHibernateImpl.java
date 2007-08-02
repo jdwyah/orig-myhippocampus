@@ -185,12 +185,13 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 	}
 
-	public Topic getForName(User currentUser, String string) {
+	public Topic getForNameCaseInsensitive(User currentUser, String string) {
 
 		log.debug("user " + currentUser.getUsername() + " string " + string);
 
 		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(RealTopic.class).add(
-				Expression.eq("user", currentUser)).add(Expression.eq("title", string)));
+				Expression.eq("user", currentUser))
+				.add(Expression.eq("title", string).ignoreCase()));
 
 
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));

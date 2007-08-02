@@ -32,7 +32,6 @@ import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.HippoPermissionException;
-import com.aavu.client.exception.HippoSubscriptionException;
 import com.aavu.server.dao.EditDAO;
 import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.service.TopicService;
@@ -48,8 +47,8 @@ public class TopicServiceImpl implements TopicService {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 
 	private static MetaSeeAlso seealsoSingleton;
-	private SelectDAO selectDAO;
 	private EditDAO editDAO;
+	private SelectDAO selectDAO;
 
 
 	private UserService userService;
@@ -57,6 +56,16 @@ public class TopicServiceImpl implements TopicService {
 	// private SearchService searchService;
 
 	public void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException {
+		addLinkToTags(link, tags, null);
+	}
+
+	/**
+	 * TODO this save() calls mustHaveUniqueName() and then getUnique...() which is totally
+	 * redundant and gives us n selects, which we know are redundant since we just did
+	 * createNewIfNonExistent(). this is probably why the del.icio.us add is so darn slow.
+	 */
+	public void addLinkToTags(WebLink link, String[] tags, Topic parent)
+			throws HippoBusinessException {
 
 		for (String string : tags) {
 			log.debug("str: " + string);
@@ -64,15 +73,20 @@ public class TopicServiceImpl implements TopicService {
 			String clipped = string.trim();
 
 			if (clipped.length() != 0) {
-				Topic t = getForName(clipped);
-				if (null == t) {
-					log.debug("was null, creating as Tag ");
-					t = new RealTopic();
-					t.setTitle(clipped);
-					t.setUser(userService.getCurrentUser());
+				Topic t = null;
+				if (parent != null) {
+					t = createNewIfNonExistent(clipped, parent);
+				} else {
+					t = createNewIfNonExistent(clipped);
 				}
+
 				t.addOccurence(link);
-				Topic st = save(t);
+
+				// skip the unique check
+				Topic st = save(t, true);
+
+				log.debug("Save " + link + " to " + st.getTitle() + " " + st.getId());
+
 			}
 
 		}
@@ -91,6 +105,19 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 
+	private List<FullTopicIdentifier> connectorsToTIs(List<TopicTypeConnector> conns) {
+		List<FullTopicIdentifier> rtn = new ArrayList<FullTopicIdentifier>(conns.size());
+		for (TopicTypeConnector conn : conns) {
+			rtn.add(new FullTopicIdentifier(conn));
+
+
+			// log.debug("Topic on island Found " + conn.getId() + " " + conn.getLatitude() + " "
+			// + conn.getLongitude());
+
+		}
+		return rtn;
+	}
+
 	/**
 	 * If parent is null, that's ok, we're saving a Meta or something. Pass new Root(), to do a
 	 * lookup and get the actual root element. Pass parent to get tagged.
@@ -100,10 +127,10 @@ public class TopicServiceImpl implements TopicService {
 	public Topic createNew(String title, Topic prototype, Topic parent)
 			throws HippoBusinessException {
 
-		if ((prototype instanceof RealTopic) && userIsOverSubscriptionLimit()) {
-			log.info("User over Subscription Limit " + userService.getCurrentUser().getUsername());
-			throw new HippoSubscriptionException("Too many topics for your subscription.");
-		}
+		// if ((prototype instanceof RealTopic) && userIsOverSubscriptionLimit()) {
+		// log.info("User over Subscription Limit " + userService.getCurrentUser().getUsername());
+		// throw new HippoSubscriptionException("Too many topics for your subscription.");
+		// }
 
 		log.debug("Prototype " + prototype.getId() + " " + prototype.getClass());
 
@@ -137,6 +164,27 @@ public class TopicServiceImpl implements TopicService {
 		return prototype;
 	}
 
+	public Topic createNewIfNonExistent(String tagName) throws HippoBusinessException {
+		return createNewIfNonExistent(tagName, new Root());
+	}
+
+	public Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException {
+
+		Topic cur = getForNameCaseInsensitive(tagName);
+		if (cur == null) {
+			cur = createNew(tagName, new RealTopic(), parent);
+		}
+		return cur;
+	}
+
+	public void delete(long id) throws HippoBusinessException {
+		Topic t = selectDAO.get(id);
+		if (t.getUser() != userService.getCurrentUser()) {
+			throw new HippoPermissionException();
+		}
+		delete(t);
+	}
+
 	/*
 	 * TODO maybe AOP secure this?
 	 * 
@@ -165,6 +213,8 @@ public class TopicServiceImpl implements TopicService {
 		}
 	}
 
+
+
 	private void deleteCommand(AbstractCommand command) throws HippoBusinessException {
 		Set topics = command.getDeleteSet();
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
@@ -174,13 +224,6 @@ public class TopicServiceImpl implements TopicService {
 		}
 	}
 
-	public void delete(long id) throws HippoBusinessException {
-		Topic t = selectDAO.get(id);
-		if (t.getUser() != userService.getCurrentUser()) {
-			throw new HippoPermissionException();
-		}
-		delete(t);
-	}
 
 	/**
 	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects. 2)
@@ -196,22 +239,25 @@ public class TopicServiceImpl implements TopicService {
 		deleteCommand(command);
 	}
 
-
-
 	public List<LocationDTO> getAllLocations() {
 		return selectDAO.getLocations(userService.getCurrentUser());
 	}
+
 
 
 	public List<Meta> getAllMetas() {
 		return selectDAO.getAllMetas(userService.getCurrentUser());
 	}
 
+	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username, int start,
+			int max, String startStr) {
+		return selectDAO.getAllTopicIdentifiers(userService.getUserWithNormalization(username),
+				start, max, startStr);
+	}
+
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
 		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), false);
 	}
-
-
 
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
 		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), all);
@@ -221,24 +267,19 @@ public class TopicServiceImpl implements TopicService {
 		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), start, max, startStr);
 	}
 
-	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username, int start,
-			int max, String startStr) {
-		return selectDAO.getAllTopicIdentifiers(userService.getUserWithNormalization(username),
-				start, max, startStr);
-	}
-
 	public Topic getForID(long topicID) {
 
 		return selectDAO.getForID(userService.getCurrentUser(), topicID);
 	}
 
-	public Topic getForName(String string) {
-		return selectDAO.getForName(userService.getCurrentUser(), string);
+	public Topic getForNameCaseInsensitive(String string) {
+		return selectDAO.getForNameCaseInsensitive(userService.getCurrentUser(), string);
 	}
 
 	public List<TopicIdentifier> getLinksTo(Topic topic) {
 		return selectDAO.getLinksTo(topic, userService.getCurrentUser());
 	}
+
 
 	public List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList) {
 		List<List<LocationDTO>> rtn = new ArrayList<List<LocationDTO>>(shoppingList.size());
@@ -289,6 +330,15 @@ public class TopicServiceImpl implements TopicService {
 		return seealsoSingleton;
 	}
 
+	public List<TopicIdentifier> getTagsStarting(String match) {
+		return selectDAO.getTagsStarting(userService.getCurrentUser(), match);
+	}
+
+	public List<TagStat> getTagStats() {
+		log.info("getting tag stats " + userService.getCurrentUser().getUsername());
+		return selectDAO.getTagStats(userService.getCurrentUser());
+	}
+
 	public List<TimeLineObj> getTimeline() {
 		return selectDAO.getTimeline(userService.getCurrentUser());
 	}
@@ -302,6 +352,8 @@ public class TopicServiceImpl implements TopicService {
 		return rtn;
 	}
 
+
+
 	public List<FullTopicIdentifier> getTopicIdsWithTag(long id) {
 
 		List<TopicTypeConnector> conns = selectDAO.getTopicIdsWithTag(id, userService
@@ -309,19 +361,6 @@ public class TopicServiceImpl implements TopicService {
 
 		return connectorsToTIs(conns);
 
-	}
-
-	private List<FullTopicIdentifier> connectorsToTIs(List<TopicTypeConnector> conns) {
-		List<FullTopicIdentifier> rtn = new ArrayList<FullTopicIdentifier>(conns.size());
-		for (TopicTypeConnector conn : conns) {
-			rtn.add(new FullTopicIdentifier(conn));
-
-
-			// log.debug("Topic on island Found " + conn.getId() + " " + conn.getLatitude() + " "
-			// + conn.getLongitude());
-
-		}
-		return rtn;
 	}
 
 	public List<List<FullTopicIdentifier>> getTopicIdsWithTags(List<TopicIdentifier> shoppingList) {
@@ -341,8 +380,6 @@ public class TopicServiceImpl implements TopicService {
 
 		return selectDAO.getTopicsStarting(userService.getCurrentUser(), match);
 	}
-
-
 
 	public MindTree getTree(MindTreeOcc occ) {
 		return selectDAO.getTree(occ);
@@ -397,7 +434,10 @@ public class TopicServiceImpl implements TopicService {
 	 * 
 	 */
 	public Topic save(Topic topic) throws HippoBusinessException {
+		return save(topic, false);
+	}
 
+	private Topic save(Topic topic, boolean guaranteedNotDupe) throws HippoBusinessException {
 		topic.setLastUpdated(new Date());
 		topic.setUser(userService.getCurrentUser());
 
@@ -406,11 +446,12 @@ public class TopicServiceImpl implements TopicService {
 			log.info("Throw HBE exception for Empty Title");
 			throw new HippoBusinessException("Empty Title");
 		}
-		if (topic.mustHaveUniqueName()) {
+		if (topic.mustHaveUniqueName() && !guaranteedNotDupe) {
 			log.debug("Getting same named");
 
 			try {
-				Topic sameNamed = (Topic) selectDAO.getForName(topic.getUser(), topic.getTitle());
+				Topic sameNamed = (Topic) selectDAO.getForNameCaseInsensitive(topic.getUser(),
+						topic.getTitle());
 				log.debug("Rec " + sameNamed);
 
 				if (sameNamed != null && sameNamed.getId() != topic.getId()) {
@@ -418,8 +459,9 @@ public class TopicServiceImpl implements TopicService {
 							+ " ID2:" + sameNamed.getId());
 					throw new HippoBusinessException("Duplicate Name");
 				}
+				System.out.println("evict " + sameNamed);
 				// need to evict or we'll get a NonUniqueException
-				// topicDAO.evict(sameNamed);
+				editDAO.evict(sameNamed);
 
 			} catch (IncorrectResultSizeDataAccessException e) {
 				log.info(e.getMessage() + " Throw HBE exception for Duplicate Title. ID: "
@@ -459,26 +501,27 @@ public class TopicServiceImpl implements TopicService {
 		}
 	}
 
-	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException {
-		editDAO.saveTopicsLocation(tagId, topicId, lat, lng, userService.getCurrentUser());
-	}
-
 	public void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng)
 			throws HippoException {
 		editDAO.saveOccurrenceLocation(topicID, occurrenceID, lat, lng, userService
 				.getCurrentUser());
 	}
 
+	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException {
+		editDAO.saveTopicsLocation(tagId, topicId, lat, lng, userService.getCurrentUser());
+	}
+
 	public MindTree saveTree(MindTree tree) {
 		return editDAO.save(tree);
 	}
 
-	public void setSelectDAO(SelectDAO selectDAO) {
-		this.selectDAO = selectDAO;
-	}
-
 	public void setEditDAO(EditDAO editDAO) {
 		this.editDAO = editDAO;
+	}
+
+
+	public void setSelectDAO(SelectDAO selectDAO) {
+		this.selectDAO = selectDAO;
 	}
 
 	public void setUserService(UserService userService) {
@@ -489,25 +532,6 @@ public class TopicServiceImpl implements TopicService {
 		User u = userService.getCurrentUser();
 		int curTopics = selectDAO.getTopicCount(u);
 		return u.getSubscription().getMaxTopics() < curTopics;
-	}
-
-
-	public List<TagStat> getTagStats() {
-		log.info("getting tag stats " + userService.getCurrentUser().getUsername());
-		return selectDAO.getTagStats(userService.getCurrentUser());
-	}
-
-	public List<TopicIdentifier> getTagsStarting(String match) {
-		return selectDAO.getTagsStarting(userService.getCurrentUser(), match);
-	}
-
-	public Topic createNewIfNonExistent(String tagName) throws HippoBusinessException {
-
-		Topic cur = getForName(tagName);
-		if (cur == null) {
-			cur = createNew(tagName, new RealTopic(), new Root());
-		}
-		return cur;
 	}
 
 

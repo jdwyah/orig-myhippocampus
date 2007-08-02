@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.acegisecurity.context.SecurityContextHolder;
@@ -331,6 +332,11 @@ public class UserServiceImpl implements UserService {
 	@Required
 	public void setEditDAO(EditDAO editDAO) {
 		this.editDAO = editDAO;
+	}
+
+	public void setDeliciousUpdate() {
+		User u = getCurrentUser();
+		u.setLastDeliciousDate(new Date());
 	}
 
 

@@ -2,13 +2,17 @@ package com.aavu.client.gui.gadgets;
 
 import org.gwm.client.impl.DefaultGInternalFrame;
 
+import com.aavu.client.domain.Topic;
+
 public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
+
+	private Gadget gadget;
 
 	public GadgetPopup(Gadget gadget) {
 		super(gadget.getDisplayName());
-
-		width = 400;
-		height = 40;
+		this.gadget = gadget;
+		width = 200;
+		height = 20;
 
 		setTheme("alphacube");
 
@@ -32,6 +36,16 @@ public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
 	 */
 	public boolean isVisible() {
 		return true;
+	}
+
+	public void resetSize() {
+		setWidth(200);
+		setHeight(0);
+	}
+
+	public void nowShowTopic(Topic topic) {
+		resetSize();
+		setCaption(topic.getTitle() + " " + gadget.getDisplayName());
 	}
 
 

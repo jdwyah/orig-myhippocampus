@@ -112,7 +112,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		List<TopicTypeConnector> list = selectDAO.getRootTopics(u, u);
 		assertEquals(4, list.size());
 
-		Topic savedTag = selectDAO.getForName(u, A);
+		Topic savedTag = selectDAO.getForNameCaseInsensitive(u, A);
 
 		Topic t2 = new RealTopic(u, "BAR");
 		t2.tagTopic(savedTag);
@@ -148,7 +148,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testGetTopic() throws HippoBusinessException {
 		add3();
-		Topic t = selectDAO.getForName(u, A);
+		Topic t = selectDAO.getForNameCaseInsensitive(u, A);
 		assertEquals(A, t.getTitle());
 	}
 
@@ -174,7 +174,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		add3();
 
-		Topic t = selectDAO.getForName(u, A);
+		Topic t = selectDAO.getForNameCaseInsensitive(u, A);
 		assertEquals(A, t.getTitle());
 
 		editDAO.delete(t);
@@ -219,7 +219,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		assertEquals(1, tagL.size());
 
-		Topic saved = selectDAO.getForName(u, B);
+		Topic saved = selectDAO.getForNameCaseInsensitive(u, B);
 
 		assertEquals(1, saved.getTagProperties().size());
 
