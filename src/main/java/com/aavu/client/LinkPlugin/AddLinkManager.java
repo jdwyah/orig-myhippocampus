@@ -104,7 +104,7 @@ public class AddLinkManager implements Manager, CloseListener {
 		throw new UnsupportedOperationException();
 	}
 
-	public void createNew(Topic topic) {
+	public void createNew(Topic topick, int[] lnglat) {
 		throw new UnsupportedOperationException();
 	}
 

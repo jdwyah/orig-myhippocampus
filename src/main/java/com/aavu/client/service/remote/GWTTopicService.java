@@ -2,6 +2,7 @@ package com.aavu.client.service.remote;
 
 import java.util.List;
 
+import com.aavu.client.domain.A;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
@@ -19,7 +20,7 @@ public interface GWTTopicService extends RemoteService {
 
 	void changeState(long topicID, boolean toIsland) throws HippoException;
 
-	TopicIdentifier createNew(String title, Topic prototype, Topic parent)
+	TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat)
 			throws HippoBusinessException;
 
 	void delete(long id) throws HippoException;
@@ -114,6 +115,8 @@ public interface GWTTopicService extends RemoteService {
 			throws HippoException;
 
 	MindTree saveTree(MindTree tree) throws HippoException;
+
+	A test(A a);
 
 	// List<SearchResult>
 	/**

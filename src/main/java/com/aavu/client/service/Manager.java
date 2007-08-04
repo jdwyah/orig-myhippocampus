@@ -59,7 +59,7 @@ public interface Manager {
 
 	void userNeedsToUpgrade();
 
-	void createNew(Topic topic);
+	void createNew(Topic topic, int[] lnglat);
 
 	GadgetPopup newFrameGadget(Gadget gadget);
 

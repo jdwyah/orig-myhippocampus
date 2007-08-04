@@ -6,7 +6,6 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
 
 public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, ClickListener {
 
@@ -33,17 +32,12 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 		this.unscaledWidth = width;
 		this.unscaledHeight = height;
 
-		addClickListener(this);
 	}
 
 	public TopicIdentifier getIdentifier() {
 		return owl.getOccurrence().getIdentifier();
 	}
 
-	public void onClick(Widget sender) {
-		System.out.println("OccBubble onClick");
-		getDisplay().getManager().editOccurrence(owl.getOccurrence());
-	}
 
 	public void receivedDrop(TopicDisplayObj bubble) {
 		// TODO Auto-generated method stub
@@ -60,8 +54,8 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 
 	// @Override
 	protected void hover() {
-		// TODO Auto-generated method stub
-
+		System.out.println("OccBubble onClick");
+		getDisplay().getManager().editOccurrence(owl.getOccurrence());
 	}
 
 	// @Override

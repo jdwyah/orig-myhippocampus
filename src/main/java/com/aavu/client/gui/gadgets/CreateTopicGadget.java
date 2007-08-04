@@ -59,10 +59,10 @@ public class CreateTopicGadget extends Gadget {
 	}
 
 	// @Override
-	public void onClick(Manager manager) {
-		manager.createNew(new RealTopic());
+	public void createInstance(Manager manager, int[] lngLat) {
+		RealTopic realT = new RealTopic();
+		manager.createNew(realT, lngLat);
 	}
-
 
 	// @Override
 	public String getDisplayName() {

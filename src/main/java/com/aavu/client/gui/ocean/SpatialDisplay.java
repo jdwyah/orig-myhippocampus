@@ -13,7 +13,7 @@ public interface SpatialDisplay {
 	 */
 	public void load(Topic topic, LoadFinishedListener loadFinished);
 
-	public void growIsland(Topic tag);
+	public void growIsland(Topic tag, int[] lnglat);
 
 	public Widget getWidget();
 

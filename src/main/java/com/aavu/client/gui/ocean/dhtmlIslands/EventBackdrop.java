@@ -15,7 +15,7 @@ public class EventBackdrop extends FocusPanelExt {
 		setHeight("100%");
 
 		setStyleName("H-FocusBackDrop");
-	}
 
+	}
 
 }

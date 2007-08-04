@@ -122,7 +122,7 @@ public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 	 * 
 	 * @see com.aavu.client.gui.Ocean#growIsland(com.aavu.client.domain.Tag)
 	 */
-	public void growIsland(Topic tag) {
+	public void growIsland(Topic tag, int[] lnglat) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<invoke name=\"grow\" returntype=\"javascript\"><arguments>");
 		sb.append(number(tag.getId()));

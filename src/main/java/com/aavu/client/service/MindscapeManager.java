@@ -12,7 +12,6 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
-import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
@@ -127,9 +126,14 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	}
 
-	public void clicked(Gadget gadget, int[] lngLat) {
+	public void gadgetClicked(Gadget gadget, int[] lngLat) {
 
-		gadget.onClick(this);
+		if (lngLat != null) {
+			System.out.println("MindscapeManager lngLat " + lngLat[0] + " " + lngLat[1]);
+		} else {
+			System.out.println("MindscapeManager lngLat " + lngLat);
+		}
+		gadget.createInstance(this, lngLat);
 
 
 		// map.growIsland();
@@ -142,13 +146,17 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * trick is to get us the ID, so that if we do a create, then an edit, we don't dupe on server.
 	 * 
 	 */
-	public void createNew(final Topic prototype) {
+	public void createNew(final Topic prototype, final int[] lnglat) {
+
+
+		System.out.println("Create new " + prototype + " " + GWT.getTypeName(prototype) + " "
+				+ lnglat);
 
 		if (prototype instanceof Occurrence) {
 
-			System.out.println("Create new " + prototype + " " + GWT.getTypeName(prototype));
+
 			getTopicCache().createNew(prototype.getDefaultName(), prototype, getCurrentTopic(),
-					new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
+					lnglat, new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
 						public void onSuccess(Object result) {
 							super.onSuccess(result);
 
@@ -163,7 +171,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 							System.out.println("create occ getCurrentTopic().addOccurence()");
 							getCurrentTopic().addOccurence((Occurrence) prototype);
 
-							map.growIsland(prototype);
+							map.growIsland(prototype, lnglat);
 
 							fireIslandCreated();
 						}
@@ -174,7 +182,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			CreateNewWindow n = new CreateNewWindow(this, ConstHolder.myConstants.topic_new(),
 					new EZCallback() {
 						public void onSuccess(Object result) {
-							createTopic((String) result, getCurrentTopic());
+							createTopic(prototype, (String) result, getCurrentTopic(), lnglat);
 						}
 					});
 		}
@@ -185,20 +193,22 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * 
 	 * @param name
 	 * @param parentTopic
+	 * @param lnglat
 	 */
-	public void createTopic(final String name, final Topic parentTopic) {
+	public void createTopic(final Topic prototype, final String name, final Topic parentTopic,
+			final int[] lnglat) {
 
-		getTopicCache().createNew(name, new RealTopic(), parentTopic,
+		getTopicCache().createNew(name, prototype, parentTopic, lnglat,
 				new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
 						TopicIdentifier res = (TopicIdentifier) result;
 
+						System.out.println("CreateTopic Back " + lnglat);
 
-						Topic newIsland = new RealTopic();
-						newIsland.setId(res.getTopicID());
-						newIsland.setTitle(res.getTopicTitle());
-						map.growIsland(newIsland);
+						prototype.setId(res.getTopicID());
+						prototype.setTitle(res.getTopicTitle());
+						map.growIsland(prototype, lnglat);
 
 
 						fireIslandCreated();
@@ -368,9 +378,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		}
 	}
 
-	public void growIsland(Topic tag) {
-		map.growIsland(tag);
-	}
 
 	public void loadFinished() {
 		Preloader.preload("HippoPreLoad.html");
@@ -442,7 +449,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		CreateNewWindow n = new CreateNewWindow(this, ConstHolder.myConstants.meta_new(),
 				new EZCallback() {
 					public void onSuccess(Object result) {
-						getTopicCache().createNew((String) result, meta, null,
+						getTopicCache().createNew((String) result, meta, null, null,
 								new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
 									public void onSuccess(Object result) {
 										super.onSuccess(result);
@@ -554,7 +561,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			System.out.println("TAG COMMAND");
 			Topic tag = (Topic) command.getTopic(1);
 			System.out.println("GROW " + tag);
-			map.growIsland(tag);
+			map.growIsland(tag, null);
 		}
 	}
 

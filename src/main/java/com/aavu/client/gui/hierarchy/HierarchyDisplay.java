@@ -14,6 +14,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ViewPanel;
+import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
@@ -84,7 +85,9 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		decorate();
 
-		getFocusBackdrop().addClickListener(new BackdropClickListener());
+		BackdropClickListener backdropL = new BackdropClickListener();
+		getFocusBackdrop().addDblClickListener(backdropL);
+		getFocusBackdrop().addClickListener(backdropL);
 
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
 		setBackground(currentScale);
@@ -245,9 +248,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	/**
 	 * create a dummy FullFTI
 	 */
-	public void growIsland(Topic thought) {
+	public void growIsland(Topic thought, int[] lnglat) {
 
-		System.out.println("grow " + thought + " " + thought.getId());
+		System.out.println("grow " + thought + " " + thought.getId() + " " + thought.getLatitude()
+				+ " " + thought.getLongitude());
 
 		TopicBubble bubble = (TopicBubble) topicBubbles.get(new Long(thought.getId()));
 
@@ -259,7 +263,8 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 
 
-			TopicDisplayObj newBubble = BubbleFactory.createBubbleFor(thought, currentRoot, this);
+			TopicDisplayObj newBubble = BubbleFactory.createBubbleFor(thought, currentRoot, lnglat,
+					this);
 			addBubble(newBubble);
 			redraw();
 
@@ -439,25 +444,31 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		return manager;
 	}
 
-	private class BackdropClickListener implements ClickListener {
+	private class BackdropClickListener implements ClickListener, DblClickListener {
 
 		public void onClick(Widget sender) {
 
-
 			if (getFocusBackdrop().getLastClickEventCtrl()) {
-
-				int x = getFocusBackdrop().getLastClickClientX();
-				int y = getFocusBackdrop().getLastClickClientY();
-
-				ContextMenu p = new ContextMenu(getManager(), HierarchyDisplay.this);
-				p.show(x, y);
-
+				openContextMenu();
 			} else {
 				guiManager.hideCurrentHover();
 			}
+		}
 
+		private void openContextMenu() {
+			int x = getFocusBackdrop().getLastClickClientX();
+			int y = getFocusBackdrop().getLastClickClientY();
+
+			ContextMenu p = new ContextMenu(getManager(), HierarchyDisplay.this, x, y);
+			p.show(x, y);
+		}
+
+		public void onDblClick(Widget sender) {
+			openContextMenu();
 		}
 	}
+
+
 
 	public void showHover(TopicIdentifier ti) {
 		guiManager.showHover(ti);

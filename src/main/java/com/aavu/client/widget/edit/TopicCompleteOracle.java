@@ -7,7 +7,6 @@ import java.util.List;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.widget.autocompletion.SuggestBoxExt;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
@@ -23,6 +22,7 @@ public class TopicCompleteOracle extends SuggestOracle {
 		}
 
 		public String getDisplayString() {
+
 			return highlight(value.getTopicTitle(), query);
 			// return value.getTopicTitle();
 		}
@@ -33,12 +33,18 @@ public class TopicCompleteOracle extends SuggestOracle {
 		 * use the old creataeOrNew() for now
 		 */
 		public Object getValue() {
+			System.out.println("get value " + value);
+			return value.getTopicTitle();
+		}
+
+		public String getReplacementString() {
+			System.out.println("get replacementString " + value);
 			return value.getTopicTitle();
 		}
 	}
 
 	private TopicCache topicCache;
-	private SuggestBoxExt box;
+
 	private CompleteListener completeListener;
 
 	public TopicCompleteOracle(TopicCache topicCache) {

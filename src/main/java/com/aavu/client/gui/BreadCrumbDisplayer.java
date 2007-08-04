@@ -8,6 +8,7 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -22,6 +23,7 @@ public class BreadCrumbDisplayer extends PopupWindow {
 	public BreadCrumbDisplayer(Manager manager) {
 		super(manager.newFrame(), ConstHolder.myConstants.breadcrumbs());
 		mainPanel = new VerticalPanel();
+		mainPanel.add(new Label(" "));
 		scrollP = new ScrollPanel(mainPanel);
 
 		scrollP.setStyleName("H-BreadCrumbScroll");

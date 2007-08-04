@@ -1,18 +1,21 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.async.EZCallback;
-import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.cache.TopicCache;
-import com.aavu.client.widget.autocompletion.SuggestBoxExt;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestionEvent;
+import com.google.gwt.user.client.ui.SuggestionHandler;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicCompleter extends SuggestBoxExt {
+public class TopicCompleter extends Composite {
 
 	private TopicCache topicService;
 	private TopicCompleteOracle oracle;
 	private CompleteListener completeListener;
+	private SuggestBox suggestBox;
 
 	public TopicCompleter(TopicCache topicService) {
 		super();
@@ -20,7 +23,9 @@ public class TopicCompleter extends SuggestBoxExt {
 		if (oracle == null) {
 			oracle = new TopicCompleteOracle(topicService);
 		}
-		setOracle(oracle);
+		suggestBox = new SuggestBox(oracle);
+
+		initWidget(suggestBox);
 	}
 
 	/**
@@ -35,12 +40,28 @@ public class TopicCompleter extends SuggestBoxExt {
 
 	public void setCompleteListener(CompleteListener completeListener) {
 		this.completeListener = completeListener;
-		addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
-				System.out.println("ONCHANGE " + getText());
+		suggestBox.addEventHandler(new SuggestionHandler() {
+
+			public void onSuggestionSelected(SuggestionEvent event) {
+				System.out.println("On Suggestion Selected! "
+						+ event.getSelectedSuggestion().getReplacementString());
+				// event.getSelectedSuggestion()
 				complete();
 			}
 		});
+
+		suggestBox.addChangeListener(new ChangeListener() {
+			public void onChange(Widget sender) {
+				System.out.println("ON CHANGE " + suggestBox.getText());
+			}
+		});
+
+		// addChangeListener(new ChangeListener() {
+		// public void onChange(Widget sender) {
+		// System.out.println("ONCHANGE " + getText());
+		// complete();
+		// }
+		// });
 	}
 
 	/**
@@ -48,11 +69,17 @@ public class TopicCompleter extends SuggestBoxExt {
 	 */
 	public void complete() {
 
-		getTopicIdentForNameOrCreateNew(getText(), new EZCallback() {
+		System.out.println("Complete t " + suggestBox.getText() + " ");
+
+		getTopicIdentForNameOrCreateNew(suggestBox.getText(), new EZCallback() {
 			public void onSuccess(Object result) {
-				completeListener.completed((TopicIdentifier) result);
+				// completeListener.completed((TopicIdentifier) result);
 			}
 		});
+	}
+
+	public void setText(String string) {
+		suggestBox.setText(string);
 	}
 
 }

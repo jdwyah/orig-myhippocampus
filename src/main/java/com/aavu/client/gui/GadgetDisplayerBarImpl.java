@@ -84,7 +84,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 	}
 
 
-	public void clicked(Gadget gadget, int[] lngLat) {
+	public void gadgetClicked(Gadget gadget, int[] lngLat) {
 		if (!gadget.enabled(manager.getUser())) {
 			manager.displayInfo(ConstHolder.myConstants.gadget_not_available());
 			return;

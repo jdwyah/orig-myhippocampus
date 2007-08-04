@@ -192,10 +192,13 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 	}
 
 
+
 	// @Override
-	public void onClick(Manager manager) {
-		manager.createNew(new WebLink());
+	public void createInstance(Manager manager, int[] lngLat) {
+		WebLink linkT = new WebLink();
+		manager.createNew(linkT, lngLat);
 	}
+
 
 	// @Override
 	public String getDisplayName() {

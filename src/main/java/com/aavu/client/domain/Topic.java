@@ -1,5 +1,6 @@
 package com.aavu.client.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,7 +9,6 @@ import java.util.Set;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.generated.AbstractTopic;
 import com.aavu.client.domain.util.CollectionUtils;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * The base storable db object. superclass of associations & metas.
@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Jeff Dwyer
  * 
  */
-public abstract class Topic extends AbstractTopic implements IsSerializable, ReallyCloneable {
+public abstract class Topic extends AbstractTopic implements Serializable, ReallyCloneable {
 
 	public Topic() {
 		setLastUpdated(new Date());
@@ -217,6 +217,10 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	}
 
 	public boolean tagTopic(Topic tag) {
+		return tagTopic(tag, null);
+	}
+
+	public boolean tagTopic(Topic tag, int[] lnglat) {
 
 		// System.out.println("tagging with "+tag.getTitle());
 		// System.out.println("alread tagged "+tag.getInstances());
@@ -239,7 +243,7 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 		// Window.alert("tag "+tag);
 		// Window.alert("pretty "+tag.toPrettyString());
 
-		return addType(tag);
+		return addType(tag, lnglat);
 
 		// Window.alert("FOO3");
 
@@ -741,7 +745,7 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	}
 
 	public boolean addType(Topic type) {
-		return addType(type, -1, -1);
+		return addType(type, null);
 	}
 
 	/**
@@ -752,8 +756,16 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	 * @param type
 	 * @return
 	 */
-	public boolean addType(Topic type, int lat, int lng) {
-		TopicTypeConnector conn = new TopicTypeConnector(this, type, lat, lng);
+	public boolean addType(Topic type, int[] lnglat) {
+		TopicTypeConnector conn;
+		if (lnglat != null) {
+			conn = new TopicTypeConnector(this, type, lnglat[1], lnglat[0]);
+		} else {
+			conn = new TopicTypeConnector(this, type, -1, -1);
+		}
+
+
+
 		// type.getInstances().add(conn);
 
 		boolean exists = false;
@@ -945,13 +957,22 @@ public abstract class Topic extends AbstractTopic implements IsSerializable, Rea
 	}
 
 	public void addOccurence(Occurrence link) {
-		TopicOccurrenceConnector conn = new TopicOccurrenceConnector(this, link);
-		getOccurences().add(conn);
-		link.getTopics().add(conn);
+		addOccurence(link, null);
 	}
 
 	public String getDefaultName() {
 		return "New Topic";
+	}
+
+	public void addOccurence(Occurrence occ, int[] lnglat) {
+		TopicOccurrenceConnector conn;
+		if (lnglat != null) {
+			conn = new TopicOccurrenceConnector(this, occ, lnglat[1], lnglat[0]);
+		} else {
+			conn = new TopicOccurrenceConnector(this, occ);
+		}
+		getOccurences().add(conn);
+		occ.getTopics().add(conn);
 	}
 
 

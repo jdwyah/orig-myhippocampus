@@ -2,6 +2,7 @@ package com.aavu.client.service.remote;
 
 import java.util.List;
 
+import com.aavu.client.domain.A;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -16,7 +17,7 @@ public interface GWTTopicServiceAsync {
 
 	void changeState(long topicID, boolean toIsland, AsyncCallback callback);
 
-	void createNew(String title, Topic prototype, Topic parent, AsyncCallback callback);
+	void createNew(String title, Topic prototype, Topic parent, int[] lnglat, AsyncCallback callback);
 
 	void delete(long id, AsyncCallback callback);
 
@@ -72,6 +73,8 @@ public interface GWTTopicServiceAsync {
 
 	// List<SearchResult>
 	void search(String searchString, AsyncCallback callback);
+
+	void test(A a, AsyncCallback callback);
 
 	void getAllLocations(AsyncCallback callback);
 

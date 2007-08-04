@@ -46,7 +46,7 @@ public class CanvasRenderingContext2D {
 	 * Saves the current Drawing State to the state stack
 	 */
 	public native void save() /*-{ 
-		var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 		ctx.save();
 	}-*/;
 
@@ -54,92 +54,92 @@ public class CanvasRenderingContext2D {
 	 * Restores the previous Drawing State from the state stack
 	 */
 	public native void restore() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.restore();
 	}-*/;
 
 	public native void scale(float x, float y) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.scale(x, y);	
 	}-*/;
 
 	public native void rotate(float angle)/*-{ 
-		var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
-		ctx.rotate(angle);	
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.rotate(angle);	
+					}-*/;
 
 	public native void translate(float x, float y) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.translate(x, y);	
 	}-*/;
 
 	public native void transform(float m11, float m12, float m21, float m22, float dx, float dy) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.transform(m11, m12, m21, m22, dx, dy);	
 	}-*/;
 
 	public native void setTransform(float m11, float m12, float m21, float m22, float dx, float dy) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.setTransform(m11, m12, m21, m22, dx, dy);	
 	}-*/;
 
 	public native float getGlobalAlpha() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.globalAlpha;
 	}-*/;
 
 	public native void setGlobalAlpha(float alpha) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.globalAlpha = alpha;
 	}-*/;
 
 	public native String getGlobalCompositeOperation() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.globalCompositeOperation;
 	}-*/;
 
 	public native void setGlobalCompositeOperation(String operation) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.globalCompositeOperation = operation;
 	}-*/;
 
 	private native String getStrokeStyleImplString() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.strokeStyle;
 	}-*/;
 
 	private native JavaScriptObject getStrokeStyleImplObject() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.strokeStyle;
 	}-*/;
 
 	private native short getStrokeStyleImplType() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	if (ctx.strokeStyle instanceof String)
 	{
-		return @com.kisgergely.gwt.canvas.client.CanvasDrawingStyle::COLOR;
+		return @com.aavu.client.gui.ext.canvas.CanvasDrawingStyle::COLOR;
 	} 
 	else if (ctx.strokeStyle instanceof CanvasGradient)
 	{
-		return @com.kisgergely.gwt.canvas.client.CanvasDrawingStyle::GRADIENT;
+		return @com.aavu.client.gui.ext.canvas.CanvasDrawingStyle::GRADIENT;
 	}
 	else if (ctx.strokeStyle instanceof CanvasPattern)
 	{
-		return @com.kisgergely.gwt.canvas.client.CanvasDrawingStyle::PATTERN;
+		return @com.aavu.client.gui.ext.canvas.CanvasDrawingStyle::PATTERN;
 	}
 	else
 	{
-		return @com.kisgergely.gwt.canvas.client.CanvasDrawingStyle::UNDEFINED;
+		return @com.aavu.client.gui.ext.canvas.CanvasDrawingStyle::UNDEFINED;
 	}
 	}-*/;
 
 	private native void setStrokeStyleImpl(String style) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.strokeStyle = style;
 	}-*/;
 
 	private native void setStrokeStyleImpl(JavaScriptObject style) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.strokeStyle = style;
 	}-*/;
 
@@ -180,29 +180,29 @@ public class CanvasRenderingContext2D {
 
 
 	private native String getFillStyleImplString() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.fillStyle;
 	}-*/;
 
 	private native JavaScriptObject getFillStyleImplObject() /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.fillStyle;
 	}-*/;
 
 	private native short getFillStyleImplType() /*-{  
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	{
-		return @com.kisgergely.gwt.canvas.client.CanvasDrawingStyle::UNDEFINED;
+		return @com.aavu.client.gui.ext.canvas.CanvasDrawingStyle::UNDEFINED;
 	}
 	}-*/;
 
 	private native void setFillStyleImpl(String style) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.fillStyle = style;
 	}-*/;
 
 	private native void setFillStyleImpl(JavaScriptObject style) /*-{ 
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	ctx.fillStyle = style;
 	}-*/;
 
@@ -241,18 +241,18 @@ public class CanvasRenderingContext2D {
 
 
 	private native JavaScriptObject createLinearGradientImpl(float x0, float y0, float x1, float y1) /*-{
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.createLinearGradient(x0, y0, x1, y1);	
 	}-*/;
 
 	private native JavaScriptObject createRadialGradientImpl(float x0, float y0, float r0,
 			float x1, float y1, float r1) /*-{
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	return ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);	
 	}-*/;
 
 	private native JavaScriptObject createPatternImpl(Element elem, String repetition) /*-{
-	var ctx = this.@com.kisgergely.gwt.canvas.client.CanvasRenderingContext2D::jsCtx;
+	var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
 	if (ctx.createPattern)
 		return ctx.createPattern(elem, repetition);
 	return null;	
@@ -368,87 +368,87 @@ public class CanvasRenderingContext2D {
 	}-*/;
 
 	public native void clearRect(float x, float y, float w, float h)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.clearRect(x, y, w, h);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.clearRect(x, y, w, h);
+					}-*/;
 
 	public native void fillRect(float x, float y, float w, float h)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.fillRect(x, y, w, h)
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.fillRect(x, y, w, h)
+					}-*/;
 
 	public native void strokeRect(float x, float y, float w, float h)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.strokeRect(x, y, w, h)
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.strokeRect(x, y, w, h)
+					}-*/;
 
 	public native void beginPath()/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.beginPath();
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.beginPath();
+					}-*/;
 
 	public native void closePath()/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.closePath();
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.closePath();
+					}-*/;
 
 
 	public native void moveTo(float x, float y)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.moveTo(x,y);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.moveTo(x,y);
+					}-*/;
 
 	public native void lineTo(float x, float y)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.lineTo(x,y);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.lineTo(x,y);
+					}-*/;
 
 	public native void quadraticCurveTo(float cpx, float cpy, float x, float y)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.quadraticCurveTo(cpx, cpy, x, y);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.quadraticCurveTo(cpx, cpy, x, y);
+					}-*/;
 
 	public native void bezierCurveTo(float cp1x, float cp1y, float cp2x, float cp2y, float x,
 			float y)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+					}-*/;
 
 	public native void arcTo(float x1, float y1, float x2, float y2, float radius)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.arcTo(x1, y1, x2, y2, radius);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.arcTo(x1, y1, x2, y2, radius);
+					}-*/;
 
 	public native void rect(float x, float y, float w, float h)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.rect(x, y, w, h);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.rect(x, y, w, h);
+					}-*/;
 
 	public native void arc(float x, float y, float radius, float startAngle, float endAngle,
 			boolean anticlockwise)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+					}-*/;
 
 	public native void fill()/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.fill();
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.fill();
+					}-*/;
 
 	public native void stroke()/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.stroke();
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.stroke();
+					}-*/;
 
 	public native void clip()/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.clip();
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.clip();
+					}-*/;
 
 	public native boolean isPointInPath(float x, float y)/*-{ 
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.isPointInPath(x, y);
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.isPointInPath(x, y);
+					}-*/;
 
 
 	private native void drawImageImpl(Element elem, float dx, float dy) /*-{
@@ -463,9 +463,9 @@ public class CanvasRenderingContext2D {
 
 	private native void drawImageImpl(Element elem, float sx, float sy, float sw, float sh,
 			float dx, float dy, float dw, float dh)/*-{
-		var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
-		ctx.drawImage(elem, sx, sy, sw, sh, dx, dy, dw, dh);	
-		}-*/;
+					var ctx = this.@com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D::jsCtx;
+					ctx.drawImage(elem, sx, sy, sw, sh, dx, dy, dw, dh);	
+					}-*/;
 
 	public void drawImage(Image img, float dx, float dy) {
 		drawImageImpl(img.getElement(), dx, dy);

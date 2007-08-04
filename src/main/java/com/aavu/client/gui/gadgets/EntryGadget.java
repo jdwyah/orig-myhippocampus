@@ -87,9 +87,14 @@ public class EntryGadget extends Gadget {
 
 	// @Override
 	public void onClick(Manager manager) {
-		manager.createNew(new Entry());
+
 	}
 
+	// @Override
+	public void createInstance(Manager manager, int[] lngLat) {
+		Entry e = new Entry();
+		manager.createNew(e, lngLat);
+	}
 
 	// @Override
 	public String getDisplayName() {

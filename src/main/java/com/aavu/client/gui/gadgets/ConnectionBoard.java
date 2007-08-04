@@ -201,10 +201,6 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		return true;
 	}
 
-	// @Override
-	public void onClick(Manager manager) {
-		throw new UnsupportedOperationException();
-	}
 
 	// @Override
 	public String getDisplayName() {

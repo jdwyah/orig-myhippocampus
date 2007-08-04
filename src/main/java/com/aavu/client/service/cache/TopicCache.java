@@ -95,7 +95,7 @@ public class TopicCache {
 				originalCallback.onSuccess(found.getIdentifier());
 			} else {
 				System.out.println("Create New! ");
-				createNew(linkTo, new RealTopic(), new Root(), originalCallback);
+				createNew(linkTo, new RealTopic(), new Root(), null, originalCallback);
 
 			}
 		}
@@ -192,9 +192,11 @@ public class TopicCache {
 		topicService.changeState(id, b, callback);
 	}
 
-	public void createNew(String title, Topic prototype, Topic parent, AsyncCallback callback) {
+	public void createNew(String title, Topic prototype, Topic parent, int[] lnglat,
+			AsyncCallback callback) {
 
-		topicService.createNew(title, prototype, parent, callback);
+		topicService.createNew(title, prototype, parent, lnglat, callback);
+
 	}
 
 	public void delete(Topic topic, StdAsyncCallback callback) {

@@ -114,9 +114,9 @@ public class UploadBoard extends Gadget {
 	}
 
 	// @Override
-	public void onClick(Manager manager) {
-		manager.createNew(new S3File());
+	public void createInstance(Manager manager, int[] lngLat) {
+		S3File realT = new S3File();
+		manager.createNew(realT, lngLat);
 	}
-
 
 }

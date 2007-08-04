@@ -80,7 +80,7 @@ public class GadgetManager {
 	public void fireGadgetClick(Gadget gadget, int[] lngLat) {
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			GadgetClickListener listener = (GadgetClickListener) iterator.next();
-			listener.clicked(gadget, lngLat);
+			listener.gadgetClicked(gadget, lngLat);
 		}
 
 	}

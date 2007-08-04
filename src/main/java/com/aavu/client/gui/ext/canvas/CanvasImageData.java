@@ -11,12 +11,12 @@ public class CanvasImageData {
 	}
 
 	public native int getWidth() /*-{
-		var imgdata = this.@com.kisgergely.gwt.canvas.client.CanvasImageData::jsImageData;
+		var imgdata = this.@com.aavu.client.gui.ext.canvas.CanvasImageData::jsImageData;
 		return imgdata.width;
 	}-*/;
 
 	public native int getHeight() /*-{
-	var imgdata = this.@com.kisgergely.gwt.canvas.client.CanvasImageData::jsImageData;
+	var imgdata = this.@com.aavu.client.gui.ext.canvas.CanvasImageData::jsImageData;
 	return imgdata.height;
 	}-*/;
 

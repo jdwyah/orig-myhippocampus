@@ -170,8 +170,8 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 
 	}
 
-	public void growIsland(Topic tag) {
-		spatialDisplay.growIsland(tag);
+	public void growIsland(Topic tag, int[] lnglat) {
+		spatialDisplay.growIsland(tag, lnglat);
 	}
 
 	public void removeIsland(long id) {

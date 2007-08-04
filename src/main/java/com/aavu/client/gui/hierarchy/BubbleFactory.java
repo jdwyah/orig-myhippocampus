@@ -42,16 +42,20 @@ public class BubbleFactory {
 	 * @param hierarchyDisplay
 	 * @return
 	 */
-	public static TopicDisplayObj createBubbleFor(Topic thought, Topic current,
+	public static TopicDisplayObj createBubbleFor(Topic thought, Topic current, int[] lnglat,
 			HierarchyDisplay hierarchyDisplay) {
 
 		if (thought instanceof Occurrence) {
-			return createBubbleFor(new TopicOccurrenceConnector(current, (Occurrence) thought),
-					hierarchyDisplay);
+			return createBubbleFor(new TopicOccurrenceConnector(current, (Occurrence) thought,
+					lnglat[1], lnglat[0]), hierarchyDisplay);
 		} else {
-			return createBubbleFor(new FullTopicIdentifier(thought), hierarchyDisplay);
+
+			FullTopicIdentifier fti = new FullTopicIdentifier(thought);
+			fti.setLatitudeOnIsland(lnglat[1]);
+			fti.setLongitudeOnIsland(lnglat[0]);
+
+			return createBubbleFor(fti, hierarchyDisplay);
 		}
 
 	}
-
 }

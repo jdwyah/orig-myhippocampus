@@ -82,12 +82,16 @@ public class ChildrenGadget extends Gadget implements TopicLoader {
 	}
 
 
-	// @Override
-	public void onClick(Manager manager) {
-	}
 
 	// @Override
 	public String getDisplayName() {
 		return ConstHolder.myConstants.children();
+	}
+
+
+	// @Override
+	public void createInstance(Manager manager, int[] lngLat) {
+		// TODO Auto-generated method stub
+
 	}
 }

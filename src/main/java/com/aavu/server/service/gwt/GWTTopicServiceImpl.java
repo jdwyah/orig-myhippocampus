@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.aavu.client.domain.A;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
@@ -141,10 +142,10 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		return tree;
 	}
 
-	public TopicIdentifier createNew(String title, Topic prototype, Topic parent)
+	public TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat)
 			throws HippoBusinessException {
 
-		prototype = topicService.createNew(title, prototype, parent);
+		prototype = topicService.createNew(title, prototype, parent, lnglat);
 
 		return prototype.getIdentifier();
 	}
@@ -405,6 +406,11 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	@Required
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
+	}
+
+	public A test(A a) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

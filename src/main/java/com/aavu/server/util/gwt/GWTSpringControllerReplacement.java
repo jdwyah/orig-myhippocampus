@@ -32,22 +32,22 @@ import com.google.gwt.user.server.rpc.RPCRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * Simple spring controller that merges GWT's {@link RemoteServiceServlet}, the
- * {@link Controller} and also implements the {@link RemoteService} interface so
- * as to be able to directly delegate RPC calls to extending classes.
+ * Simple spring controller that merges GWT's {@link RemoteServiceServlet}, the {@link Controller}
+ * and also implements the {@link RemoteService} interface so as to be able to directly delegate RPC
+ * calls to extending classes.
  * 
  * @author g.georgovassilis
  * 
  */
 
 public class GWTSpringControllerReplacement extends RemoteServiceServlet implements
-ServletContextAware, Controller, RemoteService {
+		ServletContextAware, Controller, RemoteService {
 	private static final long serialVersionUID = 5399966488983189122L;
 
 	@Override
 	public String processCall(String payload) throws SerializationException {
 		RPCRequest rpcRequest = RPC.decodeRequest(payload, this.getClass());
-		
+
 		return RPCWithHibernateSupport.invokeAndEncodeResponse(this, rpcRequest.getMethod(),
 				rpcRequest.getParameters());
 	}
@@ -67,22 +67,25 @@ ServletContextAware, Controller, RemoteService {
 
 	/**
 	 * Return the request which invokes the service. Valid only if used in the dispatching thread.
+	 * 
 	 * @return the servlet request
 	 */
-	public static HttpServletRequest getRequest(){
+	public static HttpServletRequest getRequest() {
 		return servletRequest.get();
 	}
 
 	/**
-	 * Return the response which accompanies the request. Valid only if used in the dispatching thread.
+	 * Return the response which accompanies the request. Valid only if used in the dispatching
+	 * thread.
+	 * 
 	 * @return the servlet response
 	 */
-	public static HttpServletResponse getResponse(){
+	public static HttpServletResponse getResponse() {
 		return servletResponse.get();
 	}
 
-	public ModelAndView handleRequest(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		try {
 			servletRequest.set(request);
 			servletResponse.set(response);
@@ -94,6 +97,3 @@ ServletContextAware, Controller, RemoteService {
 		return null;
 	}
 }
-
-
-

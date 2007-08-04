@@ -223,13 +223,13 @@ public class UserServiceImpl implements UserService {
 		r = (Root) editDAO.save(r);
 
 		Topic movies = new RealTopic(createdU, "Movies");
-		movies.addType(r, 100, 100);
+		movies.addType(r);
 		movies = editDAO.save(movies);
 
 
 
 		Topic people = new RealTopic(createdU, "People");
-		people.addType(r, 400, 400);
+		people.addType(r);
 		people = editDAO.save(people);
 
 

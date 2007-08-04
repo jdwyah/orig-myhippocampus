@@ -97,7 +97,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 	}
 
-	public void clicked(Gadget gadget, int[] lngLat) {
+	public void gadgetClicked(Gadget gadget, int[] lngLat) {
 		// TODO Auto-generated method stub
 
 	}

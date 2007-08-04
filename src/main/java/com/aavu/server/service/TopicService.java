@@ -39,7 +39,8 @@ public interface TopicService {
 
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
-	Topic createNew(String title, Topic prototype, Topic parent) throws HippoBusinessException;
+	Topic createNew(String title, Topic prototype, Topic parent, int[] lnglat)
+			throws HippoBusinessException;
 
 	void delete(Topic topic) throws HippoBusinessException;
 

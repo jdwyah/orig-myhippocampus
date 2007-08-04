@@ -17,8 +17,30 @@ public class ContextMenu extends PopupPanel {
 	private int x;
 	private int y;
 
+	/**
+	 * No x,y params mean we'll just create a new topic and have it placed automatically
+	 * 
+	 * @param m
+	 * @param display
+	 */
 	public ContextMenu(final Manager m, final SpatialDisplay display) {
+		this(m, display, -1, -1);
+	}
+
+	/**
+	 * x,y, should be used for new topic location
+	 * 
+	 * @param m
+	 * @param display
+	 * @param x
+	 * @param y
+	 */
+	public ContextMenu(final Manager m, final SpatialDisplay display, final int x, final int y) {
 		super(true);
+		this.x = x;
+		this.y = y;
+
+		System.out.println("ContextMenu " + x + " " + y);
 
 		VerticalPanel mainPanel = new VerticalPanel();
 
@@ -33,7 +55,11 @@ public class ContextMenu extends PopupPanel {
 			Image imgButton = gadget.getPickerButton();
 			imgButton.addClickListener(new ClickListener() {
 				public void onClick(Widget sender) {
-					m.getGadgetManager().fireGadgetClick(gadget, display.getLongLatForXY(x, y));
+					if (x != -1 || y != -1) {
+						m.getGadgetManager().fireGadgetClick(gadget, display.getLongLatForXY(x, y));
+					} else {
+						m.getGadgetManager().fireGadgetClick(gadget, null);
+					}
 					hide();
 				}
 			});
@@ -56,8 +82,6 @@ public class ContextMenu extends PopupPanel {
 	}
 
 	public void show(int x, int y) {
-		this.x = x;
-		this.y = y;
 		setPopupPosition(x, y);
 		super.show();
 	}

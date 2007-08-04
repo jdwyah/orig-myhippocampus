@@ -95,8 +95,6 @@ public abstract class Gadget extends Composite {
 
 	public abstract String getDisplayName();
 
-	public abstract void onClick(Manager manager);
-
 	public void setVisible(boolean b) {
 		gadgetHolder.setVisible(b);
 	}
@@ -111,7 +109,10 @@ public abstract class Gadget extends Composite {
 		return manager;
 	}
 
-
+	// @Override
+	public void createInstance(Manager manager, int[] lngLat) {
+		throw new UnsupportedOperationException();
+	}
 
 	public boolean isDisplayer() {
 		return false;

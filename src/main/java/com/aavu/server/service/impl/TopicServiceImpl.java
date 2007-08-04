@@ -124,7 +124,7 @@ public class TopicServiceImpl implements TopicService {
 	 * 
 	 * If prototype is an occurrence, use addOccurrence()
 	 */
-	public Topic createNew(String title, Topic prototype, Topic parent)
+	public Topic createNew(String title, Topic prototype, Topic parent, int[] lnglat)
 			throws HippoBusinessException {
 
 		// if ((prototype instanceof RealTopic) && userIsOverSubscriptionLimit()) {
@@ -145,14 +145,14 @@ public class TopicServiceImpl implements TopicService {
 				log.debug("adding occurrence");
 				Topic loadedParent = selectDAO.getForID(userService.getCurrentUser(), parent
 						.getId());
-				loadedParent.addOccurence((Occurrence) prototype);
+				loadedParent.addOccurence((Occurrence) prototype, lnglat);
 				save(loadedParent);
 			} else {
 				if (parent instanceof Root) {
 					prototype.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService
-							.getCurrentUser()));
+							.getCurrentUser()), lnglat);
 				} else {
-					prototype.tagTopic(parent);
+					prototype.tagTopic(parent, lnglat);
 				}
 			}
 			prototype = save(prototype);
@@ -172,7 +172,7 @@ public class TopicServiceImpl implements TopicService {
 
 		Topic cur = getForNameCaseInsensitive(tagName);
 		if (cur == null) {
-			cur = createNew(tagName, new RealTopic(), parent);
+			cur = createNew(tagName, new RealTopic(), parent, null);
 		}
 		return cur;
 	}

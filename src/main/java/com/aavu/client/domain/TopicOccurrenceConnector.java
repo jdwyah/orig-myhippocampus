@@ -13,7 +13,11 @@ public class TopicOccurrenceConnector extends AbstractTopicOccurrenceConnector i
 	}
 
 	public TopicOccurrenceConnector(Topic topic, Occurrence occurrence) {
-		super(topic, occurrence, -1, -1);
+		this(topic, occurrence, -1, -1);
+	}
+
+	public TopicOccurrenceConnector(Topic topic, Occurrence occurrence, int lat, int lng) {
+		super(topic, occurrence, lat, lng);
 	}
 
 	public String toString() {

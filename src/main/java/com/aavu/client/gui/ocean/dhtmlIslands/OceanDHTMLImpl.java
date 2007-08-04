@@ -90,8 +90,7 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 		clouds();
 
 		/*
-		 * override the AbsolutePanel position: relative otherwise we got a
-		 * left: 8px; top: 8px;
+		 * override the AbsolutePanel position: relative otherwise we got a left: 8px; top: 8px;
 		 */
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
 		setBackground(currentScale);
@@ -101,12 +100,11 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 	/**
 	 * turn the tag stats into Islands.
 	 * 
-	 * NOTE: this takes a while and will lead to "this script is running slowly"
-	 * warnings on IE if we're not careful. Avoid these by using Timers and
-	 * doing it in pieces.
+	 * NOTE: this takes a while and will lead to "this script is running slowly" warnings on IE if
+	 * we're not careful. Avoid these by using Timers and doing it in pieces.
 	 * 
-	 * NOTE 2: doing it piecemeal also allows the progress bar to update.
-	 * Before, it would never get the work thread until it was all over.
+	 * NOTE 2: doing it piecemeal also allows the progress bar to update. Before, it would never get
+	 * the work thread until it was all over.
 	 * 
 	 * @param tagStats
 	 */
@@ -198,15 +196,13 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 
 	/**
 	 * 
-	 * centerOn will move th map to center on the given topic. If it's an
-	 * island, that's easy. If it's only a topic, loop through its islands and
-	 * find the one closest to out current center. Otherwise we'll jump all over
-	 * the place.
+	 * centerOn will move th map to center on the given topic. If it's an island, that's easy. If
+	 * it's only a topic, loop through its islands and find the one closest to out current center.
+	 * Otherwise we'll jump all over the place.
 	 * 
 	 * 
-	 * invert this equation to find the x for a given center int centerX =
-	 * (int)((-curbackX + halfWidth)/currentScale); int centerY =
-	 * (int)((-curbackY + halfHeight)/currentScale);
+	 * invert this equation to find the x for a given center int centerX = (int)((-curbackX +
+	 * halfWidth)/currentScale); int centerY = (int)((-curbackY + halfHeight)/currentScale);
 	 * 
 	 * return - should return true if it finds a good thing to center on
 	 */
@@ -368,7 +364,7 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 		return Window.getClientHeight();
 	}
 
-	public void growIsland(Topic tag) {
+	public void growIsland(Topic tag, int[] lnglat) {
 		Island isle = (Island) islands.get(new Long(tag.getId()));
 
 		if (isle == null) {
@@ -462,8 +458,8 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 	}
 
 	/**
-	 * All the islands need to check to see if they're in the visible window. If
-	 * so, and we're zoomed in enough, show the topics.
+	 * All the islands need to check to see if they're in the visible window. If so, and we're
+	 * zoomed in enough, show the topics.
 	 * 
 	 * all others should turn topics off.
 	 * 
@@ -562,7 +558,7 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 			isle.redraw(t);
 		} else {
 			System.out.println("Ocean.update new grow Title:" + t.getTitle() + " ID " + t.getId());
-			growIsland(t);
+			growIsland(t, null);
 		}
 	}
 
