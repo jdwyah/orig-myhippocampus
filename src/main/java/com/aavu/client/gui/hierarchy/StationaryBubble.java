@@ -9,11 +9,10 @@ import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StationaryBubble extends AbstractBubble implements ClickListener {
+public class StationaryBubble extends AbstractBubble {
 
 	private TopicIdentifier ti;
 	private IslandBanner banner;
@@ -36,9 +35,6 @@ public class StationaryBubble extends AbstractBubble implements ClickListener {
 
 		init();
 
-
-		addClickListener(this);
-
 	}
 
 	// @Override
@@ -55,8 +51,8 @@ public class StationaryBubble extends AbstractBubble implements ClickListener {
 
 	// @Override
 	protected void hover() {
-		guiManager.showHover(ti);
-		// HoverManager.showHover(getManager(), this, ti, true);
+		guiManager.hideCurrentHover();
+		getManager().bringUpChart(ti);
 	}
 
 	// @Override
@@ -146,12 +142,6 @@ public class StationaryBubble extends AbstractBubble implements ClickListener {
 
 	}
 
-
-	public void onClick(Widget sender) {
-		guiManager.hideCurrentHover();
-		getManager().bringUpChart(ti);
-
-	}
 
 
 }

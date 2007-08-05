@@ -16,6 +16,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 	private GadgetManager gadgetManager;
 	private HashSet popups;
+	private int normalLeft = -1;
 
 	public GadgetDisplayerPopupImpl(Manager manager) {
 		this.gadgetManager = manager.getGadgetManager();
@@ -41,15 +42,25 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 		int left = Window.getClientWidth() - 200;
 
+
+
 		int cTop = 0;
 
 		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
 			GadgetPopup popup = (GadgetPopup) iterator.next();
-			popup.setLocation(cTop, left);
-			System.out.println("normalize " + popup.getHeight());
 
-			cTop += popup.getOffsetHeight();
+			// only normalize on first run ( < 0)
+			// or if the user hasn't moved the gadget themselves
+			//
+			if (normalLeft < 0 || popup.getLeft() == normalLeft) {
+				popup.setLocation(cTop, left);
+				System.out.println("normalize " + popup.getHeight());
+
+				cTop += popup.getOffsetHeight();
+			}
 		}
+
+		normalLeft = left;
 	}
 
 	public Widget getWidget() {

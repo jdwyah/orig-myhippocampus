@@ -59,6 +59,10 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 		return title;
 	}
 
+	public Widget getDragHandle() {
+		return getWidget();
+	}
+
 	public Widget getWidget() {
 		return this;
 	}

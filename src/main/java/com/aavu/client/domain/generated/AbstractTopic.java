@@ -245,12 +245,14 @@ public abstract class AbstractTopic implements Serializable {
 					&& (this.getLatitude() == castOther.getLatitude())
 					&& (this.getLongitude() == castOther.getLongitude());
 		} else {
-			System.out.println("Topic.equals fail, no unique name");
+			// System.out.println("Topic.equals fail, no unique name");
 			// TODO PEND HIGH. What should this be???? ID !=, object !=
-			return false;
-			// return ((this.isPublicVisible()==castOther.isPublicVisible())
-			// && (this.getLatitude()==castOther.getLatitude())
-			// && (this.getLongitude()==castOther.getLongitude()));
+			return ((this.isPublicVisible() == castOther.isPublicVisible())
+					&& (this.getTitle() == castOther.getTitle())
+					&& (this.getLatitude() == castOther.getLatitude())
+					&& (this.getCreated().equals(castOther.getCreated()))
+					&& (this.getLastUpdated().equals(castOther.getLastUpdated())) && (this
+					.getLongitude() == castOther.getLongitude()));
 		}
 	}
 

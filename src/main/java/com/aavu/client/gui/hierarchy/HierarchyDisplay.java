@@ -157,7 +157,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		// System.out.println(bubble.getTitle() + " r " + r + " theta " + theta + " l "
 		// + (r * Math.cos(theta)) + " " + (r * Math.sin(theta)));
 
-		System.out.println(bubble.getTitle() + " " + thetaIncr + i);
+		// System.out.println(bubble.getTitle() + " " + thetaIncr + i);
 		i++;
 
 		bubble.setLeft((int) (r * Math.cos(theta)));
@@ -275,7 +275,12 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	public void load(final Topic t, final LoadFinishedListener loadFinished) {
 		System.out.println("Hdisplay.load DragController" + dragController);
 
-		clear();
+		try {
+			clear();
+		} catch (Exception e) {
+			System.out.println("exception cleaing HD " + e);
+		}
+
 
 		decorateFor(t);
 

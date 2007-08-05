@@ -1,7 +1,5 @@
 package com.aavu.client.widget.edit;
 
-import com.aavu.client.gui.EntryEditWindow;
-import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.widget.RichText.RichTextToolbar;
 import com.aavu.client.widget.RichText2.KeyCodeEventListener;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -34,21 +32,18 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 	private JavaScriptObject range;
 
-	private TopicCache topicCache;
 
 	private ChangeListenerCollection listeners;
 	private String text;
 
-	public SpecialTextbox(TopicCache topicC) {
+	public SpecialTextbox(boolean useToolbar) {
 		super();
-		this.topicCache = topicC;
 
 		textArea = new RichTextArea(); // new HippoEditor(this);
 
-		textArea.setSize((EntryEditWindow.WIDTH - 120) + "px", "400px");
+
 		textArea.addKeyboardListener(this);
 
-		RichTextToolbar toolbar = new RichTextToolbar(textArea);
 
 		// textArea.addChangeListener(this);
 		// textArea.setKeyEventlistener(this);
@@ -89,7 +84,10 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		// completePanel.add(cancelButton);
 		// completePopup.add(completePanel);
 
-		mainPanel.add(toolbar);
+		if (useToolbar) {
+			RichTextToolbar toolbar = new RichTextToolbar(textArea);
+			mainPanel.add(toolbar);
+		}
 		mainPanel.add(textArea);
 
 
@@ -100,7 +98,11 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 	}
 
-
+	// @Override
+	public void setPixelSize(int width, int height) {
+		super.setPixelSize(width, height);
+		textArea.setPixelSize(width, height);
+	}
 
 	public void keyCodeEvent(int i, boolean ctrl) {
 		// if (ctrl && (i == KEY_PIPE_FF || i == KEY_PIPE_IE)) {

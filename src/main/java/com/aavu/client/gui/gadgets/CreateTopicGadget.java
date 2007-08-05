@@ -2,7 +2,6 @@ package com.aavu.client.gui.gadgets;
 
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Image;
@@ -44,7 +43,7 @@ public class CreateTopicGadget extends Gadget {
 	// @Override
 	public Image getPickerButton() {
 		Image b = ConstHolder.images.newTopic().createImage();
-		b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
+		// b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
 		return b;
 	}
 

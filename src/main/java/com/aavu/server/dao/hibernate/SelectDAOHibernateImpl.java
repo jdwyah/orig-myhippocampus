@@ -667,10 +667,11 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 
 	public Root getRoot(User user, User currentUser) {
-		DetachedCriteria crit = DetachedCriteria.forClass(Root.class).add(
-				Expression.eq("user", user));
-		Root userRoot = (Root) DataAccessUtils.requiredSingleResult(getHibernateTemplate()
-				.findByCriteria(crit));
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Root.class).add(
+				Expression.eq("user", user)));
+
+		Root userRoot = (Root) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(
+				crit));
 		return userRoot;
 	}
 

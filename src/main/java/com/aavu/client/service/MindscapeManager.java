@@ -108,7 +108,12 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	public void bringUpChart(Topic topic) {
 
-		currentObjs.clear();
+		try {
+			currentObjs.clear();
+		} catch (Exception e) {
+			Logger.error("Exception clearing " + e);
+		}
+
 		currentObjs.add(topic);
 
 		System.out.println("bring up chart Topic " + topic);

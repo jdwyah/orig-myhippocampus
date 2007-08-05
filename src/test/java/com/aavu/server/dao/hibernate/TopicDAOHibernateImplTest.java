@@ -18,6 +18,7 @@ import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.RealTopic;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.TopicTypeConnector;
@@ -1675,6 +1676,18 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertTrue(t instanceof MetaLocation);
 	}
 
+	public void testGetRoot() throws HippoBusinessException {
+		// Root r = new Root(u);
+		// editDAO.save(r);
+
+		Topic t = new RealTopic(u, "Foo");
+
+		t = editDAO.save(t);
+
+		Root rr = selectDAO.getRoot(u, u);
+
+
+	}
 
 
 }

@@ -21,7 +21,7 @@ import com.aavu.client.domain.util.CollectionUtils;
  * @author Jeff Dwyer
  * 
  */
-public abstract class Topic extends AbstractTopic implements Serializable, ReallyCloneable {
+public class Topic extends AbstractTopic implements Serializable, ReallyCloneable {
 
 	public Topic() {
 		setLastUpdated(new Date());
@@ -29,7 +29,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		setTitle("");
 	}
 
-	public Topic(User u, String title) {
+	protected Topic(User u, String title) {
 		this();
 		setUser(u);
 		setTitle(title);
@@ -40,7 +40,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * Used by SeeAlso
 	 */
-	public Topic(TopicIdentifier topicIdent) {
+	protected Topic(TopicIdentifier topicIdent) {
 		setId(topicIdent.getTopicID());
 		setTitle(topicIdent.getTopicTitle());
 	}

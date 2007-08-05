@@ -7,7 +7,6 @@ import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
@@ -182,7 +181,7 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 	// @Override
 	public Image getPickerButton() {
 		Image b = ConstHolder.images.gadgetLinks().createImage();
-		b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
+		// b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
 		return b;
 	}
 

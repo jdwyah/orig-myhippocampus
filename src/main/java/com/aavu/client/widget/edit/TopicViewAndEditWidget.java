@@ -64,7 +64,7 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 
 
 
-		topicEditWidget = new TopicEditWidget(this, manager, entry);
+		topicEditWidget = new TopicEditWidget(manager, entry);
 		topicEditWidget.addChangeListener(this);
 
 

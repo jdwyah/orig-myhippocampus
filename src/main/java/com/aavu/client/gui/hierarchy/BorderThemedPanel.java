@@ -1,5 +1,9 @@
 package com.aavu.client.gui.hierarchy;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -25,13 +29,19 @@ public class BorderThemedPanel extends Composite {
 	private int minWidth, minHeight;
 	private Widget myContent;
 
-	private boolean resizable;
-	private Label topLabel;
+	private boolean resizable = true;
+
+	private Widget captionWidget;
+
 	private FlexTable topRow;
 
 	private FlexTable ui;
 
 	private int width;
+	private BorderThemedPanelResizeImage resizeImage;
+
+	private ArrayList resizeListeners = null;
+	private Widget dragHandle;
 
 	public BorderThemedPanel() {
 
@@ -45,6 +55,9 @@ public class BorderThemedPanel extends Composite {
 		imgTopLeft = new Label();
 		imgTopRight = new Label();
 		imgBot = new HTML("&nbsp;");
+
+		resizeImage = new BorderThemedPanelResizeImage(this);
+
 		this.width = DEFAULT_WIDTH;
 		this.height = DEFAULT_HEIGHT;
 
@@ -56,7 +69,7 @@ public class BorderThemedPanel extends Composite {
 
 		// topBar.setTheme(currentTheme);
 
-		topLabel.setStyleName(getItemTheme("FrameBorder-t"));
+		captionWidget.setStyleName(getItemTheme("FrameBorder-t"));
 
 		// resizeImage.setTheme(currentTheme);
 
@@ -82,13 +95,14 @@ public class BorderThemedPanel extends Composite {
 		bottomRow.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
 		bottomRow.getCellFormatter().setVerticalAlignment(0, 2, HasVerticalAlignment.ALIGN_TOP);
 		if (resizable) {
-			// resizeImage.setTheme(currentTheme);
-			// bottomRow.setWidget(0, 2, resizeImage);
+			resizeImage.setTheme(currentTheme);
+			bottomRow.setWidget(0, 2, resizeImage);
 			bottomRow.getCellFormatter().setStyleName(0, 2, getItemTheme("FrameBorder-br"));
 		} else {
 			bottomRow.getCellFormatter().setStyleName(0, 2, getItemTheme("FrameBorder-br"));
 		}
 
+		System.out.println("resi " + resizable + " " + resizeImage);
 
 		// Logger.log("Applied theme");
 		//
@@ -97,6 +111,18 @@ public class BorderThemedPanel extends Composite {
 		//
 		// DOM.setStyleAttribute(ui.getElement(), "z-index", "999");
 		// Logger.log("special apply ");
+	}
+
+	public void setResizable(boolean resizable) {
+		this.resizable = resizable;
+		if (resizable) {
+			bottomRow.setWidget(0, 2, resizeImage);
+			bottomRow.getCellFormatter().setStyleName(0, 2, getItemTheme("FrameBorder-br"));
+			resizeImage.setTheme(currentTheme);
+		} else {
+			bottomRow.setHTML(0, 2, "&nbsp;");
+			bottomRow.getCellFormatter().setStyleName(0, 2, getItemTheme("FrameBorder-br"));
+		}
 	}
 
 	protected void buildGui() {
@@ -111,8 +137,8 @@ public class BorderThemedPanel extends Composite {
 		setSize(this.width, this.height);
 		topRow.setWidget(0, 0, imgTopLeft);
 
-		topLabel = new Label();
-		topRow.setWidget(0, 1, topLabel);
+		captionWidget = new Label();
+		topRow.setWidget(0, 1, captionWidget);
 
 		topRow.setWidget(0, 2, imgTopRight);
 		bottomRow.setHTML(0, 0, "&nbsp;");
@@ -173,8 +199,26 @@ public class BorderThemedPanel extends Composite {
 		return this.currentTheme;
 	}
 
-	public void setCaption(String title) {
-		topLabel.setText(title);
+
+	public void setCaption(Widget w) {
+		setCaption(w, w);
+	}
+
+	/**
+	 * NOTE dragHandle must implement SourcesMouseEvents if you want this to be draggable.
+	 * 
+	 * These two widgets will be separate if you have a Composite caption that doesn't do
+	 * SourcesMouseEvents itself. The dragHandle needs to be the widget that fires the event, or the
+	 * Dragger will not find it in its lookup dragHandlers.
+	 * 
+	 * @param dragHandle
+	 * @param w
+	 */
+	public void setCaption(Widget dragHandle, Widget w) {
+		this.dragHandle = dragHandle;
+		captionWidget = w;
+		captionWidget.setStyleName(getItemTheme("FrameBorder-t"));
+		topRow.setWidget(0, 1, captionWidget);
 	}
 
 
@@ -189,10 +233,82 @@ public class BorderThemedPanel extends Composite {
 		this.height = height;
 
 		ui.setSize(width + "px", height + "px");
+
+		fireResizeEvent();
+	}
+
+	private void fireResizeEvent() {
+		if (resizeListeners != null) {
+			for (Iterator it = resizeListeners.iterator(); it.hasNext();) {
+				ResizeHandler handler = (ResizeHandler) it.next();
+				handler.resize(width, height);
+			}
+		}
 	}
 
 	public void setTheme(String theme) {
 		this.currentTheme = theme;
 		applyTheme();
 	}
+
+	public void setWidth(int width) {
+		setSize(width, height);
+	}
+
+	public int getWidth() {
+		int widthResult = 0;
+		if (getOffsetWidth() > 0) {
+			widthResult = getOffsetWidth();
+			return widthResult;
+		}
+		try {
+			String widthStr = DOM.getStyleAttribute(ui.getElement(), "width");
+			widthStr = widthStr.replaceAll("px", "");
+			int width = Integer.parseInt(widthStr);
+			return width;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	public void setHeight(int height) {
+		setSize(width, height);
+	}
+
+	public int getHeight() {
+		if (getOffsetHeight() > 0)
+			return getOffsetHeight();
+		try {
+			String heightStr = DOM.getStyleAttribute(ui.getElement(), "height");
+			heightStr = heightStr.replaceAll("px", "");
+			int height = Integer.parseInt(heightStr);
+			return height;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+
+	public int getMinimumWidth() {
+		return minWidth;
+	}
+
+	public int getMinimumHeight() {
+		return minHeight;
+	}
+
+	public Widget getDragHandle() {
+		return dragHandle;
+	}
+
+	public final void addResizeHandler(ResizeHandler handler) {
+		if (resizeListeners == null) {
+			resizeListeners = new ArrayList();
+		}
+		resizeListeners.add(handler);
+	}
+
 }

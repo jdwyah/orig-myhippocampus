@@ -1,6 +1,7 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
@@ -17,7 +18,7 @@ public class DisplayPanel extends PopupPanel implements SourcesMouseEvents {
 		super();
 		mainPanel = new VerticalPanel();
 		borderPanel = new BorderThemedPanel();
-		borderPanel.setCaption(string);
+		borderPanel.setCaption(new Label(string));
 
 		borderPanel.setContent(mainPanel);
 

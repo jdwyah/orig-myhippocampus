@@ -124,6 +124,7 @@
 
 .gwm-alphacube-Frame-ResizeButton  {
   background: transparent url(alphacube/resize-btn.gif) no-repeat top right;			
+  cursor: se-resize;
   width:7px;
   height:7px;
   font-size:0px;

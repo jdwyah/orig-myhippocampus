@@ -31,4 +31,6 @@ public interface TopicDisplayObj extends RemembersPosition {
 
 	void addMouseWheelListener(MouseWheelListener listener);
 
+	Widget getDragHandle();
+
 }
