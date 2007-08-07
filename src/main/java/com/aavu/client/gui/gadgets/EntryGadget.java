@@ -10,12 +10,19 @@ import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.edit.EntryPreviewWidget;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class EntryGadget extends Gadget {
 
 
 	private VerticalPanel entryP;
+
+	private ScrollPanel scroll;
+
+	private static final int MAX_HEIGHT = 200;
+	private static final int HEIGHT_PER_ENTRY = 120;
+
 
 
 	public EntryGadget(Manager _manager) {
@@ -26,7 +33,13 @@ public class EntryGadget extends Gadget {
 		entryP = new VerticalPanel();
 		entryP.add(new Label(" "));
 
-		initWidget(entryP);
+		scroll = new ScrollPanel(entryP);
+		scroll.setAlwaysShowScrollBars(false);
+
+
+		scroll.setHeight(MAX_HEIGHT + "px");
+
+		initWidget(scroll);
 
 		addStyleName("H-EntryPreview");
 
@@ -42,6 +55,7 @@ public class EntryGadget extends Gadget {
 			entryP.add(new Label(" "));
 		}
 
+
 		for (Iterator iterator = entries.iterator(); iterator.hasNext();) {
 			Entry entry = (Entry) iterator.next();
 			// PEND MED whatever are we to do w/ "" titles?
@@ -50,6 +64,11 @@ public class EntryGadget extends Gadget {
 			epw.load(entry);
 			entryP.add(epw);
 		}
+
+		int scrollH = entries.size() * HEIGHT_PER_ENTRY;
+		scrollH = (scrollH < MAX_HEIGHT) ? scrollH : MAX_HEIGHT;
+		scroll.setHeight(scrollH + "px");
+		System.out.println("EntryGadg scroll heigh " + scrollH);
 
 		return entries.size();
 	}

@@ -13,6 +13,7 @@ import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.google.gwt.user.client.Timer;
@@ -63,13 +64,13 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		this.closeListener = closeListener;
 		this.manager = manager;
 
-		Grid mainPanel = new Grid(5, 3);
+		Grid mainPanel = new Grid(6, 3);
 
 		// mainPanel.setWidget(0,0, new HDatePicker(HorizontalPanel.ALIGN_RIGHT));
 
 		mainPanel.setWidget(0, 0, new Label(ConstHolder.myConstants.link_description()));
 		mainPanel.setWidget(1, 0, new Label(ConstHolder.myConstants.link_url()));
-		mainPanel.setWidget(2, 0, new Label(ConstHolder.myConstants.link_notes()));
+		mainPanel.setWidget(3, 0, new Label(ConstHolder.myConstants.link_notes()));
 
 
 		/*
@@ -78,8 +79,8 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		tagsBoard = new LinksTagsBoard(this, topicCache);
 		tagsBoard.load(link);
 
-		mainPanel.setWidget(3, 0, new Label(ConstHolder.myConstants.link_topics()));
-		mainPanel.setWidget(3, 1, tagsBoard);
+		mainPanel.setWidget(4, 0, new Label(ConstHolder.myConstants.link_topics()));
+		mainPanel.setWidget(4, 1, tagsBoard);
 
 
 		descRequired = new Label();
@@ -108,9 +109,12 @@ public class AddLinkContent extends Composite implements CompleteListener {
 			}
 		}
 
+		ExternalLink urlGoB = new ExternalLink(link, null, false);
+
 		mainPanel.setWidget(0, 1, descriptionT);
 		mainPanel.setWidget(1, 1, urlT);
-		mainPanel.setWidget(2, 1, notesT);
+		mainPanel.setWidget(2, 1, urlGoB);
+		mainPanel.setWidget(3, 1, notesT);
 
 		Button submitB = new Button(ConstHolder.myConstants.save());
 		submitB.addClickListener(new ClickListener() {
@@ -131,10 +135,10 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		});
 
 		if (showDelete) {
-			mainPanel.setWidget(4, 1, submitB);
-			mainPanel.setWidget(4, 0, delButton);
+			mainPanel.setWidget(5, 1, submitB);
+			mainPanel.setWidget(5, 0, delButton);
 		} else {
-			mainPanel.setWidget(4, 0, submitB);
+			mainPanel.setWidget(5, 0, submitB);
 		}
 
 		notificationLabel = new Label();
@@ -142,7 +146,7 @@ public class AddLinkContent extends Composite implements CompleteListener {
 			notificationLabel.setText(ConstHolder.myConstants.link_add_foruser(username));
 		}
 		// notificationLabel.setVisible(true);
-		mainPanel.setWidget(4, 2, notificationLabel);
+		mainPanel.setWidget(5, 2, notificationLabel);
 
 		initWidget(mainPanel);
 	}

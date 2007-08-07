@@ -2,7 +2,6 @@ package com.aavu.client.gui.ocean.dhtmlIslands;
 
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
@@ -60,7 +59,7 @@ public class IslandBanner extends AbsolutePanel {
 
 		setStyleName("H-IslandBanner");
 
-		sinkEvents(Event.MOUSEEVENTS);
+		// sinkEvents(Event.MOUSEEVENTS);
 
 		reg.addMouseListener(new MouseListenerAdapter() {
 			public void onMouseEnter(Widget sender) {

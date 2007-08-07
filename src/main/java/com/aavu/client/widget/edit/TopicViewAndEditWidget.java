@@ -27,6 +27,10 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 
 	private EditableLabelExtension titleBox;
 
+	private int width;
+
+	private int height;
+
 
 	public TopicViewAndEditWidget(Manager manager, SaveNeededListener saveNeeded) {
 		this.saveNeeded = saveNeeded;
@@ -44,6 +48,15 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 
 		initWidget(mainPanel);
 		setStyleName("H-ViewEdit");
+	}
+
+
+	// @Override
+	public void setPixelSize(int width, int height) {
+		super.setPixelSize(width, height);
+		this.width = width;
+		this.height = height;
+
 	}
 
 
@@ -66,7 +79,7 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 
 		topicEditWidget = new TopicEditWidget(manager, entry);
 		topicEditWidget.addChangeListener(this);
-
+		topicEditWidget.setPixelSize(width, height);
 
 		topicPanel.add(topicEditWidget);
 

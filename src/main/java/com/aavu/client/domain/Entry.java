@@ -74,10 +74,14 @@ public class Entry extends Occurrence implements Serializable, IsSerializable, R
 			// Logger.log(""+getData().length())
 			return getData().substring(start, end);
 		} catch (StringIndexOutOfBoundsException e) {
+			// Again, this catch is now the normal case. See comment above
+
 			// System.out.println("e. "+e.getMessage());
 			// System.out.println("!!!!!! "+getData()+" "+getData().length());
 			// System.out.println(start+" "+end);
-			System.out.println("Catch! Didn't Find Body Tag, hoping.." + start + " " + end);
+
+
+			// System.out.println("Catch! Didn't Find Body Tag, hoping.." + start + " " + end);
 			return getData();
 		}
 	}

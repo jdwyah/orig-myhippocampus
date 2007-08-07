@@ -4,9 +4,6 @@ import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
-import com.aavu.client.gui.ext.TooltipListener;
-import com.aavu.client.gui.ext.canvas.Canvas;
-import com.aavu.client.gui.ext.canvas.CanvasRenderingContext2D;
 import com.aavu.client.gui.hierarchy.ContextMenu;
 import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.service.Manager;
@@ -15,7 +12,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -84,59 +80,57 @@ public class Dashboard extends SimplePanel {
 
 		userW = new UserWidget(manager);
 
-		Image explorerButton = ConstHolder.images.bookAZ().createImage();
-		explorerButton.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				manager.explore();
-			}
-		});
-		explorerButton.addMouseListener(new TooltipListener(0, -20, ConstHolder.myConstants
-				.explorer_tooltip()));
+		// Image explorerButton = ConstHolder.images.bookAZ().createImage();
+		// explorerButton.addClickListener(new ClickListener() {
+		// public void onClick(Widget sender) {
+		// manager.explore();
+		// }
+		// });
+		// explorerButton.addMouseListener(new TooltipListener(0, -20, ConstHolder.myConstants
+		// .explorer_tooltip()));
 
 
 
 		mainPanel.add(addNewButton);
-		mainPanel.add(explorerButton);
+		// mainPanel.add(explorerButton);
 		mainPanel.add(userW);
 
-		Button bB = new Button("Canvas");
-		bB.addClickListener(new ClickListener() {
+		// Button bB = new Button("Canvas");
+		// bB.addClickListener(new ClickListener() {
+		//
+		// public void onClick(Widget sender) {
+		//
+		//
+		// Canvas c = new Canvas(400, 400);
+		//
+		// CanvasRenderingContext2D ctx = c.getContext2D();
+		//
+		// ctx.beginPath();
+		// ctx.arc(75, 75, 50, 0, (float) Math.PI * 2, true); // Outer circle
+		// ctx.moveTo(110, 75);
+		// ctx.arc(75, 75, 35, 0, (float) Math.PI, false); // Mouth (clockwise)
+		// ctx.moveTo(65, 65);
+		// ctx.arc(60, 65, 5, 0, (float) Math.PI * 2, true); // Left eye
+		// ctx.moveTo(95, 65);
+		// ctx.arc(90, 65, 5, 0, (float) Math.PI * 2, true); // Right eye
+		// ctx.stroke();
+		//
+		// PopupPanel p = new PopupPanel();
+		// p.add(c);
+		// p.show();
+		//
+		// }
+		// });
+		// mainPanel.add(bB);
 
-			public void onClick(Widget sender) {
-
-
-				Canvas c = new Canvas(400, 400);
-
-				CanvasRenderingContext2D ctx = c.getContext2D();
-
-				ctx.beginPath();
-				ctx.arc(75, 75, 50, 0, (float) Math.PI * 2, true); // Outer circle
-				ctx.moveTo(110, 75);
-				ctx.arc(75, 75, 35, 0, (float) Math.PI, false); // Mouth (clockwise)
-				ctx.moveTo(65, 65);
-				ctx.arc(60, 65, 5, 0, (float) Math.PI * 2, true); // Left eye
-				ctx.moveTo(95, 65);
-				ctx.arc(90, 65, 5, 0, (float) Math.PI * 2, true); // Right eye
-				ctx.stroke();
-
-				PopupPanel p = new PopupPanel();
-				p.add(c);
-				p.show();
-
-			}
-		});
-
-
-		mainPanel.add(bB);
-
-		Button addDeliciousTags = new Button("Add Delicious Tags");
-		addDeliciousTags.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				DeliciousWidget widg = new DeliciousWidget(manager);
-			}
-		});
-
-		mainPanel.add(addDeliciousTags);
+		// Button addDeliciousTags = new Button("Add Delicious Tags");
+		// addDeliciousTags.addClickListener(new ClickListener() {
+		// public void onClick(Widget sender) {
+		// DeliciousWidget widg = new DeliciousWidget(manager);
+		// }
+		// });
+		//
+		// mainPanel.add(addDeliciousTags);
 
 		// Button b = new Button("test");
 		// b.addClickListener(new ClickListener(){

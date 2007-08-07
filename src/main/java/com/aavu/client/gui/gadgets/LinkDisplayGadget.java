@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -40,14 +41,15 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 		linkPanel = new VerticalPanel();
 		linkPanel.addStyleName("H-LinkDisplay");
 
-		Button newLinkB = new Button(ConstHolder.myConstants.link_add());
-		newLinkB.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				newLink();
-			}
-		});
+		// Button newLinkB = new Button(ConstHolder.myConstants.link_add());
+		// newLinkB.addClickListener(new ClickListener() {
+		// public void onClick(Widget sender) {
+		// newLink();
+		// }
+		// });
+		//
+		// mainPanel.add(newLinkB);
 
-		mainPanel.add(newLinkB);
 		mainPanel.add(linkPanel);
 
 		initWidget(mainPanel);
@@ -120,6 +122,10 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 			size++;
 
 		}
+		if (size < 1) {
+			linkPanel.add(new Label(" "));
+		}
+
 		// PEND awkward. we'd really like to set scroll.setMaxHeight(),
 		// but that doesn't exist. setting it in all cases leads to excess space
 		ScrollPanel scroll = new ScrollPanel(table);

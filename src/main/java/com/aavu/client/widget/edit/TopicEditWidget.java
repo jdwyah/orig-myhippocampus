@@ -54,7 +54,11 @@ public class TopicEditWidget extends Composite implements SourcesChangeEvents {
 		setupTopic();
 	}
 
-
+	// @Override
+	public void setPixelSize(int width, int height) {
+		super.setPixelSize(width, height);
+		textArea.setPixelSize(width, height);
+	}
 
 	private void setupTopic() {
 		System.out.println("setupTopic");

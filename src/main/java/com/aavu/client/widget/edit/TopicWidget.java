@@ -45,7 +45,7 @@ public class TopicWidget extends FocusPanel {
 
 		add(panel);
 
-		addStyleName("H-editableText");
+		// addStyleName("H-editableText");
 
 		addMouseListener(new MouseListenerAdapter() {
 			public void onMouseEnter(Widget sender) {
@@ -84,9 +84,10 @@ public class TopicWidget extends FocusPanel {
 		System.out.println("ENTRY is empty = " + entry.isEmpty());
 		if (entry.isEmpty()) {
 			panel.add(new Label(ConstHolder.myConstants.topic_blank()));
-		} else {
-			panel.add(new Label(ConstHolder.myConstants.topic_edit()));
 		}
+		// else {
+		// panel.add(new Label(ConstHolder.myConstants.topic_edit()));
+		// }
 
 
 	}

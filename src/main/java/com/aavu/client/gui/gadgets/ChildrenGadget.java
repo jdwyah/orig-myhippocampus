@@ -9,15 +9,21 @@ import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ChildrenGadget extends Gadget implements TopicLoader {
 
-	private static final String HEIGHT = "200px";
+	private static final int MAX_HEIGHT = 200;
+	private static final int HEIGHT_PER_ENTRY = 20;
 
 
 
 	private VerticalPanel childPanel;
+
+
+
+	private ScrollPanel scroll;
 
 
 	public ChildrenGadget(Manager _manager) {
@@ -28,16 +34,16 @@ public class ChildrenGadget extends Gadget implements TopicLoader {
 		childPanel.addStyleName("H-ChildDisplay");
 
 
-		// // PEND awkward. we'd really like to set scroll.setMaxHeight(),
-		// // but that doesn't exist. setting it in all cases leads to excess space
-		// ScrollPanel scroll = new ScrollPanel(childPanel);
-		// scroll.setAlwaysShowScrollBars(false);
-		//
-		//
-		// scroll.setHeight(HEIGHT);
+		// PEND awkward. we'd really like to set scroll.setMaxHeight(),
+		// but that doesn't exist. setting it in all cases leads to excess space
+		scroll = new ScrollPanel(childPanel);
+		scroll.setAlwaysShowScrollBars(false);
 
 
-		initWidget(childPanel);
+		scroll.setHeight(MAX_HEIGHT + "px");
+
+
+		initWidget(scroll);
 
 
 	}
@@ -67,6 +73,10 @@ public class ChildrenGadget extends Gadget implements TopicLoader {
 		if (childCount < 1) {
 			childPanel.add(new Label(" "));
 		}
+		int scrollH = childCount * HEIGHT_PER_ENTRY;
+		scrollH = (scrollH < MAX_HEIGHT) ? scrollH : MAX_HEIGHT;
+		scroll.setHeight(scrollH + "px");
+		System.out.println("ChildGadg scroll heigh " + scrollH);
 
 		return childCount;
 	}

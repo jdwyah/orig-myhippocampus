@@ -18,7 +18,7 @@ public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
 
 
 		setMinimizable(false);
-		setMaximizable(true);
+		setMaximizable(false);
 
 		setDraggable(true);
 		setEffects(false);

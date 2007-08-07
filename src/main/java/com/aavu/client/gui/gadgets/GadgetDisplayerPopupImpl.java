@@ -82,7 +82,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 			// popup.setWidth(100);
 			// popup.setHeight(100);
 
-			System.out.println("w h " + popup.getOffsetWidth() + " " + popup.getOffsetHeight());
+			// System.out.println("w h " + popup.getOffsetWidth() + " " + popup.getOffsetHeight());
 
 			popup.setVisible(true);
 

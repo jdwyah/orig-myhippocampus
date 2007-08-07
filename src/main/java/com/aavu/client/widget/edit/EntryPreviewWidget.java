@@ -14,8 +14,8 @@ public class EntryPreviewWidget extends TopicWidget {
 
 		textPanel.clear();
 
-		Logger.log("entry " + entry.getData());
-		Logger.log("chopBody " + entry.getDataWithoutBodyTags());
+		// Logger.log("entry " + entry.getData());
+		// Logger.log("chopBody " + entry.getDataWithoutBodyTags());
 		String stripped = entry.getDataWithoutBodyTags();
 
 		// TODO make sure we don't cut off in the middle of an HTML tag

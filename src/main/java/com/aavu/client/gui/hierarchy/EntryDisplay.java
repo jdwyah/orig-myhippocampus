@@ -192,13 +192,13 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 
 
 	// @Override
-	protected void hover() {
+	protected void clickAction() {
 		// TODO Auto-generated method stub
 
 	}
 
 	// @Override
-	protected void unhover() {
+	protected void unClickAction() {
 		// TODO Auto-generated method stub
 
 	}
@@ -296,7 +296,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 			titleL = new Label();
 			mainP.add(titleL);
 
-			richL = new Label(">>");
+			richL = new Label("(edit)");
 			richL.addClickListener(new ClickListener() {
 				public void onClick(Widget sender) {
 					display.getManager().editOccurrence(getEntry());

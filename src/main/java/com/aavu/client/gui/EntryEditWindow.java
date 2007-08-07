@@ -25,71 +25,74 @@ public class EntryEditWindow extends PopupWindow implements SaveNeededListener {
 	private SaveStopLight saveButton;
 	private TopicViewAndEditWidget topicViewAndEditW;
 	private HorizontalPanel mainP;
-	
+
 	public EntryEditWindow(Entry entry, Manager manager, GInternalFrame frame) {
-		super(frame,entry.getTitle(),WIDTH,HEIGHT);
+		super(frame, entry.getTitle(), WIDTH, HEIGHT);
 		this.manager = manager;
 
-		topicViewAndEditW = new TopicViewAndEditWidget(manager,this);
-		
-		
-		saveButton = new SaveStopLight(new ClickListener(){
-				public void onClick(Widget sender) {
-					save();	
-				}
-			});
+		topicViewAndEditW = new TopicViewAndEditWidget(manager, this);
+		topicViewAndEditW.setPixelSize(WIDTH - 50, HEIGHT - 40);
+
+		saveButton = new SaveStopLight(new ClickListener() {
+			public void onClick(Widget sender) {
+				save();
+			}
+		});
 		mainP = new HorizontalPanel();
-		
+
 		mainP.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
-		
+
 		mainP.add(topicViewAndEditW);
 		mainP.add(saveButton);
-		
+
 		setContent(mainP);
-		
+
 		topicViewAndEditW.load(entry);
-		
+
 
 		frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
-		
-		frame.addFrameListener(new GFrameAdapter(){
+
+		frame.addFrameListener(new GFrameAdapter() {
 			public void frameClosing(GFrameEvent evt) {
-				if(saveButton.isSaveNeeded()){
-					
-//					DefaultGDialog.showConfirmDialog(mainP, Manager.myConstants.close_without_saving(), "", GDialog.OK_CANCEL_OPTION_TYPE, new GDialogChoiceListener(){
-//						public void onChoice(DefaultGDialog dialog) {
-//							 if (dialog.getSelectedOption() == DefaultGDialog.OK_OPTION) {
-//								 frame.close();
-//							 }
-//						}});
-					
-					if(Window.confirm(ConstHolder.myConstants.close_without_saving())){
+				if (saveButton.isSaveNeeded()) {
+
+					// DefaultGDialog.showConfirmDialog(mainP,
+					// Manager.myConstants.close_without_saving(), "",
+					// GDialog.OK_CANCEL_OPTION_TYPE, new GDialogChoiceListener(){
+					// public void onChoice(DefaultGDialog dialog) {
+					// if (dialog.getSelectedOption() == DefaultGDialog.OK_OPTION) {
+					// frame.close();
+					// }
+					// }});
+
+					if (Window.confirm(ConstHolder.myConstants.close_without_saving())) {
 						getFrame().close();
 					}
-					
-				}else{
+
+				} else {
 					getFrame().close();
 				}
 			}
 		});
 	}
-	
-	public GFrame getFrame(){
+
+	public GFrame getFrame() {
 		return frame;
 	}
-	
+
 	private void save() {
-		manager.getTopicCache().executeCommand(topicViewAndEditW.getEntry(),topicViewAndEditW.getSaveCommand(),
-				new StdAsyncCallback(""){
-					public void onSuccess(Object result) {					
+		manager.getTopicCache().executeCommand(topicViewAndEditW.getEntry(),
+				topicViewAndEditW.getSaveCommand(), new StdAsyncCallback("") {
+					public void onSuccess(Object result) {
 						super.onSuccess(result);
 						saveButton.saveAccomplished();
 						frame.setCaption(topicViewAndEditW.getEntry().getTitle());
-					}});		
-	}			
+					}
+				});
+	}
 
 	public void onChange(Widget sender) {
 		saveButton.setSaveNeeded();
-	}	
-	
+	}
+
 }

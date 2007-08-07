@@ -18,6 +18,7 @@
 	  <li><a href="http://www.famfamfam.com/lab/icons/silk/">FamFamFam Silk Icon Set</a></li>
   	  <li><a href="http://www.opensymphony.com/compass/">Compass Java Search Engine</a></li>
   	  <li><a href="http://code.google.com/webtoolkit/">Google Web Toolkit - GWT</a></li>
+  	  <li><img align=middle src="http://www.gwtwindowmanager.org/images/logo-mini.png"><a href="http://www.gwtwindowmanager.org/">GWT Window Manager</a></li>
   	  </ul>
 	  
 	  </div>

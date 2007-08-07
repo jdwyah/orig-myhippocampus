@@ -336,7 +336,7 @@ a:visited {
 
 .H-StatusPanel {
 	top: 0px;
-	left: 40%;
+	left: 0%;
 	width: 200px;
 	height: 40px;
 	background-color: transparent;
@@ -537,11 +537,12 @@ a:visited {
 }
 
 .H-IslandBanner .Text {
-	color: #600D25;
+	color: #FFF2BF;	
+	/*color: #F8F5F4;*/
 }
 
 .H-IslandBanner .Shadow {
-	color: #F8F5F4;
+	color: #B34700;	
 }
 
 .H-IslandBanner .Selected {
@@ -657,7 +658,7 @@ a:visited {
 	font-size: .6em;
 }
 
-.H-editableText {
+/*.H-editableText {
 	border-style: dashed;
 	border-width: 2px;
 	border-color: gray;
@@ -665,7 +666,7 @@ a:visited {
 
 .H-editableText-hover {
 	border-color: #6492FF;
-}
+}*/
 
 .H-editableLabel-label-hover {
 	background-color: #6492FF;
@@ -686,9 +687,9 @@ a:visited {
 	background-repeat: repeat;
 }
 
-.H-Tooltip { /*border: 1px solid black;
+.H-Tooltip { border: 1px solid yellow;
 	padding: 2px 3px 3px 3px;
-	background-color: #ffffcc;*/ /*Pale Weak Yellow*/
+	background-color: #ffffcc; /*Pale Weak Yellow*/
 	z-index: 9999;
 }
 

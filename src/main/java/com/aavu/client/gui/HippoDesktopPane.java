@@ -55,6 +55,7 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 	public abstract void removeButton(GFrame frame);
 
 	public void iconify(GFrame frame) {
+		// frame.getContent().setPixelSize(1, 1);
 		frame.setVisible(false);
 		addButton(frame);
 	}

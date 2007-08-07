@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
 public class FocusPanelExt extends SimplePanel implements HasFocus, SourcesClickEvents,
 		SourcesMouseEvents, SourcesMouseWheelEvents {
 
-	private static final int DBL_CLICK_DELAY = 50;
+	private static final int DBL_CLICK_DELAY = 250;
 	static final FocusImpl impl = FocusImpl.getFocusImplForPanel();
 	private ClickListenerCollection clickListeners;
 
@@ -57,6 +57,7 @@ public class FocusPanelExt extends SimplePanel implements HasFocus, SourcesClick
 
 		delayedclickFirer = new Timer() {
 			public void run() {
+				System.out.println("DELAYED CLICK FIRE");
 				clickListeners.fireClick(FocusPanelExt.this);
 			}
 		};
@@ -127,6 +128,7 @@ public class FocusPanelExt extends SimplePanel implements HasFocus, SourcesClick
 			lastClickClientX = DOM.eventGetClientX(event);
 			lastClickClientY = DOM.eventGetClientY(event);
 			if (clickListeners != null) {
+				System.out.println("DELAYED CLICK SCHEDULE");
 				delayedclickFirer.schedule(DBL_CLICK_DELAY);
 			}
 			break;
@@ -143,6 +145,7 @@ public class FocusPanelExt extends SimplePanel implements HasFocus, SourcesClick
 		case Event.ONDBLCLICK:
 			if (doubleClickLisenerCollection != null) {
 				delayedclickFirer.cancel();
+				System.out.println("DELAYED CLICK CANCEL ON DOUBLE");
 				doubleClickLisenerCollection.fireDoubleClick(this);
 			}
 			break;

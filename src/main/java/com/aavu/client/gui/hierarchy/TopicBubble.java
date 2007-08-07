@@ -106,13 +106,14 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 	}
 
 	// @Override
-	protected void hover() {
+	protected void clickAction() {
+		System.out.println("\n\nTOPIC BUBBLE click Action");
 		// showDetailButton();
 		showDetails();
 	}
 
 	// @Override
-	protected void unhover() {
+	protected void unClickAction() {
 		// hideDetailButton();
 		hideDetails();
 	}

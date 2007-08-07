@@ -31,6 +31,8 @@ public class BreadCrumbDisplayer extends PopupWindow {
 		setContent(scrollP);
 		frame.setLocation(300, 0);
 		frame.setClosable(false);
+		frame.setMaximizable(false);
+		frame.setMinimizable(false);
 
 		frame.getContent().addStyleName("H-BreadCrumbs");
 	}

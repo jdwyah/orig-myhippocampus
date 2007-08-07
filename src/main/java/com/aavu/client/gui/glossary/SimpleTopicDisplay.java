@@ -28,9 +28,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 
 	private VerticalPanel mainP;
-	
+
 	private ClickListener listener;
-	
+
 	private Topic topic;
 	private Manager manager;
 	private CloseListener close;
@@ -39,40 +39,44 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 
 	private int width = -1;
 	private int height = -1;
-	
-	
-	public SimpleTopicDisplay() {
-		mainP = new VerticalPanel();				
-		initWidget(mainP);
-		
 
-		listener = new ClickListener(){
+
+	public SimpleTopicDisplay() {
+		mainP = new VerticalPanel();
+		initWidget(mainP);
+
+
+		listener = new ClickListener() {
 			public void onClick(Widget sender) {
-				System.out.println("go there on click........"+manager+" "+close);
+				System.out.println("go there on click........" + manager + " " + close);
 				manager.bringUpChart(topic.getId());
-				close.close();					
-			}};		
+				close.close();
+			}
+		};
 	}
-	
+
 	/**
 	 * Pass a manager to enable the "Go There now" link.
+	 * 
 	 * @param topic
 	 */
 	public SimpleTopicDisplay(Topic topic) {
-		this(topic,null,null,-1,-1);
+		this(topic, null, null, -1, -1);
 	}
-	
+
 	/**
 	 * This CTOR enables to "Go There Now" link.
+	 * 
 	 * @param topic
 	 * @param manager
 	 */
-	public SimpleTopicDisplay(final Topic topic, final Manager manager, final CloseListener close,int width, int height) {
-		this();	
+	public SimpleTopicDisplay(final Topic topic, final Manager manager, final CloseListener close,
+			int width, int height) {
+		this();
 		this.width = width;
 		this.height = height;
-		draw(topic,manager,close);
-		
+		draw(topic, manager, close);
+
 	}
 
 	/**
@@ -81,26 +85,28 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 	 * @param id
 	 * @param manager
 	 * @param close
-	 * @param height 
-	 * @param width 
+	 * @param height
+	 * @param width
 	 */
-	public SimpleTopicDisplay(final TopicIdentifier id, final Manager manager, final CloseListener close,int width, int height, final AsyncCallback callback) {
-		this();	
+	public SimpleTopicDisplay(final TopicIdentifier id, final Manager manager,
+			final CloseListener close, int width, int height, final AsyncCallback callback) {
+		this();
 		this.width = width;
 		this.height = height;
-		manager.getTopicCache().getTopicByIdA(id.getTopicID(), new StdAsyncCallback("Preview"){
-			
+		manager.getTopicCache().getTopicByIdA(id.getTopicID(), new StdAsyncCallback("Preview") {
+
 
 			public void onSuccess(Object result) {
-				super.onSuccess(result);				
-				draw((Topic)result,manager,close);
+				super.onSuccess(result);
+				draw((Topic) result, manager, close);
 				callback.onSuccess(SimpleTopicDisplay.this);
-			}});
-		
+			}
+		});
+
 	}
-	
+
 	/**
-	 * PEND MED move these init's someplace else, but careful not to break the async. 
+	 * PEND MED move these init's someplace else, but careful not to break the async.
 	 * 
 	 * @param topic
 	 * @param manager
@@ -110,77 +116,79 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 		this.manager = manager;
 		this.topic = topic;
 		this.close = close;
-		
-		
+
+
 		mainP.add(new HeaderLabel(topic.getTitle()));
-		
+
 		doEntry(topic);
 		doTags(topic);
 		doLinks(topic);
-		
-		if(manager != null){	
+
+		if (manager != null) {
 			goThere = new Button(ConstHolder.myConstants.topic_preview_gotherenow());
 			goThere.addClickListener(listener);
 			mainP.add(goThere);
-		}				
+		}
 	}
 
 	private void doEntry(Topic topic) {
 		Entry e = topic.getLatestEntry();
-		
-		if(!e.isEmpty()){
-			if(width != -1 && height != -1){
-				mainP.add(new TextDisplay(topic.getLatestEntry().getData(),width,height));	
-			}else{
+
+		if (!e.isEmpty()) {
+			if (width != -1 && height != -1) {
+				mainP.add(new TextDisplay(topic.getLatestEntry().getData(), width, height));
+			} else {
 				mainP.add(new TextDisplay(topic.getLatestEntry().getData()));
 			}
-						
+
 		}
 	}
 
 	private void doTags(Topic topic) {
-		
-		if(topic.getTags().size() > 0){
+
+		if (topic.getTags().size() > 0) {
 			mainP.add(new HeaderLabel(ConstHolder.myConstants.tags()));
 			for (Iterator iter = topic.getTags().iterator(); iter.hasNext();) {
 				Topic tag = (Topic) iter.next();
-				showTag(tag);						
-			}		
+				showTag(tag);
+			}
 		}
 	}
 
 	/**
 	 * TODO not working when wrapped in GoogleMap. Needs GWTInfoWidgetWrapping?
+	 * 
 	 * @param tag
 	 */
-	private void showTag(final Topic tag){
-		
-		TopicLink tagLink = new TopicLink(tag);				
-		mainP.add(tagLink);	
-		
+	private void showTag(final Topic tag) {
+
+		TopicLink tagLink = new TopicLink(tag);
+		mainP.add(tagLink);
+
 		displayMetas(tag);
-		
+
 	}
+
 	private void displayMetas(final Topic tag) {
-		Set metas = tag.getTagProperties();		
-//		for (Iterator iter = metas.iterator(); iter.hasNext();) {		
-//			Meta element = (Meta) iter.next();
-//			GWT.log("displayMetas", null);
-//		
-//			Widget w = element.getEditorWidget(cur_topic,saveNeeded,manager);
-//			tagPanel.add(w);
-//
-//		}
+		Set metas = tag.getTagProperties();
+		// for (Iterator iter = metas.iterator(); iter.hasNext();) {
+		// Meta element = (Meta) iter.next();
+		// GWT.log("displayMetas", null);
+		//		
+		// Widget w = element.getEditorWidget(cur_topic,saveNeeded,manager);
+		// tagPanel.add(w);
+		//
+		// }
 	}
 
 
-	private void doLinks(final Topic topic){		
+	private void doLinks(final Topic topic) {
 		Set weblinks = topic.getWebLinks();
-		if(!weblinks.isEmpty()){
+		if (!weblinks.isEmpty()) {
 			mainP.add(new HeaderLabel(ConstHolder.myConstants.occurrences()));
 			for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
 				WebLink link = (WebLink) iter.next();
-				mainP.add(new ExternalLink(link));
+				mainP.add(new ExternalLink(link, true));
 			}
 		}
 	}
@@ -191,8 +199,8 @@ public class SimpleTopicDisplay extends Composite implements HasClickListeners {
 
 	public Set getPairs() {
 		Set pairs = new HashSet();
-		pairs.add(new ListenerWidget(listener,goThere));
+		pairs.add(new ListenerWidget(listener, goThere));
 		return pairs;
 	}
-	
+
 }

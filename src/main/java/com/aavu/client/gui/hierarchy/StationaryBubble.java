@@ -50,13 +50,13 @@ public class StationaryBubble extends AbstractBubble {
 	}
 
 	// @Override
-	protected void hover() {
+	protected void clickAction() {
 		guiManager.hideCurrentHover();
 		getManager().bringUpChart(ti);
 	}
 
 	// @Override
-	protected void unhover() {
+	protected void unClickAction() {
 		guiManager.hideHoverIn1(ti);
 		// HoverManager.hideHoverIn1(ti);
 	}

@@ -53,13 +53,13 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 	}
 
 	// @Override
-	protected void hover() {
+	protected void clickAction() {
 		System.out.println("OccBubble onClick");
 		getDisplay().getManager().editOccurrence(owl.getOccurrence());
 	}
 
 	// @Override
-	protected void unhover() {
+	protected void unClickAction() {
 		// TODO Auto-generated method stub
 
 	}

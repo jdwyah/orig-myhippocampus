@@ -67,7 +67,7 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 		return this;
 	}
 
-	protected abstract void hover();
+	protected abstract void clickAction();
 
 	public void onMouseDown(Widget sender, int x, int y) {
 	}
@@ -104,12 +104,12 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 		return manager;
 	}
 
-	protected abstract void unhover();
+	protected abstract void unClickAction();
 
 
 
 	public void onClick(Widget sender) {
-		hover();
+		clickAction();
 	}
 
 }

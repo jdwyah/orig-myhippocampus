@@ -1,7 +1,6 @@
 package com.aavu.client.widget;
 
 import com.aavu.client.Interactive;
-import com.aavu.client.MyMindscape;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.URI;
@@ -14,18 +13,15 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HasHTML;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
-import com.google.gwt.user.client.ui.Widget;
 
-public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEvents, SourcesMouseEvents {
+public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEvents,
+		SourcesMouseEvents {
 
 	private Element anchorElem;
 	private ClickListenerCollection fClickListeners;
@@ -40,68 +36,71 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		DOM.appendChild(getElement(), anchorElem = DOM.createAnchor());
 		sinkEvents(Event.ONCLICK);
 		sinkEvents(Event.MOUSEEVENTS);
-		
+
 		setStyleName("H-External-Hyperlink");
 	}
 
-	public void init(URI occ) {
-							
-		if(null != occ.getData()){	
-			init(occ,occ.getUri()+"<BR>"+occ.getData(),true);			
-		}else{
-			init(occ,occ.getUri(),true);			
+	public void init(URI occ, boolean doHover) {
+
+		if (null != occ.getData()) {
+			init(occ, occ.getUri() + "<BR>" + occ.getData(), true, doHover);
+		} else {
+			init(occ, occ.getUri(), true, doHover);
 		}
 	}
-	
-	
-	public void init(S3File file){
-		init((URI) file);	
-				
-		String link = Interactive.getRelativeURL(ConstHolder.FILE_PATH+urlEncode(file.getUri()));
-		
-		System.out.println("EXTERNAL LINK S3 PRE "+file.getUri());
-		System.out.println("EXTERNAL LINK FOR S3 "+link);
-		setTarget(link);		
+
+
+	public void init(S3File file, boolean doHover) {
+		init((URI) file, doHover);
+
+		String link = Interactive.getRelativeURL(ConstHolder.FILE_PATH + urlEncode(file.getUri()));
+
+		System.out.println("EXTERNAL LINK S3 PRE " + file.getUri());
+		System.out.println("EXTERNAL LINK FOR S3 " + link);
+		setTarget(link);
 	}
-	
-	public void init(URI occ,String popupText,boolean right) {
+
+	public void init(URI occ, String popupText, boolean right, boolean doHover) {
 		setText(occ.getTitle());
 		setTarget(occ.getUri());
-		
-		if(right){
-			addMouseListener(new TooltipListener(TooltipListener.DYNAMIC_LEFT,popupText));
-		}else{
-			addMouseListener(new TooltipListener(popupText));
+
+		if (doHover) {
+			if (right) {
+				addMouseListener(new TooltipListener(TooltipListener.DYNAMIC_LEFT, popupText));
+			} else {
+				addMouseListener(new TooltipListener(popupText));
+			}
 		}
 	}
-	
-	public ExternalLink(Occurrence occ) {
+
+	public ExternalLink(Occurrence occ, boolean doHover) {
 		this();
-		if(occ instanceof S3File){
-			init((S3File)occ);
-		}else if(occ instanceof URI){
-			init((URI)occ);
-		}else{
+		if (occ instanceof S3File) {
+			init((S3File) occ, doHover);
+		} else if (occ instanceof URI) {
+			init((URI) occ, doHover);
+		} else {
 			throw new UnsupportedOperationException();
 		}
 	}
 
 	public ExternalLink(WebLink occ, String popupText, boolean alignRight) {
 		this();
-		init(occ,popupText,alignRight);
+		init(occ, popupText, alignRight, true);
 	}
+
+
+
 	public ExternalLink(String text, String url) {
 		this();
 		setText(text);
-		setTarget(url);		
+		setTarget(url);
 	}
 
-	private static native String urlEncode( String str )
-    /*-{
-        return escape( str );
-    }-*/; 
-
-
+	private static native String urlEncode(String str)
+	/*-{
+	    return escape( str );
+	}-*/;
 
 
 
@@ -129,31 +128,31 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 		return DOM.getInnerText(anchorElem);
 	}
 
-//	public void onBrowserEvent(Event event) {
-//		if (DOM.eventGetType(event) == Event.ONCLICK) {
-//			if (fClickListeners != null)
-//				fClickListeners.fireClick(this);
-//			Window.open(getTarget(), getText(), "");
-//			DOM.eventPreventDefault(event);
-//		}
-//	}
+	// public void onBrowserEvent(Event event) {
+	// if (DOM.eventGetType(event) == Event.ONCLICK) {
+	// if (fClickListeners != null)
+	// fClickListeners.fireClick(this);
+	// Window.open(getTarget(), getText(), "");
+	// DOM.eventPreventDefault(event);
+	// }
+	// }
 	public void onBrowserEvent(Event event) {
 		switch (DOM.eventGetType(event)) {
-	      case Event.ONCLICK:
-	        if (fClickListeners != null)
-	        	fClickListeners.fireClick(this);
-	        break;
+		case Event.ONCLICK:
+			if (fClickListeners != null)
+				fClickListeners.fireClick(this);
+			break;
 
-	      case Event.ONMOUSEDOWN:
-	      case Event.ONMOUSEUP:
-	      case Event.ONMOUSEMOVE:
-	      case Event.ONMOUSEOVER:
-	      case Event.ONMOUSEOUT:
-	        if (fMouseListeners != null)
-	        	fMouseListeners.fireMouseEvent(this, event);
-	        break;
-	    }
-	  }
+		case Event.ONMOUSEDOWN:
+		case Event.ONMOUSEUP:
+		case Event.ONMOUSEMOVE:
+		case Event.ONMOUSEOVER:
+		case Event.ONMOUSEOUT:
+			if (fMouseListeners != null)
+				fMouseListeners.fireMouseEvent(this, event);
+			break;
+		}
+	}
 
 	public void removeClickListener(ClickListener listener) {
 		if (fClickListeners != null)
@@ -165,11 +164,11 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 	}
 
 	/**
-	 * Sets the history token referenced by this hyperlink. This is the history
-	 * token that will be passed to {@link History#newItem} when this link is
-	 * clicked.
+	 * Sets the history token referenced by this hyperlink. This is the history token that will be
+	 * passed to {@link History#newItem} when this link is clicked.
 	 * 
-	 * @param target the new target history token
+	 * @param target
+	 *            the new target history token
 	 */
 	public void setTarget(String target) {
 		this.target = target;
@@ -187,7 +186,7 @@ public class ExternalLink extends FocusWidget implements HasHTML, SourcesClickEv
 	}
 
 	public void removeMouseListener(MouseListener listener) {
-		if(fMouseListeners != null)
+		if (fMouseListeners != null)
 			fMouseListeners.remove(listener);
 	}
 
