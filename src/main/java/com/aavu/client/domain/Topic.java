@@ -777,7 +777,9 @@ public class Topic extends AbstractTopic implements Serializable, ReallyCloneabl
 		}
 
 		if (!exists) {
-			type.getInstances().add(conn);
+			// System.out.println("exists " + exists + " " + conn);
+			// System.out.println("type " + type);
+			// type.getInstances().add(conn);
 			return getTypes().add(conn);
 		} else {
 			return true;

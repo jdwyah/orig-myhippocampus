@@ -1,6 +1,7 @@
 package com.aavu.client.widget.edit;
 
 import com.aavu.client.async.EZCallback;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.cache.TopicCache;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -73,7 +74,7 @@ public class TopicCompleter extends Composite {
 
 		getTopicIdentForNameOrCreateNew(suggestBox.getText(), new EZCallback() {
 			public void onSuccess(Object result) {
-				// completeListener.completed((TopicIdentifier) result);
+				completeListener.completed((TopicIdentifier) result);
 			}
 		});
 	}

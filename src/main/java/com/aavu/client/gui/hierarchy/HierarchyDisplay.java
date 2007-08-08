@@ -302,6 +302,14 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 			addBubble(BubbleFactory.createBubbleFor(owl, this));
 
 		}
+
+		currentRoot = t;
+
+		zoomTo(1);
+		centerOn(0, 0);
+
+		redraw();
+
 	}
 
 	private void loadChildTopics(final Topic t, final LoadFinishedListener loadFinished) {
@@ -318,11 +326,6 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 							FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();
 							addBubble(BubbleFactory.createBubbleFor(fti, HierarchyDisplay.this));
 						}
-
-						currentRoot = t;
-
-						zoomTo(1);
-						centerOn(0, 0);
 
 						redraw();
 

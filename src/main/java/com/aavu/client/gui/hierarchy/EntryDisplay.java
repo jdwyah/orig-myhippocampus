@@ -121,6 +121,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 	}
 
 	public void zoomToScale(double currentScale) {
+
 		lastScale = currentScale;
 
 		// our div
@@ -177,8 +178,6 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 		mainPanel = new AbsolutePanel();
 
 		mainPanel.add(entryPreview);
-
-
 
 		return mainPanel;
 	}

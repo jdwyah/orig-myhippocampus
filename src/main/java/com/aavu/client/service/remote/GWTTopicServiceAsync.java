@@ -76,6 +76,8 @@ public interface GWTTopicServiceAsync {
 
 	void test(A a, AsyncCallback callback);
 
+	// void test(C c, AsyncCallback callback);
+
 	void getAllLocations(AsyncCallback callback);
 
 	void getLocationsForTags(List shoppingList, AsyncCallback callback);

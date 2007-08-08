@@ -118,6 +118,8 @@ public interface GWTTopicService extends RemoteService {
 
 	A test(A a);
 
+	// C test(C a);
+
 	// List<SearchResult>
 	/**
 	 * @gwt.typeArgs <com.aavu.client.domain.dto.SearchResult>

@@ -122,6 +122,7 @@ public abstract class AbstractTopic implements Serializable {
 	 * * The latitude
 	 */
 	public int getLatitude() {
+
 		return this.latitude;
 	}
 
@@ -247,6 +248,7 @@ public abstract class AbstractTopic implements Serializable {
 		} else {
 			// System.out.println("Topic.equals fail, no unique name");
 			// TODO PEND HIGH. What should this be???? ID !=, object !=
+
 			return ((this.isPublicVisible() == castOther.isPublicVisible())
 					&& (this.getTitle() == castOther.getTitle())
 					&& (this.getLatitude() == castOther.getLatitude())

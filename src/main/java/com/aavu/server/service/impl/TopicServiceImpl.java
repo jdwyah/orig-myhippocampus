@@ -122,6 +122,10 @@ public class TopicServiceImpl implements TopicService {
 	 * If parent is null, that's ok, we're saving a Meta or something. Pass new Root(), to do a
 	 * lookup and get the actual root element. Pass parent to get tagged.
 	 * 
+	 * NOTE: must do the 'loadedParent' thing or some variation of this, to make sure that we don't
+	 * save a parent passed in directly from GWT. That led to some awful foreign key shenanagins as
+	 * we tried to duplicate the Collections.
+	 * 
 	 * If prototype is an occurrence, use addOccurrence()
 	 */
 	public Topic createNew(String title, Topic prototype, Topic parent, int[] lnglat)
@@ -141,10 +145,9 @@ public class TopicServiceImpl implements TopicService {
 		log.debug("Prototype " + prototype.getId() + " " + prototype.getClass());
 
 		if (parent != null) {
+			Topic loadedParent = selectDAO.getForID(userService.getCurrentUser(), parent.getId());
 			if (prototype instanceof Occurrence) {
 				log.debug("adding occurrence");
-				Topic loadedParent = selectDAO.getForID(userService.getCurrentUser(), parent
-						.getId());
 				loadedParent.addOccurence((Occurrence) prototype, lnglat);
 				save(loadedParent);
 			} else {
@@ -152,7 +155,7 @@ public class TopicServiceImpl implements TopicService {
 					prototype.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService
 							.getCurrentUser()), lnglat);
 				} else {
-					prototype.tagTopic(parent, lnglat);
+					prototype.tagTopic(loadedParent, lnglat);
 				}
 			}
 			prototype = save(prototype);

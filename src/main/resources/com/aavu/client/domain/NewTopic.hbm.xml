@@ -119,8 +119,8 @@
 			<one-to-many class="TopicOccurrenceConnector"/>
 		</set>
 
-		<!-- backwards, names are switched -->		
-	    <set name="associations" table="topic_associations" cascade="save-update">
+		<!-- backwards, names are switched -->				
+	     <set name="associations" table="topic_associations" cascade="save-update"> 	    
 			<key column="association_id"></key>			
 			<many-to-many column="topic_id" class="Association" />
 		</set>
@@ -250,7 +250,9 @@
 				<!-- <map-key-many-to-many column="role_topic" class="Topic" ></map-key-many-to-many>-->
 <!-- 				<many-to-many column="implementing_topic" class="Topic"></many-to-many>						
 	    	</map>-->
-	      	<set name="members" table="member_topics" cascade="save-update">
+	    	
+	    	
+	      	<set name="members" table="member_topics" cascade="save-update">	      	
 				<key column="member_topics_id"></key>			
 				<many-to-many column="member_id" class="Topic" />
   			</set>

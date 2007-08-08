@@ -51,8 +51,10 @@ public class BubbleFactory {
 		} else {
 
 			FullTopicIdentifier fti = new FullTopicIdentifier(thought);
-			fti.setLatitudeOnIsland(lnglat[1]);
-			fti.setLongitudeOnIsland(lnglat[0]);
+			if (lnglat != null) {
+				fti.setLatitudeOnIsland(lnglat[1]);
+				fti.setLongitudeOnIsland(lnglat[0]);
+			}
 
 			return createBubbleFor(fti, hierarchyDisplay);
 		}

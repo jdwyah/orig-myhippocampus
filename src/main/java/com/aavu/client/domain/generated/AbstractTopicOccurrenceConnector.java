@@ -113,7 +113,7 @@ public class AbstractTopicOccurrenceConnector implements Serializable, IsSeriali
 			if (other.topic != null)
 				return false;
 		} else if (!topic.equals(other.topic)) {
-			System.out.println("dinging on top");
+			// System.out.println("TopicOccConn.equals topic!=other");
 			return false;
 		}
 		if (occurrence == null) {

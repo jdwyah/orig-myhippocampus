@@ -409,8 +409,10 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 	public A test(A a) {
-		// TODO Auto-generated method stub
-		return null;
+		return a;
 	}
 
+	// public C test(C c) {
+	// return c;
+	// }
 }

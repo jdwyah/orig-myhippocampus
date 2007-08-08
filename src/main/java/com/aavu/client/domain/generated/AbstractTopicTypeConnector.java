@@ -108,7 +108,7 @@ public class AbstractTopicTypeConnector implements Serializable, IsSerializable 
 			if (other.topic != null)
 				return false;
 		} else if (!topic.equals(other.topic)) {
-			System.out.println("dinging on top");
+			// System.out.println("TopicTypeConn.equals topic!=other");
 			return false;
 		}
 		if (type == null) {

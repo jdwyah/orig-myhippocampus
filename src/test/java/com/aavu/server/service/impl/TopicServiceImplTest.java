@@ -20,6 +20,7 @@ import com.aavu.client.domain.MetaText;
 import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.RealTopic;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.User;
@@ -369,13 +370,36 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 
+	public void testCommandWithAssociation() throws HippoException {
+
+		clean();
+
+		// Topic ptag = topicService.createNewIfNonExistent(D);
+		//
+		// Topic tag = topicService.getForNameCaseInsensitive(D);
+		//
+		// MetaDate bday = new MetaDate();
+		// bday.setUser(u);
+		// bday.setTitle("Birthday");
+		// tag.addMetaValue(bday, new HippoDate());
+		//		
+		// tag = topicService.save(tag);
+
+
+		Topic book = topicService.getForID(1915);
+
+
+		Topic newBook = topicService.createNewIfNonExistent("new book", book);
+
+		System.out.println("SAVED TAG " + B);
+
+	}
 
 	public void testCommands() throws HippoException {
 
 		clean();
 
-		Topic tag = new RealTopic(u, D);
-		tag = topicService.save(tag);
+		Topic tag = topicService.createNewIfNonExistent(D);
 
 		System.out.println("SAVED TAG " + B);
 
@@ -943,6 +967,9 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 			topicService.delete(t);
 		}
 		log.debug("\n-----CLEAN FIN--------");
+
+		Root r = new Root(u);
+		topicService.save(r);
 	}
 
 
