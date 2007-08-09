@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class Gadget extends Composite {
 	private GadgetHolder gadgetHolder;
 	protected Manager manager;
+	private int lastLoadSize;
 
 	// implements SourcesMouseEvents {
 
@@ -73,7 +74,27 @@ public abstract class Gadget extends Composite {
 		super.initWidget(widget);
 	}
 
+	/**
+	 * PEND integrate lastload size better
+	 * 
+	 * @param topic
+	 * @return
+	 */
 	public abstract int load(Topic topic);
+
+
+	/**
+	 * PEND integrate with load()
+	 * 
+	 * @param lastLoadSize
+	 */
+	public void setLastLoadSize(int lastLoadSize) {
+		this.lastLoadSize = lastLoadSize;
+	}
+
+	public int getLastLoadSize() {
+		return lastLoadSize;
+	}
 
 	public abstract Image getPickerButton();
 
@@ -114,13 +135,56 @@ public abstract class Gadget extends Composite {
 		throw new UnsupportedOperationException();
 	}
 
+
+	/**
+	 * This is called by GadgetDisplayer impl to see whether the gadget should display. PEND, this
+	 * is a bit duped by isOnForTopic()
+	 * 
+	 * @return
+	 */
 	public boolean isDisplayer() {
 		return false;
 	}
 
+	/**
+	 * Should we show on the double-click, ctrl-click, menu?
+	 * 
+	 * @return
+	 */
 	public boolean isOnContextMenu() {
 		return false;
 	}
+
+
+
+	public String getDisplayName(Topic topic) {
+		return topic.getTitle() + " " + getDisplayName();
+	}
+
+
+
+	/**
+	 * Default behavior is not to show for when the topic loaded is the current topic. ie, the topic
+	 * that is the current root of the hierarchydisplay.
+	 * 
+	 * TitleOptions & TagBoard override this to be always showing.
+	 * 
+	 * @param isCurrent
+	 * @return
+	 */
+	public boolean showForIsCurrent(boolean isCurrent) {
+		return !isCurrent;
+	}
+
+
+	/**
+	 * override point for gadget that want to position themselves
+	 * 
+	 * @param gadgetPopup
+	 */
+	public void normalize(GadgetPopup gadgetPopup) {
+	}
+
 
 	// public void addMouseListener(MouseListener listener) {
 	// focusPanel.addMouseListener(listener);

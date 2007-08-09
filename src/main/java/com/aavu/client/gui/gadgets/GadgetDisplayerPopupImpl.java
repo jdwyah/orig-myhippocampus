@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements GadgetDisplayer {
 
+
 	private GadgetManager gadgetManager;
 	private HashSet popups;
 	private int normalLeft = -1;
@@ -40,7 +41,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 	private void normalize() {
 
-		int left = Window.getClientWidth() - 200;
+		int left = Window.getClientWidth() - GadgetPopup.POPUPWIDTH;
 
 
 
@@ -52,11 +53,19 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 			// only normalize on first run ( < 0)
 			// or if the user hasn't moved the gadget themselves
 			//
+
+
+
+			System.out.println("GadgetDisplayerPopup unset " + 4 + " " + popup.getLeft() + " l "
+					+ left + " nl " + normalLeft + " " + popup.getCaption());
+
 			if (normalLeft < 0 || popup.getLeft() == normalLeft) {
-				popup.setLocation(cTop, left);
-				System.out.println("normalize " + popup.getHeight());
+
+				popup.normalize(cTop, left);
 
 				cTop += popup.getOffsetHeight();
+
+
 			}
 		}
 
@@ -67,24 +76,31 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 		return null;
 	}
 
-	public void load(Topic topic) {
-		System.out.println("gadgetPopuDisplayer load");
+	public void load(Topic topic, boolean isCurrent) {
+		System.out.println("gadgetPopuDisplayer load current: " + isCurrent);
 		gadgetManager.load(topic);
 
 		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
 			GadgetPopup popup = (GadgetPopup) iterator.next();
-			popup.nowShowTopic(topic);
 
-			// System.out.println("GadgetDisplayPopupImpl popup set vis " + popup.getLeft() + " " +
-			// popup.getTop());
+			if (popup.showForIsCurrent(isCurrent) && popup.getLastLoadSize() > 0) {
+				popup.nowShowTopic(topic);
+
+				// System.out.println("GadgetDisplayPopupImpl popup set vis " + popup.getLeft() + "
+				// " +
+				// popup.getTop());
 
 
-			// popup.setWidth(100);
-			// popup.setHeight(100);
+				// popup.setWidth(100);
+				// popup.setHeight(100);
 
-			// System.out.println("w h " + popup.getOffsetWidth() + " " + popup.getOffsetHeight());
+				// System.out.println("w h " + popup.getOffsetWidth() + " " +
+				// popup.getOffsetHeight());
 
-			popup.setVisible(true);
+				popup.setVisible(true);
+			} else {
+				popup.setVisible(false);
+			}
 
 		}
 		normalize();

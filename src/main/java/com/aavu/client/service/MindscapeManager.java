@@ -233,7 +233,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 				map.removeIsland(topic.getId());
 
-				unselect();
 				refreshAll();
 			}
 		});

@@ -106,7 +106,7 @@ public class PublicBrowser extends Composite implements GadgetDisplayer {
 		// TODO Auto-generated method stub
 	}
 
-	public void load(Topic topic) {
+	public void load(Topic topic, boolean isCurrent) {
 		this.topic = topic;
 
 		panel.clear();

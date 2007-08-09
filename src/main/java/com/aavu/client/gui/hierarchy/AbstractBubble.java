@@ -104,8 +104,6 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 		return manager;
 	}
 
-	protected abstract void unClickAction();
-
 
 
 	public void onClick(Widget sender) {

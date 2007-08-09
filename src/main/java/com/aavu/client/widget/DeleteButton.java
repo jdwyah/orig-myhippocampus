@@ -8,12 +8,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 
 public class DeleteButton extends Composite implements SourcesClickEvents {
-	
+
 	private Image image;
 
-	public DeleteButton(){		
+	public DeleteButton() {
 		image = ConstHolder.images.bin_closed().createImage();
-		image.addMouseListener(new TooltipListener(ConstHolder.myConstants.delete_tooltip()));		
+		image.addMouseListener(new TooltipListener(ConstHolder.myConstants.remove_tooltip()));
 		initWidget(image);
 	}
 

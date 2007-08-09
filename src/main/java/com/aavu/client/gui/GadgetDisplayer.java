@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Panel;
 public interface GadgetDisplayer extends GadgetClickListener {
 
 
-	void load(Topic topic);
+	void load(Topic topic, boolean isCurrent);
 
 	void unload();
 

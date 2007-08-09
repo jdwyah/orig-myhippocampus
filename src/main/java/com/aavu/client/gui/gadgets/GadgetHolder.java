@@ -6,4 +6,8 @@ public interface GadgetHolder {
 
 	void setVisible(boolean b);
 
+	void setTop(int i);
+
+	void setLeft(int i);
+
 }

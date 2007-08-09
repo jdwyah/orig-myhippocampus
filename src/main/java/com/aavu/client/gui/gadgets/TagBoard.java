@@ -4,16 +4,13 @@ import java.util.Iterator;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.RealTopic;
-import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.GUIManager;
-import com.aavu.client.gui.hierarchy.StationaryBubble;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.AddButton;
 import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.aavu.client.widget.edit.DeletableTopicLabel;
@@ -28,7 +25,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TagBoard extends Composite implements CompleteListener, RemoveListener {
+public class TagBoard extends Gadget implements CompleteListener, RemoveListener {
 
 	private CellPanel tagPanel = new HorizontalPanel();
 
@@ -43,14 +40,13 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 	private HorizontalPanel adderP;
 
-	private GUIManager guiManager;
 
 
 	// private SaveNeededListener saveNeeded;
 
-	public TagBoard(Manager manager, GUIManager guiManager) {
+	public TagBoard(Manager manager) {
+		super(manager);
 		this.manager = manager;
-		this.guiManager = guiManager;
 
 		// this.saveNeeded = saveNeeded;
 
@@ -82,14 +78,14 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		HorizontalPanel tagBoxP = new HorizontalPanel();
 
 
-
-		Image ballAdd = ConstHolder.images.ballAdd().createImage();
-		ballAdd.addClickListener(new ClickListener() {
+		AddButton addButton = new AddButton("Add Tag");
+		addButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				toggle();
 			}
 		});
-		tagBoxP.add(ballAdd);
+
+		tagBoxP.add(addButton);
 
 		adderP = new HorizontalPanel();
 		adderP.add(new Label(ConstHolder.myConstants.addTag()));
@@ -131,12 +127,6 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	public int load(Topic topic) {
 		adderP.setVisible(false);
 
-		if (topic instanceof Root) {
-			setVisible(false);
-		} else {
-			setVisible(true);
-		}
-
 
 		tagPanel.clear();
 
@@ -162,16 +152,16 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 
 	private void showTag(final Topic tag) {
 
-		StationaryBubble topicBubble = new StationaryBubble(new FullTopicIdentifier(tag), manager,
-				guiManager);
-
-		tagPanel.add(topicBubble);
-
-		// DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
+		// StationaryBubble topicBubble = new StationaryBubble(new FullTopicIdentifier(tag),
+		// manager);
 		//
-		// TagGadget tg = new TagGadget(tagLabel);
-		//
-		// tagPanel.add(tg);
+		// tagPanel.add(topicBubble);
+
+		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
+
+		TagGadget tg = new TagGadget(tagLabel);
+
+		tagPanel.add(tg);
 	}
 
 	/**
@@ -179,6 +169,11 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 	 * to make sure that we have all necessary Data.
 	 */
 	public void remove(Topic tag, final Widget widgetToRemoveOnSuccess) {
+
+		if (cur_topic.getTypes().size() < 2) {
+			manager.displayInfo("Can't remove the last tag for a topic.");
+			return;
+		}
 
 		manager.getTopicCache().executeCommand(cur_topic,
 				new RemoveTagFromTopicCommand(cur_topic, tag),
@@ -260,5 +255,37 @@ public class TagBoard extends Composite implements CompleteListener, RemoveListe
 		}
 
 	}
+
+	// @Override
+	public String getDisplayName() {
+		return ConstHolder.myConstants.tags();
+	}
+
+	// @Override
+	public Image getPickerButton() {
+		return null;
+	}
+
+	// @Override
+	public boolean isOnForTopic(Topic topic) {
+		return !topic.getTypes().isEmpty();
+	}
+
+	// @Override
+	public boolean isDisplayer() {
+		return true;
+	}
+
+	// @Override
+	public boolean showForIsCurrent(boolean isCurrent) {
+		return true;
+	}
+
+
+	// @Override
+	public void normalize(GadgetPopup gadgetPopup) {
+		gadgetPopup.setLocation(0, 250);
+	}
+
 
 }

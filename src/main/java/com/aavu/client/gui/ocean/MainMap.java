@@ -58,6 +58,10 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 
 	private GadgetDisplayer gadgetDisplayer;
 
+	private Topic curTopic;
+
+	private boolean gadgetsDirty;
+
 	// private TopicDisplayOverlay topicDisplayOverlay;
 
 	// private List frames;
@@ -125,9 +129,11 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 		mainP.add(zoomer);
 
 		centerDisplayer = new CenterTopicDisplayer(manager, this);
-		mainP.add(centerDisplayer);
+		// mainP.add(centerDisplayer);
 
 		breadcrumbDisplayer = new BreadCrumbDisplayer(manager);
+
+
 		// mainP.add(breadcrumbDisplayer);
 
 		// connectionBoard = new ConnectionBoard(manager);
@@ -229,9 +235,15 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 			manager.displayInfo("That Topic cannot be found");
 			return;
 		}
+
+		curTopic = topic;
+
 		spatialDisplay.load(topic, null);
 		centerDisplayer.load(topic);
 		breadcrumbDisplayer.load(topic);
+
+		getRidOfHover();
+
 		// connectionBoard.load(topic);
 
 	}
@@ -307,26 +319,31 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 		return Window.getClientHeight();
 	}
 
+	/**
+	 * Without this we'll reload on every click of the backdrop
+	 */
 	public void hideCurrentHover() {
-
-		gadgetDisplayer.unload();
-
+		if (gadgetsDirty) {
+			getRidOfHover();
+		}
 	}
 
-	public void hideHoverIn1(TopicIdentifier ti) {
 
-		gadgetDisplayer.unload();
-
+	private void getRidOfHover() {
+		gadgetDisplayer.load(curTopic, true);
+		gadgetsDirty = false;
 	}
+
 
 	public void showHover(TopicIdentifier ti) {
+		gadgetsDirty = true;
 
 		manager.getTopicCache().getTopic(ti, new StdAsyncCallback("Get Display Overlay") {
 			// @Override
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 
-				gadgetDisplayer.load((Topic) result);
+				gadgetDisplayer.load((Topic) result, false);
 				// topicDisplayOverlay.load((Topic) result);
 
 

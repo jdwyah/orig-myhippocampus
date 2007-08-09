@@ -22,7 +22,7 @@ public class CenterTopicDisplayer extends Composite {
 		this.manager = manager;
 		this.guiManager = guiManager;
 
-		tagBoard = new TagBoard(manager, guiManager);
+		tagBoard = new TagBoard(manager);
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 

@@ -108,7 +108,7 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
 	protected abstract void showDetails();
 
-	protected abstract void hideDetails();
+
 
 	// private void toggleDetails() {
 	// if (isDetailsShowing()) {

@@ -47,7 +47,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 	}
 
 
-	public void load(Topic topic) {
+	public void load(Topic topic, boolean isCurrent) {
 
 		this.topic = topic;
 

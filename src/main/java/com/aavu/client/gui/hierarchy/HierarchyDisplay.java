@@ -482,7 +482,5 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		guiManager.showHover(ti);
 	}
 
-	public void hideHoverIn1(TopicIdentifier ti) {
-		guiManager.hideHoverIn1(ti);
-	}
+
 }

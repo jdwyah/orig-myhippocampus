@@ -2,6 +2,7 @@ package com.aavu.client.gui;
 
 import com.aavu.client.Interactive;
 import com.aavu.client.domain.User;
+import com.aavu.client.gui.hierarchy.BorderThemedPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ExternalLink;
@@ -44,9 +45,12 @@ public class UserWidget extends Composite {
 				.getRelativeURL(ConstHolder.myConstants.userw_logout_url())));
 		mainP.add(noUserPanel);
 
+		BorderThemedPanel btp = new BorderThemedPanel();
+		btp.setCaption(new Label("User"));
+		btp.setContent(mainP);
 
-		initWidget(mainP);
-		addStyleName("H-BlueFade");
+		initWidget(btp);
+
 	}
 
 	public void load() {

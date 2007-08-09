@@ -112,11 +112,6 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 		showDetails();
 	}
 
-	// @Override
-	protected void unClickAction() {
-		// hideDetailButton();
-		hideDetails();
-	}
 
 	protected void showDetails() {
 		detailsShowing = true;
@@ -125,12 +120,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	}
 
-	protected void hideDetails() {
-		detailsShowing = false;
 
-		getDisplay().hideHoverIn1(getFTI());
-		// HoverManager.hideHoverIn1(getFTI());
-	}
 
 	protected boolean isDetailsShowing() {
 		return detailsShowing;

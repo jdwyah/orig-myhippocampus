@@ -4,12 +4,10 @@ import com.aavu.client.async.EZCallback;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.cache.TopicCache;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestionEvent;
 import com.google.gwt.user.client.ui.SuggestionHandler;
-import com.google.gwt.user.client.ui.Widget;
 
 public class TopicCompleter extends Composite {
 
@@ -46,33 +44,37 @@ public class TopicCompleter extends Composite {
 			public void onSuggestionSelected(SuggestionEvent event) {
 				System.out.println("On Suggestion Selected! "
 						+ event.getSelectedSuggestion().getReplacementString());
-				// event.getSelectedSuggestion()
-				complete();
+				complete(event.getSelectedSuggestion().getReplacementString());
 			}
 		});
 
-		suggestBox.addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
-				System.out.println("ON CHANGE " + suggestBox.getText());
-			}
-		});
 
-		// addChangeListener(new ChangeListener() {
-		// public void onChange(Widget sender) {
-		// System.out.println("ONCHANGE " + getText());
+		// NOTE, this dupes!
+		// maybe add a timer?
+
+		// suggestBox.addKeyboardListener(new KeyboardListenerAdapter() {
+		// // @Override
+		// public void onKeyPress(Widget sender, char keyCode, int modifiers) {
+		// if (keyCode == KEY_ENTER) {
 		// complete();
 		// }
+		// }
 		// });
+
 	}
 
 	/**
 	 * public so we can call this at any time
 	 */
 	public void complete() {
+		complete(suggestBox.getText());
+	}
 
-		System.out.println("Complete t " + suggestBox.getText() + " ");
+	public void complete(String completeStr) {
 
-		getTopicIdentForNameOrCreateNew(suggestBox.getText(), new EZCallback() {
+		System.out.println("Complete t " + completeStr + " ");
+
+		getTopicIdentForNameOrCreateNew(completeStr, new EZCallback() {
 			public void onSuccess(Object result) {
 				completeListener.completed((TopicIdentifier) result);
 			}

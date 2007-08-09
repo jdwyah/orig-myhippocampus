@@ -2,7 +2,6 @@ package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
 import com.aavu.client.service.Manager;
@@ -23,13 +22,12 @@ public class StationaryBubble extends AbstractBubble {
 	private AbsolutePanel mainPanel;
 	private int unscaledHeight;
 	private int unscaledWidth;
-	private GUIManager guiManager;
 
-	public StationaryBubble(TopicIdentifier ti, Manager manager, GUIManager guiManager) {
+	public StationaryBubble(TopicIdentifier ti, Manager manager) {
 		super(ti.getTopicTitle(), manager);
 		this.ti = ti;
-		this.image = new Image(ImageHolder.getImgLoc("hierarchy/") + "ball_red.png");
-		this.guiManager = guiManager;
+		this.image = new Image(ImageHolder.getImgLoc("hierarchy/") + "ball_lightbrown.png");
+
 		unscaledWidth = 50;
 		unscaledHeight = 50;
 
@@ -51,13 +49,13 @@ public class StationaryBubble extends AbstractBubble {
 
 	// @Override
 	protected void clickAction() {
-		guiManager.hideCurrentHover();
+		// guiManager.hideCurrentHover();
 		getManager().bringUpChart(ti);
 	}
 
 	// @Override
 	protected void unClickAction() {
-		guiManager.hideHoverIn1(ti);
+		// guiManager.hideHoverIn1(ti);
 		// HoverManager.hideHoverIn1(ti);
 	}
 

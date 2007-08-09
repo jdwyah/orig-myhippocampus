@@ -21,7 +21,7 @@ public class BreadCrumbDisplayer extends PopupWindow {
 	private ScrollPanel scrollP;
 
 	public BreadCrumbDisplayer(Manager manager) {
-		super(manager.newFrame(), ConstHolder.myConstants.breadcrumbs());
+		super(manager.newFrame(), ConstHolder.myConstants.breadcrumbs(), -1, -1);
 		mainPanel = new VerticalPanel();
 		mainPanel.add(new Label(" "));
 		scrollP = new ScrollPanel(mainPanel);

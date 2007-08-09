@@ -8,6 +8,5 @@ public interface GUIManager {
 
 	void hideCurrentHover();
 
-	void hideHoverIn1(TopicIdentifier ti);
 
 }

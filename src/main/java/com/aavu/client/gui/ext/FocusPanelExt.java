@@ -57,7 +57,7 @@ public class FocusPanelExt extends SimplePanel implements HasFocus, SourcesClick
 
 		delayedclickFirer = new Timer() {
 			public void run() {
-				System.out.println("DELAYED CLICK FIRE");
+				// System.out.println("DELAYED CLICK FIRE");
 				clickListeners.fireClick(FocusPanelExt.this);
 			}
 		};
@@ -128,7 +128,7 @@ public class FocusPanelExt extends SimplePanel implements HasFocus, SourcesClick
 			lastClickClientX = DOM.eventGetClientX(event);
 			lastClickClientY = DOM.eventGetClientY(event);
 			if (clickListeners != null) {
-				System.out.println("DELAYED CLICK SCHEDULE");
+				// System.out.println("DELAYED CLICK SCHEDULE");
 				delayedclickFirer.schedule(DBL_CLICK_DELAY);
 			}
 			break;
@@ -145,7 +145,7 @@ public class FocusPanelExt extends SimplePanel implements HasFocus, SourcesClick
 		case Event.ONDBLCLICK:
 			if (doubleClickLisenerCollection != null) {
 				delayedclickFirer.cancel();
-				System.out.println("DELAYED CLICK CANCEL ON DOUBLE");
+				// System.out.println("DELAYED CLICK CANCEL ON DOUBLE");
 				doubleClickLisenerCollection.fireDoubleClick(this);
 			}
 			break;

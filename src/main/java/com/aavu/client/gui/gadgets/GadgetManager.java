@@ -16,7 +16,12 @@ public class GadgetManager {
 	// private ConnectionBoard connectionBoard;
 	private EntryGadget entryPreview;
 	private ChildrenGadget childGadget;
+	// private TypeGadget typeGadget;
 	private CreateTopicGadget createTopicGadget;
+
+	private TagBoard tagBoard;
+
+	private TitleGadget titleGadget;
 
 	// private UploadBoard uploadBoard;
 	// private TimeGadget timeGadget;
@@ -49,6 +54,9 @@ public class GadgetManager {
 			createTopicGadget = new CreateTopicGadget(manager);
 
 			childGadget = new ChildrenGadget(manager);
+			// typeGadget = new TypeGadget(manager);
+			titleGadget = new TitleGadget(manager);
+			tagBoard = new TagBoard(manager);
 
 			// uploadBoard = new UploadBoard(manager);
 			// timeGadget = new TimeGadget(manager);
@@ -63,6 +71,11 @@ public class GadgetManager {
 			allGadgets.add(entryPreview);
 			allGadgets.add(createTopicGadget);
 			allGadgets.add(childGadget);
+			// allGadgets.add(typeGadget);
+
+			allGadgets.add(titleGadget);
+
+			allGadgets.add(tagBoard);
 
 			// allGadgets.add(uploadBoard);
 			// allGadgets.add(mapGadget);
@@ -96,7 +109,8 @@ public class GadgetManager {
 		for (Iterator iter = allGadgets.iterator(); iter.hasNext();) {
 			Gadget gadget = (Gadget) iter.next();
 
-			gadget.load(topic);
+			int lastLoadSize = gadget.load(topic);
+			gadget.setLastLoadSize(lastLoadSize);
 		}
 
 	}

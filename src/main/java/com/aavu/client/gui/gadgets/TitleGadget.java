@@ -1,4 +1,4 @@
-package com.aavu.client.gui;
+package com.aavu.client.gui.gadgets;
 
 import java.util.Date;
 
@@ -7,21 +7,21 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveDateCreatedCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
-import com.aavu.client.gui.gadgets.Gadget;
-import com.aavu.client.gui.gadgets.StatusPicker;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.datepicker.DateFormatter;
 import com.aavu.client.widget.datepicker.DatePickerInterface;
 import com.aavu.client.widget.datepicker.HDatePicker;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -87,16 +87,24 @@ public class TitleGadget extends Gadget {
 
 
 		CellPanel titleP = new HorizontalPanel();
-		titleP.add(new HeaderLabel(ConstHolder.myConstants.title()));
+		titleP.add(new Label(ConstHolder.myConstants.title()));
 		titleP.add(titleBox);
 
 		picker = new StatusPicker(manager);
 
-		titleP.add(picker);
+		Image deleteB = ConstHolder.images.bin_closed().createImage();
+		deleteB.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				if (Window.confirm(ConstHolder.myConstants.delete_warningS(topic.getTitle()))) {
+					manager.delete(topic, new StdAsyncCallback("Delete"));
+				}
+			}
+		});
+		titleP.add(deleteB);
 
 
 		CellPanel dateP = new HorizontalPanel();
-		dateP.add(new HeaderLabel(ConstHolder.myConstants.date()));
+		dateP.add(new Label(ConstHolder.myConstants.date()));
 		dateP.add(datePicker.getWidget());
 
 		VerticalPanel mainP = new VerticalPanel();
@@ -112,7 +120,7 @@ public class TitleGadget extends Gadget {
 
 	// @Override
 	public String getDisplayName() {
-		return ConstHolder.myConstants.title();
+		return ConstHolder.myConstants.options();
 	}
 
 	// @Override
@@ -126,7 +134,7 @@ public class TitleGadget extends Gadget {
 
 		// datePicker.setText(df.format(mv.getStartDate()));
 
-		return 0;
+		return 1;
 	}
 
 	// @Override
@@ -139,4 +147,13 @@ public class TitleGadget extends Gadget {
 		throw new UnsupportedOperationException();
 	}
 
+	// @Override
+	public boolean isDisplayer() {
+		return true;
+	}
+
+	// @Override
+	public boolean showForIsCurrent(boolean isCurrent) {
+		return true;
+	}
 }

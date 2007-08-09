@@ -460,4 +460,8 @@ public interface Consts extends Messages {
 
 	String children();
 
+	String options();
+
+	String remove_tooltip();
+
 }
