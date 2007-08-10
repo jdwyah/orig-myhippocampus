@@ -429,6 +429,11 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 			//
 			Logger.debug("HierarchyDisplay: Told to Update NonExist " + t.getId());
 		}
+
+		if (t.equals(currentRoot)) {
+			backdropLabel.setText(t.getTitle());
+		}
+
 	}
 
 	public void navigateTo(FullTopicIdentifier fti) {

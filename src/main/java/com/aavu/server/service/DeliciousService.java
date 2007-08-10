@@ -12,7 +12,7 @@ import com.aavu.server.domain.DeliciousPost;
 
 public interface DeliciousService {
 
-	void newLinksForUser(String username, String password) throws HippoException;
+	int newLinksForUser(String username, String password) throws HippoException;
 
 	List<DeliciousPost> getPostsFromXML(Document doc);
 

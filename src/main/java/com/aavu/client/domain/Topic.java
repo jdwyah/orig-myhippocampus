@@ -977,6 +977,13 @@ public class Topic extends AbstractTopic implements Serializable, ReallyCloneabl
 		occ.getTopics().add(conn);
 	}
 
-
+	/**
+	 * Overriden by Root so that we don't let them delete Root
+	 * 
+	 * @return
+	 */
+	public boolean isDeletable() {
+		return true;
+	}
 
 }

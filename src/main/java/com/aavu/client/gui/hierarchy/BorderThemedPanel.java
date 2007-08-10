@@ -201,6 +201,7 @@ public class BorderThemedPanel extends Composite {
 
 
 	public void setCaption(Widget w) {
+		w.addStyleName(getItemTheme("FrameCaption"));
 		setCaption(w, w);
 	}
 

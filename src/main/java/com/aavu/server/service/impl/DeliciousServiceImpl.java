@@ -15,6 +15,7 @@ import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
@@ -49,6 +50,17 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		}
 	};
 
+	/**
+	 * del.icio.us date format (yyyy-MM-dd) SimpleDateFormats are not threadsafe, but we should not
+	 * need more than one per thread.
+	 */
+	private static final ThreadLocal DELICIOUS_DATE_FORMAT_OBJECT = new ThreadLocal() {
+		protected Object initialValue() {
+			return new SimpleDateFormat(DELICIOUS_DATE_FORMAT);
+		}
+	};
+
+
 	public static Date getDateFromDeliciousString(String time) {
 		Date result = null;
 
@@ -62,6 +74,10 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		return result;
 	}
 
+	public static String getDeliciousDate(Date date) {
+		return ((SimpleDateFormat) DELICIOUS_DATE_FORMAT_OBJECT.get()).format(date);
+	}
+
 
 	private static final String delicousApiUrlAll = "https://api.del.icio.us/v1/posts/all?";
 	private static final String delicousApiBundleGet = "https://api.del.icio.us/v1/tags/bundles/all?";
@@ -71,8 +87,8 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 	private TopicService topicService;
 	private UserService userService;
 
-	public DeliciousServiceImpl(String userAgent, String authURL) {
-		super(userAgent, authURL);
+	public DeliciousServiceImpl(String userAgent, String authURL, int waitBetweenReq) {
+		super(userAgent, authURL, waitBetweenReq);
 	}
 
 
@@ -90,26 +106,65 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 	}
 
-	public void newLinksForUser(String username, String password) throws HippoException {
+	/**
+	 * NOTE: this will return before tags are actually added.
+	 * 
+	 * adding the tags in another thread, because it's such a slow op. Not really ideal though,
+	 * because we can't return any error messages..
+	 */
+	public int newLinksForUser(String username, String password) throws HippoException {
 
 		log.info("user: " + username);
 
-		Topic deliciousRoot = topicService.createNewIfNonExistent(DELICIOUS_STR);
+		final Topic deliciousRoot = topicService.createNewIfNonExistent(DELICIOUS_STR);
 
 		List<DeliciousBundle> bundles = getBundles(username, password);
 
 		log.info("Found " + bundles.size() + " Bundles.");
 
 
-
 		addBundles(deliciousRoot, bundles);
 
+		User u = userService.getCurrentUser();
 
-		List<DeliciousPost> posts = getAllPosts(username, password);
+		List<DeliciousPost> posts = null;
 
-		addDeliciousTags(posts, deliciousRoot);
 
-		userService.setDeliciousUpdate();
+
+		if (null == u.getLastDeliciousDate() || u.getLastDeliciousDate().getYear() == -900) {
+			log.info("GetAllPosts Last del.icio.us date: " + u.getLastDeliciousDate());
+			posts = getAllPosts(username, password);
+		} else {
+			log.info("GetRecentPosts Last del.icio.us date: " + u.getLastDeliciousDate());
+			posts = getPostFromPosts(username, password, u.getLastDeliciousDate());
+		}
+
+		log.info("Found " + posts.size() + " Posts.");
+
+
+
+		final List<DeliciousPost> postsf = posts;
+
+		Thread addTagThread = new Thread() {
+			public void run() {
+				try {
+
+					log.info("Starting Add Tags Thread for " + postsf.size() + " posts.");
+
+					addDeliciousTags(postsf, deliciousRoot);
+
+				} catch (HippoException e) {
+					log.error("addDeliciousTags thread " + e);
+				}
+				log.info("Delicious Add Complete");
+				userService.setDeliciousUpdate();
+			}
+		};
+		addTagThread.start();
+
+		log.info("Returning to caller.");
+
+		return posts.size();
 
 	}
 
@@ -176,6 +231,24 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		Document doc;
 		try {
 			doc = xmlRESTReq(delicousApiUrlAll, new Vector<RestParam>(), username, password);
+		} catch (Exception e) {
+			log.error(e);
+			throw new HippoException(e);
+		}
+
+		return getPostsFromXML(doc);
+	}
+
+	public List<DeliciousPost> getPostFromPosts(String username, String password, Date lastUpdate)
+			throws HippoException {
+
+
+		Document doc;
+		try {
+			Vector<RestParam> params = new Vector<RestParam>();
+			params.add(new RestParam("dt", getDeliciousDate(lastUpdate)));
+
+			doc = xmlRESTReq(delicousApiUrlGet, new Vector<RestParam>(), username, password);
 		} catch (Exception e) {
 			log.error(e);
 			throw new HippoException(e);

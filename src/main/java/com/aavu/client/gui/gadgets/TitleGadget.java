@@ -32,6 +32,7 @@ public class TitleGadget extends Gadget {
 	private Topic topic;
 	private StatusPicker picker;
 	private DatePickerInterface datePicker;
+	private Image deleteB;
 
 	// private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -43,6 +44,13 @@ public class TitleGadget extends Gadget {
 				manager.getTopicCache().executeCommand(topic,
 						new SaveTitleCommand(topic, titleBox.getText()),
 						new StdAsyncCallback(ConstHolder.myConstants.save()) {
+
+							// @Override
+							public void onSuccess(Object result) {
+								super.onSuccess(result);
+								// manager.
+							}
+
 						});
 			}
 		});
@@ -92,7 +100,9 @@ public class TitleGadget extends Gadget {
 
 		picker = new StatusPicker(manager);
 
-		Image deleteB = ConstHolder.images.bin_closed().createImage();
+
+
+		deleteB = ConstHolder.images.bin_closed().createImage();
 		deleteB.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				if (Window.confirm(ConstHolder.myConstants.delete_warningS(topic.getTitle()))) {
@@ -127,6 +137,10 @@ public class TitleGadget extends Gadget {
 	public int load(Topic topic) {
 		this.topic = topic;
 		titleBox.setText(topic.getTitle());
+
+		// don't let them delete Root
+		deleteB.setVisible(topic.isDeletable());
+
 		picker.load(topic);
 
 		datePicker.setSelectedDate(topic.getCreated());

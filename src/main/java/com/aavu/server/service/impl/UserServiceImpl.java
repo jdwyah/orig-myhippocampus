@@ -336,7 +336,9 @@ public class UserServiceImpl implements UserService {
 
 	public void setDeliciousUpdate() {
 		User u = getCurrentUser();
-		u.setLastDeliciousDate(new Date());
+		Date now = new Date();
+		u.setLastDeliciousDate(now);
+		log.debug("now " + now);
 	}
 
 

@@ -22,15 +22,17 @@ public class AbstractRestService {
 	private HttpClient client;
 	private String userAgent;
 	private String authURL;
+	private int waitBetweenReq = -1;
 
 	public AbstractRestService() {
 		// Create an instance of HttpClient.
 		client = new HttpClient();
-
 	}
 
-	public AbstractRestService(String userAgent, String authURL) {
+	public AbstractRestService(String userAgent, String authURL, int waitBetweenReq) {
 		this();
+
+		this.waitBetweenReq = waitBetweenReq;
 		this.userAgent = userAgent;
 		this.authURL = authURL;
 	}

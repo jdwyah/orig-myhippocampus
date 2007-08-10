@@ -2,7 +2,6 @@ package com.aavu.client.service.remote;
 
 import java.util.List;
 
-import com.aavu.client.domain.A;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
@@ -116,7 +115,6 @@ public interface GWTTopicService extends RemoteService {
 
 	MindTree saveTree(MindTree tree) throws HippoException;
 
-	A test(A a);
 
 	// C test(C a);
 

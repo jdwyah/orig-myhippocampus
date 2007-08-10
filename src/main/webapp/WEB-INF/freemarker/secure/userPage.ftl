@@ -37,12 +37,23 @@
 
 	<p>	
     <a href="<@spring.url "mindscape.html"/>"/><img id="enterButton" width="${width}" height="${height}" src="<@spring.url "/img/enterMyHippocampus.png"/>"><br>Enter!</a>
-	<div id="userDetails">
-		Number of Islands: ${bean.numberOfIslands}<BR>
+	<div id="userDetails">		
 		Number of Links: ${bean.numberOfLinks}<BR>
 		Number of Topics: ${bean.numberOfTopics}<BR>
 	</div>
 	</p>
+	
+			<div class="middle-column-box-title-green">Del.icio.us Bookmarks</div>
+	<#if bean.user?exists>
+		<p>
+			To import your Del.icio.us Bookmarks <a href="<@spring.url "/site/secure/importDelicious.html"/>">Click Here</a>
+			<br>
+			<#if bean.user.lastDeliciousDate?exists && bean.user.lastDeliciousDate?string("yyyy") != "1000">
+				Last updated: ${bean.user.lastDeliciousDate}
+			</#if>
+		</p>
+	</#if>
+	
 	  			
 	<#if bean.user?exists>
 		<#if bean.user.supervisor>

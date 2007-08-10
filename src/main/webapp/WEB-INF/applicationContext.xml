@@ -63,6 +63,7 @@
 	<bean id="deliciousService" class="com.aavu.server.service.impl.DeliciousServiceImpl">
 		<constructor-arg value="MyHippocampus.com Server" />
 		<constructor-arg value="api.del.icio.us" />
+		<constructor-arg value="2000"/>
 
 		<property name="userService" ref="userService" />
 		<property name="topicService" ref="topicService" />

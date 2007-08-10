@@ -21,4 +21,13 @@ public class Root extends Topic implements IsSerializable, Serializable {
 		setTitle(user.getUsername() + " Root");
 	}
 
+	/**
+	 * Overriden so that we don't let them delete their Root
+	 * 
+	 * @return
+	 */
+	// @Override
+	public boolean isDeletable() {
+		return false;
+	}
 }

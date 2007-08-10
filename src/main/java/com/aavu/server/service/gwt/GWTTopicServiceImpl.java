@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.aavu.client.domain.A;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
@@ -408,9 +407,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		this.topicService = topicService;
 	}
 
-	public A test(A a) {
-		return a;
-	}
 
 	// public C test(C c) {
 	// return c;

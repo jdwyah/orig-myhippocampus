@@ -462,7 +462,7 @@ public class TopicServiceImpl implements TopicService {
 							+ " ID2:" + sameNamed.getId());
 					throw new HippoBusinessException("Duplicate Name");
 				}
-				System.out.println("evict " + sameNamed);
+				log.debug("evict " + sameNamed);
 				// need to evict or we'll get a NonUniqueException
 				editDAO.evict(sameNamed);
 
