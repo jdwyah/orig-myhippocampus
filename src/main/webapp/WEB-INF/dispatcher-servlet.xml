@@ -170,7 +170,7 @@
 	<!-- PEND MED blech. GWT loads the image bundles from the right spot, but
 		 goes looking for this clear.cache.gif from where the .js was called.  -->
 	<bean id="forwardClearCacheController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="redirect:/com.aavu.HippoTest/clear.cache.gif" />
+		<property name="view" value="redirect:/com.aavu.Interactive/clear.cache.gif" />
 		<property name="userService" ref="userService" />
 	</bean>
 	

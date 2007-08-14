@@ -3,6 +3,7 @@ package com.aavu.client.LinkPlugin;
 import java.util.List;
 
 import org.gwm.client.GInternalFrame;
+import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
@@ -13,6 +14,7 @@ import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.ext.GUIEffects;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.gadgets.GadgetPopup;
@@ -185,6 +187,11 @@ public class AddLinkManager implements Manager, CloseListener {
 	public void refreshAll() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public PopupWindow showProgressBar(ProgressBar progressBar) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

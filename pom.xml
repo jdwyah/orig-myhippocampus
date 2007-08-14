@@ -8,7 +8,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<build>
-		<plugins>               
+		<plugins>               <!-- 
   			 <plugin>
 				<groupId>org.xi8ix</groupId>				
 				<artifactId>xi8ix-gwtc</artifactId>
@@ -31,7 +31,7 @@
 					
 					<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 				</configuration>
-			</plugin>    
+			</plugin>     -->
 			     
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

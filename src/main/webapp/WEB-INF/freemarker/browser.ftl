@@ -1,5 +1,5 @@
 
-<#macro gwtURL str>../../com.aavu.HippoTest/${str}</#macro>
+<#macro gwtURL str>../../com.aavu.Interactive/${str}</#macro>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
 	<head>

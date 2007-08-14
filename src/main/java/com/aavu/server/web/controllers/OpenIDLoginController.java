@@ -45,7 +45,8 @@ public class OpenIDLoginController extends AbstractController {
 
 		// HttpUtils.getRequestURL(req).toString();
 		// get the submitted id field
-		String id = req.getParameter(identityField);
+		String openID = req.getParameter(identityField);
+
 
 		// assume page will validate?
 		// TODO: null checking!
@@ -62,14 +63,15 @@ public class OpenIDLoginController extends AbstractController {
 			return new ModelAndView(formLoginUrl);
 
 		} else {
-			log.info("No pass, doing  OPENID");
+			log.info("No pass, doing  OPENID " + openID);
 			// send the user the redirect url to proceed with OpenID
 			// authentication
 			try {
 				String returnToURL = trustRoot + returnTo;
 
 				log.debug("ReturnToURL to: " + returnToURL);
-				String redirect = consumer.beginConsumption(req, id, returnToURL);
+
+				String redirect = consumer.beginConsumption(req, openID, returnToURL);
 				log.debug("Redirecting to: " + redirect);
 
 				return new ModelAndView("redirect:" + redirect);

@@ -29,7 +29,7 @@
 	<#list users as user>
 		<tr>
 		<td>${user.username}</td>
-		<td>${user.email}</td>
+		<td>${user.email?default("null")}</td>
 	    <td>${user.accountNonExpired?string}</td>
 	    <td>${user.accountNonLocked?string}</td>
 	    <td>${user.credentialsNonExpired?string}</td>

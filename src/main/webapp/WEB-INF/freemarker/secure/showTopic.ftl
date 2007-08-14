@@ -45,7 +45,7 @@
 	</#if>
 
 	<p>	
-    <a href="<@spring.url "/com.aavu.HippoTest/HippoTest.html"/>"/><img id="enterButton" width="200" src="<@spring.url "/img/enterMyHippocampus.png"/>"><br>Enter!</a>	
+    <a href="<@spring.url "mindscape.html"/>"/><img id="enterButton" width="200" src="<@spring.url "/img/enterMyHippocampus.png"/>"><br>Enter!</a>	
 	</p>
 	
 	

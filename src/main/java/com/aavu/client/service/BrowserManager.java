@@ -2,10 +2,13 @@ package com.aavu.client.service;
 
 import java.util.List;
 
+import org.gwtwidgets.client.ui.ProgressBar;
+
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.StatusCode;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.service.cache.HippoCache;
@@ -81,6 +84,11 @@ public class BrowserManager extends AbstractManager {
 	public void refreshAll() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public PopupWindow showProgressBar(ProgressBar progressBar) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

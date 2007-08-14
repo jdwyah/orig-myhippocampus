@@ -3,6 +3,7 @@ package com.aavu.client.service;
 import java.util.List;
 
 import org.gwm.client.GInternalFrame;
+import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
@@ -10,6 +11,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.StatusCode;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.gadgets.GadgetPopup;
@@ -66,6 +68,8 @@ public interface Manager {
 	void addDeliciousTags(String username, String password, AsyncCallback callback);
 
 	void refreshAll();
+
+	PopupWindow showProgressBar(ProgressBar progressBar);
 
 	// void explore(Topic myTag, List topics);
 

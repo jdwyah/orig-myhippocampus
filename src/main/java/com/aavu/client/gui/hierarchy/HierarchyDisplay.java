@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.gwtwidgets.client.ui.ProgressBar;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
@@ -16,6 +18,7 @@ import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ext.JSUtil;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.gui.ocean.dhtmlIslands.OceanLabel;
@@ -27,6 +30,7 @@ import com.allen_sauer.gwt.dragdrop.client.PickupDragController;
 import com.allen_sauer.gwt.dragdrop.client.drop.DropController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
@@ -40,6 +44,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	private static final int SPIRAL_SCALE = 250;
 	private static final double PHI_SQUARED = Math.pow(1.61803399, 2);
 
+	private int CHILD_LOAD_BATCH_SIZE = 20;
 
 	private double thetaIncr = THETA_INCR_START;
 
@@ -61,6 +66,8 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	private OceanLabel backdropLabel;
 	private GUIManager guiManager;
 	private int i = 0;
+
+	private PopupWindow progressWindow;
 
 	public HierarchyDisplay(Manager manager, GUIManager map) {
 		super();
@@ -285,6 +292,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		decorateFor(t);
 
 		loadTopicOcc(t);
+
 		loadChildTopics(t, loadFinished);
 
 	}
@@ -319,21 +327,63 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
 
-						List all_ftis = (List) result;
+						final List all_ftis = (List) result;
 
-						for (Iterator iterator = all_ftis.iterator(); iterator.hasNext();) {
+						final Iterator iterator = all_ftis.iterator();
 
-							FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();
-							addBubble(BubbleFactory.createBubbleFor(fti, HierarchyDisplay.this));
-						}
 
-						redraw();
+						final ProgressBar progressBar = new ProgressBar(10, ProgressBar.SHOW_TEXT);
+						progressBar.setProgress(0);
+						progressBar.setText(ConstHolder.myConstants.loading_islands());
 
-						if (loadFinished != null) {
-							loadFinished.loadFinished();
-						}
+
+						progressWindow = manager.showProgressBar(progressBar);
+
+						Timer t = new Timer() {
+
+							public void run() {
+
+
+								addNextX(iterator, CHILD_LOAD_BATCH_SIZE, all_ftis.size(), this,
+										progressBar, loadFinished);
+
+							}
+						};
+						t.schedule(200);
+
 					}
 				});
+	}
+
+	private void addNextX(Iterator iterator, int batchSize, int totalSize, Timer timer,
+			ProgressBar progressBar, LoadFinishedListener loadFinished) {
+
+		int count = 0;
+
+		int curProg = progressBar.getProgress();
+
+		while (iterator.hasNext() && count < batchSize) {
+
+			FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();
+			addBubble(BubbleFactory.createBubbleFor(fti, HierarchyDisplay.this));
+
+			curProg += (100 * (1.0 / totalSize));
+			progressBar.setProgress(curProg);
+
+			count++;
+		}
+
+		redraw();
+
+		if (iterator.hasNext()) {
+			timer.schedule(100);
+		} else {
+			progressWindow.hide();
+
+			if (loadFinished != null) {
+				loadFinished.loadFinished();
+			}
+		}
 	}
 
 	// @Override
