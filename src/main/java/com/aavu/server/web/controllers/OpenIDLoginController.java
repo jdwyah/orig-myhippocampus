@@ -8,11 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.acegisecurity.ui.openid.OpenIDConsumer;
 import org.acegisecurity.ui.openid.OpenIDConsumerException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
 public class OpenIDLoginController extends AbstractController {
+	private static final Logger log = Logger.getLogger(OpenIDLoginController.class);
 
 	private OpenIDConsumer consumer;
 
@@ -52,30 +54,28 @@ public class OpenIDLoginController extends AbstractController {
 		String password = req.getParameter(passwordField);
 
 		if ((password != null) && (password.length() > 0)) {
-			System.out
-					.println("Attempting to authenticate using username/password " + formLoginUrl);
-			System.out.println("user: " + req.getParameter("j_username") + " "
-					+ req.getParameter("j_password"));
-			logger.debug("Attempting to authenticate using username/password");
+			log.debug("Attempting to authenticate using username/password " + formLoginUrl);
+			log.debug("Attempting to authenticate using username/password ");
 
 			// forward to authenticationProcessingFilter
 			// (/j_acegi_security_check - depends on param names)
 			return new ModelAndView(formLoginUrl);
 
 		} else {
-			System.out.println("No pass, doing just OPENID");
+			log.info("No pass, doing  OPENID");
 			// send the user the redirect url to proceed with OpenID
 			// authentication
 			try {
 				String returnToURL = trustRoot + returnTo;
 
+				log.debug("ReturnToURL to: " + returnToURL);
 				String redirect = consumer.beginConsumption(req, id, returnToURL);
-				logger.debug("Redirecting to: " + redirect);
+				log.debug("Redirecting to: " + redirect);
 
 				return new ModelAndView("redirect:" + redirect);
 
 			} catch (OpenIDConsumerException oice) {
-				logger.error("Consumer error!", oice);
+				log.error("Consumer error!", oice);
 				System.out.println("oice " + oice.getMessage());
 
 				Map<String, Object> model = new HashMap<String, Object>();
