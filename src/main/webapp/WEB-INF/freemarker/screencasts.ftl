@@ -24,6 +24,9 @@
 		
 <#--		<li><a href="http://www.myhippocampus.com/screencasts/Step2/Step2.html">First Steps</a></li>-->
 		</ul>
+		
+		<p>
+		(Please Note, these screencasts are for the Beta 1 release of MyHippocampus. The current Beta 2 simplifies a lot, but we haven't had a chance to make the screencasts yet. 
 
 	<p>
  	<#if !user?exists>

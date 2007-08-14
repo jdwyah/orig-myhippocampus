@@ -32,6 +32,7 @@ public class TitleGadget extends Gadget {
 	private Topic topic;
 	private StatusPicker picker;
 	private DatePickerInterface datePicker;
+
 	private Image deleteB;
 
 	// private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -110,7 +111,7 @@ public class TitleGadget extends Gadget {
 				}
 			}
 		});
-		titleP.add(deleteB);
+		// titleP.add(deleteB);
 
 
 		CellPanel dateP = new HorizontalPanel();

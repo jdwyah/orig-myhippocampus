@@ -34,6 +34,8 @@
 			<input value="<@spring.message "importDelicious.submit"/>" type="submit">
 		</fieldset>
 	</form>		
+	<p>
+	Your name and password is not saved on our servers. 
 	
   </div>
 		

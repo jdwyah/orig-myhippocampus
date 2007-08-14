@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.Vector;
 
+import org.acegisecurity.Authentication;
+import org.acegisecurity.context.SecurityContextHolder;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -145,10 +147,15 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		final List<DeliciousPost> postsf = posts;
 
+
+		final Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		// Copy the authentication to the new thread
 		Thread addTagThread = new Thread() {
 			public void run() {
 				try {
-
+					SecurityContextHolder.getContext().setAuthentication(authentication);
 					log.info("Starting Add Tags Thread for " + postsf.size() + " posts.");
 
 					addDeliciousTags(postsf, deliciousRoot);

@@ -45,11 +45,11 @@
 	
 			<div class="middle-column-box-title-green">Del.icio.us Bookmarks</div>
 	<#if bean.user?exists>
-		<p>
-			To import your Del.icio.us Bookmarks <a href="<@spring.url "/site/secure/importDelicious.html"/>">Click Here</a>
-			<br>
+		<p>			
 			<#if bean.user.lastDeliciousDate?exists && bean.user.lastDeliciousDate?string("yyyy") != "1000">
-				Last updated: ${bean.user.lastDeliciousDate}
+				Import Del.icio.us Bookmarks added since ${bean.user.lastDeliciousDate} <a href="<@spring.url "/site/secure/importDelicious.html"/>">Click Here</a>				
+				<#else>
+				To import your Del.icio.us Bookmarks <a href="<@spring.url "/site/secure/importDelicious.html"/>">Click Here</a>
 			</#if>
 		</p>
 	</#if>
