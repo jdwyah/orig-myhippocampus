@@ -59,7 +59,9 @@ public class EntryGadget extends Gadget {
 		for (Iterator iterator = entries.iterator(); iterator.hasNext();) {
 			Entry entry = (Entry) iterator.next();
 			// PEND MED whatever are we to do w/ "" titles?
-			entryP.add(new Label(" " + entry.getTitle()));
+			if (entry.getTitle() != null) {
+				entryP.add(new Label(" " + entry.getTitle()));
+			}
 			EntryPreviewWidget epw = new EntryPreviewWidget();
 			epw.load(entry);
 			entryP.add(epw);

@@ -5,7 +5,7 @@ body {
 	padding: 0em;
 	font-family: Verdana, Tahoma, Arial, sans-serif;
 	background-color: #D2EAF9;
-	background-image:url("../com.aavu.HippoTest/img/simplicity/ocean200.png");
+	background-image:url("../img/simplicity/ocean200.png");
 }
 
 h2 {
@@ -193,7 +193,7 @@ input.openid-identifier {
 
 
 /*#sidebar ul {
-	background-image: url("../com.aavu.HippoTest/img/blueFade.png");
+	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
 	border: 1px solid #D8E3FD;
 	border-style: ridge;
@@ -254,7 +254,7 @@ input.openid-identifier {
 	width: 200px;
 }
 .middle-column-box-white {
-	background-image: url("../com.aavu.HippoTest/img/blueFade.png");
+	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
 	background-color: #647CB5;
 	border: 1px solid #D8E3FD;
@@ -275,7 +275,7 @@ input.openid-identifier {
 	-moz-opacity: .50;
 	opacity: .50;
 	-khtml-opacity: .5;*/
-	background-image: url("../com.aavu.HippoTest/img/blueFade.png");
+	background-image: url("../img/blueFade.png");
 	background-position: 0px -20px;
 	
 	/*background-color: #e1e184;

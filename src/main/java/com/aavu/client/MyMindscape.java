@@ -28,21 +28,20 @@ public class MyMindscape extends AbstractClientApp implements HistoryListener {
 	private void loadGUI(Widget widget) {
 		RootPanel.get("loading").setVisible(false);
 		RootPanel.get(MAIN_DIV).add(widget);
+
 	}
 
 	/**
 	 * This is the entry point method.
 	 * 
-	 * -T-ODO HIGH we're running map setup TWICE. once from LoginWindow.
-	 * secondly because onModuleLoad() is getting called right after the login.
-	 * Why is this? It couldn't be the addition of the iframe code could it?
+	 * -T-ODO HIGH we're running map setup TWICE. once from LoginWindow. secondly because
+	 * onModuleLoad() is getting called right after the login. Why is this? It couldn't be the
+	 * addition of the iframe code could it?
 	 * 
-	 * SOLVED. It was the IFRAME. let's make another EntryPoint that just
-	 * pre-loads stuff.
+	 * SOLVED. It was the IFRAME. let's make another EntryPoint that just pre-loads stuff.
 	 * 
-	 * NOTE the semaphore code below is inefectual even with the var static.
-	 * have_initted is false both times. It looks like we're re-initting the
-	 * class. this reports different objectIDs
+	 * NOTE the semaphore code below is inefectual even with the var static. have_initted is false
+	 * both times. It looks like we're re-initting the class. this reports different objectIDs
 	 * 
 	 * 
 	 * 

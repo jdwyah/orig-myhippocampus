@@ -1,5 +1,6 @@
 package com.aavu.client;
 
+import com.aavu.client.exception.MyUncaughtExceptionHandler;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -18,75 +19,70 @@ public class Interactive implements EntryPoint {
 	public static final String REMOTE_HOST = "http://www.myhippocampus.com/";
 
 	/**
-	 * Switch between localhost for testing & 
+	 * Switch between localhost for testing &
 	 */
 	public static String getRelativeURL(String url) {
 		String realModuleBase;
 
-		if(GWT.isScript()){			
+		if (GWT.isScript()) {
 
-			Logger.log("ModuleBaseURL: "+GWT.getModuleBaseURL());
+			Logger.log("ModuleBaseURL: " + GWT.getModuleBaseURL());
 
 			String moduleBase = GWT.getModuleBaseURL();
 
-			//Use for Deployment to production server
+			// Use for Deployment to production server
 			//
 			realModuleBase = REMOTE_HOST;
 
-			//Use to test compiled browser locally
+			// Use to test compiled browser locally
 			//
-			if(moduleBase.indexOf("myhippocampus.com") == -1){	
+			if (moduleBase.indexOf("myhippocampus.com") == -1) {
 				Logger.log("Testing. Using Localhost");
 				realModuleBase = LOCAL_HOST;
 			}
 
 
-		}else{
-			//realModuleBase = GWT.getModuleBaseURL();
+		} else {
+			// realModuleBase = GWT.getModuleBaseURL();
 
-			//This is the URL for GWT Hosted mode 
+			// This is the URL for GWT Hosted mode
 			//
 			realModuleBase = LOCAL_HOST;
 		}
 
-		return realModuleBase+url;
+		return realModuleBase + url;
 	}
 
 
 	/**
-	 * EntryPoint. Dispatch based on javascript dictionary that tells us 
-	 * what we should load. 
+	 * EntryPoint. Dispatch based on javascript dictionary that tells us what we should load.
 	 * 
-	 * <script language="JavaScript">
-	 *		var Vars = {
-	 *			page: "MyMindscape"
-	 *		};
-	 *	</script>
-     *
+	 * <script language="JavaScript"> var Vars = { page: "MyMindscape" }; </script>
+	 * 
 	 */
 	public void onModuleLoad() {
-		try{
-			//TODO not a bad idea
-			//GWT.setUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
-			
+		try {
+			GWT.setUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
+
 			Dictionary theme = Dictionary.getDictionary("Vars");
 
 			String page = theme.get("page");
-			
-			if(page.equals("MyMindscape")){
+
+			if (page.equals("MyMindscape")) {
 				MyMindscape m = new MyMindscape();
-			}else if(page.equals("AddLink")){
+			} else if (page.equals("AddLink")) {
 
 
-			}else if(page.equals("HippocampusBrowser")){
-				HippocampusBrowser browser = new HippocampusBrowser(theme.get("user"),theme.get("topic"));
+			} else if (page.equals("HippocampusBrowser")) {
+				HippocampusBrowser browser = new HippocampusBrowser(theme.get("user"), theme
+						.get("topic"));
 
-			}else{
+			} else {
 				throw new Exception("Vars['page'] not set.");
 			}
 
-		}catch(Exception e){
-			Logger.log("e: "+e);
+		} catch (Exception e) {
+			Logger.log("e: " + e);
 
 			e.printStackTrace();
 
@@ -101,6 +97,5 @@ public class Interactive implements EntryPoint {
 		}
 
 	}
-
 
 }

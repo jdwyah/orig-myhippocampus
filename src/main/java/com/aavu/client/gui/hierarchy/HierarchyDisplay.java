@@ -32,10 +32,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.WindowResizeListener;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
+public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, WindowResizeListener {
 
 	private static final int THETA_START = 0;
 	private static final double THETA_INCR_START = .628;
@@ -68,6 +70,22 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	private int i = 0;
 
 	private PopupWindow progressWindow;
+	private int height;
+	private int width;
+
+	private class FullBoundaryPanel extends AbsolutePanel {
+		// @Override
+		public int getOffsetHeight() {
+			return Window.getClientHeight();
+		}
+
+		// @Override
+		public int getOffsetWidth() {
+			return Window.getClientWidth();
+		}
+	}
+
+
 
 	public HierarchyDisplay(Manager manager, GUIManager map) {
 		super();
@@ -82,11 +100,35 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		// passing (this,true) kinda worked, but we'd often miss entry events
 		// which led to problems.
-		dragController = new PickupDragController(null, true);
+
+
+		// We're supposed to be able to use new PickupDragController(null, true);
+		// to get the RootPanel, but our RootPanel is returning offsetHeight 0
+		// so we'll use our panel. Only trick with that is that we now need to
+		// capture resizes.
+		//
+		// sorry, just kidding. using 'this' sorts the drag n drop bc height is now no longer 0, but
+		// window resize is still borked bc dropTarget doesn't get redone.
+		//
+		width = Window.getClientWidth();
+		height = Window.getClientHeight();
+		Window.addWindowResizeListener(this);
+
+		dragController = new PickupDragController(this, true);
+
 		// dragController.setDragProxyEnabled(true);
 
 		backdropDropController = new BackdropDropController(this);
 		dragController.registerDropController(backdropDropController);
+
+		// AbsolutePanel boundaryPanel = dragController.getBoundaryPanel();
+		// WidgetArea boundaryArea = new WidgetArea(boundaryPanel, null);
+
+		// MouseDragHandler.logN("Boundary Panel: " + GWT.getTypeName(boundaryPanel));
+		//
+		// MouseDragHandler.logN("Boundary Area: " + boundaryArea.getLeft() + " "
+		// + boundaryArea.getRight() + " " + boundaryArea.getTop() + " "
+		// + boundaryArea.getBottom());
 
 		setDoZoom(true);
 
@@ -101,7 +143,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 	}
 
 	private void decorate() {
-		backdropLabel = new OceanLabel("HippoCampus Ocean", -200, 0);
+		backdropLabel = new OceanLabel(" ", -200, 0);
 
 		makeThisADragHandle(backdropLabel);
 
@@ -138,7 +180,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 		if (bubble.getDropController() != null) {
 			dragController.registerDropController(bubble.getDropController());
+
+			Logger.debug("register drop controller " + bubble.getTitle());
 		}
+
 
 		addObject(bubble);
 
@@ -294,6 +339,9 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 		loadTopicOcc(t);
 
 		loadChildTopics(t, loadFinished);
+
+
+		// Logger.debug("drag controller "+dragController.getMovableWidget());
 
 	}
 
@@ -535,6 +583,15 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay {
 
 	public void showHover(TopicIdentifier ti) {
 		guiManager.showHover(ti);
+	}
+
+	public void onWindowResized(int width, int height) {
+		this.width = width;
+		this.height = height;
+		setPixelSize(width, height);
+
+		// Need top reset the BackdropDropController DropTargetInfo
+		System.out.println("WINDOW RESIZE! " + width + " " + height);
 	}
 
 

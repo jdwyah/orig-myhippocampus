@@ -474,7 +474,8 @@ a:visited {
 	text-decoration: underline;
 }
 
-.H-Ocean { /*background-color: #CCE6FF;*/
+.H-Ocean { 
+	background-color: #D2EAF9;
 	position: absolute;
 	background-repeat: repeat;
 	left: 0px;

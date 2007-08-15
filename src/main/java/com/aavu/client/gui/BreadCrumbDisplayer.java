@@ -21,7 +21,7 @@ public class BreadCrumbDisplayer extends PopupWindow {
 	private ScrollPanel scrollP;
 
 	public BreadCrumbDisplayer(Manager manager) {
-		super(manager.newFrame(), ConstHolder.myConstants.breadcrumbs(), -1, -1);
+		super(manager.newFrame(), ConstHolder.myConstants.breadcrumbs(), 120, 100);
 		mainPanel = new VerticalPanel();
 		mainPanel.add(new Label(" "));
 		scrollP = new ScrollPanel(mainPanel);
@@ -33,6 +33,7 @@ public class BreadCrumbDisplayer extends PopupWindow {
 		frame.setClosable(false);
 		frame.setMaximizable(false);
 		frame.setMinimizable(false);
+		frame.setSize(120, 100);
 
 		frame.getContent().addStyleName("H-BreadCrumbs");
 	}
