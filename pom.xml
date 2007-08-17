@@ -31,7 +31,7 @@
 					
 					<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 				</configuration>
-			</plugin>     
+			</plugin>      
 			     
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -82,19 +82,19 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>1.4.0.build1282p</version>
+			<version>1.4.0.build1331</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-dev-windows</artifactId>
-			<version>1.4.0.build1282p</version>
+			<version>1.4.0.build1331</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>1.4.0.build1282p</version>			
+			<version>1.4.0.build1331</version>			
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
@@ -159,6 +159,18 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.5.2</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.google</groupId>
+			<artifactId>gdata-client</artifactId>
+			<version>1.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google</groupId>
+			<artifactId>gdata-docs</artifactId>
+			<version>1.13.0</version>
+		</dependency>								
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
