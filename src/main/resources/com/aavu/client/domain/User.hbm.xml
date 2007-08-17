@@ -33,7 +33,10 @@
 			<meta attribute="field-description">Last DeliciousDate</meta>
 			<column name="lastDeliciousDate" sql-type="timestamp" />
 		</property>
-				
+		<property name="lastGoogleAppsDate" type="java.util.Date">			
+			<meta attribute="field-description">Last GoogleApps Date</meta>
+			<column name="lastGoogleAppsDate" sql-type="timestamp" />
+		</property>		
 				
 		<many-to-one name="subscription" class="Subscription" column="subscription_id" lazy="false"/>
 	

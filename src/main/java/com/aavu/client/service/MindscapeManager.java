@@ -10,6 +10,7 @@ import com.aavu.client.LinkPlugin.AddLinkPopup;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
+import com.aavu.client.domain.GoogleData;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
@@ -263,15 +264,17 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 		if (occurrence instanceof Entry) {
 			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence, this, newFrame());
-		}
-		if (occurrence instanceof WebLink) {
+		} else if (occurrence instanceof WebLink) {
 			AddLinkPopup pop = new AddLinkPopup(null, this, newFrame(), (WebLink) occurrence,
 					getCurrentTopic(), null);
 
 			// EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
-		}
-		if (occurrence instanceof S3File) {
+		} else if (occurrence instanceof S3File) {
 			// EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
+		} else if (occurrence instanceof GoogleData) {
+
+		} else {
+
 		}
 
 	}

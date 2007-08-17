@@ -23,6 +23,7 @@ public abstract class AbstractUser implements IsSerializable, java.io.Serializab
 	private String password;
 	private String paypalID;
 	private Date lastDeliciousDate;
+	private Date lastGoogleAppsDate;
 
 
 	private Subscription subscription;
@@ -151,6 +152,14 @@ public abstract class AbstractUser implements IsSerializable, java.io.Serializab
 
 	public void setLastDeliciousDate(Date lastDeliciousDate) {
 		this.lastDeliciousDate = lastDeliciousDate;
+	}
+
+	public Date getLastGoogleAppsDate() {
+		return lastGoogleAppsDate;
+	}
+
+	public void setLastGoogleAppsDate(Date lastGoogleAppsDate) {
+		this.lastGoogleAppsDate = lastGoogleAppsDate;
 	}
 
 

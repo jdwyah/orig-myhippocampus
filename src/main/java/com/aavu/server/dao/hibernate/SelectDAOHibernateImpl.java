@@ -30,6 +30,7 @@ import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.TopicTypeConnector;
+import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
@@ -47,6 +48,7 @@ import com.aavu.server.web.domain.UserPageBean;
  * 
  */
 public class SelectDAOHibernateImpl extends HibernateDaoSupport implements SelectDAO {
+
 	private static final int DEFAULT_AUTOCOMPLET_MAX = 7;
 	private static final int DEFAULT_TAG_AUTOCOMPLETE_MAX = 7;
 	private static final Logger log = Logger.getLogger(SelectDAOHibernateImpl.class);
@@ -676,5 +678,18 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 
+
+	public URI getForURI(String uri, User user, User currentUser) {
+
+		log.debug("user " + currentUser.getUsername() + " uri " + uri);
+
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(URI.class).add(
+				Expression.eq("user", currentUser)).add(Expression.eq("uri", uri)));
+
+
+		return (URI) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+
+
+	}
 
 }

@@ -70,6 +70,12 @@
 	</bean>
 
 	<bean id="googleService" class="com.aavu.server.service.impl.GoogleServicesImpl">
+		<constructor-arg value="MyHippocampus.com Server" />
+		<constructor-arg value="Google Docs &amp; Spreadsheets" />
+		
+		<property name="selectDAO" ref="selectDAO"/>
+		<property name="userService" ref="userService" />
+		<property name="topicService" ref="topicService" />
 	</bean>
 
 	<bean id="awsConnection" class="com.aavu.server.s3.com.amazon.s3.AWSAuthConnection">

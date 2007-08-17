@@ -92,11 +92,12 @@
 		<property name="invitationService" ref="invitationService"/>
 	</bean>
 
-	<bean id="deliciousAddController" class="com.aavu.server.web.controllers.DeliciousBookmarkController">
+	<bean id="importController" class="com.aavu.server.web.controllers.ImportController">
 		<property name="formView" value="secure/importDelicious" />
 		<property name="successView" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->		
 		<property name="userService" ref="userService" />
 		<property name="deliciousService" ref="deliciousService"/>		
+		<property name="googleService" ref="googleService"/>
 	</bean>
 
 	<bean id="manageMailingListController" class="com.aavu.server.web.controllers.secure.extreme.ManageMailingListController">
@@ -282,7 +283,7 @@
 				<prop key="/site/secure/search.html">searchController</prop>
 				<prop key="/site/secure/userPage.html">userPageController</prop>
 				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
-				<prop key="/site/secure/importDelicious.html">deliciousAddController</prop>
+				<prop key="/site/secure/import.html">importController</prop>
 
 				<prop key="/site/browser.html">browserController</prop>
 				<prop key="/site/secure/mindscape.html">mindscapeController</prop>

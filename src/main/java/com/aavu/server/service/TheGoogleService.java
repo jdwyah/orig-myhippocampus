@@ -6,6 +6,8 @@ import com.google.gdata.util.ServiceException;
 
 public interface TheGoogleService {
 
-	void getAllDocs() throws IOException, ServiceException;
+	int getDocsForUser(String username, String password) throws IOException, ServiceException;
+
+
 
 }

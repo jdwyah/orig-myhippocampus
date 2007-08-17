@@ -133,4 +133,9 @@ public class MockUserService implements UserService {
 
 	}
 
+	public void setGoogleAppsUpdate() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

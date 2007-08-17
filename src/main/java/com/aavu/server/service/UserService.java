@@ -50,6 +50,8 @@ public interface UserService {
 
 	void setDeliciousUpdate();
 
+	void setGoogleAppsUpdate();
+
 
 
 }

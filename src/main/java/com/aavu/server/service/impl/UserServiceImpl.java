@@ -341,6 +341,13 @@ public class UserServiceImpl implements UserService {
 		log.debug("now " + now);
 	}
 
+	public void setGoogleAppsUpdate() {
+		User u = getCurrentUser();
+		Date now = new Date();
+		u.setLastGoogleAppsDate(now);
+		log.debug("now " + now);
+	}
+
 
 
 }

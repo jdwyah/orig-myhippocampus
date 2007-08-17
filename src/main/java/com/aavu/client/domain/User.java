@@ -1,10 +1,6 @@
 package com.aavu.client.domain;
+
 //Generated Jul 18, 2006 12:44:47 PM by Hibernate Tools 3.1.0.beta4
-
-import java.util.HashSet;
-import java.util.Set;
-
-import org.gwtwidgets.client.svg.SVGBasicShape;
 
 import com.aavu.client.domain.generated.AbstractUser;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -16,17 +12,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 /**
- * Extended by ServerSideUser on the Server to implement UserDetails,
- * Since getting the acegisecurity jar into client side land was a no go.
+ * Extended by ServerSideUser on the Server to implement UserDetails, Since getting the
+ * acegisecurity jar into client side land was a no go.
  * 
  */
 public class User extends AbstractUser implements IsSerializable {
 
 	public static final int PREMIUM_CUTOFF = 75;
 
-	public User(){
+	public User() {
 		setEnabled(true);
-		setSupervisor(false);		
+		setSupervisor(false);
 	}
 
 	public boolean isAccountNonExpired() {
@@ -40,20 +36,22 @@ public class User extends AbstractUser implements IsSerializable {
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-	public boolean isPremiumAccount(){
+
+	public boolean isPremiumAccount() {
 		return getSubscription().getMaxTopics() > PREMIUM_CUTOFF;
 	}
 
 	public int getWorldSize(int totalNumberOfTopics, int numberOfTags) {
-		//2000 @ 0 tags
-		//4000 @ 30 tags
-		return 2000+66*numberOfTags;
+		// 2000 @ 0 tags
+		// 4000 @ 30 tags
+		return 2000 + 66 * numberOfTags;
 	}
 
-	//@Override
-	public String toString() {		
-		return getId()+" "+getUsername();
+	// @Override
+	public String toString() {
+		return getId() + " " + getUsername();
 	}
-	
+
+
 
 }

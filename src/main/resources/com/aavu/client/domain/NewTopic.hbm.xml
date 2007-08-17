@@ -232,6 +232,17 @@
 					<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
 				</subclass>
 
+				<subclass name="GoogleData" abstract="true" discriminator-value="gdata">
+					<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+					
+					<subclass name="GDocument" discriminator-value="gdoc">
+						<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+					</subclass>
+					<subclass name="GSpreadsheet" discriminator-value="gspread">
+						<meta attribute="generated-class" inherit="false">AbstractJUNK</meta>
+					</subclass>
+				</subclass>
+
 				<!-- could have local HD links too.. -->
 
 			</subclass>

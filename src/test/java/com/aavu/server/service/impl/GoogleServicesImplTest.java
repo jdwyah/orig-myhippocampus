@@ -11,7 +11,7 @@ public class GoogleServicesImplTest extends BaseTestNoTransaction {
 	private TheGoogleService googleService;
 
 	public void testGetAllDocs() throws IOException, ServiceException {
-		googleService.getAllDocs();
+		googleService.getDocsForUser("jdwyah", "foo");
 	}
 
 	public void setGoogleService(TheGoogleService googleService) {

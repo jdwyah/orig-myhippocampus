@@ -1,9 +1,12 @@
 package com.aavu.server.web.domain;
 
-public class DeliciousCommand {
+public class ImportCommand {
 
 	private String deliciousName;
 	private String deliciousPass;
+
+	private String googleName;
+	private String googlePass;
 
 	public String getDeliciousName() {
 		return deliciousName;
@@ -19,6 +22,22 @@ public class DeliciousCommand {
 
 	public void setDeliciousPass(String deliciousPass) {
 		this.deliciousPass = deliciousPass;
+	}
+
+	public String getGooglePass() {
+		return googlePass;
+	}
+
+	public void setGooglePass(String googlePass) {
+		this.googlePass = googlePass;
+	}
+
+	public String getGoogleName() {
+		return googleName;
+	}
+
+	public void setGoogleName(String googleName) {
+		this.googleName = googleName;
 	}
 
 }

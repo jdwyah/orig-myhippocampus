@@ -118,6 +118,12 @@ public class TopicServiceImpl implements TopicService {
 		return rtn;
 	}
 
+
+
+	public <T> T createNew(String title, Class<T> type, Topic parent) throws HippoBusinessException {
+		return createNew(title, type, parent, null);
+	}
+
 	/**
 	 * If parent is null, that's ok, we're saving a Meta or something. Pass new Root(), to do a
 	 * lookup and get the actual root element. Pass parent to get tagged.
@@ -128,8 +134,16 @@ public class TopicServiceImpl implements TopicService {
 	 * 
 	 * If prototype is an occurrence, use addOccurrence()
 	 */
-	public Topic createNew(String title, Topic prototype, Topic parent, int[] lnglat)
+
+	public <T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat)
 			throws HippoBusinessException {
+
+		Topic prototype;
+		try {
+			prototype = (Topic) type.newInstance();
+		} catch (Exception e) {
+			throw new HippoBusinessException(e);
+		}
 
 		// if ((prototype instanceof RealTopic) && userIsOverSubscriptionLimit()) {
 		// log.info("User over Subscription Limit " + userService.getCurrentUser().getUsername());
@@ -164,20 +178,31 @@ public class TopicServiceImpl implements TopicService {
 		log.info("create New: " + title + " " + prototype.getClass() + " "
 				+ userService.getCurrentUser().getUsername());
 
-		return prototype;
+
+		return (T) prototype;
+
 	}
 
-	public Topic createNewIfNonExistent(String tagName) throws HippoBusinessException {
-		return createNewIfNonExistent(tagName, new Root());
+	public Topic createNewIfNonExistent(String title) throws HippoBusinessException {
+		return createNewIfNonExistent(title, new Root());
 	}
 
-	public Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException {
+	public Topic createNewIfNonExistent(String title, Topic parent) throws HippoBusinessException {
+		return createNewIfNonExistent(title, RealTopic.class, parent);
+	}
 
-		Topic cur = getForNameCaseInsensitive(tagName);
+	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
+			Topic parent) throws HippoBusinessException {
+		Topic cur = getForNameCaseInsensitive(title);
 		if (cur == null) {
-			cur = createNew(tagName, new RealTopic(), parent, null);
+
+			try {
+				cur = createNew(title, type, parent, null);
+			} catch (Exception e) {
+				throw new HippoBusinessException(e);
+			}
 		}
-		return cur;
+		return (T) cur;
 	}
 
 	public void delete(long id) throws HippoBusinessException {

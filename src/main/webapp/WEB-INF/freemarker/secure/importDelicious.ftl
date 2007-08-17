@@ -2,7 +2,7 @@
 <#import "/spring.ftl" as spring/>
 <#import "../common.ftl" as common/>
 <head>
-  <title><@spring.message "importDelicious.title"/></title>
+  <title><@spring.message "import.title"/></title>
 </head>
 
 <body>
@@ -11,7 +11,7 @@
 	
  <div class="middle-column-box-white">
 	<div class="middle-column-box-title-green">
-		<@spring.message "importDelicious.header"/>
+		<@spring.message "import.header"/>
 	</div>
 
 	 <#if message?exists>
@@ -19,7 +19,7 @@
 	 </#if>
 
 
-	<form action="<@spring.url "/site/secure/importDelicious.html"/>" method="POST">
+	<form action="<@spring.url "/site/secure/import.html?type=delicious"/>" method="POST">
 		<fieldset>
 			<legend><@spring.message "importDelicious.legend"/></legend>				
 								
@@ -35,6 +35,21 @@
 		</fieldset>
 	</form>		
 	<p>
+	<form action="<@spring.url "/site/secure/import.html?type=google"/>" method="POST">
+		<fieldset>
+			<legend><@spring.message "importGoogle.legend"/></legend>				
+								
+			 <label for="googleName"><@spring.formInput "command.googleName"/><@common.regError/>
+			 <@spring.message "importGoogle.username"/>
+			 </label>		
+			 <br>	
+			 <label for="googlePass"><@spring.formPasswordInput "command.googlePass"/><@common.regError/>
+			 <@spring.message "importGoogle.password"/>
+			 </label>
+			 <br>
+			<input value="<@spring.message "importGoogle.submit"/>" type="submit">
+		</fieldset>
+	</form>		
 	Your name and password is not saved on our servers. 
 	
   </div>

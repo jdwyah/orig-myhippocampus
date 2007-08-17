@@ -39,24 +39,41 @@ public interface TopicService {
 
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
-	Topic createNew(String title, Topic prototype, Topic parent, int[] lnglat)
+	<T> T createNew(String title, Class<T> type, Topic parent) throws HippoBusinessException;
+
+	<T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat)
 			throws HippoBusinessException;
 
-	void delete(Topic topic) throws HippoBusinessException;
+	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
+
+	Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException;
+
+
+	<T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
+			Topic parent) throws HippoBusinessException;
+
 
 	void delete(long id) throws HippoBusinessException;
+
+	void delete(Topic topic) throws HippoBusinessException;
 
 	void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException,
 			HippoException;
 
 	List<LocationDTO> getAllLocations();
 
+
 	List<Meta> getAllMetas();
 
-	List<TopicIdentifier> getTagsStarting(String match);
-
-
-	List<TagStat> getTagStats();
+	/**
+	 * Filter out Dates/Locaitons/Metas.
+	 * 
+	 * @param startStr
+	 * @param max
+	 * @param start
+	 */
+	List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username, int start, int max,
+			String startStr);
 
 	/**
 	 * Filter out Dates/Locaitons/Metas.
@@ -80,16 +97,6 @@ public interface TopicService {
 	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr);
 
-	/**
-	 * Filter out Dates/Locaitons/Metas.
-	 * 
-	 * @param startStr
-	 * @param max
-	 * @param start
-	 */
-	List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username, int start, int max,
-			String startStr);
-
 	Topic getForID(long topicID);
 
 	Topic getForNameCaseInsensitive(String string);
@@ -100,9 +107,13 @@ public interface TopicService {
 
 	Topic getPublicTopic(String userString, String topicString) throws HippoBusinessException;
 
+	List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id);
+
 	Root getRootTopic(User forUser);
 
-	List<FullTopicIdentifier> getPublicTopicIdsWithTag(long id);
+	List<TopicIdentifier> getTagsStarting(String match);
+
+	List<TagStat> getTagStats();
 
 	List<TimeLineObj> getTimeline();
 
@@ -124,15 +135,11 @@ public interface TopicService {
 
 	Topic save(Topic topic) throws HippoBusinessException;
 
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng)
+			throws HippoException;
+
 	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
 
 	MindTree saveTree(MindTree tree);
-
-	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
-
-	Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException;
-
-	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng)
-			throws HippoException;
 
 }
