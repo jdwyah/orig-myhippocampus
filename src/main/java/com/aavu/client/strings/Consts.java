@@ -256,7 +256,6 @@ public interface Consts extends Messages {
 
 	String gadget_already_showing();
 
-	String enterInfo_image();
 
 	String topic_picker_topic_tooltip();
 
@@ -463,5 +462,7 @@ public interface Consts extends Messages {
 	String options();
 
 	String remove_tooltip();
+
+	String goThere();
 
 }

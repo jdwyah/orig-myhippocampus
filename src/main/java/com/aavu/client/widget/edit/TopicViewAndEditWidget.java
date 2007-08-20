@@ -1,20 +1,24 @@
 package com.aavu.client.widget.edit;
 
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveOccurrenceDataCommand;
+import com.aavu.client.gui.EntryEditWindow;
+import com.aavu.client.gui.SaveStopLight;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TopicViewAndEditWidget extends Composite implements ChangeListener {
+public class TopicViewAndEditWidget extends Composite implements ChangeListener, SaveNeededListener {
 
 
 	private TopicEditWidget topicEditWidget;
@@ -23,7 +27,7 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 
 	public Entry entry;
 	private Manager manager;
-	private SaveNeededListener saveNeeded;
+
 
 	private EditableLabelExtension titleBox;
 
@@ -31,17 +35,25 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 
 	private int height;
 
+	private SaveStopLight saveButton;
 
-	public TopicViewAndEditWidget(Manager manager, SaveNeededListener saveNeeded) {
-		this.saveNeeded = saveNeeded;
+	private EntryEditWindow entryEditWindow;
+
+	public TopicViewAndEditWidget(Manager manager, EntryEditWindow entryEditWindow) {
+
 		this.manager = manager;
-
+		this.entryEditWindow = entryEditWindow;
 
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 
 		topicPanel = new VerticalPanel();
 
+		saveButton = new SaveStopLight(new ClickListener() {
+			public void onClick(Widget sender) {
+				save();
+			}
+		});
 
 		mainPanel.add(topicPanel);
 
@@ -77,7 +89,7 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 
 
 
-		topicEditWidget = new TopicEditWidget(manager, entry);
+		topicEditWidget = new TopicEditWidget(manager, entry, saveButton);
 		topicEditWidget.addChangeListener(this);
 		topicEditWidget.setPixelSize(width, height);
 
@@ -102,14 +114,29 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener 
 	}
 
 
-	public void onChange(Widget sender) {
-		saveNeeded.onChange(this);
-	}
-
 
 	public AbstractCommand getSaveCommand() {
 		return new SaveOccurrenceDataCommand(entry, titleBox.getText(), getEntryText());
 	}
 
+	private void save() {
+		manager.getTopicCache().executeCommand(getEntry(), getSaveCommand(),
+				new StdAsyncCallback("") {
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+						saveButton.saveAccomplished();
+						entryEditWindow.setCaption(getEntry().getTitle());
+					}
+				});
+	}
+
+	public void onChange(Widget sender) {
+		saveButton.setSaveNeeded();
+	}
+
+
+	public boolean isSaveNeeded() {
+		return saveButton.isSaveNeeded();
+	}
 
 }

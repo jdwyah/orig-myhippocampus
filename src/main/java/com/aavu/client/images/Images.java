@@ -114,4 +114,21 @@ public interface Images extends ImageBundle {
 	 */
 	AbstractImagePrototype ballAdd();
 
+	/**
+	 * @gwt.resource greenLight.png
+	 */
+	AbstractImagePrototype greenLight();
+
+	/**
+	 * @gwt.resource redLight.png
+	 */
+	AbstractImagePrototype redLight();
+
+	/**
+	 * @gwt.resource enterInfo.png
+	 */
+	AbstractImagePrototype enterInfo();
+
+
+
 }

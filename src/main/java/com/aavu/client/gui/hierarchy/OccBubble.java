@@ -3,15 +3,19 @@ package com.aavu.client.gui.hierarchy;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 
-public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, ClickListener {
+public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, ClickListener,
+		DblClickListener {
 
-	private TopicOccurrenceConnector owl;
+	protected TopicOccurrenceConnector owl;
 	private int unscaledWidth;
 	private int unscaledHeight;
+	private boolean detailsShowing;
 
 	/**
 	 * default to the green ball image
@@ -31,6 +35,8 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 		this.owl = owl;
 		this.unscaledWidth = width;
 		this.unscaledHeight = height;
+
+		addDblClickListener(this);
 
 	}
 
@@ -53,10 +59,37 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 	}
 
 	// @Override
-	protected void clickAction() {
-		System.out.println("OccBubble onClick");
+	public void onDblClick(Widget sender) {
+		System.out.println("OccBubble onDBLClick");
+		dblClick();
+	}
+
+	/**
+	 * Override for custom double click processing.
+	 */
+	protected void dblClick() {
 		getDisplay().getManager().editOccurrence(owl.getOccurrence());
 	}
+
+	// @Override
+	protected void clickAction() {
+		System.out.println("\n\nTOPIC BUBBLE click Action");
+		// showDetailButton();
+		showDetails();
+	}
+
+
+	protected void showDetails() {
+		detailsShowing = true;
+		getDisplay().showHover(owl.getOccurrence().getIdentifier());
+		// HoverManager.showHover(getDisplay().getManager(), this, getFTI());
+
+	}
+
+	protected boolean isDetailsShowing() {
+		return detailsShowing;
+	}
+
 
 	// @Override
 	protected void unClickAction() {
@@ -80,16 +113,6 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 
 	}
 
-	// @Override
-	protected void showDetails() {
-		// TODO Auto-generated method stub
 
-	}
-
-	// @Override
-	protected boolean isDetailsShowing() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

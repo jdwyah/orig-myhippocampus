@@ -54,8 +54,6 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 			// or if the user hasn't moved the gadget themselves
 			//
 
-
-
 			System.out.println("GadgetDisplayerPopup unset " + 4 + " " + popup.getLeft() + " l "
 					+ left + " nl " + normalLeft + " " + popup.getCaption());
 

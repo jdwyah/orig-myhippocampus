@@ -109,10 +109,15 @@ public class GoogleServicesImpl implements TheGoogleService {
 	private void add(User user, DocumentListEntry doc, Topic parent) throws HippoBusinessException {
 
 
+		Link link = doc.getLink(null, "text/html");
 
-		Topic existing = selectDAO.getForURI(doc.getSelfLink().getHref(), user, user);
+		if (link == null) {
+			throw new HippoBusinessException("No text/HTML Link");
+		}
 
-		if (existing == null) {
+		Topic existingT = selectDAO.getForURI(link.getHref(), user, user);
+
+		if (existingT == null) {
 
 			GoogleData data = null;
 
@@ -131,7 +136,9 @@ public class GoogleServicesImpl implements TheGoogleService {
 			if (doc.getUpdated() != null) {
 				data.setLastUpdated(new Date(doc.getUpdated().getValue()));
 			}
-			data.setUri(doc.getSelfLink().getHref());
+
+			data.setUri(link.getHref());
+
 
 			topicService.save(data);
 
@@ -140,8 +147,18 @@ public class GoogleServicesImpl implements TheGoogleService {
 		// something, but it's probably more likely that gapps is up to date.
 		//
 		else {
-			existing.setTitle(doc.getTitle().getPlainText());
-			topicService.save(existing);
+			if (existingT instanceof GoogleData) {
+				GoogleData existing = (GoogleData) existingT;
+
+				existing.setTitle(doc.getTitle().getPlainText());
+
+				existing.setUri(link.getHref());
+
+				topicService.save(existing);
+			} else {
+				throw new HippoBusinessException("Retrieved non Google Data " + link);
+			}
+
 		}
 
 

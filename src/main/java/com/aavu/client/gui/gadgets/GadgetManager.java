@@ -20,6 +20,7 @@ public class GadgetManager {
 	private CreateTopicGadget createTopicGadget;
 
 	private TagBoard tagBoard;
+	private OccurrenceTopicsBoard occTopicsBoard;
 
 	private TitleGadget titleGadget;
 
@@ -57,6 +58,8 @@ public class GadgetManager {
 			// typeGadget = new TypeGadget(manager);
 			titleGadget = new TitleGadget(manager);
 			tagBoard = new TagBoard(manager);
+			occTopicsBoard = new OccurrenceTopicsBoard(manager);
+
 
 			// uploadBoard = new UploadBoard(manager);
 			// timeGadget = new TimeGadget(manager);
@@ -76,6 +79,7 @@ public class GadgetManager {
 			allGadgets.add(titleGadget);
 
 			allGadgets.add(tagBoard);
+			allGadgets.add(occTopicsBoard);
 
 			// allGadgets.add(uploadBoard);
 			// allGadgets.add(mapGadget);

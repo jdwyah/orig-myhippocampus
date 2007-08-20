@@ -470,7 +470,7 @@ public class TopicServiceImpl implements TopicService {
 		topic.setUser(userService.getCurrentUser());
 
 
-		if (topic.getTitle().equals("")) {
+		if (topic.mustHaveUniqueName() && topic.getTitle().equals("")) {
 			log.info("Throw HBE exception for Empty Title");
 			throw new HippoBusinessException("Empty Title");
 		}

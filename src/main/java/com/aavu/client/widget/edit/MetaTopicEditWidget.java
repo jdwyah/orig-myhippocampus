@@ -8,10 +8,10 @@ import com.aavu.client.domain.commands.SaveMetaTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.EnterInfoButton;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -21,7 +21,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 	private MetaTopic meta;
 	private TopicCompleter completer;
 	private ActionableTopicLabel topicDisplayLink;
-	private EnterInfoButton enterB;
+	private Image enterB;
 	private TopicCache topicCache;
 
 	public MetaTopicEditWidget(final MetaTopic meta, final Topic topic, TopicCache topicCache) {
@@ -35,7 +35,7 @@ public class MetaTopicEditWidget extends Composite implements CompleteListener {
 		completer = new TopicCompleter(topicCache);
 		completer.setCompleteListener(this);
 
-		enterB = new EnterInfoButton();
+		enterB = ConstHolder.images.enterInfo().createImage();
 		enterB.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				completer.complete();

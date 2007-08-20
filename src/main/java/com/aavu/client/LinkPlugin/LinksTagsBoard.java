@@ -13,8 +13,8 @@ import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.util.CollectionUtils;
 import com.aavu.client.service.cache.TopicCache;
+import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
-import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.aavu.client.widget.edit.DeletableTopicLabel;
 import com.aavu.client.widget.edit.RemoveListener;
@@ -22,6 +22,7 @@ import com.aavu.client.widget.edit.TopicCompleter;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,7 +46,7 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 		topicCompleter = new TopicCompleter(topicCache);
 		topicCompleter.setCompleteListener(completer);
 
-		EnterInfoButton enterInfoButton = new EnterInfoButton();
+		Image enterInfoButton = ConstHolder.images.enterInfo().createImage();
 		enterInfoButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				topicCompleter.complete();

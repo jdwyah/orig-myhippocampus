@@ -4,11 +4,13 @@ import java.util.Date;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.URI;
 import com.aavu.client.domain.commands.SaveDateCreatedCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.widget.ExternalLink;
 import com.aavu.client.widget.datepicker.DateFormatter;
 import com.aavu.client.widget.datepicker.DatePickerInterface;
 import com.aavu.client.widget.datepicker.HDatePicker;
@@ -34,6 +36,7 @@ public class TitleGadget extends Gadget {
 	private DatePickerInterface datePicker;
 
 	private Image deleteB;
+	private HorizontalPanel uriPanel;
 
 	// private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -114,6 +117,9 @@ public class TitleGadget extends Gadget {
 		// titleP.add(deleteB);
 
 
+
+		uriPanel = new HorizontalPanel();
+
 		CellPanel dateP = new HorizontalPanel();
 		dateP.add(new Label(ConstHolder.myConstants.date()));
 		dateP.add(datePicker.getWidget());
@@ -121,6 +127,7 @@ public class TitleGadget extends Gadget {
 		VerticalPanel mainP = new VerticalPanel();
 		mainP.add(titleP);
 		mainP.add(dateP);
+		mainP.add(uriPanel);
 		initWidget(mainP);
 	}
 
@@ -146,6 +153,14 @@ public class TitleGadget extends Gadget {
 
 		datePicker.setSelectedDate(topic.getCreated());
 		// datePicker.setCurrentDate(topic.getCreated());
+
+
+		uriPanel.clear();
+		if (topic instanceof URI) {
+			ExternalLink urlGoB = new ExternalLink((URI) topic, null, false);
+			uriPanel.add(new Label(ConstHolder.myConstants.goThere()));
+			uriPanel.add(urlGoB);
+		}
 
 		// datePicker.setText(df.format(mv.getStartDate()));
 

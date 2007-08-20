@@ -78,7 +78,9 @@ a:visited {
 .H-SaveLabel {
 	color: red;
 }
-
+.H-SaveLight {
+	padding-left: 10px;
+}
 .gwt-RichTextArea {
 	overflow-x: hidden;
 	overflow: -moz-scrollbars-vertical;

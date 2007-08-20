@@ -101,7 +101,7 @@ public abstract class Gadget extends Composite {
 	public void showForFirstTime() {
 	}
 
-	public abstract boolean isOnForTopic(Topic topic);
+	// public abstract boolean isOnForTopic(Topic topic);
 
 	/**
 	 * Overridden by Gadgets that need to now when the GadgetDisplayer is visible

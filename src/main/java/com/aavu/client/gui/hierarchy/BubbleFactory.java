@@ -1,6 +1,8 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.domain.Entry;
+import com.aavu.client.domain.GDocument;
+import com.aavu.client.domain.GSpreadsheet;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
@@ -19,10 +21,15 @@ public class BubbleFactory {
 
 		if (owl.getOccurrence() instanceof Entry) {
 			return new EntryDisplay(owl, display);
-		}
-		if (owl.getOccurrence() instanceof WebLink) {
+		} else if (owl.getOccurrence() instanceof WebLink) {
 			return new OccBubble(owl, ImageHolder.getImgLoc("hierarchy/") + "gadgetLinks.png", 59,
 					29, display);
+		} else if (owl.getOccurrence() instanceof GDocument) {
+			return new GoogOccBubble(owl, ImageHolder.getImgLoc("hierarchy/") + "gDocument.png",
+					40, 40, display);
+		} else if (owl.getOccurrence() instanceof GSpreadsheet) {
+			return new GoogOccBubble(owl, ImageHolder.getImgLoc("hierarchy/") + "gSpreadsheet.png",
+					40, 40, display);
 		} else {
 			return new OccBubble(owl, display);
 		}

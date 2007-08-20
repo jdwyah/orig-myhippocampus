@@ -12,13 +12,13 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -45,7 +45,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 
 		// alsos = new SeeAlsoWidget();
 
-		EnterInfoButton enterInfoButton = new EnterInfoButton();
+		Image enterInfoButton = ConstHolder.images.enterInfo().createImage();
 		enterInfoButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				topicCompleter.complete();

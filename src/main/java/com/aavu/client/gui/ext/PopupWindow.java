@@ -33,12 +33,12 @@ public class PopupWindow implements CloseListener {
 
 		this.frame = frame;
 
-		System.out.println("PopupWindow.setting theme !!!");
+
 		// This must be called before anything else.
 		// NOTE: don't forget to add the css file to the html.
-		System.out.println("Z");
+
 		frame.setTheme("alphacube");
-		System.out.println("A..");
+
 		if (width != -1) {
 			frame.setWidth(width);
 			frame.setHeight(height);
@@ -53,15 +53,15 @@ public class PopupWindow implements CloseListener {
 			h = (h < 100) ? 100 : h;
 			frame.setLocation(w, h);
 		}
-		System.out.println("B");
+
 		frame.setMinimizable(false);
 		frame.setMaximizable(true);
 		frame.setDraggable(true);
 		((DefaultGFrame) frame).setEffects(false);
 
-		System.out.println("set vis");
+
 		frame.setVisible(true);
-		System.out.println("set vis 2");
+
 		// This end up with windows where the title bar is hidden/undraggable
 		// frame.showCenter(false);
 
@@ -71,7 +71,7 @@ public class PopupWindow implements CloseListener {
 		// frame.setDestroyOnClose();
 	}
 
-	public void setTitle(String title) {
+	public void setCaption(String title) {
 		frame.setCaption(title);
 	}
 

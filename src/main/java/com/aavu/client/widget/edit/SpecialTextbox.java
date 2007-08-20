@@ -1,5 +1,6 @@
 package com.aavu.client.widget.edit;
 
+import com.aavu.client.gui.SaveStopLight;
 import com.aavu.client.widget.RichText.RichTextToolbar;
 import com.aavu.client.widget.RichText2.KeyCodeEventListener;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -9,6 +10,7 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
@@ -37,6 +39,10 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	private String text;
 
 	public SpecialTextbox(boolean useToolbar) {
+		this(useToolbar, null);
+	}
+
+	public SpecialTextbox(boolean useToolbar, SaveStopLight saveButton) {
 		super();
 
 		textArea = new RichTextArea(); // new HippoEditor(this);
@@ -84,9 +90,18 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 		// completePanel.add(cancelButton);
 		// completePopup.add(completePanel);
 
+
 		if (useToolbar) {
+			HorizontalPanel hp = new HorizontalPanel();
 			RichTextToolbar toolbar = new RichTextToolbar(textArea);
-			mainPanel.add(toolbar);
+
+			hp.add(toolbar);
+
+			if (saveButton != null) {
+
+				hp.add(saveButton);
+			}
+			mainPanel.add(hp);
 		}
 		mainPanel.add(textArea);
 
@@ -97,6 +112,8 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 
 
 	}
+
+
 
 	// @Override
 	public void setPixelSize(int width, int height) {

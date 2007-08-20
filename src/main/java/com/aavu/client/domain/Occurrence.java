@@ -1,6 +1,9 @@
 package com.aavu.client.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.aavu.client.domain.generated.AbstractOccurrence;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -37,6 +40,16 @@ public class Occurrence extends AbstractOccurrence implements Serializable, IsSe
 		super.copyPropsButNotIDIntoParam(o);
 		o.setData(getData());
 		return o;
+	}
+
+	public Set getTopicsAsTopics() {
+
+		Set rtn = new HashSet();
+		for (Iterator iter = getTopics().iterator(); iter.hasNext();) {
+			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) iter.next();
+			rtn.add(toc.getTopic());
+		}
+		return rtn;
 	}
 
 

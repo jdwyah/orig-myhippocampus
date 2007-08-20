@@ -2,6 +2,7 @@ package com.aavu.client.widget.edit;
 
 import com.aavu.client.domain.Entry;
 import com.aavu.client.gui.EntryEditWindow;
+import com.aavu.client.gui.SaveStopLight;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -20,15 +21,15 @@ public class TopicEditWidget extends Composite implements SourcesChangeEvents {
 
 	private Manager manager;
 
-	public TopicEditWidget(final Manager manager, Entry entry) {
+	public TopicEditWidget(final Manager manager, Entry entry, SaveStopLight saveButton) {
 		this.entry = entry;
 
 		this.manager = manager;
 
 		System.out.println("topic edit widg " + entry);
 
-		textArea = new SpecialTextbox(true);
-		textArea.setSize((EntryEditWindow.WIDTH - 120) + "px", "400px");
+		textArea = new SpecialTextbox(true, saveButton);
+		textArea.setSize((EntryEditWindow.WIDTH - 100) + "px", "400px");
 
 		// tagBoard = new TagBoard(manager);
 		// subjectBoard = new SubjectBoard(manager,titleBox,tagBoard);

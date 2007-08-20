@@ -13,7 +13,6 @@ import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.EnterInfoButton;
 import com.aavu.client.widget.HeaderLabel;
 import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
@@ -54,7 +53,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		alsos = new SeeAlsoWidget();
 
-		EnterInfoButton enterInfoButton = new EnterInfoButton();
+		Image enterInfoButton = ConstHolder.images.enterInfo().createImage();
 		enterInfoButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				topicCompleter.complete();
