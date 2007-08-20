@@ -67,6 +67,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 		// This occurs when we add a new Occ
 		if (theOcc == null) {
 			theOcc = occurrence;
+			setTopic(0, theOcc);
 		}
 
 		System.out.println("the occ " + theOcc + " CopyProps");
@@ -137,7 +138,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 
 		System.out.println(getTopic(1));
 		System.out.println("contp: " + getTopic(1).getOccurenceObjs().contains(getOccurrence()));
-		System.out.println("occ " + getOccurrence());
+		System.out.println("occ: " + getOccurrence());
 
 
 		affected.add(theOcc);

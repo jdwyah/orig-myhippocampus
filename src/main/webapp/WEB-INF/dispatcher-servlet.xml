@@ -55,11 +55,9 @@
 		<property name="view" value="terms" />
 		<property name="userService" ref="userService" />
 	</bean>
-	<bean id="addLinkController" class="com.aavu.server.web.controllers.AddLinkController">
-		<property name="formView" value="secure/addLink" />
-		<property name="successView" value="closeWindow" />
-		<property name="userService" ref="userService" />
-		<property name="topicService" ref="topicService" />
+	<bean id="addLinkController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="secure/addLink" />		
+		<property name="userService" ref="userService" />		
 	</bean>
 
 
@@ -339,6 +337,7 @@
    		<property name="servletName" value="default"/>
  	</bean> -->
 	
+
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10485760"/><!-- 10MB -->

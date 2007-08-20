@@ -18,7 +18,7 @@ public class Root extends Topic implements IsSerializable, Serializable {
 	public Root(User user) {
 		setPublicVisible(false);
 		setUser(user);
-		setTitle(user.getUsername() + "'s Desktop");
+		setTitle("Desktop");
 	}
 
 	/**

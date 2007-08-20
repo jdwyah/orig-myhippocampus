@@ -4,6 +4,7 @@
 	  <pattern>*com.aavu.HippoTest*</pattern> 
 	  <pattern>*com.aavu.Interactive*</pattern>
 	  <pattern>/site/secure/mindscape.html</pattern><!-- Ajax Straight HTML <UL> -->
+	  <pattern>/site/secure/addLink.html*</pattern><!-- Ajax Straight HTML <UL> -->
       <pattern>/site/secure/getTopics.html</pattern><!-- Ajax Straight HTML <UL> -->
 	</excludes>
     

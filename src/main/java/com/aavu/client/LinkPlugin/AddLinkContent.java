@@ -158,7 +158,7 @@ public class AddLinkContent extends Composite implements CompleteListener {
 		}
 
 		List allTopics = tagsBoard.getAllTopics();
-		int removeNumber = tagsBoard.getRemoveNumber();
+
 
 		// int i = 0;
 		// for (Iterator iter = allTopics.iterator(); iter.hasNext();) {

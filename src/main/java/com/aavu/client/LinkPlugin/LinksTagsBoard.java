@@ -32,7 +32,7 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 	private List topics;
 	private HorizontalPanel onPanel;
 	private TopicCompleter topicCompleter;
-	private int removeNumber = 0;
+
 
 	public LinksTagsBoard(final CompleteListener completer, TopicCache topicCache) {
 
@@ -63,7 +63,7 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 	}
 
 	public void load(WebLink w) {
-		removeNumber = 0;
+
 
 		topicM.clear();
 		topics.clear();
@@ -102,7 +102,6 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 			// NOTE
 			// topics.add(topic);
 
-			removeNumber++;
 		}
 	}
 
@@ -125,11 +124,6 @@ public class LinksTagsBoard extends Composite implements RemoveListener {
 		topicCompleter.setText("");
 	}
 
-	public int getRemoveNumber() {
-		if (removeNumber == 0) {
-			return -1;
-		}
-		return topics.size() - removeNumber;
-	}
+
 
 }

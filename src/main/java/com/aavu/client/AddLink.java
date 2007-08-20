@@ -1,8 +1,8 @@
 package com.aavu.client;
 
+import org.gwm.client.GDesktopPane;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGDesktopPane;
-import org.gwm.client.impl.DefaultGFrame;
 import org.gwm.client.impl.DefaultGInternalFrame;
 import org.gwtwidgets.client.util.WindowUtils;
 
@@ -17,7 +17,6 @@ import com.aavu.client.service.remote.GWTUserServiceAsync;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.strings.Consts;
 import com.aavu.client.util.Logger;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -29,7 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class AddLink implements EntryPoint {
+public class AddLink {
 
 	public static final String EMPTY = "-1";
 	public static final String UPLOAD_PATH = "service/upload.html";// "site/secure/upload.html";
@@ -54,6 +53,8 @@ public class AddLink implements EntryPoint {
 
 	public AddLink() {
 		initConstants();
+		initServices();
+		setMeUp();
 	}
 
 	private boolean initServices() {
@@ -101,20 +102,18 @@ public class AddLink implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 * 
-	 * -T-ODO HIGH we're running map setup TWICE. once from LoginWindow.
-	 * secondly because onModuleLoad() is getting called right after the login.
-	 * Why is this? It couldn't be the addition of the iframe code could it?
+	 * -T-ODO HIGH we're running map setup TWICE. once from LoginWindow. secondly because
+	 * onModuleLoad() is getting called right after the login. Why is this? It couldn't be the
+	 * addition of the iframe code could it?
 	 * 
-	 * SOLVED. It was the IFRAME. let's make another EntryPoint that just
-	 * pre-loads stuff.
+	 * SOLVED. It was the IFRAME. let's make another EntryPoint that just pre-loads stuff.
 	 * 
-	 * NOTE the semaphore code below is inefectual even with the var static.
-	 * have_initted is false both times. It looks like we're re-initting the
-	 * class. this reports different objectIDs
+	 * NOTE the semaphore code below is inefectual even with the var static. have_initted is false
+	 * both times. It looks like we're re-initting the class. this reports different objectIDs
 	 * 
 	 * 
 	 */
-	public void onModuleLoad() {
+	public void setMeUp() {
 
 		url = WindowUtils.getLocation().getParameter("url");
 		notes = WindowUtils.getLocation().getParameter("notes");
@@ -161,8 +160,8 @@ public class AddLink implements EntryPoint {
 	}
 
 	/**
-	 * Actual GUI initialization addL will try to lookup the URL, if not logged
-	 * in that call will fail and we'll run doLogin() here.
+	 * Actual GUI initialization addL will try to lookup the URL, if not logged in that call will
+	 * fail and we'll run doLogin() here.
 	 * 
 	 * If that call suceeds, we'll be returned the AddLinkPanel widget.
 	 */
@@ -182,8 +181,8 @@ public class AddLink implements EntryPoint {
 	}
 
 	/**
-	 * should only be used in testing where we're not already logged in since
-	 * acegi should ensure we're logged in for this
+	 * should only be used in testing where we're not already logged in since acegi should ensure
+	 * we're logged in for this
 	 * 
 	 * That's why the stub impls are ok.
 	 * 
@@ -195,11 +194,15 @@ public class AddLink implements EntryPoint {
 		// int top) {}
 		// });
 
+		Logger.log("doLogin ");
+
 		GInternalFrame frame = new DefaultGInternalFrame();
 
-		frame.setDesktopPane(new DefaultGDesktopPane());
 
-		RootPanel.get(FRAME_DIV).add((DefaultGFrame) frame);
+		GDesktopPane p = new DefaultGDesktopPane();
+		p.addFrame(frame);
+
+		RootPanel.get(FRAME_DIV).add(p.getFramesContainer());
 
 		LoginService.doLogin(frame, new LoginListener() {
 			public void loginSuccess() {

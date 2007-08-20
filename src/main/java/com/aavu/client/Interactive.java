@@ -71,7 +71,7 @@ public class Interactive implements EntryPoint {
 			if (page.equals("MyMindscape")) {
 				MyMindscape m = new MyMindscape();
 			} else if (page.equals("AddLink")) {
-
+				AddLink addLink = new AddLink();
 
 			} else if (page.equals("HippocampusBrowser")) {
 				HippocampusBrowser browser = new HippocampusBrowser(theme.get("user"), theme
