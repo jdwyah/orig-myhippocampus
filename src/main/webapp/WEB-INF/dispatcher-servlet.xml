@@ -91,7 +91,7 @@
 	</bean>
 
 	<bean id="importController" class="com.aavu.server.web.controllers.ImportController">
-		<property name="formView" value="secure/importDelicious" />
+		<property name="formView" value="secure/import" />
 		<property name="successView" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->		
 		<property name="userService" ref="userService" />
 		<property name="deliciousService" ref="deliciousService"/>		

@@ -1,5 +1,8 @@
 package com.aavu.server.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,10 +12,13 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
+import com.aavu.client.exception.HippoException;
 import com.aavu.server.service.DeliciousService;
 import com.aavu.server.service.TheGoogleService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.ImportCommand;
+import com.aavu.server.web.domain.validation.ImportCommandValidator;
+import com.google.gdata.util.AuthenticationException;
 
 public class ImportController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(ImportController.class);
@@ -23,6 +29,14 @@ public class ImportController extends SimpleFormController {
 
 	public ImportController() {
 		setCommandClass(ImportCommand.class);
+		setValidator(new ImportCommandValidator());
+	}
+
+	private Map<String, Object> getModelForMessage(String message) {
+		Map<String, Object> rtn = new HashMap<String, Object>();
+		rtn.put("command", new ImportCommand());
+		rtn.put("message", message);
+		return rtn;
 	}
 
 	@Override
@@ -34,19 +48,32 @@ public class ImportController extends SimpleFormController {
 		ImportCommand comm = (ImportCommand) command;
 
 		if (type.equals("delicious")) {
-			int found = deliciousService.newLinksForUser(comm.getDeliciousName(), comm
-					.getDeliciousPass());
+			try {
+				int found = deliciousService.newLinksForUser(comm.getDeliciousName(), comm
+						.getDeliciousPass());
 
-			String successStr = "Success importing " + found + " bookmarks.";
+				String successStr = "Success importing " + found + " bookmarks.";
 
-			return new ModelAndView(getSuccessView(), "message", successStr);
+				return new ModelAndView(getSuccessView(), "message", successStr);
+			} catch (HippoException e) {
+
+				return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
+						+ e.getMessage()));
+			}
 		} else if (type.equals("google")) {
 
-			int found = googleService.getDocsForUser(comm.getGoogleName(), comm.getGooglePass());
+			try {
+				int found = googleService.importDocsForUser(comm.getGoogleName(), comm
+						.getGooglePass());
 
-			String successStr = "Success importing " + found + " documents.";
+				String successStr = "Success importing " + found + " documents.";
 
-			return new ModelAndView(getSuccessView(), "message", successStr);
+				return new ModelAndView(getSuccessView(), "message", successStr);
+			} catch (AuthenticationException e) {
+
+				return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
+						+ e.getMessage()));
+			}
 		} else {
 			throw new RuntimeException("No Import Type Specified");
 		}

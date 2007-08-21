@@ -17,6 +17,7 @@ import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.domain.subjects.WikiSubject;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.server.domain.RestParam;
 import com.aavu.server.service.ExternalServicesService;
@@ -102,7 +103,7 @@ public class ExternalServicesServiceImpl extends AbstractRestService implements
 	}
 
 	private List<AmazonBook> amazonLookup(String type, String matchText) throws IOException,
-			DocumentException {
+			DocumentException, HippoBusinessException {
 
 		List<AmazonBook> rtn = new ArrayList<AmazonBook>();
 
@@ -155,8 +156,10 @@ public class ExternalServicesServiceImpl extends AbstractRestService implements
 	 * @return
 	 * @throws IOException
 	 * @throws DocumentException
+	 * @throws HippoBusinessException
 	 */
-	public List<Subject> wikiLookup(String matchText) throws IOException, DocumentException {
+	public List<Subject> wikiLookup(String matchText) throws IOException, DocumentException,
+			HippoBusinessException {
 
 		List<Subject> rtn = new ArrayList<Subject>();
 

@@ -82,19 +82,19 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>1.4.0.build1331</version>
+			<version>1.4.59-RC2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-dev-windows</artifactId>
-			<version>1.4.0.build1331</version>
+			<version>1.4.59-RC2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>1.4.0.build1331</version>
+			<version>1.4.59-RC2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>

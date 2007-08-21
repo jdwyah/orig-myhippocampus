@@ -11,7 +11,9 @@ public class GoogleServicesImplTest extends BaseTestWithTransaction {
 	private TheGoogleService googleService;
 
 	public void testGetAllDocs() throws IOException, ServiceException {
-		googleService.getDocsForUser("jdwyah", "");
+		int rtn = googleService.importDocsForUser("jdwyah@myhippocampus.com", "");
+
+		System.out.println("found " + rtn + " docs");
 	}
 
 	public void setGoogleService(TheGoogleService googleService) {

@@ -51,8 +51,9 @@ public class GoogleServicesImpl implements TheGoogleService {
 	/**
 	 * do a create new if exists for all docs
 	 * 
+	 * Don't call it get* since that's our select only aop code
 	 */
-	public int getDocsForUser(String username, String password) throws IOException,
+	public int importDocsForUser(final String username, String password) throws IOException,
 			ServiceException {
 
 		service.setUserCredentials(username, password);
@@ -64,20 +65,34 @@ public class GoogleServicesImpl implements TheGoogleService {
 				.getAuthentication();
 		final User user = userService.getCurrentUser();
 
+		if (log.isDebugEnabled()) {
+			for (DocumentListEntry entry : feed.getEntries()) {
+				log.debug("Found Entry: " + entry.getTitle().getPlainText());
+			}
+		}
+
+
 		Thread addTagThread = new Thread() {
 			public void run() {
 				try {
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 
 					// create a parent entry so that everything doesn't just wack onto the main
-					// desktop
+					// desktop.
 					//
 					Topic googleRoot = topicService.createNewIfNonExistent(rootName);
+
+					// sort by username, since somebody might have docs for jdwyah@gmail.com and
+					// jdwyah@myhippocampus.com
+					//
+					Topic userRoot = topicService.createNewIfNonExistent(username, googleRoot);
+
+					log.debug("Adding to userRoot " + userRoot);
 
 					for (DocumentListEntry entry : feed.getEntries()) {
 
 						log.info("Adding gdoc " + entry.getTitle().getPlainText());
-						add(user, entry, googleRoot);
+						add(user, entry, userRoot);
 
 					}
 

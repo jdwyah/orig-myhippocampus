@@ -11,13 +11,16 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.domain.RestParam;
 
 public class AbstractRestService {
+	private static final Logger log = Logger.getLogger(AbstractRestService.class);
 
 	private HttpClient client;
 	private String userAgent;
@@ -38,12 +41,12 @@ public class AbstractRestService {
 	}
 
 	protected Document xmlRESTReq(String baseURL, Vector<RestParam> params) throws IOException,
-			DocumentException {
+			DocumentException, HippoBusinessException {
 		return xmlRESTReq(baseURL, params, null, null);
 	}
 
 	protected Document xmlRESTReq(String baseURL, Vector<RestParam> params, String username,
-			String password) throws IOException, DocumentException {
+			String password) throws IOException, DocumentException, HippoBusinessException {
 		StringBuilder url = new StringBuilder(baseURL);
 
 		for (RestParam p : params) {
@@ -77,7 +80,8 @@ public class AbstractRestService {
 			int statusCode = client.executeMethod(method);
 
 			if (statusCode != HttpStatus.SC_OK) {
-				System.err.println("Method failed: " + method.getStatusLine());
+				log.error("Method failed: " + method.getStatusLine());
+				throw new HippoBusinessException("Request Failed: " + method.getStatusLine());
 			}
 
 			// Read the response body.

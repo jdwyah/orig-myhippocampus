@@ -41,7 +41,7 @@
 								
 			 <label for="googleName"><@spring.formInput "command.googleName"/><@common.regError/>
 			 <@spring.message "importGoogle.username"/>
-			 </label>		
+			 </label>		(JohnDoe@gmail.com or JohnDoe@MyGoogleAppsDomain.com if you have GoogleApps)
 			 <br>	
 			 <label for="googlePass"><@spring.formPasswordInput "command.googlePass"/><@common.regError/>
 			 <@spring.message "importGoogle.password"/>
@@ -49,8 +49,10 @@
 			 <br>
 			<input value="<@spring.message "importGoogle.submit"/>" type="submit">
 		</fieldset>
-	</form>		
-	Your name and password is not saved on our servers. 
+	</form>
+	<p>		
+	Your password is not saved on our servers.
+	</p> 
 	
   </div>
 		
