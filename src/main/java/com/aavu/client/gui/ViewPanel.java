@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.aavu.client.gui.hierarchy.TopicDisplayObj;
 import com.aavu.client.gui.ocean.dhtmlIslands.EventBackdrop;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
+import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -275,9 +277,20 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 			// System.out.println("move "+rp.getLeft()+" "+(int)((rp.getLeft())*currentScale)+"
 			// "+(int)((rp.getLeft())*currentScale*getXSpread())+" cs "+currentScale);
-			setWidgetPosition(rp.getWidget(), (int) ((rp.getLeft()) * currentScale * getXSpread())
-					+ curbackX, (int) ((rp.getTop()) * yScale) + curbackY);
-
+			try {
+				setWidgetPosition(rp.getWidget(),
+						(int) ((rp.getLeft()) * currentScale * getXSpread()) + curbackX, (int) ((rp
+								.getTop()) * yScale)
+								+ curbackY);
+			} catch (RuntimeException e) {
+				if (rp instanceof TopicDisplayObj) {
+					Logger.log("ERROR: ViewPanel. couldn't move: "
+							+ ((TopicDisplayObj) rp).getTopic());
+				} else {
+					Logger.log("ERROR: ViewPanel. couldn't move: " + rp.getWidget());
+				}
+				throw e;
+			}
 			objectHasMoved(rp, halfWidth, halfHeight, centerX, centerY);
 
 		}

@@ -1,6 +1,7 @@
 package com.aavu.client.gui.ocean;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import org.gwm.client.GFrame;
 
@@ -9,7 +10,6 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.BreadCrumbDisplayer;
-import com.aavu.client.gui.CenterTopicDisplayer;
 import com.aavu.client.gui.Dashboard;
 import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.GadgetDisplayer;
@@ -42,7 +42,6 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	private StatusPanel statusPanel;
 	private SearchBox searchBox;
 
-	private CenterTopicDisplayer centerDisplayer;
 
 	private BreadCrumbDisplayer breadcrumbDisplayer;
 
@@ -128,8 +127,6 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 		zoomer = new Zoomer(manager);
 		mainP.add(zoomer);
 
-		centerDisplayer = new CenterTopicDisplayer(manager, this);
-		// mainP.add(centerDisplayer);
 
 		breadcrumbDisplayer = new BreadCrumbDisplayer(manager);
 
@@ -239,7 +236,7 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 		curTopic = topic;
 
 		spatialDisplay.load(topic, null);
-		centerDisplayer.load(topic);
+
 		breadcrumbDisplayer.load(topic);
 
 		getRidOfHover();
@@ -248,16 +245,19 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 
 	}
 
-	public void clearForLoading() {
-		centerDisplayer.clearForLoading();
-	}
+
 
 	public boolean centerOn(Topic topic) {
 		return spatialDisplay.centerOn(topic);
 	}
 
-	public void unselect() {
-		centerDisplayer.unload();
+	public void unselect(Set selectedTopics) {
+
+		for (Iterator iterator = selectedTopics.iterator(); iterator.hasNext();) {
+			Topic topic = (Topic) iterator.next();
+			spatialDisplay.editSelectStatus(topic.getIdentifier(), false);
+		}
+
 
 	}
 
@@ -320,11 +320,12 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	}
 
 	/**
-	 * Without this we'll reload on every click of the backdrop
+	 * Without this check we'll reload on every click of the backdrop
 	 */
 	public void hideCurrentHover() {
 		if (gadgetsDirty) {
 			getRidOfHover();
+			manager.unselect();
 		}
 	}
 
@@ -338,16 +339,26 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	public void showHover(TopicIdentifier ti) {
 		gadgetsDirty = true;
 
+
+
 		manager.getTopicCache().getTopic(ti, new StdAsyncCallback("Get Display Overlay") {
 			// @Override
 			public void onSuccess(Object result) {
 				super.onSuccess(result);
 
-				gadgetDisplayer.load((Topic) result, false);
+				Topic tRes = (Topic) result;
+
+				gadgetDisplayer.load(tRes, false);
+
 				// topicDisplayOverlay.load((Topic) result);
 
 
 			}
 		});
+	}
+
+	public void editSelectStatus(TopicIdentifier topicIdentifier, boolean isSelected) {
+		spatialDisplay.editSelectStatus(topicIdentifier, isSelected);
+
 	}
 }

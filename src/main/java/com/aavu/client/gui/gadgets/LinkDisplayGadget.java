@@ -57,13 +57,7 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 
 	}
 
-	private void newLink() {
-		WebLink newL = new WebLink();
-		newL.setUser(myTopic.getUser());
-		myTopic.addOccurence(newL);
 
-		editLink(newL);
-	}
 
 	private void editLink(WebLink link) {
 		AddLinkPopup pop = new AddLinkPopup(this, manager, manager.newFrame(), link, myTopic, null);

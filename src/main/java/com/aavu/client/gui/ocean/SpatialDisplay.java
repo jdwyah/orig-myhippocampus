@@ -2,6 +2,7 @@ package com.aavu.client.gui.ocean;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -18,7 +19,7 @@ public interface SpatialDisplay {
 	public Widget getWidget();
 
 
-	public void removeIsland(long id);
+	public boolean removeIsland(long id);
 
 
 	public void zoomTo(double scale);
@@ -41,5 +42,8 @@ public interface SpatialDisplay {
 	public double ensureZoomOfAtLeast(double scale);
 
 	public int[] getLongLatForXY(int x, int y);
+
+	public void editSelectStatus(TopicIdentifier topicIdentifier, boolean isSelected);
+
 
 }

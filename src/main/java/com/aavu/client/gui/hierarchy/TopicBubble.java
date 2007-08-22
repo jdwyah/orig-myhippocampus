@@ -1,24 +1,26 @@
 package com.aavu.client.gui.hierarchy;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ext.FocusPanelExt;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.strings.ConstHolder;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj, DblClickListener {
 
-	private FullTopicIdentifier fti;
-
 	private boolean detailsShowing = false;
+
+	private FullTopicIdentifier fti;
 
 	public TopicBubble(FullTopicIdentifier fti, HierarchyDisplay display) {
 		super(fti.getLongitudeOnIsland(), fti.getLatitudeOnIsland(), fti.getTopicTitle(),
@@ -33,11 +35,23 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	}
 
+	// @Override
+	protected void clickAction() {
+		System.out.println("\n\nTOPIC BUBBLE click Action");
+		// showDetailButton();
+
+		showDetails(getLastClickEventCtrl());
+	}
+
 	public FocusPanelExt getFocusPanel() {
 		return this;
 	}
 
 	public FullTopicIdentifier getFTI() {
+		return fti;
+	}
+
+	public TopicIdentifier getIdentifier() {
 		return fti;
 	}
 
@@ -50,9 +64,23 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 		return new RealTopic(getFTI());
 	}
 
+	// @Override
+	protected int getUnscaledHeight() {
+		return 50;
+	}
+
+	// @Override
+	protected int getUnscaledWidth() {
+		return 50;
+	}
+
 	public void grow() {
 		// TODO Auto-generated method stub
 
+	}
+
+	protected boolean isDetailsShowing() {
+		return detailsShowing;
 	}
 
 	public void onDblClick(Widget sender) {
@@ -61,32 +89,30 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	public void receivedDrop(TopicDisplayObj bubble) {
 
-		if (bubble instanceof TopicBubble) {
-			TopicBubble received = (TopicBubble) bubble;
-			getDisplay().removeTopicBubble(received);
-			getDisplay().getManager().getTopicCache().executeCommand(
-					received.getTopic(),
-					new SaveTagtoTopicCommand(received.getTopic(), getTopic(), getDisplay()
-							.getCurrentRoot()),
-					new StdAsyncCallback(ConstHolder.myConstants.save()) {
-						// @Override
-						public void onSuccess(Object result) {
-							super.onSuccess(result);
-						}
-					});
-		} else {
-			Window.alert("can't dnd that yet");
+		Set selectedTopics = getDisplay().getManager().getSelectedTopics();
+
+		for (Iterator iterator = selectedTopics.iterator(); iterator.hasNext();) {
+			Topic name = (Topic) iterator.next();
+			boolean suc = getDisplay().removeIsland(name.getId());
+			System.out.println("removed " + name + " suc: " + suc);
 		}
+
+		AddToTopicCommand command = new AddToTopicCommand(selectedTopics, getTopic(), getDisplay()
+				.getCurrentRoot());
+
+		System.out.println("TOPICBUBBLE reeive DROP command " + command);
+
+		getDisplay().getManager().getTopicCache().executeCommand(bubble.getTopic(), command,
+				new StdAsyncCallback(ConstHolder.myConstants.save()) {
+					// @Override
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+					}
+				});
+
 	}
 
-	public void receivedDrop(Widget draggable) {
-		TopicBubble received = (TopicBubble) draggable;
 
-		System.out.println("TopicBubble recievedDrop widget");
-
-		// display.processDrop(this,received);
-
-	}
 
 	// @Override
 	protected void saveLocation() {
@@ -101,40 +127,14 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 		fti.setLatitudeOnIsland(top);
 	}
 
-	public TopicIdentifier getIdentifier() {
-		return fti;
-	}
-
-	// @Override
-	protected void clickAction() {
-		System.out.println("\n\nTOPIC BUBBLE click Action");
-		// showDetailButton();
-		showDetails();
-	}
-
-
-	protected void showDetails() {
+	protected void showDetails(boolean ctrlKey) {
 		detailsShowing = true;
-		getDisplay().showHover(getFTI());
+		getDisplay().doSelection(new RealTopic(getFTI()), ctrlKey);
+		// getDisplay().getManager()
 		// HoverManager.showHover(getDisplay().getManager(), this, getFTI());
 
 	}
 
-
-
-	protected boolean isDetailsShowing() {
-		return detailsShowing;
-	}
-
-	// @Override
-	protected int getUnscaledHeight() {
-		return 50;
-	}
-
-	// @Override
-	protected int getUnscaledWidth() {
-		return 50;
-	}
 
 
 }

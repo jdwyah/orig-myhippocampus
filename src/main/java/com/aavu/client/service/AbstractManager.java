@@ -1,7 +1,8 @@
 package com.aavu.client.service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.gwm.client.GInternalFrame;
 
@@ -25,7 +26,8 @@ public abstract class AbstractManager implements Manager {
 
 	private GadgetManager gadgetManager;
 	private HippoCache hippoCache;
-	protected List currentObjs = new ArrayList();
+
+	protected Set selectedTopics = new HashSet();
 
 	public AbstractManager(HippoCache hippoCache) {
 		this.hippoCache = hippoCache;
@@ -98,8 +100,8 @@ public abstract class AbstractManager implements Manager {
 
 	}
 
-	public List getCurrentObjs() {
-		return currentObjs;
+	public Set getSelectedTopics() {
+		return selectedTopics;
 	}
 
 	public GadgetManager getGadgetManager() {

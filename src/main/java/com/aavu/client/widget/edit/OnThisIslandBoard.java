@@ -6,7 +6,7 @@ import java.util.List;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
@@ -154,7 +154,7 @@ public class OnThisIslandBoard extends Composite implements CompleteListener {
 
 		onThisIslandPanel.insert(new TopicLink(newTopic), 0);
 
-		topicService.executeCommand(newTopic, new SaveTagtoTopicCommand(newTopic, myTag),
+		topicService.executeCommand(newTopic, new AddToTopicCommand(newTopic, myTag),
 				new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
 				});
 

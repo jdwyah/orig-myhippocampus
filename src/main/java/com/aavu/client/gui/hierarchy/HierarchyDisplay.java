@@ -463,10 +463,13 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 	//		
 	// }
 
-	public void removeIsland(long id) {
+	public boolean removeIsland(long id) {
 		AbstractBubble bubble = (AbstractBubble) topicBubbles.get(new Long(id));
 		System.out.println("removing bubble " + bubble);
-		removeTopicBubble(bubble);
+		if (bubble == null) {
+			return false;
+		}
+		return removeTopicBubble(bubble);
 	}
 
 	// @Override
@@ -516,10 +519,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 			System.out.println("update " + b);
 			b.update(t);
 		} else {
-			System.out.println("HD not found " + t + " " + t.getId());
+			System.out.println("HierarchyDisplay not found " + t + " " + t.getId());
 			for (Iterator iterator = topicBubbles.keySet().iterator(); iterator.hasNext();) {
 				Long l = (Long) iterator.next();
-				System.out.println("cont: " + l);
+				System.out.println("HierarchyDisplay contained: " + l);
 			}
 
 			// Not necessarily problem. May be that we told a weblink to save, and it
@@ -540,10 +543,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		manager.bringUpChart(fti);
 	}
 
-	public void removeTopicBubble(AbstractBubble received) {
-		topicBubbles.remove(new Long(received.getIdentifier().getTopicID()));
-		dragController.unregisterDropController(received.getDropController());
-		removeObj(received.getWidget());
+	public boolean removeTopicBubble(TopicDisplayObj bubble) {
+		topicBubbles.remove(new Long(bubble.getIdentifier().getTopicID()));
+		dragController.unregisterDropController(bubble.getDropController());
+		return removeObj(bubble.getWidget());
 
 	}
 
@@ -581,8 +584,14 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 
 
-	public void showHover(TopicIdentifier ti) {
-		guiManager.showHover(ti);
+	public void doSelection(Topic topic, boolean ctrlDown) {
+
+		if (!ctrlDown) {
+			manager.unselect();
+		}
+		manager.addSelected(topic);
+
+		guiManager.showHover(topic.getIdentifier());
 	}
 
 	public void onWindowResized(int width, int height) {
@@ -592,6 +601,18 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 		// Need top reset the BackdropDropController DropTargetInfo
 		System.out.println("WINDOW RESIZE! " + width + " " + height);
+	}
+
+	public void editSelectStatus(TopicIdentifier t, boolean isSelected) {
+
+
+		System.out.println("edit select status " + t + " " + isSelected);
+
+		TopicDisplayObj b = (TopicDisplayObj) topicBubbles.get(new Long(t.getTopicID()));
+		if (b != null) {
+			b.setSelected(isSelected);
+		}
+
 	}
 
 

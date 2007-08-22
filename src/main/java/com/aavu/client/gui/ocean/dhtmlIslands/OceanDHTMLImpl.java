@@ -499,15 +499,16 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 		manager.zoomTo(currentScale);
 	}
 
-	public void removeIsland(long id) {
+	public boolean removeIsland(long id) {
 		Island isle = (Island) islands.get(new Long(id));
 		if (isle != null) {
 
 			GUIEffects.fadeAndRemove(isle, 3000);
 
 			islands.remove(new Long(id));
-			objects.remove(isle);
+			return objects.remove(isle);
 		}
+		return false;
 	}
 
 	// @Override
@@ -560,6 +561,21 @@ public class OceanDHTMLImpl extends ViewPanel implements SpatialDisplay, DragEve
 			System.out.println("Ocean.update new grow Title:" + t.getTitle() + " ID " + t.getId());
 			growIsland(t, null);
 		}
+	}
+
+	public void makeSelected(Topic res) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void editSelectStatus(Topic res, boolean isSelected) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void editSelectStatus(TopicIdentifier topicIdentifier, boolean isSelected) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

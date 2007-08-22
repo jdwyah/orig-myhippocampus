@@ -38,7 +38,7 @@ public abstract class AbstractCommand implements IsSerializable {
 	 * @gwt.typeArgs <java.lang.Long>
 	 */
 	private List topicIDs = new ArrayList();
-	protected transient List topics = new ArrayList();
+	private transient List topics = new ArrayList();
 
 	private String data;
 
@@ -71,6 +71,10 @@ public abstract class AbstractCommand implements IsSerializable {
 	}
 
 	public AbstractCommand(List _topics) {
+		init(_topics);
+	}
+
+	protected void init(List _topics) {
 		this.topics = _topics;
 		setTopicIDsFromTopics(_topics);
 	}
@@ -147,6 +151,17 @@ public abstract class AbstractCommand implements IsSerializable {
 		return new HashSet();
 	}
 
+
+	/**
+	 * s -> e inclusive s, exclusive e TODO java 1.5 makes this unec
+	 */
+	protected List subList(List l, int s, int e) {
+		List rtn = new ArrayList();
+		for (int i = s; i < e; i++) {
+			rtn.add(l.get(i));
+		}
+		return rtn;
+	}
 
 
 }

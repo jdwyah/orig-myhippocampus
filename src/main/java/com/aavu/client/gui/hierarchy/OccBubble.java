@@ -1,6 +1,7 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DblClickListener;
@@ -75,13 +76,12 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 	protected void clickAction() {
 		System.out.println("\n\nTOPIC BUBBLE click Action");
 		// showDetailButton();
-		showDetails();
+		showDetails(getLastClickEventCtrl());
 	}
 
-
-	protected void showDetails() {
+	protected void showDetails(boolean ctrlKey) {
 		detailsShowing = true;
-		getDisplay().showHover(owl.getOccurrence().getIdentifier());
+		getDisplay().doSelection(owl.getOccurrence(), ctrlKey);
 		// HoverManager.showHover(getDisplay().getManager(), this, getFTI());
 
 	}
@@ -111,6 +111,10 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 	protected void hideDetails() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public Topic getTopic() {
+		return owl.getOccurrence();
 	}
 
 

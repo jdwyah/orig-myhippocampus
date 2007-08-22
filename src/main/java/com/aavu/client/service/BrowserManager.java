@@ -7,6 +7,7 @@ import org.gwtwidgets.client.ui.ProgressBar;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
@@ -89,6 +90,21 @@ public class BrowserManager extends AbstractManager {
 	public PopupWindow showProgressBar(ProgressBar progressBar) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void addSelected(TopicIdentifier ti) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void unselect() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addSelected(Topic topic) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

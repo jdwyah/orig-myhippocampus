@@ -192,5 +192,14 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 	}
 
 
+	//
+	public void setSelected(boolean b) {
+		// TODO
+	}
+
+	public Topic getTopic() {
+		return entry;
+	}
+
 
 }

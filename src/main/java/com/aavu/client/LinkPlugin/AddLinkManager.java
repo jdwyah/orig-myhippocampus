@@ -1,6 +1,7 @@
 package com.aavu.client.LinkPlugin;
 
 import java.util.List;
+import java.util.Set;
 
 import org.gwm.client.GInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
@@ -192,6 +193,26 @@ public class AddLinkManager implements Manager, CloseListener {
 	public PopupWindow showProgressBar(ProgressBar progressBar) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Set getSelectedTopics() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addSelected(TopicIdentifier ti) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void unselect() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addSelected(Topic topic) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

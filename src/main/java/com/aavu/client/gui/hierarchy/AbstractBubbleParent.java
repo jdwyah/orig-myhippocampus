@@ -2,14 +2,12 @@ package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.ocean.dhtmlIslands.IslandBanner;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
-	private static final int HIDE_DETAIL_BUTTON_IN = 800;
 	private IslandBanner banner;
 	private int currentHeight;
 	private int currentWidth;
@@ -19,12 +17,6 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
 	private AbsolutePanel mainPanel;
 
-
-	private double lastScale;
-
-	// private Button showDetailsB;
-	// private FocusPanelExt showDetailsP;
-	private Timer showDetailHideTimer;
 
 	public AbstractBubbleParent(int longitudeOnIsland, int latitudeOnIsland, String topicTitle,
 			Image image, HierarchyDisplay display) {
@@ -50,33 +42,7 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 		mainPanel.add(image, 0, 0);
 		mainPanel.add(banner, 0, 0);
 
-		// showDetailsB = new Button("+");
-		// showDetailsB.setVisible(false);
-		//
-		// showDetailsP = new FocusPanelExt();
-		// showDetailsP.addClickListener(new ClickListener() {
-		// public void onClick(Widget sender) {
-		// DOM.eventCancelBubble(showDetailsP.getLastEvent(), true);
-		// toggleDetails();
-		// }
-		// });
-		//
-		// // don't let a scheduled hide hide us if the mouse has entered us
-		// showDetailsP.addMouseListener(new MouseListenerAdapter() {
-		// public void onMouseEnter(Widget sender) {
-		// showDetailHideTimer.cancel();
-		// }
-		// });
-		// showDetailsP.add(showDetailsB);
-		// mainPanel.add(showDetailsP, 0, 0);
-		//
-		// showDetailHideTimer = new Timer() {
-		// // @Override
-		// public void run() {
-		// showDetailsB.setVisible(false);
-		// zoomToScale(lastScale);
-		// }
-		// };
+
 
 		return mainPanel;
 	}
@@ -106,40 +72,9 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 		return banner;
 	}
 
-	protected abstract void showDetails();
-
-
-
-	// private void toggleDetails() {
-	// if (isDetailsShowing()) {
-	// hideDetails();
-	// // showDetailsB.setText("+");
-	// } else {
-	// showDetails();
-	// // showDetailsB.setText("-");
-	// }
-	// }
-
-	protected abstract boolean isDetailsShowing();
-
-	protected void showDetailButton() {
-		// if (isDetailsShowing()) {
-		// showDetailsB.setText("-");
-		// } else {
-		// showDetailsB.setText("+");
-		// }
-		// mainPanel.setWidgetPosition(showDetailsP, currentWidth, 0);
-		// mainPanel.setPixelSize(currentWidth + 20, currentHeight);
-		// showDetailsB.setVisible(true);
-	}
-
-	protected void hideDetailButton() {
-		showDetailHideTimer.schedule(HIDE_DETAIL_BUTTON_IN);
-	}
 
 	public void zoomToScale(double currentScale) {
 
-		lastScale = currentScale;
 
 		image.setPixelSize((int) (getUnscaledWidth() * currentScale),
 				(int) (getUnscaledHeight() * currentScale));
@@ -160,5 +95,10 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
 		mainPanel.setPixelSize(currentWidth, currentHeight);
 
+	}
+
+
+	public void setSelected(boolean b) {
+		banner.setSelected(b);
 	}
 }

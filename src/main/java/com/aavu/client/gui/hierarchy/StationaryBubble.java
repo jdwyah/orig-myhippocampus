@@ -146,5 +146,12 @@ public class StationaryBubble extends AbstractBubble {
 	}
 
 
+	public void setSelected(boolean b) {
+		banner.setSelected(b);
+	}
+
+	public Topic getTopic() {
+		throw new UnsupportedOperationException();
+	}
 
 }

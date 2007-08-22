@@ -6,6 +6,7 @@ import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ext.FlashContainer;
 import com.aavu.client.service.Manager;
@@ -147,7 +148,7 @@ public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 		return 600;
 	}
 
-	public void removeIsland(long id) {
+	public boolean removeIsland(long id) {
 		throw new UnsupportedOperationException("Not Yet Implemented");
 	}
 
@@ -195,5 +196,20 @@ public class OceanFlashImpl extends FlashContainer implements SpatialDisplay {
 	public int[] getLongLatForXY(int x, int y) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void makeSelected(Topic res) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void editSelectStatus(Topic res, boolean isSelected) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void editSelectStatus(TopicIdentifier topicIdentifier, boolean isSelected) {
+		// TODO Auto-generated method stub
+
 	}
 }

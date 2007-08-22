@@ -6,7 +6,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
-import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -207,7 +207,7 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 		}
 		// incommand tagsToSave.add(tag);
 		manager.getTopicCache().executeCommand(cur_topic,
-				new SaveTagtoTopicCommand(cur_topic, tag),
+				new AddToTopicCommand(cur_topic, tag),
 				new StdAsyncCallback(ConstHolder.myConstants.save()) {
 					// @Override
 					public void onSuccess(Object result) {

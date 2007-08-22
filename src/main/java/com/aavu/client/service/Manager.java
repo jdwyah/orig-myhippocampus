@@ -1,6 +1,6 @@
 package com.aavu.client.service;
 
-import java.util.List;
+import java.util.Set;
 
 import org.gwm.client.GInternalFrame;
 import org.gwtwidgets.client.ui.ProgressBar;
@@ -47,7 +47,7 @@ public interface Manager {
 
 	User getUser();
 
-	List getCurrentObjs();
+	Set getSelectedTopics();
 
 	GInternalFrame newFrame();
 
@@ -70,6 +70,10 @@ public interface Manager {
 	void refreshAll();
 
 	PopupWindow showProgressBar(ProgressBar progressBar);
+
+	void addSelected(Topic topic);
+
+	void unselect();
 
 	// void explore(Topic myTag, List topics);
 

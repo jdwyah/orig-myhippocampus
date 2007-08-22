@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,13 +25,14 @@ import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
-import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
@@ -408,7 +410,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		topic = (Topic) topicService.save(topic);
 
 		System.out.println("SAVED TOPIC " + C);
-		topicService.executeAndSaveCommand(new SaveTagtoTopicCommand(topic, tag));
+		topicService.executeAndSaveCommand(new AddToTopicCommand(topic, tag));
 
 		Topic topicS = topicService.getForID(topic.getId());
 		assertEquals(1, topicS.getTypes().size());
@@ -432,6 +434,81 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		Topic s = (Topic) a.getMembers().iterator().next();
 		assertEquals(t3.getId(), s.getId());
 
+
+	}
+
+	public void testSaveTagtoTopicCommand() throws HippoException {
+
+		clean();
+
+		Topic tag = topicService.createNewIfNonExistent(D);
+
+		System.out.println("SAVED TAG " + B);
+
+
+		Topic topic = new RealTopic(u, C);
+		topic = (Topic) topicService.save(topic);
+
+		System.out.println("SAVED TOPIC " + C);
+		topicService.executeAndSaveCommand(new AddToTopicCommand(topic, tag));
+
+
+		WebLink link = topicService.createNewIfNonExistent("Weblink", WebLink.class, null);
+
+		topicService.executeAndSaveCommand(new AddToTopicCommand(link, tag));
+
+
+
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getTypes().size());
+		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
+		assertEquals(tag.getId(), tagRef.getId());
+
+		Topic tagS = topicService.getForID(tag.getId());
+		assertEquals(1, tagS.getOccurences().size());
+		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
+		assertEquals(link.getId(), linkRef.getId());
+
+	}
+
+	public void testSaveTagtoTopicCommandMulti() throws HippoException {
+
+		clean();
+
+		Topic tag = topicService.createNewIfNonExistent(D);
+
+		System.out.println("SAVED TAG " + B);
+
+
+		Topic topic = new RealTopic(u, C);
+		topic = (Topic) topicService.save(topic);
+
+
+
+		WebLink link = topicService.createNewIfNonExistent(E, WebLink.class, null);
+
+		List<Topic> toadd = new ArrayList<Topic>();
+
+		toadd.add(topic);
+		toadd.add(link);
+
+		System.out.println("SAVED TOPIC " + C);
+		topicService.executeAndSaveCommand(new AddToTopicCommand(toadd, tag, null));
+
+
+
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getTypes().size());
+		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
+		assertEquals(tag.getId(), tagRef.getId());
+		assertEquals(0, topicS.getOccurences().size());
+
+
+		Topic tagS = topicService.getForID(tag.getId());
+		assertEquals(1, tagS.getOccurences().size());
+		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
+		assertEquals(link.getId(), linkRef.getId());
+		assertEquals(1, tagS.getInstances().size());
 
 	}
 
@@ -927,7 +1004,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		Topic topic = new RealTopic(u, D);
 		topic = topicService.save(topic);
 
-		AbstractCommand comm = new SaveTagtoTopicCommand(topic, tag);
+		AbstractCommand comm = new AddToTopicCommand(topic, tag);
 
 		topicService.executeAndSaveCommand(comm);
 

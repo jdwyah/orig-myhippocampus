@@ -1,6 +1,5 @@
 package com.aavu.client.domain.commands;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -273,14 +272,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 	// return subList(getTopics(), 0, removeStartNumber);
 	// }
 	//
-	// TODO java 1.5 makes this unec
-	private List subList(List l, int s, int e) {
-		List rtn = new ArrayList();
-		for (int i = s; i < e; i++) {
-			rtn.add(l.get(i));
-		}
-		return rtn;
-	}
+
 
 
 	/**

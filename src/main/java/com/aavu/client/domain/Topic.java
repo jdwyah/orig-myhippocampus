@@ -21,7 +21,7 @@ import com.aavu.client.domain.util.CollectionUtils;
  * @author Jeff Dwyer
  * 
  */
-public class Topic extends AbstractTopic implements Serializable, ReallyCloneable {
+public abstract class Topic extends AbstractTopic implements Serializable, ReallyCloneable {
 
 	public Topic() {
 		setLastUpdated(new Date());

@@ -19,7 +19,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.commands.SaveTagtoTopicCommand;
+import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.EditMetaWindow;
@@ -34,7 +34,6 @@ import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetClickListener;
 import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.gui.gadgets.TopicLoader;
-import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.ocean.MainMap;
 import com.aavu.client.help.HelpWindow;
 import com.aavu.client.help.UserHelper;
@@ -63,9 +62,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	// private FramesManager framesManager;
 	// private DefaultGDesktopPane desktop;
 
-	private boolean focussed = false;
-	// private MainMap mainMap;
-	private Glossary glossary;
+
 
 	private MainMap map;
 
@@ -75,6 +72,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	private UserActionListener userActionListener;
 
+	private Topic currentTopic;
 
 
 	public MindscapeManager(HippoCache hippoCache) {
@@ -110,12 +108,13 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void bringUpChart(Topic topic) {
 
 		try {
-			currentObjs.clear();
+			currentTopic = null;
+			selectedTopics.clear();
 		} catch (Exception e) {
 			Logger.error("Exception clearing " + e);
 		}
 
-		currentObjs.add(topic);
+		currentTopic = topic;
 
 		System.out.println("bring up chart Topic " + topic);
 
@@ -313,7 +312,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 
 	private Topic getCurrentTopic() {
-		return (Topic) currentObjs.get(0);
+		return currentTopic;
 	}
 
 	/**
@@ -353,28 +352,28 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 */
 	public void gotoTopic(String historyToken) {
 
-		long l = -2;// Will be -2 if we're loading by name
+		long parsedID = -2;// Will be -2 if we're loading by name
 		try {
-			l = Long.parseLong(historyToken);
+			parsedID = Long.parseLong(historyToken);
 		} catch (NumberFormatException e) {
 
 		}
-		System.out.println("|" + historyToken + "|" + l);
-		if (l == -2 && historyToken != null && historyToken.length() > 0) {
+		System.out.println("|" + historyToken + "|" + parsedID);
+		if (parsedID == -2 && historyToken != null && historyToken.length() > 0) {
 			getHippoCache().getTopicCache().getTopicForNameA(historyToken,
-					new StdAsyncCallback("GotoTopicStr " + l) {
+					new StdAsyncCallback("GotoTopicStr " + parsedID) {
 						public void onSuccess(Object result) {
 							super.onSuccess(result);
 							Topic t = (Topic) result;
 							bringUpChart(t);
 						}
 					});
-		} else if (l != -1) {// == HippoTest.EMPTY
+		} else if (parsedID != -1) {// == HippoTest.EMPTY
 
 			// don't load if we're already loaded
-			if (!currentObjs.isEmpty() && getCurrentTopic().getId() != l) {
-				getHippoCache().getTopicCache().getTopicByIdA(l,
-						new StdAsyncCallback("GotoTopicID " + l) {
+			if (getCurrentTopic() != null && getCurrentTopic().getId() != parsedID) {
+				getHippoCache().getTopicCache().getTopicByIdA(parsedID,
+						new StdAsyncCallback("GotoTopicID " + parsedID) {
 							public void onSuccess(Object result) {
 								super.onSuccess(result);
 								Topic t = (Topic) result;
@@ -564,17 +563,20 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		map.update(t, command);
 
 		System.out.println("MindscapeManager TOPIC SAVED " + t + " " + t.getId());
-		if (command instanceof SaveTagtoTopicCommand) {
-			System.out.println("TAG COMMAND");
-			Topic tag = (Topic) command.getTopic(1);
-			System.out.println("GROW " + tag);
+		if (command instanceof AddToTopicCommand) {
+			System.out.println("MindscapeManager TAG COMMAND");
+			AddToTopicCommand comm = (AddToTopicCommand) command;
+			Topic tag = (Topic) comm.getTagToAddThingsTo();
+			System.out.println("MindscapeManager GROW " + tag);
 			map.growIsland(tag, null);
 		}
 	}
 
 
 	public void unselect() {
-		map.unselect();
+		System.out.println("MindscapeManger UNSELECT()");
+		map.unselect(selectedTopics);
+		selectedTopics.clear();
 	}
 
 
@@ -605,6 +607,14 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public int load(Topic myTopic) {
 		bringUpChart(myTopic);
 		return 0;
+	}
+
+
+	public void addSelected(Topic t) {
+		selectedTopics.add(t);
+		map.editSelectStatus(t.getIdentifier(), true);
+
+		System.out.println("MindscapeManager addSelected " + t + " Now: " + selectedTopics);
 	}
 
 
