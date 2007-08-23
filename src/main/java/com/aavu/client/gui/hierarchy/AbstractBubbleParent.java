@@ -47,6 +47,14 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 		return mainPanel;
 	}
 
+	// @Override
+	protected void clickAction() {
+		showDetails(getLastClickEventCtrl());
+	}
+
+
+	protected abstract void showDetails(boolean lastClickEventCtrl);
+
 	protected abstract int getUnscaledWidth();
 
 	protected abstract int getUnscaledHeight();

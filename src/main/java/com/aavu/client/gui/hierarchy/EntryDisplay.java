@@ -202,4 +202,5 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 	}
 
 
+
 }

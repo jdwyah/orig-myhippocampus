@@ -24,10 +24,11 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 		this.manager = manager;
 		this.title = title;
 
-
+		// Careful this really screw with Dnd
 		// addMouseListener(this);
 
 		addClickListener(this);
+
 	}
 
 	/**
@@ -67,6 +68,7 @@ public abstract class AbstractBubble extends FocusPanelExt implements TopicDispl
 	}
 
 	protected abstract void clickAction();
+
 
 	protected abstract void saveLocation();
 

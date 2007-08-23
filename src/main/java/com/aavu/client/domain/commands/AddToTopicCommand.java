@@ -103,19 +103,19 @@ public class AddToTopicCommand extends AbstractCommand implements IsSerializable
 		for (Iterator iterator = topicsToProcess.iterator(); iterator.hasNext();) {
 			Topic toProcess = (Topic) iterator.next();
 
-			System.out.println("AddToTagCommand to process " + toProcess + " occ "
-					+ (toProcess instanceof Occurrence));
+			// System.out.println("AddToTagCommand to process " + toProcess + " occ "
+			// + (toProcess instanceof Occurrence));
 
 			if (toProcess instanceof Occurrence) {
 				Occurrence occToProcces = (Occurrence) toProcess;
 
-				System.out.println("AddToTagCommand. Process as occ");
+				// System.out.println("AddToTagCommand. Process as occ");
 				tag.addOccurence(occToProcces);
 
 
 			} else {
 
-				System.out.println("AddToTagCommand. Process as topic");
+				// System.out.println("AddToTagCommand. Process as topic");
 				toProcess.tagTopic(tag);
 
 			}

@@ -16,7 +16,6 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 	protected TopicOccurrenceConnector owl;
 	private int unscaledWidth;
 	private int unscaledHeight;
-	private boolean detailsShowing;
 
 	/**
 	 * default to the green ball image
@@ -80,14 +79,9 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 	}
 
 	protected void showDetails(boolean ctrlKey) {
-		detailsShowing = true;
+
 		getDisplay().doSelection(owl.getOccurrence(), ctrlKey);
 		// HoverManager.showHover(getDisplay().getManager(), this, getFTI());
-
-	}
-
-	protected boolean isDetailsShowing() {
-		return detailsShowing;
 	}
 
 

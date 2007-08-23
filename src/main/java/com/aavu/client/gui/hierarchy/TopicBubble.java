@@ -18,8 +18,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj, DblClickListener {
 
-	private boolean detailsShowing = false;
-
 	private FullTopicIdentifier fti;
 
 	public TopicBubble(FullTopicIdentifier fti, HierarchyDisplay display) {
@@ -35,13 +33,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	}
 
-	// @Override
-	protected void clickAction() {
-		System.out.println("\n\nTOPIC BUBBLE click Action");
-		// showDetailButton();
 
-		showDetails(getLastClickEventCtrl());
-	}
 
 	public FocusPanelExt getFocusPanel() {
 		return this;
@@ -79,9 +71,9 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	}
 
-	protected boolean isDetailsShowing() {
-		return detailsShowing;
-	}
+	// protected boolean isDetailsShowing() {
+	// return detailsShowing;
+	// }
 
 	public void onDblClick(Widget sender) {
 		getDisplay().navigateTo(getFTI());
@@ -90,6 +82,10 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 	public void receivedDrop(TopicDisplayObj bubble) {
 
 		Set selectedTopics = getDisplay().getManager().getSelectedTopics();
+
+		// will already be there, unless they started dragging before the click event occurred.
+		//
+		selectedTopics.add(bubble.getTopic());
 
 		for (Iterator iterator = selectedTopics.iterator(); iterator.hasNext();) {
 			Topic name = (Topic) iterator.next();
@@ -128,7 +124,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 	}
 
 	protected void showDetails(boolean ctrlKey) {
-		detailsShowing = true;
+		// detailsShowing = true;
 		getDisplay().doSelection(new RealTopic(getFTI()), ctrlKey);
 		// getDisplay().getManager()
 		// HoverManager.showHover(getDisplay().getManager(), this, getFTI());

@@ -518,12 +518,12 @@ public class TopicServiceImpl implements TopicService {
 		List topics = command.getTopics();
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
 			Topic topic = (Topic) iter.next();
-			System.out.println("saveComand save " + topic);
+			log.debug("saveComand save " + topic);
 			if (topic instanceof Occurrence) {
 				Occurrence oc = (Occurrence) topic;
-				System.out.println("was occ Data " + oc.getData());
+				log.debug("was occ Data " + oc.getData());
 			} else {
-				System.out.println("not oc");
+				log.debug("not oc");
 			}
 			save(topic);
 		}

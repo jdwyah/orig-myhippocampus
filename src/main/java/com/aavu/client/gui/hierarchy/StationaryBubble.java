@@ -154,4 +154,5 @@ public class StationaryBubble extends AbstractBubble {
 		throw new UnsupportedOperationException();
 	}
 
+
 }
