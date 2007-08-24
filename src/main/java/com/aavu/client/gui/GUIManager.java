@@ -8,5 +8,11 @@ public interface GUIManager {
 
 	void hideCurrentHover();
 
+	void showTimeline();
+
+	void showGlossary();
+
+	void showGoogleMap();
+
 
 }

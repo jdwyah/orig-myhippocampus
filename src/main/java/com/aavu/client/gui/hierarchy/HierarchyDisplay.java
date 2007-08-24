@@ -33,7 +33,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -73,17 +72,17 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 	private int height;
 	private int width;
 
-	private class FullBoundaryPanel extends AbsolutePanel {
-		// @Override
-		public int getOffsetHeight() {
-			return Window.getClientHeight();
-		}
-
-		// @Override
-		public int getOffsetWidth() {
-			return Window.getClientWidth();
-		}
-	}
+	// private class FullBoundaryPanel extends AbsolutePanel {
+	// // @Override
+	// public int getOffsetHeight() {
+	// return Window.getClientHeight();
+	// }
+	//
+	// // @Override
+	// public int getOffsetWidth() {
+	// return Window.getClientWidth();
+	// }
+	// }
 
 
 
@@ -138,7 +137,13 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		getFocusBackdrop().addDblClickListener(backdropL);
 		getFocusBackdrop().addClickListener(backdropL);
 
+
+
+		/*
+		 * override the AbsolutePanel position: relative otherwise we got a left: 8px; top: 8px;
+		 */
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
+
 		setBackground(currentScale);
 	}
 
@@ -177,6 +182,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		bubble.addMouseWheelListener(this);
 
 		dragController.makeDraggable(bubble.getWidget());
+
 
 		if (bubble.getDropController() != null) {
 			dragController.registerDropController(bubble.getDropController());
@@ -474,7 +480,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 	// @Override
 	protected void setBackground(double scale) {
-		int pix = (int) (scale * 100);
+		int pix = (int) (scale * 400);
 		if (pix > 1600 || pix < 6) {
 			return;
 		}

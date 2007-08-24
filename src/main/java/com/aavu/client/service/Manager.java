@@ -10,6 +10,7 @@ import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
@@ -74,6 +75,8 @@ public interface Manager {
 	void addSelected(Topic topic);
 
 	void unselect();
+
+	GUIManager getGui();
 
 	// void explore(Topic myTag, List topics);
 

@@ -81,6 +81,21 @@ public class PopupWindow implements CloseListener {
 		hp.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
 		hp.addStyleName("H-FullSize");
 		hp.add(w);
+
+		setCenteredContent(hp);
+		// SimplePanel outerPanel = new SimplePanel();
+		// outerPanel.setStyleName("H-FullDiv");
+		// outerPanel.add(w);
+		// setCenteredContent(outerPanel);
+	}
+
+	protected void setContentWithProblematicSize(Widget w, int width, int height) {
+		HorizontalPanel hp = new HorizontalPanel();
+		hp.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+		hp.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
+		hp.addStyleName("H-FullSize");
+		hp.add(w);
+		hp.setPixelSize(width, height);
 		setCenteredContent(hp);
 		// SimplePanel outerPanel = new SimplePanel();
 		// outerPanel.setStyleName("H-FullDiv");
@@ -113,6 +128,11 @@ public class PopupWindow implements CloseListener {
 
 	public void addInternalFrameListener(GFrameListener listener) {
 		frame.addFrameListener(listener);
+	}
+
+	public void show() {
+		frame.restore();
+		frame.setVisible(true);
 	}
 
 }

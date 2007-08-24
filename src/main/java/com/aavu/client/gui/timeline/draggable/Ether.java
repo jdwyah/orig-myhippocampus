@@ -85,7 +85,7 @@ public abstract class Ether extends ViewPanel {
 		
 		int left = getRelLeft(pct);
 
-		currentSlot = getBestSlotFor(left,tlo.getTopic().getTopicTitle());
+		currentSlot = getBestSlotFor(left,tlo.getTopicIdentifier().getTopicTitle());
 		if(currentSlot > 0){
 			int top = currentSlot * getYPush();
 

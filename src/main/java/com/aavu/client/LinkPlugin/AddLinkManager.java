@@ -13,6 +13,7 @@ import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.PopupWindow;
@@ -213,6 +214,11 @@ public class AddLinkManager implements Manager, CloseListener {
 	public void addSelected(Topic topic) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public GUIManager getGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

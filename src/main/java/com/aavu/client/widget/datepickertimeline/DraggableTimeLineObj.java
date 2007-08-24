@@ -39,7 +39,7 @@ public class DraggableTimeLineObj extends FocusPanel implements RemembersPositio
 
 		// panel = new FocusPanel();
 
-		label = new Label(tlo.getTopic().getTopicTitle());
+		label = new Label(tlo.getTopicIdentifier().getTopicTitle());
 
 		image = ConstHolder.images.bullet_blue().createImage();
 

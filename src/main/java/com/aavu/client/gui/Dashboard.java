@@ -5,6 +5,7 @@ import java.util.Map;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.hierarchy.ContextMenu;
+import com.aavu.client.gui.hierarchy.ViewMenu;
 import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -28,6 +29,8 @@ public class Dashboard extends SimplePanel {
 	private UserWidget userW;
 
 	private ContextMenu contextMenu;
+
+	private ViewMenu viewMenu;
 
 
 	public Dashboard(Manager _manager, SpatialDisplay display) {
@@ -54,6 +57,17 @@ public class Dashboard extends SimplePanel {
 						- contextMenu.getOffsetHeight());
 			}
 		});
+
+		viewMenu = new ViewMenu(manager);
+		Image eyeButton = ConstHolder.images.eye().createImage();
+		eyeButton.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				viewMenu.show();
+				viewMenu.setPopupPosition(sender.getAbsoluteLeft(), sender.getAbsoluteTop()
+						- viewMenu.getOffsetHeight());
+			}
+		});
+
 
 		// addNewButton.addMouseListener(new TooltipListener(0, -20, ConstHolder.myConstants
 		// .topic_new()));
@@ -92,6 +106,7 @@ public class Dashboard extends SimplePanel {
 
 
 		mainPanel.add(addNewButton);
+		mainPanel.add(eyeButton);
 		// mainPanel.add(explorerButton);
 		mainPanel.add(userW);
 

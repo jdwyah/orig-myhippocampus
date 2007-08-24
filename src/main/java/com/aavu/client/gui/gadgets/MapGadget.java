@@ -235,7 +235,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 
 
 	private void makeVisible() {
-		mapWidget.setSize(200);
+		mapWidget.setSize(200, 200);
 		mapWidget.setVisible(true);
 		extraPanel.setVisible(true);
 	}

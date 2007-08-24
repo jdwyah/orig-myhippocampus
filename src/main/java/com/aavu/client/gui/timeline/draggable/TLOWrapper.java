@@ -50,7 +50,7 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 
 		HorizontalPanel panel = new HorizontalPanel();
 
-		label = new Label(tlo.getTopic().getTopicTitle(), false);
+		label = new Label(tlo.getTopicIdentifier().getTopicTitle(), false);
 
 		image = ConstHolder.images.bullet_blue().createImage();
 		panel.add(image);
@@ -59,7 +59,10 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 		label.addClickListener(new ClickListener() {
 
 			public void onClick(final Widget sender) {
-				manager.getTopicCache().getTopic(tlo.getTopic(),
+
+				System.out.println("Fetching " + tlo + " TI: " + tlo.getTopicIdentifier());
+
+				manager.getTopicCache().getTopic(tlo.getTopicIdentifier(),
 						new StdAsyncCallback("Fetch Preview") {
 
 							// @Override

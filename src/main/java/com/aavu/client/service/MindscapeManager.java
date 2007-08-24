@@ -24,11 +24,11 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.CreateNewWindow;
 import com.aavu.client.gui.EditMetaWindow;
 import com.aavu.client.gui.EntryEditWindow;
+import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.Preloader;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
-import com.aavu.client.gui.ViewMemberWindow;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetClickListener;
@@ -289,8 +289,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	public void explore(Topic myTag) {
 
-		ViewMemberWindow gw = new ViewMemberWindow(myTag.getTitle(), this, newFrame());
-		gw.load();
 	}
 
 	public void fireIslandCreated() {
@@ -615,6 +613,11 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		map.editSelectStatus(t.getIdentifier(), true);
 
 		System.out.println("MindscapeManager addSelected " + t + " Now: " + selectedTopics);
+	}
+
+
+	public GUIManager getGui() {
+		return map;
 	}
 
 

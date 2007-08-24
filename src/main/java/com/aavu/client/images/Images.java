@@ -129,6 +129,10 @@ public interface Images extends ImageBundle {
 	 */
 	AbstractImagePrototype enterInfo();
 
+	/**
+	 * @gwt.resource eye.png
+	 */
+	AbstractImagePrototype eye();
 
 
 }

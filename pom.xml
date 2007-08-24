@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-maps</artifactId>
-			<version>2.1.4.gwt1.4</version><!-- upg to 2.2.1 -->
+			<version>2.2.1</version><!-- upg to 2.2.1 -->
 		</dependency>
 		<dependency>
 			<groupId>com.google</groupId>
@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>gwt-dragdrop</artifactId>
-			<version>1.1</version>
+			<version>1.1</version><!-- upg to 1.2 -->
 		</dependency>
 		<dependency>
 			<groupId>gwt-widgets</groupId>

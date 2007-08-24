@@ -59,10 +59,6 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		makeThisADragHandle(focusBackdrop);
 		add(focusBackdrop, 0, 0);
 
-		/*
-		 * override the AbsolutePanel position: relative otherwise we got a left: 8px; top: 8px;
-		 */
-		DOM.setStyleAttribute(getElement(), "position", "absolute");
 
 	}
 
@@ -113,11 +109,13 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		int halfWidth = getWidth() / 2;
 		int halfHeight = getHeight() / 2;
 
-		int dx = lastx - halfWidth;
-		int dy = lasty - halfHeight;
+		int dx = lastx - getAbsoluteLeft() - halfWidth;
+		int dy = lasty - getAbsoluteTop() - halfHeight;
 
-		// System.out.println("last x "+lastx+" mousex "+0+" curbackx "+curbackX+" dx "+dx);
-		// System.out.println("last y "+lasty+" mousey "+0+" curbacky "+curbackY+" dy "+dy);
+		System.out.println("ViewPanel.centerOnMouse last x " + lastx + " absLeft "
+				+ getAbsoluteLeft() + " curbackx " + curbackX + " dx " + dx);
+		System.out.println("ViewPanel.centerOnMouse last y " + lasty + " absTop "
+				+ getAbsoluteTop() + " curbacky " + curbackY + " dy " + dy);
 
 		moveBy(dx, dy);
 

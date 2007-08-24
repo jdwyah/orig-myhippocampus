@@ -43,7 +43,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * @return
 	 */
 	public static Topic convert(Topic t) {
-		log.debug("New Converter " + t.getId() + " " + t.getTitle());
+		if (t != null) {
+			log.debug("New Converter " + t.getId() + " " + t.getTitle());
+		}
 
 		// NewConverter.convertInPlace(t);
 
