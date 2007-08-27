@@ -23,6 +23,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -33,6 +34,7 @@ import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.server.rpc.RPC;
 import com.google.gwt.user.server.rpc.RPCRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
 
 /**
  * Simple spring controller that merges GWT's {@link RemoteServiceServlet}, the {@link Controller}
@@ -45,20 +47,47 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class GWTSpringControllerReplacement extends RemoteServiceServlet implements
 		ServletContextAware, Controller, RemoteService {
+
+	private static final Logger log = Logger.getLogger(GWTSpringControllerReplacement.class);
+
 	private static final long serialVersionUID = 5399966488983189122L;
 
+	private boolean serializeEverything = false;
+
+	public void setSerializeEverything(boolean serializeEverything) {
+		this.serializeEverything = serializeEverything;
+	}
 
 	@Override
 	public String processCall(String payload) throws SerializationException {
 		try {
+
 			RPCRequest rpcRequest = RPC.decodeRequest(payload, this.getClass(), this);
+
 			return RPCWithHibernateSupport.invokeAndEncodeResponse(this, rpcRequest.getMethod(),
 					rpcRequest.getParameters(), rpcRequest.getSerializationPolicy());
+
 		} catch (IncompatibleRemoteServiceException ex) {
 			getServletContext().log(
 					"An IncompatibleRemoteServiceException was thrown while processing this call.",
 					ex);
 			return RPC.encodeResponseForFailure(null, ex);
+		}
+	}
+
+	/**
+	 * We can use our funky laissez faire 1.4.10 (RC1) style serialization policy to serialize
+	 * everything which means we don't need to recompile all the gwt stuff just to restart jetty.
+	 */
+	@Override
+	protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request,
+			String moduleBaseURL, String strongName) {
+		if (serializeEverything) {
+			log.warn("Using 1.4.10 (RC1) style serializaion.");
+			return OneFourTenSerializationPolicy.getInstance();
+		} else {
+			log.debug("Using Standard Serialization.");
+			return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
 		}
 	}
 

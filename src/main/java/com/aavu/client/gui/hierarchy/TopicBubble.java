@@ -90,7 +90,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 		for (Iterator iterator = selectedTopics.iterator(); iterator.hasNext();) {
 			Topic name = (Topic) iterator.next();
 			boolean suc = getDisplay().removeIsland(name.getId());
-			System.out.println("removed " + name + " suc: " + suc);
+			System.out.println("TopicBubble. SELECTED TOPIC removed " + name + " suc: " + suc);
 		}
 
 		AddToTopicCommand command = new AddToTopicCommand(selectedTopics, getTopic(), getDisplay()
@@ -106,12 +106,25 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 					}
 				});
 
+		// important otherwise if they do some drag dropping, then go straight to doing some more,
+		// we may never do this unselect and topics will end up going places they're not meant to
+		getDisplay().getManager().unselect();
+
 	}
 
 
 
 	// @Override
 	protected void saveLocation() {
+		// Set selectedTopics = getDisplay().getManager().getSelectedTopics();
+		// selectedTopics.add(getTopic());
+		// for (Iterator iterator = selectedTopics.iterator(); iterator.hasNext();) {
+		// Topic name = (Topic) iterator.next();
+		// System.out.println("TopicBubble. SELECTED TOPIC " + name + " ");
+		// }
+		// System.out.println("-----");
+
+
 		getDisplay().getManager().getTopicCache().saveTopicLocationA(
 				getDisplay().getCurrentRoot().getId(), getFTI().getTopicID(), getTop(), getLeft(),
 				new StdAsyncCallback("SaveLatLong") {

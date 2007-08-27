@@ -143,10 +143,28 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		return tree;
 	}
 
+
+
 	public TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat)
 			throws HippoBusinessException {
 
-		prototype = topicService.createNew(title, prototype.getClass(), parent, lnglat);
+		prototype = (Topic) topicService.createNew(title, prototype.getClass(), parent, lnglat);
+
+		return prototype.getIdentifier();
+	}
+
+	public TopicIdentifier createNewIfNonExistent(String title) throws HippoBusinessException {
+
+		Topic prototype = topicService.createNewIfNonExistent(title);
+
+		return prototype.getIdentifier();
+	}
+
+	public TopicIdentifier createNewIfNonExistent(String title, Topic prototype, Topic parent,
+			int[] lnglat) throws HippoBusinessException {
+
+		prototype = topicService
+				.createNewIfNonExistent(title, prototype.getClass(), parent, lnglat);
 
 		return prototype.getIdentifier();
 	}
@@ -408,6 +426,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
 	}
+
 
 
 	// public C test(C c) {

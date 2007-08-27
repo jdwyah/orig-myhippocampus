@@ -120,8 +120,8 @@ public class HippoMapWidget extends Composite implements GMarkerEventDragListene
 
 
 	public static native void enableScrollWheelZoom(JSObject map)/*-{
-		  		map.enableScrollWheelZoom();
-		  	}-*/;
+			  		map.enableScrollWheelZoom();
+			  	}-*/;
 
 	public void add(LocationDTO locObj, boolean partOfAmalgam) {
 		createPoint(locObj, partOfAmalgam);

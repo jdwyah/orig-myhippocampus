@@ -18,6 +18,11 @@ public interface GWTTopicServiceAsync {
 
 	void createNew(String title, Topic prototype, Topic parent, int[] lnglat, AsyncCallback callback);
 
+	void createNewIfNonExistent(String title, AsyncCallback callback);
+
+	void createNewIfNonExistent(String title, Topic prototype, Topic parent, int[] lnglat,
+			AsyncCallback callback);
+
 	void delete(long id, AsyncCallback callback);
 
 	void getAllMetas(AsyncCallback callback);

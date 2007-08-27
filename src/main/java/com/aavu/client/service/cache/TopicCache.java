@@ -11,12 +11,12 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.RealTopic;
-import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.gui.TopicSaveListener;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
@@ -33,8 +33,8 @@ public class TopicCache {
 	 */
 	private class SaveCallbackWrapper implements AsyncCallback {
 		private AsyncCallback callback;
-		private Topic topic;
 		private AbstractCommand command;
+		private Topic topic;
 
 		public SaveCallbackWrapper(Topic topic, AbstractCommand command, AsyncCallback callback) {
 			this.topic = topic;
@@ -57,49 +57,6 @@ public class TopicCache {
 
 			callback.onSuccess(result);
 		}
-	}
-
-	/**
-	 * CHANGED!! now call this with the found TI
-	 * 
-	 * 
-	 * //This callback expects to be onSuccessed once the topicIdentifiers have been loaded //NOTE:
-	 * onSuccess should be called with null.
-	 */
-	private class TopicLookupOrNewCallback implements AsyncCallback {
-
-		private AsyncCallback originalCallback;
-		private String linkTo;
-
-		public TopicLookupOrNewCallback(AsyncCallback originalCallback, String linkTo) {
-			this.originalCallback = originalCallback;
-			this.linkTo = linkTo;
-		}
-
-		public void onFailure(Throwable caught) {
-			originalCallback.onFailure(caught);
-		}
-
-		/**
-		 * 
-		 */
-		public void onSuccess(Object result) {
-
-			// TopicIdentifier found =
-			// CacheUtils.searchTopics(topicIdentifiers,linkTo);
-
-			Topic found = (Topic) result;
-
-			if (found != null) {
-				System.out.println("Found " + found);
-				originalCallback.onSuccess(found.getIdentifier());
-			} else {
-				System.out.println("Create New! ");
-				createNew(linkTo, new RealTopic(), new Root(), null, originalCallback);
-
-			}
-		}
-
 	}
 
 	/**
@@ -170,15 +127,17 @@ public class TopicCache {
 
 	}
 
+
+
 	public static final ReturnTypeConstant TOPIC = new ReturnTypeConstant(1);
 	public static final ReturnTypeConstant TOPIC_LIST = new ReturnTypeConstant(2);
 
-	private Map topicByName = new HashMap();
+	private List saveListeners = new ArrayList();
 
 	private Map topicByID = new HashMap();
-	private GWTTopicServiceAsync topicService;
+	private Map topicByName = new HashMap();
 
-	private List saveListeners = new ArrayList();
+	private GWTTopicServiceAsync topicService;
 
 	public TopicCache(GWTTopicServiceAsync topicService) {
 		this.topicService = topicService;
@@ -199,12 +158,34 @@ public class TopicCache {
 
 	}
 
+	public void createNewIfNonExistent(String title, final AsyncCallback callback) {
+		topicService.createNewIfNonExistent(title, callback);
+	}
+
+
+
+	/**
+	 * returns a topicID to callback
+	 * 
+	 * 
+	 * @param linkTo
+	 * @param callback
+	 * @throws HippoBusinessException
+	 */
+	public void createNewIfNonExistent(String title, Topic parent, int[] lnglat,
+			final AsyncCallback callback) {
+
+		// TopicLookupOrNewCallback ourCall = new TopicLookupOrNewCallback(callback, linkTo);
+		// getTopicForNameA(linkTo, ourCall);
+
+		topicService.createNewIfNonExistent(title, new RealTopic(), parent, lnglat, callback);
+
+	}
+
 	public void delete(Topic topic, StdAsyncCallback callback) {
 		topicService.delete(topic.getId(), callback);
 		// TODO update after delete
 	}
-
-
 
 	/**
 	 * Ok, here's how this works. We don't want to serialize the whole topic, send it to the server
@@ -266,6 +247,14 @@ public class TopicCache {
 		topicService.getLocationsForTags(shoppingList, callback);
 	}
 
+	public void getRootTopic(User user, AsyncCallback callback) {
+		topicService.getRootTopic(user, callback);
+	}
+
+	public void getTagStats(AsyncCallback stdAsyncCallback) {
+		topicService.getTagStats(stdAsyncCallback);
+	}
+
 	public void getTimelineObjs(List shoppingList, AsyncCallback callback) {
 		topicService.getTimelineWithTags(shoppingList, callback);
 	}
@@ -314,26 +303,6 @@ public class TopicCache {
 	}
 
 	/**
-	 * returns a topicID to callback
-	 * 
-	 * NOTE: this relies on the topicIdentifiers list being a correctly sorted list, otherwise
-	 * binary search won't work.
-	 * 
-	 * Since it's possible that we'll need to init the TopicIdentifiers list first, create our own
-	 * callback to wrap the functionality.
-	 * 
-	 * @param linkTo
-	 * @param callback
-	 */
-	public void getTopicIdentForNameOrCreateNew(String linkTo, final AsyncCallback callback) {
-
-		TopicLookupOrNewCallback ourCall = new TopicLookupOrNewCallback(callback, linkTo);
-
-		getTopicForNameA(linkTo, ourCall);
-
-	}
-
-	/**
 	 * returns List<List<FullTopicIdentifier>>
 	 * 
 	 * @param shoppingList
@@ -361,6 +330,11 @@ public class TopicCache {
 		topicService.match(match, call);
 	}
 
+	public void saveOccLocationA(long topicID, long occurrenceID, int lat, int lng,
+			AsyncCallback callback) {
+		topicService.saveOccurrenceLocation(topicID, occurrenceID, lat, lng, callback);
+	}
+
 	public void saveTopicLocationA(long tagId, long topicId, int lat, int lng,
 			StdAsyncCallback callback) {
 		topicService.saveTopicLocation(tagId, topicId, lat, lng, callback);
@@ -372,19 +346,6 @@ public class TopicCache {
 
 	public void search(String text, StdAsyncCallback callback) {
 		topicService.search(text, callback);
-	}
-
-	public void getRootTopic(User user, AsyncCallback callback) {
-		topicService.getRootTopic(user, callback);
-	}
-
-	public void saveOccLocationA(long topicID, long occurrenceID, int lat, int lng,
-			AsyncCallback callback) {
-		topicService.saveOccurrenceLocation(topicID, occurrenceID, lat, lng, callback);
-	}
-
-	public void getTagStats(AsyncCallback stdAsyncCallback) {
-		topicService.getTagStats(stdAsyncCallback);
 	}
 
 	//

@@ -52,6 +52,9 @@ public interface TopicService {
 	<T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent) throws HippoBusinessException;
 
+	<T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
+			Topic parent, int[] lnglat) throws HippoBusinessException;
+
 
 	void delete(long id) throws HippoBusinessException;
 
@@ -141,5 +144,7 @@ public interface TopicService {
 	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
 
 	MindTree saveTree(MindTree tree);
+
+
 
 }

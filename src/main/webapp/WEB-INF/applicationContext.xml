@@ -18,15 +18,18 @@
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
 		<property name="topicService" ref="topicService" />
 		<property name="searchService" ref="searchService" />
+		<property name="serializeEverything" value="${HOST.gwt.serializeEverything}"/>
 	</bean>
 
 	<bean id="GWTUserService" class="com.aavu.server.service.gwt.GWTUserServiceImpl">
 		<property name="userService" ref="userService" />
+		<property name="serializeEverything" value="${HOST.gwt.serializeEverything}"/>
 	</bean>
 
 	<bean id="GWTSubjectService" class="com.aavu.server.service.gwt.GWTExternalServiceImpl">
 		<property name="externalServicesService" ref="externalServicesService" />		
 		<property name="deliciousService" ref="deliciousService"/>
+		<property name="serializeEverything" value="${HOST.gwt.serializeEverything}"/>
 	</bean>
 
 	<bean id="facebookService" class="com.aavu.server.service.facebook.impl.FacebookServiceImpl"></bean>

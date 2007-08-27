@@ -193,11 +193,16 @@ public class TopicServiceImpl implements TopicService {
 
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent) throws HippoBusinessException {
+		return createNewIfNonExistent(title, RealTopic.class, parent, null);
+	}
+
+	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
+			Topic parent, int[] lnglat) throws HippoBusinessException {
 		Topic cur = getForNameCaseInsensitive(title);
 		if (cur == null) {
 
 			try {
-				cur = createNew(title, type, parent, null);
+				cur = createNew(title, type, parent, lnglat);
 			} catch (Exception e) {
 				throw new HippoBusinessException(e);
 			}

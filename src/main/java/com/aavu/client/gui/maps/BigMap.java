@@ -23,6 +23,8 @@ import com.aavu.client.gui.maps.ext.GWTInfoWidget;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
+import com.aavu.client.util.Logger;
+import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -63,8 +65,11 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		extraPanel = new SimplePanel();
 
 
-		mapWidget = new HippoMapWidget(this, width, height, DEFAULT_ZOOM);
-
+		try {
+			mapWidget = new HippoMapWidget(this, width, height, DEFAULT_ZOOM);
+		} catch (JavaScriptException e) {
+			Logger.error("Couldn't Load Map. Connection to Google Maps may have failed.");
+		}
 		extraPanel.add(mapWidget);
 
 		window.addInternalFrameListener(new GFrameAdapter() {

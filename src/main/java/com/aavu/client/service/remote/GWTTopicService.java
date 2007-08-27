@@ -22,6 +22,11 @@ public interface GWTTopicService extends RemoteService {
 	TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat)
 			throws HippoBusinessException;
 
+	TopicIdentifier createNewIfNonExistent(String title) throws HippoBusinessException;
+
+	TopicIdentifier createNewIfNonExistent(String title, Topic prototype, Topic parent, int[] lnglat)
+			throws HippoBusinessException;
+
 	void delete(long id) throws HippoException;
 
 	// List <LocationDTO>

@@ -21,7 +21,7 @@ import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
-import com.aavu.client.gui.CreateNewWindow;
+import com.aavu.client.gui.AddTopicPopup;
 import com.aavu.client.gui.EditMetaWindow;
 import com.aavu.client.gui.EntryEditWindow;
 import com.aavu.client.gui.GUIManager;
@@ -43,6 +43,7 @@ import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -184,43 +185,53 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 		} else {
 
-			CreateNewWindow n = new CreateNewWindow(this, ConstHolder.myConstants.topic_new(),
-					new EZCallback() {
+			AddTopicPopup n = new AddTopicPopup(this, ConstHolder.myConstants.topic_new(),
+					getCurrentTopic(), lnglat, new EZCallback() {
 						public void onSuccess(Object result) {
-							createTopic(prototype, (String) result, getCurrentTopic(), lnglat);
+
+							TopicIdentifier res = (TopicIdentifier) result;
+
+							prototype.setId(res.getTopicID());
+							prototype.setTitle(res.getTopicTitle());
+							map.growIsland(prototype, lnglat);
+
+							// getTopicCache().createNew
+
+							fireIslandCreated();
 						}
 					});
 		}
 
 	}
 
-	/**
-	 * 
-	 * @param name
-	 * @param parentTopic
-	 * @param lnglat
-	 */
-	public void createTopic(final Topic prototype, final String name, final Topic parentTopic,
-			final int[] lnglat) {
 
-		getTopicCache().createNew(name, prototype, parentTopic, lnglat,
-				new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
-					public void onSuccess(Object result) {
-						super.onSuccess(result);
-						TopicIdentifier res = (TopicIdentifier) result;
-
-						System.out.println("CreateTopic Back " + lnglat);
-
-						prototype.setId(res.getTopicID());
-						prototype.setTitle(res.getTopicTitle());
-						map.growIsland(prototype, lnglat);
-
-
-						fireIslandCreated();
-
-					}
-				});
-	}
+	// /**
+	// *
+	// * @param name
+	// * @param parentTopic
+	// * @param lnglat
+	// */
+	// public void createTopic(final Topic prototype, final String name, final Topic parentTopic,
+	// final int[] lnglat) {
+	//
+	// getTopicCache().createNew(name, prototype, parentTopic, lnglat,
+	// new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
+	// public void onSuccess(Object result) {
+	// super.onSuccess(result);
+	// TopicIdentifier res = (TopicIdentifier) result;
+	//
+	// System.out.println("CreateTopic Back " + lnglat);
+	//
+	// prototype.setId(res.getTopicID());
+	// prototype.setTitle(res.getTopicTitle());
+	// map.growIsland(prototype, lnglat);
+	//
+	//
+	// fireIslandCreated();
+	//
+	// }
+	// });
+	// }
 
 	public void delete(final Topic topic, final AsyncCallback callback) {
 		getTopicCache().delete(topic, new StdAsyncCallback(ConstHolder.myConstants.delete_async()) {
@@ -450,18 +461,19 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * @param callback
 	 */
 	public void newMeta(final Meta meta, final AsyncCallback callback) {
-		CreateNewWindow n = new CreateNewWindow(this, ConstHolder.myConstants.meta_new(),
-				new EZCallback() {
-					public void onSuccess(Object result) {
-						getTopicCache().createNew((String) result, meta, null, null,
-								new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
-									public void onSuccess(Object result) {
-										super.onSuccess(result);
-										callback.onSuccess(result);
-									}
-								});
-					}
-				});
+		Window.alert("Mindscape Manager Not Supp");
+		// AddTopicPopup n = new AddTopicPopup(this, ConstHolder.myConstants.meta_new(),
+		// new EZCallback() {
+		// public void onSuccess(Object result) {
+		// getTopicCache().createNew((String) result, meta, null, null,
+		// new StdAsyncCallback(ConstHolder.myConstants.save_async()) {
+		// public void onSuccess(Object result) {
+		// super.onSuccess(result);
+		// callback.onSuccess(result);
+		// }
+		// });
+		// }
+		// });
 	}
 
 	public void refreshAll() {
