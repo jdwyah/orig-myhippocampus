@@ -21,8 +21,26 @@ public class EntryRichText extends Composite {
 	private Entry entry;
 
 
+	// private static final int zoomedBackHeight = 49 * 4;
+	// private static final int zoomedBackWidth = 60 * 4;
+	// private IslandBanner zoomedBackBanner;
+	// private Image zoomedBackImage;
+	// private FocusPanelExt zoomedBackP;
+	// private SimplePanel simplePanel;
+
 	public EntryRichText(ResizeHandler handler, HierarchyDisplay display) {
 		this.display = display;
+
+		// this.zoomedBackImage = new Image(ImageHolder.getImgLoc("hierarchy/") +
+		// "entryZoomBack.png");
+		// zoomedBackBanner = new IslandBanner("", 1);
+		//
+		//
+		// AbsolutePanel zabsP = new AbsolutePanel();
+		// zabsP.add(zoomedBackImage, 0, 0);
+		// zabsP.add(zoomedBackBanner, 0, 0);
+		// zoomedBackP = new FocusPanelExt(zabsP);
+
 		caption = new EntryCaption(this);
 
 		rtMainPanel = new BorderThemedPanel();
@@ -38,6 +56,11 @@ public class EntryRichText extends Composite {
 		rtMainPanel.setVisible(true);
 
 		rtMainPanel.addResizeHandler(handler);
+
+		// simplePanel = new SimplePanel();
+		//
+		// simplePanel.add(rtMainPanel);
+
 		initWidget(rtMainPanel);
 	}
 
@@ -58,6 +81,8 @@ public class EntryRichText extends Composite {
 
 	public void load(Entry e) {
 		this.entry = e;
+
+		// zoomedBackBanner.setText(e.getTitle());
 
 		caption.setText(e.getTitle());
 
@@ -88,6 +113,16 @@ public class EntryRichText extends Composite {
 
 	public HierarchyDisplay getDisplay() {
 		return display;
+	}
+
+	public void setZoomedBack(boolean zoomedBack) {
+		// if (zoomedBack) {
+		// simplePanel.clear();
+		// simplePanel.add(zoomedBackP);
+		// } else {
+		// simplePanel.clear();
+		// simplePanel.add(rtMainPanel);
+		// }
 	}
 
 

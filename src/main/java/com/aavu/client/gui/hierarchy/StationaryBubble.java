@@ -140,6 +140,7 @@ public class StationaryBubble extends AbstractBubble {
 
 	}
 
+
 	public void receivedDrop(TopicDisplayObj bubble) {
 		// TODO Auto-generated method stub
 

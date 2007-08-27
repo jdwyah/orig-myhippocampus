@@ -26,6 +26,28 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 		init();
 	}
 
+	// @Override
+	protected void clickAction() {
+		showDetails(getLastClickEventCtrl());
+	}
+
+	public IslandBanner getBanner() {
+		return banner;
+	}
+
+
+	public int getCurrentHeight() {
+		return currentHeight;
+	}
+
+	public int getCurrentWidth() {
+		return currentWidth;
+	}
+
+	public Widget getDropTarget() {
+		return image;
+	}
+
 	protected Widget getOurWidget() {
 
 
@@ -47,37 +69,22 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 		return mainPanel;
 	}
 
-	// @Override
-	protected void clickAction() {
-		showDetails(getLastClickEventCtrl());
-	}
-
-
-	protected abstract void showDetails(boolean lastClickEventCtrl);
+	protected abstract int getUnscaledHeight();
 
 	protected abstract int getUnscaledWidth();
 
-	protected abstract int getUnscaledHeight();
 
-	public int getCurrentHeight() {
-		return currentHeight;
+
+	public void setSelected(boolean b) {
+		banner.setSelected(b);
 	}
 
-	public int getCurrentWidth() {
-		return currentWidth;
-	}
+	protected abstract void showDetails(boolean lastClickEventCtrl);
 
-	public Widget getDropTarget() {
-		return image;
-	}
 
 	public void update(Topic t) {
 		System.out.println("AbstractBubbleParent setting banner " + t);
 		banner.setText(t.getTitle());
-	}
-
-	public IslandBanner getBanner() {
-		return banner;
 	}
 
 
@@ -103,10 +110,5 @@ public abstract class AbstractBubbleParent extends AbstractDraggableBubble {
 
 		mainPanel.setPixelSize(currentWidth, currentHeight);
 
-	}
-
-
-	public void setSelected(boolean b) {
-		banner.setSelected(b);
 	}
 }

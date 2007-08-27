@@ -58,6 +58,7 @@ public class ExplorerWindow extends PopupWindow {
 	public void loadTimeline(Topic curTopic) {
 
 		frame.setCaption("TimeLine for " + curTopic.getTitle());
+		frame.setWidth(WIDTH);
 		timeline.load(curTopic);
 
 		frame.setContent(timeline);
@@ -66,7 +67,7 @@ public class ExplorerWindow extends PopupWindow {
 	public void loadGlossary(Topic curTopic) {
 
 		frame.setCaption("Glossary for " + curTopic.getTitle());
-
+		frame.setWidth(200);
 		glossary.load(curTopic);
 
 		frame.setContent(glossary);
@@ -76,6 +77,7 @@ public class ExplorerWindow extends PopupWindow {
 	public void loadGoogleMap(Topic curTopic) {
 
 		frame.setCaption("Map for " + curTopic.getTitle());
+		frame.setWidth(WIDTH);
 		show();// avoid the gray!
 
 		bigMap.load(curTopic);

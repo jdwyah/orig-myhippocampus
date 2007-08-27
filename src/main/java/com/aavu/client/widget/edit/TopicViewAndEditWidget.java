@@ -7,10 +7,7 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveOccurrenceDataCommand;
 import com.aavu.client.gui.EntryEditWindow;
 import com.aavu.client.gui.SaveStopLight;
-import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.service.Manager;
-import com.aavu.client.strings.ConstHolder;
-import com.aavu.client.widget.HeaderLabel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -27,9 +24,6 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener,
 
 	public Entry entry;
 	private Manager manager;
-
-
-	private EditableLabelExtension titleBox;
 
 	private int width;
 
@@ -76,19 +70,6 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener,
 		this.entry = entry;
 		topicPanel.clear();
 
-
-
-		HorizontalPanel titleP = new HorizontalPanel();
-
-
-		titleBox = new EditableLabelExtension(entry.getTitle(), this);
-
-		titleP.add(new HeaderLabel(ConstHolder.myConstants.title()));
-		titleP.add(titleBox);
-		topicPanel.add(titleP);
-
-
-
 		topicEditWidget = new TopicEditWidget(manager, entry, saveButton);
 		topicEditWidget.addChangeListener(this);
 		topicEditWidget.setPixelSize(width, height);
@@ -116,7 +97,7 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener,
 
 
 	public AbstractCommand getSaveCommand() {
-		return new SaveOccurrenceDataCommand(entry, titleBox.getText(), getEntryText());
+		return new SaveOccurrenceDataCommand(entry, entry.getTitle(), getEntryText());
 	}
 
 	private void save() {

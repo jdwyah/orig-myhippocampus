@@ -35,6 +35,7 @@ public interface TopicDisplayObj extends RemembersPosition {
 
 	Topic getTopic();
 
+
 	// Widget getDragHandle();
 
 }

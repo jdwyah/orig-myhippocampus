@@ -221,12 +221,12 @@ a:visited {
 	font-size: 1.1em;
 	font-weight: bolder;
 	width: 100px;	
-	margin-top: 3px;
-	margin-left: 10px;
+	margin-top: 3px;	
 	border-bottom: 2px ridge gray;
 }
 .H-Glossary .H-TopicLink {
 	font-size: .7em;	
+	margin-left: 10px;
 }	
 	
 .H-BlogView {
