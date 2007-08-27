@@ -144,7 +144,12 @@ public class TitleGadget extends Gadget {
 	// @Override
 	public int load(Topic topic) {
 		this.topic = topic;
-		titleBox.setText(topic.getTitle());
+
+		if (topic.getTitle() == null || topic.getTitle().equals("")) {
+			titleBox.setText(ConstHolder.myConstants.topic_blank());
+		} else {
+			titleBox.setText(topic.getTitle());
+		}
 
 		// don't let them delete Root
 		deleteB.setVisible(topic.isDeletable());

@@ -191,9 +191,16 @@ public class TopicServiceImpl implements TopicService {
 		return createNewIfNonExistent(title, RealTopic.class, parent);
 	}
 
+	/**
+	 * NOTE! this cast "(T)" is necessary to compile on the linux java 1.5.0_07 javac, but not here
+	 * in eclipse. How worrisome is that? Bug fixed for Dolphin b03, so no help there.
+	 * 
+	 * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6302954
+	 * http://forum.java.sun.com/thread.jspa?messageID=4196171
+	 */
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent) throws HippoBusinessException {
-		return createNewIfNonExistent(title, RealTopic.class, parent, null);
+		return (T) createNewIfNonExistent(title, RealTopic.class, parent, null);
 	}
 
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
