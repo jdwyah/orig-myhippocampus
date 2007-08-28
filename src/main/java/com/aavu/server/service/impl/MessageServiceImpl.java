@@ -119,15 +119,19 @@ public class MessageServiceImpl implements MessageService {
 			Topic topic = new RealTopic(u, newTitle);
 			topic.setLastUpdated(new Date());
 
-			Entry entry = topic.getLatestEntry();
+			Entry entry = new Entry();
 			entry.setUser(u);
 			entry.setInnerHTML(text);
+
 
 			Topic inbox = createTagIfNeeded(INBOX, u);
 
 			topic.tagTopic(inbox);
 
+			topic.addOccurence(entry);
+
 			topic = editDAO.save(topic);
+
 
 			for (PersistedFile file : attachements) {
 				log.debug("Saving attachement " + file + " " + file.getFilename());

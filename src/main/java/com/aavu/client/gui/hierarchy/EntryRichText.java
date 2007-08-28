@@ -85,7 +85,7 @@ public class EntryRichText extends Composite {
 		// zoomedBackBanner.setText(e.getTitle());
 
 		caption.setText(e.getTitle());
-
+		caption.setNeedsSave(false);
 		textArea.setText(e.getData());
 	}
 

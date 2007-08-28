@@ -68,7 +68,7 @@ public class OccBubble extends AbstractBubbleParent implements TopicDisplayObj, 
 	 * Override for custom double click processing.
 	 */
 	protected void dblClick() {
-		getDisplay().getManager().editOccurrence(owl.getOccurrence());
+		getDisplay().getManager().editOccurrence(owl.getOccurrence(), false);
 	}
 
 	// @Override

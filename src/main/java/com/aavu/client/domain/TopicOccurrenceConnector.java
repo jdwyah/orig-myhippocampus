@@ -23,6 +23,6 @@ public class TopicOccurrenceConnector extends AbstractTopicOccurrenceConnector i
 	public String toString() {
 		String tstr = getTopic() == null ? "null" : getTopic().getTitle();
 		String ostr = getOccurrence() == null ? "null" : getOccurrence().getTitle();
-		return "TOC Topic " + tstr + " Occ " + ostr;
+		return "TOC " + getId() + " Topic " + tstr + " Occ " + ostr;
 	}
 }

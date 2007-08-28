@@ -348,6 +348,10 @@ public class TopicCache {
 		topicService.search(text, callback);
 	}
 
+	public void getDeleteList(long id, AsyncCallback callback) {
+		topicService.getDeleteList(id, callback);
+	}
+
 	//
 	// public void test(StdAsyncCallback stdAsyncCallback) {
 	// topicService.test(stdAsyncCallback);

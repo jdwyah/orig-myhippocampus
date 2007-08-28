@@ -139,7 +139,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 	}
 
 	public void onDblClick(Widget sender) {
-		getDisplay().getManager().editOccurrence(entry);
+		getDisplay().getManager().editOccurrence(entry, false);
 	}
 
 
@@ -185,6 +185,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 			entry = (Entry) t;
 
 			entryPreview.load(entry);
+
 
 		} else {
 			Logger.error("EntryDisplay. Update with non-entry");

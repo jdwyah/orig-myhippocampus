@@ -2,6 +2,8 @@ package com.aavu.server.dao.hibernate;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -57,12 +59,62 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	}
 
+	public List<Topic> getDeleteList(long topicID) {
+		List<Topic> rtn = new ArrayList<Topic>();
+
+		Topic toDelete = (Topic) getHibernateTemplate().get(Topic.class, topicID);
+
+		recurseDelete(rtn, toDelete);
+
+		return rtn;
+	}
+
+	private void recurseDelete(List<Topic> toDelete, Topic toCheck) {
+		// prevent infinite loop
+		if (toDelete.contains(toCheck)) {
+			return;
+		}
+		for (Iterator iterator = toCheck.getInstances().iterator(); iterator.hasNext();) {
+			TopicTypeConnector toc = (TopicTypeConnector) iterator.next();
+			Topic child = toc.getTopic();
+
+			if (child.getTypes().size() < 2) {
+				recurseDelete(toDelete, child);
+			}
+		}
+		for (Iterator iterator = toCheck.getOccurenceObjs().iterator(); iterator.hasNext();) {
+			Occurrence occ = (Occurrence) iterator.next();
+
+			if (occ.getTopics().size() < 2) {
+				recurseDelete(toDelete, occ);
+			}
+		}
+		toDelete.add(toCheck);
+	}
+
 	/**
-	 * 
+	 * recursively delete a topic. Use getDeleteList if you want to know what's going to be deleted.
 	 */
 	public void delete(final Topic todelete) {
 
-		log.info("Deleting: " + todelete + " " + todelete.getId());
+		List<Topic> toDeleteList = getDeleteList(todelete.getId());
+		log.info(" " + todelete + " recurse size " + toDeleteList.size());
+		for (Topic recursiveDelete : toDeleteList) {
+			log.info("recurse: " + recursiveDelete + " " + recursiveDelete.getClass());
+			delete(recursiveDelete.getId());
+		}
+	}
+
+	/**
+	 * Do not call delete() unless you know what you're doing, which is just to say, make sure to
+	 * use getDeleteList first, so that you don't leave danglers. This is done by the public
+	 * delete(Topic) method
+	 * 
+	 * 
+	 */
+	private void delete(final long topicID) {
+
+		log.info("Deleting: " + topicID);
 		getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
 
@@ -72,7 +124,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 				 * delete todelete, there's no reason to save his associations first. NOTE: we could
 				 * just change this method to take the long topic_id instead of a real Topic.class
 				 */
-				Topic topic = (Topic) sess.get(Topic.class, todelete.getId());
+				Topic topic = (Topic) sess.get(Topic.class, topicID);
 
 
 
@@ -117,28 +169,18 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 				// topic.getTypes().clear();
 
 
-				// TODO PEND will leave danglers!
+				/**
+				 * this will leave danglers, but we're taking care of that with the getDeleteList().
+				 * Do not call delete() unless you know what you're doing
+				 * 
+				 * TODO delete S3Files from amazon
+				 */
 				for (TopicOccurrenceConnector owl : (Set<TopicOccurrenceConnector>) topic
 						.getOccurences()) {
 
+					// other side of delete
+					owl.getOccurrence().getTopics().remove(owl);
 					sess.delete(owl);
-
-					// Occurrence occurence = owl.getOccurrence();
-
-					// //TODO delete S3Files
-					// //TODO delete Weblinks that were only referenced by us
-
-					// log.debug("remove occurrence: "+occurence.getId()+" "+occurence.getTitle()+"
-					// "+occurence.getData());
-
-					// if(occurence instanceof Entry){
-					// sess.delete(occurence);
-					// }
-					// if(occurence instanceof MindTreeOcc){
-					// sess.delete(occurence);
-					// }
-
-
 				}
 				topic.getOccurences().clear();
 
@@ -169,6 +211,43 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 				}
 
 
+				if (topic instanceof Occurrence) {
+					log.debug("Is an occ");
+					Occurrence topicAsOcc = (Occurrence) topic;
+					Set<TopicOccurrenceConnector> topics = topicAsOcc.getTopics();
+					for (TopicOccurrenceConnector toccConnector : topics) {
+						log.debug("Remove toc " + toccConnector);
+
+						// System.out.println("s1 " +
+						// toccConnector.getTopic().getOccurences().size());
+						// System.out
+						// .println("s2 " + toccConnector.getOccurrence().getTopics().size());
+						//
+						// System.out.println("i1 "
+						// + toccConnector.getTopic().getOccurences().iterator().next());
+						// System.out.println("i2 "
+						// + toccConnector.getOccurrence().getTopics().iterator().next());
+						//
+						//
+						// boolean b1 = CollectionUtils.removeFromCollectionById(toccConnector
+						// .getTopic().getOccurences(), toccConnector.getId());
+						// boolean b2 = CollectionUtils.removeFromCollectionById(toccConnector
+						// .getOccurrence().getTopics(), toccConnector.getId());
+
+						// System.out.println("b1 " + b1);
+						// System.out.println("b2 " + b2);
+
+						System.out.println("rem1: "
+								+ toccConnector.getTopic().getOccurences().remove(toccConnector));
+						// System.out.println("rem2: "
+						// + toccConnector.getOccurrence().getTopics().remove(toccConnector));
+						sess.delete(toccConnector);
+					}
+					topicAsOcc.getTopics().clear();
+				}
+
+
+
 				System.out.println("last gasp " + topic.toPrettyString());
 
 				sess.delete(topic);
@@ -178,29 +257,29 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 	}
 
 
-	public void deleteOccurrence(final Occurrence toDelete) {
-
-		getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session sess) throws HibernateException, SQLException {
-
-				Occurrence o = (Occurrence) sess.get(Occurrence.class, toDelete.getId());
-
-				log.debug("going to delete " + o + " " + o.getId() + " " + o.getData());
-
-				Set<TopicOccurrenceConnector> topics = o.getTopics();
-				for (TopicOccurrenceConnector toccConnector : topics) {
-					log.debug("remove " + toccConnector);
-
-					toccConnector.getTopic().getOccurences().remove(toccConnector);
-					sess.delete(toccConnector);
-
-				}
-				sess.delete(o);
-				return null;
-			}
-		});
-
-	}
+	// public void deleteOccurrence(final Occurrence toDelete) {
+	//
+	// getHibernateTemplate().execute(new HibernateCallback() {
+	// public Object doInHibernate(Session sess) throws HibernateException, SQLException {
+	//
+	// Occurrence o = (Occurrence) sess.get(Occurrence.class, toDelete.getId());
+	//
+	// log.debug("going to delete " + o + " " + o.getId() + " " + o.getData());
+	//
+	// Set<TopicOccurrenceConnector> topics = o.getTopics();
+	// for (TopicOccurrenceConnector toccConnector : topics) {
+	// log.debug("remove " + toccConnector);
+	//
+	// toccConnector.getTopic().getOccurences().remove(toccConnector);
+	// sess.delete(toccConnector);
+	//
+	// }
+	// sess.delete(o);
+	// return null;
+	// }
+	// });
+	//
+	// }
 
 	public void evict(Serializable obj) {
 		getHibernateTemplate().evict(obj);
@@ -297,7 +376,8 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 			getHibernateTemplate().save(toc);
 
 		} catch (IncorrectResultSizeDataAccessException e) {
-			throw new HippoBusinessException("Missing Connection to save Occurrence Location");
+			throw new HippoBusinessException("Missing Connection to save Occurrence Location "
+					+ topicID + " " + occurrenceID);
 		}
 
 

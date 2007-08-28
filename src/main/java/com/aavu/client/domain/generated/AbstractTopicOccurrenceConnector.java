@@ -79,6 +79,10 @@ public class AbstractTopicOccurrenceConnector implements Serializable, IsSeriali
 		result = PRIME * result + (int) (longitude * 1000);
 		result = PRIME * result + ((topic == null) ? 0 : topic.hashCode());
 		result = PRIME * result + ((occurrence == null) ? 0 : occurrence.hashCode());
+
+		// System.out.println(this + " hash " + result);
+		// System.out.println("top: " + topic.hashCode());
+		// System.out.println("occ: " + occurrence.hashCode());
 		return result;
 	}
 

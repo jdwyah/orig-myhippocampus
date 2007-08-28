@@ -145,6 +145,8 @@ public interface TopicService {
 
 	MindTree saveTree(MindTree tree);
 
+	List<Topic> getDeleteList(long topicID);
+
 
 
 }

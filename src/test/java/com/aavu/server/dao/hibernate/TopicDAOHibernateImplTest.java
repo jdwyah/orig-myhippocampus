@@ -93,7 +93,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
@@ -133,7 +132,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic savedTopic = selectDAO.getForID(u, saved.getTopicID());
 
 		assertEquals(C, savedTopic.getTitle());
-		assertEquals(B, savedTopic.getLatestEntry().getData());
 		assertEquals(u, savedTopic.getUser());
 
 		assertEquals(1, savedTopic.getTypesAsTopics().size());
@@ -151,7 +149,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testSaveComplexMetas() throws HippoBusinessException {
 
 		Topic patriotGames = new RealTopic();
-		patriotGames.getLatestEntry().setData(B);
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
@@ -237,12 +234,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
 		Topic t2 = new RealTopic();
-		t2.getLatestEntry().setData(C);
 		t2.setTitle(B);
 		t2.setUser(u);
 
@@ -299,12 +294,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testGetTopicsWithTopic2() throws HippoBusinessException, InterruptedException {
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
 		Topic t2 = new RealTopic();
-		t2.getLatestEntry().setData(C);
 		t2.setTitle(B);
 		t2.setUser(u);
 
@@ -353,7 +346,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testGetAllTopicIdentifiers() throws HippoBusinessException {
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
@@ -535,7 +527,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		// topicDAO.deleteAllTables();
 
 		Topic patriotGames = new RealTopic(u, C);
-		patriotGames.getLatestEntry().setData(B);
 
 		Topic book = new RealTopic(u, D);
 
@@ -1150,7 +1141,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testDelete() throws HippoBusinessException {
 		Topic patriotGames = new RealTopic();
-		patriotGames.getLatestEntry().setData(B);
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
@@ -1194,7 +1184,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testDeleteAdvanced() throws HippoBusinessException {
 		Topic patriotGames = new RealTopic();
-		patriotGames.getLatestEntry().setData(B);
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
@@ -1219,7 +1208,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(patriotGames);
 
-		Entry lastEntry = patriotGames.getLatestEntry();
 
 		System.out.println("after: " + patriotGames.getId());
 
@@ -1246,12 +1234,12 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testDeleteAdvanced2() throws HippoBusinessException {
 		Topic patriotGames = new RealTopic();
-		patriotGames.getLatestEntry().setData(B);
+
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
 		Topic forWhomTheBellTolls = new RealTopic();
-		forWhomTheBellTolls.getLatestEntry().setData(B);
+
 		forWhomTheBellTolls.setTitle(F);
 		forWhomTheBellTolls.setUser(u);
 
@@ -1278,7 +1266,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		forWhomTheBellTolls.tagTopic(book);
 		editDAO.save(forWhomTheBellTolls);
 
-		Entry lastEntry = patriotGames.getLatestEntry();
 
 		System.out.println("after: " + patriotGames.getId());
 
@@ -1306,7 +1293,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testDeleteTopic() throws HippoBusinessException {
 		Topic patriotGames = new RealTopic();
-		patriotGames.getLatestEntry().setData(B);
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
@@ -1330,7 +1316,6 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		editDAO.save(patriotGames);
 
-		Entry lastEntry = patriotGames.getLatestEntry();
 
 		System.out.println("after: " + patriotGames.getId());
 
@@ -1364,12 +1349,10 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 
 		Topic t2 = new RealTopic();
-		t2.getLatestEntry().setData(C);
 		t2.setTitle(B);
 		t2.setUser(u);
 
@@ -1428,17 +1411,24 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 	public void testSaveOccLocation() throws HippoBusinessException {
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
+
 		t.setTitle(C);
 		t.setUser(u);
 
+
+
+		Entry e = new Entry();
+		e.setData(D);
+		t.addOccurence(e);
+
 		t = editDAO.save(t);
 
-		Entry e = t.getLatestEntry();
+		Entry e2 = t.getLatestEntry();
+		assertNotSame(0, e2.getId());
 
 		int Y = 4545;
 		int X = 232;
-		editDAO.saveOccurrenceLocation(t.getId(), e.getId(), Y, X, u);
+		editDAO.saveOccurrenceLocation(t.getId(), e2.getId(), Y, X, u);
 
 		Topic saved = selectDAO.getForID(u, t.getId());
 
@@ -1549,7 +1539,11 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		assertEquals(C, savedTopic.getTitle());
 		assertEquals(u, savedTopic.getUser());
 
-		savedTopic.getLatestEntry().setData(B);
+		Entry newE = new Entry();
+		newE.setData(B);
+
+		savedTopic.addOccurence(newE);
+
 		savedTopic = editDAO.save(savedTopic);
 
 		Topic savedTopic2 = selectDAO.getForID(u, t.getId());
@@ -1560,18 +1554,18 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		System.out.println("SAVED 2: " + savedTopic2.getLatestEntry().getTopics().size());
 		System.out.println("saved " + savedTopic2.getOccurenceObjs().size());
 
-		editDAO.deleteOccurrence(savedTopic2.getLatestEntry());
+		editDAO.delete(savedTopic2.getLatestEntry());
 
 
 		Topic savedTopic3 = selectDAO.getForID(u, t.getId());
-		assertTrue(savedTopic3.getLatestEntry().isEmpty());
+		assertNull(savedTopic3.getLatestEntry());
 
 	}
 
 	public void testGetAllMetas() throws HippoBusinessException {
 
 		Topic patriotGames = new RealTopic();
-		patriotGames.getLatestEntry().setData(B);
+
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 

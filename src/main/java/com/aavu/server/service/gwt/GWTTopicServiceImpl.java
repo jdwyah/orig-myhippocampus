@@ -1,5 +1,6 @@
 package com.aavu.server.service.gwt;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -129,6 +130,16 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		for (int i = 0; i < list.size(); i++) {
 			TopicIdentifier t = list.get(i);
 			rtn[i] = t;
+		}
+		return rtn;
+	}
+
+	private List<TopicIdentifier> convertTopicToTIArray(List<Topic> list) {
+
+		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Topic topic = (Topic) iterator.next();
+			rtn.add(topic.getIdentifier());
 		}
 		return rtn;
 	}
@@ -427,8 +438,18 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		this.topicService = topicService;
 	}
 
-
-
+	/**
+	 * had a problem with CGLIB if we return topics
+	 */
+	public List getDeleteList(long id) throws HippoException {
+		try {
+			return convertTopicToTIArray(topicService.getDeleteList(id));
+		} catch (Exception e) {
+			log.error("FAILURE: " + e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
 	// public C test(C c) {
 	// return c;
 	// }

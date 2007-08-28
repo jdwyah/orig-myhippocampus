@@ -12,6 +12,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.SearchResultsWindow;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.images.Images;
 import com.aavu.client.service.cache.HippoCache;
@@ -74,9 +75,9 @@ public abstract class AbstractManager implements Manager {
 
 	}
 
-	public void displayInfo(String gadget_not_available) {
+	public PopupWindow displayInfo(String gadget_not_available) {
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 	public void doSearch(String text) {

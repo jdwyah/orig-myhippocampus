@@ -83,7 +83,6 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 		log.debug("INITING");
 
 		Topic patriotGames = new RealTopic(u, C);
-		patriotGames.getLatestEntry().setData(B);
 
 		Topic book = new RealTopic(u, D);
 
@@ -164,7 +163,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 	public void testDisappearingTagInstances() throws HippoBusinessException {
 
 		Topic patriotGames = new RealTopic(u, C);
-		patriotGames.getLatestEntry().setData(B);
+
 
 		Topic book = new RealTopic(u, D);
 

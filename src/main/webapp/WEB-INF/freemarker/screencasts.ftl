@@ -27,7 +27,7 @@
 		
 		<p>
 		(Please Note, these screencasts are for the Beta 1 release of MyHippocampus.<br>
-		 The new Beta 2 has some significant differences, but we haven't had a chance to make the screencasts yet) 
+		 The new Beta 2 has some significant differences (read huge improvements) but we haven't had a chance to make the screencasts yet) 
 
 	<p>
  	<#if !user?exists>

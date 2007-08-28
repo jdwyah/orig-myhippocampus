@@ -37,8 +37,8 @@
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
 		<property name="userDAO" ref="userDAO" />
 		<property name="editDAO" ref="editDAO" />
-		<property name="maxUsers" value="150" />
-		<property name="startingInvitations" value="3" />
+		<property name="maxUsers" value="200" />
+		<property name="startingInvitations" value="2" />
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
 		<property name="selectDAO" ref="selectDAO" />

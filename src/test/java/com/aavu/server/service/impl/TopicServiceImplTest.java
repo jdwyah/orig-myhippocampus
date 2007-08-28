@@ -2,9 +2,12 @@ package com.aavu.server.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -27,12 +30,13 @@ import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
+import com.aavu.client.domain.commands.SaveOccurrenceCommand;
 import com.aavu.client.domain.commands.SaveSeeAlsoCommand;
 import com.aavu.client.domain.commands.SaveTagPropertiesCommand;
-import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
@@ -61,6 +65,18 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	private static final String J = "DateRead";
 	private static final String K = "LocationMeta";
+
+	private static final String movies = "Movies";
+	private static final String comics = "Comics";
+	private static final String gladiator = "Gladiator";
+	private static final String xmen = "X-Men";
+	private static final String people = "People";
+	private static final String daschelle = "Daschelle";
+	private static final String crowe = "Crowe";
+	private static final String australia = "Australia";
+	private static final String newzealand = "New Zealand";
+	private static final String islandsText = "something about islands";
+	private static final String croweText = "something about russell crowe";
 
 	private static final int LAT1 = 213123;
 	private static final int LONG1 = 12332;
@@ -145,7 +161,19 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		Topic savedTopic = topicService.getForID(saved.getTopicID());
 
-		assertEquals(C, savedTopic.getTitle());
+		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {
+			if (!datedTopicIdentifier.getTopicTitle().equals(C)
+					&& !datedTopicIdentifier.getTopicTitle().equals(D)) {
+				fail("Not equal to either");
+			} else {
+				if (datedTopicIdentifier.getTopicTitle().equals(C)) {
+
+				} else {
+
+				}
+			}
+		}
+
 		// assertEquals(B, savedTopic.getLatestEntry().getData());
 		assertEquals(u, savedTopic.getUser());
 
@@ -165,16 +193,13 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	 * NOTE; same code as DAO test, but with service. Different result, since we set the tag's user
 	 * in the service layer.
 	 * 
-	 * @throws HippoBusinessException
+	 * @throws HippoException
 	 */
-	public void testSaveAndCompleteLoad() throws HippoBusinessException {
+	public void testSaveAndCompleteLoad() throws HippoException {
 		clean();
 
 		Topic t = new RealTopic();
 
-		Entry e = new Entry();
-		e.setData(B);
-		t.addOccurence(e);
 
 		t.setTitle(C);
 		t.setUser(u);
@@ -186,19 +211,29 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		t.tagTopic(tag);
 
-		assertEquals(1, t.getOccurences().size());
 
 		System.out.println("before: " + t.getId());
 
 		t = topicService.save(t);
 
-		topicService.save(e);
+		Entry e = new Entry();
+		e.setData(B);
+
+		List<Topic> tagsT = new LinkedList<Topic>();
+		tagsT.add(t);
+		AbstractCommand comm = new SaveOccurrenceCommand(e, tagsT);
+		topicService.executeAndSaveCommand(comm);
+
 
 		System.out.println("after: " + t.getId());
 
-		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
 
-		assertEquals(3, savedL.size());
+		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {
+			System.out.println("found " + datedTopicIdentifier);
+		}
+
+		assertEquals(4, savedL.size());
 
 		Topic savedTopic = topicService.getForID(t.getId());
 
@@ -251,7 +286,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	public void __testSaveComplexMetas() throws HippoBusinessException {
 
 		Topic patriotGames = new RealTopic();
-		patriotGames.getLatestEntry().setData(B);
+
 		patriotGames.setTitle(C);
 		patriotGames.setUser(u);
 
@@ -338,7 +373,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		clean();
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
+
 		t.setTitle(C);
 		t.setUser(u);
 
@@ -1032,6 +1067,136 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
+	/**
+	 * Sorry, formatter is a killer for ascii art diagrams of the object graph
+	 * 
+	 * @return
+	 * @throws HippoException
+	 */
+	private Map<String, Topic> bigSetup() throws HippoException {
+		Map<String, Topic> rtn = new HashMap<String, Topic>();
+
+		// on desktop
+		addToMap(rtn, movies);
+		addToMap(rtn, comics);
+		addToMap(rtn, people);
+		addToMap(rtn, newzealand);
+
+
+		// only children or subchildren of movies
+		addToMap(rtn, gladiator, movies);
+		addToMap(rtn, crowe, gladiator);
+		addToMap(rtn, australia, gladiator);
+
+		// tagged to other root tags
+		addToMap(rtn, daschelle, gladiator);
+		tag(rtn, daschelle, people);
+
+		addToMap(rtn, xmen, movies);
+		tag(rtn, xmen, comics);
+
+
+		List<String> isL = new LinkedList<String>();
+		isL.add(australia);
+		isL.add(newzealand);
+		addEntry(rtn, islandsText, isL);
+
+		List<String> crL = new LinkedList<String>();
+		crL.add(crowe);
+		addEntry(rtn, croweText, crL);
+
+		return rtn;
+
+	}
+
+	private void addEntry(Map<String, Topic> rtn, String entryText, List<String> tags)
+			throws HippoBusinessException, HippoException {
+		Entry e = new Entry();
+		e.setData(entryText);
+
+		List<Topic> tagsT = new LinkedList<Topic>();
+		for (String string : tags) {
+			tagsT.add(rtn.get(string));
+		}
+
+		AbstractCommand comm = new SaveOccurrenceCommand(e, tagsT);
+		topicService.executeAndSaveCommand(comm);
+	}
+
+	private void tag(Map<String, Topic> map, String topic, String tag)
+			throws HippoBusinessException, HippoException {
+		AbstractCommand comm = new AddToTopicCommand(map.get(topic), map.get(tag));
+		topicService.executeAndSaveCommand(comm);
+	}
+
+	private void addToMap(Map<String, Topic> map, String str) throws HippoBusinessException {
+		map.put(str, topicService.createNewIfNonExistent(str));
+	}
+
+	private void addToMap(Map<String, Topic> map, String str, String parent)
+			throws HippoBusinessException {
+		map.put(str, topicService.createNewIfNonExistent(str, map.get(parent)));
+	}
+
+	/**
+	 * Delete confirm should give us a list of everything that will be deleted if the given ID is
+	 * deleted. That means a recursive delete, but one that misses anything else that is referenced
+	 * from another place.
+	 * 
+	 * @throws HippoException
+	 */
+	public void testDeleteConfirm() throws HippoException {
+
+		clean();
+
+		Map<String, Topic> map = bigSetup();
+
+		assertEquals(9, map.size());
+
+		List<Topic> willBeDeleted = topicService.getDeleteList(map.get(xmen).getId());
+		assertEquals(1, willBeDeleted.size());
+
+
+		willBeDeleted = topicService.getDeleteList(map.get(comics).getId());
+		assertEquals(1, willBeDeleted.size());
+
+		willBeDeleted = topicService.getDeleteList(map.get(crowe).getId());
+		assertEquals(2, willBeDeleted.size());
+
+		willBeDeleted = topicService.getDeleteList(map.get(movies).getId());
+		assertEquals(5, willBeDeleted.size());
+
+		for (Topic topic : willBeDeleted) {
+			log.info("Will Delete: " + willBeDeleted);
+		}
+
+
+	}
+
+
+	public void testRecursiveDelete() throws HippoException {
+
+		clean();
+
+		Map<String, Topic> map = bigSetup();
+
+		assertEquals(9, map.size());
+
+		// 9 + 2 entries + root
+		assertEquals(12, topicService.getAllTopicIdentifiers(true).size());
+
+
+		topicService.delete(map.get(movies).getId());
+
+		// should delete 5
+		assertEquals(7, topicService.getAllTopicIdentifiers(true).size());
+
+
+
+	}
+
+
+
 	private void clean() throws HippoBusinessException {
 		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
 
@@ -1041,7 +1206,10 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 			// t.getTypes().clear();
 			// t.getInstances().clear();
 			// t = topicService.save(t);
-			topicService.delete(t);
+			if (t != null) {
+				topicService.delete(t);
+			}
+
 		}
 		log.debug("\n-----CLEAN FIN--------");
 

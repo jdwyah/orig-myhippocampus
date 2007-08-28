@@ -1,6 +1,7 @@
 package com.aavu.client.gui.hierarchy;
 
 import com.aavu.client.async.StdAsyncCallback;
+import com.aavu.client.domain.Entry;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -20,6 +21,7 @@ public class EntryCaption extends Composite implements SourcesMouseEvents, Chang
 	private FocusPanel fp;
 	private Label richL;
 
+	private boolean needsSave;
 
 	public EntryCaption(final EntryRichText entryRichText) {
 		this.entryRichText = entryRichText;
@@ -29,10 +31,12 @@ public class EntryCaption extends Composite implements SourcesMouseEvents, Chang
 		titleL = new Label();
 		mainP.add(titleL);
 
-		richL = new Label("(edit)");
+		richL = new Label("(rich edit)");
 		richL.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
-				entryRichText.getDisplay().getManager().editOccurrence(entryRichText.getEntry());
+				Entry e = entryRichText.getEntry();
+				e.setData(entryRichText.getText());
+				entryRichText.getDisplay().getManager().editOccurrence(e, needsSave);
 			}
 		});
 
@@ -77,9 +81,10 @@ public class EntryCaption extends Composite implements SourcesMouseEvents, Chang
 	private void save() {
 		entryRichText.getDisplay().getManager().getTopicCache().executeCommand(
 				entryRichText.getEntry(), entryRichText.getSaveComand(), new StdAsyncCallback("") {
+
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
-						saveL.setVisible(false);
+						setNeedsSave(false);
 					}
 				});
 
@@ -93,8 +98,15 @@ public class EntryCaption extends Composite implements SourcesMouseEvents, Chang
 		fp.removeMouseListener(listener);
 	}
 
+
+
+	public void setNeedsSave(boolean needsSave) {
+		this.needsSave = needsSave;
+		saveL.setVisible(needsSave);
+	}
+
 	public void onChange(Widget sender) {
-		saveL.setVisible(true);
+		setNeedsSave(true);
 	}
 
 }

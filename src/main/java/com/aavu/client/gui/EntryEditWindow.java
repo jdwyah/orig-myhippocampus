@@ -22,7 +22,7 @@ public class EntryEditWindow extends PopupWindow {
 	private TopicViewAndEditWidget topicViewAndEditW;
 	private HorizontalPanel mainP;
 
-	public EntryEditWindow(Entry entry, Manager manager, GInternalFrame frame) {
+	public EntryEditWindow(Entry entry, Manager manager, GInternalFrame frame, boolean needsSave) {
 		super(frame, entry.getTitle(), WIDTH, HEIGHT);
 		this.manager = manager;
 
@@ -66,6 +66,10 @@ public class EntryEditWindow extends PopupWindow {
 				}
 			}
 		});
+
+		if (needsSave) {
+			topicViewAndEditW.setSaveNeeded();
+		}
 	}
 
 	public GFrame getFrame() {

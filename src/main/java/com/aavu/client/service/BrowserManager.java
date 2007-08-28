@@ -15,6 +15,7 @@ import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.service.cache.HippoCache;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 public class BrowserManager extends AbstractManager {
 	public BrowserManager(HippoCache cache) {
@@ -73,7 +74,7 @@ public class BrowserManager extends AbstractManager {
 
 	}
 
-	public void editOccurrence(Occurrence topic) {
+	public void editOccurrence(Occurrence topic, boolean saveNeeded) {
 		// TODO Auto-generated method stub
 
 	}
@@ -109,6 +110,11 @@ public class BrowserManager extends AbstractManager {
 	}
 
 	public GUIManager getGui() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PopupWindow displayInfo(Widget widg) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,6 +1,7 @@
 package com.aavu.server.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
@@ -14,7 +15,6 @@ public interface EditDAO {
 
 	void delete(Topic topic);
 
-	void deleteOccurrence(Occurrence o);
 	void evict(Serializable obj);
 
 	MindTree save(MindTree tree);
@@ -25,9 +25,13 @@ public interface EditDAO {
 
 	Long saveSimple(Topic t);
 
-	void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude,User currentUser) throws HippoBusinessException;
+	void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude, User currentUser)
+			throws HippoBusinessException;
 
-	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat,int lng,User currentUser) throws HippoBusinessException;
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng, User currentUser)
+			throws HippoBusinessException;
+
+	List<Topic> getDeleteList(long topicID);
 
 
 }

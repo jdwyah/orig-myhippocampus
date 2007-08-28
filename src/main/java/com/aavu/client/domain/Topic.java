@@ -296,16 +296,13 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 
 	public Entry getLatestEntry() {
 
-		Set entries = getEntries();
-
-		if (entries.isEmpty()) {
-			Entry initialEntry = new Entry();
-			addOccurence(initialEntry);
-			return initialEntry;
-		} else {
-			return (Entry) entries.iterator().next();
+		for (Iterator iterator = getOccurenceObjs().iterator(); iterator.hasNext();) {
+			Occurrence occ = (Occurrence) iterator.next();
+			if (occ instanceof Entry) {
+				return (Entry) occ;
+			}
 		}
-
+		return null;
 	}
 
 	// public Set<Occurrence> getOccurences() {
@@ -699,8 +696,6 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		sb.append(this.getTitle() + " title " + castOther.getTitle() + "\n");
 		sb.append("Topic.Compare ");
 		sb.append(this.getCreated() + " created " + castOther.getCreated() + "\n");
-		sb.append("Topic.Compare ");
-		sb.append(this.getLatestEntry() + " data " + castOther.getLatestEntry() + "\n");
 		sb.append("Topic.Compare ");
 		sb.append(this.getUser() + " user " + castOther.getUser() + "\n");
 		sb.append("Topic.Compare ");

@@ -206,15 +206,11 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 			showTag(tag);
 		}
 		// incommand tagsToSave.add(tag);
-		manager.getTopicCache().executeCommand(cur_topic,
-				new AddToTopicCommand(cur_topic, tag),
+		manager.getTopicCache().executeCommand(cur_topic, new AddToTopicCommand(cur_topic, tag),
 				new StdAsyncCallback(ConstHolder.myConstants.save()) {
 					// @Override
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
-						// needs a full bringUpChart, because Tag will just be a
-						// placeholder
-						manager.bringUpChart(cur_topic.getId());
 					}
 				});
 

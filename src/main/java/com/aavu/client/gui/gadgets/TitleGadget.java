@@ -1,13 +1,18 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
+import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.URI;
 import com.aavu.client.domain.commands.SaveDateCreatedCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.EditableLabelExtension;
+import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ExternalLink;
@@ -17,7 +22,7 @@ import com.aavu.client.widget.datepicker.HDatePicker;
 import com.aavu.client.widget.datepicker.SimpleDatePicker;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -106,15 +111,55 @@ public class TitleGadget extends Gadget {
 
 
 
+		/**
+		 * Double callback wrapping delete button
+		 * 
+		 * First ask show the user the repercussions of their delete, then give them a delete button
+		 * to perform the operation.
+		 * 
+		 * TODO bringUpChart(desktop?) if curTopic = the one we're deleting
+		 */
 		deleteB = ConstHolder.images.bin_closed().createImage();
 		deleteB.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
-				if (Window.confirm(ConstHolder.myConstants.delete_warningS(topic.getTitle()))) {
-					manager.delete(topic, new StdAsyncCallback("Delete"));
-				}
+				manager.getTopicCache().getDeleteList(topic.getId(), new EZCallback() {
+					private PopupWindow deleteWindow;
+
+					public void onSuccess(Object result) {
+
+						List topics = (List) result;
+
+						VerticalPanel vp = new VerticalPanel();
+						vp.add(new Label("Will delete:"));
+						for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
+							TopicIdentifier topic = (TopicIdentifier) iterator.next();
+							vp.add(new Label(topic.getTopicTitle()));
+						}
+						Button deleteB = new Button("Yes, delete these (" + topics.size()
+								+ ") topic(s).");
+						deleteB.addClickListener(new ClickListener() {
+							public void onClick(Widget sender) {
+								manager.delete(topic, new StdAsyncCallback("Delete") {
+									// @Override
+									public void onSuccess(Object result) {
+										super.onSuccess(result);
+										manager.unselect();
+										manager.getGui().hideCurrentHover();
+										deleteWindow.close();
+									}
+								});
+							}
+						});
+						vp.add(deleteB);
+						deleteWindow = manager.displayInfo(vp);
+					}
+				});
+
+
+
 			}
 		});
-		// titleP.add(deleteB);
+		titleP.add(deleteB);
 
 
 

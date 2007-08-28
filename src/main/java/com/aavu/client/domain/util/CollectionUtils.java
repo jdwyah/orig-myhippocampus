@@ -63,8 +63,7 @@ public class CollectionUtils {
 				}
 			} else if (o instanceof TopicOccurrenceConnector) {
 				TopicOccurrenceConnector occ = (TopicOccurrenceConnector) o;
-				if (occ.getOccurrence().getId() == id) {
-					System.out.println("REMOVE!! " + o.hashCode() + " " + occ.hashCode());
+				if (occ.getId() == id) {
 					iter.remove();
 					foundOne = true;
 				}

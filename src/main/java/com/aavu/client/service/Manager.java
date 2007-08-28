@@ -19,6 +19,7 @@ import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface Manager {
 
@@ -30,13 +31,15 @@ public interface Manager {
 
 	void delete(Topic topic, AsyncCallback callback);
 
-	void displayInfo(String gadget_not_available);
+	PopupWindow displayInfo(String displayString);
+
+	PopupWindow displayInfo(Widget widg);
 
 	void doLogin();
 
 	void doSearch(String text);
 
-	void editOccurrence(Occurrence topic);
+	void editOccurrence(Occurrence topic, boolean needsSave);
 
 	void editMetas(AsyncCallback callback, Meta type);
 

@@ -112,9 +112,12 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener,
 	}
 
 	public void onChange(Widget sender) {
-		saveButton.setSaveNeeded();
+		setSaveNeeded();
 	}
 
+	public void setSaveNeeded() {
+		saveButton.setSaveNeeded();
+	}
 
 	public boolean isSaveNeeded() {
 		return saveButton.isSaveNeeded();

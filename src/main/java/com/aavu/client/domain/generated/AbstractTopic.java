@@ -269,8 +269,13 @@ public abstract class AbstractTopic implements Serializable {
 
 		result = 37 * result + (this.isPublicVisible() ? 1 : 0);
 
-
-
+		// if (title == null || title.equals(""))
+		// try {
+		// throw new Exception("f " + title);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// System.out.println("Topic Hash " + result + " " + title + " " + isPublicVisible());
 		return result;
 	}
 

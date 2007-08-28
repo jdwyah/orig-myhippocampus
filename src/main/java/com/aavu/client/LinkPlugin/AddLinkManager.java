@@ -27,6 +27,7 @@ import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.aavu.client.service.remote.GWTTopicServiceAsync;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 public class AddLinkManager implements Manager, CloseListener {
 
@@ -116,7 +117,7 @@ public class AddLinkManager implements Manager, CloseListener {
 		throw new UnsupportedOperationException();
 	}
 
-	public void displayInfo(String gadget_not_available) {
+	public PopupWindow displayInfo(String gadget_not_available) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -132,7 +133,7 @@ public class AddLinkManager implements Manager, CloseListener {
 		throw new UnsupportedOperationException();
 	}
 
-	public void editOccurrence(Occurrence topic) {
+	public void editOccurrence(Occurrence topic, boolean saveNeeded) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -217,6 +218,11 @@ public class AddLinkManager implements Manager, CloseListener {
 	}
 
 	public GUIManager getGui() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PopupWindow displayInfo(Widget widg) {
 		// TODO Auto-generated method stub
 		return null;
 	}

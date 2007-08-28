@@ -88,4 +88,6 @@ public interface GWTTopicServiceAsync {
 
 	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng,
 			AsyncCallback callback);
+
+	void getDeleteList(long id, AsyncCallback callback);
 }

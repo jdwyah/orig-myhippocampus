@@ -45,6 +45,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MindscapeManager extends AbstractManager implements Manager, TopicSaveListener,
@@ -256,10 +257,15 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * 
 	 * @param warning
 	 */
-	public void displayInfo(String warning) {
+	public PopupWindow displayInfo(String warning) {
+		return displayInfo(new Label(warning));
+	}
+
+	public PopupWindow displayInfo(Widget widg) {
 		GInternalFrame f = newFrame();
 		PopupWindow w = new PopupWindow(f, ConstHolder.myConstants.displayInfoTitle(), true);
-		f.setContent(warning);
+		f.setContent(widg);
+		return w;
 	}
 
 
@@ -268,12 +274,16 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		LoginService.doLogin(newFrame(), this);
 	}
 
-
-	public void editOccurrence(Occurrence occurrence) {
+	/**
+	 * needs save will be true if the occurrence passed in is already dirty. ie, they were editting
+	 * in the entryDisplay, then clicked on (rich edit) before they'd saved.
+	 */
+	public void editOccurrence(Occurrence occurrence, boolean needsSave) {
 		System.out.println("edit occ " + GWT.getTypeName(occurrence));
 
 		if (occurrence instanceof Entry) {
-			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence, this, newFrame());
+			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence, this, newFrame(),
+					needsSave);
 		} else if (occurrence instanceof WebLink) {
 			AddLinkPopup pop = new AddLinkPopup(null, this, newFrame(), (WebLink) occurrence,
 					getCurrentTopic(), null);

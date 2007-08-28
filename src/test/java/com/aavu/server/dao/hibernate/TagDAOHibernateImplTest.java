@@ -264,7 +264,6 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		}
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 		t.tagTopic(three[0]);
@@ -287,7 +286,6 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		// Add a new RealTopic with tags 0 & 1
 		//
 		Topic t2 = new RealTopic();
-		t2.getLatestEntry().setData(C);
 		t2.setTitle(B3);
 		t2.setUser(u);
 		t2.tagTopic(three[1]);
@@ -340,7 +338,6 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		subj1.setName(S);
 
 		Topic t = new RealTopic();
-		t.getLatestEntry().setData(B);
 		t.setTitle(C);
 		t.setUser(u);
 		t.tagTopic(three[0]);
@@ -375,7 +372,6 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		// and subject 1
 		//
 		Topic t2 = new RealTopic();
-		t2.getLatestEntry().setData(C);
 		t2.setTitle(B3);
 		t2.setUser(u);
 		t2.tagTopic(three[1]);

@@ -187,10 +187,6 @@ public class TopicServiceImpl implements TopicService {
 		return createNewIfNonExistent(title, new Root());
 	}
 
-	public Topic createNewIfNonExistent(String title, Topic parent) throws HippoBusinessException {
-		return createNewIfNonExistent(title, RealTopic.class, parent);
-	}
-
 	/**
 	 * NOTE! this cast "(T)" is necessary to compile on the linux java 1.5.0_07 javac, but not here
 	 * in eclipse. How worrisome is that? Bug fixed for Dolphin b03, so no help there.
@@ -200,7 +196,7 @@ public class TopicServiceImpl implements TopicService {
 	 */
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent) throws HippoBusinessException {
-		return (T) createNewIfNonExistent(title, RealTopic.class, parent, null);
+		return (T) createNewIfNonExistent(title, type, parent, null);
 	}
 
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
@@ -215,6 +211,10 @@ public class TopicServiceImpl implements TopicService {
 			}
 		}
 		return (T) cur;
+	}
+
+	public Topic createNewIfNonExistent(String title, Topic parent) throws HippoBusinessException {
+		return createNewIfNonExistent(title, RealTopic.class, parent);
 	}
 
 	public void delete(long id) throws HippoBusinessException {
@@ -235,12 +235,7 @@ public class TopicServiceImpl implements TopicService {
 	public void delete(Topic topic) throws HippoBusinessException {
 		if (userService.getCurrentUser().equals(topic.getUser())) {
 
-			if (topic instanceof Occurrence) {
-				Occurrence occ = (Occurrence) topic;
-				editDAO.deleteOccurrence(occ);
-			} else {
-				editDAO.delete(topic);
-			}
+			editDAO.delete(topic);
 
 			// TODO delete S3Files
 			// TODO delete Weblinks that were only referenced by us
@@ -254,7 +249,12 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 
-
+	/**
+	 * currently used by SaveMetaLocationCommand
+	 * 
+	 * @param command
+	 * @throws HippoBusinessException
+	 */
 	private void deleteCommand(AbstractCommand command) throws HippoBusinessException {
 		Set topics = command.getDeleteSet();
 		for (Iterator iter = topics.iterator(); iter.hasNext();) {
@@ -268,6 +268,8 @@ public class TopicServiceImpl implements TopicService {
 	/**
 	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects. 2)
 	 * Execute. use the domain classes logic & the command to enact the change 3) Save.
+	 * 
+	 * TODO secure, BE carefull of messageService's use of this
 	 */
 	public void executeAndSaveCommand(AbstractCommand command) throws HippoException {
 
@@ -307,6 +309,11 @@ public class TopicServiceImpl implements TopicService {
 		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), start, max, startStr);
 	}
 
+
+	public List<Topic> getDeleteList(long topicID) {
+		return editDAO.getDeleteList(topicID);
+	}
+
 	public Topic getForID(long topicID) {
 
 		return selectDAO.getForID(userService.getCurrentUser(), topicID);
@@ -316,10 +323,10 @@ public class TopicServiceImpl implements TopicService {
 		return selectDAO.getForNameCaseInsensitive(userService.getCurrentUser(), string);
 	}
 
+
 	public List<TopicIdentifier> getLinksTo(Topic topic) {
 		return selectDAO.getLinksTo(topic, userService.getCurrentUser());
 	}
-
 
 	public List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList) {
 		List<List<LocationDTO>> rtn = new ArrayList<List<LocationDTO>>(shoppingList.size());
@@ -383,6 +390,8 @@ public class TopicServiceImpl implements TopicService {
 		return selectDAO.getTimeline(userService.getCurrentUser());
 	}
 
+
+
 	public List<List<TimeLineObj>> getTimelineWithTags(List<TopicIdentifier> shoppingList) {
 		List<List<TimeLineObj>> rtn = new ArrayList<List<TimeLineObj>>(shoppingList.size());
 
@@ -391,8 +400,6 @@ public class TopicServiceImpl implements TopicService {
 		}
 		return rtn;
 	}
-
-
 
 	public List<FullTopicIdentifier> getTopicIdsWithTag(long id) {
 
@@ -555,10 +562,10 @@ public class TopicServiceImpl implements TopicService {
 		return editDAO.save(tree);
 	}
 
+
 	public void setEditDAO(EditDAO editDAO) {
 		this.editDAO = editDAO;
 	}
-
 
 	public void setSelectDAO(SelectDAO selectDAO) {
 		this.selectDAO = selectDAO;

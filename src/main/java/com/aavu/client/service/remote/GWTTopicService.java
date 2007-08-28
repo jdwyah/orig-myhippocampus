@@ -46,6 +46,13 @@ public interface GWTTopicService extends RemoteService {
 	 */
 	List getAllTopicIdentifiers(int start, int max, String startStr) throws HippoException;
 
+	/**
+	 * @throws HippoException
+	 * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
+	 */
+	List getDeleteList(long id) throws HippoException;
+
+
 	// List<TimeLineObj>
 	// List getTimelineObjs(long tag_id) throws HippoException;
 
