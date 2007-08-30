@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.aavu.client.domain.Meta;
@@ -39,11 +43,13 @@ import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.UserPageBean;
 
 /**
+ * TODO remove ApplicationContextAware. This was introduced when UserService began needing a
+ * reference to TopicService
  * 
  * @author Jeff Dwyer
  * 
  */
-public class TopicServiceImpl implements TopicService {
+public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 
 	private static MetaSeeAlso seealsoSingleton;
@@ -160,12 +166,14 @@ public class TopicServiceImpl implements TopicService {
 
 		if (parent != null) {
 			Topic loadedParent = selectDAO.getForID(userService.getCurrentUser(), parent.getId());
+
 			if (prototype instanceof Occurrence) {
 				log.debug("adding occurrence");
 				loadedParent.addOccurence((Occurrence) prototype, lnglat);
 				save(loadedParent);
 			} else {
 				if (parent instanceof Root) {
+
 					prototype.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService
 							.getCurrentUser()), lnglat);
 				} else {
@@ -562,11 +570,12 @@ public class TopicServiceImpl implements TopicService {
 		return editDAO.save(tree);
 	}
 
-
+	@Required
 	public void setEditDAO(EditDAO editDAO) {
 		this.editDAO = editDAO;
 	}
 
+	@Required
 	public void setSelectDAO(SelectDAO selectDAO) {
 		this.selectDAO = selectDAO;
 	}
@@ -581,6 +590,13 @@ public class TopicServiceImpl implements TopicService {
 		return u.getSubscription().getMaxTopics() < curTopics;
 	}
 
+
+	/**
+	 * avoid circular reference problems by loading this way
+	 */
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		setUserService((UserService) applicationContext.getBean("userService"));
+	}
 
 
 }

@@ -35,15 +35,14 @@
 	<bean id="facebookService" class="com.aavu.server.service.facebook.impl.FacebookServiceImpl"></bean>
 
 	<bean id="userService" class="com.aavu.server.service.impl.UserServiceImpl">
-		<property name="userDAO" ref="userDAO" />
-		<property name="editDAO" ref="editDAO" />
+		<property name="userDAO" ref="userDAO" />		
+		<property name="messageSource" ref="messageSource" />
 		<property name="maxUsers" value="200" />
 		<property name="startingInvitations" value="2" />
 	</bean>
 	<bean id="topicService" class="com.aavu.server.service.impl.TopicServiceImpl">
 		<property name="selectDAO" ref="selectDAO" />
-		<property name="editDAO" ref="editDAO"></property>
-		<property name="userService" ref="userService" />
+		<property name="editDAO" ref="editDAO"></property>		
 	</bean>
 	<bean id="searchService" class="com.aavu.server.service.impl.SearchServiceImpl">
 		<property name="compass" ref="compass" />
@@ -93,6 +92,10 @@
 	</bean>
 
 
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" abstract="false"
+		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
+		<property name="basename" value="messages" />
+	</bean>
 
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer" abstract="false"
 		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">

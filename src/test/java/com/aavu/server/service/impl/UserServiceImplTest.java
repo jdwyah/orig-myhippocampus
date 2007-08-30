@@ -6,6 +6,7 @@ import java.util.List;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestWithTransaction;
@@ -25,7 +26,7 @@ public class UserServiceImplTest extends BaseTestWithTransaction {
 	 * 
 	 * @throws HippoBusinessException
 	 */
-	public void testCreateUserCreateUserRequestCommand() throws HippoBusinessException {
+	public void testCreateUserCreateUserRequestCommand() throws HippoException {
 
 		User u = userService.createUser(NAME, PASS, EMAIL, false);
 
@@ -42,7 +43,7 @@ public class UserServiceImplTest extends BaseTestWithTransaction {
 			System.out.println("t " + t + " " + t.getId());
 		}
 
-		assertEquals(3, topics.size());
+		assertEquals(6, topics.size());
 
 	}
 

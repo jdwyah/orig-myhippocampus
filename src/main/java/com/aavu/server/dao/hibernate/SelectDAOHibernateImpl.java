@@ -378,7 +378,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		List<Object[]> list = getHibernateTemplate()
 				.find(
 						""
-								+ "select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from Tag tag "
+								+ "select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from RealTopic tag "
 								+ "where  user is ? order by tag.title", user);
 
 		// This is the query if we decide to get rid of the instances mapping again.
@@ -648,8 +648,10 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		rtn.setNumberOfTopics(getTopicCount(user));
 
-		rtn.setNumberOfIslands(DataAccessUtils.intResult(getHibernateTemplate().find(
-				"" + "select count(id) from Tag tag " + "where user is ? ", rtn.getUser())));
+		rtn
+				.setNumberOfIslands(DataAccessUtils.intResult(getHibernateTemplate().find(
+						"" + "select count(id) from RealTopic topic " + "where user is ? ",
+						rtn.getUser())));
 		rtn.setNumberOfLinks(DataAccessUtils.intResult(getHibernateTemplate().find(
 				"" + "select count(id) from WebLink link " + "where user is ? ", rtn.getUser())));
 		return rtn;

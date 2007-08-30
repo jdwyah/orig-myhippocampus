@@ -3,27 +3,43 @@ package com.aavu.server.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.acegisecurity.Authentication;
+import org.acegisecurity.GrantedAuthority;
+import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.providers.TestingAuthenticationToken;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.MessageSource;
 
-import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.domain.commands.QuickAddEntryCommand;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
-import com.aavu.server.dao.EditDAO;
 import com.aavu.server.dao.UserDAO;
+import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.util.CryptUtils;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
-public class UserServiceImpl implements UserService {
+/**
+ * TODO remove ApplicationContextAware. This was introduced when UserService began needing a
+ * reference to TopicService
+ * 
+ * @author Jeff Dwyer
+ * 
+ */
+public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
@@ -31,11 +47,13 @@ public class UserServiceImpl implements UserService {
 
 	private UserDAO userDAO;
 
-	private EditDAO editDAO;
+	private TopicService topicService;
 
 	private int maxUsers;
 
 	private int startingInvitations;
+
+	private MessageSource messageSource;
 
 
 	public User getCurrentUser() throws UsernameNotFoundException {
@@ -88,7 +106,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User createUser(CreateUserRequestCommand comm) throws DuplicateUserException,
-			HippoBusinessException {
+			HippoException {
 
 		if (comm.isStandard()) {
 			return createUser(comm.getUsername(), comm.getPassword(), comm.getEmail());
@@ -101,7 +119,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private User createUser(String username, String userpass, String email)
-			throws DuplicateUserException, HippoBusinessException {
+			throws DuplicateUserException, HippoException {
 		return createUser(username, userpass, email, false);
 	}
 
@@ -190,7 +208,7 @@ public class UserServiceImpl implements UserService {
 	 * @throws HippoBusinessException
 	 */
 	public User createUser(String username, String userpass, String email, boolean superV)
-			throws HippoBusinessException {
+			throws HippoException {
 
 		// hmm a bit odd having the logic catch in the
 		//
@@ -212,28 +230,53 @@ public class UserServiceImpl implements UserService {
 
 		User createdU = userDAO.save(user);
 
-		setup(createdU);
+		setup(createdU, userpass);
 
 		return createdU;
 	}
 
-	private void setup(User createdU) throws HippoBusinessException {
-		Root r = new Root(createdU);
+	private void setup(User createdU, String userPass) throws HippoException {
 
-		r = (Root) editDAO.save(r);
+		// PEND MED should we be using RunAs instead?
+		// masquerade as the new user for a second while we set up their account
+		Authentication oldAuthentication = SecurityContextHolder.getContext().getAuthentication();
+		TestingAuthenticationToken auth = new TestingAuthenticationToken(createdU.getUsername(),
+				userPass, new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_TELLER"),
+						new GrantedAuthorityImpl("ROLE_PERMISSION_LIST") });
 
-		Topic movies = new RealTopic(createdU, "Movies");
-		movies.addType(r);
-		movies = editDAO.save(movies);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		try {
+			Root root = new Root(createdU);
+			topicService.save(root);
+
+			Topic movies = topicService.createNewIfNonExistent("Movies");
+
+			Topic gettingStarted = topicService.createNewIfNonExistent(gm("setup.getStarted.0"));
+
+			topicService.executeAndSaveCommand(new QuickAddEntryCommand(
+					gm("setup.getStarted.entry1.0"), gm("setup.getStarted.entry1.1"),
+					gettingStarted));
+
+			topicService.executeAndSaveCommand(new QuickAddEntryCommand(
+					gm("setup.getStarted.entry2.0"), gm("setup.getStarted.entry2.1"),
+					gettingStarted));
+
+			topicService.executeAndSaveCommand(new QuickAddEntryCommand(
+					gm("setup.getStarted.entry3.0"), gm("setup.getStarted.entry3.1"),
+					gettingStarted));
 
 
+		} catch (Exception e) {
+			// Make sure to replace the previous authentication context
+			SecurityContextHolder.getContext().setAuthentication(oldAuthentication);
+			throw new HippoException(e);
+		}
 
-		Topic people = new RealTopic(createdU, "People");
-		people.addType(r);
-		people = editDAO.save(people);
+	}
 
-
-
+	private String gm(String messageName) {
+		return messageSource.getMessage(messageName, null, null);
 	}
 
 	public void changeToSubscriptionAndSave(User user, Subscription subscription, String paypalID) {
@@ -329,9 +372,9 @@ public class UserServiceImpl implements UserService {
 		this.startingInvitations = startingInvitations;
 	}
 
-	@Required
-	public void setEditDAO(EditDAO editDAO) {
-		this.editDAO = editDAO;
+
+	public void setTopicService(TopicService topicService) {
+		this.topicService = topicService;
 	}
 
 	public void setDeliciousUpdate() {
@@ -346,6 +389,18 @@ public class UserServiceImpl implements UserService {
 		Date now = new Date();
 		u.setLastGoogleAppsDate(now);
 		log.debug("now " + now);
+	}
+
+	@Required
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+
+	/**
+	 * avoid circular reference problems by loading this way
+	 */
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		setTopicService((TopicService) applicationContext.getBean("topicService"));
 	}
 
 

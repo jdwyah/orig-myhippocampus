@@ -351,10 +351,6 @@
 		</bean>-->
 
 
-	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" abstract="false"
-		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
-		<property name="basename" value="messages" />
-	</bean>
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" abstract="false"
 		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">

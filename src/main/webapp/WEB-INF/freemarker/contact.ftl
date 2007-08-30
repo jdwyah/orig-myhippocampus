@@ -18,7 +18,7 @@
 	  <p class="subheading"><@spring.message "contact.1.0"/></p>
 	  	<p><a href="mailto:help@myhippocampus.com">help@myhippocampus.com</a></p>
 	  <p class="subheading"><@spring.message "contact.1.1"/></p>
-	  	<p><a href="mailto:jdwyah@myhippocampus.com">jdwyah@myhippocampus.com</a></p>
+	  	<p>Jeff Dwyer - <a href="mailto:jdwyah@myhippocampus.com">jdwyah@myhippocampus.com</a></p>
 	  <p class="subheading"><@spring.message "contact.1.2"/></p>
 	  	<p>
 	  	MyHippocampus<br>

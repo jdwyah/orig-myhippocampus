@@ -23,7 +23,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializable {
 
-	private Occurrence occurrence;
+	protected Occurrence occurrence;
 
 	// private int removeStartNumber;
 
@@ -69,9 +69,10 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 			setTopic(0, theOcc);
 		}
 
-		System.out.println("the occ " + theOcc + " CopyProps");
+		System.out.println("SaveOccComm.the occ " + theOcc + " CopyProps");
 
-		System.out.println("occ Data" + occurrence.getData() + " " + occurrence.getDefaultName());
+		System.out.println("SaveOccComm.occ Data" + occurrence.getData() + " "
+				+ occurrence.getDefaultName());
 
 		// PEND MED ugly
 		// w/o this we only call Occurrence.copyProps, even if our instance is a URI, because the
@@ -79,7 +80,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 		// the polymorphic call with visitor pattern.. sigh.
 		//
 		if (occurrence instanceof URI) {
-			System.out.println("toURI");
+			System.out.println("SaveOccComm.toURI");
 			URI uri = (URI) occurrence;
 			uri.copyPropsButNotIDIntoParam((URI) theOcc);
 		} else {
@@ -91,11 +92,11 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 
 		for (Iterator iterator = getTopics().iterator(); iterator.hasNext();) {
 			Topic tt = (Topic) iterator.next();
-			System.out.println("BaseList " + tt);
+			System.out.println("SaveOccComm.BaseList " + tt);
 		}
 		for (Iterator iterator = desiredList.iterator(); iterator.hasNext();) {
 			Topic tt = (Topic) iterator.next();
-			System.out.println("Desired " + tt);
+			System.out.println("SaveOccComm.Desired " + tt);
 		}
 
 
@@ -106,17 +107,17 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) iterator.next();
 
 			if (desiredList.contains(toc.getTopic())) {
-				System.out.println("remove from desired " + toc.getTopic());
+				System.out.println("SaveOccComm.remove from desired " + toc.getTopic());
 
 				// remove from need to add list
 				desiredList.remove(toc.getTopic());
 			} else {
 
 				// delete reference
-				System.out.println("delete ref to " + toc.getTopic());
+				System.out.println("SaveOccComm.delete ref to " + toc.getTopic());
 				boolean found = toc.getTopic().removeOcc(theOcc);
 				if (!found) {
-					System.out.println("SaveOccCmd Couldn't remove " + theOcc);
+					System.out.println("SaveOccComm.SaveOccCmd Couldn't remove " + theOcc);
 					throw new HippoException("Couldn't delete " + theOcc);
 				}
 				iterator.remove();
@@ -124,7 +125,7 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 
 		}
 
-		System.out.println("fin rem del Left:" + desiredList.size());
+		System.out.println("SaveOccComm.fin rem del Left:" + desiredList.size());
 
 		// add things left in the forTopics list
 		for (Iterator iterator = desiredList.iterator(); iterator.hasNext();) {
@@ -135,9 +136,10 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 			System.out.println("cont: " + toAdd.getOccurenceObjs().contains(getOccurrence()));
 		}
 
-		System.out.println(getTopic(1));
-		System.out.println("contp: " + getTopic(1).getOccurenceObjs().contains(getOccurrence()));
-		System.out.println("occ: " + getOccurrence());
+		System.out.println("SaveOccComm." + getTopic(1));
+		System.out.println("SaveOccComm.contp: "
+				+ getTopic(1).getOccurenceObjs().contains(getOccurrence()));
+		System.out.println("SaveOccComm.occ: " + getOccurrence());
 
 
 		affected.add(theOcc);

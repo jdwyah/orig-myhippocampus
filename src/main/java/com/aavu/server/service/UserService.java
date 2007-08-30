@@ -8,16 +8,15 @@ import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 public interface UserService {
 
-	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException,
-			HippoBusinessException;
+	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException, HippoException;
 
-	User createUser(String user, String pass, String email, boolean superV)
-			throws HippoBusinessException;
+	User createUser(String user, String pass, String email, boolean superV) throws HippoException;
 
 	void delete(Integer id) throws PermissionDeniedException;
 
