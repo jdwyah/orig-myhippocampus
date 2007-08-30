@@ -11,7 +11,8 @@ public interface GadgetDisplayer extends GadgetClickListener {
 
 	void unload();
 
-
 	void addTo(Panel mainP);
+
+	void fireSizeChanged();
 
 }

@@ -14,6 +14,7 @@ import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.LinkAndUser;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.GUIManager;
+import com.aavu.client.gui.GadgetDisplayer;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.ext.GUIEffects;
 import com.aavu.client.gui.ext.PopupWindow;
@@ -177,7 +178,7 @@ public class AddLinkManager implements Manager, CloseListener {
 		throw new UnsupportedOperationException();
 	}
 
-	public GadgetPopup newFrameGadget(Gadget gadget) {
+	public GadgetPopup newFrameGadget(Gadget gadget, GadgetDisplayer gDisplayer) {
 		// TODO Auto-generated method stub
 		return null;
 	}

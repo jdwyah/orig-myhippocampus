@@ -1,7 +1,8 @@
 package com.aavu.client.gui.gadgets;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.gwm.client.impl.DefaultGInternalFrame;
 
@@ -16,13 +17,13 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 
 	private GadgetManager gadgetManager;
-	private HashSet popups;
+	private List popups;
 	private int normalLeft = -1;
 
 	public GadgetDisplayerPopupImpl(Manager manager) {
 		this.gadgetManager = manager.getGadgetManager();
 
-		popups = new HashSet();
+		popups = new ArrayList();
 
 		for (Iterator iterator = gadgetManager.getFullGadgetList().iterator(); iterator.hasNext();) {
 			Gadget gadget = (Gadget) iterator.next();
@@ -31,8 +32,9 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 				continue;
 			}
 
-			GadgetPopup popup = manager.newFrameGadget(gadget);
+			GadgetPopup popup = manager.newFrameGadget(gadget, this);
 			popups.add(popup);
+
 
 
 		}
@@ -81,7 +83,13 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
 			GadgetPopup popup = (GadgetPopup) iterator.next();
 
-			if (popup.showForIsCurrent(isCurrent) && popup.getLastLoadSize() > 0) {
+
+			System.out.println("popup " + popup.getGadget().getDisplayName() + " "
+					+ popup.showForIsCurrent(isCurrent) + " " + (popup.getLastLoadSize() > 0));
+
+
+
+			if (popup.showForIsCurrent(isCurrent) && popup.isOnForTopic(topic)) {
 				popup.nowShowTopic(topic);
 
 				// System.out.println("GadgetDisplayPopupImpl popup set vis " + popup.getLeft() + "
@@ -125,6 +133,10 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 	public void gadgetClicked(Gadget gadget, int[] lngLat) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void fireSizeChanged() {
+		normalize();
 	}
 
 }

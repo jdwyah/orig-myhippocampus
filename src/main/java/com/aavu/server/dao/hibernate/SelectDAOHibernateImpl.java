@@ -91,6 +91,11 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 
+	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User user, int start, int max,
+			String startStr) {
+		return getAllTopicIdentifiers(user, start, max, startStr, false, true);
+	}
+
 	private List<DatedTopicIdentifier> getAllTopicIdentifiers(DetachedCriteria crit, int start,
 			int max) {
 
@@ -109,14 +114,6 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 	/**
-	 * 
-	 */
-	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, int start, int max,
-			String startStr) {
-		return getAllTopicIdentifiers(user, start, max, startStr, false, false);
-	}
-
-	/**
 	 * all param is used by some unit tests to help wipe a user's account.
 	 * 
 	 */
@@ -124,9 +121,12 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		return getAllTopicIdentifiers(user, 0, 9999, null, all, false);
 	}
 
-	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User user, int start, int max,
+	/**
+	 * 
+	 */
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, int start, int max,
 			String startStr) {
-		return getAllTopicIdentifiers(user, start, max, startStr, false, true);
+		return getAllTopicIdentifiers(user, start, max, startStr, false, false);
 	}
 
 	/**
@@ -203,18 +203,17 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		// :title", "user", user);
 	}
 
-	public Topic getPublicForName(String username, String string) {
+	public URI getForURI(String uri, User user, User currentUser) {
 
-		log.debug("Public user " + username + " string " + string);
+		log.debug("user " + currentUser.getUsername() + " uri " + uri);
 
-		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(RealTopic.class).createAlias(
-				"user", "u").add(Expression.eq("u.username", username)).add(
-				Expression.eq("publicVisible", true)).add(Expression.eq("title", string)));
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(URI.class).add(
+				Expression.eq("user", currentUser)).add(Expression.eq("uri", uri)));
 
-		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 
-		// return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title =
-		// :title", "user", user);
+		return (URI) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+
+
 	}
 
 	public List<TopicIdentifier> getLinksTo(Topic topic, User user) {
@@ -319,6 +318,35 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 				.findByCriteria(crit));
 	}
 
+	public Topic getPublicForName(String username, String string) {
+
+		log.debug("Public user " + username + " string " + string);
+
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(RealTopic.class).createAlias(
+				"user", "u").add(Expression.eq("u.username", username)).add(
+				Expression.eq("publicVisible", true)).add(Expression.eq("title", string)));
+
+		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+
+		// return getHibernateTemplate().findByNamedParam("from Topic where user = :user and title =
+		// :title", "user", user);
+	}
+
+
+	public Root getRoot(User user, User currentUser) {
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Root.class).add(
+				Expression.eq("user", user)));
+
+		Root userRoot = (Root) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(
+				crit));
+		return userRoot;
+	}
+
+
+	public List<TopicTypeConnector> getRootTopics(User forUser, User currentUser) {
+		return getTopicIdsWithTag(getRoot(forUser, currentUser).getId(), forUser);
+	}
+
 	/**
 	 * 
 	 * 
@@ -332,12 +360,75 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 	}
 
-
 	public MetaSeeAlso getSeeAlsoSingleton() {
 		return (MetaSeeAlso) DataAccessUtils.uniqueResult(getHibernateTemplate().find(
 				"from MetaSeeAlso"));
 	}
 
+	/**
+	 * NOTE!! This is NOT the same code as getTopicStarting()!! note the MatchMode
+	 */
+	public List<TopicIdentifier> getTagsStarting(User user, String match) {
+		return getTopicsStarting(user, match, MatchMode.START, DEFAULT_TAG_AUTOCOMPLETE_MAX);
+	}
+
+
+	public List<TagStat> getTagStats(User user) {
+
+		List<Object[]> list = getHibernateTemplate()
+				.find(
+						""
+								+ "select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from Tag tag "
+								+ "where  user is ? order by tag.title", user);
+
+		// This is the query if we decide to get rid of the instances mapping again.
+		//
+		// List<Object[]> list = getHibernateTemplate().find(""+
+		// "select conn.type.id, count(conn.type), conn.type.title, conn.type.latitude,
+		// conn.type.longitude from TopicTypeConnector conn "+
+		// //"left join topic "+
+		// "where conn.topic.user is ? and conn.type.class = Tag "+
+		// "group by conn.type"
+		// ,user);
+
+
+
+		// List<Object[]> subjectList = getHibernateTemplate().find(""+
+		// "select top.subject.class.id, top.subject.class, count(top.subject.class) from Topic top
+		// "+
+		// "where top.user is ? "+
+		// "group by top.subject.class"
+		// ,user);
+
+		log.debug("tagstats size " + list.size());
+		// log.debug("subject list: "+subjectList.size());
+
+		// List<TagStat> rtn = new ArrayList<TagStat>(subjectList.size() + list.size());
+		List<TagStat> rtn = new ArrayList<TagStat>(list.size());
+
+		// for (Object[] o : subjectList){
+		// if(log.isDebugEnabled()){
+		// log.debug("SUBJECT "+o[0]+" "+o[1]+" "+o[2]);
+		// }
+		// rtn.add(new TagStat((Long)o[0],(String)o[1],(Integer)o[2]));
+		// }
+
+
+		// TODO http://sourceforge.net/forum/forum.php?forum_id=459719
+		//
+		for (Object[] o : list) {
+			// if(log.isDebugEnabled()){
+			// log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);
+			// //log.debug("TagStat "+o[0].getClass()+" "+o[1].getClass()+" "+o[2].getClass()+"
+			// "+o[3].getClass()+" "+o[4].getClass());
+			// }
+
+			rtn.add(new TagStat((Long) o[0], (Integer) o[1], (String) o[2], (Integer) o[3],
+					(Integer) o[4]));
+		}
+
+		return rtn;
+	}
 
 	/**
 	 * 
@@ -462,6 +553,20 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 				Property.forName("lastUpdated"));
 	}
 
+	/**
+	 * No user, so only return public topics
+	 */
+	public List<TopicTypeConnector> getTopicIdsWithTag(long tagid) {
+
+		List<TopicTypeConnector> rtn = getHibernateTemplate()
+				.find(
+						"from TopicTypeConnector conn "
+								+ "where conn.type.id = ? and conn.topic.publicVisible = true order by conn.topic.lastUpdated DESC",
+						new Long(tagid));
+
+		return rtn;
+	}
+
 	public List<TopicTypeConnector> getTopicIdsWithTag(long tagid, User user) {
 
 		List<TopicTypeConnector> rtn = getHibernateTemplate().find(
@@ -479,37 +584,29 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		return rtn;
 	}
 
-	/**
-	 * No user, so only return public topics
-	 */
-	public List<TopicTypeConnector> getTopicIdsWithTag(long tagid) {
-
-		List<TopicTypeConnector> rtn = getHibernateTemplate()
-				.find(
-						"from TopicTypeConnector conn "
-								+ "where conn.type.id = ? and conn.topic.publicVisible = true order by conn.topic.lastUpdated DESC",
-						new Long(tagid));
-
-		return rtn;
-	}
-
 	/*
-	 * TODO push this responsibility over to Compass, it should get better performance.
-	 * 
-	 * (non-Javadoc)
+	 * TODO push this responsibility over to Compass, it should get better performance. NOTE!! This
+	 * is NOT the same code as getTagsStarting()!! (non-Javadoc)
 	 * 
 	 * @see com.aavu.server.dao.TopicDAO#getTopicsStarting(com.aavu.client.domain.User,
 	 *      java.lang.String)
 	 */
 	public List<TopicIdentifier> getTopicsStarting(User user, String match) {
-		return getTopicsStarting(user, match, DEFAULT_AUTOCOMPLET_MAX);
+		return getTopicsStarting(user, match, MatchMode.ANYWHERE, DEFAULT_AUTOCOMPLET_MAX);
 	}
 
-	public List<TopicIdentifier> getTopicsStarting(User user, String match, int max) {
+	/**
+	 * 
+	 * @param user
+	 * @param match
+	 * @param max
+	 * @return
+	 */
+	private List<TopicIdentifier> getTopicsStarting(User user, String match, MatchMode matchMode,
+			int max) {
 		DetachedCriteria crit = DetachedCriteria.forClass(RealTopic.class).add(
-				Expression.eq("user", user)).add(
-				Expression.ilike("title", match, MatchMode.ANYWHERE)).addOrder(Order.asc("title"))
-				.setProjection(
+				Expression.eq("user", user)).add(Expression.ilike("title", match, matchMode))
+				.addOrder(Order.asc("title")).setProjection(
 						Projections.projectionList().add(Property.forName("title")).add(
 								Property.forName("id")));
 
@@ -558,6 +655,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		return rtn;
 	}
 
+
 	public WebLink getWebLinkForURI(String url, User user) {
 		log.debug("user " + user.getUsername() + " url " + url);
 
@@ -576,120 +674,10 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 	}
 
-	public List<TopicTypeConnector> getRootTopics(User forUser, User currentUser) {
-		return getTopicIdsWithTag(getRoot(forUser, currentUser).getId(), forUser);
-	}
+
 
 	public void tester() {
 		// TODO Auto-generated method stub
-
-	}
-
-	public List<TagStat> getTagStats(User user) {
-
-		List<Object[]> list = getHibernateTemplate()
-				.find(
-						""
-								+ "select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from Tag tag "
-								+ "where  user is ? order by tag.title", user);
-
-		// This is the query if we decide to get rid of the instances mapping again.
-		//
-		// List<Object[]> list = getHibernateTemplate().find(""+
-		// "select conn.type.id, count(conn.type), conn.type.title, conn.type.latitude,
-		// conn.type.longitude from TopicTypeConnector conn "+
-		// //"left join topic "+
-		// "where conn.topic.user is ? and conn.type.class = Tag "+
-		// "group by conn.type"
-		// ,user);
-
-
-
-		// List<Object[]> subjectList = getHibernateTemplate().find(""+
-		// "select top.subject.class.id, top.subject.class, count(top.subject.class) from Topic top
-		// "+
-		// "where top.user is ? "+
-		// "group by top.subject.class"
-		// ,user);
-
-		log.debug("tagstats size " + list.size());
-		// log.debug("subject list: "+subjectList.size());
-
-		// List<TagStat> rtn = new ArrayList<TagStat>(subjectList.size() + list.size());
-		List<TagStat> rtn = new ArrayList<TagStat>(list.size());
-
-		// for (Object[] o : subjectList){
-		// if(log.isDebugEnabled()){
-		// log.debug("SUBJECT "+o[0]+" "+o[1]+" "+o[2]);
-		// }
-		// rtn.add(new TagStat((Long)o[0],(String)o[1],(Integer)o[2]));
-		// }
-
-
-		// TODO http://sourceforge.net/forum/forum.php?forum_id=459719
-		//
-		for (Object[] o : list) {
-			// if(log.isDebugEnabled()){
-			// log.debug("TagStat "+o[0]+" "+o[1]+" "+o[2]+" "+o[3]+" "+o[4]);
-			// //log.debug("TagStat "+o[0].getClass()+" "+o[1].getClass()+" "+o[2].getClass()+"
-			// "+o[3].getClass()+" "+o[4].getClass());
-			// }
-
-			rtn.add(new TagStat((Long) o[0], (Integer) o[1], (String) o[2], (Integer) o[3],
-					(Integer) o[4]));
-		}
-
-		return rtn;
-	}
-
-
-	public List<TopicIdentifier> getTagsStarting(User user, String match) {
-		return getTagsStarting(user, match, DEFAULT_TAG_AUTOCOMPLETE_MAX);
-	}
-
-	public List<TopicIdentifier> getTagsStarting(User user, String match, int max) {
-		DetachedCriteria crit = DetachedCriteria.forClass(Topic.class).add(
-				Expression.and(Expression.ilike("title", match, MatchMode.START), Expression.eq(
-						"user", user))).setProjection(
-				Projections.projectionList().add(Property.forName("title")).add(
-						Property.forName("id")));
-		log.debug("USER: " + user + " USER ID " + user.getId() + " NAME " + user.getUsername()
-				+ " MATCH|" + match + "|");
-
-		List<Object[]> list = getHibernateTemplate().findByCriteria(crit, 0, max);
-
-		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
-
-		// TODO http://sourceforge.net/forum/forum.php?forum_id=459719
-		//
-		for (Object[] o : list) {
-			rtn.add(new TopicIdentifier((Long) o[1], (String) o[0]));
-		}
-		return rtn;
-	}
-
-
-	public Root getRoot(User user, User currentUser) {
-		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Root.class).add(
-				Expression.eq("user", user)));
-
-		Root userRoot = (Root) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(
-				crit));
-		return userRoot;
-	}
-
-
-
-	public URI getForURI(String uri, User user, User currentUser) {
-
-		log.debug("user " + currentUser.getUsername() + " uri " + uri);
-
-		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(URI.class).add(
-				Expression.eq("user", currentUser)).add(Expression.eq("uri", uri)));
-
-
-		return (URI) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
-
 
 	}
 

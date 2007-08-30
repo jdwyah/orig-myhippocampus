@@ -3,15 +3,18 @@ package com.aavu.client.gui.gadgets;
 import org.gwm.client.impl.DefaultGInternalFrame;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.GadgetDisplayer;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
 
 	private Gadget gadget;
+	private GadgetDisplayer displayer;
 	public static final int POPUPWIDTH = 240;
 
-	public GadgetPopup(Gadget gadget) {
+	public GadgetPopup(Gadget gadget, GadgetDisplayer displayer) {
 		super(gadget.getDisplayName());
+		this.displayer = displayer;
 		this.gadget = gadget;
 		width = POPUPWIDTH;
 		height = 20;
@@ -64,6 +67,18 @@ public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
 	public void normalize(int top, int left) {
 		setLocation(top, left);
 		gadget.normalize(this);
+	}
+
+	public Gadget getGadget() {
+		return gadget;
+	}
+
+	public boolean isOnForTopic(Topic topic) {
+		return gadget.isOnForTopic(topic);
+	}
+
+	public void fireSizeChanged() {
+		displayer.fireSizeChanged();
 	}
 
 

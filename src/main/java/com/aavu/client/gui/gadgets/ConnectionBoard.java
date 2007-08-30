@@ -76,6 +76,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		mainP.add(refPanel);
 
+
 		initWidget(mainP);
 
 		addStyleName("H-ConnectionBoard");
@@ -99,7 +100,6 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	public int load(Topic topic) {
 		myTopic = topic;
 
-		// setVisible(false);
 
 		manager.getTopicCache().getLinksTo(topic, new StdAsyncCallback("GetLinksTo") {
 			public void onSuccess(Object result) {
@@ -121,6 +121,9 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 					refPanel.add(new TopicLink(topicIdent));
 				}
 
+				if (!list.isEmpty()) {
+					getGadgetHolder().fireSizeChanged();
+				}
 				// updateTitle(refPanel,ConstHolder.myConstants.referencesN(list.size()));
 				// bar.updateTitle(AllReferencesPanel.this,ConstHolder.myConstants.all_referencesN(totalSize
 				// + list.size()));
@@ -131,9 +134,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		Association assoc = myTopic.getSeeAlsoAssociation();
 
 		int size = alsos.load(assoc);
-		if (size > 0) {
-			// setVisible(true);
-		}
+
 		return size;
 
 	}
@@ -152,6 +153,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 				new SaveSeeAlsoCommand(myTopic, new RealTopic(topicID)), new StdAsyncCallback(
 						ConstHolder.myConstants.save_async()) {
 				});
+		getGadgetHolder().fireSizeChanged();
 	}
 
 	/**
@@ -191,19 +193,23 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		return b;
 	}
 
-	// @Override
-	/**
-	 * Special Gadget always add, but it will maintain its own visibility since we don't know at
-	 * load time whether there are references
-	 */
+
 	public boolean isOnForTopic(Topic topic) {
 		return true;
 	}
-
 
 	// @Override
 	public String getDisplayName() {
 		return ConstHolder.myConstants.connections();
 	}
 
+	// // @Override
+	// public void normalize(GadgetPopup gadgetPopup) {
+	// gadgetPopup.setLocation(40, 0);
+	// }
+
+	// @Override
+	public boolean showForIsCurrent(boolean isCurrent) {
+		return true;
+	}
 }

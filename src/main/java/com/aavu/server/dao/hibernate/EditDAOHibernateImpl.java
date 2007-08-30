@@ -59,6 +59,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	}
 
+
 	public List<Topic> getDeleteList(long topicID) {
 		List<Topic> rtn = new ArrayList<Topic>();
 
@@ -74,6 +75,12 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 		if (toDelete.contains(toCheck)) {
 			return;
 		}
+		// don't delete root or allow a root child with a child of root to end up looping back on
+		// itself
+		if (!toCheck.isDeletable()) {
+			return;
+		}
+
 		for (Iterator iterator = toCheck.getInstances().iterator(); iterator.hasNext();) {
 			TopicTypeConnector toc = (TopicTypeConnector) iterator.next();
 			Topic child = toc.getTopic();
@@ -89,6 +96,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 				recurseDelete(toDelete, occ);
 			}
 		}
+
 		toDelete.add(toCheck);
 	}
 
@@ -104,6 +112,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 			delete(recursiveDelete.getId());
 		}
 	}
+
 
 	/**
 	 * Do not call delete() unless you know what you're doing, which is just to say, make sure to

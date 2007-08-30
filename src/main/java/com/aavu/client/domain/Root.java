@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Each user should have 1 'root' node.
  */
 
-public class Root extends Topic implements IsSerializable, Serializable {
+public class Root extends RealTopic implements IsSerializable, Serializable {
 
 	public Root() {
 	}

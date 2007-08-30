@@ -101,7 +101,6 @@ public abstract class Gadget extends Composite {
 	public void showForFirstTime() {
 	}
 
-	// public abstract boolean isOnForTopic(Topic topic);
 
 	/**
 	 * Overridden by Gadgets that need to now when the GadgetDisplayer is visible
@@ -183,6 +182,12 @@ public abstract class Gadget extends Composite {
 	 * @param gadgetPopup
 	 */
 	public void normalize(GadgetPopup gadgetPopup) {
+	}
+
+
+
+	public boolean isOnForTopic(Topic topic) {
+		return getLastLoadSize() > 0;
 	}
 
 

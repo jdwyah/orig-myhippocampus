@@ -116,6 +116,12 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 		mainP.add(this);
 	}
 
+
+	public void fireSizeChanged() {
+		// TODO Auto-generated method stub
+
+	}
+
 	// public void onClick(Widget sender) {
 	// if(sender == entryPreview){
 	// manager.editEntry(topic);

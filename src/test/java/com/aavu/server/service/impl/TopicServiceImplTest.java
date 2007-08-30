@@ -48,7 +48,7 @@ import com.aavu.server.service.gwt.BaseTestNoTransaction;
 public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
-	private static final Logger log = Logger.getLogger(TopicServiceImplTest.class);
+	private static final String australia = "Australia";
 
 	// private static final String B = "Ssds45t";
 	// private static final String C = "ASR#35rf";
@@ -57,231 +57,39 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	private static final String B = "Author";
 	private static final String C = "PatriotGames";
+	private static final String comics = "Comics";
+	private static final String crowe = "Crowe";
+	private static final String croweText = "something about russell crowe";
 	private static final String D = "Book";
+	private static final String daschelle = "Daschelle";
+
 	private static final String E = "TomClancy";
 	private static final String F = "Recommender";
-	private static final String G = "AnotherBook";
-	private static final String H = "AnotherRecommender";
 
+	private static final String G = "AnotherBook";
+	private static final String gladiator = "Gladiator";
+	private static final String H = "AnotherRecommender";
+	private static final String islandsText = "something about islands";
 	private static final String J = "DateRead";
 	private static final String K = "LocationMeta";
+	private static final int LAT1 = 213123;
+	private static final int LAT2 = 223;
+	private static final Logger log = Logger.getLogger(TopicServiceImplTest.class);
+	private static final int LONG1 = 12332;
+	private static final int LONG2 = 2334;
 
 	private static final String movies = "Movies";
-	private static final String comics = "Comics";
-	private static final String gladiator = "Gladiator";
-	private static final String xmen = "X-Men";
-	private static final String people = "People";
-	private static final String daschelle = "Daschelle";
-	private static final String crowe = "Crowe";
-	private static final String australia = "Australia";
 	private static final String newzealand = "New Zealand";
-	private static final String islandsText = "something about islands";
-	private static final String croweText = "something about russell crowe";
-
-	private static final int LAT1 = 213123;
-	private static final int LONG1 = 12332;
-	private static final int LAT2 = 223;
-	private static final int LONG2 = 2334;
+	private static final String people = "People";
+	private static final String xmen = "X-Men";
 
 	private TopicService topicService;
 
-	private UserService userService;
-
 	private User u;
 
+	private UserService userService;
 
 
-	public void setTopicService(TopicService topicService) {
-		this.topicService = topicService;
-	}
-
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-
-	@Override
-	protected void onSetUp() throws Exception {
-		super.onSetUp();
-		u = userService.getCurrentUser();
-	}
-
-	//
-	// @Override
-	// protected void onSetUpBeforeTransaction() throws Exception {
-	// super.onSetUpBeforeTransaction();
-	// setUsername("junit");
-	// }
-	// @Override
-	// protected void onSetUpInTransaction() throws Exception {
-	//
-	// super.onSetUpInTransaction();
-	//
-	//		
-	// }
-
-
-	/**
-	 * NOTE; same code as DAO test, but with service. Different result, since we set the tag's user
-	 * in the service layer.
-	 * 
-	 * @throws HippoBusinessException
-	 */
-	public void testSaveTopic() throws HippoBusinessException {
-		clean();
-
-		Topic t = new RealTopic();
-
-		// Entry e = new Entry();
-		// e.setData(B);
-		// t.addOccurence(e);
-
-		t.setTitle(C);
-		t.setUser(u);
-
-		Topic tag = new RealTopic();
-		tag.setTitle(D);
-
-		topicService.save(tag);
-
-		t.tagTopic(tag);
-
-		System.out.println("before: " + t.getId());
-
-		topicService.save(t);
-
-		System.out.println("after: " + t.getId());
-
-		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
-
-		assertEquals(2, savedL.size());
-
-		TopicIdentifier saved = savedL.get(1);
-
-		Topic savedTopic = topicService.getForID(saved.getTopicID());
-
-		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {
-			if (!datedTopicIdentifier.getTopicTitle().equals(C)
-					&& !datedTopicIdentifier.getTopicTitle().equals(D)) {
-				fail("Not equal to either");
-			} else {
-				if (datedTopicIdentifier.getTopicTitle().equals(C)) {
-
-				} else {
-
-				}
-			}
-		}
-
-		// assertEquals(B, savedTopic.getLatestEntry().getData());
-		assertEquals(u, savedTopic.getUser());
-
-		assertEquals(1, savedTopic.getTypesAsTopics().size());
-
-		Topic savedTag = (Topic) savedTopic.getTypesAsTopics().iterator().next();
-
-		assertEquals(D, savedTag.getTitle());
-
-		// Tag's user will not be initialized
-		assertEquals(u, savedTag.getUser());
-
-
-	}
-
-	/**
-	 * NOTE; same code as DAO test, but with service. Different result, since we set the tag's user
-	 * in the service layer.
-	 * 
-	 * @throws HippoException
-	 */
-	public void testSaveAndCompleteLoad() throws HippoException {
-		clean();
-
-		Topic t = new RealTopic();
-
-
-		t.setTitle(C);
-		t.setUser(u);
-
-		Topic tag = new RealTopic();
-		tag.setTitle(D);
-
-		topicService.save(tag);
-
-		t.tagTopic(tag);
-
-
-		System.out.println("before: " + t.getId());
-
-		t = topicService.save(t);
-
-		Entry e = new Entry();
-		e.setData(B);
-
-		List<Topic> tagsT = new LinkedList<Topic>();
-		tagsT.add(t);
-		AbstractCommand comm = new SaveOccurrenceCommand(e, tagsT);
-		topicService.executeAndSaveCommand(comm);
-
-
-		System.out.println("after: " + t.getId());
-
-		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
-
-		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {
-			System.out.println("found " + datedTopicIdentifier);
-		}
-
-		assertEquals(4, savedL.size());
-
-		Topic savedTopic = topicService.getForID(t.getId());
-
-		assertEquals(C, savedTopic.getTitle());
-
-		assertEquals(1, savedTopic.getOccurences().size());
-
-		for (Iterator iterator = savedTopic.getOccurences().iterator(); iterator.hasNext();) {
-			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator.next();
-			System.out.println("occ " + owl.getOccurrence().getData() + " "
-					+ owl.getOccurrence().getTitle() + " " + owl.getOccurrence().getId());
-
-		}
-		TopicOccurrenceConnector owl = (TopicOccurrenceConnector) savedTopic.getOccurences()
-				.iterator().next();
-
-		Occurrence occ = (Occurrence) owl.getOccurrence();
-
-		TopicOccurrenceConnector toc = (TopicOccurrenceConnector) occ.getTopics().iterator().next();
-		assertEquals(savedTopic, toc.getTopic());
-
-		System.out.println();
-
-		// not working because of CGLIB enhanced, 'instanceof' not working.
-		// assertEquals(B, savedTopic.getLatestEntry().getDataWithoutBodyTags());
-
-		assertEquals(u, savedTopic.getUser());
-
-		assertEquals(1, savedTopic.getTypesAsTopics().size());
-
-		Topic savedTag = (Topic) savedTopic.getTypesAsTopics().iterator().next();
-
-		assertEquals(D, savedTag.getTitle());
-
-		// Tag's user will not be initialized
-		assertEquals(u, savedTag.getUser());
-
-
-
-		Topic links = topicService.getForID(2081);
-		assertEquals(3, links.getOccurences().size());
-
-		for (Iterator iterator = links.getOccurenceObjs().iterator(); iterator.hasNext();) {
-			Occurrence link = (Occurrence) iterator.next();
-			assertEquals(1, link.getTopics().size());
-		}
-
-	}
 
 	public void __testSaveComplexMetas() throws HippoBusinessException {
 
@@ -369,41 +177,164 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 
-	public void testUpdatingTopic() throws HippoBusinessException {
+
+	private void addEntry(Map<String, Topic> rtn, String entryText, List<String> tags)
+			throws HippoBusinessException, HippoException {
+		Entry e = new Entry();
+		e.setData(entryText);
+
+		List<Topic> tagsT = new LinkedList<Topic>();
+		for (String string : tags) {
+			tagsT.add(rtn.get(string));
+		}
+
+		AbstractCommand comm = new SaveOccurrenceCommand(e, tagsT);
+		topicService.executeAndSaveCommand(comm);
+	}
+
+
+	private void addToMap(Map<String, Topic> map, String str) throws HippoBusinessException {
+		map.put(str, topicService.createNewIfNonExistent(str));
+	}
+
+	//
+	// @Override
+	// protected void onSetUpBeforeTransaction() throws Exception {
+	// super.onSetUpBeforeTransaction();
+	// setUsername("junit");
+	// }
+	// @Override
+	// protected void onSetUpInTransaction() throws Exception {
+	//
+	// super.onSetUpInTransaction();
+	//
+	//		
+	// }
+
+
+	private void addToMap(Map<String, Topic> map, String str, String parent)
+			throws HippoBusinessException {
+		map.put(str, topicService.createNewIfNonExistent(str, map.get(parent)));
+	}
+
+	/**
+	 * Sorry, formatter is a killer for ascii art diagrams of the object graph
+	 * 
+	 * @return
+	 * @throws HippoException
+	 */
+	private Map<String, Topic> bigSetup() throws HippoException {
+		Map<String, Topic> rtn = new HashMap<String, Topic>();
+
+		// on desktop
+		addToMap(rtn, movies);
+		addToMap(rtn, comics);
+		addToMap(rtn, people);
+		addToMap(rtn, newzealand);
+
+
+		// only children or subchildren of movies
+		addToMap(rtn, gladiator, movies);
+		addToMap(rtn, crowe, gladiator);
+		addToMap(rtn, australia, gladiator);
+
+		// tagged to other root tags
+		addToMap(rtn, daschelle, gladiator);
+		tag(rtn, daschelle, people);
+
+		addToMap(rtn, xmen, movies);
+		tag(rtn, xmen, comics);
+
+
+		List<String> isL = new LinkedList<String>();
+		isL.add(australia);
+		isL.add(newzealand);
+		addEntry(rtn, islandsText, isL);
+
+		List<String> crL = new LinkedList<String>();
+		crL.add(crowe);
+		addEntry(rtn, croweText, crL);
+
+		return rtn;
+
+	}
+
+	private void clean() throws HippoBusinessException {
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
+
+		for (TopicIdentifier identifier : savedL) {
+			log.debug("Clean: " + identifier.getTopicTitle());
+			Topic t = topicService.getForID(identifier.getTopicID());
+			// t.getTypes().clear();
+			// t.getInstances().clear();
+			// t = topicService.save(t);
+
+			// delete using the DAO so we don't run into protections put in place when deleting the
+			// root
+			if (t != null) {
+				topicService.delete(t);
+			}
+
+		}
+		log.debug("\n-----CLEAN FIN--------");
+
+	}
+
+	@Override
+	protected void onSetUp() throws Exception {
+		super.onSetUp();
+		u = userService.getCurrentUser();
+	}
+
+	public void setTopicService(TopicService topicService) {
+		this.topicService = topicService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	private void tag(Map<String, Topic> map, String topic, String tag)
+			throws HippoBusinessException, HippoException {
+		AbstractCommand comm = new AddToTopicCommand(map.get(topic), map.get(tag));
+		topicService.executeAndSaveCommand(comm);
+	}
+
+	public void testCommands() throws HippoException {
 
 		clean();
-		Topic t = new RealTopic();
 
-		t.setTitle(C);
-		t.setUser(u);
+		Topic tag = topicService.createNewIfNonExistent(D);
 
-		Topic tag = new RealTopic();
-		tag.setTitle(D);
-
-		tag = topicService.save(tag);
-
-		t.tagTopic(tag);
-
-		System.out.println("before: " + t.getId());
-
-		topicService.save(t);
-
-		System.out.println("after: " + t.getId());
-
-		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
-
-		assertEquals(3, savedL.size());
-
-		TopicIdentifier saved = savedL.get(1);
+		System.out.println("SAVED TAG " + B);
 
 
-		Topic savedTopic = topicService.getForID(saved.getTopicID());
+		Topic topic = topicService.createNewIfNonExistent(C);
 
-		savedTopic.setTitle(E);
+		System.out.println("SAVED TOPIC " + C);
+		topicService.executeAndSaveCommand(new AddToTopicCommand(topic, tag));
 
-		Topic secondSave = topicService.save(savedTopic);
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getTypes().size());
+		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
+		assertEquals(tag.getId(), tagRef.getId());
 
-		assertEquals(E, secondSave.getTitle());
+
+		Topic t3 = topicService.createNewIfNonExistent(G);
+		topicService.executeAndSaveCommand(new SaveSeeAlsoCommand(topic, t3));
+
+		Topic t3s = topicService.getForID(t3.getId());
+		assertEquals(0, t3s.getAssociations().size());
+
+		topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getAssociations().size());
+
+		Association a = (Association) topicS.getAssociations().iterator().next();
+		assertEquals(1, a.getMembers().size());
+
+		Topic s = (Topic) a.getMembers().iterator().next();
+		assertEquals(t3.getId(), s.getId());
+
 
 	}
 
@@ -432,133 +363,163 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 
-	public void testCommands() throws HippoException {
+	public void testConnectionsInMultiplePassesCommand() throws HippoException {
 
 		clean();
 
-		Topic tag = topicService.createNewIfNonExistent(D);
-
-		System.out.println("SAVED TAG " + B);
+		Topic topic = topicService.createNewIfNonExistent(C);
 
 
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
+		Topic topic2 = topicService.createNewIfNonExistent(D);
 
-		System.out.println("SAVED TOPIC " + C);
-		topicService.executeAndSaveCommand(new AddToTopicCommand(topic, tag));
+
+		Topic topic3 = topicService.createNewIfNonExistent(E);
+
+
+
+		AbstractCommand comm = new SaveSeeAlsoCommand(topic, topic2);
+
+		topicService.executeAndSaveCommand(comm);
+
+		log.debug("FINISHED SAVE 1");
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
-		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
-		assertEquals(tag.getId(), tagRef.getId());
+		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+
+		Association see = topicS.getSeeAlsoAssociation();
+		assertNotNull(see);
+		assertNotNull(see.getMembers());
+		assertEquals(1, see.getMembers().size());
+		assertEquals(topic2, see.getMembers().iterator().next());
 
 
-		Topic t3 = new RealTopic(u, G);
-		t3 = (Topic) topicService.save(t3);
-		topicService.executeAndSaveCommand(new SaveSeeAlsoCommand(topic, t3));
+		comm = new SaveSeeAlsoCommand(topic, topic3);
+		topicService.executeAndSaveCommand(comm);
 
-		Topic t3s = topicService.getForID(t3.getId());
-		assertEquals(0, t3s.getAssociations().size());
+		log.debug("FINISHED SAVE 2");
+
 
 		topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());
 		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
 
-		Association a = (Association) topicS.getAssociations().iterator().next();
-		assertEquals(1, a.getMembers().size());
+		see = topicS.getSeeAlsoAssociation();
+		assertNotNull(see);
+		assertNotNull(see.getMembers());
+		assertEquals(2, see.getMembers().size());
 
-		Topic s = (Topic) a.getMembers().iterator().next();
-		assertEquals(t3.getId(), s.getId());
-
+		for (Iterator iter = see.getMembers().iterator(); iter.hasNext();) {
+			Topic element = (Topic) iter.next();
+			assertTrue(element.equals(topic2) || element.equals(topic3));
+		}
 
 	}
 
-	public void testSaveTagtoTopicCommand() throws HippoException {
+
+	/**
+	 * Delete confirm should give us a list of everything that will be deleted if the given ID is
+	 * deleted. That means a recursive delete, but one that misses anything else that is referenced
+	 * from another place.
+	 * 
+	 * @throws HippoException
+	 */
+	public void testDeleteConfirm() throws HippoException {
 
 		clean();
 
-		Topic tag = topicService.createNewIfNonExistent(D);
+		Map<String, Topic> map = bigSetup();
 
-		System.out.println("SAVED TAG " + B);
+		assertEquals(9, map.size());
 
-
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
-
-		System.out.println("SAVED TOPIC " + C);
-		topicService.executeAndSaveCommand(new AddToTopicCommand(topic, tag));
+		List<Topic> willBeDeleted = topicService.getDeleteList(map.get(xmen).getId());
+		assertEquals(1, willBeDeleted.size());
 
 
-		WebLink link = topicService.createNewIfNonExistent("Weblink", WebLink.class, null);
+		willBeDeleted = topicService.getDeleteList(map.get(comics).getId());
+		assertEquals(1, willBeDeleted.size());
 
-		topicService.executeAndSaveCommand(new AddToTopicCommand(link, tag));
+		willBeDeleted = topicService.getDeleteList(map.get(crowe).getId());
+		assertEquals(2, willBeDeleted.size());
 
+		willBeDeleted = topicService.getDeleteList(map.get(movies).getId());
+		assertEquals(5, willBeDeleted.size());
 
+		for (Topic topic : willBeDeleted) {
+			log.info("Will Delete: " + willBeDeleted);
+		}
 
-		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
-		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
-		assertEquals(tag.getId(), tagRef.getId());
-
-		Topic tagS = topicService.getForID(tag.getId());
-		assertEquals(1, tagS.getOccurences().size());
-		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
-		assertEquals(link.getId(), linkRef.getId());
 
 	}
 
-	public void testSaveTagtoTopicCommandMulti() throws HippoException {
 
+
+	/**
+	 * Also test getTagsStarting, which uses a different matchmode
+	 * 
+	 * @throws HippoException
+	 */
+	public void testGetTopicsStarting() throws HippoException {
 		clean();
-
-		Topic tag = topicService.createNewIfNonExistent(D);
-
-		System.out.println("SAVED TAG " + B);
-
-
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
+		Map<String, Topic> map = bigSetup();
 
 
 
-		WebLink link = topicService.createNewIfNonExistent(E, WebLink.class, null);
+		List<TopicIdentifier> res = topicService.getTagsStarting(movies.substring(0, 2));
+		assertEquals(1, res.size());
 
-		List<Topic> toadd = new ArrayList<Topic>();
-
-		toadd.add(topic);
-		toadd.add(link);
-
-		System.out.println("SAVED TOPIC " + C);
-		topicService.executeAndSaveCommand(new AddToTopicCommand(toadd, tag, null));
+		res = topicService.getTopicsStarting(movies.substring(0, 2));
+		assertEquals(1, res.size());
 
 
+		// test multiple finds
+		res = topicService.getTagsStarting(comics.substring(0, 2));
+		assertEquals(1, res.size());
+		addToMap(map, "comic book");
+		res = topicService.getTagsStarting(comics.substring(0, 2));
+		assertEquals(2, res.size());
 
-		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
-		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
-		assertEquals(tag.getId(), tagRef.getId());
-		assertEquals(0, topicS.getOccurences().size());
+
+		res = topicService.getTopicsStarting(comics.substring(0, 2));
+		assertEquals(2, res.size());
+
+		// should find lots
+		res = topicService.getTopicsStarting("E");
+		assertEquals(7, res.size());
 
 
-		Topic tagS = topicService.getForID(tag.getId());
-		assertEquals(1, tagS.getOccurences().size());
-		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
-		assertEquals(link.getId(), linkRef.getId());
-		assertEquals(1, tagS.getInstances().size());
+		// test that we don't find entries
+		res = topicService.getTagsStarting(islandsText.substring(0, 2));
+		assertEquals(0, res.size());
+
+		// test to make sure that desktop can be found
+		Root r = topicService.getRootTopic(u);
+		res = topicService.getTagsStarting(r.getTitle().substring(0, 2));
+		assertEquals(1, res.size());
+		assertEquals(r.getId(), res.get(0).getTopicID());
+
+		res = topicService.getTopicsStarting(r.getTitle().substring(0, 2));
+		assertEquals(1, res.size());
+
+		System.out.println("finding " + res.get(0));
+
 
 	}
+
 
 	public void testLocationCommand() throws HippoException {
 
 		clean();
 
-		Topic tag = new RealTopic(u, B);
-		tag = topicService.save(tag);
+		Topic tag = topicService.createNewIfNonExistent(B);
 
 		System.out.println("SAVED TAG " + B);
 
 
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
+		Topic topic = topicService.createNewIfNonExistent(C);
+
 
 		MetaLocation metaL = new MetaLocation();
 		metaL.setTitle(K);
@@ -602,18 +563,70 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 
+
+	public void testMetaDateCommand() throws HippoException {
+
+		clean();
+
+
+
+		Topic topic = topicService.createNewIfNonExistent(C);
+
+		MetaDate metaL = new MetaDate();
+		metaL.setTitle(J);
+		metaL = (MetaDate) topicService.save(metaL);
+
+		Topic savedMeta1 = topicService.getForID(metaL.getId());
+		assertNotSame(0, savedMeta1.getId());
+		System.out.println("||| metaL " + metaL + " " + metaL.getClass());
+		System.out.println("||| savedMeta1 " + savedMeta1 + " " + savedMeta1.getClass());
+		assertTrue(savedMeta1 instanceof MetaDate);
+
+
+		HippoDate date = new HippoDate();
+		date.setStartDate(new Date());
+
+
+		AbstractCommand comm = new SaveMetaDateCommand(topic, savedMeta1, date);
+
+
+		topicService.executeAndSaveCommand(comm);
+
+		System.out.println("FINISHED SAVE");
+
+
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(0, topicS.getTypes().size());
+
+		System.out.println(topicS.toPrettyString());
+
+
+		assertEquals(1, topicS.getAssociations().size());
+		assertEquals(1, topicS.getMetas().size());
+		Meta savedMeta = (Meta) topicS.getMetas().iterator().next();
+		assertNotNull(savedMeta);
+
+
+		assertEquals(J, savedMeta.getTitle());
+
+		HippoDate savedLoc = (HippoDate) topicS.getSingleMetaValueFor(savedMeta);
+		assertNotNull(savedLoc);
+		assertEquals(date.getTitle(), savedLoc.getTitle());
+
+
+	}
+
+
 	public void testMultipleLocationCommand() throws HippoException {
 
 		clean();
 
-		Topic tag = new RealTopic(u, B);
-		tag = topicService.save(tag);
+		Topic tag = topicService.createNewIfNonExistent(B);
 
 		System.out.println("SAVED TAG " + B);
 
 
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
+		Topic topic = topicService.createNewIfNonExistent(C);
 
 		MetaLocation metaL = new MetaLocation();
 		metaL.setTitle(K);
@@ -679,8 +692,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		clean();
 
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
+		Topic topic = topicService.createNewIfNonExistent(C);
 
 		MetaLocation metaL = new MetaLocation();
 		metaL.setTitle(K);
@@ -731,7 +743,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		assertEquals(LONG1, s1.getLongitude());
 
 		List<DatedTopicIdentifier> idents = topicService.getAllTopicIdentifiers(true);
-		assertEquals(4, idents.size());
+		assertEquals(5, idents.size());
 
 
 
@@ -803,33 +815,37 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
-
-	public void testMetaDateCommand() throws HippoException {
+	public void testRecursiveDelete() throws HippoException {
 
 		clean();
 
+		Map<String, Topic> map = bigSetup();
+
+		assertEquals(9, map.size());
+
+		// 9 + 2 entries + root
+		assertEquals(12, topicService.getAllTopicIdentifiers(true).size());
 
 
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
+		topicService.delete(map.get(movies).getId());
 
-		MetaDate metaL = new MetaDate();
-		metaL.setTitle(J);
-		metaL = (MetaDate) topicService.save(metaL);
-
-		Topic savedMeta1 = topicService.getForID(metaL.getId());
-		assertNotSame(0, savedMeta1.getId());
-		System.out.println("||| metaL " + metaL + " " + metaL.getClass());
-		System.out.println("||| savedMeta1 " + savedMeta1 + " " + savedMeta1.getClass());
-		assertTrue(savedMeta1 instanceof MetaDate);
+		// should delete 5
+		assertEquals(7, topicService.getAllTopicIdentifiers(true).size());
 
 
-		HippoDate date = new HippoDate();
-		date.setStartDate(new Date());
+
+	}
+
+	public void testRemoveTagComand() throws HippoException {
+
+		clean();
+
+		Topic tag = topicService.createNewIfNonExistent(C);
 
 
-		AbstractCommand comm = new SaveMetaDateCommand(topic, savedMeta1, date);
+		Topic topic = topicService.createNewIfNonExistent(D);
 
+		AbstractCommand comm = new AddToTopicCommand(topic, tag);
 
 		topicService.executeAndSaveCommand(comm);
 
@@ -837,83 +853,114 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 
-		System.out.println(topicS.toPrettyString());
-
-
-		assertEquals(1, topicS.getAssociations().size());
-		assertEquals(1, topicS.getMetas().size());
-		Meta savedMeta = (Meta) topicS.getMetas().iterator().next();
-		assertNotNull(savedMeta);
+		assertEquals(tag, topicS.getTags().iterator().next());
 
 
-		assertEquals(J, savedMeta.getTitle());
 
-		HippoDate savedLoc = (HippoDate) topicS.getSingleMetaValueFor(savedMeta);
-		assertNotNull(savedLoc);
-		assertEquals(date.getTitle(), savedLoc.getTitle());
-
-
-	}
-
-
-	public void testConnectionsInMultiplePassesCommand() throws HippoException {
-
-		clean();
-
-		Topic topic = new RealTopic(u, C);
-		topic = (Topic) topicService.save(topic);
-
-
-		Topic topic2 = new RealTopic(u, D);
-		topic2 = (Topic) topicService.save(topic2);
-
-		Topic topic3 = new RealTopic(u, E);
-		topic3 = (Topic) topicService.save(topic3);
-
-
-		AbstractCommand comm = new SaveSeeAlsoCommand(topic, topic2);
-
+		comm = new RemoveTagFromTopicCommand(topic, tag);
 		topicService.executeAndSaveCommand(comm);
-
-		log.debug("FINISHED SAVE 1");
-
-		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
-		assertEquals(1, topicS.getAssociations().size());
-		assertEquals(1, topicS.getMetas().size());
-
-		Association see = topicS.getSeeAlsoAssociation();
-		assertNotNull(see);
-		assertNotNull(see.getMembers());
-		assertEquals(1, see.getMembers().size());
-		assertEquals(topic2, see.getMembers().iterator().next());
-
-
-		comm = new SaveSeeAlsoCommand(topic, topic3);
-		topicService.executeAndSaveCommand(comm);
-
-		log.debug("FINISHED SAVE 2");
 
 
 		topicS = topicService.getForID(topic.getId());
 		assertEquals(0, topicS.getTypes().size());
-		assertEquals(1, topicS.getAssociations().size());
-		assertEquals(1, topicS.getMetas().size());
 
-		see = topicS.getSeeAlsoAssociation();
-		assertNotNull(see);
-		assertNotNull(see.getMembers());
-		assertEquals(2, see.getMembers().size());
 
-		for (Iterator iter = see.getMembers().iterator(); iter.hasNext();) {
-			Topic element = (Topic) iter.next();
-			assertTrue(element.equals(topic2) || element.equals(topic3));
-		}
+		Topic tagS = (Topic) topicService.getForID(tag.getId());
+		assertEquals(0, topicService.getTopicIdsWithTag(tagS.getId()).size());
 
 	}
 
+	/**
+	 * NOTE; same code as DAO test, but with service. Different result, since we set the tag's user
+	 * in the service layer.
+	 * 
+	 * @throws HippoException
+	 */
+	public void testSaveAndCompleteLoad() throws HippoException {
+		clean();
+
+		Topic t = new RealTopic();
+
+
+		t.setTitle(C);
+		t.setUser(u);
+
+		Topic tag = topicService.createNewIfNonExistent(D);
+		t.tagTopic(tag);
+
+
+		System.out.println("before: " + t.getId());
+
+		t = topicService.save(t);
+
+		Entry e = new Entry();
+		e.setData(B);
+
+		List<Topic> tagsT = new LinkedList<Topic>();
+		tagsT.add(t);
+		AbstractCommand comm = new SaveOccurrenceCommand(e, tagsT);
+		topicService.executeAndSaveCommand(comm);
+
+
+		System.out.println("after: " + t.getId());
+
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
+
+		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {
+			System.out.println("found " + datedTopicIdentifier);
+		}
+
+		assertEquals(4, savedL.size());
+
+		Topic savedTopic = topicService.getForID(t.getId());
+
+		assertEquals(C, savedTopic.getTitle());
+
+		assertEquals(1, savedTopic.getOccurences().size());
+
+		for (Iterator iterator = savedTopic.getOccurences().iterator(); iterator.hasNext();) {
+			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator.next();
+			System.out.println("occ " + owl.getOccurrence().getData() + " "
+					+ owl.getOccurrence().getTitle() + " " + owl.getOccurrence().getId());
+
+		}
+		TopicOccurrenceConnector owl = (TopicOccurrenceConnector) savedTopic.getOccurences()
+				.iterator().next();
+
+		Occurrence occ = (Occurrence) owl.getOccurrence();
+
+		TopicOccurrenceConnector toc = (TopicOccurrenceConnector) occ.getTopics().iterator().next();
+		assertEquals(savedTopic, toc.getTopic());
+
+		System.out.println();
+
+		// not working because of CGLIB enhanced, 'instanceof' not working.
+		// assertEquals(B, savedTopic.getLatestEntry().getDataWithoutBodyTags());
+
+		assertEquals(u, savedTopic.getUser());
+
+		assertEquals(1, savedTopic.getTypesAsTopics().size());
+
+		Topic savedTag = (Topic) savedTopic.getTypesAsTopics().iterator().next();
+
+		assertEquals(D, savedTag.getTitle());
+
+		// Tag's user will not be initialized
+		assertEquals(u, savedTag.getUser());
+
+
+
+		// Topic links = topicService.getForID(2081);
+		// assertEquals(3, links.getOccurences().size());
+		//
+		// for (Iterator iterator = links.getOccurenceObjs().iterator(); iterator.hasNext();) {
+		// Occurrence link = (Occurrence) iterator.next();
+		// assertEquals(1, link.getTopics().size());
+		// }
+
+	}
 
 	/**
 	 * Test duplicate entry and "" title checks.
@@ -959,6 +1006,147 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 	}
+
+	public void testSaveTagtoTopicCommand() throws HippoException {
+
+		clean();
+
+		Topic tag = topicService.createNewIfNonExistent(D);
+
+		System.out.println("SAVED TAG " + B);
+
+
+		Topic topic = topicService.createNewIfNonExistent(C);
+
+		System.out.println("SAVED TOPIC " + C);
+		topicService.executeAndSaveCommand(new AddToTopicCommand(topic, tag));
+
+
+		WebLink link = topicService.createNewIfNonExistent("Weblink", WebLink.class, null);
+
+		topicService.executeAndSaveCommand(new AddToTopicCommand(link, tag));
+
+
+
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getTypes().size());
+		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
+		assertEquals(tag.getId(), tagRef.getId());
+
+		Topic tagS = topicService.getForID(tag.getId());
+		assertEquals(1, tagS.getOccurences().size());
+		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
+		assertEquals(link.getId(), linkRef.getId());
+
+	}
+
+	public void testSaveTagtoTopicCommandMulti() throws HippoException {
+
+		clean();
+
+		Topic tag = topicService.createNewIfNonExistent(D);
+
+		System.out.println("SAVED TAG " + B);
+
+
+		Topic topic = topicService.createNewIfNonExistent(C);
+
+
+		WebLink link = topicService.createNewIfNonExistent(E, WebLink.class, null);
+
+		List<Topic> toadd = new ArrayList<Topic>();
+
+		toadd.add(topic);
+		toadd.add(link);
+
+		System.out.println("SAVED TOPIC " + C);
+		topicService.executeAndSaveCommand(new AddToTopicCommand(toadd, tag, null));
+
+
+
+		Topic topicS = topicService.getForID(topic.getId());
+		assertEquals(1, topicS.getTypes().size());
+		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
+		assertEquals(tag.getId(), tagRef.getId());
+		assertEquals(0, topicS.getOccurences().size());
+
+
+		Topic tagS = topicService.getForID(tag.getId());
+		assertEquals(1, tagS.getOccurences().size());
+		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
+		assertEquals(link.getId(), linkRef.getId());
+		assertEquals(1, tagS.getInstances().size());
+
+	}
+
+
+	/**
+	 * NOTE; same code as DAO test, but with service. Different result, since we set the tag's user
+	 * in the service layer.
+	 * 
+	 * @throws HippoBusinessException
+	 */
+	public void testSaveTopic() throws HippoBusinessException {
+		clean();
+
+		Topic t = new RealTopic();
+
+		// Entry e = new Entry();
+		// e.setData(B);
+		// t.addOccurence(e);
+
+		t.setTitle(C);
+		t.setUser(u);
+
+		Topic tag = new RealTopic();
+		tag.setTitle(D);
+
+		topicService.save(tag);
+
+		t.tagTopic(tag);
+
+		System.out.println("before: " + t.getId());
+
+		topicService.save(t);
+
+		System.out.println("after: " + t.getId());
+
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
+
+		assertEquals(2, savedL.size());
+
+		TopicIdentifier saved = savedL.get(1);
+
+		Topic savedTopic = topicService.getForID(saved.getTopicID());
+
+		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {
+			if (!datedTopicIdentifier.getTopicTitle().equals(C)
+					&& !datedTopicIdentifier.getTopicTitle().equals(D)) {
+				fail("Not equal to either");
+			} else {
+				if (datedTopicIdentifier.getTopicTitle().equals(C)) {
+
+				} else {
+
+				}
+			}
+		}
+
+		// assertEquals(B, savedTopic.getLatestEntry().getData());
+		assertEquals(u, savedTopic.getUser());
+
+		assertEquals(1, savedTopic.getTypesAsTopics().size());
+
+		Topic savedTag = (Topic) savedTopic.getTypesAsTopics().iterator().next();
+
+		assertEquals(D, savedTag.getTitle());
+
+		// Tag's user will not be initialized
+		assertEquals(u, savedTag.getUser());
+
+
+	}
+
 
 
 	public void testTagPropertyCommand() throws HippoException {
@@ -1028,195 +1216,44 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 
-	public void testRemoveTagComand() throws HippoException {
+
+	public void testUpdatingTopic() throws HippoBusinessException {
 
 		clean();
+		Topic t = new RealTopic();
 
-		Topic tag = new RealTopic(u, C);
+		t.setTitle(C);
+		t.setUser(u);
+
+		Topic tag = new RealTopic();
+		tag.setTitle(D);
+
 		tag = topicService.save(tag);
 
+		t.tagTopic(tag);
 
-		Topic topic = new RealTopic(u, D);
-		topic = topicService.save(topic);
+		System.out.println("before: " + t.getId());
 
-		AbstractCommand comm = new AddToTopicCommand(topic, tag);
+		topicService.save(t);
 
-		topicService.executeAndSaveCommand(comm);
+		System.out.println("after: " + t.getId());
 
-		System.out.println("FINISHED SAVE");
+		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
 
+		assertEquals(3, savedL.size());
 
-		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
-
-		assertEquals(tag, topicS.getTags().iterator().next());
+		TopicIdentifier saved = savedL.get(1);
 
 
+		Topic savedTopic = topicService.getForID(saved.getTopicID());
 
-		comm = new RemoveTagFromTopicCommand(topic, tag);
-		topicService.executeAndSaveCommand(comm);
+		savedTopic.setTitle(E);
 
+		Topic secondSave = topicService.save(savedTopic);
 
-		topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
-
-
-		Topic tagS = (Topic) topicService.getForID(tag.getId());
-		assertEquals(0, topicService.getTopicIdsWithTag(tagS.getId()).size());
+		assertEquals(E, secondSave.getTitle());
 
 	}
-
-
-	/**
-	 * Sorry, formatter is a killer for ascii art diagrams of the object graph
-	 * 
-	 * @return
-	 * @throws HippoException
-	 */
-	private Map<String, Topic> bigSetup() throws HippoException {
-		Map<String, Topic> rtn = new HashMap<String, Topic>();
-
-		// on desktop
-		addToMap(rtn, movies);
-		addToMap(rtn, comics);
-		addToMap(rtn, people);
-		addToMap(rtn, newzealand);
-
-
-		// only children or subchildren of movies
-		addToMap(rtn, gladiator, movies);
-		addToMap(rtn, crowe, gladiator);
-		addToMap(rtn, australia, gladiator);
-
-		// tagged to other root tags
-		addToMap(rtn, daschelle, gladiator);
-		tag(rtn, daschelle, people);
-
-		addToMap(rtn, xmen, movies);
-		tag(rtn, xmen, comics);
-
-
-		List<String> isL = new LinkedList<String>();
-		isL.add(australia);
-		isL.add(newzealand);
-		addEntry(rtn, islandsText, isL);
-
-		List<String> crL = new LinkedList<String>();
-		crL.add(crowe);
-		addEntry(rtn, croweText, crL);
-
-		return rtn;
-
-	}
-
-	private void addEntry(Map<String, Topic> rtn, String entryText, List<String> tags)
-			throws HippoBusinessException, HippoException {
-		Entry e = new Entry();
-		e.setData(entryText);
-
-		List<Topic> tagsT = new LinkedList<Topic>();
-		for (String string : tags) {
-			tagsT.add(rtn.get(string));
-		}
-
-		AbstractCommand comm = new SaveOccurrenceCommand(e, tagsT);
-		topicService.executeAndSaveCommand(comm);
-	}
-
-	private void tag(Map<String, Topic> map, String topic, String tag)
-			throws HippoBusinessException, HippoException {
-		AbstractCommand comm = new AddToTopicCommand(map.get(topic), map.get(tag));
-		topicService.executeAndSaveCommand(comm);
-	}
-
-	private void addToMap(Map<String, Topic> map, String str) throws HippoBusinessException {
-		map.put(str, topicService.createNewIfNonExistent(str));
-	}
-
-	private void addToMap(Map<String, Topic> map, String str, String parent)
-			throws HippoBusinessException {
-		map.put(str, topicService.createNewIfNonExistent(str, map.get(parent)));
-	}
-
-	/**
-	 * Delete confirm should give us a list of everything that will be deleted if the given ID is
-	 * deleted. That means a recursive delete, but one that misses anything else that is referenced
-	 * from another place.
-	 * 
-	 * @throws HippoException
-	 */
-	public void testDeleteConfirm() throws HippoException {
-
-		clean();
-
-		Map<String, Topic> map = bigSetup();
-
-		assertEquals(9, map.size());
-
-		List<Topic> willBeDeleted = topicService.getDeleteList(map.get(xmen).getId());
-		assertEquals(1, willBeDeleted.size());
-
-
-		willBeDeleted = topicService.getDeleteList(map.get(comics).getId());
-		assertEquals(1, willBeDeleted.size());
-
-		willBeDeleted = topicService.getDeleteList(map.get(crowe).getId());
-		assertEquals(2, willBeDeleted.size());
-
-		willBeDeleted = topicService.getDeleteList(map.get(movies).getId());
-		assertEquals(5, willBeDeleted.size());
-
-		for (Topic topic : willBeDeleted) {
-			log.info("Will Delete: " + willBeDeleted);
-		}
-
-
-	}
-
-
-	public void testRecursiveDelete() throws HippoException {
-
-		clean();
-
-		Map<String, Topic> map = bigSetup();
-
-		assertEquals(9, map.size());
-
-		// 9 + 2 entries + root
-		assertEquals(12, topicService.getAllTopicIdentifiers(true).size());
-
-
-		topicService.delete(map.get(movies).getId());
-
-		// should delete 5
-		assertEquals(7, topicService.getAllTopicIdentifiers(true).size());
-
-
-
-	}
-
-
-
-	private void clean() throws HippoBusinessException {
-		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers(true);
-
-		for (TopicIdentifier identifier : savedL) {
-			log.debug("Clean: " + identifier.getTopicTitle());
-			Topic t = topicService.getForID(identifier.getTopicID());
-			// t.getTypes().clear();
-			// t.getInstances().clear();
-			// t = topicService.save(t);
-			if (t != null) {
-				topicService.delete(t);
-			}
-
-		}
-		log.debug("\n-----CLEAN FIN--------");
-
-		Root r = new Root(u);
-		topicService.save(r);
-	}
-
 
 
 	/*

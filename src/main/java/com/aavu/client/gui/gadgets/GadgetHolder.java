@@ -10,4 +10,6 @@ public interface GadgetHolder {
 
 	void setLeft(int i);
 
+	void fireSizeChanged();
+
 }

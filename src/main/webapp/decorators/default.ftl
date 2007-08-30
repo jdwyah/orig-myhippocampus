@@ -7,8 +7,8 @@
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <meta name="description" content="Tame information anxiety. Connect your thoughts, Write your novel, Start your business" />
-  <meta name="keywords" content="personal,knowledge,management,visualization,collection,GWT,information,anxiety" />
+  <meta name="description" content="Tame information anxiety. Connect your thoughts, Write your novel, Start your business, My Hippocampus" />
+  <meta name="keywords" content="personal,knowledge,management,visualization,collection,GWT,information,anxiety,hippocampus,my" />
   <meta name="author" content="Jeff Dwyer/" />
   
 <link rel="icon" href="http://www.myhippocampus.com/favicon.ico" type="image/vnd.microsoft.icon" />

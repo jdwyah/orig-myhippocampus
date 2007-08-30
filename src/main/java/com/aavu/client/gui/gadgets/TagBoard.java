@@ -261,10 +261,6 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 		return null;
 	}
 
-	// @Override
-	public boolean isOnForTopic(Topic topic) {
-		return !topic.getTypes().isEmpty();
-	}
 
 	// @Override
 	public boolean isDisplayer() {
@@ -281,6 +277,5 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 	public void normalize(GadgetPopup gadgetPopup) {
 		gadgetPopup.setLocation(0, 250);
 	}
-
 
 }

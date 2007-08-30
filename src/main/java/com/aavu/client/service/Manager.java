@@ -11,6 +11,7 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.GUIManager;
+import com.aavu.client.gui.GadgetDisplayer;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
@@ -67,7 +68,7 @@ public interface Manager {
 
 	void createNew(Topic topic, int[] lnglat);
 
-	GadgetPopup newFrameGadget(Gadget gadget);
+	GadgetPopup newFrameGadget(Gadget gadget, GadgetDisplayer gDisplayer);
 
 	void addDeliciousTags(String username, String password, AsyncCallback callback);
 

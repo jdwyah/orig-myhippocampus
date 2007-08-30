@@ -1683,5 +1683,4 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	}
 
-
 }

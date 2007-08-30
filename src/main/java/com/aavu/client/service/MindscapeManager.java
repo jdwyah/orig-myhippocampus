@@ -25,6 +25,7 @@ import com.aavu.client.gui.AddTopicPopup;
 import com.aavu.client.gui.EditMetaWindow;
 import com.aavu.client.gui.EntryEditWindow;
 import com.aavu.client.gui.GUIManager;
+import com.aavu.client.gui.GadgetDisplayer;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.Preloader;
 import com.aavu.client.gui.StatusCode;
@@ -453,9 +454,9 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		return frame;
 	}
 
-	public GadgetPopup newFrameGadget(Gadget gadget) {
+	public GadgetPopup newFrameGadget(Gadget gadget, GadgetDisplayer gDisplayer) {
 
-		GadgetPopup frame = new GadgetPopup(gadget);
+		GadgetPopup frame = new GadgetPopup(gadget, gDisplayer);
 
 		map.addFrame(frame);
 

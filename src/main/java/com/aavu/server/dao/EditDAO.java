@@ -34,4 +34,5 @@ public interface EditDAO {
 	List<Topic> getDeleteList(long topicID);
 
 
+
 }

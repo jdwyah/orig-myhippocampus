@@ -64,6 +64,7 @@ public class TopicCompleteOracle extends SuggestOracle {
 
 				for (Iterator iter = ((List) result).iterator(); iter.hasNext();) {
 					TopicIdentifier ti = (TopicIdentifier) iter.next();
+					System.out.println("SUGGEST FIND " + ti);
 					suggestions.add(new TopicSuggestion(ti, request.getQuery()));
 				}
 				callback.onSuggestionsReady(request, new Response(suggestions));

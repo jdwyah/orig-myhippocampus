@@ -139,4 +139,11 @@ public class PublicBrowser extends Composite implements GadgetDisplayer {
 		mainP.add(getWidget());
 	}
 
+
+
+	public void fireSizeChanged() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

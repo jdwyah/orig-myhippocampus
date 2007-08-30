@@ -13,7 +13,7 @@ public class GadgetManager {
 	private List allGadgets;
 
 	private LinkDisplayGadget linkDisplayW;
-	// private ConnectionBoard connectionBoard;
+	private ConnectionBoard connectionBoard;
 	private EntryGadget entryPreview;
 	private ChildrenGadget childGadget;
 	// private TypeGadget typeGadget;
@@ -50,7 +50,7 @@ public class GadgetManager {
 
 			// tagProperties = new TagPropertyPanel(manager);
 			entryPreview = new EntryGadget(manager);
-			// connectionBoard = new ConnectionBoard(manager);
+			connectionBoard = new ConnectionBoard(manager);
 			linkDisplayW = new LinkDisplayGadget(manager);
 			createTopicGadget = new CreateTopicGadget(manager);
 
@@ -69,14 +69,17 @@ public class GadgetManager {
 			// allGadgets.add(tagProperties);
 
 
-			allGadgets.add(linkDisplayW);
-			// allGadgets.add(connectionBoard);
-			allGadgets.add(entryPreview);
-			allGadgets.add(createTopicGadget);
+			allGadgets.add(titleGadget);
+			allGadgets.add(connectionBoard);
 			allGadgets.add(childGadget);
+			allGadgets.add(linkDisplayW);
+			allGadgets.add(entryPreview);
+
+			allGadgets.add(createTopicGadget);
+
 			// allGadgets.add(typeGadget);
 
-			allGadgets.add(titleGadget);
+
 
 			allGadgets.add(tagBoard);
 			allGadgets.add(occTopicsBoard);
