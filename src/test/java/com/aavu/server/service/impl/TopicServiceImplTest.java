@@ -315,9 +315,9 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		topicService.executeAndSaveCommand(new AddToTopicCommand(topic, tag));
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
-		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
-		assertEquals(tag.getId(), tagRef.getId());
+		assertEquals(2, topicS.getTypes().size());
+
+		assertContainsID(tag.getId(), topicS.getTypesAsTopics());
 
 
 		Topic t3 = topicService.createNewIfNonExistent(G);
@@ -337,6 +337,18 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 	}
+
+	private void assertContainsID(long expected, Set topics) {
+		for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
+			Topic topic = (Topic) iterator.next();
+
+			if (topic.getId() == expected) {
+				return;
+			}
+		}
+		fail(expected + " Not In Set");
+	}
+
 
 	public void testCommandWithAssociation() throws HippoException {
 
@@ -384,7 +396,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		log.debug("FINISHED SAVE 1");
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
 
@@ -402,7 +414,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
 
@@ -450,6 +462,11 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		for (Topic topic : willBeDeleted) {
 			log.info("Will Delete: " + willBeDeleted);
 		}
+
+		// make sure we can't delete the root
+		Root r = topicService.getRootTopic(u);
+		willBeDeleted = topicService.getDeleteList(r.getId());
+		assertEquals(0, willBeDeleted.size());
 
 
 	}
@@ -546,7 +563,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		System.out.println("FINISHED SAVE");
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
@@ -596,7 +613,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 
 		System.out.println(topicS.toPrettyString());
 
@@ -660,7 +677,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		System.out.println("FINISHED SAVE");
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
@@ -725,7 +742,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		System.out.println("FINISHED SAVE 1");
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
@@ -755,7 +772,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		topicService.executeAndSaveCommand(comm2);
 
 		topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
 		savedMeta = (Meta) topicS.getMetas().iterator().next();
@@ -777,7 +794,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 			}
 		}
 		idents = topicService.getAllTopicIdentifiers(true);
-		assertEquals(5, idents.size());
+		assertEquals(6, idents.size());
 
 		//
 		// Now do a command with only loc2.
@@ -789,7 +806,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		topicService.executeAndSaveCommand(comm3);
 
 		topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 		assertEquals(1, topicS.getAssociations().size());
 		assertEquals(1, topicS.getMetas().size());
 		savedMeta = (Meta) topicS.getMetas().iterator().next();
@@ -810,7 +827,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		// Test that there was no DB leakage
 		//
 		idents = topicService.getAllTopicIdentifiers(true);
-		assertEquals(4, idents.size());
+		assertEquals(5, idents.size());
 
 	}
 
@@ -853,10 +870,9 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
+		assertEquals(2, topicS.getTypes().size());
 
-		assertEquals(tag, topicS.getTags().iterator().next());
-
+		assertContainsID(tag.getId(), topicS.getTags());
 
 
 		comm = new RemoveTagFromTopicCommand(topic, tag);
@@ -864,7 +880,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		topicS = topicService.getForID(topic.getId());
-		assertEquals(0, topicS.getTypes().size());
+		assertEquals(1, topicS.getTypes().size());
 
 
 		Topic tagS = (Topic) topicService.getForID(tag.getId());
@@ -1029,14 +1045,15 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
-		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
-		assertEquals(tag.getId(), tagRef.getId());
+		assertEquals(2, topicS.getTypes().size());
+
+		assertContainsID(tag.getId(), topicS.getTypesAsTopics());
+
 
 		Topic tagS = topicService.getForID(tag.getId());
 		assertEquals(1, tagS.getOccurences().size());
-		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
-		assertEquals(link.getId(), linkRef.getId());
+
+		assertContainsID(link.getId(), tagS.getOccurenceObjs());
 
 	}
 
@@ -1065,16 +1082,17 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		Topic topicS = topicService.getForID(topic.getId());
-		assertEquals(1, topicS.getTypes().size());
-		Topic tagRef = (Topic) topicS.getTypesAsTopics().iterator().next();
-		assertEquals(tag.getId(), tagRef.getId());
+		assertEquals(2, topicS.getTypes().size());
+
+		assertContainsID(tag.getId(), topicS.getTypesAsTopics());
+
 		assertEquals(0, topicS.getOccurences().size());
 
 
 		Topic tagS = topicService.getForID(tag.getId());
 		assertEquals(1, tagS.getOccurences().size());
-		Topic linkRef = (Topic) tagS.getOccurenceObjs().iterator().next();
-		assertEquals(link.getId(), linkRef.getId());
+
+		assertContainsID(link.getId(), tagS.getOccurenceObjs());
 		assertEquals(1, tagS.getInstances().size());
 
 	}
@@ -1113,15 +1131,17 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		List<DatedTopicIdentifier> savedL = topicService.getAllTopicIdentifiers();
 
-		assertEquals(2, savedL.size());
+		assertEquals(3, savedL.size());
 
 		TopicIdentifier saved = savedL.get(1);
 
 		Topic savedTopic = topicService.getForID(saved.getTopicID());
 
+		Root root = topicService.getRootTopic(u);
 		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {
 			if (!datedTopicIdentifier.getTopicTitle().equals(C)
-					&& !datedTopicIdentifier.getTopicTitle().equals(D)) {
+					&& !datedTopicIdentifier.getTopicTitle().equals(D)
+					&& !datedTopicIdentifier.getTopicTitle().equals(root.getTitle())) {
 				fail("Not equal to either");
 			} else {
 				if (datedTopicIdentifier.getTopicTitle().equals(C)) {
@@ -1146,7 +1166,6 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 	}
-
 
 
 	public void testTagPropertyCommand() throws HippoException {
