@@ -27,9 +27,14 @@ import com.google.gdata.data.docs.DocumentListEntry;
 import com.google.gdata.data.docs.DocumentListFeed;
 import com.google.gdata.util.ServiceException;
 
+/**
+ * TODO Not transactional, need to get a better solution to these batch loads, bc one big
+ * transaction can explode on us.
+ * 
+ * @author Jeff Dwyer
+ * 
+ */
 public class GoogleServicesImpl implements TheGoogleService {
-
-
 
 	private static final Logger log = Logger.getLogger(GoogleServicesImpl.class);
 

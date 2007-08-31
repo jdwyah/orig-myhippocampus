@@ -2,6 +2,7 @@ package com.aavu.client.domain.dto;
 
 import java.util.Date;
 
+import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.timeline.HasDate;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -17,7 +18,7 @@ public class TimeLineObj implements IsSerializable, HasDate, Comparable {
 	public TimeLineObj() {
 	}
 
-	public TimeLineObj(TopicIdentifier topic, Date start, Date end) {
+	public TimeLineObj(TopicIdentifier topic, Date start, Date end, Topic typeTopic) {
 		this.topic = topic;
 		this.start = start;
 		this.end = end;
@@ -27,24 +28,6 @@ public class TimeLineObj implements IsSerializable, HasDate, Comparable {
 		return end;
 	}
 
-	/*
-	 * WARN!!!!!!!!! DO not use this code, since it will include JSON package which is not available
-	 * on the server { 'dateTimeFormat': 'iso8601', 'events' : [ {'start': '1924', 'title':
-	 * 'Barfusserkirche', 'description': 'by Lyonel Feininger, American/German Painter, 1871-1956',
-	 * 'image': 'http://images.allposters.com/images/AWI/NR096_b.jpg', 'link':
-	 * 'http://www.allposters.com/-sp/Barfusserkirche-1924-Posters_i1116895_.htm' },
-	 * 
-	 */
-	// public JSONValue getJSONObj() {
-	// JSONObject jo = new JSONObject();
-	//
-	// jo.put("start", new JSONString(getDateInJSON(getStart())));
-	// jo.put("title", new JSONString(topic.getTopicTitle()));
-	// jo.put("description", new JSONString(getTopic().getTopicID()+""));
-	// jo.put("link", new JSONString("HippoTest.html#"+getTopic().getTopicID()));
-	//
-	// return jo;
-	// }
 	public Date getStart() {
 		return start;
 	}

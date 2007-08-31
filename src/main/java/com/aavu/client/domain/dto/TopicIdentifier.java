@@ -7,33 +7,39 @@ public class TopicIdentifier implements HippoIdentifier, IsSerializable, Compara
 
 	private long topicID;
 	private String topicTitle;
-	
-	public TopicIdentifier(){
+
+
+	public TopicIdentifier() {
 	}
-	
+
 	public TopicIdentifier(long topicID, String topicTitle) {
 		super();
 		this.topicID = topicID;
-		this.topicTitle = topicTitle;		
+		this.topicTitle = topicTitle;
 	}
+
+
 	public long getTopicID() {
 		return topicID;
 	}
+
 	public void setTopicID(long topicID) {
 		this.topicID = topicID;
 	}
+
 	public String getTopicTitle() {
 		return topicTitle;
 	}
+
 	public void setTopicTitle(String topicTitle) {
 		this.topicTitle = topicTitle;
 	}
-	
-	public String toString(){
-		return getTopicID()+" "+getTopicTitle();
+
+	public String toString() {
+		return getTopicID() + " " + getTopicTitle();
 	}
 
-	//@Override
+	// @Override
 	public int hashCode() {
 		final int PRIME = 31;
 		int result = 1;
@@ -42,7 +48,7 @@ public class TopicIdentifier implements HippoIdentifier, IsSerializable, Compara
 		return result;
 	}
 
-	//@Override
+	// @Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -68,10 +74,11 @@ public class TopicIdentifier implements HippoIdentifier, IsSerializable, Compara
 		if (o instanceof TopicIdentifier) {
 			TopicIdentifier other = (TopicIdentifier) o;
 			return getTopicTitle().toLowerCase().compareTo(other.getTopicTitle().toLowerCase());
-		}if (o instanceof String) {						
-			return getTopicTitle().toLowerCase().compareTo(((String) o).toLowerCase() );
-		}else{
+		}
+		if (o instanceof String) {
+			return getTopicTitle().toLowerCase().compareTo(((String) o).toLowerCase());
+		} else {
 			throw new UnsupportedOperationException();
-		}		
+		}
 	}
 }

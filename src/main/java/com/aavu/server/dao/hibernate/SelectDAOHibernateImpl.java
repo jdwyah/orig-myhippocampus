@@ -19,6 +19,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaLocation;
@@ -472,7 +473,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		crit.setProjection(Projections.distinct(Projections.projectionList().add(
 				Property.forName("id")).add(Property.forName("title")).add(
-				Property.forName("metaValue.created")).add(Property.forName("metaValue.id"))));
+				Property.forName("metaValue.created")).add(
+				Property.forName("metaValue.lastUpdated")).add(Property.forName("metaValue.id"))));
 
 
 		List<Object[]> ll = getHibernateTemplate().findByCriteria(crit);
@@ -494,10 +496,11 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 			Long topicId = (Long) oa[0];
 
 			Date date = (Date) oa[2];
+			Date endDate = (Date) oa[3];
 
 			// add metaDate
 			rtn.add(new TimeLineObj(new TopicIdentifier(topicId.longValue(), (String) oa[1]), date,
-					null));
+					endDate, new HippoDate()));
 		}
 
 		return rtn;

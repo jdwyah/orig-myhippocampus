@@ -9,10 +9,6 @@ public interface ExplorerPanel {
 
 	Widget getWidget();
 
-	// Set<TopicIdentifier>
-	// all == null
-	void loadAll();
-
 	void load(List tags);
 
 	void load(Topic topic);

@@ -222,6 +222,9 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 	}
 
 	public void userSelected(LocationDTO selected, final GMarker marker) {
+
+		// manager.getGui().showHover(selected.getTopic());
+
 		SimpleTopicDisplay std = new SimpleTopicDisplay(selected.getTopic(), manager, closeable,
 				BLURB_WIDTH, BLURB_HEIGHT, new EZCallback() {
 					public void onSuccess(Object result) {

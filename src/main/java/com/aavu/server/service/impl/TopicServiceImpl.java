@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
@@ -49,6 +50,7 @@ import com.aavu.server.web.domain.UserPageBean;
  * @author Jeff Dwyer
  * 
  */
+@Transactional
 public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	private static final Logger log = Logger.getLogger(TopicServiceImpl.class);
 

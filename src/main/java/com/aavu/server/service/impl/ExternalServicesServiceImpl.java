@@ -12,6 +12,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.HippoCountry;
@@ -24,7 +25,7 @@ import com.aavu.server.service.ExternalServicesService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 
-
+@Transactional
 public class ExternalServicesServiceImpl extends AbstractRestService implements
 		ExternalServicesService {
 

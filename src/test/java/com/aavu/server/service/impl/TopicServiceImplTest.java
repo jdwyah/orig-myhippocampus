@@ -31,6 +31,7 @@ import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.AddToTopicCommand;
+import com.aavu.client.domain.commands.QuickAddEntryCommand;
 import com.aavu.client.domain.commands.RemoveTagFromTopicCommand;
 import com.aavu.client.domain.commands.SaveMetaDateCommand;
 import com.aavu.client.domain.commands.SaveMetaLocationCommand;
@@ -1236,24 +1237,18 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 
-	public void testUpdatingTopic() throws HippoBusinessException {
+	public void testUpdatingTopic() throws HippoException {
 
 		clean();
-		Topic t = new RealTopic();
+		Topic t = topicService.createNewIfNonExistent(C);
 
-		t.setTitle(C);
-		t.setUser(u);
+		Topic tag = topicService.createNewIfNonExistent(D);
 
-		Topic tag = new RealTopic();
-		tag.setTitle(D);
-
-		tag = topicService.save(tag);
-
-		t.tagTopic(tag);
 
 		System.out.println("before: " + t.getId());
 
-		topicService.save(t);
+		topicService.executeAndSaveCommand(new AddToTopicCommand(t, tag));
+
 
 		System.out.println("after: " + t.getId());
 
@@ -1274,7 +1269,67 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 	}
 
+	public void testSaveOccurrenceCommand() throws HippoException {
+		clean();
 
+		Topic tag = topicService.createNewIfNonExistent(C);
+
+		Topic topic = topicService.createNewIfNonExistent(D, tag);
+
+		QuickAddEntryCommand comm = new QuickAddEntryCommand(E, "entry", tag);
+		topicService.executeAndSaveCommand(comm);
+
+		Topic savedTag2 = topicService.getForID(tag.getId());
+		assertEquals(1, savedTag2.getOccurences().size());
+		assertEquals(1, savedTag2.getInstances().size());
+		assertEquals(1, savedTag2.getTypes().size());
+
+		Entry savedE = (Entry) savedTag2.getOccurenceObjs().iterator().next();
+		assertEquals(E, savedE.getTitle());
+
+		Topic savedTopic = topicService.getForID(topic.getId());
+		assertEquals(0, savedTopic.getOccurences().size());
+		assertEquals(0, savedTopic.getInstances().size());
+		assertEquals(1, savedTopic.getTypes().size());
+
+
+		List<Topic> toTopics = new ArrayList<Topic>();
+		toTopics.add(savedTag2);
+		toTopics.add(savedTopic);
+		SaveOccurrenceCommand comm2 = new SaveOccurrenceCommand(savedE, toTopics);
+		topicService.executeAndSaveCommand(comm2);
+
+		// make sure we added
+		savedTopic = topicService.getForID(topic.getId());
+		assertEquals(1, savedTopic.getOccurences().size());
+		assertEquals(0, savedTopic.getInstances().size());
+		assertEquals(1, savedTopic.getTypes().size());
+
+		// make sure we didn't screw up topic
+		savedTag2 = topicService.getForID(tag.getId());
+		assertEquals(1, savedTag2.getOccurences().size());
+		assertEquals(1, savedTag2.getInstances().size());
+
+
+		// now remove
+		List<Topic> toTopics2 = new ArrayList<Topic>();
+		toTopics2.add(savedTopic);
+		SaveOccurrenceCommand comm3 = new SaveOccurrenceCommand(savedE, toTopics2);
+		topicService.executeAndSaveCommand(comm3);
+
+		// make sure we didn't screw up tag
+		savedTopic = topicService.getForID(topic.getId());
+		assertEquals(1, savedTopic.getOccurences().size());
+		assertEquals(0, savedTopic.getInstances().size());
+		assertEquals(1, savedTopic.getTypes().size());
+
+		// make sure we removed topic
+		savedTag2 = topicService.getForID(tag.getId());
+		assertEquals(0, savedTag2.getOccurences().size());
+		assertEquals(1, savedTag2.getInstances().size());
+
+
+	}
 	/*
 	 * public void testGetForName() { fail("Not yet implemented"); }
 	 * 

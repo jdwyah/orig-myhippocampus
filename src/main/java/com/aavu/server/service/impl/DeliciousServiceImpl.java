@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
-import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.exception.HippoException;
 import com.aavu.server.domain.DeliciousBundle;
 import com.aavu.server.domain.DeliciousPost;
@@ -28,7 +28,12 @@ import com.aavu.server.service.DeliciousService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 
-
+/**
+ * TODO currently NOT transactional. was leading to HeapSpace errors
+ * 
+ * @author Jeff Dwyer
+ * 
+ */
 public class DeliciousServiceImpl extends AbstractRestService implements DeliciousService {
 
 
@@ -84,7 +89,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 	private static final String delicousApiUrlAll = "https://api.del.icio.us/v1/posts/all?";
 	private static final String delicousApiBundleGet = "https://api.del.icio.us/v1/tags/bundles/all?";
 	private static final String delicousApiUrlGet = "https://api.del.icio.us/v1/posts/get?";
-	static final String DELICIOUS_STR = "Del.icio.us Links";
+	public static final String DELICIOUS_STR = "Del.icio.us Links";
 
 	private TopicService topicService;
 	private UserService userService;
@@ -177,7 +182,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 
 	public void addBundles(Topic deliciousRoot, List<DeliciousBundle> bundles)
-			throws HippoBusinessException {
+			throws HippoException {
 		for (DeliciousBundle deliciousBundle : bundles) {
 
 			Topic bundle = topicService.createNewIfNonExistent(deliciousBundle.getName(),
@@ -185,13 +190,11 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 			log.info("New Bundle: " + bundle);
 
-			for (String bundleTag : deliciousBundle.getTags()) {
+			for (String tagString : deliciousBundle.getTags()) {
 
-				Topic tag = topicService.createNewIfNonExistent(bundleTag, bundle);
+				Topic tag = topicService.createNewIfNonExistent(tagString, bundle);
 
-				tag.addType(bundle);
-
-				topicService.save(tag);
+				topicService.executeAndSaveCommand(new AddToTopicCommand(tag, bundle));
 
 				log.debug("with tag: " + tag);
 
@@ -199,7 +202,6 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 			log.debug("New Bundle: " + bundle + " tags: " + bundle.getInstances().size());
 
-			topicService.save(bundle);
 		}
 	}
 

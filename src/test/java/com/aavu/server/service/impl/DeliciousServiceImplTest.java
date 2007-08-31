@@ -26,6 +26,7 @@ import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestNoTransaction;
 
+
 public class DeliciousServiceImplTest extends BaseTestNoTransaction {
 
 	private DeliciousService deliciousService;
@@ -128,6 +129,13 @@ public class DeliciousServiceImplTest extends BaseTestNoTransaction {
 		}
 
 		deliciousService.addDeliciousTags(posts, deliciousRoot);
+
+
+		Topic delicious = topicService
+				.getForNameCaseInsensitive(DeliciousServiceImpl.DELICIOUS_STR);
+
+		assertEquals(128, delicious.getInstances().size());
+
 
 	}
 

@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.aavu.client.domain.User;
@@ -27,43 +28,41 @@ import com.aavu.server.web.domain.MailingListCommand;
 
 import freemarker.template.Template;
 
+@Transactional
 public class InvitationServiceImpl implements InvitationService {
 	private static final Logger log = Logger.getLogger(InvitationServiceImpl.class);
-	
+
 	private FreeMarkerConfigurer configurer = null;
 	private String from;
 	private String invitationTemplate;
 
-	private MailingListDAO	mailingListDAO;
+	private MailingListDAO mailingListDAO;
 	private JavaMailSender mailSender;
 	private String masterkey;
 
 	private UserService userService;
-	
-	
-	
-	public MailingListEntry getEntryForKey(String randomkey) {		
+
+
+
+	public MailingListEntry getEntryForKey(String randomkey) {
 		return mailingListDAO.getEntryForKey(randomkey);
 	}
 
 	/**
-	 * PEND low 
-	 * SignupIfPossibleController.CHEAT should be a MD5(timestamp + pass) that we check on our end, but...
+	 * PEND low SignupIfPossibleController.CHEAT should be a MD5(timestamp + pass) that we check on
+	 * our end, but...
 	 * 
 	 */
 	public boolean isKeyValid(String randomkey) {
-		return (getEntryForKey(randomkey) != null)
-		||
-		randomkey.equals(masterkey)
-		||
-		isValidTimestampKey(randomkey);		
+		return (getEntryForKey(randomkey) != null) || randomkey.equals(masterkey)
+				|| isValidTimestampKey(randomkey);
 	}
 
-	
+
 	private boolean isValidTimestampKey(String randomkey) {
 		Calendar c = Calendar.getInstance();
-		c.get(Calendar.DAY_OF_WEEK_IN_MONTH);			
-		String preCrypt = SignupIfPossibleController.SECRET+c.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+		c.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+		String preCrypt = SignupIfPossibleController.SECRET + c.get(Calendar.DAY_OF_WEEK_IN_MONTH);
 		String crypt = CryptUtils.hashString(preCrypt);
 		return crypt.equals(randomkey);
 	}
@@ -73,9 +72,9 @@ public class InvitationServiceImpl implements InvitationService {
 	}
 
 	public void saveSignedUpUser(String randomkey, User u) {
-		//may be null for masterkey overrides of the system		
+		// may be null for masterkey overrides of the system
 		MailingListEntry entry = getEntryForKey(randomkey);
-		if(entry != null){
+		if (entry != null) {
 			entry.setSignedUpUser(u);
 			mailingListDAO.save(entry);
 		}
@@ -83,34 +82,34 @@ public class InvitationServiceImpl implements InvitationService {
 
 
 
-
-
 	/**
-	 * See http://opensource.atlassian.com/confluence/spring/display/DISC/Sending+FreeMarker-based+multipart+email+with+Spring
+	 * See
+	 * http://opensource.atlassian.com/confluence/spring/display/DISC/Sending+FreeMarker-based+multipart+email+with+Spring
 	 */
-	public void createAndSendInvitation(final String email, final User inviter) throws HippoBusinessException, HippoInfrastructureException {
+	public void createAndSendInvitation(final String email, final User inviter)
+			throws HippoBusinessException, HippoInfrastructureException {
 
-		if(inviter.getInvitations() < 1){
+		if (inviter.getInvitations() < 1) {
 			throw new HippoBusinessException("No invites available for user.");
 		}
-		
-		log.debug("before create entry");
-		
-		final MailingListEntry invitation = mailingListDAO.createEntry(email, inviter);		
-		
-		log.debug("subtract entry "+inviter.getInvitations());
-		
-		userService.addInvitationsTo(inviter,-1);
 
-		log.debug("send invite "+inviter.getInvitations());
-		
+		log.debug("before create entry");
+
+		final MailingListEntry invitation = mailingListDAO.createEntry(email, inviter);
+
+		log.debug("subtract entry " + inviter.getInvitations());
+
+		userService.addInvitationsTo(inviter, -1);
+
+		log.debug("send invite " + inviter.getInvitations());
+
 		sendInvite(invitation);
 
-		log.debug("sent "+inviter.getInvitations());
+		log.debug("sent " + inviter.getInvitations());
 	}
 
 	public void sendInvite(final MailingListEntry invitation) throws HippoInfrastructureException {
-		//send mail
+		// send mail
 		try {
 			MimeMessagePreparator preparator = new MimeMessagePreparator() {
 				public void prepare(MimeMessage mimeMessage) throws Exception {
@@ -118,25 +117,26 @@ public class InvitationServiceImpl implements InvitationService {
 					message.setTo(invitation.getEmail());
 					message.setFrom(from);
 					message.setSubject("MyHippocampus Invitation");
-					
-					Map<String,Object> model = new HashMap<String, Object>();            	 
+
+					Map<String, Object> model = new HashMap<String, Object>();
 					model.put("inviter", invitation.getInviter());
 					model.put("randomkey", invitation.getRandomkey());
 					model.put("email", invitation.getEmail());
-					
-					Template textTemplate = configurer.getConfiguration().getTemplate(invitationTemplate);
+
+					Template textTemplate = configurer.getConfiguration().getTemplate(
+							invitationTemplate);
 					final StringWriter textWriter = new StringWriter();
 
 					textTemplate.process(model, textWriter);
 
 					message.setText(textWriter.toString(), true);
-					
-					
-					
-					log.info("Inviting: "+invitation.getEmail());
-					log.debug("From: "+from);
-					log.debug("Message: "+textWriter.toString());
-					
+
+
+
+					log.info("Inviting: " + invitation.getEmail());
+					log.debug("From: " + from);
+					log.debug("Message: " + textWriter.toString());
+
 				}
 			};
 			this.mailSender.send(preparator);
@@ -149,8 +149,8 @@ public class InvitationServiceImpl implements InvitationService {
 			throw new HippoInfrastructureException(e);
 		}
 	}
-	
-	
+
+
 
 	public void setConfigurer(FreeMarkerConfigurer configuration) {
 		this.configurer = configuration;
@@ -187,10 +187,6 @@ public class InvitationServiceImpl implements InvitationService {
 	public List<MailingListEntry> getMailingList() {
 		return mailingListDAO.getMailingList();
 	}
-
-
-
-
 
 
 

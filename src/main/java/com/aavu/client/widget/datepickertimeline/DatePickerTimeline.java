@@ -16,11 +16,12 @@ import com.aavu.client.widget.datepicker.DateFormat;
 import com.aavu.client.widget.datepicker.DatePickerInterface;
 import com.google.gwt.user.client.ui.Widget;
 
-public class DatePickerTimeline extends ZoomableTimeline implements DragEventListener, DatePickerInterface {
+public class DatePickerTimeline extends ZoomableTimeline implements DragEventListener,
+		DatePickerInterface {
 
-	private DragHandler dragHandler;	
-	
-	public DatePickerTimeline(Manager manager, int width, int height,CloseListener window) {
+	private DragHandler dragHandler;
+
+	public DatePickerTimeline(Manager manager, int width, int height, CloseListener window) {
 		super(manager, width, height, window);
 
 		dragHandler = new DragHandler(this);
@@ -29,40 +30,39 @@ public class DatePickerTimeline extends ZoomableTimeline implements DragEventLis
 		addStyleName("H-DatePickerTimeline");
 	}
 
-	//@Override
-	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo,
-			int left, int top) {
-		DraggableTimeLineObj tlow = new DraggableTimeLineObj(manager,tlo,left,top);
+	// @Override
+	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo, int left, int top) {
+		DraggableTimeLineObj tlow = new DraggableTimeLineObj(manager, tlo, left, top);
 		tlow.addMouseWheelListener(this);
-		
 
-		
-		dragHandler.add(tlow,this);
 
-		
+
+		dragHandler.add(tlow, this);
+
+
 		return tlow;
 	}
 
 	public void dragFinished(Widget dragging) {
-		System.out.println("drag finished "+dragging);
+		System.out.println("drag finished " + dragging);
 		DraggableTimeLineObj dtlo = (DraggableTimeLineObj) dragging;
-		
-		//dragging.get
-		
+
+		// dragging.get
+
 	}
 
 	public void setSelectedDate(Date created) {
 		List timelines = new ArrayList();
-		timelines.add(new TimeLineObj(new TopicIdentifier(),created,null));
+		timelines.add(new TimeLineObj(new TopicIdentifier(), created, null, null));
 		add(timelines);
 	}
 
 	public void dragged(Widget dragging, int newX, int newY) {
 		DraggableTimeLineObj dtlo = (DraggableTimeLineObj) dragging;
-		
-		System.out.println("dragged "+newX+" "+newY);
-		//dtlo.setleft(newX);
-		
+
+		System.out.println("dragged " + newX + " " + newY);
+		// dtlo.setleft(newX);
+
 	}
 
 	public Date getCurrentDate() {
@@ -77,13 +77,13 @@ public class DatePickerTimeline extends ZoomableTimeline implements DragEventLis
 
 	public void setDateFormat(DateFormat date_format_mmddyyyy) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setWeekendSelectable(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
+
 }

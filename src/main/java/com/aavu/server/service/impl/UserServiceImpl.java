@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Subscription;
@@ -39,6 +40,7 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
  * @author Jeff Dwyer
  * 
  */
+@Transactional
 public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 	private static final Logger log = Logger.getLogger(UserServiceImpl.class);

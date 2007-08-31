@@ -1161,7 +1161,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<DatedTopicIdentifier> savedL = selectDAO.getAllTopicIdentifiers(u, false);
 
-		assertEquals(2, savedL.size());
+		assertEquals(3, savedL.size());
 
 
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
@@ -1174,7 +1174,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		editDAO.delete(patriotGames);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
-		assertEquals(1, savedL.size());
+		assertEquals(2, savedL.size());
 
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(0,book.getInstances().size());

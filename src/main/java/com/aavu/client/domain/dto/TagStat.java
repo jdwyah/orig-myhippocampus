@@ -5,16 +5,17 @@ import com.aavu.client.domain.Topic;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class TagStat implements IsSerializable, TagInfo {
-	
-	private long  tagId;
+
+	private long tagId;
 	private int numberOfTopics;
 	private String tagName;
 	private int latitude;
 	private int longitude;
-	
-	public TagStat(){}
-	
-	public TagStat(Topic t){
+
+	public TagStat() {
+	}
+
+	public TagStat(Topic t) {
 		super();
 		this.tagId = t.getId();
 		this.numberOfTopics = t.getTypes().size();
@@ -77,11 +78,9 @@ public class TagStat implements IsSerializable, TagInfo {
 
 
 	public TopicIdentifier getTopicIdentifier() {
-		return new TopicIdentifier(tagId,tagName);
+		return new TopicIdentifier(tagId, tagName);
 	}
 
-	
-	
-	
-	
+
+
 }

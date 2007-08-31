@@ -8,6 +8,7 @@ import java.util.List;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.aavu.client.domain.Entry;
@@ -32,6 +33,7 @@ import com.aavu.server.service.UserService;
  * @author Jeff Dwyer
  * 
  */
+@Transactional
 public class MessageServiceImpl implements MessageService {
 	private static final Logger log = Logger.getLogger(MessageServiceImpl.class);
 

@@ -27,6 +27,7 @@ import org.compass.gps.CompassGps;
 import org.compass.gps.MirrorDataChangesGpsDevice;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.RealTopic;
@@ -38,6 +39,7 @@ import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.service.SearchService;
 import com.aavu.server.service.UserService;
 
+@Transactional
 public class SearchServiceImpl implements SearchService, InitializingBean {
 	private static final Logger log = Logger.getLogger(SearchServiceImpl.class);
 

@@ -10,12 +10,13 @@ import org.gwm.client.event.GFrameEvent;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
 import com.aavu.client.service.Manager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -101,51 +102,57 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 	}
 
 	private void loadChildren(Topic firstTopic) {
-		System.out.println("get topics w/ tag");
-		manager.getTopicCache().getTopicsWithTag(firstTopic.getId(), new TimeLineLookup());
+		System.out.println("getChildren");
+		List l = new ArrayList();
+		for (Iterator iterator = firstTopic.getInstances().iterator(); iterator.hasNext();) {
+			TopicTypeConnector toc = (TopicTypeConnector) iterator.next();
+
+			Topic childTopic = toc.getTopic();
+			l.add(new TimeLineObj(childTopic.getIdentifier(), childTopic.getCreated(), null,
+					childTopic));
+		}
+		timeline.add(l);
+
+		// manager.getTopicCache().getTopicsWithTag(firstTopic.getId(), new TimeLineLookup());
 	}
 
 	private void loadOccs(Topic firstTopic) {
 		List l = new ArrayList();
 		for (Iterator iterator = firstTopic.getOccurenceObjs().iterator(); iterator.hasNext();) {
 			Occurrence occ = (Occurrence) iterator.next();
-			l.add(new TimeLineObj(occ.getIdentifier(), occ.getCreated(), null));
+			System.out.println("TimeLineWrapper new TimeLineObj " + GWT.getTypeName(occ) + " "
+					+ occ);
+			l.add(new TimeLineObj(occ.getIdentifier(), occ.getCreated(), null, occ));
 		}
 		timeline.add(l);
 	}
 
-	public void loadAll() {
-
-		timeline.clear();
-
-		manager.getTopicCache().getAllTopicIdentifiers(0, 200, new TimeLineLookup());
-	}
 
 
-	/**
-	 * Wrap the call to timeline.load() so that we have the option of doing an async fetch to the
-	 * server.
-	 * 
-	 * @author Jeff Dwyer
-	 */
-	private class TimeLineLookup extends StdAsyncCallback {
-		public TimeLineLookup() {
-			super("Timeline Lookup");
-		}
-
-		// @Override
-		public void onSuccess(Object result) {
-			super.onSuccess(result);
-			List tis = (List) result;
-			List all = new ArrayList();
-			for (Iterator iter = tis.iterator(); iter.hasNext();) {
-				DatedTopicIdentifier dti = (DatedTopicIdentifier) iter.next();
-				all.add(new TimeLineObj(dti, dti.getCreated(), null));
-			}
-			timeline.add(all);
-		}
-
-	}
+	// /**
+	// * Wrap the call to timeline.load() so that we have the option of doing an async fetch to the
+	// * server.
+	// *
+	// * @author Jeff Dwyer
+	// */
+	// private class TimeLineLookup extends StdAsyncCallback {
+	// public TimeLineLookup() {
+	// super("Timeline Lookup");
+	// }
+	//
+	// // @Override
+	// public void onSuccess(Object result) {
+	// super.onSuccess(result);
+	// List tis = (List) result;
+	// List all = new ArrayList();
+	// for (Iterator iter = tis.iterator(); iter.hasNext();) {
+	// DatedTopicIdentifier dti = (DatedTopicIdentifier) iter.next();
+	// all.add(new TimeLineObj(dti, dti.getCreated(), null));
+	// }
+	// timeline.add(all);
+	// }
+	//
+	// }
 
 	/**
 	 * Merge the shopping list style return into one big list.
