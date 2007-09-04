@@ -110,6 +110,7 @@ public class GoogleServicesImpl implements TheGoogleService {
 				userService.setGoogleAppsUpdate();
 			}
 		};
+		addTagThread.setPriority(Thread.MIN_PRIORITY);
 		addTagThread.start();
 
 		log.info("Returning to caller.");

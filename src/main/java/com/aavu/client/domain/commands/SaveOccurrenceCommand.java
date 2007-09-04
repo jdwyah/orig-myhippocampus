@@ -131,15 +131,24 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 		for (Iterator iterator = desiredList.iterator(); iterator.hasNext();) {
 			Topic toAdd = (Topic) iterator.next();
 			System.out.println("adding " + toAdd);
-			toAdd.addOccurence(theOcc);
 
-			System.out.println("cont: " + toAdd.getOccurenceObjs().contains(getOccurrence()));
+			// TODO fix better
+			// not sure why this ever happens, but have found it null in the logs
+			if (toAdd != null) {
+				toAdd.addOccurence(theOcc);
+
+				System.out.println("cont: " + toAdd.getOccurenceObjs().contains(getOccurrence()));
+			}
 		}
 
-		System.out.println("SaveOccComm." + getTopic(1));
-		System.out.println("SaveOccComm.contp: "
-				+ getTopic(1).getOccurenceObjs().contains(getOccurrence()));
-		System.out.println("SaveOccComm.occ: " + getOccurrence());
+		try {
+			System.out.println("SaveOccComm." + getTopic(1));
+			System.out.println("SaveOccComm.contp: "
+					+ getTopic(1).getOccurenceObjs().contains(getOccurrence()));
+			System.out.println("SaveOccComm.occ: " + getOccurrence());
+		} catch (NullPointerException e) {
+			System.out.println("SaveOccComm. ERR NPE");
+		}
 
 
 		affected.add(theOcc);

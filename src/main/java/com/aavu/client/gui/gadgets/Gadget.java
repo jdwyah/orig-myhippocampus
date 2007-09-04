@@ -74,13 +74,14 @@ public abstract class Gadget extends Composite {
 		super.initWidget(widget);
 	}
 
-	/**
-	 * PEND integrate lastload size better
-	 * 
-	 * @param topic
-	 * @return
-	 */
-	public abstract int load(Topic topic);
+	public int load(Topic topic) {
+		setTheme(topic);
+		return -1;
+	}
+
+	private void setTheme(Topic topic) {
+		getGadgetHolder().setTheme(topic.getWindowTheme());
+	}
 
 
 	/**

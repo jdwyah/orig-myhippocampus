@@ -98,8 +98,9 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 	// }
 
 	public int load(Topic topic) {
-		myTopic = topic;
+		super.load(topic);
 
+		myTopic = topic;
 
 		manager.getTopicCache().getLinksTo(topic, new StdAsyncCallback("GetLinksTo") {
 			public void onSuccess(Object result) {
@@ -138,6 +139,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 		return size;
 
 	}
+
 
 	// @Override
 	public boolean isDisplayer() {

@@ -188,6 +188,7 @@ public class TitleGadget extends Gadget {
 
 	// @Override
 	public int load(Topic topic) {
+		super.load(topic);
 		this.topic = topic;
 
 		if (topic.getTitle() == null || topic.getTitle().equals("")) {

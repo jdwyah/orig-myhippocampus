@@ -236,7 +236,8 @@ public abstract class AbstractTopic implements Serializable {
 		AbstractTopic castOther = (AbstractTopic) other;
 
 		if (this.getId() != 0 && this.getId() == castOther.getId()) {
-			System.out.println("ID EQUALS! " + this.getId() + " " + castOther.getId());
+			// System.out.println("AbstractTopic.equals ID EQUALS! " + this.getId() + " "
+			// + castOther.getId());
 			return true;
 		}
 		if (this.mustHaveUniqueName()) {

@@ -47,7 +47,7 @@ public class EntryGadget extends Gadget {
 
 	// @Override
 	public int load(Topic topic) {
-
+		super.load(topic);
 		Set entries = topic.getEntries();
 		entryP.clear();
 

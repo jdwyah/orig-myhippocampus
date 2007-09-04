@@ -89,6 +89,7 @@ public abstract class MetaGadget extends Gadget {
 
 	// @Override
 	public int load(Topic topic) {
+		super.load(topic);
 		this.topic = topic;
 
 		// System.out.println("Meta Gadget Load "+topic.toPrettyString());

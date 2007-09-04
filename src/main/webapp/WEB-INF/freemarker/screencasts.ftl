@@ -26,6 +26,13 @@
 		</ul>
 		
 		<p>
+<script type="text/javascript">
+//digg_bgcolor = '#ff9900';
+digg_skin = 'compact';
+</script>
+<script src="http://digg.com/tools/diggthis.js" type="text/javascript"></script>
+		</p>
+		<p>
 		(Please Note, these screencasts are for the Beta 1 release of MyHippocampus.<br>
 		 The new Beta 2 has some significant differences (read huge improvements) but we haven't had a chance to make the screencasts yet) 
 

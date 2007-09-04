@@ -56,6 +56,7 @@ public class ChildrenGadget extends Gadget implements TopicLoader {
 
 
 	public int load(Topic topic) {
+		super.load(topic);
 		childPanel.clear();
 
 

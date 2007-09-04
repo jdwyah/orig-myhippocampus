@@ -19,10 +19,10 @@ public class MindMapBoard extends Composite {
 
 	protected static final int MAP_HEIGHT = 400;
 	protected static final int MAP_WIDTH = 600;
-	
+
 	private MapperWidget mapper;
 	private MindTreeOcc treeOcc;
-	
+
 	private SaveNeededListener saveNeeded;
 	private VerticalPanel mainPanel;
 	private Manager manager;
@@ -31,65 +31,67 @@ public class MindMapBoard extends Composite {
 	public MindMapBoard(Manager manager, SaveNeededListener _saveNeeded) {
 		this.saveNeeded = _saveNeeded;
 		this.manager = manager;
-				
+
 		mainPanel = new VerticalPanel();
-		
+
 		initWidget(mainPanel);
 	}
 
-	
 
 
-	private void loadNShow(Topic topic,MindTreeOcc treeOcc2) {
-		mapper.loadTree(topic,treeOcc2);		
-	
+	private void loadNShow(Topic topic, MindTreeOcc treeOcc2) {
+		mapper.loadTree(topic, treeOcc2);
+
 	}
 
 
 	public void load(final Topic topic) {
-		
+
+
 		mainPanel.clear();
-		
+
 		treeOcc = topic.getMyMindTree();
-		
-		
+
+
 		Button mapB = new Button(ConstHolder.myConstants.mapperAddMap());
-		mapB.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {		
-				if(mapper == null){
-					mapper = new MapperWidget(manager,MAP_WIDTH,MAP_HEIGHT);
-					mapper.hide();					
+		mapB.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				if (mapper == null) {
+					mapper = new MapperWidget(manager, MAP_WIDTH, MAP_HEIGHT);
+					mapper.hide();
 				}
 
 				/*
-				 * We're specifically nulling out the MindTree elements before serialization 
-				 * so we need to fetch & save explicitly 
+				 * We're specifically nulling out the MindTree elements before serialization so we
+				 * need to fetch & save explicitly
 				 */
-				if(treeOcc.getMindTree() == null){
-					manager.getTopicCache().getTreeFor(treeOcc,new StdAsyncCallback(ConstHolder.myConstants.mapperAsyncGet()){
-						public void onSuccess(Object result) {
-							super.onSuccess(result);
-							MindTree tree = (MindTree) result;
-							treeOcc.setMindTree(tree);
-							loadNShow(topic,treeOcc);
-						}						
-					});
-				}else{
+				if (treeOcc.getMindTree() == null) {
+					manager.getTopicCache().getTreeFor(treeOcc,
+							new StdAsyncCallback(ConstHolder.myConstants.mapperAsyncGet()) {
+								public void onSuccess(Object result) {
+									super.onSuccess(result);
+									MindTree tree = (MindTree) result;
+									treeOcc.setMindTree(tree);
+									loadNShow(topic, treeOcc);
+								}
+							});
+				} else {
 					loadNShow(topic, treeOcc);
 				}
 				saveNeeded.onChange(MindMapBoard.this);
-				
-			}});
-		
-		//This avoid a transientObject save problem when saving the 
-		//mind map
-		//TODO get rid of this requirement
-		if(topic.getId() <= 0){
-			mainPanel.add(new Label(ConstHolder.myConstants.mapperSaveFirst()));			
-		}else{
+
+			}
+		});
+
+		// This avoid a transientObject save problem when saving the
+		// mind map
+		// TODO get rid of this requirement
+		if (topic.getId() <= 0) {
+			mainPanel.add(new Label(ConstHolder.myConstants.mapperSaveFirst()));
+		} else {
 			mainPanel.add(mapB);
 		}
 	}
 
-	
+
 }

@@ -116,6 +116,7 @@ public class DeliciousServiceImplTest extends BaseTestNoTransaction {
 
 
 		path = "com/aavu/server/service/jeff_aFew.xml";
+		// path = "com/aavu/server/service/jeff_all_huge.xml"; //~2500 posts
 
 		Document doc = getDoc(path);
 

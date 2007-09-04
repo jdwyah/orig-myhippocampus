@@ -84,8 +84,8 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 			GadgetPopup popup = (GadgetPopup) iterator.next();
 
 
-			System.out.println("popup " + popup.getGadget().getDisplayName() + " "
-					+ popup.showForIsCurrent(isCurrent) + " " + (popup.getLastLoadSize() > 0));
+			// System.out.println("popup " + popup.getGadget().getDisplayName() + " "
+			// + popup.showForIsCurrent(isCurrent) + " " + (popup.getLastLoadSize() > 0));
 
 
 

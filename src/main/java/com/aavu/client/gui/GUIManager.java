@@ -14,5 +14,7 @@ public interface GUIManager {
 
 	void showGoogleMap();
 
+	void showConnections();
+
 
 }

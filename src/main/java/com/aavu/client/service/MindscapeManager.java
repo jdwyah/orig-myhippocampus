@@ -19,7 +19,6 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.AddTopicPopup;
 import com.aavu.client.gui.EditMetaWindow;
@@ -115,6 +114,19 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			selectedTopics.clear();
 		} catch (Exception e) {
 			Logger.error("Exception clearing " + e);
+		}
+
+		// if this is an occurrence, short circuit a bit. go to the first type instead.
+		// since we don't display hieracrchies off an entry / weblink
+		// PEND bring up a choice of the types instead?
+		if (topic instanceof Occurrence) {
+			Occurrence occ = (Occurrence) topic;
+			Topic parent = (Topic) occ.getTopicsAsTopics().iterator().next();
+
+			// do full load since parent will not have all info loaded
+			bringUpChart(parent.getId());
+			editOccurrence(occ, false);
+			return;
 		}
 
 		currentTopic = topic;
@@ -583,14 +595,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void topicSaved(Topic t, AbstractCommand command) {
 		map.update(t, command);
 
-		System.out.println("MindscapeManager TOPIC SAVED " + t + " " + t.getId());
-		if (command instanceof AddToTopicCommand) {
-			System.out.println("MindscapeManager TAG COMMAND");
-			AddToTopicCommand comm = (AddToTopicCommand) command;
-			Topic tag = (Topic) comm.getTagToAddThingsTo();
-			System.out.println("MindscapeManager GROW " + tag);
-			map.growIsland(tag, null);
-		}
+
 	}
 
 

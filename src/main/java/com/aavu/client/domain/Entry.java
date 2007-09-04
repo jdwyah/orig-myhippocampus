@@ -104,5 +104,20 @@ public class Entry extends Occurrence implements Serializable, IsSerializable, R
 		return 200;
 	}
 
+	// @Override
+	public void setData(String data) {
+
+		// PEND low
+		// Microsoft Word paste fix
+		data.replaceAll("â??", "'");
+
+		super.setData(data);
+	}
+
+	// @Override
+	public String getWindowTheme() {
+		return "alphacube-blue";
+	}
+
 
 }

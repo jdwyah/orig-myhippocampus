@@ -981,4 +981,8 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		return true;
 	}
 
+	public String getWindowTheme() {
+		return "alphacube";
+	}
+
 }

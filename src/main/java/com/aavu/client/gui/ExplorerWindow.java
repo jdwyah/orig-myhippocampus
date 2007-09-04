@@ -6,6 +6,7 @@ import org.gwm.client.event.GFrameAdapter;
 import org.gwm.client.event.GFrameEvent;
 
 import com.aavu.client.domain.Topic;
+import com.aavu.client.gui.connectionExplorer.ConnectionExplorer;
 import com.aavu.client.gui.explorer.TimeLineWrapper;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.glossary.Glossary;
@@ -20,7 +21,7 @@ public class ExplorerWindow extends PopupWindow {
 	private TimeLineWrapper timeline;
 	private Glossary glossary;
 	private BigMap bigMap;
-
+	private ConnectionExplorer connectionExplorer;
 
 	public ExplorerWindow(Manager manager, final GInternalFrame frame) {
 		super(frame, "Timeline", WIDTH, HEIGHT);
@@ -28,6 +29,7 @@ public class ExplorerWindow extends PopupWindow {
 		timeline = new TimeLineWrapper(manager, WIDTH, HEIGHT, this);
 		glossary = new Glossary(manager);
 		bigMap = new BigMap(manager, null, WIDTH, HEIGHT, this);
+		connectionExplorer = new ConnectionExplorer(manager);
 
 		System.out.println("\n\n\nNew Timeline " + timeline.getOffsetWidth() + " "
 				+ timeline.getOffsetHeight());
@@ -83,5 +85,14 @@ public class ExplorerWindow extends PopupWindow {
 		bigMap.load(curTopic);
 		bigMap.setVisible(true);
 		frame.setContent(bigMap);
+	}
+
+
+	public void loadConnections(Topic curTopic) {
+		frame.setCaption("Connections for " + curTopic.getTitle());
+		frame.setWidth(200);
+		connectionExplorer.load(curTopic);
+
+		frame.setContent(connectionExplorer);
 	}
 }

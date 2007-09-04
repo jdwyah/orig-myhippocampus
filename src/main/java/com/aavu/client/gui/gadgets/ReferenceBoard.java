@@ -42,7 +42,7 @@ public class ReferenceBoard extends Gadget {
 	}
 
 	public int load(Topic topic) {
-
+		super.load(topic);
 		manager.getTopicCache().getLinksTo(topic, new StdAsyncCallback("GetLinksTo") {
 			public void onSuccess(Object result) {
 				super.onSuccess(result);

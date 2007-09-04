@@ -52,7 +52,9 @@ public class ImportController extends SimpleFormController {
 				int found = deliciousService.newLinksForUser(comm.getDeliciousName(), comm
 						.getDeliciousPass());
 
-				String successStr = "Success importing " + found + " bookmarks.";
+				String successStr = "Found "
+						+ found
+						+ " bookmarks. Importing in the background, it may take a bit before they are all available.";
 
 				return new ModelAndView(getSuccessView(), "message", successStr);
 			} catch (HippoException e) {
@@ -66,7 +68,9 @@ public class ImportController extends SimpleFormController {
 				int found = googleService.importDocsForUser(comm.getGoogleName(), comm
 						.getGooglePass());
 
-				String successStr = "Success importing " + found + " documents.";
+				String successStr = "Found "
+						+ found
+						+ " documents. Importing in the background, it may take a bit before they are all available.";
 
 				return new ModelAndView(getSuccessView(), "message", successStr);
 			} catch (AuthenticationException e) {

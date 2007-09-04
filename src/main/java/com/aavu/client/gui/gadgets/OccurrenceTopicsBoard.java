@@ -134,6 +134,7 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 	 * @param topic
 	 */
 	public int load(Topic topic) {
+		super.load(topic);
 		System.out.println("occ topic board load " + (topic instanceof Occurrence));
 		if (!(topic instanceof Occurrence)) {
 			return -1;

@@ -26,12 +26,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
-public class SubjectBoard extends Composite{
+public class SubjectBoard extends Composite {
 
 	private Manager manager;
 
 	private ChooserPanel chooserPanel;
-	private InfoPanel infoPanel;	
+	private InfoPanel infoPanel;
 	private SelectedPanel selectedPanel;
 	private Label editMe;
 	private SubjectServicePicker subjectTypeList;
@@ -44,9 +44,10 @@ public class SubjectBoard extends Composite{
 
 	private TagBoard tagBoard;
 
-	private SaveNeededListener saveNeeded; 
+	private SaveNeededListener saveNeeded;
 
-	public SubjectBoard(final Manager manager, EditableLabelExtension titleBox2, TagBoard tagBoard, SaveNeededListener saveNeeded) {	
+	public SubjectBoard(final Manager manager, EditableLabelExtension titleBox2, TagBoard tagBoard,
+			SaveNeededListener saveNeeded) {
 		this.manager = manager;
 		this.titleBox = titleBox2;
 		this.tagBoard = tagBoard;
@@ -54,25 +55,27 @@ public class SubjectBoard extends Composite{
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 
-		chooserPanel  = new ChooserPanel();
+		chooserPanel = new ChooserPanel();
 		infoPanel = new InfoPanel();
 
 
 		selectedPanel = new SelectedPanel();
 
 		editMe = new Label(ConstHolder.myConstants.subject_edit());
-		editMe.addClickListener(new ClickListener(){
+		editMe.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				chooseSubject();
-			}});
+			}
+		});
 		editMe.setVisible(false);
 
 		subjectTypeList = new SubjectServicePicker();
-		subjectTypeList.addChangeListener(new ChangeListener(){
+		subjectTypeList.addChangeListener(new ChangeListener() {
 			public void onChange(Widget sender) {
 				chooseSubject();
 
-			}});
+			}
+		});
 
 		mainPanel.add(new HeaderLabel(ConstHolder.myConstants.subject()));
 		mainPanel.add(subjectTypeList);
@@ -86,53 +89,58 @@ public class SubjectBoard extends Composite{
 	}
 
 	public void load(Topic topic) {
+
 		this.topic = topic;
 		setSubject(topic.getSubject());
 		subjectTypeList.setSubject(topic.getSubject());
 	}
-	private void setSubject(Subject subject){	
-				
-		//TODO remove old TAG
-		//tagBoard.removeTag(selectedSubject.getTagName())
-		
-		selectedSubject = subject;		
+
+	private void setSubject(Subject subject) {
+
+		// TODO remove old TAG
+		// tagBoard.removeTag(selectedSubject.getTagName())
+
+		selectedSubject = subject;
 		selectedPanel.setSubject(subject);
-		
+
 		editMe.setVisible(true);
 		chooserPanel.setVisible(false);
 		infoPanel.setVisible(false);
-				
+
 	}
-	private void setNewSubject(Subject subject){	
-		setSubject(subject);		
-		if(subject != null){
-			//TODO
-			//tagBoard.tagTopic(subject.getTagName());
+
+	private void setNewSubject(Subject subject) {
+		setSubject(subject);
+		if (subject != null) {
+			// TODO
+			// tagBoard.tagTopic(subject.getTagName());
 		}
 		saveNeeded.onChange(this);
 	}
 
-	public Subject getSelectedSubject() {	
+	public Subject getSelectedSubject() {
 		return selectedSubject;
 	}
-	private void chooseSubject(){		
+
+	private void chooseSubject() {
 		editMe.setVisible(false);
 
 		Subject s = subjectTypeList.getSelectedService();
-		if(s != null){
-			manager.getSubjectService().lookup(s,titleBox.getText(),new StdAsyncCallback("SubjectService"){
-				public void onSuccess(Object result) {
-					super.onSuccess(result);
+		if (s != null) {
+			manager.getSubjectService().lookup(s, titleBox.getText(),
+					new StdAsyncCallback("SubjectService") {
+						public void onSuccess(Object result) {
+							super.onSuccess(result);
 
-					System.out.println("result: "+result);
+							System.out.println("result: " + result);
 
-					List subjectList = (List) result;
-					chooserPanel.setList(subjectList);
+							List subjectList = (List) result;
+							chooserPanel.setList(subjectList);
 
-					chooserPanel.setVisible(true);
-					infoPanel.setVisible(true);
-				}
-			});
+							chooserPanel.setVisible(true);
+							infoPanel.setVisible(true);
+						}
+					});
 		}
 
 	}
@@ -142,21 +150,21 @@ public class SubjectBoard extends Composite{
 	 * Panel responsible for giving the user the options in the subject list
 	 * 
 	 * @author Jeff Dwyer
-	 *
+	 * 
 	 */
-	private class ChooserPanel extends VerticalPanel{
-		public ChooserPanel(){
+	private class ChooserPanel extends VerticalPanel {
+		public ChooserPanel() {
 			setStyleName("H-SubjectChooser");
 		}
 
-		//List <Subject>
+		// List <Subject>
 		public void setList(List subjectList) {
 			clear();
 			infoPanel.clear();
 
-			if(subjectList.size() > 0){
+			if (subjectList.size() > 0) {
 				add(new Label(ConstHolder.myConstants.subject_choose()));
-			}else{
+			} else {
 				add(new Label(ConstHolder.myConstants.subject_no_matches()));
 			}
 
@@ -173,39 +181,40 @@ public class SubjectBoard extends Composite{
 
 
 	}
+
 	/**
 	 * Panel to show additional information about the Subject
 	 * 
 	 * @author Jeff Dwyer
 	 */
-	private class InfoPanel extends VerticalPanel{
-		public InfoPanel(){
+	private class InfoPanel extends VerticalPanel {
+		public InfoPanel() {
 			setStyleName("H-SubjectInfoPanel");
 		}
 
 		public void setSubject(Subject subject) {
-			clear();			
+			clear();
 			for (Iterator iter = subject.getInfos().iterator(); iter.hasNext();) {
 				SubjectInfo info = (SubjectInfo) iter.next();
-				add(new Label(info.getType()+" "+info.getValue()));				
-			}			
+				add(new Label(info.getType() + " " + info.getValue()));
+			}
 		}
 	}
 
-	private class SelectedPanel extends VerticalPanel{
+	private class SelectedPanel extends VerticalPanel {
 
 		private Label lab = new Label(ConstHolder.myConstants.subject_none());
 
-		public SelectedPanel(){
+		public SelectedPanel() {
 			setStyleName("H-SubjectSelectedPanel");
-			add(lab);			
+			add(lab);
 		}
 
 
 		public void setSubject(Subject subject) {
-			if(subject == null){
+			if (subject == null) {
 				lab.setText(ConstHolder.myConstants.subject_none());
-			}else{
+			} else {
 				lab.setText(subject.getName());
 			}
 		}
@@ -213,17 +222,17 @@ public class SubjectBoard extends Composite{
 	}
 
 	/**
-	 * Label for "Did you mean:" 
+	 * Label for "Did you mean:"
 	 * 
 	 * @author Jeff Dwyer
-	 *
+	 * 
 	 */
 	private class ChooserLabel extends Label implements MouseListener {
 		private Subject subject;
 
-		public ChooserLabel(Subject subj){
+		public ChooserLabel(Subject subj) {
 			super(subj.getName());
-			this.subject = subj;	
+			this.subject = subj;
 
 			addMouseListener(this);
 		}
@@ -232,25 +241,29 @@ public class SubjectBoard extends Composite{
 			infoPanel.setSubject(subject);
 			addStyleName("H-Selected");
 		}
+
 		public void onMouseLeave(Widget sender) {
 			removeStyleName("H-Selected");
 		}
 
-		public void onMouseDown(Widget sender, int x, int y) {}
+		public void onMouseDown(Widget sender, int x, int y) {
+		}
 
-		public void onMouseMove(Widget sender, int x, int y) {}
+		public void onMouseMove(Widget sender, int x, int y) {
+		}
+
 		public void onMouseUp(Widget sender, int x, int y) {
 			setNewSubject(subject);
-		}		
+		}
 	}
 
 	private class SubjectServicePicker extends ObjectListBox {
 
-		public SubjectServicePicker(){
-			super();		
-			addItem(ConstHolder.myConstants.subject_none(),null);
-			addItem(ConstHolder.myConstants.book(),new AmazonBook());
-			addItem(ConstHolder.myConstants.country(),new HippoCountry());	
+		public SubjectServicePicker() {
+			super();
+			addItem(ConstHolder.myConstants.subject_none(), null);
+			addItem(ConstHolder.myConstants.book(), new AmazonBook());
+			addItem(ConstHolder.myConstants.country(), new HippoCountry());
 			addItem(ConstHolder.myConstants.wiki(), new WikiSubject());
 		}
 
@@ -260,10 +273,9 @@ public class SubjectBoard extends Composite{
 		}
 
 		public Subject getSelectedService() {
-			return (Subject) getSelectedObject();			
+			return (Subject) getSelectedObject();
 		}
 	}
-
 
 
 

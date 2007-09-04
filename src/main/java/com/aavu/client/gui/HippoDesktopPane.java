@@ -88,7 +88,8 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 				"absolute");
 
 		frames.add(internalFrame);
-		internalFrame.setTheme(theme);
+
+		// internalFrame.setTheme(theme);
 	}
 
 

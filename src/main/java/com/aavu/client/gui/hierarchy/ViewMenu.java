@@ -45,6 +45,14 @@ public class ViewMenu extends PopupPanel {
 						hide();
 					}
 				}));
+		mainPanel.add(addView(ConstHolder.images.gadgetConnections().createImage(), "Connections",
+				new ClickListener() {
+					public void onClick(Widget sender) {
+						manager.getGui().showConnections();
+						hide();
+					}
+				}));
+
 		// mainPanel.add(addView(ConstHolder.images.gadgetMap().createImage(), "Maps",
 		// new ClickListener() {
 		// public void onClick(Widget sender) {

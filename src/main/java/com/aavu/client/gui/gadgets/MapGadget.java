@@ -195,6 +195,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	}
 
 	public int load(Topic topic) {
+		super.load(topic);
 		myTopic = topic;
 		mapWidget.clear();
 

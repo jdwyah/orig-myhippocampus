@@ -106,6 +106,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		for (DeliciousPost post : posts) {
 			WebLink ww = new WebLink(userService.getCurrentUser(), post.getDescription(), post
 					.getHref(), post.getExtended());
+			ww.setCreated(post.getDate());
 			String[] tags = post.getTags();
 
 			topicService.addLinkToTags(ww, tags, parent);
@@ -172,6 +173,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 				userService.setDeliciousUpdate();
 			}
 		};
+		addTagThread.setPriority(Thread.MIN_PRIORITY);
 		addTagThread.start();
 
 		log.info("Returning to caller.");

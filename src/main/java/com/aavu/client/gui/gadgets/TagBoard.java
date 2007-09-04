@@ -124,6 +124,7 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 	 * @param topic
 	 */
 	public int load(Topic topic) {
+		super.load(topic);
 		adderP.setVisible(false);
 
 

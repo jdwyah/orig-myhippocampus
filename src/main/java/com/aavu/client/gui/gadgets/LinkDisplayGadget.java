@@ -71,6 +71,7 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 
 
 	public int load(Topic topic) {
+		super.load(topic);
 		myTopic = topic;
 		linkPanel.clear();
 		size = 0;

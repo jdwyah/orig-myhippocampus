@@ -11,6 +11,7 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.BreadCrumbDisplayer;
 import com.aavu.client.gui.Dashboard;
+import com.aavu.client.gui.ExplorerWindow;
 import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.GadgetDisplayer;
 import com.aavu.client.gui.HippoDesktopPane;
@@ -19,7 +20,6 @@ import com.aavu.client.gui.LocationSettingWidget;
 import com.aavu.client.gui.SearchBox;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.StatusPanel;
-import com.aavu.client.gui.ExplorerWindow;
 import com.aavu.client.gui.Zoomer;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.gui.gadgets.GadgetDisplayerPopupImpl;
@@ -210,9 +210,7 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 
 		}
 
-		// if(command.affectedTag()){
-		// ocean.update(command.getAffectedTag(), command);
-		// }
+
 
 	}
 
@@ -378,6 +376,11 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 
 	public void showGoogleMap() {
 		explorerWindow.loadGoogleMap(curTopic);
+		explorerWindow.show();
+	}
+
+	public void showConnections() {
+		explorerWindow.loadConnections(curTopic);
 		explorerWindow.show();
 	}
 }

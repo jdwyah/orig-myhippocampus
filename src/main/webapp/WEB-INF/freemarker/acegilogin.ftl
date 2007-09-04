@@ -17,6 +17,10 @@
         Reason: ${login_error}
       </font>
     </#if>
+    
+     <#if message?exists>
+		 <p class="message">${message}</p>
+	 </#if>
 
 
 		<div id="loginBox">

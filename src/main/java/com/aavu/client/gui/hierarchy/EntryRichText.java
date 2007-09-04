@@ -45,6 +45,7 @@ public class EntryRichText extends Composite {
 
 		rtMainPanel = new BorderThemedPanel();
 		rtMainPanel.setResizable(true);
+		rtMainPanel.setTheme(new Entry().getWindowTheme());
 
 		textArea = new SpecialTextbox(false);
 

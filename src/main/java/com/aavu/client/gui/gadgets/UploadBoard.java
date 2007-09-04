@@ -43,7 +43,7 @@ public class UploadBoard extends Gadget {
 
 
 	public int load(final Topic topic) {
-
+		super.load(topic);
 		mainPanel.clear();
 
 		HorizontalPanel rowOne = new HorizontalPanel();

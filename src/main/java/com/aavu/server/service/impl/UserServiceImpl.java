@@ -234,6 +234,9 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 		setup(createdU, userpass);
 
+		// important. otherwise we were getting directed to the user page in a logged in, but not
+		// authenticated state, despite our redirect:/site/index.html
+		SecurityContextHolder.getContext().setAuthentication(null);
 		return createdU;
 	}
 
@@ -252,7 +255,8 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			Root root = new Root(createdU);
 			topicService.save(root);
 
-			Topic movies = topicService.createNewIfNonExistent("Movies");
+			// Topic movies = topicService.createNewIfNonExistent("Movies");
+			// Topic eight12 = topicService.createNewIfNonExistent("8 1/2", movies);
 
 			Topic gettingStarted = topicService.createNewIfNonExistent(gm("setup.getStarted.0"));
 
