@@ -1,5 +1,6 @@
 package com.aavu.server.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.QuickAddEntryCommand;
+import com.aavu.client.domain.commands.SaveDateCreatedCommand;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
@@ -255,8 +257,19 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			Root root = new Root(createdU);
 			topicService.save(root);
 
-			// Topic movies = topicService.createNewIfNonExistent("Movies");
-			// Topic eight12 = topicService.createNewIfNonExistent("8 1/2", movies);
+			Topic movies = topicService.createNewIfNonExistent("Movies");
+
+			Calendar c = Calendar.getInstance();
+
+			addWithDate("Great Expectations", c, 2006, 12, 12, movies);
+			addWithDate("Straight Story, The", c, 2007, 1, 14, movies);
+			addWithDate("Casino Royale", c, 2007, 3, 12, movies);
+			addWithDate("Bicycle Thief, The", c, 2007, 4, 14, movies);
+			addWithDate("Children Of Men", c, 2007, 4, 18, movies);
+			addWithDate("Paradise Now", c, 2007, 4, 27, movies);
+			addWithDate("8 1/2", c, 2007, 7, 17, movies);
+			addWithDate("American Graffiti", c, 2007, 7, 21, movies);
+
 
 			Topic gettingStarted = topicService.createNewIfNonExistent(gm("setup.getStarted.0"));
 
@@ -272,6 +285,17 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 					gm("setup.getStarted.entry3.0"), gm("setup.getStarted.entry3.1"),
 					gettingStarted));
 
+			topicService.executeAndSaveCommand(new QuickAddEntryCommand(
+					gm("setup.getStarted.entry4.0"), gm("setup.getStarted.entry4.1"),
+					gettingStarted));
+
+			topicService.executeAndSaveCommand(new QuickAddEntryCommand(
+					gm("setup.getStarted.entry5.0"), gm("setup.getStarted.entry5.1"),
+					gettingStarted));
+
+			topicService.executeAndSaveCommand(new QuickAddEntryCommand(
+					gm("setup.getStarted.entry6.0"), gm("setup.getStarted.entry6.1"),
+					gettingStarted));
 
 		} catch (Exception e) {
 			// Make sure to replace the previous authentication context
@@ -279,6 +303,13 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			throw new HippoException(e);
 		}
 
+	}
+
+	private void addWithDate(String name, Calendar proto, int year, int month, int day, Topic parent)
+			throws HippoException {
+		proto.set(year, month, day);
+		Topic topic = topicService.createNewIfNonExistent(name, parent);
+		topicService.executeAndSaveCommand(new SaveDateCreatedCommand(topic, proto.getTime()));
 	}
 
 	private String gm(String messageName) {

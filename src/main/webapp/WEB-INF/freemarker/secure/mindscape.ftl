@@ -71,6 +71,15 @@
 		<div id="loading" class="loading"><p>Loading...</p></div>
 		<div id="preload"></div>
 	
+<#--TODO move to decorator-->	
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-1880676-1";
+urchinTracker();
+</script>
+
+  
  
 	</body>
 </html>

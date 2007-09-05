@@ -133,7 +133,7 @@ public class TitleGadget extends Gadget {
 						vp.add(new Label("Will delete:"));
 						for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
 							TopicIdentifier topic = (TopicIdentifier) iterator.next();
-							vp.add(new Label(topic.getTopicTitle()));
+							vp.add(new Label("Title: " + topic.getTopicTitle()));
 						}
 						Button deleteB = new Button("Yes, delete these (" + topics.size()
 								+ ") topic(s).");
