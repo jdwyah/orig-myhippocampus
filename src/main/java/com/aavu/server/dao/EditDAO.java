@@ -33,6 +33,8 @@ public interface EditDAO {
 
 	List<Topic> getDeleteList(long topicID);
 
+	Topic merge(Topic t);
+
 
 
 }

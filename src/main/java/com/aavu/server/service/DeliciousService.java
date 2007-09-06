@@ -19,6 +19,7 @@ public interface DeliciousService {
 
 	void addBundles(Topic deliciousRoot, List<DeliciousBundle> bundles) throws HippoException;
 
-	void addDeliciousTags(List<DeliciousPost> posts, Topic deliciousRoot) throws HippoException;
+	void addDeliciousTags(List<DeliciousPost> postsf, Topic deliciousRoot) throws HippoException;
+
 
 }

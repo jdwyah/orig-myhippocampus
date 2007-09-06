@@ -392,4 +392,10 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	}
 
+
+	public Topic merge(Topic t) {
+		return (Topic) getHibernateTemplate().merge(t);
+	}
+
+
 }

@@ -1,12 +1,15 @@
 package com.aavu.server.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -35,7 +38,8 @@ public interface TopicService {
 	 */
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 
-	void addLinkToTags(WebLink link, String[] tags, Topic parent) throws HippoBusinessException;
+	void addLinkToTags(WebLink link, String[] tags, Topic parent, Map<String, Topic> cachedTopics)
+			throws HippoBusinessException;
 
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
@@ -146,6 +150,9 @@ public interface TopicService {
 	MindTree saveTree(MindTree tree);
 
 	List<Topic> getDeleteList(long topicID);
+
+	<T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
+			String title, Date date, String data) throws HippoBusinessException;
 
 
 

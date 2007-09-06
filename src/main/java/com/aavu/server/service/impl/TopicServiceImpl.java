@@ -2,8 +2,10 @@ package com.aavu.server.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,7 @@ import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
+import com.aavu.client.domain.URI;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
@@ -61,19 +65,34 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 	private UserService userService;
 
+
+
 	// private SearchService searchService;
 
+
+
 	public void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException {
-		addLinkToTags(link, tags, null);
+		addLinkToTags(link, tags, null, new HashMap<String, Topic>());
 	}
 
 	/**
 	 * TODO this save() calls mustHaveUniqueName() and then getUnique...() which is totally
 	 * redundant and gives us n selects, which we know are redundant since we just did
 	 * createNewIfNonExistent(). this is probably why the del.icio.us add is so darn slow.
+	 * 
+	 * @throws HippoBusinessException
 	 */
-	public void addLinkToTags(WebLink link, String[] tags, Topic parent)
-			throws HippoBusinessException {
+	// public void addLinkToTags(WebLink link, String[] tags, Topic parent)
+	// throws HippoBusinessException {
+	// addLinkToTags(link, tags, parent, new HashMap<String, Topic>());
+	// }
+	public void addLinkToTags(WebLink link, String[] tags, Topic parent,
+			Map<String, Topic> cachedTopics) throws HippoBusinessException {
+
+		User user = userService.getCurrentUser();
+
+		WebLink linkM = (WebLink) editDAO.merge(link);
+
 
 		for (String string : tags) {
 			log.debug("str: " + string);
@@ -81,19 +100,40 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 			String clipped = string.trim();
 
 			if (clipped.length() != 0) {
-				Topic t = null;
-				if (parent != null) {
-					t = createNewIfNonExistent(clipped, parent);
+
+				Topic t = cachedTopics.get(clipped);
+
+				if (t == null) {
+					if (parent != null) {
+						t = createNewIfNonExistent(clipped, parent);
+					} else {
+						t = createNewIfNonExistent(clipped);
+					}
+					// System.out.println("Cache Mis " + t + " " + t.getId() + " " + linkM);
 				} else {
-					t = createNewIfNonExistent(clipped);
+					// System.out.println("Cache Hit " + t + " " + t.getId() + " " + linkM);
 				}
 
-				t.addOccurence(link);
 
-				// skip the unique check
-				Topic st = save(t, true);
 
-				log.debug("Save " + link + " to " + st.getTitle() + " " + st.getId());
+				t.addOccurence(linkM);
+
+
+				Topic st = null;
+				try {
+					// skip the unique check
+					st = save(t, true, user);
+				} catch (DataAccessException e) {
+					// System.out.println("exception, trying merge Link: " + linkM);
+					log.debug("Exception merging " + t);
+					Topic merged = editDAO.merge(t);
+
+					st = save(merged, true, user);
+				}
+
+				log.debug("Save " + linkM + " to " + st.getTitle() + " " + st.getId());
+
+				cachedTopics.put(clipped, st);
 
 			}
 
@@ -106,7 +146,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 */
 	public void changeState(long topicID, boolean toIsland) throws HippoPermissionException {
 		Topic t = selectDAO.get(topicID);
-		if (t.getUser() != userService.getCurrentUser()) {
+		if (!t.getUser().equals(userService.getCurrentUser())) {
 			throw new HippoPermissionException();
 		}
 		editDAO.changeState(t, toIsland);
@@ -212,6 +252,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent, int[] lnglat) throws HippoBusinessException {
 		Topic cur = getForNameCaseInsensitive(title);
+
 		if (cur == null) {
 
 			try {
@@ -223,14 +264,43 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		return (T) cur;
 	}
 
+
+	public <T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
+			String title, Date date, String data) throws HippoBusinessException {
+		User u = userService.getCurrentUser();
+
+		URI cur = selectDAO.getForURI(uri, u, u);
+
+		if (cur == null) {
+
+			try {
+				cur = (URI) clazz.newInstance();
+			} catch (Exception e) {
+				throw new HippoBusinessException(e);
+			}
+
+			log.debug("Prototype " + cur.getId() + " " + cur.getClass());
+
+			cur.setTitle(title);
+			cur.setData(data);
+			cur.setUri(uri);
+			cur.setCreated(date);
+
+			cur = (URI) save(cur);
+		}
+
+		return (T) cur;
+	}
+
+
 	public Topic createNewIfNonExistent(String title, Topic parent) throws HippoBusinessException {
 		return createNewIfNonExistent(title, RealTopic.class, parent);
 	}
 
 	public void delete(long id) throws HippoBusinessException {
 		Topic t = selectDAO.get(id);
-		if (t.getUser() != userService.getCurrentUser()) {
-			throw new HippoPermissionException();
+		if (!t.getUser().equals(userService.getCurrentUser())) {
+			throw new HippoPermissionException(userService.getCurrentUser() + " " + t.getUser());
 		}
 		delete(t);
 	}
@@ -482,6 +552,8 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	}
 
 	public Occurrence save(Occurrence link) {
+		link.setUser(userService.getCurrentUser());
+		link.setLastUpdated(new Date());
 		return editDAO.save(link);
 	}
 
@@ -491,12 +563,13 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 * 
 	 */
 	public Topic save(Topic topic) throws HippoBusinessException {
-		return save(topic, false);
+		return save(topic, false, userService.getCurrentUser());
 	}
 
-	private Topic save(Topic topic, boolean guaranteedNotDupe) throws HippoBusinessException {
+	private Topic save(Topic topic, boolean guaranteedNotDupe, User user)
+			throws HippoBusinessException {
 		topic.setLastUpdated(new Date());
-		topic.setUser(userService.getCurrentUser());
+		topic.setUser(user);
 
 
 		if (topic.mustHaveUniqueName() && topic.getTitle().equals("")) {
@@ -532,9 +605,10 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		// log.debug("save "+topic.toPrettyString());
 
 
+		// TODO Necessary????
 		Set<Occurrence> occs = topic.getOccurenceObjs();
 		for (Occurrence o : occs) {
-			o.setUser(userService.getCurrentUser());
+			o.setUser(user);
 		}
 
 
@@ -599,6 +673,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		setUserService((UserService) applicationContext.getBean("userService"));
 	}
+
 
 
 }

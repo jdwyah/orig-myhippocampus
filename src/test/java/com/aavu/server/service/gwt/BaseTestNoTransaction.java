@@ -25,7 +25,7 @@ public abstract class BaseTestNoTransaction extends AbstractDependencyInjectionS
 		String path = "src/main/webapp/WEB-INF/";
 		String pathh = "file:" + path;
 		return new String[] { pathh + "applicationContext-hibernate.xml",
-				pathh + "applicationContext.xml" };
+				pathh + "applicationContext-acegi-security.xml", pathh + "applicationContext.xml" };
 
 	}
 

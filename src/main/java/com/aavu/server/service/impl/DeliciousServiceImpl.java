@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
 
@@ -103,14 +105,36 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		log.info("Found " + posts.size() + " Posts.");
 
+		Date start = new Date();
+
+
+		Map<String, Topic> cache = new HashMap<String, Topic>();
+
 		for (DeliciousPost post : posts) {
-			WebLink ww = new WebLink(userService.getCurrentUser(), post.getDescription(), post
-					.getHref(), post.getExtended());
-			ww.setCreated(post.getDate());
+
+			WebLink ww = topicService.createNewIfURINonexistant(WebLink.class, post.getHref(), post
+					.getDescription(), post.getDate(), post.getExtended());
+
+			// WebLink ww = new WebLink(userService.getCurrentUser(), post.getDescription(), post
+			// .getHref(), post.getExtended());
+
+
 			String[] tags = post.getTags();
 
-			topicService.addLinkToTags(ww, tags, parent);
+			topicService.addLinkToTags(ww, tags, parent, cache);
+
 		}
+
+		// original 17 posts 2 sec
+		// original 217 posts 64 sec
+		// w/ user and not dupe check 217 posts 38 sec
+		// w/ user, !dupe, cache 217 posts 24 sec
+		// w/ userServiceCache, !dupe, cache 217 posts 8 sec
+		// w/ userServiceCache, !dupe, cache & createNewIfURINonexistant 217 posts 25 sec
+
+		Date finish = new Date();
+		long duration = finish.getTime() - start.getTime();
+		log.info("Add DeliciousTags in " + (duration / 1000) + " sec.");
 
 	}
 

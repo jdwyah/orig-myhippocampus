@@ -30,6 +30,8 @@ public interface SelectDAO {
 
 	Topic getForNameCaseInsensitive(User user, String string);
 
+	Topic getForNameCaseInsensitiveMinimal(User user, String string);
+
 	List<TimeLineObj> getTimeline(long tagID, User user);
 
 	List<TimeLineObj> getTimeline(User user);

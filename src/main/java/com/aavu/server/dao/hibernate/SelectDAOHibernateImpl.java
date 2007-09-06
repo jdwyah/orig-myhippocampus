@@ -1,6 +1,7 @@
 package com.aavu.server.dao.hibernate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -204,6 +205,14 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		// :title", "user", user);
 	}
 
+	public Topic getForNameCaseInsensitiveMinimal(User currentUser, String string) {
+		DetachedCriteria crit = DetachedCriteria.forClass(RealTopic.class).add(
+				Expression.eq("user", currentUser))
+				.add(Expression.eq("title", string).ignoreCase());
+
+		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+	}
+
 	public URI getForURI(String uri, User user, User currentUser) {
 
 		log.debug("user " + currentUser.getUsername() + " uri " + uri);
@@ -212,8 +221,15 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 				Expression.eq("user", currentUser)).add(Expression.eq("uri", uri)));
 
 
-		return (URI) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
+		Collection c = getHibernateTemplate().findByCriteria(crit);
+		if (c.isEmpty()) {
+			return null;
+		} else {
+			return (URI) c.iterator().next();
+		}
 
+		// TODO we've let the DB get a bit polluted according to this metric
+		// return (URI) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 
 	}
 

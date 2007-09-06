@@ -9,6 +9,7 @@ import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.TestingAuthenticationToken;
+import org.acegisecurity.providers.dao.UserCache;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
@@ -30,6 +31,7 @@ import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.client.exception.PermissionDeniedException;
 import com.aavu.server.dao.UserDAO;
+import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.util.CryptUtils;
@@ -38,6 +40,9 @@ import com.aavu.server.web.domain.CreateUserRequestCommand;
 /**
  * TODO remove ApplicationContextAware. This was introduced when UserService began needing a
  * reference to TopicService
+ * 
+ * TODO I feel like we shouldn't have to be updating the UserCache ourselves. Why is this? Right now
+ * it's flaky because we need to remove users too.
  * 
  * @author Jeff Dwyer
  * 
@@ -51,6 +56,8 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 	private UserDAO userDAO;
 
+	private UserCache userCache;
+
 	private TopicService topicService;
 
 	private int maxUsers;
@@ -58,7 +65,6 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 	private int startingInvitations;
 
 	private MessageSource messageSource;
-
 
 	public User getCurrentUser() throws UsernameNotFoundException {
 
@@ -79,7 +85,20 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			log.debug("loadUserByUsername " + username);
 
 			try {
-				return userDAO.getUserByUsername(username);
+
+				ServerSideUser serverUser = (ServerSideUser) userCache.getUserFromCache(username);
+
+				User u;
+				if (serverUser == null) {
+
+					u = userDAO.getUserByUsername(username);
+					userCache.putUserInCache(new ServerSideUser(u));
+
+				} else {
+					u = serverUser.getUser();
+				}
+
+				return u;
 			} catch (UsernameNotFoundException e) {
 				log.debug(e);
 				throw e;
@@ -104,7 +123,8 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			 * com.aavu.server.web.controllers.BasicController.getDefaultModel(BasicController.java:46)
 			 * com.aavu.server.web.controllers.BasicController.handleRequestInternal(BasicController.java:37)
 			 */
-			throw new UsernameNotFoundException("No Authentication Context");
+			e.printStackTrace();
+			throw new UsernameNotFoundException("No Authentication Context " + e);
 		}
 
 	}
@@ -180,6 +200,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			User user = userDAO.getUserForId(id);
 			user.setEnabled(!user.isEnabled());
 			userDAO.save(user);
+			userCache.removeUserFromCache(user.getUsername());
 		} else {
 			throw new PermissionDeniedException("You don't have rights to do that.");
 		}
@@ -189,6 +210,8 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 		if (getCurrentUser().isSupervisor()) {
 			User user = userDAO.getUserForId(id);
 			userDAO.delete(user);
+
+			userCache.removeUserFromCache(user.getUsername());
 		} else {
 			throw new PermissionDeniedException("You don't have rights to do that.");
 		}
@@ -200,6 +223,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			User user = userDAO.getUserForId(id);
 			user.setSupervisor(!user.isSupervisor());
 			userDAO.save(user);
+			userCache.removeUserFromCache(user.getUsername());
 		} else {
 			throw new PermissionDeniedException("You don't have rights to do that.");
 		}
@@ -322,7 +346,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 		user.setSubscription(subscription);
 		userDAO.save(user);
-
+		userCache.removeUserFromCache(user.getUsername());
 	}
 
 
@@ -336,6 +360,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 		User user = userDAO.getForPaypalID(paypalID);
 
 		changeToSubscriptionAndSave(user, cancelled, "");
+		userCache.removeUserFromCache(user.getUsername());
 	}
 
 	/**
@@ -349,6 +374,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 		log.info(userToProcess.getId() + " " + userToProcess.getUsername() + " " + paypalID
 				+ " PAID!");
+
 	}
 
 	/**
@@ -372,6 +398,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 		changeToSubscriptionAndSave(userToProcess, subscription, paypalID);
 
+		userCache.removeUserFromCache(userToProcess.getUsername());
 	}
 
 	public List<Subscription> getAllUpgradeSubscriptions() {
@@ -388,6 +415,8 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			inviter.setInvitations(newV);
 		}
 		userDAO.save(inviter);
+
+		userCache.removeUserFromCache(inviter.getUsername());
 	}
 
 	public boolean nowAcceptingSignups() {
@@ -431,6 +460,11 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 	@Required
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+
+	@Required
+	public void setUserCache(UserCache userCache) {
+		this.userCache = userCache;
 	}
 
 	/**

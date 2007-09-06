@@ -125,23 +125,43 @@
 			</list>
 		</property>
 	</bean>
-
+<!-- 
 	<bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
-		<property name="userDetailsService" ref="userDAO"/>
-		<property name="passwordEncoder" ref="passwordEncoder" /> 		
-		<property name="userCache">
-			<bean class="org.acegisecurity.providers.dao.cache.EhCacheBasedUserCache">
-				<property name="cache">
-					<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-						<property name="cacheManager">
-							<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-						</property>
-						<property name="cacheName" value="userCache"/>
-					</bean>
+		<property name="userDetailsService" ref="userDAO" />
+		<property name="passwordEncoder" ref="passwordEncoder" />
+		<property name="userCache" ref="userCache" />
+	</bean>
+	<bean id="userCache" class="org.acegisecurity.providers.dao.cache.EhCacheBasedUserCache">
+		<property name="cache">
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+				<property name="cacheManager">
+					<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
 				</property>
+				<property name="cacheName" value="userCache" />
 			</bean>
 		</property>
-	</bean>
+	</bean>-->
+	<bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+  <property name="userDetailsService" ref="userDAO" />
+		<property name="passwordEncoder" ref="passwordEncoder" />
+		<property name="userCache" ref="userCache" />
+</bean>
+
+<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+  <property name="configLocation">
+    <value>classpath:/ehcache-failsafe.xml</value>
+  </property>
+</bean>
+
+<bean id="userCacheBackend" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+  <property name="cacheManager" ref="cacheManager"/>
+  <property name="cacheName" value="userCache"/>  
+</bean>
+
+<bean id="userCache" class="org.acegisecurity.providers.dao.cache.EhCacheBasedUserCache">
+  <property name="cache"><ref local="userCacheBackend"/></property>
+</bean>        
+	
 	<bean id="passwordEncoder" class="org.acegisecurity.providers.encoding.Md5PasswordEncoder" abstract="false" 
 		lazy-init="default" autowire="default" dependency-check="default" scope="singleton"/>
 

@@ -11,39 +11,41 @@ import com.aavu.client.domain.User;
  * server side wrapper only. does NOT extend User
  * 
  * @author Jeff Dwyer
- *
+ * 
  */
-public class ServerSideUser implements UserDetails{
+public class ServerSideUser implements UserDetails {
 
 	private static final Logger log = Logger.getLogger(ServerSideUser.class);
 
 	private User user;
-	
+
 	public ServerSideUser(User u) {
 		this.user = u;
 	}
 
 	public GrantedAuthority[] getAuthorities() {
 		GrantedAuthority[] rtn = new GrantedAuthority[1];
-		if(user.isSupervisor()){
-			log.debug("adding supervisor permissions");		
+		if (user.isSupervisor()) {
+			log.debug("adding supervisor permissions");
 			rtn[0] = new MyAuthority("ROLE_SUPERVISOR");
 			return rtn;
-		}else{
+		} else {
 			rtn[0] = new MyAuthority("");
 			return rtn;
-		}		
+		}
 
 	}
 
-	private class MyAuthority implements GrantedAuthority{
+	private class MyAuthority implements GrantedAuthority {
 		private String auth;
-		public MyAuthority(String auth){
+
+		public MyAuthority(String auth) {
 			this.auth = auth;
-		}		
+		}
+
 		public String getAuthority() {
 			return auth;
-		}		
+		}
 	}
 
 	public String getPassword() {
@@ -68,6 +70,10 @@ public class ServerSideUser implements UserDetails{
 
 	public boolean isEnabled() {
 		return user.isEnabled();
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 
