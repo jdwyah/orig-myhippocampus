@@ -8,11 +8,9 @@ import java.util.Map;
 import org.gwtwidgets.client.ui.ProgressBar;
 
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.commands.AbstractCommand;
-import com.aavu.client.domain.commands.AddToTopicCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.GUIManager;
@@ -534,14 +532,17 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 			// }
 
 
-			// we;ve added a tag. this means the tag either already existed which is
+			// we've added a tag. this means the tag either already existed which is
 			// A) should be found in logic above if we're meant to grow
 			// B) is a new tag, and will only exist on the desktop for right now
-			if (command instanceof AddToTopicCommand) {
-				if (getCurrentRoot() instanceof Root) {
-					growIsland(t, null);
-				}
-			}
+			// TODO NOTE this didn't work. this made a topic dragged from the desktop to a child,
+			// re-popup on the Desktop
+			// if (command instanceof AddToTopicCommand) {
+			// if (getCurrentRoot() instanceof Root) {
+			// growIsland(t, null);
+			// }
+			// command.get
+			// }
 
 			// Not necessarily problem. May be that we told a weblink to save, and it
 			// said, update my parent, which is this, which doesn't contain this.

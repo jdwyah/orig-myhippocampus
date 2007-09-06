@@ -17,25 +17,19 @@
 		<p class="subheading">Available Screencasts</p>
 		<ul>
 
-		<li><a href="<@spring.url "/screencasts/5min/5min.html"/>">5 minute demo</a> Watch this first!</li>		
-		<li><a href="<@spring.url "/screencasts/Whirlwind/Whirlwind.html"/>">The extended tour</a></li>		
-		<li><a href="<@spring.url "/screencasts/FirstSteps/FirstSteps.html"/>">First Steps</a> How to get started.</li>
-		<li><a href="<@spring.url "/screencasts/TipsAndTricks/TipsAndTricks.html"/>">Tips & Tricks</a> Browser plugins, Island properties & Changing a topic into an island </li>
+		<li><a href="<@spring.url "/screencasts/GoogleDocs/GoogleDocs.html"/>">Google Docs & MyHippocampus</a></li>
 		
-<#--		<li><a href="http://www.myhippocampus.com/screencasts/Step2/Step2.html">First Steps</a></li>-->
 		</ul>
 		
+		<#--
 		<p>
 <script type="text/javascript">
 //digg_bgcolor = '#ff9900';
 digg_skin = 'compact';
 </script>
 <script src="http://digg.com/tools/diggthis.js" type="text/javascript"></script>
-		</p>
-		<p>
-		(Please Note, these screencasts are for the Beta 1 release of MyHippocampus.<br>
-		 The new Beta 2 has some significant differences (read huge improvements) but we haven't had a chance to make the screencasts yet) 
-
+		</p>-->
+		
 	<p>
  	<#if !user?exists>
 	      <@common.signupNow/>
