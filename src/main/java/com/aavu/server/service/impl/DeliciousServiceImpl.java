@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.TimeZone;
 import java.util.Vector;
 
@@ -17,11 +18,13 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AddToTopicCommand;
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 import com.aavu.server.domain.DeliciousBundle;
 import com.aavu.server.domain.DeliciousPost;
@@ -92,6 +95,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 	private static final String delicousApiBundleGet = "https://api.del.icio.us/v1/tags/bundles/all?";
 	private static final String delicousApiUrlGet = "https://api.del.icio.us/v1/posts/get?";
 	public static final String DELICIOUS_STR = "Del.icio.us Links";
+	private static final int BATCH_SIZE = 200;
 
 	private TopicService topicService;
 	private UserService userService;
@@ -100,8 +104,11 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		super(userAgent, authURL, waitBetweenReq);
 	}
 
-
-	public void addDeliciousTags(List<DeliciousPost> posts, Topic parent) throws HippoException {
+	/**
+	 * NOT transactional. If it is, we end up grinding to a halt for big lists > ~300 Instead, run
+	 * addBatch as a little transactional task.
+	 */
+	public void addDeliciousTags(Queue<DeliciousPost> posts, Topic parent) throws HippoException {
 
 		log.info("Found " + posts.size() + " Posts.");
 
@@ -110,19 +117,8 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		Map<String, Topic> cache = new HashMap<String, Topic>();
 
-		for (DeliciousPost post : posts) {
-
-			WebLink ww = topicService.createNewIfURINonexistant(WebLink.class, post.getHref(), post
-					.getDescription(), post.getDate(), post.getExtended());
-
-			// WebLink ww = new WebLink(userService.getCurrentUser(), post.getDescription(), post
-			// .getHref(), post.getExtended());
-
-
-			String[] tags = post.getTags();
-
-			topicService.addLinkToTags(ww, tags, parent, cache);
-
+		while (!posts.isEmpty()) {
+			addBatch(posts, BATCH_SIZE, parent, cache);
 		}
 
 		// original 17 posts 2 sec
@@ -136,6 +132,33 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		long duration = finish.getTime() - start.getTime();
 		log.info("Add DeliciousTags in " + (duration / 1000) + " sec.");
 
+	}
+
+	@Transactional
+	private void addBatch(Queue<DeliciousPost> posts, int numToDo, Topic parent,
+			Map<String, Topic> cache) throws HippoBusinessException {
+
+		DeliciousPost post = null;
+
+		int i = 0;
+		Date start = new Date();
+
+		while (i < numToDo && null != (post = posts.poll())) {
+
+			WebLink ww = topicService.createNewIfURINonexistant(WebLink.class, post.getHref(), post
+					.getDescription(), post.getDate(), post.getExtended());
+
+			String[] tags = post.getTags();
+
+			topicService.addLinkToTags(ww, tags, parent, cache);
+
+			log.debug("Added " + ww);
+			i++;
+		}
+
+		Date finish = new Date();
+		long duration = finish.getTime() - start.getTime();
+		log.info("Add Batch size " + i + " " + (duration / 1000) + " sec. Cache " + cache.size());
 	}
 
 	/**
@@ -159,7 +182,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		User u = userService.getCurrentUser();
 
-		List<DeliciousPost> posts = null;
+		Queue<DeliciousPost> posts = null;
 
 
 
@@ -175,7 +198,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 
 
-		final List<DeliciousPost> postsf = posts;
+		final Queue<DeliciousPost> postsf = posts;
 
 
 		final Authentication authentication = SecurityContextHolder.getContext()
@@ -260,7 +283,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 	 * </posts>
 	 * 
 	 */
-	public List<DeliciousPost> getAllPosts(String username, String password) throws HippoException {
+	public Queue<DeliciousPost> getAllPosts(String username, String password) throws HippoException {
 
 
 		Document doc;
@@ -274,7 +297,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		return getPostsFromXML(doc);
 	}
 
-	public List<DeliciousPost> getPostFromPosts(String username, String password, Date lastUpdate)
+	public Queue<DeliciousPost> getPostFromPosts(String username, String password, Date lastUpdate)
 			throws HippoException {
 
 
@@ -292,10 +315,10 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		return getPostsFromXML(doc);
 	}
 
-	public List<DeliciousPost> getPostsFromXML(Document doc) {
+	public Queue<DeliciousPost> getPostsFromXML(Document doc) {
 
 		Element root = doc.getRootElement();
-		List<DeliciousPost> posts = new LinkedList<DeliciousPost>();
+		Queue<DeliciousPost> posts = new LinkedList<DeliciousPost>();
 		List<Element> postList = root.elements("post");
 
 		// log.debug("itemL" + postList);

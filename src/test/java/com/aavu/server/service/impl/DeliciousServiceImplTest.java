@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -79,7 +80,7 @@ public class DeliciousServiceImplTest extends BaseTestNoTransaction {
 		Document doc = getDoc(path);
 
 
-		List<DeliciousPost> posts = deliciousService.getPostsFromXML(doc);
+		Queue<DeliciousPost> posts = deliciousService.getPostsFromXML(doc);
 
 
 		for (DeliciousPost post : posts) {
@@ -117,12 +118,12 @@ public class DeliciousServiceImplTest extends BaseTestNoTransaction {
 
 		path = "com/aavu/server/service/jeff_aFew.xml"; // 17 posts
 		path = "com/aavu/server/service/jeff_all.xml"; // ~218 posts
-		// path = "com/aavu/server/service/jeff_all_huge.xml"; //~2500 posts
+		path = "com/aavu/server/service/jeff_all_huge.xml"; // ~2500 posts
 
 		Document doc = getDoc(path);
 
 
-		List<DeliciousPost> posts = deliciousService.getPostsFromXML(doc);
+		Queue<DeliciousPost> posts = deliciousService.getPostsFromXML(doc);
 
 
 		for (DeliciousPost post : posts) {

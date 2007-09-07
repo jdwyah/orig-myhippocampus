@@ -1,6 +1,7 @@
 package com.aavu.server.service;
 
 import java.util.List;
+import java.util.Queue;
 
 import org.dom4j.Document;
 
@@ -13,13 +14,13 @@ public interface DeliciousService {
 
 	int newLinksForUser(String username, String password) throws HippoException;
 
-	List<DeliciousPost> getPostsFromXML(Document doc);
+	Queue<DeliciousPost> getPostsFromXML(Document doc);
 
 	List<DeliciousBundle> getBundlesFromXML(Document bundleDoc);
 
 	void addBundles(Topic deliciousRoot, List<DeliciousBundle> bundles) throws HippoException;
 
-	void addDeliciousTags(List<DeliciousPost> postsf, Topic deliciousRoot) throws HippoException;
+	void addDeliciousTags(Queue<DeliciousPost> posts, Topic deliciousRoot) throws HippoException;
 
 
 }

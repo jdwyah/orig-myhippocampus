@@ -13,7 +13,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -109,32 +108,24 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 					} else {
 						t = createNewIfNonExistent(clipped);
 					}
+
+
+					t.addOccurence(linkM);
+					t = save(t, true, user);
+
+					cachedTopics.put(clipped, t);
+
 					// System.out.println("Cache Mis " + t + " " + t.getId() + " " + linkM);
 				} else {
+					Topic merged = editDAO.merge(t);
+					merged.addOccurence(linkM);
+
+					merged = save(merged, true, user);
+
+					cachedTopics.put(clipped, merged);
+
 					// System.out.println("Cache Hit " + t + " " + t.getId() + " " + linkM);
 				}
-
-
-
-				t.addOccurence(linkM);
-
-
-				Topic st = null;
-				try {
-					// skip the unique check
-					st = save(t, true, user);
-				} catch (DataAccessException e) {
-					// System.out.println("exception, trying merge Link: " + linkM);
-					log.debug("Exception merging " + t);
-					Topic merged = editDAO.merge(t);
-
-					st = save(merged, true, user);
-				}
-
-				log.debug("Save " + linkM + " to " + st.getTitle() + " " + st.getId());
-
-				cachedTopics.put(clipped, st);
-
 			}
 
 		}
