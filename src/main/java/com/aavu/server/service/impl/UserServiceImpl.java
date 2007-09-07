@@ -70,61 +70,44 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 		log.debug("getCurrentUser");
 
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (null == auth) {
+			throw new UsernameNotFoundException("No Authorizations");
+		}
+
+		Object obj = auth.getPrincipal();
+		String username = "";
+
+		if (obj instanceof UserDetails) {
+			log.debug("instance of UserDetails");
+			username = ((UserDetails) obj).getUsername();
+		} else {
+			log.debug("not a UserDetail, it's a " + obj.getClass().getName());
+			username = obj.toString();
+		}
+
+		log.debug("loadUserByUsername " + username);
+
 		try {
-			Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			String username = "";
 
-			if (obj instanceof UserDetails) {
-				log.debug("instance of UserDetails");
-				username = ((UserDetails) obj).getUsername();
+			ServerSideUser serverUser = (ServerSideUser) userCache.getUserFromCache(username);
+
+			User u;
+			if (serverUser == null) {
+
+				u = userDAO.getUserByUsername(username);
+				userCache.putUserInCache(new ServerSideUser(u));
+
 			} else {
-				log.debug("not a UserDetail, it's a " + obj.getClass().getName());
-				username = obj.toString();
+				u = serverUser.getUser();
 			}
 
-			log.debug("loadUserByUsername " + username);
-
-			try {
-
-				ServerSideUser serverUser = (ServerSideUser) userCache.getUserFromCache(username);
-
-				User u;
-				if (serverUser == null) {
-
-					u = userDAO.getUserByUsername(username);
-					userCache.putUserInCache(new ServerSideUser(u));
-
-				} else {
-					u = serverUser.getUser();
-				}
-
-				return u;
-			} catch (UsernameNotFoundException e) {
-				log.debug(e);
-				throw e;
-			}
-
-
-		} catch (NullPointerException e) {
-			// This seems to get thrown on some errors. ie a servlet error comes here,
-			// then something in
-			// SecurityContextHolder.getContext().getAuthentication().getPrincipal()
-			// NPE's and then we get this NPE exception instead of the original exception.
-			// rethrow as UserNotFound since we, hopefully, know what to do with that.
-			/*
-			 * java.lang.NullPointerException
-			 * com.aavu.server.service.impl.UserServiceImpl.getCurrentUser(UserServiceImpl.java:39)
-			 * sun.reflect.GeneratedMethodAccessor94.invoke(Unknown Source)
-			 * sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
-			 * ... AOP schtuff
-			 * org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:161)
-			 * org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:204)
-			 * $Proxy1.getCurrentUser(Unknown Source)
-			 * com.aavu.server.web.controllers.BasicController.getDefaultModel(BasicController.java:46)
-			 * com.aavu.server.web.controllers.BasicController.handleRequestInternal(BasicController.java:37)
-			 */
-			e.printStackTrace();
-			throw new UsernameNotFoundException("No Authentication Context " + e);
+			return u;
+		} catch (UsernameNotFoundException e) {
+			log.debug(e);
+			throw e;
 		}
 
 	}

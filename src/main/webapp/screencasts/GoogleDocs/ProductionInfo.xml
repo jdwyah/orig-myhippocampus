@@ -17,8 +17,8 @@
 <MaxPIPWidth>0</MaxPIPWidth>
 <MaxPIPHeight>0</MaxPIPHeight>
 <MaxPIPFPS>0.00</MaxPIPFPS>
-<VideoDuration>327.80</VideoDuration>
-<PIPVideoDuration>313.10</PIPVideoDuration>
+<VideoDuration>338.60</VideoDuration>
+<PIPVideoDuration>324.00</PIPVideoDuration>
 <VideoFPS>15.00</VideoFPS>
 <PIPVideoFPS>10.00</PIPVideoFPS>
 <VideoWidth>956</VideoWidth>
@@ -31,7 +31,7 @@
 <MinTOCWidth>160</MinTOCWidth>
 <TOCDividerHeight>28</TOCDividerHeight>
 <TimelineHasAudio>1</TimelineHasAudio>
-<TimelineDuration>3278493331</TimelineDuration>
+<TimelineDuration>3386645583</TimelineDuration>
 <SWFControllerTotalHeight>55</SWFControllerTotalHeight>
 <SWFMinWidth>320</SWFMinWidth>
 <SWFTOCXPos>0</SWFTOCXPos>
@@ -50,7 +50,7 @@
 <DisableTOC>0</DisableTOC>
 <AutoPlay>1</AutoPlay>
 <CancelledProduction>0</CancelledProduction>
-<CancelledProdLength>3272000000</CancelledProdLength>
+<CancelledProdLength>3384000000</CancelledProdLength>
 <Hotspot_Array>
 </Hotspot_Array>
 <AdjGlobalRenderRangeStart>-1</AdjGlobalRenderRangeStart>
@@ -125,14 +125,14 @@
 <ProducedFiles_Array>
 <ProducedFile_Object>
 <FileName>C:\Documents and Settings\Jeff Dwyer\My Documents\Camtasia Studio\GoogleDocs\GoogleDocs.swf</FileName>
-<FileSize>6029821</FileSize>
+<FileSize>5706859</FileSize>
 <FileType>Video</FileType>
 <WhichFilesOfCurType>0</WhichFilesOfCurType>
 <TotalFilesOfCurType>1</TotalFilesOfCurType>
 </ProducedFile_Object>
 <ProducedFile_Object>
 <FileName>C:\Documents and Settings\Jeff Dwyer\My Documents\Camtasia Studio\GoogleDocs\GoogleDocs.html</FileName>
-<FileSize>0</FileSize>
+<FileSize>1781</FileSize>
 <FileType>HTMLFile</FileType>
 <WhichFilesOfCurType>0</WhichFilesOfCurType>
 <TotalFilesOfCurType>1</TotalFilesOfCurType>
@@ -153,7 +153,7 @@
 </ProducedFile_Object>
 <ProducedFile_Object>
 <FileName>C:\Documents and Settings\Jeff Dwyer\My Documents\Camtasia Studio\GoogleDocs\GoogleDocs_config.xml</FileName>
-<FileSize>0</FileSize>
+<FileSize>8072</FileSize>
 <FileType>FlashConfig</FileType>
 <WhichFilesOfCurType>0</WhichFilesOfCurType>
 <TotalFilesOfCurType>1</TotalFilesOfCurType>
@@ -174,14 +174,14 @@
 </ProducedFile_Object>
 <ProducedFile_Object>
 <FileName>C:\Documents and Settings\Jeff Dwyer\My Documents\Camtasia Studio\GoogleDocs\GoogleDocs_nofp_bg.gif</FileName>
-<FileSize>0</FileSize>
+<FileSize>10868</FileSize>
 <FileType>FlashNoPlayerBGImage</FileType>
 <WhichFilesOfCurType>0</WhichFilesOfCurType>
 <TotalFilesOfCurType>1</TotalFilesOfCurType>
 </ProducedFile_Object>
 <ProducedFile_Object>
 <FileName>C:\Documents and Settings\Jeff Dwyer\My Documents\Camtasia Studio\GoogleDocs\ProductionInfo.xml</FileName>
-<FileSize>0</FileSize>
+<FileSize>11711</FileSize>
 <FileType>ProductionInfoXML</FileType>
 <WhichFilesOfCurType>0</WhichFilesOfCurType>
 <TotalFilesOfCurType>1</TotalFilesOfCurType>
@@ -191,7 +191,7 @@
 <ProductionFormat>SWF</ProductionFormat>
 <NumVideoSegments>1</NumVideoSegments>
 <NumHTMLFiles>1</NumHTMLFiles>
-<TotalProductionSize>6699779</TotalProductionSize>
+<TotalProductionSize>6417081</TotalProductionSize>
 <m_cf_rtRenderRangeStart>-1</m_cf_rtRenderRangeStart>
 <m_cf_rtRenderRangeStop>-1</m_cf_rtRenderRangeStop>
 <m_cf_strTempDir>C:\DOCUME~1\JEFFDW~1\LOCALS~1\Temp\</m_cf_strTempDir>

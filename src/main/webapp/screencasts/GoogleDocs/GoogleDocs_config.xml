@@ -141,7 +141,7 @@ For other distribution methods, or to understand how the Flash Player security s
       <array>
          <fileset>
             <video1>
-               <duration type="Number">327.80</duration>
+               <duration type="Number">338.60</duration>
                <uri>GoogleDocs.swf</uri>
                <frameRate type="Number">15</frameRate>
                <keyframeRate type="Number">0</keyframeRate>
@@ -149,7 +149,7 @@ For other distribution methods, or to understand how the Flash Player security s
                <isFlv type="Boolean">0</isFlv>
             </video1>
             <pip>
-               <duration type="Number">313.10</duration>
+               <duration type="Number">324.00</duration>
                <frameRate type="Number">10</frameRate>
                <keyframeRate type="Number">30</keyframeRate>
                <uri>GoogleDocs_PIP.flv</uri>   
