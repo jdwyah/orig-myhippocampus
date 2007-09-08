@@ -10,7 +10,7 @@
 	<!-- Turn on @Required -->
 	<!-- not precisely sure why this is neccessary, since we do it in appContext too.. -->
 	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
-	<bean id="propertyConfigurer" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
+	<bean id="propertyConfigurer2" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:config.properties" />
 	</bean>
 
@@ -93,9 +93,18 @@
 	<bean id="importController" class="com.aavu.server.web.controllers.ImportController">
 		<property name="formView" value="secure/import" />
 		<property name="successView" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->		
+		<property name="googleAuthReturnURL" value="http://www.myhippocampus.com/site/google/RetrieveToken"/>
+		
 		<property name="userService" ref="userService" />
 		<property name="deliciousService" ref="deliciousService"/>		
 		<property name="googleService" ref="googleService"/>
+	</bean>
+	
+	<bean id="googleImportController" class="com.aavu.server.web.controllers.GoogleImportController">
+		<property name="view" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->
+		<property name="formView" value="redirect:/site/secure/import.html"></property>
+		<property name="googleService" ref="googleService"/>
+		<property name="userService" ref="userService"/>		
 	</bean>
 
 	<bean id="manageMailingListController" class="com.aavu.server.web.controllers.secure.extreme.ManageMailingListController">
@@ -281,7 +290,11 @@
 				<prop key="/site/secure/search.html">searchController</prop>
 				<prop key="/site/secure/userPage.html">userPageController</prop>
 				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
+				
+				
 				<prop key="/site/secure/import.html">importController</prop>
+				<prop key="/site/google/RetrieveToken">googleImportController</prop>
+
 
 				<prop key="/site/browser.html">browserController</prop>
 				<prop key="/site/secure/mindscape.html">mindscapeController</prop>

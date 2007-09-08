@@ -21,6 +21,7 @@ import com.aavu.server.service.TheGoogleService;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.google.gdata.client.docs.DocsService;
+import com.google.gdata.client.http.AuthSubUtil;
 import com.google.gdata.data.Category;
 import com.google.gdata.data.Link;
 import com.google.gdata.data.docs.DocumentListEntry;
@@ -47,23 +48,37 @@ public class GoogleServicesImpl implements TheGoogleService {
 
 	private String rootName;
 
+	private String docListURL;
+
 
 	public GoogleServicesImpl(String applicationName, String rootName) {
 		service = new DocsService(applicationName);
 		this.rootName = rootName;
 	}
 
-	/**
-	 * do a create new if exists for all docs
-	 * 
-	 * Don't call it get* since that's our select only aop code
-	 */
+
+	public int importDocsForToken(String onetimeUseToken) throws IOException, ServiceException {
+		service.setAuthSubToken(onetimeUseToken);
+		return doImport(null);
+	}
+
 	public int importDocsForUser(final String username, String password) throws IOException,
 			ServiceException {
 
 		service.setUserCredentials(username, password);
+		return doImport(username);
+	}
 
-		URL documentListFeedUrl = new URL("http://docs.google.com/feeds/documents/private/full");
+	/**
+	 * do a create new if exists for all docs
+	 * 
+	 * Don't call it get* since that's our select only aop code
+	 * 
+	 * @throws ServiceException
+	 * @throws IOException
+	 */
+	private int doImport(final String googleUsername) throws IOException, ServiceException {
+		URL documentListFeedUrl = new URL(docListURL);
 		final DocumentListFeed feed = service.getFeed(documentListFeedUrl, DocumentListFeed.class);
 
 		final Authentication authentication = SecurityContextHolder.getContext()
@@ -89,8 +104,11 @@ public class GoogleServicesImpl implements TheGoogleService {
 
 					// sort by username, since somebody might have docs for jdwyah@gmail.com and
 					// jdwyah@myhippocampus.com
-					//
-					Topic userRoot = topicService.createNewIfNonExistent(username, googleRoot);
+					// Unfortunately, token style authentication doesn't let us do this.
+					Topic userRoot = googleRoot;
+					if (googleUsername != null) {
+						userRoot = topicService.createNewIfNonExistent(googleUsername, googleRoot);
+					}
 
 					log.debug("Adding to userRoot " + userRoot);
 
@@ -98,6 +116,8 @@ public class GoogleServicesImpl implements TheGoogleService {
 
 						log.info("Adding gdoc " + entry.getTitle().getPlainText());
 						add(user, entry, userRoot);
+
+
 
 					}
 
@@ -243,6 +263,14 @@ public class GoogleServicesImpl implements TheGoogleService {
 		this.selectDAO = selectDAO;
 	}
 
+	@Required
+	public void setDocListURL(String docListURL) {
+		this.docListURL = docListURL;
+	}
+
+	public String getAuthorizationURL(String googleAuthReturnURL) {
+		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, docListURL, false, true);
+	}
 
 
 }

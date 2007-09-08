@@ -18,7 +18,6 @@ import com.aavu.server.service.TheGoogleService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.ImportCommand;
 import com.aavu.server.web.domain.validation.ImportCommandValidator;
-import com.google.gdata.util.AuthenticationException;
 
 public class ImportController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(ImportController.class);
@@ -26,6 +25,8 @@ public class ImportController extends SimpleFormController {
 	private UserService userService;
 	private DeliciousService deliciousService;
 	private TheGoogleService googleService;
+
+	private String googleAuthReturnURL;
 
 	public ImportController() {
 		setCommandClass(ImportCommand.class);
@@ -36,6 +37,14 @@ public class ImportController extends SimpleFormController {
 		Map<String, Object> rtn = new HashMap<String, Object>();
 		rtn.put("command", new ImportCommand());
 		rtn.put("message", message);
+		rtn.put("googleRequestURL", googleService.getAuthorizationURL(googleAuthReturnURL));
+		return rtn;
+	}
+
+	@Override
+	protected Map referenceData(HttpServletRequest request) throws Exception {
+		Map<String, Object> rtn = new HashMap<String, Object>();
+		rtn.put("googleRequestURL", googleService.getAuthorizationURL(googleAuthReturnURL));
 		return rtn;
 	}
 
@@ -64,20 +73,27 @@ public class ImportController extends SimpleFormController {
 			}
 		} else if (type.equals("google")) {
 
-			try {
-				int found = googleService.importDocsForUser(comm.getGoogleName(), comm
-						.getGooglePass());
+			return new ModelAndView("redirect:"
+					+ googleService.getAuthorizationURL(googleAuthReturnURL));
 
-				String successStr = "Found "
-						+ found
-						+ " documents. Importing in the background, it may take a bit before they are all available.";
-
-				return new ModelAndView(getSuccessView(), "message", successStr);
-			} catch (AuthenticationException e) {
-
-				return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
-						+ e.getMessage()));
-			}
+			// try {
+			//
+			//				
+			//
+			// int found = googleService.importDocsForUser(comm.getGoogleName(), comm
+			// .getGooglePass());
+			//				
+			// String successStr = "Found "
+			// + found
+			// + " documents. Importing in the background, it may take a bit before they are all
+			// available.";
+			//				
+			// return new ModelAndView(getSuccessView(), "message", successStr);
+			// } catch (AuthenticationException e) {
+			//
+			// return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
+			// + e.getMessage()));
+			// }
 		} else {
 			throw new RuntimeException("No Import Type Specified");
 		}
@@ -97,6 +113,11 @@ public class ImportController extends SimpleFormController {
 	@Required
 	public void setGoogleService(TheGoogleService googleService) {
 		this.googleService = googleService;
+	}
+
+	@Required
+	public void setGoogleAuthReturnURL(String googleAuthReturnURL) {
+		this.googleAuthReturnURL = googleAuthReturnURL;
 	}
 
 

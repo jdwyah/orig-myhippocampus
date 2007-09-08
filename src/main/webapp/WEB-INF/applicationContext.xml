@@ -76,6 +76,8 @@
 		<constructor-arg value="MyHippocampus-Server-1.0" />
 		<constructor-arg value="Google Docs &amp; Spreadsheets" />
 		
+		<property name="docListURL" value="http://docs.google.com/feeds/documents/private/full"/>
+		
 		<property name="selectDAO" ref="selectDAO"/>
 		<property name="userService" ref="userService" />
 		<property name="topicService" ref="topicService" />

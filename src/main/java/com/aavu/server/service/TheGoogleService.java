@@ -8,6 +8,10 @@ public interface TheGoogleService {
 
 	int importDocsForUser(String username, String password) throws IOException, ServiceException;
 
+	String getAuthorizationURL(String googleAuthReturnURL);
+
+	int importDocsForToken(String onetimeUseToken) throws IOException, ServiceException;
+
 
 
 }

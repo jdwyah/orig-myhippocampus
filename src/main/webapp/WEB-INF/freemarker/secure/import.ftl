@@ -18,7 +18,7 @@
 		 <p class="message">${message}</p>
 	 </#if>
 
-
+	<div class="middle-column-box-title-green">Del.icio.us Links</div>
 	<form action="<@spring.url "/site/secure/import.html?type=delicious"/>" method="POST">
 		<fieldset>
 			<legend><@spring.message "importDelicious.legend"/></legend>				
@@ -33,9 +33,14 @@
 			 <br>
 			<input value="<@spring.message "importDelicious.submit"/>" type="submit">
 		</fieldset>
-	</form>		
+	</form>
+	
+	<div class="middle-column-box-title-green">Google Docs & Spreadsheets</div>				
 	<p>
-	<form action="<@spring.url "/site/secure/import.html?type=google"/>" method="POST">
+	To authorize MyHippocampus to access your account click 
+	<a href="${googleRequestURL}">Import My Google Docs</a>. MyHippocampus never sees your credentials.
+	</p>
+	<#--<form action="<@spring.url "/site/secure/import.html?type=google"/>" method="POST">
 		<fieldset>
 			<legend><@spring.message "importGoogle.legend"/></legend>				
 								
@@ -52,7 +57,7 @@
 	</form>
 	<p>		
 	Your password is not saved on our servers.
-	</p> 
+	</p>--> 
 	
   </div>
 		
