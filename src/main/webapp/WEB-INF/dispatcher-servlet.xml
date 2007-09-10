@@ -102,7 +102,7 @@
 	
 	<bean id="googleImportController" class="com.aavu.server.web.controllers.GoogleImportController">
 		<property name="view" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->
-		<property name="formView" value="redirect:/site/secure/import.html"></property>
+		<property name="formView" value="redirect:/site/secure/import.html" />
 		<property name="googleService" ref="googleService"/>
 		<property name="userService" ref="userService"/>		
 	</bean>

@@ -1,6 +1,5 @@
 package com.aavu.server.web.domain.validation;
 
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -16,11 +15,11 @@ public class ImportCommandValidator implements Validator {
 
 		ImportCommand comm = (ImportCommand) target;
 
-		if (!StringUtils.hasText(comm.getDeliciousName())
-				&& !StringUtils.hasText(comm.getGoogleName())) {
-			errors.rejectValue("deliciousName", "invalid.importusername.oneorother");
-			errors.rejectValue("googleName", "invalid.importusername.oneorother");
-		}
+		// if (!StringUtils.hasText(comm.getDeliciousName())
+		// && !StringUtils.hasText(comm.getGoogleName())) {
+		// errors.rejectValue("deliciousName", "invalid.importusername.oneorother");
+		// errors.rejectValue("googleName", "invalid.importusername.oneorother");
+		// }
 
 	}
 }

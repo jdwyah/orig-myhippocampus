@@ -18,6 +18,7 @@ import com.aavu.server.service.TheGoogleService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.ImportCommand;
 import com.aavu.server.web.domain.validation.ImportCommandValidator;
+import com.google.gdata.util.AuthenticationException;
 
 public class ImportController extends SimpleFormController {
 	private static final Logger log = Logger.getLogger(ImportController.class);
@@ -73,27 +74,27 @@ public class ImportController extends SimpleFormController {
 			}
 		} else if (type.equals("google")) {
 
-			return new ModelAndView("redirect:"
-					+ googleService.getAuthorizationURL(googleAuthReturnURL));
+			// return new ModelAndView("redirect:"
+			// + googleService
+			// .getAuthorizationURL(googleAuthReturnURL, comm.getGoogleDomain()));
 
-			// try {
-			//
-			//				
-			//
-			// int found = googleService.importDocsForUser(comm.getGoogleName(), comm
-			// .getGooglePass());
-			//				
-			// String successStr = "Found "
-			// + found
-			// + " documents. Importing in the background, it may take a bit before they are all
-			// available.";
-			//				
-			// return new ModelAndView(getSuccessView(), "message", successStr);
-			// } catch (AuthenticationException e) {
-			//
-			// return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
-			// + e.getMessage()));
-			// }
+			try {
+
+
+
+				int found = googleService.importDocsForUser(comm.getGoogleName(), comm
+						.getGooglePass());
+
+				String successStr = "Found "
+						+ found
+						+ " documents. Importing in the background, it may take a bit before they are all available.";
+
+				return new ModelAndView(getSuccessView(), "message", successStr);
+			} catch (AuthenticationException e) {
+
+				return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
+						+ e.getMessage()));
+			}
 		} else {
 			throw new RuntimeException("No Import Type Specified");
 		}

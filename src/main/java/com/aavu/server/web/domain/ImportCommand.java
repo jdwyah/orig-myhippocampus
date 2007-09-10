@@ -5,8 +5,9 @@ public class ImportCommand {
 	private String deliciousName;
 	private String deliciousPass;
 
-	private String googleName;
 	private String googlePass;
+	private String googleName;
+	private String googleDomain;
 
 	public String getDeliciousName() {
 		return deliciousName;
@@ -22,6 +23,14 @@ public class ImportCommand {
 
 	public void setDeliciousPass(String deliciousPass) {
 		this.deliciousPass = deliciousPass;
+	}
+
+	public String getGoogleDomain() {
+		return googleDomain;
+	}
+
+	public void setGoogleDomain(String googleDomain) {
+		this.googleDomain = googleDomain;
 	}
 
 	public String getGooglePass() {

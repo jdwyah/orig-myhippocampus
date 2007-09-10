@@ -268,9 +268,21 @@ public class GoogleServicesImpl implements TheGoogleService {
 		this.docListURL = docListURL;
 	}
 
+	// private static final String DEFAULT_PROTOCOL = "https";
+	// private static final String DEFAULT_DOMAIN = "www.google.com";
+	// public String getAuthorizationURL(String googleAuthReturnURL, Strin domain) {
+	//		
+	// if (StringUtils.hasText(domain)) {
+	// return AuthSubUtil.getRequestUrl(DEFAULT_PROTOCOL, domain, googleAuthReturnURL,
+	// docListURL, false, true);
+	// } else {
+	// return AuthSubUtil.getRequestUrl(DEFAULT_PROTOCOL, DEFAULT_DOMAIN, googleAuthReturnURL,
+	// docListURL, false, true);
+	// }
+	//
+	// }
 	public String getAuthorizationURL(String googleAuthReturnURL) {
 		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, docListURL, false, true);
 	}
-
 
 }

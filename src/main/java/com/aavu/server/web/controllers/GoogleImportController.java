@@ -40,8 +40,6 @@ public class GoogleImportController extends BasicController {
 
 		try {
 
-
-
 			int found = googleService.importDocsForToken(onetimeUseToken);
 
 			String successStr = "Found "

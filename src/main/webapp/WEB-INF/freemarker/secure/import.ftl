@@ -36,28 +36,46 @@
 	</form>
 	
 	<div class="middle-column-box-title-green">Google Docs & Spreadsheets</div>				
-	<p>
-	To authorize MyHippocampus to access your account click 
-	<a href="${googleRequestURL}">Import My Google Docs</a>. MyHippocampus never sees your credentials.
+	<table>
+	<tr>
+	<th>
+		Basic Google Account
+	</th>
+	<th>
+	    Google Apps For Your Domain Account
+	</th>
+	</tr>
+	<tr>
+	<td valign=top>		
+	<br> 
+	<button onclick="location.href='${googleRequestURL}'">Import My Google Docs</button>
+	<br>
+	For standard Google accounts (ie gmail), authorize MyHippocampus to access your docs.
+	<br>
+	MyHippocampus never sees your credentials.
 	</p>
-	<#--<form action="<@spring.url "/site/secure/import.html?type=google"/>" method="POST">
-		<fieldset>
-			<legend><@spring.message "importGoogle.legend"/></legend>				
+	</td>
+	<td>	
+	<form action="<@spring.url "/site/secure/import.html?type=google"/>" method="POST">
+		<fieldset>						
 								
 			 <label for="googleName"><@spring.formInput "command.googleName"/><@common.regError/>
 			 <@spring.message "importGoogle.username"/>
-			 </label>		(JohnDoe@gmail.com or JohnDoe@MyGoogleAppsDomain.com if you have GoogleApps)
-			 <br>	
+			 </label>		(username@myGoogleAppsDomain.com)
+			 <br>				 
 			 <label for="googlePass"><@spring.formPasswordInput "command.googlePass"/><@common.regError/>
 			 <@spring.message "importGoogle.password"/>
 			 </label>
 			 <br>
 			<input value="<@spring.message "importGoogle.submit"/>" type="submit">
 		</fieldset>
+		<p>
+		Sorry, the Google API doesn't support the credential free import for Apps For Your Domain yet. Your credentials are not saved. 
 	</form>
-	<p>		
-	Your password is not saved on our servers.
-	</p>--> 
+	</td>
+	</tr>
+	</table>
+	
 	
   </div>
 		
