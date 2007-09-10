@@ -36,7 +36,7 @@
 	       <ul>
 	       <#if user?exists>
 				<li><a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a></li>
-				<li><a href="<@spring.url "/site/secure/account.html"/>"><@spring.message "sidebar.account"/></a></li>
+<#--				<li><a href="<@spring.url "/site/secure/account.html"/>"><@spring.message "sidebar.account"/></a></li>-->
 				<li><a href="<@spring.url "/site/j_acegi_logout"/>">Logout</a></li>
 			<#else>
 				<li><a href="<@spring.url "/site/index.html"/>"><@spring.message "sidebar.frontPage"/></a></li>

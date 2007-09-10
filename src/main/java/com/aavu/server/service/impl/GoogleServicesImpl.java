@@ -282,7 +282,7 @@ public class GoogleServicesImpl implements TheGoogleService {
 	//
 	// }
 	public String getAuthorizationURL(String googleAuthReturnURL) {
-		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, docListURL, false, true);
+		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, docListURL, false, false);
 	}
 
 }
