@@ -49,6 +49,7 @@ public class GoogleServicesImpl implements TheGoogleService {
 	private String rootName;
 
 	private String docListURL;
+	private String authScopeURL;
 
 
 	public GoogleServicesImpl(String applicationName, String rootName) {
@@ -268,6 +269,12 @@ public class GoogleServicesImpl implements TheGoogleService {
 		this.docListURL = docListURL;
 	}
 
+	@Required
+	public void setAuthScopeURL(String authScopeURL) {
+		this.authScopeURL = authScopeURL;
+	}
+
+
 	// private static final String DEFAULT_PROTOCOL = "https";
 	// private static final String DEFAULT_DOMAIN = "www.google.com";
 	// public String getAuthorizationURL(String googleAuthReturnURL, Strin domain) {
@@ -282,7 +289,7 @@ public class GoogleServicesImpl implements TheGoogleService {
 	//
 	// }
 	public String getAuthorizationURL(String googleAuthReturnURL) {
-		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, docListURL, false, false);
+		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, authScopeURL, false, false);
 	}
 
 }
