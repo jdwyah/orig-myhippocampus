@@ -10,7 +10,7 @@ public interface TheGoogleService {
 
 	String getAuthorizationURL(String googleAuthReturnURL);
 
-	int importDocsForToken(String onetimeUseToken) throws IOException, ServiceException;
+	int importDocsForToken(String sessionToken) throws IOException, ServiceException;
 
 
 

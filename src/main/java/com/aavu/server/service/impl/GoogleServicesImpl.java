@@ -58,8 +58,8 @@ public class GoogleServicesImpl implements TheGoogleService {
 	}
 
 
-	public int importDocsForToken(String onetimeUseToken) throws IOException, ServiceException {
-		service.setAuthSubToken(onetimeUseToken);
+	public int importDocsForToken(String sessionToken) throws IOException, ServiceException {
+		service.setAuthSubToken(sessionToken);
 		return doImport(null);
 	}
 
@@ -289,7 +289,7 @@ public class GoogleServicesImpl implements TheGoogleService {
 	//
 	// }
 	public String getAuthorizationURL(String googleAuthReturnURL) {
-		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, authScopeURL, false, false);
+		return AuthSubUtil.getRequestUrl(googleAuthReturnURL, authScopeURL, false, true);
 	}
 
 }

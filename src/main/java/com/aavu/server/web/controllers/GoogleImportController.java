@@ -36,11 +36,13 @@ public class GoogleImportController extends BasicController {
 
 		String onetimeUseToken = AuthSubUtil.getTokenFromReply(req.getQueryString());
 
-		googleService.importDocsForToken(onetimeUseToken);
+		// TODO use key
+		String sessionToken = AuthSubUtil.exchangeForSessionToken(onetimeUseToken, null);
+
 
 		try {
 
-			int found = googleService.importDocsForToken(onetimeUseToken);
+			int found = googleService.importDocsForToken(sessionToken);
 
 			String successStr = "Found "
 					+ found
