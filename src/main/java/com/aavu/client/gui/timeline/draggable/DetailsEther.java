@@ -11,65 +11,65 @@ public class DetailsEther extends Ether {
 
 
 	private int zoneStart;
-	
+
 	public DetailsEther(Manager manager, int width, int height) {
 		super(manager, width, height);
 		addStyleName("H-TimelineDetail");
 	}
 
-	//@Override
+	// @Override
 	protected int getYPush() {
 		return 30;
 	}
 
-	//@Override
+	// @Override
 	protected int getXSpan() {
 		return 250;
 	}
 
-	//@Override
-	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo,
-			int left, int top) {		
-		return new TLOWrapper(manager,tlo,left,top);
+	// @Override
+	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo, int left, int top) {
+		return new TLOWrapper(manager, tlo);
 	}
 
-	//@Override
+	// @Override
 	protected int newSection(int depth, int key, Date date) {
-		
 
-		zoneStart += getXSpan();			
 
-		
-		//System.out.println("DetailsEther.time linebg height "+getHeight());
-		addObject(new TimelineBG(depth,key,date,zoneStart,getXSpan(),getHeight(),this));
-		
-		LabelWrapper startIntervalLabel = new LabelWrapper(TreeOfTime.getLabelForDepth(depth,key,date),zoneStart,getIntervalTop()); 			
+		zoneStart += getXSpan();
+
+
+		// System.out.println("DetailsEther.time linebg height "+getHeight());
+		addObject(new TimelineBG(depth, key, date, zoneStart, getXSpan(), getHeight(), this));
+
+		LabelWrapper startIntervalLabel = new LabelWrapper(TreeOfTime.getLabelForDepth(depth, key,
+				date), zoneStart, getIntervalTop());
 		addObject(startIntervalLabel);
-		
+
 		return zoneStart;
 	}
 
-	//@Override
-	protected void newObject(Manager manager,TimeLineObj tlo, int left, int top) {
-		addObject(getTLORepr(manager,tlo,left,top));
+	// @Override
+	protected void newObject(Manager manager, TimeLineObj tlo, int left, int top) {
+		addObject(getTLORepr(manager, tlo, left, top));
 	}
 
-	//@Override
+	// @Override
 	protected int getRelLeft(double pct) {
 		return (int) (getXSpan() * pct) + zoneStart;
 	}
-	
-	
-	//@Override
+
+
+	// @Override
 	public void init() {
 		super.init();
 		zoneStart = -getXSpan();
 	}
 
-	//@Override
+	// @Override
 	protected void setBackground(double scale) {
-		
+
 	}
 
-	
+
 }

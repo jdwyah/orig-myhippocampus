@@ -1,6 +1,9 @@
 package com.aavu.client.domain;
 
+import java.util.Date;
+
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.timeline.HasDate;
 
 /**
  * This is the basic instantiation of the abstract type Topic.
@@ -12,7 +15,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
  * @author Jeff Dwyer
  * 
  */
-public class RealTopic extends Topic {
+public class RealTopic extends Topic implements HasDate {
 
 	public RealTopic(TopicIdentifier to) {
 		super(to);
@@ -25,5 +28,14 @@ public class RealTopic extends Topic {
 	public RealTopic(User u, String d) {
 		super(u, d);
 	}
+
+	public Date getEndDate() {
+		return null;
+	}
+
+	public Date getStartDate() {
+		return getCreated();
+	}
+
 
 }

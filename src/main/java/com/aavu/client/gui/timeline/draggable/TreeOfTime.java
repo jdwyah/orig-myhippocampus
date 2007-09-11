@@ -80,7 +80,7 @@ public class TreeOfTime {
 
 	private void distributeElementToLeafs(HasDate member) {
 
-		int val = getSortValue(depth, member.getDate());
+		int val = getSortValue(depth, member.getStartDate());
 
 		TreeOfTime leaf = (TreeOfTime) leafs.get(new Integer(val));
 		if(leaf == null){
@@ -287,7 +287,7 @@ public class TreeOfTime {
 		for (Iterator iterator = members.iterator(); iterator.hasNext();) {
 			HasDate date = (HasDate) iterator.next();			
 			sb.append(spacer);
-			sb.append("= "+date.toString()+" "+getLabelForDepth(depth - 1, yourkey.intValue(), date.getDate())+" depth "+depth+" key "+yourkey.intValue());
+			sb.append("= "+date.toString()+" "+getLabelForDepth(depth - 1, yourkey.intValue(), date.getStartDate())+" depth "+depth+" key "+yourkey.intValue());
 			sb.append("\n");
 		}
 

@@ -44,6 +44,10 @@ public class TimelineBG extends Composite implements RemembersPosition {
 		return top;
 	}
 
+	public void setTop(int top) {
+		this.top = top;
+	}
+
 	public Widget getWidget() {
 		return this;
 	}

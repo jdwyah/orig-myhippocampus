@@ -3,7 +3,7 @@ package com.aavu.client.widget.datepickertimeline;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.TooltipListener;
-import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class DraggableTimeLineObj extends FocusPanel implements RemembersPosition,
+public class DraggableTimeLineObj extends FocusPanel implements TimelineRemembersPosition,
 		SourcesMouseWheelEvents, SourcesMouseEvents {
 
 	private DateTimeFormat format = DateTimeFormat.getFormat("MMM, d yyyy");
@@ -59,7 +59,7 @@ public class DraggableTimeLineObj extends FocusPanel implements RemembersPositio
 		// }});
 		// }});
 
-		label.addMouseListener(new TooltipListener(format.format(tlo.getStart())));
+		label.addMouseListener(new TooltipListener(format.format(tlo.getStartDate())));
 
 		setWidget(image);
 
@@ -97,6 +97,10 @@ public class DraggableTimeLineObj extends FocusPanel implements RemembersPositio
 	public void zoomToScale(double currentScale) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public int getWidth() {
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -76,4 +76,9 @@ public class ConnectionExplorerWidget extends SimplePanel implements RemembersPo
 		return super.getWidget();
 	}
 
+	public void setTop(int top) {
+		this.top = top;
+	}
+
+
 }

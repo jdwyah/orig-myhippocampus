@@ -132,4 +132,7 @@ public class DraggableLabel extends Label implements ClickListener, SourcesMouse
 
 	}
 
+	public void setTop(int top) {
+		this.top = top;
+	}
 }

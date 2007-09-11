@@ -467,7 +467,10 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 				Expression.eq("user", user)).createAlias("associations", "assoc").createAlias(
 				"assoc.members", "metaValue").createAlias("assoc.types", "assocTypeConn")
 				.createAlias("assocTypeConn.type", "assocType").add(
-						Expression.eq("assocType.class", "metadate"));
+						Expression.eq("metaValue.class", "date"));
+
+		// Expression.eq("assocType.class", "metadate"));
+
 
 		if (tagID != -1) {
 			DetachedCriteria tags = DetachedCriteria.forClass(TopicTypeConnector.class).add(
@@ -490,7 +493,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		crit.setProjection(Projections.distinct(Projections.projectionList().add(
 				Property.forName("id")).add(Property.forName("title")).add(
 				Property.forName("metaValue.created")).add(
-				Property.forName("metaValue.lastUpdated")).add(Property.forName("metaValue.id"))));
+				Property.forName("metaValue.lastUpdated")).add(Property.forName("metaValue.id"))
+				.add(Property.forName("metaValue.title"))));
 
 
 		List<Object[]> ll = getHibernateTemplate().findByCriteria(crit);
@@ -514,9 +518,13 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 			Date date = (Date) oa[2];
 			Date endDate = (Date) oa[3];
 
-			// add metaDate
-			rtn.add(new TimeLineObj(new TopicIdentifier(topicId.longValue(), (String) oa[1]), date,
-					endDate, new HippoDate()));
+			Long metaValueId = (Long) oa[4];
+			String metaValueTitle = (String) oa[5];
+
+			HippoDate hdate = new HippoDate(metaValueId, metaValueTitle, date, endDate);
+
+			TopicIdentifier forTopic = new TopicIdentifier(topicId.longValue(), (String) oa[1]);
+			rtn.add(new TimeLineObj(forTopic, hdate));
 		}
 
 		return rtn;

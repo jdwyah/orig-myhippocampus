@@ -12,4 +12,6 @@ public interface RemembersPosition {
 
 	void zoomToScale(double currentScale);
 
+	void setTop(int top);
+
 }

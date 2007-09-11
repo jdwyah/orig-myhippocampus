@@ -1,4 +1,5 @@
 package com.aavu.client.domain;
+
 // Generated Jul 18, 2006 12:44:47 PM by Hibernate Tools 3.1.0.beta4
 
 import java.io.Serializable;
@@ -6,55 +7,65 @@ import java.util.Date;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
+import com.aavu.client.gui.timeline.HasDate;
 import com.google.gwt.user.client.rpc.IsSerializable;
-
 
 
 
 /**
  * NOTE: HippoDate stores startDate as Created & endDate as lastUpdated.
  */
-public class HippoDate extends MetaValue implements IsSerializable, Serializable{
-	
-	private transient static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");	
-		
-	
-	public HippoDate(){
-		setPublicVisible(false);
-	}	
+public class HippoDate extends MetaValue implements IsSerializable, Serializable, HasDate {
 
-	public HippoDate(User u, String d) {		
-		super(u,d);
+	private transient static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
+
+
+	public HippoDate() {
 		setPublicVisible(false);
+	}
+
+
+	public HippoDate(long id, String title, Date date, Date endDate) {
+		setId(id);
+		setTitle(title);
+		setStartDate(date);
+		setEndDate(endDate);
 	}
 
 	/**
-	 * bc DB has not-null constraints on lastUpdated, we'll say that... eq == null... 
-	 * hmmm, need to make sure not to fake out Hibernate.
 	 * 
 	 * @return
 	 */
-	public Date getEndDate(){
-//		if(getLastUpdated().equals(getCreated())){
-//			return null;
-//		}
+	public Date getEndDate() {
 		return getLastUpdated();
 	}
-	public Date getStartDate(){
+
+	public Date getStartDate() {
 		return getCreated();
 	}
+
 	public boolean mustHaveUniqueName() {
 		return false;
 	}
-	public void setEndDate(Date date){
+
+	public void setEndDate(Date date) {
 		setLastUpdated(date);
 	}
-	
-	public void setStartDate(Date date){
-		if(getTitle() == null || getTitle().equals("")){
-			setTitle(df.format(date));			
+
+	public void setStartDate(Date date) {
+		if (getTitle() == null || getTitle().equals("")) {
+			setTitle(df.format(date));
 		}
 		setCreated(date);
 	}
+
+
+	// public void deltaStartDate(int dxSeconds) {
+	// getStartDate().setTime(getStartDate().getTime() + dxSeconds);
+	// }
+	//
+	// public void deltaEndDate(int dxSeconds) {
+	// getEndDate().setTime(getEndDate().getTime() + dxSeconds);
+	// }
 
 }

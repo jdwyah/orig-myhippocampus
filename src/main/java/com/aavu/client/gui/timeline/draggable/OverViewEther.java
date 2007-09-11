@@ -43,6 +43,10 @@ public class OverViewEther extends Ether {
 
 		public void zoomToScale(double currentScale) {
 		}
+
+		public void setTop(int top) {
+			this.top = top;
+		}
 	}
 
 	private int left;

@@ -61,7 +61,7 @@ public abstract class Ether extends ViewPanel {
 		//System.out.println("Ether.add "+tlo+" depth "+depth+" key "+key);
 
 		if(startDate == null){
-			startDate = tlo.getDate();
+			startDate = tlo.getStartDate();
 		}
 		
 		if(depth == lastDepth && key == lastKey){
@@ -70,9 +70,9 @@ public abstract class Ether extends ViewPanel {
 
 			//System.out.println("!= NEW zone "+key+" "+TreeOfTime.getLabelForDepth(depth,key,tlo.getDate())+" LastZone start "+zoneStart);
 
-			int zoneStart = newSection(depth,key,tlo.getDate());
+			int zoneStart = newSection(depth,key,tlo.getStartDate());
 			
-			zoneStarts.put(tlo.getDate(), new Integer(zoneStart));
+			zoneStarts.put(tlo.getStartDate(), new Integer(zoneStart));
 			
 			
 			//System.out.println("Ether.Zone Start "+tlo.getDate()+" "+zoneStart);
@@ -80,7 +80,7 @@ public abstract class Ether extends ViewPanel {
 		}
 
 
-		double pct = TreeOfTime.getPctAtDepth(depth, tlo.getDate());
+		double pct = TreeOfTime.getPctAtDepth(depth, tlo.getStartDate());
 
 		
 		int left = getRelLeft(pct);

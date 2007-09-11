@@ -8,15 +8,19 @@ import java.util.List;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ViewPanel;
+import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeline;
+import com.aavu.client.gui.timeline.draggable.TLORangeWidget;
 import com.aavu.client.gui.timeline.draggable.TLOWrapper;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -131,6 +135,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	private int ySpread;
 
 	private int yStart;
+	private CheckBox showCreated;
 
 	public ZoomableTimeline(Manager manager, int width, int height, CloseListener window) {
 		super();
@@ -151,6 +156,13 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		drawHUD();
 		setBackground(currentScale);
 
+		getFocusBackdrop().addDblClickListener(new DblClickListener() {
+
+			public void onDblClick(Widget sender) {
+				System.out.println("DOUBLE CLICK!");
+			}
+		});
+
 
 	}
 
@@ -166,7 +178,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		}
 
 		super.clear();
-
+		initYSlots();
 
 		System.out.println("addObj " + sorted.size());
 
@@ -176,10 +188,13 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 			// int top = (int) (Math.random()*(double)height);
 
-			int slot = getBestSlotFor(tlo);
+			TimelineRemembersPosition rp = getTLORepr(manager, tlo);
 
+			int slot = getBestSlotFor(rp);
 			int top = yStart + (slot * ySpread);
-			RemembersPosition rp = getTLORepr(manager, tlo, tlo.getLeft(), top);
+			rp.setTop(top);
+
+
 
 			if (slot < 0) {
 				rp.getWidget().setVisible(false);
@@ -233,10 +248,18 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 			}
 		});
 
+		showCreated = new CheckBox("Created");
+		showCreated.setChecked(true);
+		showCreated.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				showCreated(showCreated.isChecked());
+			}
+		});
+
 		add(magSmall);
 		add(whenlabel);
 		add(magBig);
-
+		add(showCreated);
 	}
 
 	private void drawHUD() {
@@ -245,27 +268,34 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		setWidgetPosition(magSmall, center - 40, y - 15);
 		setWidgetPosition(whenlabel, center, y);
 		setWidgetPosition(magBig, center + 70, y - 15);
+		setWidgetPosition(showCreated, center + 115, y);
 	}
 
 	/**
+	 * Determine how far each element extends in the x-axis
+	 * 
 	 * return -1 if we can't fit
 	 * 
 	 * @param left
 	 * @param string
 	 * @return
 	 */
-	private int getBestSlotFor(TimeLineObj tlo) {
+	private int getBestSlotFor(TimelineRemembersPosition rp) {
 		int i = 0;
-		// PEND MED weak 11 * #letters = width assumption
-		int mywidth = 11 * (int) (tlo.getTopicIdentifier().getTopicTitle().length() / (double) getXSpread() / currentScale);
+
+		int mywidth = (int) (rp.getWidth() / (double) getXSpread() / currentScale);
+		if (rp instanceof TLORangeWidget) {
+			System.out.println("RP " + rp.getLeft() + " w " + rp.getWidth() + " my " + mywidth
+					+ " q " + ((double) getXSpread() / currentScale));
+		}
 		for (; i < ySlots.length; i++) {
 			int lastLeftForThisSlot = ySlots[i];
 
 			// System.out.println("gb "+i+" "+lastLeftForThisSlot+" "+tlo.getLeft()+" mywid
 			// "+mywidth);
-			if (lastLeftForThisSlot < tlo.getLeft()) {
+			if (lastLeftForThisSlot < rp.getLeft()) {
 
-				ySlots[i] = (int) (tlo.getLeft() + mywidth);
+				ySlots[i] = (int) (rp.getLeft() + mywidth);
 				// System.out.println("Ether.choose "+i);
 				return i;
 			}
@@ -282,10 +312,17 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 
 	// @Override
-	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo, int left, int top) {
-		TLOWrapper tlow = new TLOWrapper(manager, tlo, left, top);
-		tlow.addMouseWheelListener(this);
-		return tlow;
+	protected TimelineRemembersPosition getTLORepr(Manager manager, TimeLineObj tlo) {
+
+		if (tlo.isMaleable()) {
+			TLORangeWidget tlow = new TLORangeWidget(this, tlo);
+			tlow.addMouseWheelListener(this);
+			return tlow;
+		} else {
+			TLOWrapper tlow = new TLOWrapper(manager, tlo);
+			tlow.addMouseWheelListener(this);
+			return tlow;
+		}
 	}
 
 	public Widget getWidget() {
@@ -339,12 +376,17 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 	protected void objectHasMoved(RemembersPosition o, int halfWidth, int halfHeight, int centerX,
 			int centerY) {
+
+		// PEND MED necesary if they've been editting a range, but besides that this is not
+		// necessary
+		o.zoomToScale(currentScale);
+
 		if (ySlotsDirty) {
-			if (o instanceof TLOWrapper) {
-				TLOWrapper tlw = (TLOWrapper) o;
+			if (o instanceof TimelineRemembersPosition) {
+				TimelineRemembersPosition tlw = (TimelineRemembersPosition) o;
 
 
-				int slot = getBestSlotFor(tlw.getTlo());
+				int slot = getBestSlotFor(tlw);
 
 				// System.out.println("best top "+slot+" "+tlw.getTlo().getTopic().getTopicTitle()+"
 				// "+(yStart + (slot * ySpread)));
@@ -367,6 +409,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	// @Override
 	protected void postZoomCallback(double currentScale) {
 		updateLabels();
+
 	}
 
 	public void resize(int newWidth, int newHeight) {
@@ -399,12 +442,17 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 				+ ImageHolder.getImgLoc(IMG_POSTFIX) + img + ".png)");
 	}
 
+	private void showCreated(boolean checked) {
+		// TODO Auto-generated method stub
+
+	}
+
 	private void updateLabels() {
 
 		int index = zoomList.indexOf(new Double(currentScale));
 
 		int ii = getCenterX();
-		Date d2 = TimeLineObj.getDateForLeft(ii);
+		Date d2 = TimeLineObj.getDateFromViewPanelX(ii);
 
 		whenlabel.setText(((DateTimeFormat) labelFormatters.get(3)).format(d2));
 

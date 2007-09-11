@@ -6,10 +6,12 @@ import com.aavu.client.gui.hierarchy.BorderThemedPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ExternalLink;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class UserWidget extends Composite {
 
@@ -18,7 +20,7 @@ public class UserWidget extends Composite {
 	private HorizontalPanel userPanel;
 	private HorizontalPanel noUserPanel;
 
-	public UserWidget(Manager manager) {
+	public UserWidget(final Manager manager) {
 		this.manager = manager;
 		VerticalPanel mainP = new VerticalPanel();
 
@@ -43,6 +45,15 @@ public class UserWidget extends Composite {
 		noUserPanel = new HorizontalPanel();
 		noUserPanel.add(new ExternalLink(ConstHolder.myConstants.userw_signup(), Interactive
 				.getRelativeURL(ConstHolder.myConstants.userw_logout_url())));
+
+		Label loginLabel = new Label("Login");
+		loginLabel.addStyleName("a");
+		loginLabel.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				manager.doLogin();
+			}
+		});
+		noUserPanel.add(loginLabel);
 		mainP.add(noUserPanel);
 
 		BorderThemedPanel btp = new BorderThemedPanel();

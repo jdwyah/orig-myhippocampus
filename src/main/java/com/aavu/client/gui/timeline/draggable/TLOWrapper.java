@@ -3,7 +3,7 @@ package com.aavu.client.gui.timeline.draggable;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ext.TooltipListener;
-import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -16,7 +16,8 @@ import com.google.gwt.user.client.ui.MouseWheelListener;
 import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TLOWrapper extends Composite implements RemembersPosition, SourcesMouseWheelEvents {
+public class TLOWrapper extends Composite implements TimelineRemembersPosition,
+		SourcesMouseWheelEvents {
 
 	private DateTimeFormat format = DateTimeFormat.getFormat("MMM, d yyyy");
 
@@ -26,18 +27,21 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 	private TimeLineObj tlo;
 	private int top;
 	private Label label;
+
 	private Image image;
 
-	public TLOWrapper(final Manager manager, final TimeLineObj tlo, int left, int top) {
+	public TLOWrapper(final Manager manager, final TimeLineObj tlo) {
 		this.tlo = tlo;
-		this.left = left;
-		this.top = top;
+		this.left = tlo.getLeft();
+		this.top = 0;
 
 		HorizontalPanel panel = new HorizontalPanel();
 
 		label = new Label(tlo.getTopicIdentifier().getTopicTitle(), false);
 
 		image = ConstHolder.images.bullet_blue().createImage();
+
+
 		panel.add(image);
 		panel.add(label);
 
@@ -64,7 +68,7 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 			}
 		});
 
-		label.addMouseListener(new TooltipListener(format.format(tlo.getStart())));
+		label.addMouseListener(new TooltipListener(format.format(tlo.getStartDate())));
 
 		initWidget(panel);
 
@@ -103,8 +107,18 @@ public class TLOWrapper extends Composite implements RemembersPosition, SourcesM
 	}
 
 	public void zoomToScale(double currentScale) {
-		// TODO Auto-generated method stub
+
+
 
 	}
+
+	/**
+	 * PEND MED weak 11 * #letters = width assumption
+	 */
+	public int getWidth() {
+		return 11 * tlo.getTopicIdentifier().getTopicTitle().length();
+	}
+
+
 
 }

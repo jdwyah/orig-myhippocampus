@@ -142,7 +142,7 @@ public class SimpleTimeLine extends Composite implements HippoTimeline {
 
 	protected void add(TimeLineObj tlo,long start, long interval) {
 		
-		int bucket = (int) ((tlo.getDate().getTime() - start) / interval);
+		int bucket = (int) ((tlo.getStartDate().getTime() - start) / interval);
 		
 		//System.out.println(bucket+" "+tlo.getDate().getTime()+" - "+start+" / "+interval);
 		
@@ -179,7 +179,7 @@ public class SimpleTimeLine extends Composite implements HippoTimeline {
 		long end = Long.MIN_VALUE;
 		for (Iterator iterator = timelines.iterator(); iterator.hasNext();) {
 			TimeLineObj tlo = (TimeLineObj) iterator.next();
-			long time = tlo.getDate().getTime(); 
+			long time = tlo.getStartDate().getTime(); 
 			if(time > end){
 				end = time;
 			}

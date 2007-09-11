@@ -4,6 +4,8 @@ import java.util.Date;
 
 public interface HasDate {
 
-	Date getDate();
+	Date getStartDate();
+
+	Date getEndDate();
 
 }

@@ -9,6 +9,7 @@ import org.gwm.client.event.GFrameEvent;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.dto.TimeLineObj;
@@ -107,9 +108,8 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 		for (Iterator iterator = firstTopic.getInstances().iterator(); iterator.hasNext();) {
 			TopicTypeConnector toc = (TopicTypeConnector) iterator.next();
 
-			Topic childTopic = toc.getTopic();
-			l.add(new TimeLineObj(childTopic.getIdentifier(), childTopic.getCreated(), null,
-					childTopic));
+			RealTopic childTopic = (RealTopic) toc.getTopic();
+			l.add(new TimeLineObj(childTopic.getIdentifier(), childTopic));
 		}
 		timeline.add(l);
 
@@ -122,7 +122,7 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 			Occurrence occ = (Occurrence) iterator.next();
 			System.out.println("TimeLineWrapper new TimeLineObj " + GWT.getTypeName(occ) + " "
 					+ occ);
-			l.add(new TimeLineObj(occ.getIdentifier(), occ.getCreated(), null, occ));
+			l.add(new TimeLineObj(occ.getIdentifier(), occ));
 		}
 		timeline.add(l);
 	}

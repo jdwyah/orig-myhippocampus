@@ -135,4 +135,15 @@ public interface Images extends ImageBundle {
 	AbstractImagePrototype eye();
 
 
+	/**
+	 * @gwt.resource resultset_next.png
+	 */
+	AbstractImagePrototype resultset_next();
+
+
+	/**
+	 * @gwt.resource resultset_previous.png
+	 */
+	AbstractImagePrototype resultset_previous();
+
 }

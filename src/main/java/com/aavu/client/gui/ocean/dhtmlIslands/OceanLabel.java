@@ -31,6 +31,10 @@ public class OceanLabel extends Label implements RemembersPosition {
 		return top;
 	}
 
+	public void setTop(int top) {
+		this.top = top;
+	}
+
 	public Widget getWidget() {
 		return this;
 	}

@@ -35,4 +35,7 @@ public class LabelWrapper extends Label implements RemembersPosition {
 
 	}
 
+	public void setTop(int top) {
+		this.top = top;
+	}
 }

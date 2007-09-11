@@ -1,15 +1,17 @@
 package com.aavu.client.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import com.aavu.client.domain.generated.AbstractOccurrence;
+import com.aavu.client.gui.timeline.HasDate;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Occurrence extends AbstractOccurrence implements Serializable, IsSerializable,
-		ReallyCloneable {
+		ReallyCloneable, HasDate {
 
 	public Occurrence() {
 
@@ -50,6 +52,14 @@ public class Occurrence extends AbstractOccurrence implements Serializable, IsSe
 			rtn.add(toc.getTopic());
 		}
 		return rtn;
+	}
+
+	public Date getEndDate() {
+		return null;
+	}
+
+	public Date getStartDate() {
+		return getCreated();
 	}
 
 

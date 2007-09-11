@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.aavu.client.domain.dto.TimeLineObj;
-import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.DragEventListener;
 import com.aavu.client.gui.ocean.dhtmlIslands.DragHandler;
-import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
+import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
 import com.aavu.client.service.Manager;
@@ -31,7 +30,8 @@ public class DatePickerTimeline extends ZoomableTimeline implements DragEventLis
 	}
 
 	// @Override
-	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo, int left, int top) {
+	protected TimelineRemembersPosition getTLORepr(Manager manager, TimeLineObj tlo, int left,
+			int top) {
 		DraggableTimeLineObj tlow = new DraggableTimeLineObj(manager, tlo, left, top);
 		tlow.addMouseWheelListener(this);
 
@@ -53,8 +53,11 @@ public class DatePickerTimeline extends ZoomableTimeline implements DragEventLis
 
 	public void setSelectedDate(Date created) {
 		List timelines = new ArrayList();
-		timelines.add(new TimeLineObj(new TopicIdentifier(), created, null, null));
-		add(timelines);
+
+		throw new UnsupportedOperationException();
+		// timelines.add(new TimeLineObj(t);
+
+		// add(timelines);
 	}
 
 	public void dragged(Widget dragging, int newX, int newY) {

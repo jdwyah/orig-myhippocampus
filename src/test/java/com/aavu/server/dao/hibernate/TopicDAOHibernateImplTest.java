@@ -124,8 +124,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<DatedTopicIdentifier> savedL = selectDAO.getAllTopicIdentifiers(u, false);
 
-		// tag does not show up bc user not set
-		assertEquals(1, savedL.size());
+		assertEquals(2, savedL.size());
 
 		TopicIdentifier saved = savedL.get(0);
 
@@ -185,7 +184,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		// assertEquals(5,allTopics.size());
 		// assertEquals(5, allTopics.size());
 
-		assertEquals(3, savedL.size());
+		assertEquals(4, savedL.size());
 
 
 		assertNotSame(0, patriotGames.getId());
@@ -353,10 +352,14 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<DatedTopicIdentifier> list = selectDAO.getAllTopicIdentifiers(u, false);
 
-		assertEquals(1, list.size());
+		for (DatedTopicIdentifier datedTopicIdentifier : list) {
+			System.out.println("DTI " + datedTopicIdentifier);
+		}
+
+		assertEquals(2, list.size());
 
 		for (TopicIdentifier tident : list) {
-			assertEquals(tident.getTopicTitle(), C);
+			assertTrue(tident.getTopicTitle().equals(C) || tident.getTopicTitle().contains("Root"));
 		}
 
 
@@ -370,8 +373,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		for (TopicIdentifier tident : list) {
 			System.out.println("tident " + tident);
 		}
-		// not 3, even though there's and association
-		assertEquals(2, list.size());
+		// not 4, even though there's an association
+		assertEquals(3, list.size());
 
 
 		assertEquals(list.get(1).getTopicTitle(), D);
@@ -760,8 +763,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		// Use fuzzyEq, bc DB seems to truncate milliseconds
 		for (TimeLineObj timeLine : list) {
-			assertTrue(fuzzyDateEq(timeLine.getStart(), oldDate2)
-					|| fuzzyDateEq(timeLine.getStart(), oldDate));
+			assertTrue(fuzzyDateEq(timeLine.getStartDate(), oldDate2)
+					|| fuzzyDateEq(timeLine.getStartDate(), oldDate));
 		}
 
 		System.out.println("2");
@@ -1215,7 +1218,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<DatedTopicIdentifier> savedL = selectDAO.getAllTopicIdentifiers(u, false);
 
-		assertEquals(2, savedL.size());
+		assertEquals(3, savedL.size());
 
 
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
@@ -1224,7 +1227,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		editDAO.delete(patriotGames);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
-		assertEquals(1, savedL.size());
+		assertEquals(2, savedL.size());
 
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(0,book.getInstances().size());
@@ -1273,7 +1276,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<DatedTopicIdentifier> savedL = selectDAO.getAllTopicIdentifiers(u, false);
 
-		assertEquals(4, savedL.size());
+		assertEquals(5, savedL.size());
 
 
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
@@ -1282,7 +1285,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		editDAO.delete(patriotGames);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
-		assertEquals(3, savedL.size());
+		assertEquals(4, savedL.size());
 
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(1,book.getInstances().size());
@@ -1323,7 +1326,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		List<DatedTopicIdentifier> savedL = selectDAO.getAllTopicIdentifiers(u, false);
 
-		assertEquals(3, savedL.size());
+		assertEquals(4, savedL.size());
 
 
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
@@ -1332,7 +1335,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		editDAO.delete(book);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
-		assertEquals(2, savedL.size());
+		assertEquals(3, savedL.size());
 
 		// assert that Book is no longer there
 		for (TopicIdentifier identifier : savedL) {

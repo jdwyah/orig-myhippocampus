@@ -58,7 +58,7 @@ public class TimeDisplay extends Composite {
 	}
 
 	public void add(TimeLineObj tlo, long start, long interval) {
-		double pct = ((tlo.getDate().getTime() - start) % interval) / (double)interval;
+		double pct = ((tlo.getStartDate().getTime() - start) % interval) / (double)interval;
 		int bucket = (int) (SIZE * pct);
 		
 		//System.out.println("num "+((tlo.getDate().getTime() - start) % (double)interval)+"pct "+pct +" bucket "+bucket+" tlo "+tlo);

@@ -10,6 +10,7 @@ import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
@@ -108,6 +109,16 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 		int halfWidth = getWidth() / 2;
 		int halfHeight = getHeight() / 2;
+
+
+		// lastx, lasty are just a backup in case this doesn't work. They're not a great backup,
+		// because if child objects have obscured us we won't be getting mouseMove events and we'll
+		// be weird relative x & y's from senders anyway.
+		Event curEvent = DOM.eventGetCurrentEvent();
+		if (curEvent != null) {
+			lastx = DOM.eventGetClientX(curEvent);
+			lasty = DOM.eventGetClientY(curEvent);
+		}
 
 		int dx = lastx - getAbsoluteLeft() - halfWidth;
 		int dy = lasty - getAbsoluteTop() - halfHeight;
@@ -241,10 +252,28 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 	protected void moveByDelta(int dx, int dy) {
 		curbackX = -dx + backX;
 
-		double yScale = 1;
+		RedrawParams rd = getParams(dy);
+
+		// System.out.println("centerX "+centerX+" centerY "+centerY);
+
+		for (Iterator iter = objects.iterator(); iter.hasNext();) {
+			Object o = iter.next();
+			RemembersPosition rp = (RemembersPosition) o;
+
+			redraw(rp, rd);
+		}
+
+		moveOccurredCallback();
+		// System.out.println("moved "+curbackX+" "+curbackY);
+
+	}
+
+	private RedrawParams getParams(int dy) {
+		RedrawParams rd = new RedrawParams();
+		rd.yScale = 1;
 		if (isDoYTranslate()) {
 			curbackY = -dy + backY;
-			yScale = currentScale;
+			rd.yScale = currentScale;
 		}
 
 		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX + "px " + curbackY
@@ -253,51 +282,75 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		int width = getWidth();
 		int height = getHeight();
 
-		int halfWidth = width / 2;
-		int halfHeight = height / 2;
+		rd.halfWidth = width / 2;
+		rd.halfHeight = height / 2;
 
-		int centerX = getCenterX(currentScale, width);
-		int centerY = getCenterY(yScale, height);
-
-		// System.out.println("centerX "+centerX+" centerY "+centerY);
-
-		for (Iterator iter = objects.iterator(); iter.hasNext();) {
-			Object o = iter.next();
-			RemembersPosition rp = (RemembersPosition) o;
-
-			// System.out.println("found: "+GWT.getTypeName(rp));
-
-			// System.out.println("Left "+isle.getLeft()+" Top "+isle.getTop());
-			// System.out.println("cur "+curbackX+" cury "+curbackY);
-
-			// setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale),
-			// (int)((rp.getTop()+curbackY)*currentScale));
-
-			// System.out.println("move "+rp.getLeft()+" "+(int)((rp.getLeft())*currentScale)+"
-			// "+(int)((rp.getLeft())*currentScale*getXSpread())+" cs "+currentScale);
-			try {
-				setWidgetPosition(rp.getWidget(),
-						(int) ((rp.getLeft()) * currentScale * getXSpread()) + curbackX, (int) ((rp
-								.getTop()) * yScale)
-								+ curbackY);
-			} catch (RuntimeException e) {
-				if (rp instanceof TopicDisplayObj) {
-					Logger.log("ERROR: ViewPanel. couldn't move: "
-							+ ((TopicDisplayObj) rp).getTopic());
-				} else {
-					Logger.log("ERROR: ViewPanel. couldn't move: " + rp.getWidget());
-				}
-				throw e;
-			}
-			objectHasMoved(rp, halfWidth, halfHeight, centerX, centerY);
-
-		}
-
-		moveOccurredCallback();
-		// System.out.println("moved "+curbackX+" "+curbackY);
-
+		rd.centerX = getCenterX(currentScale, width);
+		rd.centerY = getCenterY(rd.yScale, height);
+		return rd;
 	}
 
+	private class RedrawParams {
+		public double yScale;
+		public int centerY;
+		public int centerX;
+		public int halfHeight;
+		public int halfWidth;
+	}
+
+	public void redraw(RemembersPosition rp) {
+		RedrawParams rd = getParams(0);
+		redraw(rp, rd);
+	}
+
+	private void redraw(RemembersPosition rp, RedrawParams params) {
+		// System.out.println("found: "+GWT.getTypeName(rp));
+
+		// System.out.println("Left "+isle.getLeft()+" Top "+isle.getTop());
+		// System.out.println("cur "+curbackX+" cury "+curbackY);
+
+		// setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale),
+		// (int)((rp.getTop()+curbackY)*currentScale));
+
+		// System.out.println("move "+rp.getLeft()+" "+(int)((rp.getLeft())*currentScale)+"
+		// "+(int)((rp.getLeft())*currentScale*getXSpread())+" cs "+currentScale);
+		try {
+
+			setWidgetPosition(rp.getWidget(), getPositionX(rp.getLeft()),
+					(int) ((rp.getTop()) * params.yScale) + curbackY);
+
+		} catch (RuntimeException e) {
+			if (rp instanceof TopicDisplayObj) {
+				Logger.log("ERROR: ViewPanel. couldn't move: " + ((TopicDisplayObj) rp).getTopic());
+			} else {
+				Logger.log("ERROR: ViewPanel. couldn't move: " + rp.getWidget());
+			}
+			throw e;
+		}
+		objectHasMoved(rp, params.halfWidth, params.halfHeight, params.centerX, params.centerY);
+	}
+
+	public int getPositionX(int left) {
+
+		// System.out.println("getPositionX " + left + " " + currentScale + " " + getXSpread() + " "
+		// + curbackX);
+		return (int) (left * currentScale * getXSpread()) + curbackX;
+	}
+
+	public int getPositionXFromGUIX(int guix) {
+
+		System.out.println("getPositionXFromGuiX " + guix + " " + currentScale + " " + getXSpread()
+				+ " " + curbackX);
+		return (int) ((guix - curbackX) / currentScale / (double) getXSpread());
+	}
+
+
+	/**
+	 * Basically an extra zoom factor. Spread to the size of the background. Overridden to 600 for
+	 * ZoomableTimeline
+	 * 
+	 * @return
+	 */
 	protected int getXSpread() {
 		return 1;
 	}
