@@ -60,6 +60,7 @@
 		 <p>
 		 <input type="hidden" name="password"/>
 		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
+		  <br>Already created an account? Sign in here.
 		</fieldset>
 	 </form>	
 </#macro>

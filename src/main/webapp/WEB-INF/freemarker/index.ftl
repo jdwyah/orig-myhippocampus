@@ -10,7 +10,7 @@
    
  <#if message?exists>
 	<div style="z-index: 99; position: absolute; left: 200px;">
-	 <p class="message">${message}</p>
+	 <div class="message">${message}</div>
 	</div>
  </#if>			  	 	  
 
@@ -83,7 +83,7 @@
 	<#else>
 		 <div id="loginBox">
 			 <@common.loginForm/>
-		 </div>		 
+		 </div>		 		
 	</#if>
 	
 		</div><!--islandOverlay-->

@@ -12,14 +12,15 @@
 
 
 	<#if login_error?has_content>
-      <font color="red">
+      <div class="message">      
         Your login attempt was not successful, try again.<BR><BR>
-        Reason: ${login_error}
-      </font>
+        Reason: ${login_error}<br>
+        Note: OpenID users must create a MyHippocampus account before they will be able to login. Use the signup link below.
+      </div>
     </#if>
     
      <#if message?exists>
-		 <p class="message">${message}</p>
+		 <div class="message">${message}</div>
 	 </#if>
 
 

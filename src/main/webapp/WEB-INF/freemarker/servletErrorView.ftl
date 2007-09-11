@@ -15,8 +15,10 @@
 	
 	
 	 <#if message?exists>
-		 <p class="message">${message}</p>
+		 <div class="message">${message}</div>
 	 </#if>
+
+	We're sorry you received an error. Do us a favor and let us know! email <a href="mailto:help@myhippocampus.com">help@myhippocampus.com</a> with the error message and a description of what you were doing. Thanks!
 
 	<#if exception?exists>
 

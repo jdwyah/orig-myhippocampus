@@ -10,7 +10,7 @@
 	 <div class="middle-column-box-white">
         <div class="middle-column-box-title-green"><@spring.message "acknowledgments.1"/></div>
 	 <#if message?exists>
-		 <p class="message">${message}</p>
+		 <div class="message">${message}</div>
 	 </#if>
 
 	  <p class="subheading"><@spring.message "acknowledgments.2"/></p>

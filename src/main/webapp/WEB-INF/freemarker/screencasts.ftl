@@ -12,7 +12,7 @@
 		<div class="middle-column-box-title-green"><@spring.message "screencasts.header"/></div>
 
 		 <#if message?exists>
-			 <p class="message">${message}</p>
+			 <div class="message">${message}</div>
 		 </#if>
 		<p class="subheading">Available Screencasts</p>
 		<ul>

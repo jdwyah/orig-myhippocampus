@@ -13,7 +13,7 @@
 	
 	
 	 <#if message?exists>
-		 <p class="message">${message}</p>
+		 <div class="message">${message}</div>
 	 </#if>
 	
 

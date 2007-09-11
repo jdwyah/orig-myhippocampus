@@ -157,11 +157,19 @@ input.openid-identifier {
 	border: 25px;
 }
 
-.message {
-	border: 2px;
-	border-color: red;
-	padding: 5px;
-	background-color: #FFBB99;
+.message {	
+	color: black;
+	background: #fff6bf url("../img/sideSeaHorseSm.png") center no-repeat;
+    background-position: 0px 2px; 
+    text-align: left;
+    vertical-align: middle;   
+    padding-left: 45px;
+    padding-right: 10px;       
+    height: 75px;    
+    margin-left: 10px;
+    margin-right: 10px;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;	
 }
 
 .error {

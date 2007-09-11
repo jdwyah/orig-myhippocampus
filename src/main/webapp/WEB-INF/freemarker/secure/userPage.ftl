@@ -45,18 +45,12 @@
 	
 			<div class="middle-column-box-title-green">Import Del.icio.us Bookmarks & Google Apps Documents</div>
 	<#if bean.user?exists>
-		<p>			
-			<#if bean.user.lastDeliciousDate?exists && bean.user.lastDeliciousDate?date?string("yyyy") != "1000">
-				Del.icio.us Bookmarks Updated: <a href="<@spring.url "/site/secure/import.html"/>">${bean.user.lastDeliciousDate}</a>				
-				<#else>
-				Del.icio.us Bookmarks Updated: <a href="<@spring.url "/site/secure/import.html"/>">Never</a>
-			</#if>
-			<br>
-			<#if bean.user.lastGoogleAppsDate?exists && bean.user.lastGoogleAppsDate?date?string("yyyy") != "1000">
-				Google Docs Updated: <a href="<@spring.url "/site/secure/import.html"/>">${bean.user.lastGoogleAppsDate}</a>			
-				<#else>
-				Google Docs Updated: <a href="<@spring.url "/site/secure/import.html"/>">Never</a>
-			</#if>
+		<p>
+				
+			Del.icio.us Bookmarks Updated: <a href="<@spring.url "/site/secure/import.html"/>">${(bean.user.lastDeliciousDate?date)?default("Never")}</a>	
+			<br>			
+			Google Docs Updated: <a href="<@spring.url "/site/secure/import.html"/>">${(bean.user.lastGoogleAppsDate?date)?default("Never")}</a>
+			
 			<br>
 			<h2>
 			<a href="<@spring.url "/site/secure/import.html"/>">Import Now</a>
