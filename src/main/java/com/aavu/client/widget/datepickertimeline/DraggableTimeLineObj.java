@@ -107,4 +107,9 @@ public class DraggableTimeLineObj extends FocusPanel implements TimelineRemember
 		return tlo;
 	}
 
+	public void updateTitle() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

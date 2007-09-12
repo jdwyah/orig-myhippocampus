@@ -471,8 +471,19 @@ a:visited {
 	opacity: .50;
 	-khtml-opacity: .5;		
 }
+.Selected .H-TimeBar-BG {
+	border: 1px solid blue;
+	background-color: #00E3FD;
+}
+
 .H-TimeBar-Label {
 	font-size: 10pt;
+}
+.Selected .H-TimeBar-Label  {
+	
+}
+.Selected H-TLOWrapper {
+	font-weight: bold;
 }
 .H-TimeBar-Edge {	
 	width: 0px;
@@ -480,7 +491,12 @@ a:visited {
 	line-height: 15px;	
 	cursor: e-resize;	
 }
-
+.H-TimeBar-Editor {	
+	color: black;
+	background-color: #fff6bf;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;	
+}
 .H-TimeDisplay { /*position: absolute;
 	left: 200px;	
 	border: 2px solid green;*/

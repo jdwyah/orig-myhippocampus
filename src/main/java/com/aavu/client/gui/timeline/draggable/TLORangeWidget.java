@@ -19,7 +19,7 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 
 	private static final int MIN_WIDTH = 2;
 	private static final int X_MARGIN = 10;
-	private static final int LABEL_HOLDER_HEIGHT = 13;
+	private static final int LABEL_HOLDER_HEIGHT = 16;
 	private static final int EDGE_WIDTH = 16;
 
 	private int top;
@@ -47,10 +47,10 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 		// TODO cast
 		hippoDate = (HippoDate) tlo.getHasDate();
 
-		label = new Label(tlo.getTopicIdentifier().getTopicTitle() + " " + hippoDate.getTitle(),
-				false);
+		label = new Label("", false);
 		labelBG = new Label(" ");
 
+		updateTitle();
 
 		TLORangeEdge leftEdge = new TLORangeEdge(timeline, tlo, this, true, ConstHolder.images
 				.resultset_previous().createImage());
@@ -143,6 +143,10 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 
 	public TimeLineObj getTLO() {
 		return tlo;
+	}
+
+	public void updateTitle() {
+		label.setText(tlo.getTopicIdentifier().getTopicTitle() + " " + hippoDate.getTitle());
 	}
 
 }

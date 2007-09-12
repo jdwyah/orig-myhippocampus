@@ -70,7 +70,7 @@
 			<input value="<@spring.message "importGoogle.submit"/>" type="submit">
 		</fieldset>
 		<p>
-		Sorry, the Google API doesn't support the credential free import for Apps For Your Domain yet. Your credentials are not saved. 
+		The Google API doesn't support the credential free import for Apps For Your Domain yet. Your credentials are not saved, but they will go through our servers. 
 	</form>
 	</td>
 	</tr>

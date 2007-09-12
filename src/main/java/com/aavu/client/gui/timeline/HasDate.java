@@ -16,5 +16,11 @@ public interface HasDate {
 
 	void setEndDate(Date newD);
 
+	long getId();
+
+	String getTitle();
+
+	void setTitle(String text);
+
 
 }

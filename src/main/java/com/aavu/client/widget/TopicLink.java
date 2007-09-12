@@ -21,6 +21,7 @@ public class TopicLink extends SimplePanel implements ClickListener {
 	private Label l;
 	protected long id;
 	private CloseListener popup;
+	private int maxStringLength;
 
 	/**
 	 * dummyLink
@@ -56,15 +57,13 @@ public class TopicLink extends SimplePanel implements ClickListener {
 
 	public TopicLink(String title, long id, int maxStringLength, CloseListener popup) {
 		this.popup = popup;
-
-		l = null;
-		if (title.length() > maxStringLength) {
-			l = new Label(title.substring(0, maxStringLength - 3) + "...", false);
-			l.addMouseListener(new TooltipListener(0, 20, title));
-		} else {
-			l = new Label(title, false);
-		}
 		this.id = id;
+		this.maxStringLength = maxStringLength;
+
+		l = new Label("", false);
+
+		setLinkTitle(title);
+
 		l.addClickListener(this);
 
 		l.addMouseListener(new MouseListenerAdapter() {
@@ -85,8 +84,18 @@ public class TopicLink extends SimplePanel implements ClickListener {
 
 	}
 
+
+	private void setLinkTitle(String title) {
+		if (title.length() > maxStringLength) {
+			l.setText(title.substring(0, maxStringLength - 3) + "...");
+			l.addMouseListener(new TooltipListener(0, 20, title));
+		} else {
+			l.setText(title);
+		}
+	}
+
 	public void load(TopicIdentifier to) {
-		l.setText(to.getTopicTitle());
+		setLinkTitle(to.getTopicTitle());
 		id = to.getTopicID();
 	}
 

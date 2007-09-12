@@ -43,6 +43,8 @@ public class TLOWrapper extends FocusPanelExt implements TimelineRemembersPositi
 
 		setWidget(panel);
 
+		label.setStyleName("H-TLOWrapper");
+
 		JSUtil.disableSelect(getElement());
 	}
 
@@ -96,5 +98,8 @@ public class TLOWrapper extends FocusPanelExt implements TimelineRemembersPositi
 		return "TLOWrapper " + tlo.getTopicIdentifier().getTopicTitle();
 	}
 
+	public void updateTitle() {
+		label.setText(tlo.getHasDate().getTitle());
+	}
 
 }

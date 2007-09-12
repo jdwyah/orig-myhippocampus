@@ -138,8 +138,10 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 
 	private int ySpread;
 	private int yStart;
+	private TimelineEditBox editWidget;
+	private TimelineRemembersPosition selectedRP;
 
-	public ZoomableTimeline(Manager manager, int width, int height, CloseListener window) {
+	public ZoomableTimeline(final Manager manager, int width, int height, CloseListener window) {
 		super();
 		this.manager = manager;
 		this.height = height;
@@ -161,10 +163,17 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 		getFocusBackdrop().addDblClickListener(new DblClickListener() {
 
 			public void onDblClick(Widget sender) {
+
+				// ContextMenu p = new ContextMenu(manager, ZoomableTimeline.this, x, y);
+				// p.show(x, y);
 				System.out.println("DOUBLE CLICK!");
 			}
 		});
-
+		getFocusBackdrop().addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				setSelected(null, false);
+			}
+		});
 
 	}
 
@@ -258,21 +267,25 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 			}
 		});
 
+		editWidget = new TimelineEditBox(manager);
 
-
+		add(editWidget);
 		add(magSmall);
 		add(whenlabel);
 		add(magBig);
-		add(showCreated);
+		// add(showCreated);
 	}
 
 	private void drawHUD() {
 		int center = width / 2 - 50;
+		center -= 50;// offset left
 		int y = yEnd + 30;
 		setWidgetPosition(magSmall, center - 40, y - 15);
 		setWidgetPosition(whenlabel, center, y);
 		setWidgetPosition(magBig, center + 70, y - 15);
-		setWidgetPosition(showCreated, center + 115, y);
+		// setWidgetPosition(showCreated, center + 115, y);
+
+		setWidgetPosition(editWidget, center + 115, y - 20);
 	}
 
 
@@ -422,8 +435,31 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 	public void onClick(Widget sender) {
 		TimelineRemembersPosition rp = (TimelineRemembersPosition) sender;
 		manager.getGui().showHover(rp.getTLO().getTopicIdentifier());
+
+
+		setSelected(rp, true);
+
 	}
 
+	private void setSelected(TimelineRemembersPosition rp, boolean selected) {
+		if (selected) {
+			unselect();
+			selectedRP = rp;
+			editWidget.setTopicAndVisible(selectedRP);
+			selectedRP.addStyleName("Selected");
+		} else {
+			unselect();
+		}
+	}
+
+	// @Override
+	protected void unselect() {
+		editWidget.setVisible(false);
+		if (selectedRP != null) {
+			selectedRP.removeStyleName("Selected");
+		}
+		selectedRP = null;
+	}
 
 	public void onDblClick(Widget sender) {
 
@@ -436,6 +472,10 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 
 			TimelineRemembersPosition rp = (TimelineRemembersPosition) sender;
 			manager.getGui().navigateTo(rp.getTLO().getTopicIdentifier());
+
+			// TODO make it update this timeline?
+			// manager.getGui().showTimeline();
+
 		}
 	}
 

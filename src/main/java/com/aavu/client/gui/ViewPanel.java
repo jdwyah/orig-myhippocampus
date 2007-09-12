@@ -55,15 +55,18 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 	private int dragStartY;
 	private EventBackdrop focusBackdrop;
-	private int lastx;
-	private int lasty;
+
 
 	protected List objects = new ArrayList();
+
+	private ClientMouseImpl clientMouseImpl;
 
 	public ViewPanel() {
 		super();
 
 		setStyleName("H-ViewPanel");
+
+		clientMouseImpl = (ClientMouseImpl) GWT.create(ClientMouseImpl.class);
 
 		focusBackdrop = new EventBackdrop();
 		makeThisADragHandle(focusBackdrop);
@@ -119,23 +122,25 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		// lastx, lasty are just a backup in case this doesn't work. They're not a great backup,
 		// because if child objects have obscured us we won't be getting mouseMove events and we'll
 		// be weird relative x & y's from senders anyway.
+		// BUT it turns out that FF clientX & Y are rogered for ScrollWheel events, -> replace-with
+		// MozillaImpl
 		Event curEvent = DOM.eventGetCurrentEvent();
-		if (curEvent != null) {
-			lastx = DOM.eventGetClientX(curEvent);
-			lasty = DOM.eventGetClientY(curEvent);
-		}
+
+		int lastx = clientMouseImpl.getClientX(curEvent);
+		int lasty = clientMouseImpl.getClientY(curEvent);
 
 		int dx = lastx - getAbsoluteLeft() - halfWidth;
 		int dy = lasty - getAbsoluteTop() - halfHeight;
 
-		System.out.println("ViewPanel.centerOnMouse last x " + lastx + " absLeft "
-				+ getAbsoluteLeft() + " curbackx " + curbackX + " dx " + dx);
-		System.out.println("ViewPanel.centerOnMouse last y " + lasty + " absTop "
-				+ getAbsoluteTop() + " curbacky " + curbackY + " dy " + dy);
+		Logger.log("ViewPanel.centerOnMouse last x " + lastx + " absLeft " + getAbsoluteLeft()
+				+ " curbackx " + curbackX + " dx " + dx);
+		Logger.log("ViewPanel.centerOnMouse last y " + lasty + " absTop " + getAbsoluteTop()
+				+ " curbacky " + curbackY + " dy " + dy);
 
 		moveBy(dx, dy);
 
 	}
+
 
 	/**
 	 * don't let a regular clear() happen or you'll lose the focusBackdrop
@@ -430,8 +435,10 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 	}
 
 	public void onMouseMove(Widget sender, int x, int y) {
-		lastx = x + sender.getAbsoluteLeft();
-		lasty = y + sender.getAbsoluteTop();
+		int lastx = x + sender.getAbsoluteLeft();
+		int lasty = y + sender.getAbsoluteTop();
+		clientMouseImpl.setLastXY(lastx, lasty);
+
 		int dx = dragStartX - x - sender.getAbsoluteLeft();
 		int dy = dragStartY - y - sender.getAbsoluteTop();
 

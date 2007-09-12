@@ -240,6 +240,19 @@ public class TreeOfTimeTest extends TestCase {
 			// no-op
 		}
 
+		public long getId() {
+			throw new UnsupportedOperationException();
+		}
+
+		public String getTitle() {
+			throw new UnsupportedOperationException();
+		}
+
+		public void setTitle(String text) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public void testPct() {

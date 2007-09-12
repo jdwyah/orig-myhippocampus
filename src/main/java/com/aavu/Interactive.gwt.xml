@@ -1,26 +1,39 @@
 <module>
 
 	<!-- Inherit the core Web Toolkit stuff.                  -->
-	<inherits name='com.google.gwt.user.User'/>
-	
-	<inherits name='org.gwtwidgets.WidgetLibrary'/>
-	<inherits name='com.mapitz.gwt.googleMaps.GoogleMaps' /> 
-    <inherits name='org.gwm.GwtWindowManager'/>
-    <inherits name='com.allen_sauer.gwt.dragdrop.DragAndDrop'/>
-    
-    <inherits name="com.google.gwt.i18n.I18N"/>
-	<inherits name="com.google.gwt.json.JSON"/> 
+	<inherits name='com.google.gwt.user.User' />
+
+	<inherits name='org.gwtwidgets.WidgetLibrary' />
+	<inherits name='com.mapitz.gwt.googleMaps.GoogleMaps' />
+	<inherits name='org.gwm.GwtWindowManager' />
+	<inherits name='com.allen_sauer.gwt.dragdrop.DragAndDrop' />
+
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.json.JSON" />
 
 	<!-- Specify the app entry point class.                   -->
-	<entry-point class='com.aavu.client.Interactive'/>
+	<entry-point class='com.aavu.client.Interactive' />
 	<!-- <entry-point class='com.aavu.client.HippoPreLoad'/>-->
-	
-	<stylesheet src="css/HippoTest.css" /> 	
-	
-<!-- 	<servlet path="/topicService" class="com.aavu.server.TopicServiceImpl" />-->
-    <servlet path="/topicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl" />
-    <servlet path="/tagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl" />
+
+	<stylesheet src="css/HippoTest.css" />
+
+	<!-- 	<servlet path="/topicService" class="com.aavu.server.TopicServiceImpl" />-->
+	<servlet path="/topicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl" />
+	<servlet path="/tagService" class="com.aavu.server.service.gwt.GWTTagServiceImpl" />
+
+
+	<!-- Mozilla-specific implementation -->
+	<!-- http://blog.brandonaaron.net/2007/06/05/mouse-wheel-plugin-update-211/ -->
+	<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=352179 -->
+	<replace-with class="com.aavu.client.gui.ClientMouseImplMozilla">
+		<when-type-is class="com.aavu.client.gui.ClientMouseImpl" />
+		<any>
+			<when-property-is name="user.agent" value="gecko1_8" />
+			<when-property-is name="user.agent" value="gecko" />
+		</any>
+	</replace-with>
+
 
 	<!-- only compile 1 browser -->
-	<!-- <set-property name="user.agent" value="ie6"/> --> 
+	<!-- <set-property name="user.agent" value="ie6"/> -->
 </module>
