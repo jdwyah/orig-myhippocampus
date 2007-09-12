@@ -103,4 +103,8 @@ public class DraggableTimeLineObj extends FocusPanel implements TimelineRemember
 		throw new UnsupportedOperationException();
 	}
 
+	public TimeLineObj getTLO() {
+		return tlo;
+	}
+
 }

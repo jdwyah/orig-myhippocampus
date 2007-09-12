@@ -76,7 +76,7 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 	// }
 
 	public void onDblClick(Widget sender) {
-		getDisplay().navigateTo(getFTI());
+		getDisplay().getManager().getGui().navigateTo(getFTI());
 	}
 
 	public void receivedDrop(TopicDisplayObj bubble) {

@@ -66,6 +66,8 @@ public class AddLinkManager implements Manager, CloseListener {
 
 				weblink = linkAndUser.getWeblink();
 
+				Logger.debug("Found Weblink: " + weblink);
+
 				if (weblink == null) {
 					weblink = new WebLink();
 					weblink.setUri(url);

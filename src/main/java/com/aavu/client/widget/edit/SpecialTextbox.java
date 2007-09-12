@@ -2,7 +2,6 @@ package com.aavu.client.widget.edit;
 
 import com.aavu.client.gui.SaveStopLight;
 import com.aavu.client.widget.RichText.RichTextToolbar;
-import com.aavu.client.widget.RichText2.KeyCodeEventListener;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -17,8 +16,8 @@ import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SpecialTextbox extends Composite implements KeyCodeEventListener, ClickListener,
-		SourcesChangeEvents, KeyboardListener {
+public class SpecialTextbox extends Composite implements ClickListener, SourcesChangeEvents,
+		KeyboardListener {
 
 	/**
 	 * no I'm not kidding. 92 is "|" on IE & FF, but ctrl-Pipe is 28 on IE. I dunno.
@@ -119,15 +118,6 @@ public class SpecialTextbox extends Composite implements KeyCodeEventListener, C
 	public void setPixelSize(int width, int height) {
 		super.setPixelSize(width, height);
 		textArea.setPixelSize(width, height);
-	}
-
-	public void keyCodeEvent(int i, boolean ctrl) {
-		// if (ctrl && (i == KEY_PIPE_FF || i == KEY_PIPE_IE)) {
-		// openLinkDialog();
-		// }
-		// // if(listeners != null){
-		// // listeners.fireChange(this);
-		// // }
 	}
 
 

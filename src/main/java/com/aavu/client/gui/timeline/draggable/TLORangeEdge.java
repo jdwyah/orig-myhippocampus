@@ -1,6 +1,12 @@
 package com.aavu.client.gui.timeline.draggable;
 
-import com.aavu.client.strings.ConstHolder;
+import java.util.Date;
+
+import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.gui.ext.TooltipListener;
+import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
+import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -9,29 +15,46 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TLORangeEdge extends Composite implements MouseListener {
 
+	private static final DateTimeFormat format = DateTimeFormat.getFormat("MMM, d yyyy");
+
+
+
 	private boolean resizing;
 	private Image myLabel;
 	private int resizeStartX;
 
-	private TLORangeWidget tloRangeW;
+	private ZoomableTimeline timeline;
 	private boolean leftSide;
+	private TimeLineObj tlo;
+	private TimelineRemembersPosition rp;
+	private TooltipListener tooltip;
 
-	public TLORangeEdge(TLORangeWidget tloRangeW, boolean leftSide) {
-		this.tloRangeW = tloRangeW;
+	public TLORangeEdge(ZoomableTimeline timeline, TimeLineObj tlo, TimelineRemembersPosition rp,
+			boolean leftSide, Image image) {
+		this.timeline = timeline;
 		this.leftSide = leftSide;
+		this.tlo = tlo;
+		this.rp = rp;
+		myLabel = image;
 
-		// myImage = ConstHolder.images.bullet_blue().createImage();
-
-		if (leftSide) {
-			myLabel = ConstHolder.images.resultset_previous().createImage();
-		} else {
-			myLabel = ConstHolder.images.resultset_next().createImage();
-		}
 
 		myLabel.addMouseListener(this);
+
+
+
 		myLabel.setStyleName("H-TimeBar-Edge");
 
 		initWidget(myLabel);
+
+		if (leftSide) {
+
+			// tooltip = new TooltipListener(format.format(tlo.getStartDate()));
+		} else {
+
+			// tooltip = new TooltipListener(format.format(tlo.getEndDate()));
+		}
+
+		// myLabel.addMouseListener(tooltip);
 
 	}
 
@@ -44,6 +67,12 @@ public class TLORangeEdge extends Composite implements MouseListener {
 
 
 	public void onMouseUp(Widget sender, int x, int y) {
+
+		if (resizing) {
+			int clientX = DOM.eventGetClientX(DOM.eventGetCurrentEvent());
+			timeline.setDateFromDrag(tlo, rp, clientX, leftSide, true);
+		}
+
 		resizing = false;
 		DOM.releaseCapture(myLabel.getElement());
 	}
@@ -60,7 +89,10 @@ public class TLORangeEdge extends Composite implements MouseListener {
 			int clientX = DOM.eventGetClientX(DOM.eventGetCurrentEvent());
 			System.out.println("resiszeStart " + resizeStartX + " " + x + " clientX " + clientX);
 
-			tloRangeW.expand(clientX, leftSide);
+			Date rtn = timeline.setDateFromDrag(tlo, rp, clientX, leftSide, false);
+
+			// tooltip.setHTML(format.format(rtn));
+
 		}
 	}
 }

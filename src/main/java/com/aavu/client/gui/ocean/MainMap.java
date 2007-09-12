@@ -383,4 +383,9 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 		explorerWindow.loadConnections(curTopic);
 		explorerWindow.show();
 	}
+
+	public void navigateTo(TopicIdentifier ti) {
+		hideCurrentHover();
+		manager.bringUpChart(ti);
+	}
 }

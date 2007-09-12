@@ -4,6 +4,7 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
+import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.gui.timeline.draggable.TreeOfTime;
 import com.aavu.client.gui.timeline.draggable.Visitor;
 
@@ -222,6 +223,21 @@ public class TreeOfTimeTest extends TestCase {
 
 		public Date getEndDate() {
 			return null;
+		}
+
+		public void setStartDate(Date startDate) {
+			date = startDate;
+		}
+
+		public AbstractCommand getDateSaveCommand() {
+			throw new UnsupportedOperationException();
+		}
+
+		/**
+		 * no-op. This shouldn't be used since it is lastUpdated
+		 */
+		public void setEndDate(Date newD) {
+			// no-op
 		}
 
 	}

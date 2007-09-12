@@ -146,4 +146,27 @@ public interface Images extends ImageBundle {
 	 */
 	AbstractImagePrototype resultset_previous();
 
+	/**
+	 * @gwt.resource gSpreadsheetTimeline.png
+	 */
+	AbstractImagePrototype gSpreadsheetTimeline();
+
+
+	/**
+	 * @gwt.resource entryZoomBackTimeline.png
+	 */
+	AbstractImagePrototype entryZoomBackTimeline();
+
+
+	/**
+	 * @gwt.resource gadgetLinksTimeline.png
+	 */
+	AbstractImagePrototype gadgetLinksTimeline();
+
+	/**
+	 * @gwt.resource gDocumentTimeline.png
+	 */
+	AbstractImagePrototype gDocumentTimeline();
+
+
 }

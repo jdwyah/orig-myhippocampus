@@ -7,6 +7,8 @@ import java.util.Date;
 
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
+import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.commands.SaveDatesCommand;
 import com.aavu.client.gui.timeline.HasDate;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -40,6 +42,10 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 		return getLastUpdated();
 	}
 
+	public AbstractCommand getDateSaveCommand() {
+		return new SaveDatesCommand(this, getStartDate(), getEndDate());
+	}
+
 	public Date getStartDate() {
 		return getCreated();
 	}
@@ -59,6 +65,15 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 		setCreated(date);
 	}
 
+
+
+	/**
+	 * bc we use lastUpdated for our own nefarious purpose, make sure not to update it on saves
+	 */
+	// @Override
+	public boolean usesLastUpdated() {
+		return true;
+	}
 
 	// public void deltaStartDate(int dxSeconds) {
 	// getStartDate().setTime(getStartDate().getTime() + dxSeconds);

@@ -985,4 +985,16 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		return "alphacube";
 	}
 
+	/**
+	 * Return whether this command uses the lastUpdated field for it's own purposes. If not, we
+	 * should update the lastUpdated field when we save.
+	 * 
+	 * Overriden by HippoDate
+	 * 
+	 * @return
+	 */
+	public boolean usesLastUpdated() {
+		return false;
+	}
+
 }

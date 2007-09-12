@@ -512,12 +512,13 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		System.out.println("hierarchy display update " + t);
 
 		if (t == null) {
-			Logger.error("update null");
-			try {
-				throw new Exception();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			Logger.error("HierarchyDisplay: error update null");
+			// try {
+			// throw new Exception();
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
+			return;
 		}
 
 		TopicDisplayObj b = (TopicDisplayObj) topicBubbles.get(new Long(t.getId()));
@@ -556,11 +557,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 	}
 
-	public void navigateTo(FullTopicIdentifier fti) {
-		guiManager.hideCurrentHover();
-		// HoverManager.hideCurrentHover();
-		manager.bringUpChart(fti);
-	}
+
 
 	public boolean removeTopicBubble(TopicDisplayObj bubble) {
 		topicBubbles.remove(new Long(bubble.getIdentifier().getTopicID()));
@@ -619,7 +616,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		setPixelSize(width, height);
 
 		// Need top reset the BackdropDropController DropTargetInfo
-		System.out.println("WINDOW RESIZE! " + width + " " + height);
+		// System.out.println("WINDOW RESIZE! " + width + " " + height);
 	}
 
 	public void editSelectStatus(TopicIdentifier t, boolean isSelected) {

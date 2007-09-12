@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ViewPanel;
@@ -15,7 +16,6 @@ import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.gui.timeline.draggable.TLORangeWidget;
-import com.aavu.client.gui.timeline.draggable.TLOWrapper;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -26,7 +26,15 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
+
+/**
+ * NOTE: make sure you understand the moveOccurred() and objectHasMoved() callbacks
+ * 
+ * @author Jeff Dwyer
+ * 
+ */
+public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickListener,
+		DblClickListener {
 
 
 	private static List backGroundList = new ArrayList();
@@ -34,27 +42,21 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 	private static List labelFormatters = new ArrayList();
 
-
 	static final double MIN_HOUR = 60;
 	static final double MIN_DAY = MIN_HOUR * 24;
-	static final double MIN_WEEK = MIN_DAY * 7;
-	static final double MIN_MONTH = MIN_DAY * 30.43;
-
 	static final double MIN_YEAR = MIN_DAY * 365.25;
-	static final double MIN_DECADE = MIN_YEAR * 10;
 	static final double MIN_CENTURY = MIN_YEAR * 100;
-
-
 	static final double MIN_3CENTURY = MIN_CENTURY * 3;
 	static final double MIN_3MONTH = MIN_DAY * 91.31;
 	static final double MIN_3YEAR = MIN_YEAR * 3;
-
-
+	static final double MIN_DECADE = MIN_YEAR * 10;
 	static final double MIN_MILL = MIN_YEAR * 1000;
-
+	static final double MIN_MONTH = MIN_DAY * 30.43;
+	static final double MIN_WEEK = MIN_DAY * 7;
 
 
 	private static final int NUM_LABELS = 5;
+	private static final int WINDOW_GUTTER = 7;
 	/**
 	 * This needs to correspond to the width of the background images. It's basically an extra zoom
 	 */
@@ -125,17 +127,17 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	private Image magSmall;
 
 	private Manager manager;
+	private CheckBox showCreated;
 	private GWTSortedMap sorted = new GWTSortedMap();
 	private Label whenlabel;
 	private int width;
 	private int yEnd;
+
 	private int[] ySlots;
-
 	private boolean ySlotsDirty = false;
-	private int ySpread;
 
+	private int ySpread;
 	private int yStart;
-	private CheckBox showCreated;
 
 	public ZoomableTimeline(Manager manager, int width, int height, CloseListener window) {
 		super();
@@ -178,7 +180,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		}
 
 		super.clear();
-		initYSlots();
+		initYSlots(false);
 
 		System.out.println("addObj " + sorted.size());
 
@@ -188,7 +190,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 			// int top = (int) (Math.random()*(double)height);
 
-			TimelineRemembersPosition rp = getTLORepr(manager, tlo);
+			TimelineRemembersPosition rp = TimeLineObjFactory.getWidget(this, manager, tlo);
 
 			int slot = getBestSlotFor(rp);
 			int top = yStart + (slot * ySpread);
@@ -256,6 +258,8 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 			}
 		});
 
+
+
 		add(magSmall);
 		add(whenlabel);
 		add(magBig);
@@ -271,6 +275,8 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		setWidgetPosition(showCreated, center + 115, y);
 	}
 
+
+
 	/**
 	 * Determine how far each element extends in the x-axis
 	 * 
@@ -285,8 +291,9 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 		int mywidth = (int) (rp.getWidth() / (double) getXSpread() / currentScale);
 		if (rp instanceof TLORangeWidget) {
-			System.out.println("RP " + rp.getLeft() + " w " + rp.getWidth() + " my " + mywidth
-					+ " q " + ((double) getXSpread() / currentScale));
+			System.out.println("ZoommableTimeline.getBestSlot RP " + rp.getLeft() + " w "
+					+ rp.getWidth() + " my " + mywidth + " q "
+					+ ((double) getXSpread() / currentScale));
 		}
 		for (; i < ySlots.length; i++) {
 			int lastLeftForThisSlot = ySlots[i];
@@ -304,25 +311,11 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		return -1;
 	}
 
+
+
 	// @Override
 	protected int getHeight() {
 		return height;
-	}
-
-
-
-	// @Override
-	protected TimelineRemembersPosition getTLORepr(Manager manager, TimeLineObj tlo) {
-
-		if (tlo.isMaleable()) {
-			TLORangeWidget tlow = new TLORangeWidget(this, tlo);
-			tlow.addMouseWheelListener(this);
-			return tlow;
-		} else {
-			TLOWrapper tlow = new TLOWrapper(manager, tlo);
-			tlow.addMouseWheelListener(this);
-			return tlow;
-		}
 	}
 
 	public Widget getWidget() {
@@ -353,17 +346,32 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 		initYSlots();
 	}
 
+	/**
+	 * force a re-jiggering of the yslots on the next redraw()
+	 * 
+	 * @param dirty
+	 */
 	private void initYSlots() {
+		initYSlots(true);
+	}
+
+	private void initYSlots(boolean dirty) {
+
+		System.out.println("ZoomableTimeline.initYSlots(" + dirty + ")");
+		ySlotsDirty = dirty;
+
 		for (int i = 0; i < ySlots.length; i++) {
 			ySlots[i] = Integer.MIN_VALUE;
 		}
 	}
 
+
 	// @Override
 	protected void moveOccurredCallback() {
 
-		// 600, otherwise 1 pixel per SCALE length
+		System.out.println("ZoomableTimeline.moveOccurredCallback settingYSlots !dirty");
 
+		// 600, otherwise 1 pixel per SCALE length
 
 
 		updateLabels();
@@ -374,17 +382,24 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 	}
 
 
+
 	protected void objectHasMoved(RemembersPosition o, int halfWidth, int halfHeight, int centerX,
 			int centerY) {
 
-		// PEND MED necesary if they've been editting a range, but besides that this is not
-		// necessary
-		o.zoomToScale(currentScale);
 
-		if (ySlotsDirty) {
-			if (o instanceof TimelineRemembersPosition) {
-				TimelineRemembersPosition tlw = (TimelineRemembersPosition) o;
+		// ProteanLabels come in here too
+		if (o instanceof TimelineRemembersPosition) {
 
+			System.out.println("ZoomableTimelin.objHasMoved " + ySlotsDirty + " " + o.getLeft()
+					+ " " + o.getTop() + " " + o);
+
+			// PEND MED necesary if they've been editting a range, but besides that this is not
+			// necessary
+			o.zoomToScale(currentScale);
+
+			TimelineRemembersPosition tlw = (TimelineRemembersPosition) o;
+
+			if (ySlotsDirty) {
 
 				int slot = getBestSlotFor(tlw);
 
@@ -404,7 +419,25 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 	}
 
+	public void onClick(Widget sender) {
+		TimelineRemembersPosition rp = (TimelineRemembersPosition) sender;
+		manager.getGui().showHover(rp.getTLO().getTopicIdentifier());
+	}
 
+
+	public void onDblClick(Widget sender) {
+
+		// process edit title
+		if (sender instanceof TLORangeWidget) {
+
+
+
+		} else {
+
+			TimelineRemembersPosition rp = (TimelineRemembersPosition) sender;
+			manager.getGui().navigateTo(rp.getTLO().getTopicIdentifier());
+		}
+	}
 
 	// @Override
 	protected void postZoomCallback(double currentScale) {
@@ -427,7 +460,6 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 	}
 
-
 	// @Override
 	protected void setBackground(double scale) {
 
@@ -440,6 +472,48 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 		DOM.setStyleAttribute(getElement(), "backgroundImage", "url("
 				+ ImageHolder.getImgLoc(IMG_POSTFIX) + img + ".png)");
+	}
+
+	public Date setDateFromDrag(TimeLineObj tlo, TimelineRemembersPosition rp, int clientX,
+			boolean leftSide, boolean doSave) {
+
+		// subtract the window left.
+		// PEND low, this is missing the gutter ~10px
+		clientX -= getAbsoluteLeft() + WINDOW_GUTTER;
+
+		Date rtn = null;
+
+		if (leftSide) {
+			// System.out.println("LEFT left " + left + " size " + sizeThisZoom);
+			// left += dx;
+
+			// System.out.println("ZoomableTimeline start " + tlo.getHasDate().getStartDate());
+
+			rtn = tlo.setStartDateToX(getPositionXFromGUIX(clientX));
+
+			// System.out.println("ZoomableTimeline start " + tlo.getHasDate().getStartDate());
+
+
+		} else {
+			// System.out.println("RIGHT left " + left + " size " + sizeThisZoom);
+
+			// System.out.println("ZoomableTimeline end " + tlo.getHasDate().getEndDate());
+
+			rtn = tlo.setEndDateToX(getPositionXFromGUIX(clientX));
+
+			// System.out.println("ZoomableTimeline end " + tlo.getHasDate().getEndDate());
+		}
+
+
+		if (doSave) {
+			manager.getTopicCache().executeCommand(null, tlo.getHasDate().getDateSaveCommand(),
+					new StdAsyncCallback("SaveTime"));
+		}
+
+
+		redraw(rp);
+
+		return rtn;
 	}
 
 	private void showCreated(boolean checked) {
@@ -473,7 +547,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 		int index = zoomList.indexOf(new Double(oldScale));
 
-		System.out.println("ZoomableTL zoom: index " + index + " next  " + (index + upDown));
+		// System.out.println("ZoomableTL zoom: index " + index + " next " + (index + upDown));
 		index += upDown;
 
 		index = index < 0 ? 0 : index;
@@ -485,13 +559,12 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline {
 
 		currentScale = ((Double) zoomList.get(index)).doubleValue();
 
-		System.out.println("ZoomableTL cur " + currentScale + " old " + oldScale + " "
-				+ currentScale / oldScale);
-		System.out.println("ZoomableTL cur " + getZoomStr(currentScale) + " old "
-				+ getZoomStr(oldScale));
+		// System.out.println("ZoomableTL cur " + currentScale + " old " + oldScale + " "
+		// + currentScale / oldScale);
+		// System.out.println("ZoomableTL cur " + getZoomStr(currentScale) + " old "
+		// + getZoomStr(oldScale));
 
-		// force a re-jiggering of the yslots on the next redraw()
-		ySlotsDirty = true;
+
 		initYSlots();
 
 		finishZoom(oldScale);

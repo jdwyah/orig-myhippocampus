@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.commands.SaveDatesCommand;
 import com.aavu.client.domain.generated.AbstractOccurrence;
 import com.aavu.client.gui.timeline.HasDate;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -58,8 +60,23 @@ public class Occurrence extends AbstractOccurrence implements Serializable, IsSe
 		return null;
 	}
 
+	public AbstractCommand getDateSaveCommand() {
+		return new SaveDatesCommand(this, getStartDate());
+	}
+
 	public Date getStartDate() {
 		return getCreated();
+	}
+
+	public void setStartDate(Date startDate) {
+		setCreated(startDate);
+	}
+
+	/**
+	 * no-op. This shouldn't be used since it is lastUpdated
+	 */
+	public void setEndDate(Date newD) {
+		// no-op
 	}
 
 

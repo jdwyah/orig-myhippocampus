@@ -1,5 +1,6 @@
 package com.aavu.client.gui.ocean.dhtmlIslands;
 
+import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -74,6 +75,8 @@ public class IslandBanner extends AbsolutePanel {
 		Logger.debug("IslandBanner.reg " + text + " " + reg.getOffsetWidth() + " "
 				+ reg.getOffsetHeight());
 		DOM.setStyleAttribute(getElement(), "position", "absolute");
+
+		JSUtil.disableSelect(getElement());
 
 	}
 

@@ -25,9 +25,18 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		SourcesChangeEvents, MouseWheelListener {
 
+	private class RedrawParams {
+		public int centerX;
+		public int centerY;
+		public int halfHeight;
+		public int halfWidth;
+		public double yScale;
+	}
+
 	protected int backX = 0;
 	protected int backY = 0;
 	private ChangeListenerCollection changeCollection = new ChangeListenerCollection();
+
 	private int curbackX = 0;
 
 	private int curbackY = 0;
@@ -38,17 +47,17 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 	private boolean doZoom;
 
+	protected boolean dragEnabled = true;
+
 	private boolean dragging;
 
 	private int dragStartX;
 
 	private int dragStartY;
-
 	private EventBackdrop focusBackdrop;
-
-	protected boolean dragEnabled = true;
 	private int lastx;
 	private int lasty;
+
 	protected List objects = new ArrayList();
 
 	public ViewPanel() {
@@ -97,10 +106,6 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		moveBy(dx, dy);
 
 	}
-
-	protected abstract int getWidth();
-
-	protected abstract int getHeight();
 
 	/**
 	 * 
@@ -152,6 +157,18 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 			backY = curbackY;
 		}
 		dragging = false;
+	}
+
+	/**
+	 * Make sure that we're zoomed to 'scale' or higher
+	 * 
+	 * return the value that we settle on
+	 */
+	public double ensureZoomOfAtLeast(double scale) {
+		if (scale > currentScale) {
+			zoomTo(scale);
+		}
+		return currentScale;
 	}
 
 	protected void finishZoom(double oldScale) {
@@ -216,12 +233,96 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		return curbackY;
 	}
 
+	public EventBackdrop getFocusBackdrop() {
+		return focusBackdrop;
+	}
+
+	protected abstract int getHeight();
+
+	public int[] getLongLatForXY(int absLeft, int absTop) {
+
+		int oceanLeft = getBackX();
+		int oceanTop = getBackY();
+
+		int newLeft = absLeft - oceanLeft;
+		int newTop = absTop - oceanTop;
+
+		int lng = (int) (newLeft / currentScale);
+		int lat = (int) (newTop / currentScale);
+
+		return new int[] { lng, lat };
+
+	}
+
+	private RedrawParams getParams(int dy) {
+		RedrawParams rd = new RedrawParams();
+		rd.yScale = 1;
+		if (isDoYTranslate()) {
+			curbackY = -dy + backY;
+			rd.yScale = currentScale;
+		}
+
+		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX + "px " + curbackY
+				+ "px");
+
+		int width = getWidth();
+		int height = getHeight();
+
+		rd.halfWidth = width / 2;
+		rd.halfHeight = height / 2;
+
+		rd.centerX = getCenterX(currentScale, width);
+		rd.centerY = getCenterY(rd.yScale, height);
+		return rd;
+	}
+
+	public int getPositionX(int left) {
+
+		// System.out.println("getPositionX " + left + " " + currentScale + " " + getXSpread() + " "
+		// + curbackX);
+		return (int) (left * currentScale * getXSpread()) + curbackX;
+	}
+
+	public int getPositionXFromGUIX(int guix) {
+
+		System.out.println("getPositionXFromGuiX " + guix + " " + currentScale + " " + getXSpread()
+				+ " " + curbackX);
+		return (int) ((guix - curbackX) / currentScale / (double) getXSpread());
+	}
+
+	protected abstract int getWidth();
+
+	/**
+	 * Basically an extra zoom factor. Spread to the size of the background. Overridden to 600 for
+	 * ZoomableTimeline
+	 * 
+	 * @return
+	 */
+	protected int getXSpread() {
+		return 1;
+	}
+
 	public boolean isDoYTranslate() {
 		return doYTranslate;
 	}
 
 	public boolean isDoZoom() {
 		return doZoom;
+	}
+
+
+	protected void makeThisADragHandle(Widget widget) {
+
+		if (doZoom) {
+			if (widget instanceof SourcesMouseWheelEvents) {
+				SourcesMouseWheelEvents wheeler = (SourcesMouseWheelEvents) widget;
+				wheeler.addMouseWheelListener(this);
+			}
+		}
+		if (widget instanceof SourcesMouseEvents) {
+			SourcesMouseEvents mouser = (SourcesMouseEvents) widget;
+			mouser.addMouseListener(this);
+		}
 	}
 
 	/**
@@ -254,105 +355,18 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 		RedrawParams rd = getParams(dy);
 
-		// System.out.println("centerX "+centerX+" centerY "+centerY);
+		System.out.println("ViewPanel.moveByDelta dx " + dx + " dy " + dy);
 
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 			Object o = iter.next();
 			RemembersPosition rp = (RemembersPosition) o;
 
-			redraw(rp, rd);
+			redrawObj(rp, rd);
 		}
 
 		moveOccurredCallback();
 		// System.out.println("moved "+curbackX+" "+curbackY);
 
-	}
-
-	private RedrawParams getParams(int dy) {
-		RedrawParams rd = new RedrawParams();
-		rd.yScale = 1;
-		if (isDoYTranslate()) {
-			curbackY = -dy + backY;
-			rd.yScale = currentScale;
-		}
-
-		DOM.setStyleAttribute(getElement(), "backgroundPosition", curbackX + "px " + curbackY
-				+ "px");
-
-		int width = getWidth();
-		int height = getHeight();
-
-		rd.halfWidth = width / 2;
-		rd.halfHeight = height / 2;
-
-		rd.centerX = getCenterX(currentScale, width);
-		rd.centerY = getCenterY(rd.yScale, height);
-		return rd;
-	}
-
-	private class RedrawParams {
-		public double yScale;
-		public int centerY;
-		public int centerX;
-		public int halfHeight;
-		public int halfWidth;
-	}
-
-	public void redraw(RemembersPosition rp) {
-		RedrawParams rd = getParams(0);
-		redraw(rp, rd);
-	}
-
-	private void redraw(RemembersPosition rp, RedrawParams params) {
-		// System.out.println("found: "+GWT.getTypeName(rp));
-
-		// System.out.println("Left "+isle.getLeft()+" Top "+isle.getTop());
-		// System.out.println("cur "+curbackX+" cury "+curbackY);
-
-		// setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale),
-		// (int)((rp.getTop()+curbackY)*currentScale));
-
-		// System.out.println("move "+rp.getLeft()+" "+(int)((rp.getLeft())*currentScale)+"
-		// "+(int)((rp.getLeft())*currentScale*getXSpread())+" cs "+currentScale);
-		try {
-
-			setWidgetPosition(rp.getWidget(), getPositionX(rp.getLeft()),
-					(int) ((rp.getTop()) * params.yScale) + curbackY);
-
-		} catch (RuntimeException e) {
-			if (rp instanceof TopicDisplayObj) {
-				Logger.log("ERROR: ViewPanel. couldn't move: " + ((TopicDisplayObj) rp).getTopic());
-			} else {
-				Logger.log("ERROR: ViewPanel. couldn't move: " + rp.getWidget());
-			}
-			throw e;
-		}
-		objectHasMoved(rp, params.halfWidth, params.halfHeight, params.centerX, params.centerY);
-	}
-
-	public int getPositionX(int left) {
-
-		// System.out.println("getPositionX " + left + " " + currentScale + " " + getXSpread() + " "
-		// + curbackX);
-		return (int) (left * currentScale * getXSpread()) + curbackX;
-	}
-
-	public int getPositionXFromGUIX(int guix) {
-
-		System.out.println("getPositionXFromGuiX " + guix + " " + currentScale + " " + getXSpread()
-				+ " " + curbackX);
-		return (int) ((guix - curbackX) / currentScale / (double) getXSpread());
-	}
-
-
-	/**
-	 * Basically an extra zoom factor. Spread to the size of the background. Overridden to 600 for
-	 * ZoomableTimeline
-	 * 
-	 * @return
-	 */
-	protected int getXSpread() {
-		return 1;
 	}
 
 	protected void moveOccurredCallback() {
@@ -469,44 +483,67 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 	}
 
+	/**
+	 * redraw all
+	 */
 	public void redraw() {
+		System.out.println("ViewPanel.redraw()");
 		moveBy(0, 0);
+	}
+
+	/**
+	 * redraw a single object
+	 * 
+	 * @param rp
+	 */
+	public void redraw(RemembersPosition rp) {
+		System.out.println("ViewPanel.redraw(RP) ");
+		RedrawParams rd = getParams(0);
+		redrawObj(rp, rd);
+		moveOccurredCallback();
+	}
+
+	private void redrawObj(RemembersPosition rp, RedrawParams params) {
+		// System.out.println("found: "+GWT.getTypeName(rp));
+
+		// System.out.println("Left "+isle.getLeft()+" Top "+isle.getTop());
+		// System.out.println("cur "+curbackX+" cury "+curbackY);
+
+		// setWidgetPosition(rp.getWidget(),(int)((rp.getLeft()+curbackX)*currentScale),
+		// (int)((rp.getTop()+curbackY)*currentScale));
+
+		// System.out.println("move "+rp.getLeft()+" "+(int)((rp.getLeft())*currentScale)+"
+		// "+(int)((rp.getLeft())*currentScale*getXSpread())+" cs "+currentScale);
+		try {
+
+			setWidgetPosition(rp.getWidget(), getPositionX(rp.getLeft()),
+					(int) ((rp.getTop()) * params.yScale) + curbackY);
+
+		} catch (RuntimeException e) {
+			if (rp instanceof TopicDisplayObj) {
+				Logger.log("ERROR: ViewPanel. couldn't move: " + ((TopicDisplayObj) rp).getTopic());
+			} else {
+				Logger.log("ERROR: ViewPanel. couldn't move: " + rp.getWidget());
+			}
+			throw e;
+		}
+		objectHasMoved(rp, params.halfWidth, params.halfHeight, params.centerX, params.centerY);
 	}
 
 	public void removeChangeListener(ChangeListener listener) {
 		changeCollection.remove(listener);
 	}
 
+	public boolean removeObj(Widget w) {
+		System.out.println("ViewPanel.remove " + GWT.getTypeName(w));
+		super.remove(w);
+		return objects.remove(w);
+	}
+
 	protected abstract void setBackground(double scale);
 
 	public void setDoYTranslate(boolean doYTranslate) {
 		this.doYTranslate = doYTranslate;
-	}
-
-	/**
-	 * Make sure that we're zoomed to 'scale' or higher
-	 * 
-	 * return the value that we settle on
-	 */
-	public double ensureZoomOfAtLeast(double scale) {
-		if (scale > currentScale) {
-			zoomTo(scale);
-		}
-		return currentScale;
-	}
-
-	protected void makeThisADragHandle(Widget widget) {
-
-		if (doZoom) {
-			if (widget instanceof SourcesMouseWheelEvents) {
-				SourcesMouseWheelEvents wheeler = (SourcesMouseWheelEvents) widget;
-				wheeler.addMouseWheelListener(this);
-			}
-		}
-		if (widget instanceof SourcesMouseEvents) {
-			SourcesMouseEvents mouser = (SourcesMouseEvents) widget;
-			mouser.addMouseListener(this);
-		}
 	}
 
 	public void setDoZoom(boolean doZoom) {
@@ -543,31 +580,6 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 		currentScale = scale;
 
 		finishZoom(oldScale);
-
-	}
-
-	public boolean removeObj(Widget w) {
-		System.out.println("ViewPanel.remove " + GWT.getTypeName(w));
-		super.remove(w);
-		return objects.remove(w);
-	}
-
-	public EventBackdrop getFocusBackdrop() {
-		return focusBackdrop;
-	}
-
-	public int[] getLongLatForXY(int absLeft, int absTop) {
-
-		int oceanLeft = getBackX();
-		int oceanTop = getBackY();
-
-		int newLeft = absLeft - oceanLeft;
-		int newTop = absTop - oceanTop;
-
-		int lng = (int) (newLeft / currentScale);
-		int lat = (int) (newTop / currentScale);
-
-		return new int[] { lng, lat };
 
 	}
 }

@@ -115,7 +115,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 					cachedTopics.put(clipped, t);
 
-					// System.out.println("Cache Mis " + t + " " + t.getId() + " " + linkM);
+					// System.out.println("Cache Miss " + t + " " + t.getId() + " " + linkM);
 				} else {
 					Topic merged = editDAO.merge(t);
 					merged.addOccurence(linkM);
@@ -507,8 +507,12 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		return selectDAO.getUsageStats(su);
 	}
 
+	/**
+	 * TODO merge with getForURI
+	 */
 	public LinkAndUser getWebLinkForURLAndUser(String url) {
 		User u = userService.getCurrentUser();
+		// selectDAO.getForURI(url, u, u)
 		return new LinkAndUser(selectDAO.getWebLinkForURI(url, u), u);
 	}
 
@@ -557,9 +561,12 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		return save(topic, false, userService.getCurrentUser());
 	}
 
+
 	private Topic save(Topic topic, boolean guaranteedNotDupe, User user)
 			throws HippoBusinessException {
-		topic.setLastUpdated(new Date());
+		if (!topic.usesLastUpdated()) {
+			topic.setLastUpdated(new Date());
+		}
 		topic.setUser(user);
 
 

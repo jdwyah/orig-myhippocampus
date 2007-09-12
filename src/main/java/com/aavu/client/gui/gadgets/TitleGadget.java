@@ -8,7 +8,7 @@ import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.URI;
-import com.aavu.client.domain.commands.SaveDateCreatedCommand;
+import com.aavu.client.domain.commands.SaveDatesCommand;
 import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.EditableLabelExtension;
@@ -90,7 +90,7 @@ public class TitleGadget extends Gadget {
 
 							manager.getTopicCache().executeCommand(
 									topic,
-									new SaveDateCreatedCommand(topic, cDate),
+									new SaveDatesCommand(topic, cDate),
 									new StdAsyncCallback(ConstHolder.myConstants.save()
 											+ "TitleDate"));
 						} else {

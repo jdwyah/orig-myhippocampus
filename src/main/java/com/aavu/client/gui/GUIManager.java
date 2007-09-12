@@ -16,5 +16,8 @@ public interface GUIManager {
 
 	void showConnections();
 
+	void navigateTo(TopicIdentifier ti);
+
+
 
 }

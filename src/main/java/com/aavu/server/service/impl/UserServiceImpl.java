@@ -25,7 +25,7 @@ import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.QuickAddEntryCommand;
-import com.aavu.client.domain.commands.SaveDateCreatedCommand;
+import com.aavu.client.domain.commands.SaveDatesCommand;
 import com.aavu.client.exception.DuplicateUserException;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
@@ -316,7 +316,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			throws HippoException {
 		proto.set(year, month, day);
 		Topic topic = topicService.createNewIfNonExistent(name, parent);
-		topicService.executeAndSaveCommand(new SaveDateCreatedCommand(topic, proto.getTime()));
+		topicService.executeAndSaveCommand(new SaveDatesCommand(topic, proto.getTime()));
 	}
 
 	private String gm(String messageName) {

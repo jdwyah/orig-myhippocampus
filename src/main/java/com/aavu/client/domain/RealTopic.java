@@ -2,6 +2,8 @@ package com.aavu.client.domain;
 
 import java.util.Date;
 
+import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.commands.SaveDatesCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.timeline.HasDate;
 
@@ -33,9 +35,22 @@ public class RealTopic extends Topic implements HasDate {
 		return null;
 	}
 
+	public AbstractCommand getDateSaveCommand() {
+		return new SaveDatesCommand(this, getStartDate());
+	}
+
 	public Date getStartDate() {
 		return getCreated();
 	}
 
+	public void setStartDate(Date startDate) {
+		setCreated(startDate);
+	}
 
+	/**
+	 * no-op. This shouldn't be used since it is lastUpdated
+	 */
+	public void setEndDate(Date newD) {
+		// no-op
+	}
 }

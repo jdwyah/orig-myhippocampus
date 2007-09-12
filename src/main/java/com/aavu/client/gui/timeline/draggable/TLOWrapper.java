@@ -1,14 +1,11 @@
 package com.aavu.client.gui.timeline.draggable;
 
 import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.gui.ext.FocusPanelExt;
 import com.aavu.client.gui.ext.JSUtil;
-import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
+import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
 import com.aavu.client.service.Manager;
-import com.aavu.client.strings.ConstHolder;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -16,67 +13,41 @@ import com.google.gwt.user.client.ui.MouseWheelListener;
 import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TLOWrapper extends Composite implements TimelineRemembersPosition,
+public class TLOWrapper extends FocusPanelExt implements TimelineRemembersPosition,
 		SourcesMouseWheelEvents {
 
-	private DateTimeFormat format = DateTimeFormat.getFormat("MMM, d yyyy");
 
-
-
-	private int left;
 	private TimeLineObj tlo;
 	private int top;
 	private Label label;
 
 	private Image image;
 
-	public TLOWrapper(final Manager manager, final TimeLineObj tlo) {
+	public TLOWrapper(final Manager manager, ZoomableTimeline timeline, final TimeLineObj tlo,
+			Image image) {
 		this.tlo = tlo;
-		this.left = tlo.getLeft();
 		this.top = 0;
+		this.image = image;
 
 		HorizontalPanel panel = new HorizontalPanel();
 
 		label = new Label(tlo.getTopicIdentifier().getTopicTitle(), false);
 
-		image = ConstHolder.images.bullet_blue().createImage();
+		TLORangeEdge edge = new TLORangeEdge(timeline, tlo, this, true, image);
 
-
-		panel.add(image);
+		panel.add(edge);
 		panel.add(label);
 
-		label.addClickListener(new ClickListener() {
+		addClickListener(timeline);
+		addDblClickListener(timeline);
 
-			public void onClick(final Widget sender) {
-
-				System.out.println("Fetching " + tlo + " TI: " + tlo.getTopicIdentifier());
-
-				manager.getGui().showHover(tlo.getTopicIdentifier());
-
-				// manager.getTopicCache().getTopic(tlo.getTopicIdentifier(),
-				// new StdAsyncCallback("Fetch Preview") {
-				//
-				// // @Override
-				// public void onSuccess(Object result) {
-				// super.onSuccess(result);
-				//								
-				// manager.getGui().showHover(result.)
-				//
-				// PreviewPopup p = new PreviewPopup(manager, (Topic) result, 0, 0);
-				// }
-				// });
-			}
-		});
-
-		label.addMouseListener(new TooltipListener(format.format(tlo.getStartDate())));
-
-		initWidget(panel);
+		setWidget(panel);
 
 		JSUtil.disableSelect(getElement());
 	}
 
 	public int getLeft() {
-		return left;
+		return tlo.getLeft();
 	}
 
 	public int getTop() {
@@ -102,14 +73,16 @@ public class TLOWrapper extends Composite implements TimelineRemembersPosition,
 		this.top = top;
 	}
 
-	public TimeLineObj getTlo() {
-		return tlo;
-	}
+
 
 	public void zoomToScale(double currentScale) {
 
 
 
+	}
+
+	public TimeLineObj getTLO() {
+		return tlo;
 	}
 
 	/**
@@ -119,6 +92,9 @@ public class TLOWrapper extends Composite implements TimelineRemembersPosition,
 		return 11 * tlo.getTopicIdentifier().getTopicTitle().length();
 	}
 
+	public String toString() {
+		return "TLOWrapper " + tlo.getTopicIdentifier().getTopicTitle();
+	}
 
 
 }

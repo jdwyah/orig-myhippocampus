@@ -3,11 +3,12 @@ package com.aavu.client.gui.timeline.draggable;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.FocusPanelExt;
+import com.aavu.client.gui.ext.JSUtil;
 import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
 import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
+import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SourcesMouseWheelEvents;
 import com.google.gwt.user.client.ui.Widget;
@@ -22,7 +23,7 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 	private static final int EDGE_WIDTH = 16;
 
 	private int top;
-	private int left;
+
 	private TimeLineObj tlo;
 	private ZoomableTimeline timeline;
 
@@ -39,7 +40,6 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 	public TLORangeWidget(ZoomableTimeline timeline, final TimeLineObj tlo) {
 		super();
 		this.tlo = tlo;
-		this.left = tlo.getLeft();
 		this.top = 0;
 		this.timeline = timeline;
 
@@ -52,11 +52,10 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 		labelBG = new Label(" ");
 
 
-		// HorizontalPanel hp = new HorizontalPanel();
-
-		TLORangeEdge leftEdge = new TLORangeEdge(this, true);
-		rightEdge = new TLORangeEdge(this, false);
-
+		TLORangeEdge leftEdge = new TLORangeEdge(timeline, tlo, this, true, ConstHolder.images
+				.resultset_previous().createImage());
+		rightEdge = new TLORangeEdge(timeline, tlo, this, false, ConstHolder.images
+				.resultset_next().createImage());
 
 		labelHolder = new AbsolutePanel();
 
@@ -67,13 +66,8 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 		labelHolder.add(rightEdge, 0, 0);
 
 
-		label.addClickListener(new ClickListener() {
-
-			public void onClick(Widget sender) {
-				System.out.println("Clicked start " + hippoDate.getStartDate() + " to "
-						+ hippoDate.getEndDate());
-			}
-		});
+		addClickListener(timeline);
+		addDblClickListener(timeline);
 
 		setWidget(labelHolder);
 
@@ -82,11 +76,11 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 
 		zoomToScale(1.0);
 
+		JSUtil.disableSelect(getElement());
 	}
 
-
 	public int getLeft() {
-		return left;
+		return tlo.getLeft();
 	}
 
 	public int getTop() {
@@ -111,8 +105,9 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 
 		sizeThisZoom = sizeThisZoom < MIN_WIDTH ? MIN_WIDTH : sizeThisZoom;
 
-		System.out.println("TLORange  st:" + start + " en:" + end + " size " + sizeThisZoom
-				+ " sd " + hippoDate.getStartDate() + " ed " + hippoDate.getEndDate());
+		System.out.println("TLORange.zoomToScale  st:" + start + " en:" + end + " size "
+				+ sizeThisZoom + " sd " + hippoDate.getStartDate() + " ed "
+				+ hippoDate.getEndDate());
 
 		DOM.setStyleAttribute(labelBG.getElement(), "width", sizeThisZoom + "px");
 
@@ -132,8 +127,8 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 
 		int minWidth = label.getOffsetWidth() + (2 * EDGE_WIDTH);
 
-		System.out.println("get TLO RANGE WIDTH  " + sizeThisZoom + " "
-				+ tlo.getTopicIdentifier().getTopicTitle());
+		// System.out.println("TLORangeWidget WIDTH " + sizeThisZoom + " "
+		// + tlo.getTopicIdentifier().getTopicTitle());
 
 		int dateWidth = (sizeThisZoom + X_MARGIN);
 
@@ -142,38 +137,12 @@ public class TLORangeWidget extends FocusPanelExt implements TimelineRemembersPo
 		return rtnW;
 	}
 
-	public void expand(int x, boolean leftSide) {
-		System.out.println("-----------------\nexpand " + x + " "
-				+ timeline.getPositionXFromGUIX(x) + " left " + getLeft());
-
-
-		if (leftSide) {
-			System.out.println("LEFT left " + left + " size " + sizeThisZoom);
-			// left += dx;
-
-			System.out.println("tlo start " + tlo.getHasDate().getStartDate());
-
-			tlo.setStartDateToX(timeline.getPositionXFromGUIX(x));
-
-			System.out.println("tlo2 start " + tlo.getHasDate().getStartDate());
-
-
-		} else {
-			// System.out.println("RIGHT left " + left + " size " + sizeThisZoom);
-
-			System.out.println("tlo end " + tlo.getHasDate().getEndDate());
-
-			tlo.setEndDateToX(timeline.getPositionXFromGUIX(x));
-
-			System.out.println("tlo2 end " + tlo.getHasDate().getEndDate());
-		}
-
-
-		left = tlo.getLeft();
-
-
-		timeline.redraw(this);
-
-		// zoomToScale(currentScale);
+	public String toString() {
+		return "TLORangeWidget " + tlo.getTopicIdentifier().getTopicTitle();
 	}
+
+	public TimeLineObj getTLO() {
+		return tlo;
+	}
+
 }

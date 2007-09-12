@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ocean.dhtmlIslands.RemembersPosition;
-
 import com.aavu.client.service.Manager;
 
 public class DetailsEther extends Ether {
@@ -29,7 +28,10 @@ public class DetailsEther extends Ether {
 
 	// @Override
 	protected RemembersPosition getTLORepr(Manager manager, TimeLineObj tlo, int left, int top) {
-		return new TLOWrapper(manager, tlo);
+		throw new UnsupportedOperationException();
+		// broke this by needing a zoomable timeline
+		// return new TLOWrapper(manager, null, tlo,
+		// ConstHolder.images.bullet_blue().createImage());
 	}
 
 	// @Override
