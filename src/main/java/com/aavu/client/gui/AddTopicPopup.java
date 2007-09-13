@@ -1,5 +1,7 @@
 package com.aavu.client.gui;
 
+import java.util.Date;
+
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
@@ -30,6 +32,7 @@ public class AddTopicPopup extends PopupWindow implements CompleteListener {
 	 * Prevents multiple instances with a semaphore.
 	 * 
 	 * @param lnglat
+	 * @param dateCreated
 	 * @param prototype
 	 * 
 	 * @param island
@@ -37,13 +40,13 @@ public class AddTopicPopup extends PopupWindow implements CompleteListener {
 	 * @param manager
 	 */
 	public AddTopicPopup(MindscapeManager _manager, String title, Topic parent, int[] lnglat,
-			AsyncCallback after) {
+			Date dateCreated, AsyncCallback after) {
 
 		super(_manager.newFrame(), title, WIDTH, HEIGHT);
 		this.manager = _manager;
 		this.after = after;
 
-		suggestBox = new TopicCompleter(manager.getTopicCache(), parent, lnglat);
+		suggestBox = new TopicCompleter(manager.getTopicCache(), parent, lnglat, dateCreated);
 		suggestBox.setCompleteListener(AddTopicPopup.this);
 
 		setCenteredContent(new NewWidget());

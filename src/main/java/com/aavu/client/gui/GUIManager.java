@@ -1,6 +1,7 @@
 package com.aavu.client.gui;
 
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.explorer.TimeLineWrapper;
 
 public interface GUIManager {
 
@@ -17,6 +18,8 @@ public interface GUIManager {
 	void showConnections();
 
 	void navigateTo(TopicIdentifier ti);
+
+	TimeLineWrapper getTimeline();
 
 
 

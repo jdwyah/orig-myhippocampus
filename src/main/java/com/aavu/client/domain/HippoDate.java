@@ -67,6 +67,12 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 
 
 
+	// @Override
+	public String getDefaultName() {
+		return "(New Date Range)";
+	}
+
+
 	/**
 	 * bc we use lastUpdated for our own nefarious purpose, make sure not to update it on saves
 	 */

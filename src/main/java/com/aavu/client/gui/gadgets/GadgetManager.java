@@ -1,6 +1,7 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class GadgetManager {
 	private ChildrenGadget childGadget;
 	// private TypeGadget typeGadget;
 	private CreateTopicGadget createTopicGadget;
+	private CreateHippoDateGadget createHippoDateGadget;
+
 
 	private TagBoard tagBoard;
 	private OccurrenceTopicsBoard occTopicsBoard;
@@ -53,6 +56,7 @@ public class GadgetManager {
 			connectionBoard = new ConnectionBoard(manager);
 			linkDisplayW = new LinkDisplayGadget(manager);
 			createTopicGadget = new CreateTopicGadget(manager);
+			createHippoDateGadget = new CreateHippoDateGadget(manager);
 
 			childGadget = new ChildrenGadget(manager);
 			// typeGadget = new TypeGadget(manager);
@@ -76,6 +80,7 @@ public class GadgetManager {
 			allGadgets.add(entryPreview);
 
 			allGadgets.add(createTopicGadget);
+			allGadgets.add(createHippoDateGadget);
 
 			// allGadgets.add(typeGadget);
 
@@ -97,10 +102,18 @@ public class GadgetManager {
 		return allGadgets;
 	}
 
-	public void fireGadgetClick(Gadget gadget, int[] lngLat) {
+	/**
+	 * 
+	 * lngLat &&|| dateCreated are ok as null
+	 * 
+	 * @param gadget
+	 * @param lngLat
+	 * @param dateCreated
+	 */
+	public void fireGadgetClick(Gadget gadget, int[] lngLat, Date dateCreated) {
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			GadgetClickListener listener = (GadgetClickListener) iterator.next();
-			listener.gadgetClicked(gadget, lngLat);
+			listener.gadgetClicked(gadget, lngLat, dateCreated);
 		}
 
 	}

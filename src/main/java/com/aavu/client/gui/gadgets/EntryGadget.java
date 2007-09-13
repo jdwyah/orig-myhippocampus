@@ -1,5 +1,6 @@
 package com.aavu.client.gui.gadgets;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -111,9 +112,9 @@ public class EntryGadget extends Gadget {
 	}
 
 	// @Override
-	public void createInstance(Manager manager, int[] lngLat) {
+	public void createInstance(Manager manager, int[] lngLat, Date dateCreated) {
 		Entry e = new Entry();
-		manager.createNew(e, lngLat);
+		manager.createNew(e, lngLat, dateCreated, false, false);
 	}
 
 	// @Override

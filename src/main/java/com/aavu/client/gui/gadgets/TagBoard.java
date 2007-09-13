@@ -203,9 +203,9 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 	 */
 	private void addTag(final Topic tag) {
 
-		if (cur_topic.tagTopic(tag)) {
-			showTag(tag);
-		}
+		cur_topic.tagTopic(tag);
+		showTag(tag);
+
 		// incommand tagsToSave.add(tag);
 		manager.getTopicCache().executeCommand(cur_topic, new AddToTopicCommand(cur_topic, tag),
 				new StdAsyncCallback(ConstHolder.myConstants.save()) {

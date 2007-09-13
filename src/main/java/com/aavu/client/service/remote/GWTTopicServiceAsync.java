@@ -1,5 +1,6 @@
 package com.aavu.client.service.remote;
 
+import java.util.Date;
 import java.util.List;
 
 import com.aavu.client.domain.MindTreeOcc;
@@ -16,12 +17,13 @@ public interface GWTTopicServiceAsync {
 
 	void changeState(long topicID, boolean toIsland, AsyncCallback callback);
 
-	void createNew(String title, Topic prototype, Topic parent, int[] lnglat, AsyncCallback callback);
+	void createNew(String title, Topic prototype, Topic parent, int[] lnglat, Date dateCreated,
+			AsyncCallback callback);
 
 	void createNewIfNonExistent(String title, AsyncCallback callback);
 
 	void createNewIfNonExistent(String title, Topic prototype, Topic parent, int[] lnglat,
-			AsyncCallback callback);
+			Date dateCreated, AsyncCallback callback);
 
 	void delete(long id, AsyncCallback callback);
 

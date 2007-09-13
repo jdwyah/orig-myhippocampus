@@ -133,6 +133,8 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * If you don't want it to clear (multiple mv's ie MetaLocation) you need to use clear == false;
 	 * 
+	 * meta can be null, bc we decided we can now store HippoDate associations with no meta type
+	 * 
 	 * @param meta
 	 * @param metaValue
 	 * @param clear
@@ -146,7 +148,10 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		//			
 		// }
 
-		Association assoc = getAssociationForMetaOrNull(meta);
+		Association assoc = null;
+		if (meta != null) {
+			assoc = getAssociationForMetaOrNull(meta);
+		}
 		if (assoc == null) {
 			System.out.println("Topic.addMetaValue: create new assoc");
 			assoc = new Association(this);
@@ -174,8 +179,10 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		System.out.println("assoc " + assoc + " metav " + metaValue);
 		assoc.setTitle(getTitle() + " to " + metaValue.getTitle());
 
-		// redundant if we've already created
-		assoc.addType(meta);
+		if (meta != null) {
+			// redundant if we've already created
+			assoc.addType(meta);
+		}
 
 		if (clear) {
 			System.out.println("Topic.addMetaValue clearing");
@@ -216,11 +223,11 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		getMetaValuesFor(meta).add(metaValue);
 	}
 
-	public boolean tagTopic(Topic tag) {
+	public TopicTypeConnector tagTopic(Topic tag) {
 		return tagTopic(tag, null);
 	}
 
-	public boolean tagTopic(Topic tag, int[] lnglat) {
+	public TopicTypeConnector tagTopic(Topic tag, int[] lnglat) {
 
 		// System.out.println("tagging with "+tag.getTitle());
 		// System.out.println("alread tagged "+tag.getInstances());
@@ -739,7 +746,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		getAssociations().add(cur);
 	}
 
-	public boolean addType(Topic type) {
+	public TopicTypeConnector addType(Topic type) {
 		return addType(type, null);
 	}
 
@@ -751,7 +758,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * @param type
 	 * @return
 	 */
-	public boolean addType(Topic type, int[] lnglat) {
+	public TopicTypeConnector addType(Topic type, int[] lnglat) {
 		TopicTypeConnector conn;
 		if (lnglat != null) {
 			conn = new TopicTypeConnector(this, type, lnglat[1], lnglat[0]);
@@ -775,11 +782,9 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 			// System.out.println("exists " + exists + " " + conn);
 			// System.out.println("type " + type);
 			// type.getInstances().add(conn);
-			return getTypes().add(conn);
-		} else {
-			return true;
+			getTypes().add(conn);
 		}
-
+		return conn;
 
 		// return getTypes().add(new Topic(topic,-1,-1));
 	}

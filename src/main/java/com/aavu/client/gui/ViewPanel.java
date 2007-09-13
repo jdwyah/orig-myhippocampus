@@ -360,7 +360,7 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 		RedrawParams rd = getParams(dy);
 
-		System.out.println("ViewPanel.moveByDelta dx " + dx + " dy " + dy);
+		// System.out.println("ViewPanel.moveByDelta dx " + dx + " dy " + dy);
 
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 			Object o = iter.next();

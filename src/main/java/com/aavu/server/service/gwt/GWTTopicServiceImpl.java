@@ -156,10 +156,11 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 
 
-	public TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat)
-			throws HippoBusinessException {
+	public TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat,
+			Date dateCreated) throws HippoBusinessException {
 
-		prototype = (Topic) topicService.createNew(title, prototype.getClass(), parent, lnglat);
+		prototype = (Topic) topicService.createNew(title, prototype.getClass(), parent, lnglat,
+				dateCreated);
 
 		return prototype.getIdentifier();
 	}
@@ -172,10 +173,10 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 	public TopicIdentifier createNewIfNonExistent(String title, Topic prototype, Topic parent,
-			int[] lnglat) throws HippoBusinessException {
+			int[] lnglat, Date dateCreated) throws HippoBusinessException {
 
-		prototype = topicService
-				.createNewIfNonExistent(title, prototype.getClass(), parent, lnglat);
+		prototype = topicService.createNewIfNonExistent(title, prototype.getClass(), parent,
+				lnglat, dateCreated);
 
 		return prototype.getIdentifier();
 	}

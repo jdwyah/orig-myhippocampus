@@ -1,5 +1,6 @@
 package com.aavu.client.LinkPlugin;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -112,7 +113,7 @@ public class AddLinkManager implements Manager, CloseListener {
 		throw new UnsupportedOperationException();
 	}
 
-	public void createNew(Topic topick, int[] lnglat) {
+	public void createNew(Topic topick, int[] lnglat, Date dateCreated) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -228,6 +229,12 @@ public class AddLinkManager implements Manager, CloseListener {
 	public PopupWindow displayInfo(Widget widg) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void createNew(Topic prototype, int[] lnglat, Date dateCreated, boolean doNamePopup,
+			boolean needsPopupForParent) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

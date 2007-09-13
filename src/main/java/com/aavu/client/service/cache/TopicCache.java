@@ -1,6 +1,7 @@
 package com.aavu.client.service.cache;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -152,9 +153,9 @@ public class TopicCache {
 	}
 
 	public void createNew(String title, Topic prototype, Topic parent, int[] lnglat,
-			AsyncCallback callback) {
+			Date dateCreated, AsyncCallback callback) {
 
-		topicService.createNew(title, prototype, parent, lnglat, callback);
+		topicService.createNew(title, prototype, parent, lnglat, dateCreated, callback);
 
 	}
 
@@ -172,13 +173,14 @@ public class TopicCache {
 	 * @param callback
 	 * @throws HippoBusinessException
 	 */
-	public void createNewIfNonExistent(String title, Topic parent, int[] lnglat,
+	public void createNewIfNonExistent(String title, Topic parent, int[] lnglat, Date dateCreated,
 			final AsyncCallback callback) {
 
 		// TopicLookupOrNewCallback ourCall = new TopicLookupOrNewCallback(callback, linkTo);
 		// getTopicForNameA(linkTo, ourCall);
 
-		topicService.createNewIfNonExistent(title, new RealTopic(), parent, lnglat, callback);
+		topicService.createNewIfNonExistent(title, new RealTopic(), parent, lnglat, dateCreated,
+				callback);
 
 	}
 

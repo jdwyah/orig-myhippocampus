@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.Topic;
@@ -315,7 +316,8 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 	private void addWithDate(String name, Calendar proto, int year, int month, int day, Topic parent)
 			throws HippoException {
 		proto.set(year, month, day);
-		Topic topic = topicService.createNewIfNonExistent(name, parent);
+		Topic topic = topicService.createNewIfNonExistent(name, RealTopic.class, parent, null,
+				proto.getTime());
 		topicService.executeAndSaveCommand(new SaveDatesCommand(topic, proto.getTime()));
 	}
 

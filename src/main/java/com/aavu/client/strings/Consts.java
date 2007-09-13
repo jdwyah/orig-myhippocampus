@@ -465,4 +465,6 @@ public interface Consts extends Messages {
 
 	String goThere();
 
+	String hippodate_new();
+
 }

@@ -1,5 +1,7 @@
 package com.aavu.client.widget.edit;
 
+import java.util.Date;
+
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -26,6 +28,7 @@ public class TopicCompleter extends Composite {
 	private Topic parent;
 
 	private Timer keyboardEnterTimer;
+	private Date dateCreated;
 
 	public TopicCompleter(TopicCache topicService) {
 		super();
@@ -38,12 +41,13 @@ public class TopicCompleter extends Composite {
 		initWidget(suggestBox);
 	}
 
-	public TopicCompleter(TopicCache topicCache, Topic parent, int[] lnglat) {
+	public TopicCompleter(TopicCache topicCache, Topic parent, int[] lnglat, Date dateCreated) {
 		this(topicCache);
 
 		this.parent = parent;
 
 		this.lnglat = lnglat;
+		this.dateCreated = dateCreated;
 	}
 
 
@@ -57,7 +61,8 @@ public class TopicCompleter extends Composite {
 		if (parent == null) {
 			topicService.createNewIfNonExistent(completeText, callback);
 		} else {
-			topicService.createNewIfNonExistent(completeText, parent, lnglat, callback);
+			topicService
+					.createNewIfNonExistent(completeText, parent, lnglat, dateCreated, callback);
 		}
 	}
 

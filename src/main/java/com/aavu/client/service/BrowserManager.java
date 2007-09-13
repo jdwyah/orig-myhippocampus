@@ -1,5 +1,6 @@
 package com.aavu.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.gwtwidgets.client.ui.ProgressBar;
@@ -55,7 +56,7 @@ public class BrowserManager extends AbstractManager {
 
 	}
 
-	public void createNew(Topic t, int[] lnglat) {
+	public void createNew(Topic t, int[] lnglat, Date dateCreated) {
 		// TODO Auto-generated method stub
 
 	}
@@ -118,6 +119,12 @@ public class BrowserManager extends AbstractManager {
 	public PopupWindow displayInfo(Widget widg) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void createNew(Topic prototype, int[] lnglat, Date dateCreated, boolean doNamePopup,
+			boolean needsPopupForParent) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

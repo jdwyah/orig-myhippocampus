@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MetaSeeAlso;
+import com.aavu.client.domain.MetaValue;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.RealTopic;
@@ -160,7 +161,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 
 	public <T> T createNew(String title, Class<T> type, Topic parent) throws HippoBusinessException {
-		return createNew(title, type, parent, null);
+		return createNew(title, type, parent, null, null);
 	}
 
 	/**
@@ -174,7 +175,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 * If prototype is an occurrence, use addOccurrence()
 	 */
 
-	public <T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat)
+	public <T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat, Date dateCreated)
 			throws HippoBusinessException {
 
 		Topic prototype;
@@ -191,41 +192,75 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 		log.debug("Prototype " + prototype.getId() + " " + prototype.getClass());
 
+		log.info("create New: " + title + " " + prototype.getClass() + " "
+				+ userService.getCurrentUser().getUsername() + " parent " + parent);
+
 		prototype.setTitle(title);
+		if (dateCreated != null) {
+			prototype.setCreated(dateCreated);
+		}
 
 		prototype = save(prototype);
 
 		log.debug("Prototype " + prototype.getId() + " " + prototype.getClass());
 
 		if (parent != null) {
-			Topic loadedParent = selectDAO.getForID(userService.getCurrentUser(), parent.getId());
-
-			if (prototype instanceof Occurrence) {
-				log.debug("adding occurrence");
-				loadedParent.addOccurence((Occurrence) prototype, lnglat);
-				save(loadedParent);
-			} else {
-				if (parent instanceof Root) {
-
-					prototype.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService
-							.getCurrentUser()), lnglat);
-				} else {
-					prototype.tagTopic(loadedParent, lnglat);
-				}
-			}
-			prototype = save(prototype);
+			prototype = ensureTopicHasTag(prototype, parent, lnglat);
 		}
 
-		log.info("create New: " + title + " " + prototype.getClass() + " "
-				+ userService.getCurrentUser().getUsername());
 
 
 		return (T) prototype;
 
 	}
 
+	/**
+	 * Split out this functionality so that it could be re-used aside from Topic creation, this is
+	 * because a createIfNotExistant() call will carry with it a parent. That relationship needs to
+	 * be created if it hasn't been already
+	 * 
+	 * @param topic
+	 * @param parent
+	 * @param lnglat
+	 * @return
+	 * @throws HippoBusinessException
+	 */
+	private Topic ensureTopicHasTag(Topic topic, Topic parent, int[] lnglat)
+			throws HippoBusinessException {
+		Topic loadedParent = selectDAO.getForID(userService.getCurrentUser(), parent.getId());
+
+		if (topic instanceof Occurrence) {
+			log.debug("adding occurrence");
+			loadedParent.addOccurence((Occurrence) topic, lnglat);
+			save(loadedParent);
+		} else if (topic instanceof MetaValue) {
+			log.info("adding MetaValue");
+			loadedParent.addMetaValue(null, topic);
+			save(loadedParent);
+		} else {
+
+			if (parent instanceof Root) {
+
+				topic.tagTopic(selectDAO.getRoot(userService.getCurrentUser(), userService
+						.getCurrentUser()), lnglat);
+			} else {
+				topic.tagTopic(loadedParent, lnglat);
+			}
+		}
+		return save(topic);
+	}
+
 	public Topic createNewIfNonExistent(String title) throws HippoBusinessException {
 		return createNewIfNonExistent(title, new Root());
+	}
+
+	/**
+	 * @param parent
+	 *            Also guarantee that this parent topic will be a type of created (or existing)
+	 *            topic
+	 */
+	public Topic createNewIfNonExistent(String title, Topic parent) throws HippoBusinessException {
+		return createNewIfNonExistent(title, RealTopic.class, parent);
 	}
 
 	/**
@@ -234,27 +269,40 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 * 
 	 * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6302954
 	 * http://forum.java.sun.com/thread.jspa?messageID=4196171
+	 * 
+	 * 
+	 * @param parent
+	 *            Also guarantee that this parent topic will be a type of created (or existing)
+	 *            topic
 	 */
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent) throws HippoBusinessException {
-		return (T) createNewIfNonExistent(title, type, parent, null);
+		return (T) createNewIfNonExistent(title, type, parent, null, null);
 	}
 
+	/**
+	 * @param parent
+	 *            Also guarantee that this parent topic will be a type of created (or existing)
+	 *            topic
+	 */
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
-			Topic parent, int[] lnglat) throws HippoBusinessException {
+			Topic parent, int[] lnglat, Date dateCreated) throws HippoBusinessException {
 		Topic cur = getForNameCaseInsensitive(title);
 
 		if (cur == null) {
 
 			try {
-				cur = createNew(title, type, parent, lnglat);
+				cur = createNew(title, type, parent, lnglat, dateCreated);
 			} catch (Exception e) {
 				throw new HippoBusinessException(e);
 			}
 		}
+		// enforce our guarantee that the parent tag exists
+		else {
+			ensureTopicHasTag(cur, parent, lnglat);
+		}
 		return (T) cur;
 	}
-
 
 	public <T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
 			String title, Date date, String data) throws HippoBusinessException {
@@ -284,9 +332,6 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	}
 
 
-	public Topic createNewIfNonExistent(String title, Topic parent) throws HippoBusinessException {
-		return createNewIfNonExistent(title, RealTopic.class, parent);
-	}
 
 	public void delete(long id) throws HippoBusinessException {
 		Topic t = selectDAO.get(id);

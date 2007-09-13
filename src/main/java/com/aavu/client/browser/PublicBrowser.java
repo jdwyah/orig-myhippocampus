@@ -1,5 +1,6 @@
 package com.aavu.client.browser;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import com.aavu.client.HippocampusBrowser;
@@ -102,7 +103,7 @@ public class PublicBrowser extends Composite implements GadgetDisplayer {
 
 
 
-	public void gadgetClicked(Gadget gadget, int[] lngLat) {
+	public void gadgetClicked(Gadget gadget, int[] lngLat, Date dateCreated) {
 		// TODO Auto-generated method stub
 	}
 

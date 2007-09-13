@@ -21,9 +21,13 @@ import com.aavu.client.gui.SearchBox;
 import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.StatusPanel;
 import com.aavu.client.gui.Zoomer;
+import com.aavu.client.gui.connectionExplorer.ConnectionExplorer;
+import com.aavu.client.gui.explorer.TimeLineWrapper;
 import com.aavu.client.gui.ext.MultiDivPanel;
 import com.aavu.client.gui.gadgets.GadgetDisplayerPopupImpl;
+import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.hierarchy.HierarchyDisplay;
+import com.aavu.client.gui.maps.BigMap;
 import com.aavu.client.service.MindscapeManager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
@@ -60,6 +64,11 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	private Topic curTopic;
 
 	private boolean gadgetsDirty;
+
+	private TimeLineWrapper timeline;
+	private Glossary glossary;
+	private BigMap bigMap;
+	private ConnectionExplorer connectionExplorer;
 
 	// private TopicDisplayOverlay topicDisplayOverlay;
 
@@ -145,7 +154,14 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 		gadgetDisplayer.addTo(mainP);
 
 
-		explorerWindow = new ExplorerWindow(manager, manager.newFrame());
+		explorerWindow = new ExplorerWindow(manager, this, manager.newFrame());
+
+		timeline = new TimeLineWrapper(manager, explorerWindow.getWidth(), explorerWindow
+				.getHeight(), explorerWindow);
+		glossary = new Glossary(manager, explorerWindow.getHeight());
+		bigMap = new BigMap(manager, null, explorerWindow.getWidth(), explorerWindow.getHeight(),
+				explorerWindow);
+		connectionExplorer = new ConnectionExplorer(manager);
 
 
 		// topicDisplayOverlay = new TopicDisplayOverlay(manager);
@@ -363,29 +379,33 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	}
 
 	public void showTimeline() {
-		explorerWindow.loadTimeline(curTopic);
+		explorerWindow.loadTimeline(timeline, curTopic);
 		explorerWindow.show();
 	}
 
 	public void showGlossary() {
 
-		explorerWindow.loadGlossary(curTopic);
+		explorerWindow.loadGlossary(glossary, curTopic);
 		explorerWindow.show();
 
 	}
 
 	public void showGoogleMap() {
-		explorerWindow.loadGoogleMap(curTopic);
+		explorerWindow.loadGoogleMap(bigMap, curTopic);
 		explorerWindow.show();
 	}
 
 	public void showConnections() {
-		explorerWindow.loadConnections(curTopic);
+		explorerWindow.loadConnections(connectionExplorer, curTopic);
 		explorerWindow.show();
 	}
 
 	public void navigateTo(TopicIdentifier ti) {
 		hideCurrentHover();
 		manager.bringUpChart(ti);
+	}
+
+	public TimeLineWrapper getTimeline() {
+		return timeline;
 	}
 }

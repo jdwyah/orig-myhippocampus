@@ -1,6 +1,7 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -130,7 +131,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 	}
 
-	public void gadgetClicked(Gadget gadget, int[] lngLat) {
+	public void gadgetClicked(Gadget gadget, int[] lngLat, Date dateCreated) {
 		// TODO Auto-generated method stub
 
 	}

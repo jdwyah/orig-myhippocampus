@@ -1,5 +1,6 @@
 package com.aavu.client.gui;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import com.aavu.client.domain.Topic;
@@ -84,7 +85,7 @@ public class GadgetDisplayerBarImpl extends Composite implements GadgetDisplayer
 	}
 
 
-	public void gadgetClicked(Gadget gadget, int[] lngLat) {
+	public void gadgetClicked(Gadget gadget, int[] lngLat, Date dateCreated) {
 		if (!gadget.enabled(manager.getUser())) {
 			manager.displayInfo(ConstHolder.myConstants.gadget_not_available());
 			return;

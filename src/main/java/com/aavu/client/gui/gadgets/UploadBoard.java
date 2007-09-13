@@ -1,5 +1,6 @@
 package com.aavu.client.gui.gadgets;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import com.aavu.client.Interactive;
@@ -114,9 +115,9 @@ public class UploadBoard extends Gadget {
 	}
 
 	// @Override
-	public void createInstance(Manager manager, int[] lngLat) {
+	public void createInstance(Manager manager, int[] lngLat, Date dateCreated) {
 		S3File realT = new S3File();
-		manager.createNew(realT, lngLat);
+		manager.createNew(realT, lngLat, dateCreated, false, false);
 	}
 
 }

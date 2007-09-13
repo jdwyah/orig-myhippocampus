@@ -1,5 +1,6 @@
 package com.aavu.client.service;
 
+import java.util.Date;
 import java.util.Set;
 
 import org.gwm.client.GInternalFrame;
@@ -24,11 +25,18 @@ import com.google.gwt.user.client.ui.Widget;
 
 public interface Manager {
 
+	void addDeliciousTags(String username, String password, AsyncCallback callback);
+
+	void addSelected(Topic topic);
+
 	void bringUpChart(long id);
 
 	void bringUpChart(Topic topic);
 
 	void bringUpChart(TopicIdentifier ident);
+
+	void createNew(final Topic prototype, final int[] lnglat, final Date dateCreated,
+			boolean doNamePopup, boolean needsPopupForParent);
 
 	void delete(Topic topic, AsyncCallback callback);
 
@@ -40,11 +48,17 @@ public interface Manager {
 
 	void doSearch(String text);
 
-	void editOccurrence(Occurrence topic, boolean needsSave);
-
 	void editMetas(AsyncCallback callback, Meta type);
 
+	void editOccurrence(Occurrence topic, boolean needsSave);
+
+	void explore();
+
 	GadgetManager getGadgetManager();
+
+	GUIManager getGui();
+
+	Set getSelectedTopics();
 
 	GWTExternalServiceAsync getSubjectService();
 
@@ -52,35 +66,23 @@ public interface Manager {
 
 	User getUser();
 
-	Set getSelectedTopics();
-
 	GInternalFrame newFrame();
+
+	GadgetPopup newFrameGadget(Gadget gadget, GadgetDisplayer gDisplayer);
 
 	void newMeta(Meta meta, AsyncCallback callback);
 
-	void explore();
+	void refreshAll();
 
 	void showPreviews(long int0);
+
+	PopupWindow showProgressBar(ProgressBar progressBar);
+
+	void unselect();
 
 	void updateStatus(int myNum, String string, StatusCode fail);
 
 	void userNeedsToUpgrade();
-
-	void createNew(Topic topic, int[] lnglat);
-
-	GadgetPopup newFrameGadget(Gadget gadget, GadgetDisplayer gDisplayer);
-
-	void addDeliciousTags(String username, String password, AsyncCallback callback);
-
-	void refreshAll();
-
-	PopupWindow showProgressBar(ProgressBar progressBar);
-
-	void addSelected(Topic topic);
-
-	void unselect();
-
-	GUIManager getGui();
 
 	// void explore(Topic myTag, List topics);
 

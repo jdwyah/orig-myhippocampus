@@ -31,6 +31,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.subjects.AmazonBook;
 import com.aavu.client.domain.subjects.Subject;
 import com.aavu.client.exception.HippoBusinessException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.server.dao.EditDAO;
 import com.aavu.server.dao.SelectDAO;
 import com.aavu.server.dao.UserDAO;
@@ -1683,6 +1684,19 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Root rr = selectDAO.getRoot(u, u);
 
+
+	}
+
+	public void testTimeline2() throws HippoException {
+
+		User uu = new User();
+		uu.setId(6);
+		List<TimeLineObj> objs = selectDAO.getTimeline(2078, uu);
+
+		System.out.println("Objs " + objs.size());
+		for (TimeLineObj timeLineObj : objs) {
+			System.out.println("TL: " + timeLineObj);
+		}
 
 	}
 

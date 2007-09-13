@@ -52,14 +52,14 @@ public class Glossary extends FocusPanel {
 	private VerticalPanel mainPanel;
 
 
-	public Glossary(Manager manager) {
+	public Glossary(Manager manager, int height) {
 
 		this.manager = manager;
 
 		mainPanel = new VerticalPanel();
 
 		ScrollPanel scrollP = new ScrollPanel(mainPanel);
-		scrollP.setHeight("400px");
+		scrollP.setHeight(height + "px");
 		scrollP.setWidth("200px");
 
 		add(scrollP);

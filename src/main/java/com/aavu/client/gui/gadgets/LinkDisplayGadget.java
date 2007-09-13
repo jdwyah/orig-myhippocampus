@@ -1,5 +1,6 @@
 package com.aavu.client.gui.gadgets;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import com.aavu.client.LinkPlugin.AddLinkPopup;
@@ -194,9 +195,9 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 
 
 	// @Override
-	public void createInstance(Manager manager, int[] lngLat) {
+	public void createInstance(Manager manager, int[] lngLat, Date dateCreated) {
 		WebLink linkT = new WebLink();
-		manager.createNew(linkT, lngLat);
+		manager.createNew(linkT, lngLat, dateCreated, false, false);
 	}
 
 

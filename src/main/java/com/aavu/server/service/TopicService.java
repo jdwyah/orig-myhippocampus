@@ -45,7 +45,7 @@ public interface TopicService {
 
 	<T> T createNew(String title, Class<T> type, Topic parent) throws HippoBusinessException;
 
-	<T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat)
+	<T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat, Date dateCreated)
 			throws HippoBusinessException;
 
 	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
@@ -57,7 +57,7 @@ public interface TopicService {
 			Topic parent) throws HippoBusinessException;
 
 	<T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
-			Topic parent, int[] lnglat) throws HippoBusinessException;
+			Topic parent, int[] lnglat, Date dateCreated) throws HippoBusinessException;
 
 
 	void delete(long id) throws HippoBusinessException;

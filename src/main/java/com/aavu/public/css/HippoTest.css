@@ -482,7 +482,10 @@ a:visited {
 .Selected .H-TimeBar-Label  {
 	
 }
-.Selected H-TLOWrapper {
+.H-TLOWrapper {
+	font-size: 10pt;
+}
+.Selected .H-TLOWrapper {
 	font-weight: bold;
 }
 .H-TimeBar-Edge {	
@@ -508,6 +511,8 @@ a:visited {
 	background-color: #D4F9FA;
 	text-decoration: underline;
 }
+
+
 
 .H-Ocean { 
 	background-color: #D2EAF9;

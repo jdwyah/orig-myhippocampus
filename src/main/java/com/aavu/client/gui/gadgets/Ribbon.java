@@ -34,7 +34,7 @@ public class Ribbon extends Composite {
 			Image imgButton = gadget.getPickerButton();
 			imgButton.addClickListener(new ClickListener() {
 				public void onClick(Widget sender) {
-					gadgetManager.fireGadgetClick(gadget, new int[] { 0, 0 });
+					gadgetManager.fireGadgetClick(gadget, new int[] { 0, 0 }, null);
 					close();
 				}
 			});

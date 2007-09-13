@@ -1,5 +1,7 @@
 package com.aavu.client.gui.gadgets;
 
+import java.util.Date;
+
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.service.Manager;
@@ -131,7 +133,7 @@ public abstract class Gadget extends Composite {
 	}
 
 	// @Override
-	public void createInstance(Manager manager, int[] lngLat) {
+	public void createInstance(Manager manager, int[] lngLat, Date dateCreated) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -155,6 +157,14 @@ public abstract class Gadget extends Composite {
 		return false;
 	}
 
+	/**
+	 * Should we show on the double-click, ctrl-click, menu for Timelines?
+	 * 
+	 * @return
+	 */
+	public boolean isOnTimelineContextMenu() {
+		return false;
+	}
 
 
 	public String getDisplayName(Topic topic) {
@@ -190,6 +200,7 @@ public abstract class Gadget extends Composite {
 	public boolean isOnForTopic(Topic topic) {
 		return getLastLoadSize() > 0;
 	}
+
 
 
 	// public void addMouseListener(MouseListener listener) {

@@ -13,6 +13,7 @@ import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
+import com.aavu.client.gui.ContextMenu;
 import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ViewPanel;
@@ -589,7 +590,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 			int x = getFocusBackdrop().getLastClickClientX();
 			int y = getFocusBackdrop().getLastClickClientY();
 
-			ContextMenu p = new ContextMenu(getManager(), HierarchyDisplay.this, x, y);
+			ContextMenu p = new HierarchyContextMenu(getManager(), HierarchyDisplay.this, x, y);
 			p.show(x, y);
 		}
 

@@ -1126,7 +1126,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		System.out.println("before: " + t.getId());
 
-		topicService.save(t);
+		Topic saved = topicService.save(t);
 
 		System.out.println("after: " + t.getId());
 
@@ -1134,9 +1134,9 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 		assertEquals(3, savedL.size());
 
-		TopicIdentifier saved = savedL.get(1);
 
-		Topic savedTopic = topicService.getForID(saved.getTopicID());
+
+		Topic savedTopic = topicService.getForID(saved.getId());
 
 		Root root = topicService.getRootTopic(u);
 		for (DatedTopicIdentifier datedTopicIdentifier : savedL) {

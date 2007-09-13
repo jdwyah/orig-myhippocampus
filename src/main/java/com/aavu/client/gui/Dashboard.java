@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.gui.ext.ExternalPopup;
-import com.aavu.client.gui.hierarchy.ContextMenu;
+import com.aavu.client.gui.hierarchy.HierarchyContextMenu;
 import com.aavu.client.gui.hierarchy.ViewMenu;
 import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.service.Manager;
@@ -45,7 +45,7 @@ public class Dashboard extends SimplePanel {
 		// manager.showTagBoard();
 		// }});
 
-		contextMenu = new ContextMenu(manager, display);
+		contextMenu = new HierarchyContextMenu(manager, display);
 
 		Image addNewButton = ConstHolder.images.newTopic().createImage();
 		addNewButton.addClickListener(new ClickListener() {

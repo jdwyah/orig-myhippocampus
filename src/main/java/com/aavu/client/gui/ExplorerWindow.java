@@ -18,24 +18,17 @@ public class ExplorerWindow extends PopupWindow {
 	private static final int WIDTH = 700;
 	private static final int HEIGHT = 500;
 
-	private TimeLineWrapper timeline;
-	private Glossary glossary;
-	private BigMap bigMap;
-	private ConnectionExplorer connectionExplorer;
 
-	public ExplorerWindow(Manager manager, final GInternalFrame frame) {
+
+	public ExplorerWindow(Manager manager, GUIManager guiManager, final GInternalFrame frame) {
 		super(frame, "Timeline", WIDTH, HEIGHT);
 
-		timeline = new TimeLineWrapper(manager, WIDTH, HEIGHT, this);
-		glossary = new Glossary(manager);
-		bigMap = new BigMap(manager, null, WIDTH, HEIGHT, this);
-		connectionExplorer = new ConnectionExplorer(manager);
 
-		System.out.println("\n\n\nNew Timeline " + timeline.getOffsetWidth() + " "
-				+ timeline.getOffsetHeight());
+		// System.out.println("\n\n\nNew Timeline " + timeline.getOffsetWidth() + " "
+		// + timeline.getOffsetHeight());
 
 
-		frame.setContent(timeline);
+		// frame.setContent(guiManager.getTimeline());
 
 		frame.setMinimizable(false);
 		frame.setClosable(true);
@@ -53,11 +46,12 @@ public class ExplorerWindow extends PopupWindow {
 				frame.minimize();
 			}
 		});
+		frame.setLocation(100, 100);
 
 	}
 
 
-	public void loadTimeline(Topic curTopic) {
+	public void loadTimeline(TimeLineWrapper timeline, Topic curTopic) {
 
 		frame.setCaption("TimeLine for " + curTopic.getTitle());
 		frame.setWidth(WIDTH);
@@ -66,7 +60,7 @@ public class ExplorerWindow extends PopupWindow {
 		frame.setContent(timeline);
 	}
 
-	public void loadGlossary(Topic curTopic) {
+	public void loadGlossary(Glossary glossary, Topic curTopic) {
 
 		frame.setCaption("Glossary for " + curTopic.getTitle());
 		frame.setWidth(200);
@@ -76,7 +70,7 @@ public class ExplorerWindow extends PopupWindow {
 	}
 
 
-	public void loadGoogleMap(Topic curTopic) {
+	public void loadGoogleMap(BigMap bigMap, Topic curTopic) {
 
 		frame.setCaption("Map for " + curTopic.getTitle());
 		frame.setWidth(WIDTH);
@@ -88,11 +82,21 @@ public class ExplorerWindow extends PopupWindow {
 	}
 
 
-	public void loadConnections(Topic curTopic) {
+	public void loadConnections(ConnectionExplorer connectionExplorer, Topic curTopic) {
 		frame.setCaption("Connections for " + curTopic.getTitle());
 		frame.setWidth(200);
 		connectionExplorer.load(curTopic);
 
 		frame.setContent(connectionExplorer);
+	}
+
+
+	public int getWidth() {
+		return WIDTH;
+	}
+
+
+	public int getHeight() {
+		return HEIGHT;
 	}
 }

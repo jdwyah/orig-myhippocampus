@@ -458,16 +458,19 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	 */
 	public List<TimeLineObj> getTimeline(long tagID, User user) {
 
+
+		// }
+
+
 		List<TimeLineObj> rtn = new ArrayList<TimeLineObj>();
 
-		// "where typeConn.type.class = MetaDate
 
 		// NOTE, aliases are INNER_JOINS so don't accidentally limt ourselves to only topics w/ tags
+		// NOTE, READ the notes next time. When switching to MetaValues, not needing metas, the meta
+		// alias's -> us screening out things on the inner join
 		DetachedCriteria crit = DetachedCriteria.forClass(Topic.class).add(
 				Expression.eq("user", user)).createAlias("associations", "assoc").createAlias(
-				"assoc.members", "metaValue").createAlias("assoc.types", "assocTypeConn")
-				.createAlias("assocTypeConn.type", "assocType").add(
-						Expression.eq("metaValue.class", "date"));
+				"assoc.members", "metaValue").add(Expression.eq("metaValue.class", "date"));
 
 		// Expression.eq("assocType.class", "metadate"));
 

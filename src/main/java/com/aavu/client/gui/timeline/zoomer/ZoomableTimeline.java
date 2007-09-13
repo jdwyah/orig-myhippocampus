@@ -8,6 +8,7 @@ import java.util.List;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.collections.GWTSortedMap;
 import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.gui.ContextMenu;
 import com.aavu.client.gui.ViewPanel;
 import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
@@ -37,7 +38,40 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 		DblClickListener {
 
 
+	/**
+	 * just wrap the two backdrop click listeners together fopr simplicity
+	 * 
+	 * @author Jeff Dwyer
+	 * 
+	 */
+	private class BackdropClickListener implements ClickListener, DblClickListener {
+
+		public void onClick(Widget sender) {
+
+			if (getFocusBackdrop().getLastClickEventCtrl()) {
+				openContextMenu();
+			} else {
+				setSelected(null, false);
+			}
+		}
+
+		public void onDblClick(Widget sender) {
+			openContextMenu();
+		}
+
+		private void openContextMenu() {
+
+			int x = getFocusBackdrop().getLastClickClientX();
+			int y = getFocusBackdrop().getLastClickClientY();
+
+			ContextMenu p = new TimelineContextMenu(manager, ZoomableTimeline.this, x);
+			p.show(x, y);
+
+		}
+	}
+
 	private static List backGroundList = new ArrayList();
+
 	static final String IMG_POSTFIX = "timeline/";
 
 	private static List labelFormatters = new ArrayList();
@@ -49,10 +83,14 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 	static final double MIN_3CENTURY = MIN_CENTURY * 3;
 	static final double MIN_3MONTH = MIN_DAY * 91.31;
 	static final double MIN_3YEAR = MIN_YEAR * 3;
+
+
 	static final double MIN_DECADE = MIN_YEAR * 10;
+
 	static final double MIN_MILL = MIN_YEAR * 1000;
 	static final double MIN_MONTH = MIN_DAY * 30.43;
 	static final double MIN_WEEK = MIN_DAY * 7;
+
 
 
 	private static final int NUM_LABELS = 5;
@@ -62,7 +100,9 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 	 */
 	private static final int X_SPREAD = 600;
 
+	private static final int Y_SPREAD = 17;
 	private static List zoomList = new ArrayList();
+
 	static {
 		// zoomList.add(new Double(1));
 		zoomList.add(new Double(1 / MIN_HOUR));
@@ -103,6 +143,8 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 
 	}
 
+
+
 	static {
 		labelFormatters.add(DateTimeFormat.getFormat("HH:mm"));
 		labelFormatters.add(DateTimeFormat.getFormat("HH"));
@@ -117,29 +159,27 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 		labelFormatters.add(DateTimeFormat.getFormat("yyyy"));
 	}
 
-
-
+	private TimelineEditBox editWidget;
 	private int height;
-
 	private List labelList = new ArrayList();
 	private ProteanLabel ll;
+
 	private Image magBig;
 	private Image magSmall;
-
 	private Manager manager;
+	private TimelineRemembersPosition selectedRP;
 	private CheckBox showCreated;
 	private GWTSortedMap sorted = new GWTSortedMap();
+
 	private Label whenlabel;
 	private int width;
-	private int yEnd;
 
+	private int yEnd;
 	private int[] ySlots;
 	private boolean ySlotsDirty = false;
-
 	private int ySpread;
+
 	private int yStart;
-	private TimelineEditBox editWidget;
-	private TimelineRemembersPosition selectedRP;
 
 	public ZoomableTimeline(final Manager manager, int width, int height, CloseListener window) {
 		super();
@@ -160,22 +200,12 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 		drawHUD();
 		setBackground(currentScale);
 
-		getFocusBackdrop().addDblClickListener(new DblClickListener() {
-
-			public void onDblClick(Widget sender) {
-
-				// ContextMenu p = new ContextMenu(manager, ZoomableTimeline.this, x, y);
-				// p.show(x, y);
-				System.out.println("DOUBLE CLICK!");
-			}
-		});
-		getFocusBackdrop().addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				setSelected(null, false);
-			}
-		});
+		BackdropClickListener bdClickListener = new BackdropClickListener();
+		getFocusBackdrop().addDblClickListener(bdClickListener);
+		getFocusBackdrop().addClickListener(bdClickListener);
 
 	}
+
 
 	public void add(List timelines) {
 
@@ -259,7 +289,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 			}
 		});
 
-		showCreated = new CheckBox("Created");
+		showCreated = new CheckBox("Topics");
 		showCreated.setChecked(true);
 		showCreated.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
@@ -353,7 +383,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 	private void init() {
 		yStart = 25;
 		yEnd = height - 60;
-		ySpread = 15;
+		ySpread = Y_SPREAD;
 
 		ySlots = new int[(yEnd - yStart) / ySpread];
 		initYSlots();
@@ -382,7 +412,7 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 	// @Override
 	protected void moveOccurredCallback() {
 
-		System.out.println("ZoomableTimeline.moveOccurredCallback settingYSlots !dirty");
+		// System.out.println("ZoomableTimeline.moveOccurredCallback settingYSlots !dirty");
 
 		// 600, otherwise 1 pixel per SCALE length
 
@@ -403,8 +433,8 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 		// ProteanLabels come in here too
 		if (o instanceof TimelineRemembersPosition) {
 
-			System.out.println("ZoomableTimelin.objHasMoved " + ySlotsDirty + " " + o.getLeft()
-					+ " " + o.getTop() + " " + o);
+			// System.out.println("ZoomableTimelin.objHasMoved " + ySlotsDirty + " " + o.getLeft()
+			// + " " + o.getTop() + " " + o);
 
 			// PEND MED necesary if they've been editting a range, but besides that this is not
 			// necessary
@@ -439,26 +469,6 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 
 		setSelected(rp, true);
 
-	}
-
-	private void setSelected(TimelineRemembersPosition rp, boolean selected) {
-		if (selected) {
-			unselect();
-			selectedRP = rp;
-			editWidget.setTopicAndVisible(selectedRP);
-			selectedRP.addStyleName("Selected");
-		} else {
-			unselect();
-		}
-	}
-
-	// @Override
-	protected void unselect() {
-		editWidget.setVisible(false);
-		if (selectedRP != null) {
-			selectedRP.removeStyleName("Selected");
-		}
-		selectedRP = null;
 	}
 
 	public void onDblClick(Widget sender) {
@@ -556,9 +566,29 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 		return rtn;
 	}
 
+	private void setSelected(TimelineRemembersPosition rp, boolean selected) {
+		if (selected) {
+			unselect();
+			selectedRP = rp;
+			editWidget.setTopicAndVisible(selectedRP);
+			selectedRP.addStyleName("Selected");
+		} else {
+			unselect();
+		}
+	}
+
 	private void showCreated(boolean checked) {
 		// TODO Auto-generated method stub
 
+	}
+
+	// @Override
+	protected void unselect() {
+		editWidget.setVisible(false);
+		if (selectedRP != null) {
+			selectedRP.removeStyleName("Selected");
+		}
+		selectedRP = null;
 	}
 
 	private void updateLabels() {

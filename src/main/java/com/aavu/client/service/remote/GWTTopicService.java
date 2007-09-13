@@ -1,5 +1,6 @@
 package com.aavu.client.service.remote;
 
+import java.util.Date;
 import java.util.List;
 
 import com.aavu.client.domain.MindTreeOcc;
@@ -19,13 +20,13 @@ public interface GWTTopicService extends RemoteService {
 
 	void changeState(long topicID, boolean toIsland) throws HippoException;
 
-	TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat)
-			throws HippoBusinessException;
+	TopicIdentifier createNew(String title, Topic prototype, Topic parent, int[] lnglat,
+			Date dateCreated) throws HippoBusinessException;
 
 	TopicIdentifier createNewIfNonExistent(String title) throws HippoBusinessException;
 
-	TopicIdentifier createNewIfNonExistent(String title, Topic prototype, Topic parent, int[] lnglat)
-			throws HippoBusinessException;
+	TopicIdentifier createNewIfNonExistent(String title, Topic prototype, Topic parent,
+			int[] lnglat, Date dateCreated) throws HippoBusinessException;
 
 	void delete(long id) throws HippoException;
 
