@@ -1,5 +1,7 @@
 package com.aavu.server.domain;
 
+import java.util.Date;
+
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.userdetails.UserDetails;
 import org.apache.log4j.Logger;
@@ -76,6 +78,12 @@ public class ServerSideUser implements UserDetails {
 		return user;
 	}
 
+	public long getId() {
+		return user.getId();
+	}
 
+	public Date getDateCreated() {
+		return user.getDateCreated();
+	}
 
 }

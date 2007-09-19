@@ -9,7 +9,9 @@ import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.TestingAuthenticationToken;
+import org.acegisecurity.providers.dao.SaltSource;
 import org.acegisecurity.providers.dao.UserCache;
+import org.acegisecurity.providers.encoding.PasswordEncoder;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
@@ -35,7 +37,6 @@ import com.aavu.server.dao.UserDAO;
 import com.aavu.server.domain.ServerSideUser;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
-import com.aavu.server.util.CryptUtils;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
 /**
@@ -61,9 +62,14 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 
 	private TopicService topicService;
 
+	private PasswordEncoder passwordEncoder;
+	private SaltSource saltSource;
+
 	private int maxUsers;
 
 	private int startingInvitations;
+
+
 
 	private MessageSource messageSource;
 
@@ -221,12 +227,16 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 	 */
 	public User createUser(String username, String userpass, String email, boolean superV)
 			throws HippoException {
+		return createUser(username, userpass, email, superV, new Date());
+	}
+
+	public User createUser(String username, String userpass, String email, boolean superV,
+			Date dateCreated) throws HippoException {
 
 		// hmm a bit odd having the logic catch in the
 		//
 		if (log.isDebugEnabled()) {
 			log.debug("u: " + username + " p " + userpass);
-			log.debug("pp: " + CryptUtils.hashString(userpass));
 		}
 
 		User user = new User();
@@ -235,9 +245,16 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 		user.setSupervisor(superV);
 		user.setEnabled(true);
 		user.setInvitations(startingInvitations);
+		user.setDateCreated(dateCreated);
+
+		user = userDAO.save(user);
 
 		if (userpass != null) {
-			user.setPassword(CryptUtils.hashString(userpass));
+
+			Object salt = saltSource.getSalt(new ServerSideUser(user));
+
+			user.setPassword(passwordEncoder.encodePassword(userpass, salt));
+
 		}
 
 		User createdU = userDAO.save(user);
@@ -450,6 +467,16 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 	@Required
 	public void setUserCache(UserCache userCache) {
 		this.userCache = userCache;
+	}
+
+	@Required
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+
+	@Required
+	public void setSaltSource(SaltSource saltSource) {
+		this.saltSource = saltSource;
 	}
 
 	/**

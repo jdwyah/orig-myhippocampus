@@ -1,5 +1,6 @@
 package com.aavu.server.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.acegisecurity.userdetails.UsernameNotFoundException;
@@ -17,6 +18,9 @@ public interface UserService {
 	User createUser(CreateUserRequestCommand comm) throws DuplicateUserException, HippoException;
 
 	User createUser(String user, String pass, String email, boolean superV) throws HippoException;
+
+	User createUser(String user, String pass, String email, boolean superV, Date dateCreated)
+			throws HippoException;
 
 	void delete(Integer id) throws PermissionDeniedException;
 

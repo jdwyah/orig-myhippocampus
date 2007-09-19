@@ -1,5 +1,6 @@
 package com.aavu.server.web.domain.validation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.acegisecurity.userdetails.UsernameNotFoundException;
@@ -7,6 +8,7 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import com.aavu.client.domain.Subscription;
 import com.aavu.client.domain.User;
 import com.aavu.client.exception.DuplicateUserException;
+import com.aavu.client.exception.HippoException;
 import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.CreateUserRequestCommand;
 
@@ -136,6 +138,12 @@ public class MockUserService implements UserService {
 	public void setGoogleAppsUpdate() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public User createUser(String user, String pass, String email, boolean superV, Date dateCreated)
+			throws HippoException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

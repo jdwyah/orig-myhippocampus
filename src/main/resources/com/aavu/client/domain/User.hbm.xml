@@ -37,6 +37,10 @@
 			<meta attribute="field-description">Last GoogleApps Date</meta>
 			<column name="lastGoogleAppsDate" sql-type="timestamp" />
 		</property>		
+		<property name="dateCreated" type="java.util.Date">			
+			<meta attribute="field-description">User Was Created</meta>
+			<column name="dateCreated" sql-type="timestamp" />
+		</property>
 				
 		<many-to-one name="subscription" class="Subscription" column="subscription_id" lazy="false"/>
 	

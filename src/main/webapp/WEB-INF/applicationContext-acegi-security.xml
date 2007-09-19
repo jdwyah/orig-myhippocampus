@@ -145,15 +145,34 @@
   <property name="userDetailsService" ref="userDAO" />
 		<property name="passwordEncoder" ref="passwordEncoder" />
 		<property name="userCache" ref="userCache" />
+		<property name="saltSource" ref="userSaltSource"></property>
 </bean>
+	<bean id="userSaltSource" class="com.aavu.server.util.TransitionReflectionSaltSource">
+		<property name="userPropertyToUse" value="getId" />
+		<property name="useSaltAfterDateProperty" value="getDateCreated" />
+		<property name="useSaltAfterDate">
+			<bean class="java.util.Date">
+				<constructor-arg>
+					<value>107</value>
+				</constructor-arg>
+				<constructor-arg>
+					<value>8</value>
+				</constructor-arg>
+				<constructor-arg>
+					<value>18</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
 
-<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-  <property name="configLocation">
-    <value>classpath:/ehcache-failsafe.xml</value>
-  </property>
-</bean>
 
-<bean id="userCacheBackend" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:/ehcache-failsafe.xml</value>
+		</property>
+	</bean>
+
+	<bean id="userCacheBackend" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
   <property name="cacheManager" ref="cacheManager"/>
   <property name="cacheName" value="userCache"/>  
 </bean>

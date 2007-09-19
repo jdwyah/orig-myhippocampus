@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 public class CryptUtils {
 	private static final Logger log = Logger.getLogger(CryptUtils.class);
-	
+
 	public static String hashString(String password) {
 		String hashword = null;
 		try {
@@ -24,7 +24,7 @@ public class CryptUtils {
 			log.error(e);
 		}
 
-		return pad(hashword,32,'0');
+		return pad(hashword, 32, '0');
 	}
 
 	private static String pad(String s, int length, char pad) {
