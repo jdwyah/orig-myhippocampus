@@ -50,15 +50,18 @@ public interface TopicService {
 
 	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
 
-	Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException;
-
-
 	<T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent) throws HippoBusinessException;
+
 
 	<T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent, int[] lnglat, Date dateCreated) throws HippoBusinessException;
 
+	Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException;
+
+
+	<T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
+			String title, Date date, String data) throws HippoBusinessException;
 
 	void delete(long id) throws HippoBusinessException;
 
@@ -67,8 +70,8 @@ public interface TopicService {
 	void executeAndSaveCommand(AbstractCommand command) throws HippoBusinessException,
 			HippoException;
 
-	List<LocationDTO> getAllLocations();
 
+	List<LocationDTO> getAllLocations();
 
 	List<Meta> getAllMetas();
 
@@ -104,6 +107,10 @@ public interface TopicService {
 	 */
 	List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr);
 
+	List<Topic> getDeleteList(long topicID);
+
+	List<Topic> getMakePublicList(long topicID);
+
 	Topic getForID(long topicID);
 
 	Topic getForNameCaseInsensitive(String string);
@@ -138,6 +145,9 @@ public interface TopicService {
 
 	LinkAndUser getWebLinkForURLAndUser(String url);
 
+	void editVisibility(List<TopicIdentifier> topics, boolean visible)
+			throws HippoBusinessException;
+
 	Occurrence save(Occurrence link);
 
 	Topic save(Topic topic) throws HippoBusinessException;
@@ -148,11 +158,6 @@ public interface TopicService {
 	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
 
 	MindTree saveTree(MindTree tree);
-
-	List<Topic> getDeleteList(long topicID);
-
-	<T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
-			String title, Date date, String data) throws HippoBusinessException;
 
 
 

@@ -651,6 +651,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		t1.addMetaValue(md, date);
 
+
 		t1 = editDAO.save(t1);
 
 		List<TimeLineObj> list = selectDAO.getTimeline(u);
@@ -1175,7 +1176,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		// assertEquals(1,book.getInstances().size());
 
-		editDAO.delete(patriotGames);
+		editDAO.deleteWithChildren(patriotGames);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(2, savedL.size());
@@ -1225,7 +1226,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(1,book.getInstances().size());
 
-		editDAO.delete(patriotGames);
+		editDAO.deleteWithChildren(patriotGames);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(2, savedL.size());
@@ -1283,7 +1284,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(2,book.getInstances().size());
 
-		editDAO.delete(patriotGames);
+		editDAO.deleteWithChildren(patriotGames);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(4, savedL.size());
@@ -1333,7 +1334,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		book = (Topic) selectDAO.getForNameCaseInsensitive(u, D);
 		// assertEquals(1,book.getInstances().size());
 
-		editDAO.delete(book);
+		editDAO.deleteWithChildren(book);
 
 		savedL = selectDAO.getAllTopicIdentifiers(u, false);
 		assertEquals(3, savedL.size());
@@ -1558,7 +1559,7 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 		System.out.println("SAVED 2: " + savedTopic2.getLatestEntry().getTopics().size());
 		System.out.println("saved " + savedTopic2.getOccurenceObjs().size());
 
-		editDAO.delete(savedTopic2.getLatestEntry());
+		editDAO.deleteWithChildren(savedTopic2.getLatestEntry());
 
 
 		Topic savedTopic3 = selectDAO.getForID(u, t.getId());

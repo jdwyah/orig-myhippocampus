@@ -48,8 +48,8 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 		this.occurrence = occurrence;
 		forTopics.add(0, occurrence);
 
-		System.out.println("create saveOCCComand " + forTopics.size() + " Data "
-				+ occurrence.getData());
+		// System.out.println("SaveOccCommand.create saveOCCComand " + forTopics.size() + " Data "
+		// + occurrence.getData());
 		setTopicIDsFromTopics(forTopics);
 	}
 
@@ -69,10 +69,10 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 			setTopic(0, theOcc);
 		}
 
-		System.out.println("SaveOccComm.the occ " + theOcc + " CopyProps");
-
-		System.out.println("SaveOccComm.occ Data" + occurrence.getData() + " "
-				+ occurrence.getDefaultName());
+		// System.out.println("SaveOccComm.the occ " + theOcc + " CopyProps");
+		//
+		// System.out.println("SaveOccComm.occ Data" + occurrence.getData() + " "
+		// + occurrence.getDefaultName());
 
 		// PEND MED ugly
 		// w/o this we only call Occurrence.copyProps, even if our instance is a URI, because the
@@ -80,7 +80,6 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 		// the polymorphic call with visitor pattern.. sigh.
 		//
 		if (occurrence instanceof URI) {
-			System.out.println("SaveOccComm.toURI");
 			URI uri = (URI) occurrence;
 			uri.copyPropsButNotIDIntoParam((URI) theOcc);
 		} else {
@@ -92,11 +91,11 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 
 		for (Iterator iterator = getTopics().iterator(); iterator.hasNext();) {
 			Topic tt = (Topic) iterator.next();
-			System.out.println("SaveOccComm.BaseList " + tt);
+			// System.out.println("SaveOccComm.BaseList " + tt);
 		}
 		for (Iterator iterator = desiredList.iterator(); iterator.hasNext();) {
 			Topic tt = (Topic) iterator.next();
-			System.out.println("SaveOccComm.Desired " + tt);
+			// System.out.println("SaveOccComm.Desired " + tt);
 		}
 
 
@@ -107,17 +106,17 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) iterator.next();
 
 			if (desiredList.contains(toc.getTopic())) {
-				System.out.println("SaveOccComm.remove from desired " + toc.getTopic());
+				// System.out.println("SaveOccComm.remove from desired " + toc.getTopic());
 
 				// remove from need to add list
 				desiredList.remove(toc.getTopic());
 			} else {
 
 				// delete reference
-				System.out.println("SaveOccComm.delete ref to " + toc.getTopic());
+				// System.out.println("SaveOccComm.delete ref to " + toc.getTopic());
 				boolean found = toc.getTopic().removeOcc(theOcc);
 				if (!found) {
-					System.out.println("SaveOccComm.SaveOccCmd Couldn't remove " + theOcc);
+					// System.out.println("SaveOccComm.SaveOccCmd Couldn't remove " + theOcc);
 					throw new HippoException("Couldn't delete " + theOcc);
 				}
 				iterator.remove();
@@ -125,164 +124,36 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 
 		}
 
-		System.out.println("SaveOccComm.fin rem del Left:" + desiredList.size());
+		// System.out.println("SaveOccComm.fin rem del Left:" + desiredList.size());
 
 		// add things left in the forTopics list
 		for (Iterator iterator = desiredList.iterator(); iterator.hasNext();) {
 			Topic toAdd = (Topic) iterator.next();
-			System.out.println("adding " + toAdd);
+			// System.out.println("adding " + toAdd);
 
 			// TODO fix better
 			// not sure why this ever happens, but have found it null in the logs
 			if (toAdd != null) {
 				toAdd.addOccurence(theOcc);
 
-				System.out.println("cont: " + toAdd.getOccurenceObjs().contains(getOccurrence()));
+				// System.out.println("cont: " +
+				// toAdd.getOccurenceObjs().contains(getOccurrence()));
 			}
 		}
 
-		try {
-			System.out.println("SaveOccComm." + getTopic(1));
-			System.out.println("SaveOccComm.contp: "
-					+ getTopic(1).getOccurenceObjs().contains(getOccurrence()));
-			System.out.println("SaveOccComm.occ: " + getOccurrence());
-		} catch (NullPointerException e) {
-			System.out.println("SaveOccComm. ERR NPE");
-		}
+		// try {
+		// System.out.println("SaveOccComm." + getTopic(1));
+		// System.out.println("SaveOccComm.contp: "
+		// + getTopic(1).getOccurenceObjs().contains(getOccurrence()));
+		// System.out.println("SaveOccComm.occ: " + getOccurrence());
+		// } catch (NullPointerException e) {
+		// System.out.println("SaveOccComm. ERR NPE");
+		// }
 
 
 		affected.add(theOcc);
 
 	}
-
-	// // @Override
-	// /**
-	// * This is a bit sqirrley. We can't do a get() on the set, since .equals() compares the data &
-	// * won't find the match.
-	// *
-	// * Use copyProps instead of remove/add to avoid 'Object with ID already associated with
-	// session'
-	// * type errors.
-	// *
-	// * PEND MED. Make this less ugly.
-	// */
-	// public void executeCommand() {
-	//
-	// if (occurrence.getId() != 0) {
-	// Occurrence existing = null;
-	//
-	// List newTopics = new ArrayList();
-	//
-	// // Step 1 Loop through the topics we're to be added to to find an existing reference to
-	// // this occurrence.
-	// //
-	// //
-	// for (Iterator iter = getAddTopics().iterator(); iter.hasNext();) {
-	// Topic topic = (Topic) iter.next();
-	//
-	// // temp, make sure to set higher scoped 'existing'
-	// Occurrence exhist = (Occurrence) SetUtils.getFromSetById(topic.getOccurenceObjs(),
-	// occurrence.getId());
-	//
-	// if (exhist != null) {
-	//
-	// existing = exhist;
-	//
-	// System.out.println("Exist " + topic);
-	// occurrence.copyPropsIntoParam(existing);
-	// } else {
-	// // can't simply add here, because that will NonUniqueObjectException
-	// // (existing && occurence)
-	// // We'll add later, because something should have an existing
-	// System.out.println("NoExisting " + topic);
-	// newTopics.add(topic);
-	// }
-	//
-	// }
-	//
-	// // Add to topics that didn't already have it
-	// //
-	// if (!newTopics.isEmpty()) {
-	// for (Iterator iter = newTopics.iterator(); iter.hasNext();) {
-	// Topic topic = (Topic) iter.next();
-	// if (existing != null) {
-	// topic.addOccurence(existing);
-	// } else {
-	// System.out.println("SaveOccurrenceCommand WARN No existing occurrence");
-	// topic.addOccurence(occurrence);
-	// }
-	//
-	// }
-	// }
-	//
-	//
-	// System.out.println("Do Remove");
-	// for (Iterator iter = getRemoveItems().iterator(); iter.hasNext();) {
-	// Topic inLink = (Topic) iter.next();
-	// System.out.println("still has link" + inLink);
-	// TopicOccurrenceConnector exist2 = (TopicOccurrenceConnector) SetUtils
-	// .getFromSetById(inLink.getOccurences(), occurrence.getId());
-	// boolean r1 = inLink.getOccurences().remove(exist2);
-	// boolean r2 = occurrence.getTopics().remove(inLink);
-	// if (!(r1 && r2)) {
-	// System.out.println("WARN SaveOccurrence Not Removing " + r1 + " " + r2);
-	// }
-	// }
-	//
-	// } else {
-	// for (Iterator iter = getAddTopics().iterator(); iter.hasNext();) {
-	// Topic topic = (Topic) iter.next();
-	// System.out.println("topic add occurrence 1 "
-	// + topic.getOccurenceObjs().contains(occurrence) + " " + topic + " | "
-	// + occurrence);
-	// topic.addOccurence(occurrence);
-	// System.out.println("topic add occurrence 2 "
-	// + topic.getOccurenceObjs().contains(occurrence) + " " + topic + " | "
-	// + occurrence);
-	// }
-	// }
-	//
-	//
-	// // System.out.println("LOOPING over "+occurrence+" topics");
-	//
-	//
-	// /**
-	// * loop over all the topics that the occurrence says it's related too. If those topics don't
-	// * have this occurence already, add it.
-	// *
-	// * Can't do a basic contains() since we're .equals is not operating on ID
-	// */
-	// // for (Iterator iter = occurrence.getTopics().iterator(); iter.hasNext();) {
-	// // Topic topic = (Topic) iter.next();
-	// // System.out.println("found "+topic);
-	// //
-	// // if(null == getFromSetById(topic.getOccurences(), occurrence.getId())){
-	// // System.out.println("Didn't contain "+occurrence+" ADD");
-	// // topic.addOccurrence(occurrence);
-	// // }
-	// // else{
-	// // System.out.println("Contained. do nothing");
-	// // }
-	// // affected.add(topic);
-	// // }
-	// }
-	//
-	// public List getRemoveItems() {
-	// if (removeStartNumber == -1) {
-	// return new ArrayList();
-	// }
-	// // return getTopics().subList(removeStartNumber, getTopics().size());
-	// return subList(getTopics(), removeStartNumber, getTopics().size());
-	// }
-	//
-	// public List getAddTopics() {
-	// if (removeStartNumber == -1) {
-	// return getTopics();
-	// }
-	// // return getTopics().subList(0, removeStartNumber);
-	// return subList(getTopics(), 0, removeStartNumber);
-	// }
-	//
 
 
 
@@ -306,10 +177,6 @@ public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializ
 	public Occurrence getOccurrence() {
 		return (Occurrence) getTopic(0);
 	}
-
-	// public Occurrence getOccurrence() {
-	// return occurrence;
-	// }
 
 
 

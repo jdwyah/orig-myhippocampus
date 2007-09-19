@@ -43,15 +43,16 @@ public class PopupWindow implements CloseListener {
 			frame.setWidth(width);
 			frame.setHeight(height);
 
-			int w = (Window.getClientWidth() - width) / 2;
-			int h = Window.getClientHeight() / 3;
+			int left = Window.getClientWidth() / 2 - width / 2;
+			int top = Window.getClientHeight() / 2 - height / 2;
 
-			// System.out.println("W "+w+" H "+h+" "+Window.getClientWidth()+"
-			// "+Window.getClientHeight());
+			System.out.println("\n\n.W " + left + " H " + top + " " + Window.getClientWidth() + " "
+					+ Window.getClientHeight());
 
-			w = (w < 100) ? 100 : w;
-			h = (h < 100) ? 100 : h;
-			frame.setLocation(w, h);
+			left = (left < 100) ? 100 : left;
+			top = (top < 100) ? 100 : top;
+			System.out.println("SET LOCATION " + left + " " + top);
+			frame.setLocation(top, left);
 		}
 
 		frame.setMinimizable(false);

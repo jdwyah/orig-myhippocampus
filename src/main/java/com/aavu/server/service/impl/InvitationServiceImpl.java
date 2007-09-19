@@ -54,6 +54,9 @@ public class InvitationServiceImpl implements InvitationService {
 	 * 
 	 */
 	public boolean isKeyValid(String randomkey) {
+		if (randomkey == null) {
+			return false;
+		}
 		return (getEntryForKey(randomkey) != null) || randomkey.equals(masterkey)
 				|| isValidTimestampKey(randomkey);
 	}

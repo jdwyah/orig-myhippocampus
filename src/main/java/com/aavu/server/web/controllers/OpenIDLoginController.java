@@ -78,8 +78,7 @@ public class OpenIDLoginController extends AbstractController {
 				return new ModelAndView("redirect:" + redirect);
 
 			} catch (OpenIDConsumerException oice) {
-				log.error("Consumer error!", oice);
-				System.out.println("oice " + oice.getMessage());
+				log.error("Consumer error!" + oice + " " + oice.getMessage());
 
 				Map<String, Object> model = new HashMap<String, Object>();
 				model.put("message", oice.getMessage());

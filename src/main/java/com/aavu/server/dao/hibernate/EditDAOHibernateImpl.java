@@ -59,25 +59,64 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 
 	}
 
-
+	/**
+	 * return a list of all topics that are only tagged with the given topicID, or who's parent
+	 * topic is such. ie, if we delete books, delete all books, unless a book is a child of
+	 * something else. Associations do NOT save you from deletion.
+	 */
 	public List<Topic> getDeleteList(long topicID) {
 		List<Topic> rtn = new ArrayList<Topic>();
 
 		Topic toDelete = (Topic) getHibernateTemplate().get(Topic.class, topicID);
 
-		recurseDelete(rtn, toDelete);
+		// Can't not go all the way. Otherwise we'd orphan things unreachable from the Root
+		recurseChildren(rtn, toDelete, true, 0, Integer.MAX_VALUE);
 
 		return rtn;
 	}
 
-	private void recurseDelete(List<Topic> toDelete, Topic toCheck) {
+	/**
+	 * uses a pretty arbitrary maxDepth because otherwise we could really go down the recursion
+	 * wormhole
+	 * 
+	 * @param topicID
+	 * @return
+	 */
+	public List<Topic> getMakePublicList(long topicID) {
+		List<Topic> rtn = new ArrayList<Topic>();
+
+		Topic makePublicRoot = (Topic) getHibernateTemplate().get(Topic.class, topicID);
+
+		recurseChildren(rtn, makePublicRoot, false, 0, 3);
+
+		return rtn;
+	}
+
+	/**
+	 * 
+	 * @param rtnList
+	 * @param toCheck
+	 * @param recurseWithDeleteStyle
+	 *            onDelete recurse, make sure to check isDeleteable() Moreover, don't add to list
+	 *            unless the parent is unique
+	 * @param depth
+	 * @param maxDepth
+	 */
+	private void recurseChildren(final List<Topic> rtnList, final Topic toCheck,
+			final boolean recurseWithDeleteStyle, final int depth, final int maxDepth) {
+		int curDepth = depth + 1;
+
+		if (curDepth > maxDepth) {
+			return;
+		}
+
 		// prevent infinite loop
-		if (toDelete.contains(toCheck)) {
+		if (rtnList.contains(toCheck)) {
 			return;
 		}
 		// don't delete root or allow a root child with a child of root to end up looping back on
 		// itself
-		if (!toCheck.isDeletable()) {
+		if (recurseWithDeleteStyle && !toCheck.isDeletable()) {
 			return;
 		}
 
@@ -85,25 +124,29 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 			TopicTypeConnector toc = (TopicTypeConnector) iterator.next();
 			Topic child = toc.getTopic();
 
-			if (child.getTypes().size() < 2) {
-				recurseDelete(toDelete, child);
+			for (Iterator iterator2 = child.getTypesAsTopics().iterator(); iterator2.hasNext();) {
+				Topic type = (Topic) iterator2.next();
+			}
+
+			if (!recurseWithDeleteStyle || child.getTypes().size() < 2) {
+				recurseChildren(rtnList, child, recurseWithDeleteStyle, curDepth, maxDepth);
 			}
 		}
 		for (Iterator iterator = toCheck.getOccurenceObjs().iterator(); iterator.hasNext();) {
 			Occurrence occ = (Occurrence) iterator.next();
 
-			if (occ.getTopics().size() < 2) {
-				recurseDelete(toDelete, occ);
+			if (!recurseWithDeleteStyle || occ.getTopics().size() < 2) {
+				recurseChildren(rtnList, occ, recurseWithDeleteStyle, curDepth, maxDepth);
 			}
 		}
 
-		toDelete.add(toCheck);
+		rtnList.add(toCheck);
 	}
 
 	/**
 	 * recursively delete a topic. Use getDeleteList if you want to know what's going to be deleted.
 	 */
-	public void delete(final Topic todelete) {
+	public void deleteWithChildren(final Topic todelete) {
 
 		List<Topic> toDeleteList = getDeleteList(todelete.getId());
 		log.info(" " + todelete + " recurse size " + toDeleteList.size());
@@ -117,7 +160,7 @@ public class EditDAOHibernateImpl extends HibernateDaoSupport implements EditDAO
 	/**
 	 * Do not call delete() unless you know what you're doing, which is just to say, make sure to
 	 * use getDeleteList first, so that you don't leave danglers. This is done by the public
-	 * delete(Topic) method
+	 * deleteWithChildren(Topic) method
 	 * 
 	 * 
 	 */

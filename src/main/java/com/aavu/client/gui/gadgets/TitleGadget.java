@@ -13,6 +13,7 @@ import com.aavu.client.domain.commands.SaveTitleCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.PopupWindow;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ExternalLink;
@@ -32,18 +33,27 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * PEND MED rework and clean up duplicate code
+ * 
+ * @author Jeff Dwyer
+ * 
+ */
 public class TitleGadget extends Gadget {
 
 
 	private EditableLabelExtension titleBox;
 	private Topic topic;
-	private StatusPicker picker;
+	// private StatusPicker picker;
 	private DatePickerInterface datePicker;
 
 	private Image deleteB;
 	private HorizontalPanel uriPanel;
+	private Image sharedB;
 
 	// private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+
 
 	public TitleGadget(final Manager manager) {
 		super(manager);
@@ -107,7 +117,7 @@ public class TitleGadget extends Gadget {
 		titleP.add(new Label(ConstHolder.myConstants.title()));
 		titleP.add(titleBox);
 
-		picker = new StatusPicker(manager);
+		// picker = new StatusPicker(manager);
 
 
 
@@ -120,6 +130,7 @@ public class TitleGadget extends Gadget {
 		 * TODO bringUpChart(desktop?) if curTopic = the one we're deleting
 		 */
 		deleteB = ConstHolder.images.bin_closed().createImage();
+		deleteB.addMouseListener(new TooltipListener(ConstHolder.myConstants.delete()));
 		deleteB.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				manager.getTopicCache().getDeleteList(topic.getId(), new EZCallback() {
@@ -129,16 +140,20 @@ public class TitleGadget extends Gadget {
 
 						List topics = (List) result;
 
+
 						VerticalPanel vp = new VerticalPanel();
 						vp.add(new Label("Will delete:"));
 						for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
 							TopicIdentifier topic = (TopicIdentifier) iterator.next();
 							vp.add(new Label("Title: " + topic.getTopicTitle()));
 						}
-						Button deleteB = new Button("Yes, delete these (" + topics.size()
+						Button confirmDeleteB = new Button("Yes, delete these (" + topics.size()
 								+ ") topic(s).");
-						deleteB.addClickListener(new ClickListener() {
+						confirmDeleteB.addClickListener(new ClickListener() {
 							public void onClick(Widget sender) {
+
+
+
 								manager.delete(topic, new StdAsyncCallback("Delete") {
 									// @Override
 									public void onSuccess(Object result) {
@@ -150,7 +165,7 @@ public class TitleGadget extends Gadget {
 								});
 							}
 						});
-						vp.add(deleteB);
+						vp.add(confirmDeleteB);
 						deleteWindow = manager.displayInfo(vp);
 					}
 				});
@@ -160,6 +175,59 @@ public class TitleGadget extends Gadget {
 			}
 		});
 		titleP.add(deleteB);
+
+
+		sharedB = ConstHolder.images.shared_not().createImage();
+		sharedB.addMouseListener(new TooltipListener(ConstHolder.myConstants.share()));
+		sharedB.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				manager.getTopicCache().getMakePublicList(topic.getId(), new EZCallback() {
+					private PopupWindow editVisWindow;
+
+					public void onSuccess(Object result) {
+
+						final List topics = (List) result;
+
+						String makePublicString = "private";
+						final boolean newVisibility = !topic.isPublicVisible();
+						if (newVisibility) {
+							makePublicString = "public";
+						}
+
+
+						VerticalPanel vp = new VerticalPanel();
+						vp.add(new Label("Make These Topics " + makePublicString + ":"));
+						for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
+							TopicIdentifier topic = (TopicIdentifier) iterator.next();
+							vp.add(new Label("Title: " + topic.getTopicTitle()));
+						}
+						Button confirmMakePublicB = new Button("Yes, make these (" + topics.size()
+								+ ") topic(s) " + makePublicString);
+						confirmMakePublicB.addClickListener(new ClickListener() {
+
+							public void onClick(Widget sender) {
+								manager.getTopicCache().editVisibility(topics, newVisibility,
+										new StdAsyncCallback("Edit Visibility") {
+
+											// @Override
+											public void onSuccess(Object result) {
+												super.onSuccess(result);
+												topic.setPublicVisible(newVisibility);
+												load(topic);
+												editVisWindow.close();
+											}
+										});
+							}
+						});
+						vp.add(confirmMakePublicB);
+						editVisWindow = manager.displayInfo(vp);
+					}
+				});
+			}
+		});
+		titleP.add(sharedB);
+
+		titleP.addStyleName("H-TitleGadgetOptions");
 
 
 
@@ -200,7 +268,13 @@ public class TitleGadget extends Gadget {
 		// don't let them delete Root
 		deleteB.setVisible(topic.isDeletable());
 
-		picker.load(topic);
+		if (topic.isPublicVisible()) {
+			ConstHolder.images.shared().applyTo(sharedB);
+		} else {
+			ConstHolder.images.shared_not().applyTo(sharedB);
+		}
+
+		// picker.load(topic);
 
 		datePicker.setSelectedDate(topic.getCreated());
 		// datePicker.setCurrentDate(topic.getCreated());

@@ -13,9 +13,15 @@ public interface EditDAO {
 
 	void changeState(Topic t, boolean toIsland);
 
-	void delete(Topic topic);
+	void deleteWithChildren(Topic topic);
 
 	void evict(Serializable obj);
+
+	List<Topic> getDeleteList(long topicID);
+
+	List<Topic> getMakePublicList(long topicID);
+
+	Topic merge(Topic t);
 
 	MindTree save(MindTree tree);
 
@@ -23,17 +29,13 @@ public interface EditDAO {
 
 	Topic save(Topic t) throws HippoBusinessException;
 
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng, User currentUser)
+			throws HippoBusinessException;
+
 	Long saveSimple(Topic t);
 
 	void saveTopicsLocation(long tagID, long topicID, int latitude, int longitude, User currentUser)
 			throws HippoBusinessException;
-
-	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng, User currentUser)
-			throws HippoBusinessException;
-
-	List<Topic> getDeleteList(long topicID);
-
-	Topic merge(Topic t);
 
 
 

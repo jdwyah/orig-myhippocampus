@@ -72,9 +72,13 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 	 */
 	public void addFrame(GInternalFrame internalFrame) {
 		internalFrame.setDesktopPane(this);
-		int spos = (frames.size() + 1) * 30;
+		int spos = (frames.size() + 1) * 12;
 		int left = getFrame().getAbsoluteLeft() + spos;
 		int top = getFrame().getAbsoluteTop() + spos;
+
+		System.out.println("add frame gf.absleft " + getFrame().getAbsoluteLeft() + " gf.abstop "
+				+ getFrame().getAbsoluteTop() + " " + spos);
+
 		SelectBoxManagerImpl selectBoxManager = ((DefaultGFrame) internalFrame)
 				.getSelectBoxManager();
 		if (selectBoxManager instanceof SelectBoxManagerImplIE6) {

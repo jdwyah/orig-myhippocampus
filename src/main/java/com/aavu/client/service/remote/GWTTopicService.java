@@ -30,6 +30,11 @@ public interface GWTTopicService extends RemoteService {
 
 	void delete(long id) throws HippoException;
 
+	/**
+	 * @gwt.typeArgs topics <com.aavu.client.domain.dto.TopicIdentifier>
+	 */
+	void editVisibility(List topics, boolean visible) throws HippoException;
+
 	// List <LocationDTO>
 	/**
 	 * @gwt.typeArgs <com.aavu.client.domain.dto.LocationDTO>
@@ -52,6 +57,13 @@ public interface GWTTopicService extends RemoteService {
 	 * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
 	 */
 	List getDeleteList(long id) throws HippoException;
+
+	/**
+	 * @throws HippoException
+	 * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
+	 */
+	List getMakePublicList(long id) throws HippoException;
+
 
 
 	// List<TimeLineObj>

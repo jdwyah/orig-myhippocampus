@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
@@ -184,9 +185,13 @@ public class TopicCache {
 
 	}
 
-	public void delete(Topic topic, StdAsyncCallback callback) {
+	public void delete(Topic topic, AsyncCallback callback) {
 		topicService.delete(topic.getId(), callback);
 		// TODO update after delete
+	}
+
+	public void editVisibility(List topicIDs, boolean visibility, AsyncCallback callback) {
+		topicService.editVisibility(topicIDs, visibility, callback);
 	}
 
 	/**
@@ -241,12 +246,20 @@ public class TopicCache {
 		topicService.getAllTopicIdentifiers(start, max, startStr, callback);
 	}
 
+	public void getDeleteList(long id, AsyncCallback callback) {
+		topicService.getDeleteList(id, callback);
+	}
+
 	public void getLinksTo(Topic topic2, StdAsyncCallback callback) {
 		topicService.getLinksTo(topic2, callback);
 	}
 
 	public void getLocationsFor(List shoppingList, AsyncCallback callback) {
 		topicService.getLocationsForTags(shoppingList, callback);
+	}
+
+	public void getMakePublicList(long id, EZCallback callback) {
+		topicService.getMakePublicList(id, callback);
 	}
 
 	public void getRootTopic(User user, AsyncCallback callback) {
@@ -348,10 +361,6 @@ public class TopicCache {
 
 	public void search(String text, StdAsyncCallback callback) {
 		topicService.search(text, callback);
-	}
-
-	public void getDeleteList(long id, AsyncCallback callback) {
-		topicService.getDeleteList(id, callback);
 	}
 
 	//

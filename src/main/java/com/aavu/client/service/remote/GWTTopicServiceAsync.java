@@ -10,10 +10,12 @@ import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.mapper.MindTree;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+/**
+ * remember, these MUST BE VOID! returns
+ */
 public interface GWTTopicServiceAsync {
 
-	// remember, these MUST BE VOID! returns
-	//
+
 
 	void changeState(long topicID, boolean toIsland, AsyncCallback callback);
 
@@ -27,16 +29,29 @@ public interface GWTTopicServiceAsync {
 
 	void delete(long id, AsyncCallback callback);
 
+	void editVisibility(List topics, boolean visible, AsyncCallback callback);
+
+	void getAllLocations(AsyncCallback callback);
+
 	void getAllMetas(AsyncCallback callback);
 
 	// List<DatedTopicIdentifiers>
 	void getAllTopicIdentifiers(int start, int max, String startStr, AsyncCallback callback);
 
+	// List TimeLineObj
+	// void getTimelineObjs(long tag_id, AsyncCallback callback);
+
+	void getDeleteList(long id, AsyncCallback callback);
+
 	// List<TopicIdentifier>
 	void getLinksTo(Topic topic, AsyncCallback callback);
 
-	// List TimeLineObj
-	// void getTimelineObjs(long tag_id, AsyncCallback callback);
+	void getLocationsForTags(List shoppingList, AsyncCallback callback);
+
+	void getMakePublicList(long id, AsyncCallback callback);
+
+	// Root
+	void getRootTopic(User forUser, AsyncCallback callback);
 
 	void getTagStats(AsyncCallback callback);
 
@@ -58,9 +73,6 @@ public interface GWTTopicServiceAsync {
 	// List<TopicIdentifier>
 	void getTopicsWithTags(List shoppingList, AsyncCallback callback);
 
-	// Root
-	void getRootTopic(User forUser, AsyncCallback callback);
-
 	// MindTree
 	void getTree(MindTreeOcc occ, AsyncCallback callback);
 
@@ -70,7 +82,14 @@ public interface GWTTopicServiceAsync {
 	// void getTopicsStarting(String match, AsyncCallback callback);
 	void match(String match, AsyncCallback callback);
 
+
+
+	// void test(C c, AsyncCallback callback);
+
 	void saveCommand(AbstractCommand command, AsyncCallback callback);
+
+	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng,
+			AsyncCallback callback);
 
 	void saveTopicLocation(long tagId, long topicId, int lat, int lng, AsyncCallback callback);
 
@@ -79,17 +98,4 @@ public interface GWTTopicServiceAsync {
 
 	// List<SearchResult>
 	void search(String searchString, AsyncCallback callback);
-
-
-
-	// void test(C c, AsyncCallback callback);
-
-	void getAllLocations(AsyncCallback callback);
-
-	void getLocationsForTags(List shoppingList, AsyncCallback callback);
-
-	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng,
-			AsyncCallback callback);
-
-	void getDeleteList(long id, AsyncCallback callback);
 }

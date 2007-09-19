@@ -17,7 +17,7 @@
 
   	<#macro acre left top color num type>
   		<div class="acre" style="left: ${left}px; top: ${top}px;">
-    		<@common.pngImage src="../img/simplicity/type120px_${color}_${num}_${type}.png" width="120" height="120"/>
+    		<@common.pngImage src="/img/simplicity/type120px_${color}_${num}_${type}.png" width="120" height="120"/>
 		</div>
 	</#macro>
   

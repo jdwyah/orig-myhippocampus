@@ -24,7 +24,7 @@ import com.aavu.server.service.UserService;
 public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 	private static final Logger log = Logger.getLogger(GWTTopicServiceImplTest.class);
 
-	private GWTTopicService topicService;
+	private GWTTopicService gwtTopicService;
 	private UserDAO userDAO;
 	private SelectDAO selectDAO;
 	private EditDAO editDAO;
@@ -43,7 +43,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 	}
 
 	public void setTopicService(GWTTopicService topicService) {
-		this.topicService = topicService;
+		this.gwtTopicService = topicService;
 	}
 
 	public void setSelectDAO(SelectDAO SelectDAO) {
@@ -190,7 +190,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 		editDAO.save(book);
 
 
-		Topic savePatriot = topicService.getTopicForName(C);
+		Topic savePatriot = gwtTopicService.getTopicForName(C);
 		Topic savedBook = (Topic) savePatriot.getTags().iterator().next();
 
 
@@ -216,7 +216,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 		// this is the important one
 		// assertEquals(1, savedBook3.getInstances().size());
 
-		Topic reloadedBook = topicService.getTopicForName(D);
+		Topic reloadedBook = gwtTopicService.getTopicForName(D);
 		// assertEquals(1, reloadedBook.getInstances().size());
 
 	}
@@ -227,7 +227,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 		shoppingList.add(new TopicIdentifier(35, "foo"));
 
 
-		List<List<FullTopicIdentifier>> rtn = topicService.getTimelineWithTags(shoppingList);
+		List<List<FullTopicIdentifier>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);
 
 		for (List<FullTopicIdentifier> ftis : rtn) {
 			for (FullTopicIdentifier identifier : ftis) {
@@ -238,5 +238,20 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 		assertNotNull(rtn);
 	}
 
+	public void testAOPProxying() throws HippoException {
 
+		List<TopicIdentifier> shoppingList = new ArrayList<TopicIdentifier>();
+		shoppingList.add(new TopicIdentifier(35, "foo"));
+
+
+		List<List<FullTopicIdentifier>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);
+
+		for (List<FullTopicIdentifier> ftis : rtn) {
+			for (FullTopicIdentifier identifier : ftis) {
+				log.debug(identifier);
+			}
+		}
+
+		assertNotNull(rtn);
+	}
 }

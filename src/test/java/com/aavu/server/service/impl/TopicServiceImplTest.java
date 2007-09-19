@@ -237,7 +237,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		// only children or subchildren of movies
 		addToMap(rtn, gladiator, movies);
 		addToMap(rtn, crowe, gladiator);
-		addToMap(rtn, australia, gladiator);
+		addToMap(rtn, australia, crowe);
 
 		// tagged to other root tags
 		addToMap(rtn, daschelle, gladiator);
@@ -452,10 +452,13 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 
 
 		willBeDeleted = topicService.getDeleteList(map.get(comics).getId());
+		for (Topic topic : willBeDeleted) {
+			log.info("Will Delete: " + willBeDeleted);
+		}
 		assertEquals(1, willBeDeleted.size());
 
 		willBeDeleted = topicService.getDeleteList(map.get(crowe).getId());
-		assertEquals(2, willBeDeleted.size());
+		assertEquals(3, willBeDeleted.size());
 
 		willBeDeleted = topicService.getDeleteList(map.get(movies).getId());
 		assertEquals(5, willBeDeleted.size());
@@ -468,6 +471,41 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		Root r = topicService.getRootTopic(u);
 		willBeDeleted = topicService.getDeleteList(r.getId());
 		assertEquals(0, willBeDeleted.size());
+
+
+	}
+
+	public void testVisibilityConfirm() throws HippoException {
+
+		clean();
+
+		Map<String, Topic> map = bigSetup();
+
+		assertEquals(9, map.size());
+
+		List<Topic> willBeVisibilityChanged = topicService.getMakePublicList(map.get(xmen).getId());
+		assertEquals(1, willBeVisibilityChanged.size());
+
+
+		willBeVisibilityChanged = topicService.getMakePublicList(map.get(comics).getId());
+		assertEquals(2, willBeVisibilityChanged.size());
+
+		System.out.println("----------------");
+		willBeVisibilityChanged = topicService.getMakePublicList(map.get(crowe).getId());
+
+		assertEquals(4, willBeVisibilityChanged.size());
+
+		willBeVisibilityChanged = topicService.getMakePublicList(map.get(movies).getId());
+		assertEquals(5, willBeVisibilityChanged.size());
+
+		for (Topic topic : willBeVisibilityChanged) {
+			log.info("Will Be Vis Changed: " + topic);
+		}
+
+		// everything but the deep Topic
+		Root r = topicService.getRootTopic(u);
+		willBeVisibilityChanged = topicService.getMakePublicList(r.getId());
+		assertEquals(9, willBeVisibilityChanged.size());
 
 
 	}

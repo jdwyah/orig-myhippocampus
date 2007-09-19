@@ -467,4 +467,6 @@ public interface Consts extends Messages {
 
 	String hippodate_new();
 
+	String share();
+
 }

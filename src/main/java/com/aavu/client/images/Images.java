@@ -168,5 +168,13 @@ public interface Images extends ImageBundle {
 	 */
 	AbstractImagePrototype gDocumentTimeline();
 
+	/**
+	 * @gwt.resource shared_not.png
+	 */
+	AbstractImagePrototype shared_not();
 
+	/**
+	 * @gwt.resource shared.png
+	 */
+	AbstractImagePrototype shared();
 }

@@ -351,7 +351,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	public void delete(Topic topic) throws HippoBusinessException {
 		if (userService.getCurrentUser().equals(topic.getUser())) {
 
-			editDAO.delete(topic);
+			editDAO.deleteWithChildren(topic);
 
 			// TODO delete S3Files
 			// TODO delete Weblinks that were only referenced by us
@@ -380,6 +380,21 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		}
 	}
 
+	/**
+	 * PEND MED efficiency
+	 * 
+	 * @param topics
+	 * @param visible
+	 * @throws HippoBusinessException
+	 */
+	public void editVisibility(List<TopicIdentifier> topics, boolean visible)
+			throws HippoBusinessException {
+		for (TopicIdentifier topicIdentifier : topics) {
+			Topic t = getForID(topicIdentifier.getTopicID());
+			t.setPublicVisible(visible);
+			save(t);
+		}
+	}
 
 	/**
 	 * 1) Hydrate. prepar the command. change the long id's into loaded hibernate objects. 2)
@@ -428,6 +443,10 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 	public List<Topic> getDeleteList(long topicID) {
 		return editDAO.getDeleteList(topicID);
+	}
+
+	public List<Topic> getMakePublicList(long topicID) {
+		return editDAO.getMakePublicList(topicID);
 	}
 
 	public Topic getForID(long topicID) {
@@ -591,6 +610,8 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		}
 	}
 
+
+
 	public Occurrence save(Occurrence link) {
 		link.setUser(userService.getCurrentUser());
 		link.setLastUpdated(new Date());
@@ -609,6 +630,11 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 	private Topic save(Topic topic, boolean guaranteedNotDupe, User user)
 			throws HippoBusinessException {
+
+		if (topic == null) {
+			return null;
+		}
+
 		if (!topic.usesLastUpdated()) {
 			topic.setLastUpdated(new Date());
 		}

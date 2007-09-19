@@ -177,7 +177,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 		Topic t = selectDAO.getForNameCaseInsensitive(u, A);
 		assertEquals(A, t.getTitle());
 
-		editDAO.delete(t);
+		editDAO.deleteWithChildren(t);
 
 		List<TopicTypeConnector> list = selectDAO.getRootTopics(u, u);
 

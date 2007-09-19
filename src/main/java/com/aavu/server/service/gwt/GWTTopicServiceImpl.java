@@ -38,7 +38,11 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * 
 	 * This means; 1) Change org.hibernate.collection.PersistentList to java.util.ArrayList -because
 	 * GWT can't handle 2) Initialize an "proxy" objects. We can't have any lazy references! Even if
-	 * we won't peek on the client. We can't transfer these it seems.
+	 * we won't peek on the client. We can't transfer these it seems. Google's AuthSub is a nice
+	 * solution to some of these issues. I found it easy to authorize and import Google Docs without
+	 * seeing a user's credentials or resorting to the 'benevolent phishing' maneuver.
+	 * 
+	 * http://code.google.com/apis/accounts/AuthForWebApps.html
 	 * 
 	 * @param t
 	 * @return
@@ -193,6 +197,17 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 	public void delete(long id) throws HippoException {
 		topicService.delete(id);
+	}
+
+	public void editVisibility(List<TopicIdentifier> topics, boolean visible) throws HippoException {
+
+		try {
+			topicService.editVisibility(topics, visible);
+		} catch (Exception e) {
+			log.error("FAILURE: " + e);
+			e.printStackTrace();
+			throw new HippoException(e);
+		}
 	}
 
 	public List getAllLocations() throws HippoException {
@@ -453,7 +468,22 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			throw new HippoException(e.getMessage());
 		}
 	}
+
+	/**
+	 * had a problem with CGLIB if we return topics
+	 */
+	public List getMakePublicList(long id) throws HippoException {
+		try {
+			return convertTopicToTIArray(topicService.getMakePublicList(id));
+		} catch (Exception e) {
+			log.error("FAILURE: " + e);
+			e.printStackTrace();
+			throw new HippoException(e.getMessage());
+		}
+	}
 	// public C test(C c) {
 	// return c;
 	// }
+
+
 }
