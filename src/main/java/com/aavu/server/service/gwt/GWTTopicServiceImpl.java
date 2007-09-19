@@ -199,7 +199,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		topicService.delete(id);
 	}
 
-	public void editVisibility(List<TopicIdentifier> topics, boolean visible) throws HippoException {
+	public void editVisibility(List topics, boolean visible) throws HippoException {
 
 		try {
 			topicService.editVisibility(topics, visible);

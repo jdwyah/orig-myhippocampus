@@ -1,8 +1,11 @@
 package com.aavu.client.gui.gadgets;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
@@ -26,10 +29,13 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -143,9 +149,10 @@ public class TitleGadget extends Gadget {
 
 						VerticalPanel vp = new VerticalPanel();
 						vp.add(new Label("Will delete:"));
+						VerticalPanel insidePanel = new VerticalPanel();
 						for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
 							TopicIdentifier topic = (TopicIdentifier) iterator.next();
-							vp.add(new Label("Title: " + topic.getTopicTitle()));
+							insidePanel.add(new Label("Title: " + topic.getTopicTitle()));
 						}
 						Button confirmDeleteB = new Button("Yes, delete these (" + topics.size()
 								+ ") topic(s).");
@@ -165,6 +172,9 @@ public class TitleGadget extends Gadget {
 								});
 							}
 						});
+						ScrollPanel scrollP = new ScrollPanel(insidePanel);
+						scrollP.setHeight("300px");
+						vp.add(scrollP);
 						vp.add(confirmDeleteB);
 						deleteWindow = manager.displayInfo(vp);
 					}
@@ -196,17 +206,48 @@ public class TitleGadget extends Gadget {
 
 
 						VerticalPanel vp = new VerticalPanel();
+						Grid insidePanel = new Grid(topics.size(), 2);
+
 						vp.add(new Label("Make These Topics " + makePublicString + ":"));
+
+						final Map checkBoxes = new HashMap();
+						int row = 0;
 						for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
 							TopicIdentifier topic = (TopicIdentifier) iterator.next();
-							vp.add(new Label("Title: " + topic.getTopicTitle()));
+
+							CheckBox cb = new CheckBox("Title: " + topic.getTopicTitle());
+							cb.setChecked(true);
+
+							if (topic.isPublicVisible()) {
+								insidePanel.setWidget(row, 0, ConstHolder.images.shared()
+										.createImage());
+							} else {
+								insidePanel.setWidget(row, 0, ConstHolder.images.shared_not()
+										.createImage());
+							}
+
+							insidePanel.setWidget(row, 1, cb);
+
+							checkBoxes.put(cb, topic);
+							row++;
 						}
-						Button confirmMakePublicB = new Button("Yes, make these (" + topics.size()
-								+ ") topic(s) " + makePublicString);
+						Button confirmMakePublicB = new Button("Yes, make the checked topics "
+								+ makePublicString);
 						confirmMakePublicB.addClickListener(new ClickListener() {
 
 							public void onClick(Widget sender) {
-								manager.getTopicCache().editVisibility(topics, newVisibility,
+
+								List tisToSend = new ArrayList();
+								for (Iterator iterator2 = checkBoxes.keySet().iterator(); iterator2
+										.hasNext();) {
+									CheckBox cb = (CheckBox) iterator2.next();
+									TopicIdentifier ti = (TopicIdentifier) checkBoxes.get(cb);
+									if (cb.isChecked()) {
+										tisToSend.add(ti);
+									}
+								}
+
+								manager.getTopicCache().editVisibility(tisToSend, newVisibility,
 										new StdAsyncCallback("Edit Visibility") {
 
 											// @Override
@@ -219,6 +260,9 @@ public class TitleGadget extends Gadget {
 										});
 							}
 						});
+						ScrollPanel scrollP = new ScrollPanel(insidePanel);
+						scrollP.setHeight("300px");
+						vp.add(scrollP);
 						vp.add(confirmMakePublicB);
 						editVisWindow = manager.displayInfo(vp);
 					}
@@ -267,6 +311,8 @@ public class TitleGadget extends Gadget {
 
 		// don't let them delete Root
 		deleteB.setVisible(topic.isDeletable());
+		//
+		sharedB.setVisible(topic.isPublicVisibleEditable());
 
 		if (topic.isPublicVisible()) {
 			ConstHolder.images.shared().applyTo(sharedB);

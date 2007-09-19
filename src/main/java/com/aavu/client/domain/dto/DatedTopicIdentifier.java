@@ -10,8 +10,9 @@ public class DatedTopicIdentifier extends TopicIdentifier {
 	public DatedTopicIdentifier() {
 	}
 
-	public DatedTopicIdentifier(long topicID, String topicTitle, Date created, Date lastUpdated) {
-		super(topicID, topicTitle);
+	public DatedTopicIdentifier(long topicID, String topicTitle, Date created, Date lastUpdated,
+			boolean publicVisible) {
+		super(topicID, topicTitle, publicVisible);
 		this.created = created;
 		this.lastUpdated = lastUpdated;
 	}

@@ -224,7 +224,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 	public void testTimeline() throws HippoException {
 
 		List<TopicIdentifier> shoppingList = new ArrayList<TopicIdentifier>();
-		shoppingList.add(new TopicIdentifier(35, "foo"));
+		shoppingList.add(new TopicIdentifier(35, "foo", false));
 
 
 		List<List<FullTopicIdentifier>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);
@@ -241,7 +241,7 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 	public void testAOPProxying() throws HippoException {
 
 		List<TopicIdentifier> shoppingList = new ArrayList<TopicIdentifier>();
-		shoppingList.add(new TopicIdentifier(35, "foo"));
+		shoppingList.add(new TopicIdentifier(35, "foo", false));
 
 
 		List<List<FullTopicIdentifier>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);

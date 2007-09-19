@@ -3,27 +3,24 @@ package com.aavu.client;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.service.MindscapeManager;
-import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class MyMindscape extends AbstractClientApp implements HistoryListener {
+public class UserClientApp extends AbstractClientApp implements HistoryListener {
 
-	public static final String EMPTY = "-1";
+
 
 	public static final String LOCAL_HOST = "http://localhost:8080/";
 	public static final String REMOTE_HOST = "http://www.myhippocampus.com/";
 	public static final String MAIN_DIV = "slot1";
 
 	private MindscapeManager manager;
-	private static boolean have_initted_semaphore = false;
+
 
 	private void loadGUI(Widget widget) {
 		RootPanel.get("loading").setVisible(false);
@@ -46,39 +43,13 @@ public class MyMindscape extends AbstractClientApp implements HistoryListener {
 	 * 
 	 * 
 	 */
-	public MyMindscape() {
-
-		try {
-			System.out.println("Module load " + have_initted_semaphore + " " + this);
-			if (!have_initted_semaphore) {
-
-				have_initted_semaphore = true;
-				System.out.println("set to " + have_initted_semaphore);
-
-				initServices();
-
-				setMeUp();
-
-			}
-
-		} catch (Exception e) {
-			Logger.log("e: " + e);
-
-			e.printStackTrace();
-
-			VerticalPanel panel = new VerticalPanel();
-
-			panel.add(new Label("Error"));
-			panel.add(new Label(e.getMessage()));
-
-			RootPanel.get("loading").setVisible(false);
-			RootPanel.get("slot1").add(panel);
-
-		}
+	public UserClientApp() {
+		super();
 
 	}
 
-	private void setMeUp() {
+	// @Override
+	protected void setMeUp() {
 		manager = new MindscapeManager(getHippoCache());
 
 		// static service setters.

@@ -7,15 +7,17 @@ public class TopicIdentifier implements HippoIdentifier, IsSerializable, Compara
 
 	private long topicID;
 	private String topicTitle;
+	private boolean publicVisible;
 
 
 	public TopicIdentifier() {
 	}
 
-	public TopicIdentifier(long topicID, String topicTitle) {
+	public TopicIdentifier(long topicID, String topicTitle, boolean publicVisible) {
 		super();
 		this.topicID = topicID;
 		this.topicTitle = topicTitle;
+		this.publicVisible = publicVisible;
 	}
 
 
@@ -33,6 +35,14 @@ public class TopicIdentifier implements HippoIdentifier, IsSerializable, Compara
 
 	public void setTopicTitle(String topicTitle) {
 		this.topicTitle = topicTitle;
+	}
+
+	public boolean isPublicVisible() {
+		return publicVisible;
+	}
+
+	public void setPublicVisible(boolean publicVisible) {
+		this.publicVisible = publicVisible;
 	}
 
 	public String toString() {

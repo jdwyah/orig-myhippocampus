@@ -11,6 +11,7 @@ public class TagStat implements IsSerializable, TagInfo {
 	private String tagName;
 	private int latitude;
 	private int longitude;
+	private boolean publicVisible;
 
 	public TagStat() {
 	}
@@ -22,15 +23,18 @@ public class TagStat implements IsSerializable, TagInfo {
 		this.tagName = t.getTitle();
 		this.latitude = t.getLatitude();
 		this.longitude = t.getLongitude();
+		this.publicVisible = t.isPublicVisible();
 	}
 
-	public TagStat(long tagId, int numberOfTopics, String tagName, int latitude, int longitude) {
+	public TagStat(long tagId, int numberOfTopics, String tagName, int latitude, int longitude,
+			boolean publicVisible) {
 		super();
 		this.tagId = tagId;
 		this.numberOfTopics = numberOfTopics;
 		this.tagName = tagName;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.publicVisible = publicVisible;
 	}
 
 
@@ -78,7 +82,7 @@ public class TagStat implements IsSerializable, TagInfo {
 
 
 	public TopicIdentifier getTopicIdentifier() {
-		return new TopicIdentifier(tagId, tagName);
+		return new TopicIdentifier(tagId, tagName, publicVisible);
 	}
 
 

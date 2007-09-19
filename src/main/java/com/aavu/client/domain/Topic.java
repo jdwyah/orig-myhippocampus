@@ -370,7 +370,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	}
 
 	public TopicIdentifier getIdentifier() {
-		return new TopicIdentifier(getId(), getTitle());
+		return new TopicIdentifier(getId(), getTitle(), isPublicVisible());
 	}
 
 	public String toPrettyString() {
@@ -983,6 +983,15 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * @return
 	 */
 	public boolean isDeletable() {
+		return true;
+	}
+
+	/**
+	 * Overriden by Root so that we don't let them go too wild
+	 * 
+	 * @return
+	 */
+	public boolean isPublicVisibleEditable() {
 		return true;
 	}
 

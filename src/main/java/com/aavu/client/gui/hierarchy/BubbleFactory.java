@@ -9,11 +9,18 @@ import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
+import com.google.gwt.user.client.ui.Image;
 
 public class BubbleFactory {
 
 	public static TopicDisplayObj createBubbleFor(FullTopicIdentifier fti, HierarchyDisplay display) {
-		return new TopicBubble(fti, display);
+		if (fti.isPublicVisible()) {
+			return new TopicBubble(fti, new Image(ImageHolder.getImgLoc("hierarchy/")
+					+ "ball_white_shared.png"), display);
+		} else {
+			return new TopicBubble(fti, new Image(ImageHolder.getImgLoc("hierarchy/")
+					+ "ball_white.png"), display);
+		}
 	}
 
 	public static TopicDisplayObj createBubbleFor(TopicOccurrenceConnector owl,

@@ -226,10 +226,11 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 					// username...
 					if (text == null) {
 						res = new SearchResult(topicID.getTopicID(), defaultCompassHit.getScore(),
-								topicID.getTopicTitle(), null);
+								topicID.getTopicTitle(), null, topicID.isPublicVisible());
 					} else {
 						res = new SearchResult(topicID.getTopicID(), defaultCompassHit.getScore(),
-								topicID.getTopicTitle(), text.getHighlightedText("text"));
+								topicID.getTopicTitle(), text.getHighlightedText("text"), topicID
+										.isPublicVisible());
 					}
 				}
 			} else if (obj instanceof URI) {
@@ -242,13 +243,13 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 					// TODO what if it has multiple refs?
 					TopicIdentifier topicID = topicIDList.get(0);
 					res = new SearchResult(topicID.getTopicID(), defaultCompassHit.getScore(), uri
-							.getTitle(), uri.getData());
+							.getTitle(), uri.getData(), topicID.isPublicVisible());
 				}
 			} else if (obj instanceof RealTopic) {
 				RealTopic top = (RealTopic) obj;
 
 				res = new SearchResult(top.getId(), defaultCompassHit.getScore(), top.getTitle(),
-						null);
+						null, top.isPublicVisible());
 
 				// // TODO doesn't work!! need to exclude in cpm. Returning as a Topic.class
 				// // TODO messy. Maybe we need TopLevelTopic.class?

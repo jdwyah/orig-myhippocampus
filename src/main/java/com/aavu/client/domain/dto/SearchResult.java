@@ -8,16 +8,18 @@ public class SearchResult implements IsSerializable {
 	private String title;
 	private String text;
 	private float score;
+	private boolean publicVisible;
 
 	public SearchResult() {
 	}
 
-	public SearchResult(long topicID, float score, String title, String text) {
+	public SearchResult(long topicID, float score, String title, String text, boolean publicVisible) {
 		super();
 		this.topicID = topicID;
 		this.score = score;
 		this.title = title;
 		this.text = text;
+		this.publicVisible = publicVisible;
 	}
 
 	public String getText() {
@@ -57,7 +59,7 @@ public class SearchResult implements IsSerializable {
 	}
 
 	public TopicIdentifier getTopicIdentifier() {
-		return new TopicIdentifier(topicID, title);
+		return new TopicIdentifier(topicID, title, publicVisible);
 	}
 
 }

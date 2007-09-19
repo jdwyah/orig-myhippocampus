@@ -22,6 +22,7 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.gadgets.GadgetPopup;
+import com.aavu.client.gui.ocean.MainMap;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.service.cache.TopicCache;
@@ -236,5 +237,31 @@ public class AddLinkManager implements Manager, CloseListener {
 		// TODO Auto-generated method stub
 
 	}
+
+	public void showHelp() {
+
+	}
+
+	public void setMap(MainMap mainMap) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Widget getRootWidget() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void gotoTopic(String historyToken) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setup(String caller) {
+		// TODO Auto-generated method stub
+
+	}
+
+
 
 }

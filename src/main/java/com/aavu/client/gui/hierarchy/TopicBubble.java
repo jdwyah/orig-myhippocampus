@@ -11,7 +11,6 @@ import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.DblClickListener;
 import com.aavu.client.gui.ext.FocusPanelExt;
-import com.aavu.client.gui.ocean.dhtmlIslands.ImageHolder;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -20,9 +19,9 @@ public class TopicBubble extends AbstractBubbleParent implements TopicDisplayObj
 
 	private FullTopicIdentifier fti;
 
-	public TopicBubble(FullTopicIdentifier fti, HierarchyDisplay display) {
-		super(fti.getLongitudeOnIsland(), fti.getLatitudeOnIsland(), fti.getTopicTitle(),
-				new Image(ImageHolder.getImgLoc("hierarchy/") + "ball_white.png"), display);
+	public TopicBubble(FullTopicIdentifier fti, Image image, HierarchyDisplay display) {
+		super(fti.getLongitudeOnIsland(), fti.getLatitudeOnIsland(), fti.getTopicTitle(), image,
+				display);
 
 		this.fti = fti;
 

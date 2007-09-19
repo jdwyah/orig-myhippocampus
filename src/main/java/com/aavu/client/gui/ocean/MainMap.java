@@ -28,7 +28,7 @@ import com.aavu.client.gui.gadgets.GadgetDisplayerPopupImpl;
 import com.aavu.client.gui.glossary.Glossary;
 import com.aavu.client.gui.hierarchy.HierarchyDisplay;
 import com.aavu.client.gui.maps.BigMap;
-import com.aavu.client.service.MindscapeManager;
+import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.Window;
@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class MainMap extends HippoDesktopPane implements GUIManager {
 
 
-	private MindscapeManager manager;
+	private Manager manager;
 	// private TagSearch tagSearch;
 
 	private SpatialDisplay spatialDisplay;
@@ -76,7 +76,7 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	// private GInternalFrame activeFrame;
 	// private String theme;
 
-	public MainMap(final MindscapeManager manager) {
+	public MainMap(final Manager manager) {
 		super();
 		this.manager = manager;
 
@@ -133,7 +133,7 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 
 		mainP.add(statusPanel);
 
-		zoomer = new Zoomer(manager);
+		zoomer = new Zoomer(this);
 		mainP.add(zoomer);
 
 

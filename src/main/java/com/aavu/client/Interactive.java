@@ -69,12 +69,12 @@ public class Interactive implements EntryPoint {
 			String page = theme.get("page");
 
 			if (page.equals("MyMindscape")) {
-				MyMindscape m = new MyMindscape();
+				UserClientApp m = new UserClientApp();
 			} else if (page.equals("AddLink")) {
 				AddLink addLink = new AddLink();
 
 			} else if (page.equals("HippocampusBrowser")) {
-				HippocampusBrowser browser = new HippocampusBrowser(theme.get("user"), theme
+				BrowserClientApp browser = new BrowserClientApp(theme.get("user"), theme
 						.get("topic"));
 
 			} else {

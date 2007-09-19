@@ -18,6 +18,7 @@ import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetManager;
 import com.aavu.client.gui.gadgets.GadgetPopup;
+import com.aavu.client.gui.ocean.MainMap;
 import com.aavu.client.service.cache.TopicCache;
 import com.aavu.client.service.remote.GWTExternalServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -83,6 +84,16 @@ public interface Manager {
 	void updateStatus(int myNum, String string, StatusCode fail);
 
 	void userNeedsToUpgrade();
+
+	void showHelp();
+
+	void setMap(MainMap mainMap);
+
+	Widget getRootWidget();
+
+	void gotoTopic(String historyToken);
+
+	void setup(String caller);
 
 	// void explore(Topic myTag, List topics);
 

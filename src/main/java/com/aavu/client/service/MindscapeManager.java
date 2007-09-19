@@ -29,7 +29,6 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.AddTopicPopup;
 import com.aavu.client.gui.EditMetaWindow;
 import com.aavu.client.gui.EntryEditWindow;
-import com.aavu.client.gui.GUIManager;
 import com.aavu.client.gui.GadgetDisplayer;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.Preloader;
@@ -42,7 +41,6 @@ import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.gui.gadgets.TopicLoader;
 import com.aavu.client.gui.ocean.MainMap;
 import com.aavu.client.gui.timeline.HasDate;
-import com.aavu.client.help.HelpWindow;
 import com.aavu.client.help.UserHelper;
 import com.aavu.client.service.cache.HippoCache;
 import com.aavu.client.service.local.TagLocalService;
@@ -73,15 +71,11 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 
 
-	private MainMap map;
-
-
 	private TagLocalService tagLocalService;
 	private User user;
 
 	private UserActionListener userActionListener;
 
-	private Topic currentTopic;
 
 
 	public MindscapeManager(HippoCache hippoCache) {
@@ -102,7 +96,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 		// RootPanel.get(HippoTest.MAIN_DIV).add((Widget) desktop);
 
-		map = new MainMap(this);
+		setMap(new MainMap(this));
 
 		getGadgetManager().addGadgetClickListener(this);
 	}
@@ -117,7 +111,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	public void bringUpChart(Topic topic) {
 
 		try {
-			currentTopic = null;
+			setCurrentTopic(null);
 			selectedTopics.clear();
 		} catch (Exception e) {
 			Logger.error("Exception clearing " + e);
@@ -136,15 +130,15 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			return;
 		}
 
-		currentTopic = topic;
+		setCurrentTopic(topic);
 
 		System.out.println("bring up chart Topic " + topic);
 
-		map.displayTopic(topic);
+		getMap().displayTopic(topic);
 
 		// only zoom if we find something good to center on
-		if (map.centerOn(topic)) {
-			map.ensureZoomOfAtLeast(4);
+		if (getMap().centerOn(topic)) {
+			getMap().ensureZoomOfAtLeast(4);
 		}
 
 
@@ -163,7 +157,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		gadget.createInstance(this, lngLat, dateCreated);
 
 
-		// map.growIsland();
+		// getMap().growIsland();
 	}
 
 
@@ -292,21 +286,21 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 				parent.addMetaValue(null, prototype);
 
 				// parent was created, add to map
-				map.growIsland(parent, lnglat);
+				getMap().growIsland(parent, lnglat);
 				fireIslandCreated();
 			} else {
 				System.out.println("DO TopicTime add proto: " + prototype);
 				tlo = new TimeLineObj(prototype.getIdentifier(), (HasDate) prototype);
 				// prototype was created, add to map
-				map.growIsland(prototype, lnglat);
+				getMap().growIsland(prototype, lnglat);
 				fireIslandCreated();
 			}
-			map.getTimeline().addSingle(tlo);
+			getMap().getTimeline().addSingle(tlo);
 		}
 
 		// ELSE if from hierarchy panel
 		if (lnglat != null) {
-			map.growIsland(prototype, lnglat);
+			getMap().growIsland(prototype, lnglat);
 			fireIslandCreated();
 		}
 		return prototype;
@@ -322,7 +316,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 				System.out.println("Map.remove " + topic.getId());
 
-				map.removeIsland(topic.getId());
+				getMap().removeIsland(topic.getId());
 
 				refreshAll();
 			}
@@ -409,24 +403,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		}
 	}
 
-	private Topic getCurrentTopic() {
-		return currentTopic;
-	}
 
-	/**
-	 * Called by HippoTest to replace the load screen with the map. Called before we've even checked
-	 * if a user exists.
-	 * 
-	 * @return
-	 */
-	public Widget getRootWidget() {
-		// AbsolutePanel p = new AbsolutePanel();
-		// p.add(mainMap.getOcean(),0,0);
-		// p.add(mainMap,0,0);
-		//		
-		// return p;
-		return map;
-	}
 
 	public TagLocalService getTagLocalService() {
 		if (tagLocalService == null) {
@@ -442,46 +419,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 
 
-	/**
-	 * we can goto a topic linked by either Name, or ID. Parse the history token, ie
-	 * HippoTest.html#453 or HippoTest.html#MyTopicName
-	 * 
-	 * @param historyToken
-	 */
-	public void gotoTopic(String historyToken) {
-
-		long parsedID = -2;// Will be -2 if we're loading by name
-		try {
-			parsedID = Long.parseLong(historyToken);
-		} catch (NumberFormatException e) {
-
-		}
-		System.out.println("|" + historyToken + "|" + parsedID);
-		if (parsedID == -2 && historyToken != null && historyToken.length() > 0) {
-			getHippoCache().getTopicCache().getTopicForNameA(historyToken,
-					new StdAsyncCallback("GotoTopicStr " + parsedID) {
-						public void onSuccess(Object result) {
-							super.onSuccess(result);
-							Topic t = (Topic) result;
-							bringUpChart(t);
-						}
-					});
-		} else if (parsedID != -1) {// == HippoTest.EMPTY
-
-			// don't load if we're already loaded
-			if (getCurrentTopic() != null && getCurrentTopic().getId() != parsedID) {
-				getHippoCache().getTopicCache().getTopicByIdA(parsedID,
-						new StdAsyncCallback("GotoTopicID " + parsedID) {
-							public void onSuccess(Object result) {
-								super.onSuccess(result);
-								Topic t = (Topic) result;
-								bringUpChart(t);
-							}
-						});
-			}
-		}
-	}
-
 
 	public void loadFinished() {
 		Preloader.preload("HippoPreLoad.html");
@@ -492,7 +429,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * 
 	 */
 	private void loadGUI() {
-		map.onLoginComplete(this);
+		getMap().onLoginComplete(this);
 
 		getTopicCache().getRootTopic(getUser(),
 				new StdAsyncCallback(ConstHolder.myConstants.getRoot_async()) {
@@ -527,7 +464,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 		GInternalFrame frame = new DefaultGInternalFrame(title);
 
-		map.addFrame(frame);
+		getMap().addFrame(frame);
 
 		return frame;
 	}
@@ -536,7 +473,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 		GadgetPopup frame = new GadgetPopup(gadget, gDisplayer);
 
-		map.addFrame(frame);
+		getMap().addFrame(frame);
 
 		return frame;
 	}
@@ -566,12 +503,10 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 
 	public void refreshAll() {
-		map.refreshIslands();
+		getMap().refreshIslands();
 	}
 
-	public void setMap(MainMap map) {
-		this.map = map;
-	}
+
 
 	/**
 	 * This will try to get the current user. If it suceeds it will run the GUI load scripts. If it
@@ -620,9 +555,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		});
 	}
 
-	public void showHelp() {
-		HelpWindow hw = new HelpWindow(this, newFrame());
-	}
 
 
 	/*
@@ -638,7 +570,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
 						Topic tag = (Topic) result;
-						map.displayTopic(tag);
+						getMap().displayTopic(tag);
 
 						// IslandDetailsWindow tcw = new
 						// IslandDetailsWindow(tag,topics,Manager.this);
@@ -659,7 +591,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	 * 
 	 */
 	public void topicSaved(Topic t, AbstractCommand command) {
-		map.update(t, command);
+		getMap().update(t, command);
 
 
 	}
@@ -667,13 +599,13 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	public void unselect() {
 		System.out.println("MindscapeManger UNSELECT()");
-		map.unselect(selectedTopics);
+		getMap().unselect(selectedTopics);
 		selectedTopics.clear();
 	}
 
 
 	public void updateStatus(int i, String call, StatusCode send) {
-		map.updateStatusWindow(i, call, send);
+		getMap().updateStatusWindow(i, call, send);
 	}
 
 	public void userNeedsToUpgrade() {
@@ -681,18 +613,18 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 
 	public void zoomIn() {
-		map.zoomIn();
+		getMap().zoomIn();
 	}
 
 
 
 	public void zoomOut() {
-		map.zoomOut();
+		getMap().zoomOut();
 	}
 
 
 	public void zoomTo(double scale) {
-		map.zoomTo(scale);
+		getMap().zoomTo(scale);
 	}
 
 
@@ -704,14 +636,9 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 	public void addSelected(Topic t) {
 		selectedTopics.add(t);
-		map.editSelectStatus(t.getIdentifier(), true);
+		getMap().editSelectStatus(t.getIdentifier(), true);
 
 		System.out.println("MindscapeManager addSelected " + t + " Now: " + selectedTopics);
-	}
-
-
-	public GUIManager getGui() {
-		return map;
 	}
 
 

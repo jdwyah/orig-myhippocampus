@@ -109,7 +109,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		//
 		for (Object[] o : list) {
 			// rtn.add(new TopicIdentifier((Long)o[1],(String)o[0]));
-			rtn.add(new DatedTopicIdentifier((Long) o[1], (String) o[0], (Date) o[2], (Date) o[3]));
+			rtn.add(new DatedTopicIdentifier((Long) o[1], (String) o[0], (Date) o[2], (Date) o[3],
+					(Boolean) o[4]));
 		}
 
 		return rtn;
@@ -242,7 +243,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		 * Get Associations that mention this Topic
 		 */
 		List<Object[]> associationsToThis = getHibernateTemplate()
-				.find("" + "select title, id from Topic top " +
+				.find("" + "select title, id, publicVisible from Topic top " +
 				// "join top.associations "+
 						"where ? in elements(top.associations.members) " + "and user is ? ", params);
 
@@ -251,7 +252,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(associationsToThis.size());
 		for (Object[] o : associationsToThis) {
-			rtn.add(new TopicIdentifier((Long) o[1], (String) o[0]));
+			rtn.add(new TopicIdentifier((Long) o[1], (String) o[0], (Boolean) o[2]));
 		}
 		return rtn;
 	}
@@ -281,8 +282,9 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		}
 
 		crit.setProjection(Projections.projectionList().add(Property.forName("id")).add(
-				Property.forName("title")).add(Property.forName("metaValue.id")).add(
-				Property.forName("metaValue.title")).add(Property.forName("metaValue.latitude"))
+				Property.forName("title")).add(Property.forName("publicVisible")).add(
+				Property.forName("metaValue.id")).add(Property.forName("metaValue.title")).add(
+				Property.forName("metaValue.latitude"))
 				.add(Property.forName("metaValue.longitude")).add(Property.forName("assocType.id"))
 				.add(Property.forName("assocType.title")));
 
@@ -302,17 +304,18 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 			// }
 			// }
 
-			TopicIdentifier topic = new TopicIdentifier((Long) oa[0], (String) oa[1]);
+			TopicIdentifier topic = new TopicIdentifier((Long) oa[0], (String) oa[1],
+					(Boolean) oa[2]);
 
 			HippoLocation location = new HippoLocation();
-			location.setId((Long) oa[2]);
-			location.setTitle((String) oa[3]);
-			location.setLatitude((Integer) oa[4]);
-			location.setLongitude((Integer) oa[5]);
+			location.setId((Long) oa[3]);
+			location.setTitle((String) oa[4]);
+			location.setLatitude((Integer) oa[5]);
+			location.setLongitude((Integer) oa[6]);
 
 			MetaLocation meta = new MetaLocation();
-			meta.setId((Long) oa[6]);
-			meta.setTitle((String) oa[7]);
+			meta.setId((Long) oa[7]);
+			meta.setTitle((String) oa[8]);
 
 			LocationDTO locDTO = new LocationDTO(topic, location, meta);
 
@@ -395,7 +398,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		List<Object[]> list = getHibernateTemplate()
 				.find(
 						""
-								+ "select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude from RealTopic tag "
+								+ "select tag.id, tag.instances.size, tag.title, tag.latitude, tag.longitude, tag.publicVisible from RealTopic tag "
 								+ "where  user is ? order by tag.title", user);
 
 		// This is the query if we decide to get rid of the instances mapping again.
@@ -441,7 +444,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 			// }
 
 			rtn.add(new TagStat((Long) o[0], (Integer) o[1], (String) o[2], (Integer) o[3],
-					(Integer) o[4]));
+					(Integer) o[4], (Boolean) o[5]));
 		}
 
 		return rtn;
@@ -495,7 +498,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		crit.setProjection(Projections.distinct(Projections.projectionList().add(
 				Property.forName("id")).add(Property.forName("title")).add(
-				Property.forName("metaValue.created")).add(
+				Property.forName("publicVisible")).add(Property.forName("metaValue.created")).add(
 				Property.forName("metaValue.lastUpdated")).add(Property.forName("metaValue.id"))
 				.add(Property.forName("metaValue.title"))));
 
@@ -518,15 +521,17 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 			// ?BigInteger topic_id = (BigInteger) oa[0];
 			Long topicId = (Long) oa[0];
 
-			Date date = (Date) oa[2];
-			Date endDate = (Date) oa[3];
+			Boolean publicVisible = (Boolean) oa[2];
+			Date date = (Date) oa[3];
+			Date endDate = (Date) oa[4];
 
-			Long metaValueId = (Long) oa[4];
-			String metaValueTitle = (String) oa[5];
+			Long metaValueId = (Long) oa[5];
+			String metaValueTitle = (String) oa[6];
 
 			HippoDate hdate = new HippoDate(metaValueId, metaValueTitle, date, endDate);
 
-			TopicIdentifier forTopic = new TopicIdentifier(topicId.longValue(), (String) oa[1]);
+			TopicIdentifier forTopic = new TopicIdentifier(topicId.longValue(), (String) oa[1],
+					publicVisible);
 			rtn.add(new TimeLineObj(forTopic, hdate));
 		}
 
@@ -562,7 +567,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		for (TopicOccurrenceConnector conn : conns) {
 			rtn.add(new DatedTopicIdentifier(conn.getTopic().getId(), conn.getTopic().getTitle(),
-					conn.getTopic().getCreated(), conn.getTopic().getLastUpdated()));
+					conn.getTopic().getCreated(), conn.getTopic().getLastUpdated(), conn.getTopic()
+							.isPublicVisible()));
 		}
 		// TODO http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
@@ -580,7 +586,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	private Projection getTopicIdentifier() {
 		return Projections.projectionList().add(Property.forName("title")).add(
 				Property.forName("id")).add(Property.forName("created")).add(
-				Property.forName("lastUpdated"));
+				Property.forName("lastUpdated")).add(Property.forName("publicVisible"));
 	}
 
 	/**
@@ -638,7 +644,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 				Expression.eq("user", user)).add(Expression.ilike("title", match, matchMode))
 				.addOrder(Order.asc("title")).setProjection(
 						Projections.projectionList().add(Property.forName("title")).add(
-								Property.forName("id")));
+								Property.forName("id")).add(Property.forName("publicVisible")));
 
 		List<Object[]> list = getHibernateTemplate().findByCriteria(crit, 0, max);
 
@@ -647,7 +653,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		// TODO http://sourceforge.net/forum/forum.php?forum_id=459719
 		//
 		for (Object[] o : list) {
-			rtn.add(new TopicIdentifier((Long) o[1], (String) o[0]));
+			rtn.add(new TopicIdentifier((Long) o[1], (String) o[0], (Boolean) o[2]));
 		}
 		return rtn;
 	}

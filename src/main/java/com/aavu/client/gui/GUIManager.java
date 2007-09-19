@@ -21,6 +21,12 @@ public interface GUIManager {
 
 	TimeLineWrapper getTimeline();
 
+	void zoomIn();
+
+	void zoomOut();
+
+	void zoomTo(double convertToScale);
+
 
 
 }

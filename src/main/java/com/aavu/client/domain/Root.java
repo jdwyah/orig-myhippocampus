@@ -30,4 +30,15 @@ public class Root extends RealTopic implements IsSerializable, Serializable {
 	public boolean isDeletable() {
 		return false;
 	}
+
+	/**
+	 * Overriden so that we don't let them delete their Root
+	 * 
+	 * @return
+	 */
+	// @Override
+	public boolean isPublicVisibleEditable() {
+		return false;
+	}
+
 }

@@ -10,6 +10,9 @@ import com.aavu.client.service.remote.GWTUserServiceAsync;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Shared functionality for setting up the GWT connections.
@@ -19,7 +22,35 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
  */
 public abstract class AbstractClientApp {
 
+	public static final String EMPTY = "-1";
+
 	private HippoCache hippoCache;
+
+	public AbstractClientApp() {
+		try {
+
+			initServices();
+
+			setMeUp();
+
+
+		} catch (Exception e) {
+			Logger.log("e: " + e);
+
+			e.printStackTrace();
+
+			VerticalPanel panel = new VerticalPanel();
+
+			panel.add(new Label("Error"));
+			panel.add(new Label(e.getMessage()));
+
+			RootPanel.get("loading").setVisible(false);
+			RootPanel.get("slot1").add(panel);
+
+		}
+	}
+
+	protected abstract void setMeUp();
 
 	protected void initServices() {
 		// if(9==9)
