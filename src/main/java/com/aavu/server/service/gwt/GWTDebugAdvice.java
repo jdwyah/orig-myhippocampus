@@ -1,28 +1,36 @@
 package com.aavu.server.service.gwt;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 
+import com.aavu.client.exception.HippoException;
+
 public class GWTDebugAdvice {
+
 	private static final Logger log = Logger.getLogger(GWTDebugAdvice.class);
 
-	public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable {
+	/**
+	 * Make sure we realize what errors are being sent back to the client
+	 * 
+	 * @param pjp
+	 * @return
+	 * @throws Throwable
+	 */
+	public Object wrapGWT(ProceedingJoinPoint pjp) throws Throwable {
 
-		log.error("I'M HERE");
-		System.out.println("\n\n!!!!!!!!!!!!");
-		Date d = new Date();
+		try {
+			// start stopwatch
+			Object retVal = pjp.proceed();
 
-		// start stopwatch
-		Object retVal = pjp.proceed();
+			return retVal;
 
-		Date end = new Date();
-		System.out.println("TOOK: " + (d.getTime() - end.getTime()));
-
-		// stop stopwatch
-		return retVal;
-
+		} catch (Exception e) {
+			log.error("FAILURE: " + e + " " + e.getMessage());
+			if (log.isDebugEnabled()) {
+				e.printStackTrace();
+			}
+			throw new HippoException(e);
+		}
 
 	}
 }

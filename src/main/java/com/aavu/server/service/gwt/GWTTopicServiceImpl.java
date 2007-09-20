@@ -12,7 +12,6 @@ import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.MindTreeOcc;
-import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -54,47 +53,17 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 		// NewConverter.convertInPlace(t);
 
-		try {
-			log.debug("Scan turned up persistent: " + Converter.scan(t));
-		} catch (Exception e) {
-			log.error("Scanning error " + e);
-			e.printStackTrace();
-		}
+
+		log.debug("Scan turned up persistent: " + Converter.scan(t));
+
 
 		return t;
 	}
 
-	/**
-	 * 1) Over-write dates 2) Null out the lazy loaded MindTree for MindTreeOcc's
-	 * 
-	 * @param in
-	 * @return
-	 */
-	public static Set converterOccurenceSet(Set in) {
-		HashSet<Occurrence> rtn = new HashSet<Occurrence>();
-		try {
-			for (Iterator iter = in.iterator(); iter.hasNext();) {
-				Occurrence top = (Occurrence) iter.next();
-				if (top.getLastUpdated() != null) {
-					top.setLastUpdated(new Date(top.getLastUpdated().getTime()));
-				}
-				if (top.getCreated() != null) {
-					top.setCreated(new Date(top.getCreated().getTime()));
-				}
-				if (top instanceof MindTreeOcc) {
-					MindTreeOcc mto = (MindTreeOcc) top;
-					mto.setMindTree(null);
-				}
-				rtn.add(top);
-			}
-		} catch (LazyInitializationException ex) {
-			log.warn("caught lazy in convertOccurrence");
-		}
-		return rtn;
-	}
 
-	private TopicService topicService;
+
 	private SearchService searchService;
+	private TopicService topicService;
 
 	public void changeState(long topicID, boolean toIsland) throws HippoException {
 		topicService.changeState(topicID, toIsland);
@@ -187,37 +156,16 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 
 
-	// private Map converter(Map metaValues) {
-	// return converter(metaValues,false);
-	// }
-	// private static Map converter(Map metaValues, boolean b) {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-
 	public void delete(long id) throws HippoException {
 		topicService.delete(id);
 	}
 
 	public void editVisibility(List topics, boolean visible) throws HippoException {
-
-		try {
-			topicService.editVisibility(topics, visible);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
+		topicService.editVisibility(topics, visible);
 	}
 
 	public List getAllLocations() throws HippoException {
-		try {
-			return topicService.getAllLocations();
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
+		return topicService.getAllLocations();
 	}
 
 	public List getAllMetas() throws HippoException {
@@ -231,123 +179,79 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * 
 	 */
 	public List getAllTopicIdentifiers(int start, int max, String startStr) throws HippoException {
-		try {
-			return topicService.getAllTopicIdentifiers(start, max, startStr);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
+		return topicService.getAllTopicIdentifiers(start, max, startStr);
+	}
+
+	/**
+	 * had a problem with CGLIB if we return topics
+	 */
+	public List getDeleteList(long id) throws HippoException {
+		return convertTopicToTIArray(topicService.getDeleteList(id));
 	}
 
 	public List getLinksTo(Topic topic) throws HippoException {
-		try {
-			return topicService.getLinksTo(topic);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
+		return topicService.getLinksTo(topic);
 	}
 
 	public List getLocationsForTags(List shoppingList) throws HippoException {
-		try {
-			return topicService.getLocationsForTags(shoppingList);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
+		return topicService.getLocationsForTags(shoppingList);
+	}
+
+	/**
+	 * had a problem with CGLIB if we return topics
+	 */
+	public List getMakePublicList(long id) throws HippoException {
+		return convertTopicToTIArray(topicService.getMakePublicList(id));
+	}
+	// public C test(C c) {
+	// return c;
+	// }
+
+
+	public Root getRootTopic(User forUser) throws HippoException {
+
+		return topicService.getRootTopic(forUser);
+
+
 	}
 
 	public TagStat[] getTagStats() throws HippoException {
-		try {
-			List<TagStat> stats = topicService.getTagStats();
-			TagStat[] rtn = new TagStat[stats.size()];
-			return stats.toArray(rtn);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
+		List<TagStat> stats = topicService.getTagStats();
+		TagStat[] rtn = new TagStat[stats.size()];
+		return stats.toArray(rtn);
 	}
 
 	public List<TimeLineObj> getTimeline() throws HippoException {
-		try {
-			return topicService.getTimeline();
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
+		return topicService.getTimeline();
 	}
 
-	// public Topic[] save(Topic[] topics) throws HippoException {
-	// try {
-	// List<Topic> list = topicService.save(topics);
-	// Topic[] rtn = new Topic[list.size()];
-	// int i = 0;
-	// for (Topic topic : list) {
-	// log.debug("Converting "+topic.getId());
-	// rtn[i++] = convert(topic);
-	// }
-	// log.debug("Save[] rtn "+Arrays.toString(rtn));
-	// return rtn;
-	// } catch (HippoException ex) {
-	// throw ex;
-	// } catch (Exception e) {
-	// log.error("FAILURE: "+e);
-	// e.printStackTrace();
-	// throw new HippoException(e);
-	// }
-	// }
-
 	public List<List<TimeLineObj>> getTimelineWithTags(List shoppingList) throws HippoException {
-		try {
-			return topicService.getTimelineWithTags(shoppingList);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
+		return topicService.getTimelineWithTags(shoppingList);
 	}
 
 	public Topic getTopicByID(long topicID) throws HippoException {
-		try {
-
-			return convert(topicService.getForID(topicID));
-
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
+		return convert(topicService.getForID(topicID));
 	}
 
 	public Topic getTopicForName(String topicName) {
-		try {
-			Topic t = topicService.getForNameCaseInsensitive(topicName);
 
-			if (t != null) {
-				log.debug("orig " + t.getId() + " " + t.getTitle());
+		Topic t = topicService.getForNameCaseInsensitive(topicName);
 
-				// just json the Abstract topic parts
-				Topic converted = convert(t);
-				log.debug("conv: " + t.getId() + " tit " + t.getTitle());
-				return converted;
-			} else {
-				log.debug("NULL");
-			}
+		if (t != null) {
+			log.debug("orig " + t.getId() + " " + t.getTitle());
 
-			return t;
-
-			// return convert(topicService.getForName(topicName));
-
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			return null;
+			// just json the Abstract topic parts
+			Topic converted = convert(t);
+			log.debug("conv: " + t.getId() + " tit " + t.getTitle());
+			return converted;
+		} else {
+			log.debug("NULL");
 		}
+
+		return t;
+
+		// return convert(topicService.getForName(topicName));
+
 	}
 
 	/**
@@ -356,27 +260,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * 
 	 */
 	public List getTopicIdsWithTag(long id) throws HippoException {
-		try {
 
-			return topicService.getTopicIdsWithTag(id);
+		return topicService.getTopicIdsWithTag(id);
 
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
-	}
-
-	public Root getRootTopic(User forUser) throws HippoException {
-		try {
-
-			return topicService.getRootTopic(forUser);
-
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e);
-		}
 	}
 
 	public List getTopicsWithTags(List shoppingList) throws HippoException {
@@ -384,13 +270,9 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	}
 
 	public MindTree getTree(MindTreeOcc occ) throws HippoException {
-		try {
-			return convertTree(topicService.getTree(occ));
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
+
+		return convertTree(topicService.getTree(occ));
+
 	}
 
 	public LinkAndUser getWebLinkForURLAndUser(String url) throws HippoException {
@@ -399,17 +281,12 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 	public List match(String match) {
 
-		try {
 
-			List l = topicService.getTopicsStarting(match);
-			log.debug("match " + match + " " + l.size());
-			return l;
 
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			return null;
-		}
+		List l = topicService.getTopicsStarting(match);
+		log.debug("match " + match + " " + l.size());
+		return l;
+
 	}
 
 	public void saveCommand(AbstractCommand command) throws HippoException {
@@ -417,33 +294,23 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		topicService.executeAndSaveCommand(command);
 	}
 
-	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException {
-		topicService.saveTopicLocation(tagId, topicId, lat, lng);
-	}
-
 	public void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng)
 			throws HippoException {
 		topicService.saveOccurrenceLocation(topicID, occurrenceID, lat, lng);
 	}
 
+	public void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException {
+		topicService.saveTopicLocation(tagId, topicId, lat, lng);
+	}
+
 	public MindTree saveTree(MindTree tree) throws HippoException {
-		try {
-			return convertTree(topicService.saveTree(tree));
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
+
+		return convertTree(topicService.saveTree(tree));
+
 	}
 
 	public List search(String searchString) throws HippoException {
-		try {
-			return searchService.search(searchString);
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
+		return searchService.search(searchString);
 	}
 
 	@Required
@@ -455,35 +322,6 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public void setTopicService(TopicService topicService) {
 		this.topicService = topicService;
 	}
-
-	/**
-	 * had a problem with CGLIB if we return topics
-	 */
-	public List getDeleteList(long id) throws HippoException {
-		try {
-			return convertTopicToTIArray(topicService.getDeleteList(id));
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
-	}
-
-	/**
-	 * had a problem with CGLIB if we return topics
-	 */
-	public List getMakePublicList(long id) throws HippoException {
-		try {
-			return convertTopicToTIArray(topicService.getMakePublicList(id));
-		} catch (Exception e) {
-			log.error("FAILURE: " + e);
-			e.printStackTrace();
-			throw new HippoException(e.getMessage());
-		}
-	}
-	// public C test(C c) {
-	// return c;
-	// }
 
 
 }

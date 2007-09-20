@@ -16,17 +16,17 @@
 	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 
 
-<!-- Theory was to wrap all these calls to change the way we do our try/catche & logging but I forgot that Spring AOP can only really catch calls to exernal public methods, in this case handleRequest -->
-<!-- 
+<!-- Theory was to wrap all these calls to change the way we do our try/catch & logging but I forgot that Spring AOP can only really catch calls to exernal public methods, in this case handleRequest -->
+
 	<aop:config>
       <aop:aspect ref="GWTDebugAdvice">
          <aop:pointcut id="gwtCalls"
-                    expression="execution(* com.aavu.server.service.gwt.*.*(..))"/>
+                    expression="execution(* com.aavu.server.util.gwt.GWTSpringControllerReplacement.handleRequest(..))"/>
          <aop:around pointcut-ref="gwtCalls"
-                  method="doBasicProfiling"/>
+                  method="wrapGWT"/>
       </aop:aspect>
    </aop:config>
-	<bean id="GWTDebugAdvice" class="com.aavu.server.service.gwt.GWTDebugAdvice"/> -->
+	<bean id="GWTDebugAdvice" class="com.aavu.server.service.gwt.GWTDebugAdvice"/> 
 	
 	<bean id="GWTTopicService" class="com.aavu.server.service.gwt.GWTTopicServiceImpl">
 		<property name="topicService" ref="topicService" />
