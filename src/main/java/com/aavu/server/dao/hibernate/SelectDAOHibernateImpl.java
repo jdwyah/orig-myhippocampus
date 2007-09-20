@@ -93,9 +93,9 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 
-	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User user, int start, int max,
-			String startStr) {
-		return getAllTopicIdentifiers(user, start, max, startStr, false, true);
+	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User currentUser, User user,
+			int start, int max, String startStr) {
+		return getAllTopicIdentifiers(currentUser, user, start, max, startStr, false, true);
 	}
 
 	private List<DatedTopicIdentifier> getAllTopicIdentifiers(DetachedCriteria crit, int start,
@@ -120,16 +120,17 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	 * all param is used by some unit tests to help wipe a user's account.
 	 * 
 	 */
-	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, boolean all) {
-		return getAllTopicIdentifiers(user, 0, 9999, null, all, false);
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User currentUser, User user,
+			boolean all) {
+		return getAllTopicIdentifiers(currentUser, user, 0, 9999, null, all, false);
 	}
 
 	/**
 	 * 
 	 */
-	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, int start, int max,
-			String startStr) {
-		return getAllTopicIdentifiers(user, start, max, startStr, false, false);
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(User currentUser, User user,
+			int start, int max, String startStr) {
+		return getAllTopicIdentifiers(currentUser, user, start, max, startStr, false, false);
 	}
 
 	/**
@@ -142,8 +143,8 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	 * @param all
 	 * @return
 	 */
-	private List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, int start, int max,
-			String startStr, boolean all, boolean publicOnly) {
+	private List<DatedTopicIdentifier> getAllTopicIdentifiers(User currentUser, User user,
+			int start, int max, String startStr, boolean all, boolean publicOnly) {
 
 		DetachedCriteria crit;
 		if (all) {
@@ -153,7 +154,9 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		}
 
 		crit.add(Expression.eq("user", user));
-
+		if (user != currentUser) {
+			crit.add(Expression.eq("publicVisible", true));
+		}
 
 
 		if (startStr != null) {
@@ -174,9 +177,9 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	 * for when you really want the whole DB
 	 * 
 	 */
-	public List<Topic> getAllTopics(User u) {
+	public List<Topic> getAllTopics(User currentUser) {
 		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Topic.class).add(
-				Expression.eq("user", u)));
+				Expression.eq("user", currentUser)));
 		return getHibernateTemplate().findByCriteria(
 				crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY));
 	}
@@ -184,9 +187,9 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 	public Topic getForID(User currentUser, long topicID) {
 
-		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Topic.class)
-		// .add(Expression.eq("user", currentUser))
-				.add(Expression.eq("id", topicID)));
+		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Topic.class).add(
+				Expression.or(Expression.eq("user", currentUser), Expression.eq("publicVisible",
+						true))).add(Expression.eq("id", topicID)));
 
 		return (Topic) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(crit));
 	}
@@ -353,15 +356,19 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	}
 
 
+	/**
+	 * return root if current user is us, or if this root is publicVisible
+	 * 
+	 */
 	public Root getRoot(User user, User currentUser) {
 		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Root.class).add(
-				Expression.eq("user", user)));
+				Expression.or(Expression.eq("user", currentUser), Expression.and(Expression.eq(
+						"user", user), Expression.eq("publicVisible", true)))));
 
 		Root userRoot = (Root) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(
 				crit));
 		return userRoot;
 	}
-
 
 	public List<TopicTypeConnector> getRootTopics(User forUser, User currentUser) {
 		return getTopicIdsWithTag(getRoot(forUser, currentUser).getId(), forUser);

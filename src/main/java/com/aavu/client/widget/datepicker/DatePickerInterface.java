@@ -21,4 +21,6 @@ public interface DatePickerInterface {
 
 	void setWeekendSelectable(boolean b);
 
+	DateFormatter getDateFormatter();
+
 }

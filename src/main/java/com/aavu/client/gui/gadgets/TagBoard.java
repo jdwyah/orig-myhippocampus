@@ -11,6 +11,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.AddButton;
+import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.aavu.client.widget.edit.DeletableTopicLabel;
 import com.aavu.client.widget.edit.RemoveListener;
@@ -83,6 +84,8 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 				toggle();
 			}
 		});
+
+		addButton.setVisible(manager.isEdittable());
 
 		tagBoxP.add(addButton);
 
@@ -157,11 +160,18 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 		//
 		// tagPanel.add(topicBubble);
 
-		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
+		if (manager.isEdittable()) {
+			DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
 
-		TagGadget tg = new TagGadget(tagLabel);
+			TagGadget tg = new TagGadget(tagLabel);
 
-		tagPanel.add(tg);
+			tagPanel.add(tg);
+
+		} else {
+			if (tag.isPublicVisible()) {
+				tagPanel.add(new TopicLink(tag));
+			}
+		}
 	}
 
 	/**

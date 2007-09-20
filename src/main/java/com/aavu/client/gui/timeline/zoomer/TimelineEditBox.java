@@ -33,6 +33,10 @@ public class TimelineEditBox extends Composite {
 	private HorizontalPanel topicLinkP;
 	private Label dateLabel;
 
+	private Label titleLabel;
+
+
+
 	public TimelineEditBox(Manager _manager) {
 		super();
 		this.manager = _manager;
@@ -40,6 +44,7 @@ public class TimelineEditBox extends Composite {
 		VerticalPanel editPanel = new VerticalPanel();
 		editPanel.setStyleName("H-TimeBar-Editor");
 
+		titleLabel = new Label();
 		editBox = new EditableLabelExtension("", new ChangeListener() {
 			public void onChange(Widget sender) {
 				Topic fauxTopic = new RealTopic();
@@ -70,7 +75,12 @@ public class TimelineEditBox extends Composite {
 
 		CellPanel editP = new HorizontalPanel();
 		editP.add(new Label("Title:"));
-		editP.add(editBox);
+
+		if (manager.isEdittable()) {
+			editP.add(editBox);
+		} else {
+			editP.add(titleLabel);
+		}
 
 		dateLabel = new Label("", false);
 		CellPanel dateP = new HorizontalPanel();
@@ -99,6 +109,8 @@ public class TimelineEditBox extends Composite {
 			editBox.setText(tlo.getHasDate().getTitle());
 			topicLinkP.setVisible(false);
 		}
+
+		titleLabel.setText(tlo.getHasDate().getTitle());
 		dateLabel.setText(format.format(tlo.getStartDate()));
 
 		setVisible(true);

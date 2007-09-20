@@ -28,7 +28,7 @@ public class EntryRichText extends Composite {
 	// private FocusPanelExt zoomedBackP;
 	// private SimplePanel simplePanel;
 
-	public EntryRichText(ResizeHandler handler, HierarchyDisplay display) {
+	public EntryRichText(ResizeHandler handler, HierarchyDisplay display, boolean isEdittable) {
 		this.display = display;
 
 		// this.zoomedBackImage = new Image(ImageHolder.getImgLoc("hierarchy/") +
@@ -41,7 +41,7 @@ public class EntryRichText extends Composite {
 		// zabsP.add(zoomedBackBanner, 0, 0);
 		// zoomedBackP = new FocusPanelExt(zabsP);
 
-		caption = new EntryCaption(this);
+		caption = new EntryCaption(this, isEdittable);
 
 		rtMainPanel = new BorderThemedPanel();
 		rtMainPanel.setResizable(true);

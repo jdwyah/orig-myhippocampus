@@ -53,8 +53,6 @@ public interface Manager {
 
 	void editOccurrence(Occurrence topic, boolean needsSave);
 
-	void explore();
-
 	GadgetManager getGadgetManager();
 
 	GUIManager getGui();
@@ -83,8 +81,6 @@ public interface Manager {
 
 	void updateStatus(int myNum, String string, StatusCode fail);
 
-	void userNeedsToUpgrade();
-
 	void showHelp();
 
 	void setMap(MainMap mainMap);
@@ -94,6 +90,8 @@ public interface Manager {
 	void gotoTopic(String historyToken);
 
 	void setup(String caller);
+
+	boolean isEdittable();
 
 	// void explore(Topic myTag, List topics);
 

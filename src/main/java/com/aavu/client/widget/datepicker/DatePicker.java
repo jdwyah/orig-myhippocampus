@@ -31,64 +31,55 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /*
- * Abstract Base class for a Date Picker object.
- * Extend this class if you wish to create a new
- * kind of a date picker
+ * Abstract Base class for a Date Picker object. Extend this class if you wish to create a new kind
+ * of a date picker
  * 
- * Date Picker extends a Text box and is intended
- * to be used in conjuction with the calendar popup.
- * It implements KeyBoardListener but the methods do
- * nothing. You can implement its methids in your
- * sub class if needed. 
+ * Date Picker extends a Text box and is intended to be used in conjuction with the calendar popup.
+ * It implements KeyBoardListener but the methods do nothing. You can implement its methids in your
+ * sub class if needed.
  */
-public abstract class DatePicker extends TextBox implements KeyboardListener{
+public abstract class DatePicker extends TextBox implements KeyboardListener {
 	// Current maintains where the calendar is at any point in time
-	// Use can be traversing back and forth in the calendar.  This
+	// Use can be traversing back and forth in the calendar. This
 	// field tracks that.
 	private Date currentDate = new Date();
-	
+
 	// Keeps the collection of all the change listners
 	private ChangeListenerCollection changeListeners;
-	
+
 	// Holds the date last selected by the user
 	private Date selectedDate = new Date();
-	
+
 	// Holds the default DateFormatter Object
 	private DateFormatter dateFormatter = new DateFormatter(DateFormatter.DATE_FORMAT_MMDDYYYY);
-	
+
 	/*
 	 * Default Constructor
 	 */
-	protected DatePicker(){
+	protected DatePicker() {
 		super();
 	}
-	
+
 	/*
-	 * show
-	 * Abstract method to be implemented by all
-	 * the sub classes. This tells the app how 
-	 * to show the date picker 
+	 * show Abstract method to be implemented by all the sub classes. This tells the app how to show
+	 * the date picker
 	 */
 	public abstract void show();
-	
+
 	/*
-	 * hide
-	 * Abstract method to be implemented by all
-	 * the sub classes. The tells what to do when
-	 * the calendar needs to be hidden
+	 * hide Abstract method to be implemented by all the sub classes. The tells what to do when the
+	 * calendar needs to be hidden
 	 */
-	public abstract void hide ();
-	
+	public abstract void hide();
+
 	/*
-	 * redrawCalendar
-	 * Abstract method to define what to do in case
-	 * the user traverses the month or year
+	 * redrawCalendar Abstract method to define what to do in case the user traverses the month or
+	 * year
 	 */
 	public abstract void redrawCalendar();
-	
+
 	/*
-	 * getCurrentDate
-	 * Getter method for currentDate
+	 * getCurrentDate Getter method for currentDate
 	 * 
 	 * @return Date
 	 */
@@ -97,20 +88,18 @@ public abstract class DatePicker extends TextBox implements KeyboardListener{
 	}
 
 	/*
-	 * setCurrentDate
-	 * Setter method for currentDate
+	 * setCurrentDate Setter method for currentDate
 	 * 
 	 * You should probably call setSelectedDate() instead of this
 	 * 
 	 * @param Date
 	 */
 	protected void setCurrentDate(Date currentDate) {
-		this.currentDate = currentDate;		
+		this.currentDate = currentDate;
 	}
 
 	/*
-	 * getSelectedDate
-	 * Getter method for selectedDate
+	 * getSelectedDate Getter method for selectedDate
 	 * 
 	 * @return Date
 	 */
@@ -119,41 +108,37 @@ public abstract class DatePicker extends TextBox implements KeyboardListener{
 	}
 
 	/*
-	 * setSelectedDate
-	 * Setter method for selectedDate
+	 * setSelectedDate Setter method for selectedDate
 	 * 
 	 * @param Date
 	 */
-	public void setSelectedDate(Date selectedDate) {		
+	public void setSelectedDate(Date selectedDate) {
 		this.selectedDate = selectedDate;
 		setCurrentDate(selectedDate);
 		String dateStr = dateFormatter.formatDate(selectedDate);
 		setText(dateStr);
 	}
-	
+
 	/*
-	 * getWeekendSelectable
-	 * Getter method for isWeekendSelectable
+	 * getWeekendSelectable Getter method for isWeekendSelectable
 	 * 
 	 * @return boolean
 	 */
 	public abstract boolean isWeekendSelectable();
 
 	/*
-	 * setWeekendSelectable
-	 * Setter method for isWeekendSelectable
+	 * setWeekendSelectable Setter method for isWeekendSelectable
 	 * 
 	 * @param boolean
 	 */
 	public abstract void setWeekendSelectable(boolean isWeekendSelectable);
 
 	/*
-	 * getWeekendSelectable
-	 * Getter method for isWeekendSelectable
+	 * getWeekendSelectable Getter method for isWeekendSelectable
 	 * 
 	 * @return boolean
 	 */
-	protected DateFormatter getDateFormatter(){
+	public DateFormatter getDateFormatter() {
 		return this.dateFormatter;
 	}
 
@@ -163,22 +148,21 @@ public abstract class DatePicker extends TextBox implements KeyboardListener{
 	 * @param text to be displayed (String)
 	 */
 	public void setText(String text) {
-	    super.setText(text);
-	    if (changeListeners != null) {
-	        changeListeners.fireChange(this);
-	    }
+		super.setText(text);
+		if (changeListeners != null) {
+			changeListeners.fireChange(this);
+		}
 	}
-	
+
 	/*
-	 * setDateFormat
-	 * Setter method set the format of the display date
+	 * setDateFormat Setter method set the format of the display date
 	 * 
 	 * @param boolean
 	 */
 	public void setDateFormat(DateFormat dateFormat) {
 		this.getDateFormatter().setDateFormat(dateFormat);
 	}
-	
+
 	/*
 	 * Methods from KeyboardListener
 	 */
@@ -201,16 +185,16 @@ public abstract class DatePicker extends TextBox implements KeyboardListener{
 	public void onKeyUp(Widget sender, char keyCode, int modifiers) {
 
 	}
-	
+
 	/*
 	 * addChangeListener
 	 * 
-	 * Adds the Change Listener Object to its collection 
+	 * Adds the Change Listener Object to its collection
 	 */
 	public void addChangeListener(ChangeListener listener) {
-	    if (null == this.changeListeners){
-	    	this.changeListeners = new ChangeListenerCollection();	    	
-	    }
-	    this.changeListeners.add(listener);
-	 }	
+		if (null == this.changeListeners) {
+			this.changeListeners = new ChangeListenerCollection();
+		}
+		this.changeListeners.add(listener);
+	}
 }

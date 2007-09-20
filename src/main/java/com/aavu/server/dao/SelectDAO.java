@@ -24,7 +24,8 @@ public interface SelectDAO {
 
 
 
-	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, int start, int max, String startStr);
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(User currentUser, User user, int start,
+			int max, String startStr);
 
 	Topic getForID(User currentUser, long topicID);
 
@@ -58,10 +59,10 @@ public interface SelectDAO {
 
 	List<Meta> getAllMetas(User currentUser);
 
-	List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User user, int start, int max,
-			String startStr);
+	List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(User currentUser, User user, int start,
+			int max, String startStr);
 
-	List<DatedTopicIdentifier> getAllTopicIdentifiers(User user, boolean all);
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(User currentUser, User user, boolean all);
 
 
 	List<Topic> getAllTopics(User u);

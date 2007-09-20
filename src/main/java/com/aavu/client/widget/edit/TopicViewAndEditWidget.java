@@ -49,6 +49,7 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener,
 			}
 		});
 
+
 		mainPanel.add(topicPanel);
 
 
@@ -70,7 +71,13 @@ public class TopicViewAndEditWidget extends Composite implements ChangeListener,
 		this.entry = entry;
 		topicPanel.clear();
 
-		topicEditWidget = new TopicEditWidget(manager, entry, saveButton);
+
+		if (manager.isEdittable()) {
+			topicEditWidget = new TopicEditWidget(manager, entry, saveButton);
+		} else {
+			topicEditWidget = new TopicEditWidget(manager, entry, null);
+		}
+
 		topicEditWidget.addChangeListener(this);
 		topicEditWidget.setPixelSize(width, height);
 

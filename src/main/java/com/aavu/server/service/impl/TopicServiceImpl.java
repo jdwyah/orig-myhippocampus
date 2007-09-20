@@ -425,19 +425,22 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	public List<DatedTopicIdentifier> getAllPublicTopicIdentifiers(String username, int start,
 			int max, String startStr) {
 		return selectDAO.getAllTopicIdentifiers(userService.getUserWithNormalization(username),
-				start, max, startStr);
+				userService.getUserWithNormalization(username), start, max, startStr);
 	}
 
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers() {
-		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), false);
+		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), userService
+				.getCurrentUser(), false);
 	}
 
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(boolean all) {
-		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), all);
+		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), userService
+				.getCurrentUser(), all);
 	}
 
 	public List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr) {
-		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), start, max, startStr);
+		return selectDAO.getAllTopicIdentifiers(userService.getCurrentUser(), userService
+				.getCurrentUser(), start, max, startStr);
 	}
 
 

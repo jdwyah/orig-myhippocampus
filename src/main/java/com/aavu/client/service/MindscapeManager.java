@@ -3,75 +3,43 @@ package com.aavu.client.service;
 
 import java.util.Date;
 
-import org.gwm.client.GInternalFrame;
-import org.gwm.client.impl.DefaultGInternalFrame;
-import org.gwtwidgets.client.ui.ProgressBar;
-
 import com.aavu.client.Interactive;
-import com.aavu.client.LinkPlugin.AddLinkPopup;
 import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
-import com.aavu.client.domain.Entry;
-import com.aavu.client.domain.GoogleData;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Root;
-import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
-import com.aavu.client.domain.WebLink;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.AddTopicPopup;
 import com.aavu.client.gui.EditMetaWindow;
-import com.aavu.client.gui.EntryEditWindow;
-import com.aavu.client.gui.GadgetDisplayer;
 import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.Preloader;
-import com.aavu.client.gui.StatusCode;
 import com.aavu.client.gui.TopicSaveListener;
-import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.gadgets.Gadget;
 import com.aavu.client.gui.gadgets.GadgetClickListener;
-import com.aavu.client.gui.gadgets.GadgetPopup;
 import com.aavu.client.gui.gadgets.TopicLoader;
 import com.aavu.client.gui.ocean.MainMap;
 import com.aavu.client.gui.timeline.HasDate;
 import com.aavu.client.help.UserHelper;
 import com.aavu.client.service.cache.HippoCache;
-import com.aavu.client.service.local.TagLocalService;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 public class MindscapeManager extends AbstractManager implements Manager, TopicSaveListener,
 		LoginListener, LoadFinishedListener, GadgetClickListener, TopicLoader {
 
 
-	private class ProgressPopup extends PopupWindow {
-		public ProgressPopup(GInternalFrame frame, String title, ProgressBar progressBar) {
-			super(frame, title, 200, 100);
-			setContent(progressBar);
 
-		}
-	}
-
-
-	// private FramesManager framesManager;
-	// private DefaultGDesktopPane desktop;
-
-
-
-	private TagLocalService tagLocalService;
 	private User user;
 
 	private UserActionListener userActionListener;
@@ -108,57 +76,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		getHippoCache().getSubjectService().addDeliciousTags(username, password, callback);
 	}
 
-	public void bringUpChart(Topic topic) {
-
-		try {
-			setCurrentTopic(null);
-			selectedTopics.clear();
-		} catch (Exception e) {
-			Logger.error("Exception clearing " + e);
-		}
-
-		// if this is an occurrence, short circuit a bit. go to the first type instead.
-		// since we don't display hieracrchies off an entry / weblink
-		// PEND bring up a choice of the types instead?
-		if (topic instanceof Occurrence) {
-			Occurrence occ = (Occurrence) topic;
-			Topic parent = (Topic) occ.getTopicsAsTopics().iterator().next();
-
-			// do full load since parent will not have all info loaded
-			bringUpChart(parent.getId());
-			editOccurrence(occ, false);
-			return;
-		}
-
-		setCurrentTopic(topic);
-
-		System.out.println("bring up chart Topic " + topic);
-
-		getMap().displayTopic(topic);
-
-		// only zoom if we find something good to center on
-		if (getMap().centerOn(topic)) {
-			getMap().ensureZoomOfAtLeast(4);
-		}
-
-
-
-		History.newItem("" + topic.getId());
-
-	}
-
-	public void gadgetClicked(Gadget gadget, int[] lngLat, Date dateCreated) {
-
-		if (lngLat != null) {
-			System.out.println("MindscapeManager lngLat " + lngLat[0] + " " + lngLat[1]);
-		} else {
-			System.out.println("MindscapeManager lngLat " + lngLat);
-		}
-		gadget.createInstance(this, lngLat, dateCreated);
-
-
-		// getMap().growIsland();
-	}
 
 
 	/**
@@ -183,6 +100,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 			boolean doNamePopup, boolean needsPopupForParent) {
 		createNew(prototype, null, lnglat, dateCreated, doNamePopup, needsPopupForParent);
 	}
+
 
 	private void createNew(final Topic prototype, Topic parentParam, final int[] lnglat,
 			final Date dateCreated, boolean doNamePopup, boolean needsPopupForParent) {
@@ -240,6 +158,22 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 					});
 		}
 
+	}
+
+	public void delete(final Topic topic, final AsyncCallback callback) {
+		getTopicCache().delete(topic, new StdAsyncCallback(ConstHolder.myConstants.delete_async()) {
+			public void onSuccess(Object result) {
+				super.onSuccess(result);
+				callback.onSuccess(result);
+
+
+				System.out.println("Map.remove " + topic.getId());
+
+				getMap().removeIsland(topic.getId());
+
+				refreshAll();
+			}
+		});
 	}
 
 	/**
@@ -307,89 +241,23 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 
 
-	public void delete(final Topic topic, final AsyncCallback callback) {
-		getTopicCache().delete(topic, new StdAsyncCallback(ConstHolder.myConstants.delete_async()) {
-			public void onSuccess(Object result) {
-				super.onSuccess(result);
-				callback.onSuccess(result);
-
-
-				System.out.println("Map.remove " + topic.getId());
-
-				getMap().removeIsland(topic.getId());
-
-				refreshAll();
-			}
-		});
-	}
-
-	/**
-	 * Simple warning dialog wrapper
-	 * 
-	 * NOTE: css style in public/themes/alphacube.css
-	 * 
-	 * @param warning
-	 */
-	public PopupWindow displayInfo(String warning) {
-		return displayInfo(new Label(warning));
-	}
-
-	public PopupWindow displayInfo(Widget widg) {
-		GInternalFrame f = newFrame();
-		PopupWindow w = new PopupWindow(f, ConstHolder.myConstants.displayInfoTitle(), true);
-		f.setContent(widg);
-		return w;
-	}
-
-
-
 	public void doLogin() {
 		LoginService.doLogin(newFrame(), this);
 	}
 
-	/**
-	 * needs save will be true if the occurrence passed in is already dirty. ie, they were editting
-	 * in the entryDisplay, then clicked on (rich edit) before they'd saved.
-	 */
-	public void editOccurrence(Occurrence occurrence, boolean needsSave) {
-		System.out.println("edit occ " + GWT.getTypeName(occurrence));
 
-		if (occurrence instanceof Entry) {
-			EntryEditWindow gw = new EntryEditWindow((Entry) occurrence, this, newFrame(),
-					needsSave);
-		} else if (occurrence instanceof WebLink) {
-			AddLinkPopup pop = new AddLinkPopup(null, this, newFrame(), (WebLink) occurrence,
-					getCurrentTopic(), null);
-
-			// EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
-		} else if (occurrence instanceof S3File) {
-			// EntryEditWindow gw = new EntryEditWindow((Entry) occurrence,this,newFrame());
-		} else if (occurrence instanceof GoogleData) {
-
-		} else {
-
-		}
-
-	}
 
 	public void editMetas(AsyncCallback callback, final Meta type) {
 		EditMetaWindow ew = new EditMetaWindow(this, newFrame(), type, callback);
 	}
 
-	public void explore() {
-		explore(getCurrentTopic());
-
-	}
-
-	public void explore(Topic myTag) {
-
-	}
 
 	public void fireIslandCreated() {
 		if (userActionListener != null) {
 			userActionListener.islandCreated();
 		}
 	}
+
 
 	public void fireOceanLoaded(int num_islands) {
 		if (userActionListener != null) {
@@ -403,15 +271,18 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		}
 	}
 
+	public void gadgetClicked(Gadget gadget, int[] lngLat, Date dateCreated) {
 
-
-	public TagLocalService getTagLocalService() {
-		if (tagLocalService == null) {
-			tagLocalService = new TagLocalService();
+		if (lngLat != null) {
+			System.out.println("MindscapeManager lngLat " + lngLat[0] + " " + lngLat[1]);
+		} else {
+			System.out.println("MindscapeManager lngLat " + lngLat);
 		}
-		return tagLocalService;
-	}
+		gadget.createInstance(this, lngLat, dateCreated);
 
+
+		// getMap().growIsland();
+	}
 
 
 	public User getUser() {
@@ -456,27 +327,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 
 
-	public GInternalFrame newFrame() {
-		return newFrame("");
-	}
-
-	private GInternalFrame newFrame(String title) {
-
-		GInternalFrame frame = new DefaultGInternalFrame(title);
-
-		getMap().addFrame(frame);
-
-		return frame;
-	}
-
-	public GadgetPopup newFrameGadget(Gadget gadget, GadgetDisplayer gDisplayer) {
-
-		GadgetPopup frame = new GadgetPopup(gadget, gDisplayer);
-
-		getMap().addFrame(frame);
-
-		return frame;
-	}
 
 	/**
 	 * pass the type of meta you'd like created and. 1) we'll put up the create window box. 2) we'll
@@ -500,10 +350,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 		// });
 		// }
 		// });
-	}
-
-	public void refreshAll() {
-		getMap().refreshIslands();
 	}
 
 
@@ -557,33 +403,6 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 
 
 
-	/*
-	 * 
-	 * 
-	 */
-	public void showPreviews(final long id) {
-
-		System.out.println("showPreviews " + id);
-
-		getTopicCache().getTopicByIdA(id,
-				new StdAsyncCallback(ConstHolder.myConstants.oceanIslandLookupAsync()) {
-					public void onSuccess(Object result) {
-						super.onSuccess(result);
-						Topic tag = (Topic) result;
-						getMap().displayTopic(tag);
-
-						// IslandDetailsWindow tcw = new
-						// IslandDetailsWindow(tag,topics,Manager.this);
-					}
-				});
-	}
-
-	public PopupWindow showProgressBar(ProgressBar progressBar) {
-		ProgressPopup win = new ProgressPopup(newFrame(progressBar.getTitle()), progressBar
-				.getTitle(), progressBar);
-		return win;
-	}
-
 	/**
 	 * Topic was saved with this command.
 	 * 
@@ -597,48 +416,8 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	}
 
 
-	public void unselect() {
-		System.out.println("MindscapeManger UNSELECT()");
-		getMap().unselect(selectedTopics);
-		selectedTopics.clear();
-	}
-
-
-	public void updateStatus(int i, String call, StatusCode send) {
-		getMap().updateStatusWindow(i, call, send);
-	}
-
-	public void userNeedsToUpgrade() {
-		displayInfo(ConstHolder.myConstants.userNeedsToUpgrade());
-	}
-
-	public void zoomIn() {
-		getMap().zoomIn();
-	}
-
-
-
-	public void zoomOut() {
-		getMap().zoomOut();
-	}
-
-
-	public void zoomTo(double scale) {
-		getMap().zoomTo(scale);
-	}
-
-
-	public int load(Topic myTopic) {
-		bringUpChart(myTopic);
-		return 0;
-	}
-
-
-	public void addSelected(Topic t) {
-		selectedTopics.add(t);
-		getMap().editSelectStatus(t.getIdentifier(), true);
-
-		System.out.println("MindscapeManager addSelected " + t + " Now: " + selectedTopics);
+	public boolean isEdittable() {
+		return true;
 	}
 
 

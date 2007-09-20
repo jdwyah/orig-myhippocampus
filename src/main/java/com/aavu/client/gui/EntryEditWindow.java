@@ -41,32 +41,33 @@ public class EntryEditWindow extends PopupWindow {
 
 		topicViewAndEditW.load(entry);
 
+		// no need to check on close if it's not edittable
+		if (manager.isEdittable()) {
+			frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
 
-		frame.setDefaultCloseOperation(GFrame.DO_NOTHING_ON_CLOSE);
+			frame.addFrameListener(new GFrameAdapter() {
+				public void frameClosing(GFrameEvent evt) {
+					if (topicViewAndEditW.isSaveNeeded()) {
 
-		frame.addFrameListener(new GFrameAdapter() {
-			public void frameClosing(GFrameEvent evt) {
-				if (topicViewAndEditW.isSaveNeeded()) {
+						// DefaultGDialog.showConfirmDialog(mainP,
+						// Manager.myConstants.close_without_saving(), "",
+						// GDialog.OK_CANCEL_OPTION_TYPE, new GDialogChoiceListener(){
+						// public void onChoice(DefaultGDialog dialog) {
+						// if (dialog.getSelectedOption() == DefaultGDialog.OK_OPTION) {
+						// frame.close();
+						// }
+						// }});
 
-					// DefaultGDialog.showConfirmDialog(mainP,
-					// Manager.myConstants.close_without_saving(), "",
-					// GDialog.OK_CANCEL_OPTION_TYPE, new GDialogChoiceListener(){
-					// public void onChoice(DefaultGDialog dialog) {
-					// if (dialog.getSelectedOption() == DefaultGDialog.OK_OPTION) {
-					// frame.close();
-					// }
-					// }});
+						if (Window.confirm(ConstHolder.myConstants.close_without_saving())) {
+							getFrame().close();
+						}
 
-					if (Window.confirm(ConstHolder.myConstants.close_without_saving())) {
+					} else {
 						getFrame().close();
 					}
-
-				} else {
-					getFrame().close();
 				}
-			}
-		});
-
+			});
+		}
 		if (needsSave) {
 			topicViewAndEditW.setSaveNeeded();
 		}

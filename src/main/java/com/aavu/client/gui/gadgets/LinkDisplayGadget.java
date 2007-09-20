@@ -90,7 +90,9 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 		for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
 			WebLink occ = (WebLink) iter.next();
 
-
+			if (!occ.isPublicVisible()) {
+				continue;
+			}
 
 			// HorizontalPanel lP = new HorizontalPanel();
 			// lP.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);

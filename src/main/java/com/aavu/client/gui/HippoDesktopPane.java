@@ -54,9 +54,13 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 
 	public abstract void removeButton(GFrame frame);
 
-	public void iconify(GFrame frame) {
-		// frame.getContent().setPixelSize(1, 1);
+	/**
+	 * weird. if we just setVisible() we run into a if(minimized) throw Exception() Which is dumb
+	 */
+	public void iconify(final GFrame frame) {
+
 		frame.setVisible(false);
+
 		addButton(frame);
 	}
 
@@ -76,8 +80,9 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 		int left = getFrame().getAbsoluteLeft() + spos;
 		int top = getFrame().getAbsoluteTop() + spos;
 
-		System.out.println("add frame gf.absleft " + getFrame().getAbsoluteLeft() + " gf.abstop "
-				+ getFrame().getAbsoluteTop() + " " + spos);
+		// System.out.println("HippoDesktopPane.add frame gf.absleft " +
+		// getFrame().getAbsoluteLeft() + " gf.abstop "
+		// + getFrame().getAbsoluteTop() + " " + spos);
 
 		SelectBoxManagerImpl selectBoxManager = ((DefaultGFrame) internalFrame)
 				.getSelectBoxManager();

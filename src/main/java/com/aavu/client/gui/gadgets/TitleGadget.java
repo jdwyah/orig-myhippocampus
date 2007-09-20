@@ -56,6 +56,8 @@ public class TitleGadget extends Gadget {
 	private Image deleteB;
 	private HorizontalPanel uriPanel;
 	private Image sharedB;
+	private Label titleLabel;
+	private Label dateLabel;
 
 	// private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -64,6 +66,7 @@ public class TitleGadget extends Gadget {
 	public TitleGadget(final Manager manager) {
 		super(manager);
 
+		titleLabel = new Label();
 		titleBox = new EditableLabelExtension("", new ChangeListener() {
 			public void onChange(Widget sender) {
 				manager.getTopicCache().executeCommand(topic,
@@ -121,7 +124,12 @@ public class TitleGadget extends Gadget {
 
 		CellPanel titleP = new HorizontalPanel();
 		titleP.add(new Label(ConstHolder.myConstants.title()));
-		titleP.add(titleBox);
+
+		if (manager.isEdittable()) {
+			titleP.add(titleBox);
+		} else {
+			titleP.add(titleLabel);
+		}
 
 		// picker = new StatusPicker(manager);
 
@@ -277,9 +285,15 @@ public class TitleGadget extends Gadget {
 
 		uriPanel = new HorizontalPanel();
 
+		dateLabel = new Label();
 		CellPanel dateP = new HorizontalPanel();
 		dateP.add(new Label(ConstHolder.myConstants.date()));
-		dateP.add(datePicker.getWidget());
+
+		if (manager.isEdittable()) {
+			dateP.add(datePicker.getWidget());
+		} else {
+			dateP.add(dateLabel);
+		}
 
 		VerticalPanel mainP = new VerticalPanel();
 		mainP.add(titleP);
@@ -305,14 +319,16 @@ public class TitleGadget extends Gadget {
 
 		if (topic.getTitle() == null || topic.getTitle().equals("")) {
 			titleBox.setText(ConstHolder.myConstants.topic_blank());
+			titleLabel.setText(ConstHolder.myConstants.topic_blank());
 		} else {
 			titleBox.setText(topic.getTitle());
+			titleLabel.setText(topic.getTitle());
 		}
 
 		// don't let them delete Root
-		deleteB.setVisible(topic.isDeletable());
+		deleteB.setVisible(topic.isDeletable() && manager.isEdittable());
 		//
-		sharedB.setVisible(topic.isPublicVisibleEditable());
+		sharedB.setVisible(topic.isPublicVisibleEditable() && manager.isEdittable());
 
 		if (topic.isPublicVisible()) {
 			ConstHolder.images.shared().applyTo(sharedB);
@@ -323,6 +339,7 @@ public class TitleGadget extends Gadget {
 		// picker.load(topic);
 
 		datePicker.setSelectedDate(topic.getCreated());
+		dateLabel.setText(datePicker.getDateFormatter().formatDate(topic.getCreated()));
 		// datePicker.setCurrentDate(topic.getCreated());
 
 

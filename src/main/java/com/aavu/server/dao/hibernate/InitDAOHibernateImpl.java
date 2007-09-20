@@ -93,7 +93,7 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 
 			log.info("Root: " + root);
 
-			List<DatedTopicIdentifier> topics = selectDAO.getAllTopicIdentifiers(user, false);
+			List<DatedTopicIdentifier> topics = selectDAO.getAllTopicIdentifiers(user, user, false);
 
 			int count = 0;
 
@@ -139,7 +139,7 @@ public class InitDAOHibernateImpl extends HibernateDaoSupport implements InitDAO
 
 			log.info("Root: " + root);
 
-			List<DatedTopicIdentifier> topics = selectDAO.getAllTopicIdentifiers(user, false);
+			List<DatedTopicIdentifier> topics = selectDAO.getAllTopicIdentifiers(user, user, false);
 
 			int count = 0;
 			log.info("Topics Size " + topics.size());

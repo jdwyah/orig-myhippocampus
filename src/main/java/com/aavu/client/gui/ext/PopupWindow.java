@@ -5,6 +5,7 @@ import org.gwm.client.event.GFrameListener;
 import org.gwm.client.impl.DefaultGFrame;
 
 import com.aavu.client.gui.timeline.CloseListener;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -46,12 +47,13 @@ public class PopupWindow implements CloseListener {
 			int left = Window.getClientWidth() / 2 - width / 2;
 			int top = Window.getClientHeight() / 2 - height / 2;
 
-			System.out.println("\n\n.W " + left + " H " + top + " " + Window.getClientWidth() + " "
-					+ Window.getClientHeight());
+			// System.out.println("\n\nPopupWindow W " + left + " H " + top + " " +
+			// Window.getClientWidth() + " "
+			// + Window.getClientHeight());
 
 			left = (left < 100) ? 100 : left;
 			top = (top < 100) ? 100 : top;
-			System.out.println("SET LOCATION " + left + " " + top);
+			// System.out.println("PopupWindow.SET LOCATION " + left + " " + top);
 			frame.setLocation(top, left);
 		}
 
@@ -124,7 +126,12 @@ public class PopupWindow implements CloseListener {
 
 	public void hide() {
 		System.out.println("PopupWindow hide()");
-		frame.minimize();
+		try {
+			frame.minimize();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Logger.error("PopupWindow hide on hidden");
+		}
 	}
 
 	public void addInternalFrameListener(GFrameListener listener) {

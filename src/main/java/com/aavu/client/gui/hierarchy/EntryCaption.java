@@ -23,7 +23,7 @@ public class EntryCaption extends Composite implements SourcesMouseEvents, Chang
 
 	private boolean needsSave;
 
-	public EntryCaption(final EntryRichText entryRichText) {
+	public EntryCaption(final EntryRichText entryRichText, boolean isEdittable) {
 		this.entryRichText = entryRichText;
 		HorizontalPanel mainP = new HorizontalPanel();
 
@@ -50,7 +50,9 @@ public class EntryCaption extends Composite implements SourcesMouseEvents, Chang
 				save();
 			}
 		});
-		mainP.add(saveL);
+		if (isEdittable) {
+			mainP.add(saveL);
+		}
 
 		mainP.add(richL);
 

@@ -134,7 +134,7 @@ public class TagDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		list = selectDAO.getRootTopics(u, u);
 
-		List<DatedTopicIdentifier> all = selectDAO.getAllTopicIdentifiers(u, false);
+		List<DatedTopicIdentifier> all = selectDAO.getAllTopicIdentifiers(u, u, false);
 		assertEquals(8, all.size());
 
 		assertEquals(8, list.size());

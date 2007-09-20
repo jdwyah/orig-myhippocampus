@@ -115,7 +115,7 @@ public class EntryDisplay extends AbstractDraggableBubble implements TopicDispla
 
 	// @Override
 	protected Widget getOurWidget() {
-		entryPreview = new EntryRichText(this, display);
+		entryPreview = new EntryRichText(this, display, display.getManager().isEdittable());
 		Entry e = (Entry) owl.getOccurrence();
 		entryPreview.load(e);
 

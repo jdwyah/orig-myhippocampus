@@ -66,7 +66,9 @@ public class ChildrenGadget extends Gadget implements TopicLoader {
 			TopicTypeConnector conn = (TopicTypeConnector) iterator.next();
 
 			Topic child = conn.getTopic();
-			childPanel.add(new TopicLink(child));
+			if (manager.isEdittable() || child.isPublicVisible()) {
+				childPanel.add(new TopicLink(child));
+			}
 
 			childCount++;
 		}

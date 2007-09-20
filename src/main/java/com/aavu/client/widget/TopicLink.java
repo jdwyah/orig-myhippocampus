@@ -106,7 +106,7 @@ public class TopicLink extends SimplePanel implements ClickListener {
 
 	public void onBrowserEvent(Event event) {
 		super.onBrowserEvent(event);
-		System.out.println("TopicLink.onBrowserEvent sadfsdfsdf");
+		System.out.println("TopicLink.onBrowserEvent ");
 		if (popup != null) {
 			if (DOM.eventGetType(event) == Event.ONCLICK) {
 				if (!DOM.eventGetCtrlKey(event)) {

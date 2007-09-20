@@ -60,13 +60,13 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 		}
 
 		private void openContextMenu() {
+			if (manager.isEdittable()) {
+				int x = getFocusBackdrop().getLastClickClientX();
+				int y = getFocusBackdrop().getLastClickClientY();
 
-			int x = getFocusBackdrop().getLastClickClientX();
-			int y = getFocusBackdrop().getLastClickClientY();
-
-			ContextMenu p = new TimelineContextMenu(manager, ZoomableTimeline.this, x);
-			p.show(x, y);
-
+				ContextMenu p = new TimelineContextMenu(manager, ZoomableTimeline.this, x);
+				p.show(x, y);
+			}
 		}
 	}
 
@@ -215,7 +215,9 @@ public class ZoomableTimeline extends ViewPanel implements HippoTimeline, ClickL
 
 		for (Iterator iter = timelines.iterator(); iter.hasNext();) {
 			TimeLineObj tlo = (TimeLineObj) iter.next();
-			sorted.put(tlo, null);
+			if (manager.isEdittable() || tlo.getTopicIdentifier().isPublicVisible()) {
+				sorted.put(tlo, null);
+			}
 		}
 
 		super.clear();

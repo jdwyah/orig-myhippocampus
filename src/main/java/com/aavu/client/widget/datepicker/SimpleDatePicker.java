@@ -32,13 +32,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /*
- * SimpleDatePicker is a date picker which sub classes
- * DatePicker and defines a calendar popup which allows
- * user to traverse back and forth in month and year
+ * SimpleDatePicker is a date picker which sub classes DatePicker and defines a calendar popup which
+ * allows user to traverse back and forth in month and year
  * 
  * 
  * 
- * WARN! NOTE ETC!!!!!  DON'T Use any date format besides mm/dd/yyyy !!
+ * WARN! NOTE ETC!!!!! DON'T Use any date format besides mm/dd/yyyy !!
  */
 public class SimpleDatePicker extends DatePicker implements ClickListener {
 
@@ -51,7 +50,7 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	/*
 	 * Default Constructor
 	 */
-	public SimpleDatePicker(){
+	public SimpleDatePicker() {
 		super();
 		this.init();
 		this.calendarPanel = new CalendarPanel(this);
@@ -59,16 +58,15 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 		this.todayPanel = new TodayPanel(this);
 		this.addCalendar(this);
 	}
-	
+
 	/*
 	 * Overridden Constructor
 	 * 
 	 * @param String
 	 * 
-	 * Uses the name to assign to the "name"
-	 * value of the HTML textbox
+	 * Uses the name to assign to the "name" value of the HTML textbox
 	 */
-	public SimpleDatePicker(String name){
+	public SimpleDatePicker(String name) {
 		this();
 		DOM.setAttribute(this.getElement(), "name", name);
 	}
@@ -78,8 +76,8 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * 
 	 * Does the initialization to the textbox
 	 */
-	protected void init(){
-		this.setWidth(80+"px");
+	protected void init() {
+		this.setWidth(80 + "px");
 		this.setStyleName("txtbox");
 		addClickListener(this);
 		addKeyboardListener(this);
@@ -88,19 +86,16 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	/*
 	 * addCalendar
 	 * 
-	 * Adds the popup panel which displays three
-	 * main panels:
-	 * 	a. CalendarTraversalPanel: DockPanel
-	 * 	b. CalendarPanel: AbsolutePanel
-	 * 	c. TodayPanel: AbsolutePanel
+	 * Adds the popup panel which displays three main panels: a. CalendarTraversalPanel: DockPanel
+	 * b. CalendarPanel: AbsolutePanel c. TodayPanel: AbsolutePanel
 	 * 
 	 * @param DatePicker
 	 */
-	protected void addCalendar(DatePicker datePicker){
+	protected void addCalendar(DatePicker datePicker) {
 		vertPanel.add(calendarTraversalPanel);
 		vertPanel.add(calendarPanel);
 		vertPanel.add(todayPanel);
-		vertPanel.addStyleName("date_DisplayPanel");	
+		vertPanel.addStyleName("date_DisplayPanel");
 		calendarPanel.addStyleName("date_popupPanel");
 		calendarPopup.add(vertPanel);
 	}
@@ -110,11 +105,12 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * 
 	 * Displays the popup calendar panel
 	 */
-	protected void showCalendar(){
+	protected void showCalendar() {
 		calendarPopup.show();
-		calendarPopup.setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop() + this.getOffsetHeight()+4);
-		calendarPopup.setHeight(120+"px");
-		calendarPopup.setWidth(165 + "px");			
+		calendarPopup.setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()
+				+ this.getOffsetHeight() + 4);
+		calendarPopup.setHeight(120 + "px");
+		calendarPopup.setWidth(165 + "px");
 	}
 
 	/*
@@ -122,23 +118,23 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * 
 	 * Hides the popup calendar panel
 	 */
-	public void hideCalendar(){
+	public void hideCalendar() {
 		this.calendarPopup.hide();
 	}
 
 	/*
 	 * redrawCalendar
 	 * 
-	 * Redraws the calendar panel with new month/ year 
+	 * Redraws the calendar panel with new month/ year
 	 */
-	public void redrawCalendar(){
+	public void redrawCalendar() {
 		this.calendarPanel.redrawCalendar();
 		this.calendarTraversalPanel.drawTitle();
 	}
 
 	/*
 	 * Methods from AbstractUIDatePicker
-	 *
+	 * 
 	 */
 	public void show() {
 		this.redrawCalendar();
@@ -153,20 +149,20 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	 * Methods from ClickListener
 	 */
 	public void onClick(Widget sender) {
-//		System.out.println("ONCLICK!!!!!!!!!!!! ");
-//		System.out.println("sel "+getSelectedDate()+" || "+this.getText()+" || "+getCurrentDate());
-//		
-//		System.out.println("STRING: "+this.getText());
+		// System.out.println("ONCLICK!!!!!!!!!!!! ");
+		// System.out.println("sel "+getSelectedDate()+" || "+this.getText()+" ||
+		// "+getCurrentDate());
+		//		
+		// System.out.println("STRING: "+this.getText());
 		Date ddd = DateUtil.convertString2Date(this.getText());
-		//System.out.println("ddd "+ddd);
+		// System.out.println("ddd "+ddd);
 		this.setSelectedDate(ddd);
-		//System.out.println("b4show  "+getSelectedDate()+" "+this.getText()+" "+getCurrentDate());
+		// System.out.println("b4show "+getSelectedDate()+" "+this.getText()+" "+getCurrentDate());
 		this.show();
 	}
-	
+
 	/*
-	 * getWeekendSelectable
-	 * Getter method for isWeekendSelectable
+	 * getWeekendSelectable Getter method for isWeekendSelectable
 	 * 
 	 * @return boolean
 	 */
@@ -175,18 +171,16 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 	}
 
 	/*
-	 * setWeekendSelectable
-	 * Setter method for isWeekendSelectable
+	 * setWeekendSelectable Setter method for isWeekendSelectable
 	 * 
 	 * @param boolean
 	 */
 	public void setWeekendSelectable(boolean isWeekendSelectable) {
 		this.calendarPanel.setWeekendSelectable(isWeekendSelectable);
 	}
-	
+
 	/*
-	 * setDateFormat
-	 * Setter method set the format of the display date
+	 * setDateFormat Setter method set the format of the display date
 	 * 
 	 * @param boolean
 	 */
@@ -194,4 +188,5 @@ public class SimpleDatePicker extends DatePicker implements ClickListener {
 		super.setDateFormat(dateFormat);
 		this.calendarPanel.setDateFormatter(this.getDateFormatter());
 	}
+
 }

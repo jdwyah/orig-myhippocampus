@@ -262,6 +262,10 @@ public class AddLinkManager implements Manager, CloseListener {
 
 	}
 
+	public boolean isEdittable() {
+		return false;
+	}
+
 
 
 }

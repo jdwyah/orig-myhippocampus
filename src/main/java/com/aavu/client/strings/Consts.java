@@ -451,6 +451,8 @@ public interface Consts extends Messages {
 
 	String getRoot_async();
 
+	String getTopicDetails_async();
+
 	String breadcrumbs();
 
 	String remove();

@@ -12,6 +12,7 @@ import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
 import com.aavu.client.service.Manager;
 import com.aavu.client.widget.datepicker.DateFormat;
+import com.aavu.client.widget.datepicker.DateFormatter;
 import com.aavu.client.widget.datepicker.DatePickerInterface;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -19,6 +20,7 @@ public class DatePickerTimeline extends ZoomableTimeline implements DragEventLis
 		DatePickerInterface {
 
 	private DragHandler dragHandler;
+	private DateFormatter dateFormatter = new DateFormatter(DateFormatter.DATE_FORMAT_MMDDYYYY);
 
 	public DatePickerTimeline(Manager manager, int width, int height, CloseListener window) {
 		super(manager, width, height, window);
@@ -86,6 +88,10 @@ public class DatePickerTimeline extends ZoomableTimeline implements DragEventLis
 	public void setWeekendSelectable(boolean b) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public DateFormatter getDateFormatter() {
+		return dateFormatter;
 	}
 
 

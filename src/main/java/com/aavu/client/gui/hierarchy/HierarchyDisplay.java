@@ -186,7 +186,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 
 		if (bubble.getDropController() != null) {
-			dragController.registerDropController(bubble.getDropController());
+
+			if (manager.isEdittable()) {
+				dragController.registerDropController(bubble.getDropController());
+			}
 
 			Logger.debug("register drop controller " + bubble.getTitle());
 		}
@@ -357,12 +360,14 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 		for (Iterator iterator = t.getOccurences().iterator(); iterator.hasNext();) {
 			TopicOccurrenceConnector owl = (TopicOccurrenceConnector) iterator.next();
+			if (manager.isEdittable() || owl.getOccurrence().isPublicVisible()) {
 
-			// System.out.println("yoooooo");
-			//
-			// System.out.println("B " + BubbleFactory.class);
-			// System.out.println("D " + new BubbleFactory());
-			addBubble(BubbleFactory.createBubbleFor(owl, this));
+				// System.out.println("yoooooo");
+				//
+				// System.out.println("B " + BubbleFactory.class);
+				// System.out.println("D " + new BubbleFactory());
+				addBubble(BubbleFactory.createBubbleFor(owl, this));
+			}
 
 		}
 
@@ -377,7 +382,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 	private void loadChildTopics(final Topic t, final LoadFinishedListener loadFinished) {
 		manager.getTopicCache().getTopicsWithTag(t.getId(),
-				new StdAsyncCallback(ConstHolder.myConstants.getRoot_async()) {
+				new StdAsyncCallback(ConstHolder.myConstants.getTopicDetails_async()) {
 					// @Override
 					public void onSuccess(Object result) {
 						super.onSuccess(result);
@@ -393,7 +398,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 
 						progressWindow = manager.showProgressBar(progressBar);
-
+						progressWindow.show();
 						Timer t = new Timer() {
 
 							public void run() {
@@ -420,7 +425,10 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		while (iterator.hasNext() && count < batchSize) {
 
 			FullTopicIdentifier fti = (FullTopicIdentifier) iterator.next();
-			addBubble(BubbleFactory.createBubbleFor(fti, HierarchyDisplay.this));
+
+			if (manager.isEdittable() || fti.isPublicVisible()) {
+				addBubble(BubbleFactory.createBubbleFor(fti, HierarchyDisplay.this));
+			}
 
 			curProg += (100 * (1.0 / totalSize));
 			progressBar.setProgress(curProg);
@@ -587,11 +595,13 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		}
 
 		private void openContextMenu() {
-			int x = getFocusBackdrop().getLastClickClientX();
-			int y = getFocusBackdrop().getLastClickClientY();
+			if (manager.isEdittable()) {
+				int x = getFocusBackdrop().getLastClickClientX();
+				int y = getFocusBackdrop().getLastClickClientY();
 
-			ContextMenu p = new HierarchyContextMenu(getManager(), HierarchyDisplay.this, x, y);
-			p.show(x, y);
+				ContextMenu p = new HierarchyContextMenu(getManager(), HierarchyDisplay.this, x, y);
+				p.show(x, y);
+			}
 		}
 
 		public void onDblClick(Widget sender) {

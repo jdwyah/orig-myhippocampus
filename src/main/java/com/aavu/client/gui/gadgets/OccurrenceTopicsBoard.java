@@ -13,6 +13,7 @@ import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.AddButton;
+import com.aavu.client.widget.TopicLink;
 import com.aavu.client.widget.edit.CompleteListener;
 import com.aavu.client.widget.edit.DeletableTopicLabel;
 import com.aavu.client.widget.edit.RemoveListener;
@@ -94,7 +95,9 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 			}
 		});
 
-		tagBoxP.add(addButton);
+		if (manager.isEdittable()) {
+			tagBoxP.add(addButton);
+		}
 
 		adderP = new HorizontalPanel();
 		adderP.add(new Label(ConstHolder.myConstants.addTag()));
@@ -162,8 +165,11 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 			Object o = iter.next();
 
 			Topic tag = (Topic) o;
-			allTopics.add(tag);
+			if (manager.isEdittable() || tag.isPublicVisible()) {
+				allTopics.add(tag);
+			}
 			showTag(tag);
+
 			rtnSize++;
 
 		}
@@ -179,10 +185,14 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 		//
 		// tagPanel.add(topicBubble);
 
-		DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
-
-
-		tagPanel.add(tagLabel);
+		if (manager.isEdittable()) {
+			DeletableTopicLabel tagLabel = new DeletableTopicLabel(tag, this);
+			tagPanel.add(tagLabel);
+		} else {
+			if (tag.isPublicVisible()) {
+				tagPanel.add(new TopicLink(tag));
+			}
+		}
 	}
 
 	/**

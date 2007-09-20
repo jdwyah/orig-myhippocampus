@@ -62,16 +62,19 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 		VerticalPanel mainP = new VerticalPanel();
 
-		HorizontalPanel cp = new HorizontalPanel();
-		cp.add(new Label(ConstHolder.myConstants.addTo()));
-		cp.add(topicCompleter);
-		cp.add(enterInfoButton);
+		HorizontalPanel addASeeAlsoPanel = new HorizontalPanel();
+		addASeeAlsoPanel.add(new Label(ConstHolder.myConstants.addTo()));
+		addASeeAlsoPanel.add(topicCompleter);
+		addASeeAlsoPanel.add(enterInfoButton);
 
 		// mainP.add(b);
 
 		refPanel = new VerticalPanel();
 
-		mainP.add(cp);
+		if (manager.isEdittable()) {
+			mainP.add(addASeeAlsoPanel);
+		}
+
 		mainP.add(alsos);
 
 		mainP.add(refPanel);
@@ -119,7 +122,9 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					TopicIdentifier topicIdent = (TopicIdentifier) iter.next();
-					refPanel.add(new TopicLink(topicIdent));
+					if (manager.isEdittable() || topicIdent.isPublicVisible()) {
+						refPanel.add(new TopicLink(topicIdent));
+					}
 				}
 
 				if (!list.isEmpty()) {
@@ -177,8 +182,10 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 			seeAlsoPanel.clear();
 			for (Iterator iter = seeAlsoAssoc.getMembers().iterator(); iter.hasNext();) {
 				Topic top = (Topic) iter.next();
-				seeAlsoPanel.add(new TopicLink(top.getIdentifier()));
-				size++;
+				if (manager.isEdittable() || top.isPublicVisible()) {
+					seeAlsoPanel.add(new TopicLink(top.getIdentifier()));
+					size++;
+				}
 			}
 			return size;
 		}
@@ -197,7 +204,7 @@ public class ConnectionBoard extends Gadget implements CompleteListener {
 
 
 	public boolean isOnForTopic(Topic topic) {
-		return true;
+		return manager.isEdittable() || !topic.getSeeAlsoAssociation().getMembers().isEmpty();
 	}
 
 	// @Override

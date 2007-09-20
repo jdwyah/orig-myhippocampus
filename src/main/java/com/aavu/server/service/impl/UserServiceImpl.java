@@ -55,6 +55,10 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
 	private static final long CANCELLED_SUBSCRIPTION_ID = 1;
+	/**
+	 * match with applicationContext-acegi-security.xml <bean id="anonymousProcessingFilter">
+	 */
+	public static final String ANONYMOUS = "anonymousUser";
 
 	private UserDAO userDAO;
 
@@ -95,7 +99,13 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			username = obj.toString();
 		}
 
+		if (username.equals(ANONYMOUS)) {
+			log.debug("Anonymous return null user");
+			return null;
+		}
+
 		log.debug("loadUserByUsername " + username);
+
 
 		try {
 
