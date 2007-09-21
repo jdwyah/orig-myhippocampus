@@ -60,6 +60,10 @@
 		<property name="selectDAO" ref="selectDAO" />
 		<property name="editDAO" ref="editDAO"></property>		
 	</bean>
+	<bean id="browseService" class="com.aavu.server.service.impl.BrowseServiceImpl">
+		<property name="browseDAO" ref="browseDAO" />
+		<property name="userService" ref="userService"/>
+	</bean>
 	<bean id="searchService" class="com.aavu.server.service.impl.SearchServiceImpl">
 		<property name="compass" ref="compass" />
 		<property name="compassGPS" ref="compassGPS"></property>

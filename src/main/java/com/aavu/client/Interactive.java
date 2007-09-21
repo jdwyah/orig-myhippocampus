@@ -74,8 +74,7 @@ public class Interactive implements EntryPoint {
 				AddLink addLink = new AddLink();
 
 			} else if (page.equals("HippocampusBrowser")) {
-				BrowserClientApp browser = new BrowserClientApp(theme.get("user"), theme
-						.get("topic"));
+				BrowserClientApp browser = new BrowserClientApp();
 
 			} else {
 				throw new Exception("Vars['page'] not set.");

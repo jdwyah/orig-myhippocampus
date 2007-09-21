@@ -5,27 +5,24 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.aavu.client.domain.User;
-import com.aavu.server.service.TopicService;
+import com.aavu.server.service.BrowseService;
 
 public class IndexController extends BasicController {
 	private static final Logger log = Logger.getLogger(IndexController.class);
 
-	private String loggedInView;
 
-	private TopicService topicService;
+	private BrowseService browseService;
 
-	public void setLoggedInView(String loggedInView) {
-		this.loggedInView = loggedInView;
+
+	@Required
+	public void setBrowseService(BrowseService browse) {
+		this.browseService = browse;
 	}
 
-	public void setTopicService(TopicService topicService) {
-		this.topicService = topicService;
-	}
 
 
 	@Override
@@ -40,14 +37,11 @@ public class IndexController extends BasicController {
 		// parameter may be on param line if we're redirect:ed here (createUserController)
 		model.put("message", req.getParameter("message"));
 
-		User su = null;
-		try {
-			su = userService.getCurrentUser();
-			return new ModelAndView(loggedInView);
 
-		} catch (UsernameNotFoundException e) {
-			log.debug("No user logged in.");
-		}
+		model.put("topTopics", browseService.getTopTopics());
+
+		model.put("topWeblinks", browseService.getTopWeblinks());
+
 		return new ModelAndView(getView(), model);
 
 	}

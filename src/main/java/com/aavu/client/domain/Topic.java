@@ -99,6 +99,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		o.setLatitude(getLatitude());
 		o.setLongitude(getLongitude());
 		o.setTitle(getTitle());
+		o.setPublicVisible(isPublicVisible());
 	}
 
 	public void copyPropsButNotIDIntoParam(Topic o) {
@@ -109,6 +110,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		o.setLatitude(getLatitude());
 		o.setLongitude(getLongitude());
 		o.setTitle(getTitle());
+		o.setPublicVisible(isPublicVisible());
 	}
 
 	public void accept(TopicVisitor visitor) {

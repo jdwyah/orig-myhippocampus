@@ -5,7 +5,8 @@ body {
 	padding: 0em;
 	font-family: Verdana, Tahoma, Arial, sans-serif;
 	background-color: #D2EAF9;
-	background-image:url("../img/simplicity/ocean200.png");
+	background-color: white;
+	/*background-image:url("../img/simplicity/ocean200.png");*/
 }
 
 h2 {
@@ -14,68 +15,63 @@ h2 {
 }
 
 #header {
-	position: absolute;
-	left: 200px;
-	padding: 10px;
+	
+}
+
+#header_logo {	
+	float: left;
+	/*background-color: #B2BB2B;*/ /*green*/	
+}
+
+
+#header_account {
+	display: inline;
+	float: right;		
+	width: 360px;
+	
+}
+
+#header_logo img {	
+	margin-left: 25px;
+}
+
+#header_logoTitle.boxStyle {
+	margin: 5px 0px 0px 90px;	
+	width: 560px;
+	height: 88px;
+	
 }
 
 #content {
-	padding-top: 120px;
+/*	padding-top: 140px;*/
 }
 
 #footer {
-	position: fixed;
+	clear: both;	
 	text-align: center;
-	left: 30%;
-	top: 95%;
+	left: 30%;	
+	margin-bottom: 10px;
+}
+.clearRdiv {
+	clear:right;
+	font-size:0pt;
+	height:1px;
+	line-height:0pt;
+}
+.cleardiv {
+	clear:both;
+	font-size:0pt;
+	height:1px;
+	line-height:0pt;
 }
 
-#sidebar {
-	float: left;
-	background-color: #B2BB2B; /*green*/
-	width: 180px;
-	height: 900px;
-}
-
-#sidebar img {
-	margin-left: 25px;
-}
-
-/*background-color: #B2BB2B;*/ /*bcard green*/
-	/*background-color: #E1E184;*/ /*faded green*/
-	/*background-color: #D3D345;*/ /*middle green*/
 #whatIsIsland {
-	position: absolute;
-	left: 21%;
-	top: 20%;
+	width: 400px;
+}
+#browseIsland {
+	width: 300px;
 }
 
-#whatIsIsland>div.islandOverlay {
-	width: 500px;
-	margin: 25px;
-}
-
-#signupIsland {
-	position: absolute;
-	left: 35%;
-	top: 60%;
-}
-
-#signupIsland>div.islandOverlay {
-	margin-left: 25px;
-	margin-top: 40px;
-}
-
-#loginIsland {
-	position: absolute;
-	left: 60%;
-	top: 20%;
-}
-
-#loginIsland>div.islandOverlay {
-	margin-top: 5px;
-	margin-left: 15px;
-}
 #remember_me {
 	height: 20px;
 	width: 300px;
@@ -97,15 +93,18 @@ fieldset {
 	margin-left: 10px;
 }
 
+.boxStyle {
+	background: #fff6bf;
+	margin-left: 10px;
+    margin-right: 10px;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;	
+}
+
 .island { /*border-style: solid;
 	border-width: 2px;
 	border-color: red;*/
 	
-}
-
-.islandOverlay {
-	position: absolute;
-	z-index: 2;
 }
 
 legend {
@@ -114,24 +113,8 @@ legend {
 	font-size: 1.3em;
 }
 
-.islandHeader {
-	color: #600D25;
-	font-size: 2em;
-	font-weight: bold;
-}
-
-.islandDesc {
-	font-size: 1.5em;
-}
-
-.acre {
-	width: 60px;
-	height: 60px;
-	position: absolute;
-	-moz-user-select: none;
-}
 a.link {
-	color: white;
+	color: blue;
 	text-decoration: underline;
 	
 }
@@ -262,6 +245,14 @@ input.openid-identifier {
 	width: 200px;
 }
 .middle-column-box-white {
+	background: #fff6bf;
+	margin-left: 10px;
+    margin-right: 10px;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;	
+    margin: 5px 50px 50px 90px;
+}
+.Xmiddle-column-box-white {
 	background-image: url("../img/blueFade.png");
 	background-repeat: repeat-x;
 	background-color: #647CB5;

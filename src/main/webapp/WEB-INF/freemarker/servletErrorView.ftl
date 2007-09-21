@@ -1,4 +1,6 @@
 <html>
+<#import "/spring.ftl" as spring/>
+<#import "common.ftl" as common/>
 	<head>
 	<#--decorator won't be called on some errors-->
   	<link rel="stylesheet" type="text/css" href="/css/style.css"/>
@@ -9,16 +11,20 @@
 	
 <body>
 	
-	
+	<div id="header_logo">	    	
+	  	<a href="<@spring.url "/site/index.html"/>"><@common.pngImage src="/img/sideSeaHorse120px.png" width="67" height="120"/>
+	  	</a>
+    </div>
+    		
 	 <div class="middle-column-box-white">
-        <div class="middle-column-box-title-green">An Servlet Error Occurred</div>
+        <div class="middle-column-box-title-green">Error Occurred</div>
 	
 	
 	 <#if message?exists>
 		 <div class="message">${message}</div>
 	 </#if>
 
-	We're sorry you received an error. Do us a favor and let us know! email <a href="mailto:help@myhippocampus.com">help@myhippocampus.com</a> with the error message and a description of what you were doing. Thanks!
+	We're sorry you received an error. Please do us a favor and let us know! Email <a href="mailto:help@myhippocampus.com">help@myhippocampus.com</a> with the error message and a description of what you were doing. Thanks!
 
 	<#if exception?exists>
 

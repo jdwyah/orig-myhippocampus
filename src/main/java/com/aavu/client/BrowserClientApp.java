@@ -21,7 +21,7 @@ public class BrowserClientApp extends AbstractClientApp implements HistoryListen
 
 	private Manager manager;
 
-	public BrowserClientApp(String user, String topic) {
+	public BrowserClientApp() {
 		super();
 	}
 

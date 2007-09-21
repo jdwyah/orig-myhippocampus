@@ -96,6 +96,9 @@
 	<bean id="selectDAO" class="com.aavu.server.dao.hibernate.SelectDAOHibernateImpl">
 		<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>
+	<bean id="browseDAO" class="com.aavu.server.dao.hibernate.BrowseDAOHibernateImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
 	<bean id="editDAO" class="com.aavu.server.dao.hibernate.EditDAOHibernateImpl">
 		<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>

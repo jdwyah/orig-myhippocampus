@@ -6,6 +6,7 @@
 	  <pattern>*com.aavu.HippoTest*</pattern> 
 	  <pattern>*com.aavu.Interactive*</pattern>	 
 	  <pattern>/site/secure/mindscape.html</pattern><!-- todo change to minimal decorator -->
+	  <pattern>/site/browser.html</pattern><!-- todo change to minimal decorator -->
 	  <pattern>/site/secure/addLink.html*</pattern><!-- todo change to minimal decorator -->
       <pattern>/site/secure/getTopics.html</pattern><!-- Ajax Straight HTML <UL> -->
 	</excludes>
@@ -20,9 +21,9 @@
     
     <!-- crucial not to match /index.html (the redirect) since that doesn't go through
     Spring and the default.ftl needs to springMacroRequestContext -->
-    <decorator name="none" page="none.ftl">
+    <!-- <decorator name="none" page="none.ftl">
         <pattern>/*</pattern>
-    </decorator>
+    </decorator> -->
     
    
     

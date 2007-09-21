@@ -25,9 +25,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * An interface into the S3 system.  It is initially configured with
- * authentication and connection parameters and exposes methods to access and
- * manipulate S3 data.
+ * An interface into the S3 system. It is initially configured with authentication and connection
+ * parameters and exposes methods to access and manipulate S3 data.
  */
 public class AWSAuthConnection implements InitializingBean {
 	private static final Logger log = Logger.getLogger(AWSAuthConnection.class);
@@ -41,7 +40,7 @@ public class AWSAuthConnection implements InitializingBean {
 	private String defaultBucket;
 
 	public AWSAuthConnection() {
-		this(null,null);
+		this(null, null);
 	}
 
 	public AWSAuthConnection(String awsAccessKeyId, String awsSecretAccessKey) {
@@ -53,25 +52,28 @@ public class AWSAuthConnection implements InitializingBean {
 	}
 
 	public AWSAuthConnection(String awsAccessKeyId, String awsSecretAccessKey, boolean isSecure,
-			String server)
-	{
-		this(awsAccessKeyId, awsSecretAccessKey, isSecure, server,
-				isSecure ? Utils.SECURE_PORT : Utils.INSECURE_PORT);
+			String server) {
+		this(awsAccessKeyId, awsSecretAccessKey, isSecure, server, isSecure ? Utils.SECURE_PORT
+				: Utils.INSECURE_PORT);
 	}
 
 	/**
 	 * Create a new interface to interact with S3 with the given credential and connection
 	 * parameters
-	 *
-	 * @param awsAccessKeyId The your user key into AWS
-	 * @param awsSecretAccessKey The secret string used to generate signatures for authentication.
-	 * @param isSecure True if the data should be encrypted on the wire on the way to or from S3.
-	 * @param server Which host to connect to.  Usually, this will be s3.amazonaws.com
-	 * @param port Which port to use.
+	 * 
+	 * @param awsAccessKeyId
+	 *            The your user key into AWS
+	 * @param awsSecretAccessKey
+	 *            The secret string used to generate signatures for authentication.
+	 * @param isSecure
+	 *            True if the data should be encrypted on the wire on the way to or from S3.
+	 * @param server
+	 *            Which host to connect to. Usually, this will be s3.amazonaws.com
+	 * @param port
+	 *            Which port to use.
 	 */
 	public AWSAuthConnection(String awsAccessKeyId, String awsSecretAccessKey, boolean isSecure,
-			String server, int port)
-	{
+			String server, int port) {
 		this.awsAccessKeyId = awsAccessKeyId;
 		this.awsSecretAccessKey = awsSecretAccessKey;
 		this.isSecure = isSecure;
@@ -81,51 +83,62 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Creates a new bucket.
-	 * @param bucket The name of the bucket to create.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
-	 * @param metadata A Map of String to List of Strings representing the s3
-	 * metadata for this bucket (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket to create.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
+	 * @param metadata
+	 *            A Map of String to List of Strings representing the s3 metadata for this bucket
+	 *            (can be null).
 	 */
-	public Response createBucket(String bucket, Map headers)
-	throws MalformedURLException, IOException
-	{
+	public Response createBucket(String bucket, Map headers) throws MalformedURLException,
+			IOException {
 		return new Response(makeRequest("PUT", bucket, headers));
 	}
 
 	/**
 	 * Lists the contents of a bucket.
-	 * @param bucket The name of the bucket to create.
-	 * @param prefix All returned keys will start with this string (can be null).
-	 * @param marker All returned keys will be lexographically greater than
-	 * this string (can be null).
-	 * @param maxKeys The maximum number of keys to return (can be null).
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket to create.
+	 * @param prefix
+	 *            All returned keys will start with this string (can be null).
+	 * @param marker
+	 *            All returned keys will be lexographically greater than this string (can be null).
+	 * @param maxKeys
+	 *            The maximum number of keys to return (can be null).
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
 	public ListBucketResponse listBucket(String bucket, String prefix, String marker,
-			Integer maxKeys, Map headers)
-	throws MalformedURLException, IOException
-	{
+			Integer maxKeys, Map headers) throws MalformedURLException, IOException {
 		return listBucket(bucket, prefix, marker, maxKeys, null, headers);
 	}
 
 	/**
 	 * Lists the contents of a bucket.
-	 * @param bucket The name of the bucket to create.
-	 * @param prefix All returned keys will start with this string (can be null).
-	 * @param marker All returned keys will be lexographically greater than
-	 * this string (can be null).
-	 * @param maxKeys The maximum number of keys to return (can be null).
-	 * @param delimiter Keys that contain a string between the prefix and the first 
-	 * occurrence of the delimiter will be rolled up into a single element.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket to create.
+	 * @param prefix
+	 *            All returned keys will start with this string (can be null).
+	 * @param marker
+	 *            All returned keys will be lexographically greater than this string (can be null).
+	 * @param maxKeys
+	 *            The maximum number of keys to return (can be null).
+	 * @param delimiter
+	 *            Keys that contain a string between the prefix and the first occurrence of the
+	 *            delimiter will be rolled up into a single element.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
 	public ListBucketResponse listBucket(String bucket, String prefix, String marker,
-			Integer maxKeys, String delimiter, Map headers)
-	throws MalformedURLException, IOException
-	{
+			Integer maxKeys, String delimiter, Map headers) throws MalformedURLException,
+			IOException {
 
 		String path = Utils.pathForListOptions(bucket, prefix, marker, maxKeys, delimiter);
 		return new ListBucketResponse(makeRequest("GET", path, headers));
@@ -133,29 +146,35 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Deletes a bucket.
-	 * @param bucket The name of the bucket to delete.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket to delete.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
-	public Response deleteBucket(String bucket, Map headers)
-	throws MalformedURLException, IOException
-	{
+	public Response deleteBucket(String bucket, Map headers) throws MalformedURLException,
+			IOException {
 		return new Response(makeRequest("DELETE", bucket, headers));
 	}
 
 	/**
 	 * Writes an object to S3.
-	 * @param bucket The name of the bucket to which the object will be added.
-	 * @param key The name of the key to use.
-	 * @param object An S3Object containing the data to write.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket to which the object will be added.
+	 * @param key
+	 *            The name of the key to use.
+	 * @param object
+	 *            An S3Object containing the data to write.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
 	public Response put(String bucket, String key, S3Object object, Map headers)
-	throws MalformedURLException, IOException
-	{
-		HttpURLConnection request =
-			makeRequest("PUT", bucket + "/" + Utils.urlencode(key), headers, object);
+			throws MalformedURLException, IOException {
+		HttpURLConnection request = makeRequest("PUT", bucket + "/" + Utils.urlencode(key),
+				headers, object);
 
 		request.setDoOutput(true);
 		request.getOutputStream().write(object.data == null ? new byte[] {} : object.data);
@@ -165,52 +184,63 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Reads an object from S3.
-	 * @param bucket The name of the bucket where the object lives.
-	 * @param key The name of the key to use.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket where the object lives.
+	 * @param key
+	 *            The name of the key to use.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
-	public GetResponse get(String bucket, String key, Map headers)
-	throws MalformedURLException, IOException
-	{
+	public GetResponse get(String bucket, String key, Map headers) throws MalformedURLException,
+			IOException {
 		return new GetResponse(makeRequest("GET", bucket + "/" + Utils.urlencode(key), headers));
 	}
 
 	/**
 	 * Deletes an object from S3.
-	 * @param bucket The name of the bucket where the object lives.
-	 * @param key The name of the key to use.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket where the object lives.
+	 * @param key
+	 *            The name of the key to use.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
-	public Response delete(String bucket, String key, Map headers)
-	throws MalformedURLException, IOException
-	{
+	public Response delete(String bucket, String key, Map headers) throws MalformedURLException,
+			IOException {
 		return new Response(makeRequest("DELETE", bucket + "/" + Utils.urlencode(key), headers));
 	}
 
 	/**
 	 * Get the logging xml document for a given bucket
-	 * @param bucket The name of the bucket
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
-	public GetResponse getBucketLogging(String bucket, Map headers)
-	throws MalformedURLException, IOException
-	{
+	public GetResponse getBucketLogging(String bucket, Map headers) throws MalformedURLException,
+			IOException {
 		return new GetResponse(makeRequest("GET", bucket + "?logging", headers));
 	}
 
 	/**
 	 * Write a new logging xml document for a given bucket
-	 * @param loggingXMLDoc The xml representation of the logging configuration as a String
-	 * @param bucket The name of the bucket
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param loggingXMLDoc
+	 *            The xml representation of the logging configuration as a String
+	 * @param bucket
+	 *            The name of the bucket
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
 	public Response putBucketLogging(String bucket, String loggingXMLDoc, Map headers)
-	throws MalformedURLException, IOException
-	{
+			throws MalformedURLException, IOException {
 		S3Object object = new S3Object(loggingXMLDoc.getBytes(), null);
 		HttpURLConnection request = makeRequest("PUT", bucket + "?logging", headers, object);
 
@@ -222,60 +252,72 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Get the ACL for a given bucket
-	 * @param bucket The name of the bucket where the object lives.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket where the object lives.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
-	public GetResponse getBucketACL(String bucket, Map headers)
-	throws MalformedURLException, IOException
-	{
+	public GetResponse getBucketACL(String bucket, Map headers) throws MalformedURLException,
+			IOException {
 		return getACL(bucket, "", headers);
 	}
 
 	/**
 	 * Get the ACL for a given object (or bucket, if key is null).
-	 * @param bucket The name of the bucket where the object lives.
-	 * @param key The name of the key to use.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param bucket
+	 *            The name of the bucket where the object lives.
+	 * @param key
+	 *            The name of the key to use.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
-	public GetResponse getACL(String bucket, String key, Map headers)
-	throws MalformedURLException, IOException
-	{
-		if (key == null) key = "";
-		return new GetResponse(
-				makeRequest("GET", bucket + "/" + Utils.urlencode(key) + "?acl", headers)
-		);
+	public GetResponse getACL(String bucket, String key, Map headers) throws MalformedURLException,
+			IOException {
+		if (key == null)
+			key = "";
+		return new GetResponse(makeRequest("GET", bucket + "/" + Utils.urlencode(key) + "?acl",
+				headers));
 	}
 
 	/**
 	 * Write a new ACL for a given bucket
-	 * @param aclXMLDoc The xml representation of the ACL as a String
-	 * @param bucket The name of the bucket where the object lives.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param aclXMLDoc
+	 *            The xml representation of the ACL as a String
+	 * @param bucket
+	 *            The name of the bucket where the object lives.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
 	public Response putBucketACL(String bucket, String aclXMLDoc, Map headers)
-	throws MalformedURLException, IOException
-	{
+			throws MalformedURLException, IOException {
 		return putACL(bucket, "", aclXMLDoc, headers);
 	}
 
 	/**
 	 * Write a new ACL for a given object
-	 * @param aclXMLDoc The xml representation of the ACL as a String
-	 * @param bucket The name of the bucket where the object lives.
-	 * @param key The name of the key to use.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param aclXMLDoc
+	 *            The xml representation of the ACL as a String
+	 * @param bucket
+	 *            The name of the bucket where the object lives.
+	 * @param key
+	 *            The name of the key to use.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
 	public Response putACL(String bucket, String key, String aclXMLDoc, Map headers)
-	throws MalformedURLException, IOException
-	{
+			throws MalformedURLException, IOException {
 		S3Object object = new S3Object(aclXMLDoc.getBytes(), null);
 
-		HttpURLConnection request =
-			makeRequest("PUT", bucket + "/" + Utils.urlencode(key) + "?acl", headers, object);
+		HttpURLConnection request = makeRequest("PUT",
+				bucket + "/" + Utils.urlencode(key) + "?acl", headers, object);
 
 		request.setDoOutput(true);
 		request.getOutputStream().write(object.data == null ? new byte[] {} : object.data);
@@ -285,12 +327,13 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * List all the buckets created by this account.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
-	public ListAllMyBucketsResponse listAllMyBuckets(Map headers)
-	throws MalformedURLException, IOException
-	{
+	public ListAllMyBucketsResponse listAllMyBuckets(Map headers) throws MalformedURLException,
+			IOException {
 		return new ListAllMyBucketsResponse(makeRequest("GET", "", headers));
 	}
 
@@ -298,29 +341,32 @@ public class AWSAuthConnection implements InitializingBean {
 	 * Make a new HttpURLConnection without passing an S3Object parameter.
 	 */
 	private HttpURLConnection makeRequest(String method, String resource, Map headers)
-	throws MalformedURLException, IOException
-	{
+			throws MalformedURLException, IOException {
 		return makeRequest(method, resource, headers, null);
 	}
 
 	/**
 	 * Make a new HttpURLConnection.
-	 * @param method The HTTP method to use (GET, PUT, DELETE)
-	 * @param resource The resource name (bucketName + "/" + key).
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
-	 * @param object The S3Object that is to be written (can be null).
+	 * 
+	 * @param method
+	 *            The HTTP method to use (GET, PUT, DELETE)
+	 * @param resource
+	 *            The resource name (bucketName + "/" + key).
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
+	 * @param object
+	 *            The S3Object that is to be written (can be null).
 	 */
 	private HttpURLConnection makeRequest(String method, String resource, Map headers,
-			S3Object object)
-	throws MalformedURLException, IOException
-	{
+			S3Object object) throws MalformedURLException, IOException {
 		URL url = makeURL(resource);
-		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod(method);
 
 		addHeaders(connection, headers);
-		if (object != null) addMetadataHeaders(connection, object.metadata);
+		if (object != null)
+			addMetadataHeaders(connection, object.metadata);
 		addAuthHeader(connection, method, resource);
 
 		return connection;
@@ -328,9 +374,12 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Add the given headers to the HttpURLConnection.
-	 * @param connection The HttpURLConnection to which the headers will be added.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
+	 * 
+	 * @param connection
+	 *            The HttpURLConnection to which the headers will be added.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
 	 */
 	private void addHeaders(HttpURLConnection connection, Map headers) {
 		addHeaders(connection, headers, "");
@@ -338,9 +387,11 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Add the given metadata fields to the HttpURLConnection.
-	 * @param connection The HttpURLConnection to which the headers will be added.
-	 * @param metadata A Map of String to List of Strings representing the s3
-	 * metadata for this resource.
+	 * 
+	 * @param connection
+	 *            The HttpURLConnection to which the headers will be added.
+	 * @param metadata
+	 *            A Map of String to List of Strings representing the s3 metadata for this resource.
 	 */
 	private void addMetadataHeaders(HttpURLConnection connection, Map metadata) {
 		addHeaders(connection, metadata, Utils.METADATA_PREFIX);
@@ -348,17 +399,21 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Add the given headers to the HttpURLConnection with a prefix before the keys.
-	 * @param connection The HttpURLConnection to which the headers will be added.
-	 * @param headers A Map of String to List of Strings representing the http
-	 * headers to pass (can be null).
-	 * @param prefix The string to prepend to each key before adding it to the connection.
+	 * 
+	 * @param connection
+	 *            The HttpURLConnection to which the headers will be added.
+	 * @param headers
+	 *            A Map of String to List of Strings representing the http headers to pass (can be
+	 *            null).
+	 * @param prefix
+	 *            The string to prepend to each key before adding it to the connection.
 	 */
 	private void addHeaders(HttpURLConnection connection, Map headers, String prefix) {
 		if (headers != null) {
-			for (Iterator i = headers.keySet().iterator(); i.hasNext(); ) {
-				String key = (String)i.next();
-				for (Iterator j = ((List)headers.get(key)).iterator(); j.hasNext(); ) {
-					String value = (String)j.next();
+			for (Iterator i = headers.keySet().iterator(); i.hasNext();) {
+				String key = (String) i.next();
+				for (Iterator j = ((List) headers.get(key)).iterator(); j.hasNext();) {
+					String value = (String) j.next();
 					connection.addRequestProperty(prefix + key, value);
 				}
 			}
@@ -367,9 +422,13 @@ public class AWSAuthConnection implements InitializingBean {
 
 	/**
 	 * Add the appropriate Authorization header to the HttpURLConnection.
-	 * @param connection The HttpURLConnection to which the header will be added.
-	 * @param method The HTTP method to use (GET, PUT, DELETE)
-	 * @param resource The resource name (bucketName + "/" + key).
+	 * 
+	 * @param connection
+	 *            The HttpURLConnection to which the header will be added.
+	 * @param method
+	 *            The HTTP method to use (GET, PUT, DELETE)
+	 * @param resource
+	 *            The resource name (bucketName + "/" + key).
 	 */
 	private void addAuthHeader(HttpURLConnection connection, String method, String resource) {
 		if (connection.getRequestProperty("Date") == null) {
@@ -379,16 +438,18 @@ public class AWSAuthConnection implements InitializingBean {
 			connection.setRequestProperty("Content-Type", "");
 		}
 
-		String canonicalString =
-			Utils.makeCanonicalString(method, resource, connection.getRequestProperties());
+		String canonicalString = Utils.makeCanonicalString(method, resource, connection
+				.getRequestProperties());
 		String encodedCanonical = Utils.encode(this.awsSecretAccessKey, canonicalString, false);
-		connection.setRequestProperty("Authorization",
-				"AWS " + this.awsAccessKeyId + ":" + encodedCanonical);
+		connection.setRequestProperty("Authorization", "AWS " + this.awsAccessKeyId + ":"
+				+ encodedCanonical);
 	}
 
 	/**
 	 * Create a new URL object for a given resource.
-	 * @param resource The resource name (bucketName + "/" + key).
+	 * 
+	 * @param resource
+	 *            The resource name (bucketName + "/" + key).
 	 */
 	private URL makeURL(String resource) throws MalformedURLException {
 		String protocol = this.isSecure ? "https" : "http";
@@ -400,9 +461,9 @@ public class AWSAuthConnection implements InitializingBean {
 	 */
 	public static String httpDate() {
 		final String DateFormat = "EEE, dd MMM yyyy HH:mm:ss ";
-		SimpleDateFormat format = new SimpleDateFormat( DateFormat, Locale.US );
-		format.setTimeZone( TimeZone.getTimeZone( "GMT" ) );
-		return format.format( new Date() ) + "GMT";
+		SimpleDateFormat format = new SimpleDateFormat(DateFormat, Locale.US);
+		format.setTimeZone(TimeZone.getTimeZone("GMT"));
+		return format.format(new Date()) + "GMT";
 	}
 
 	public void setAwsAccessKeyId(String awsAccessKeyId) {
@@ -421,31 +482,44 @@ public class AWSAuthConnection implements InitializingBean {
 		this.defaultBucket = defaultBucket;
 	}
 
+	/**
+	 * do this in a separate thread so we don't have to wait for this bucket check for unit tests
+	 * etc.
+	 */
 	public void afterPropertiesSet() throws Exception {
-		try{
-			ListAllMyBucketsResponse listAllMyBuckets = listAllMyBuckets(null);			
-			boolean exists = false;
-			
-			for (Iterator iter = listAllMyBuckets.entries.iterator(); iter.hasNext();) {
-				Bucket bucket = (Bucket) iter.next();
-				log.debug("Bucket: "+bucket.name+" "+bucket.name.equals(getDefaultBucket()));
-				if(bucket.name.equals(getDefaultBucket())){
-					exists  = true;
+
+		Thread lookupAmazonBucketThread = new Thread() {
+			public void run() {
+				try {
+					ListAllMyBucketsResponse listAllMyBuckets = listAllMyBuckets(null);
+					boolean exists = false;
+
+					for (Iterator iter = listAllMyBuckets.entries.iterator(); iter.hasNext();) {
+						Bucket bucket = (Bucket) iter.next();
+						log.debug("Bucket: " + bucket.name + " "
+								+ bucket.name.equals(getDefaultBucket()));
+						if (bucket.name.equals(getDefaultBucket())) {
+							exists = true;
+						}
+					}
+
+					if (exists) {
+						log.info("Bucket: " + getDefaultBucket() + " exists.");
+					} else {
+						log.info("Create bucket: " + getDefaultBucket());
+						Response awsResponse = createBucket(getDefaultBucket(), null);
+						if (HttpURLConnection.HTTP_OK != awsResponse.connection.getResponseCode()) {
+							log.error("Failed to create bucket: " + getDefaultBucket());
+						}
+					}
+				} catch (Exception e) {
+					log.error("Failed checking for bucket: " + getDefaultBucket());
 				}
 			}
-			
-			if(exists){
-				log.info("Bucket: "+getDefaultBucket()+" exists.");
-			}else{
-				log.info("Create bucket: "+getDefaultBucket());
-				Response awsResponse = createBucket(getDefaultBucket(), null);
-				if(HttpURLConnection.HTTP_OK != awsResponse.connection.getResponseCode()){
-					log.error("Failed to create bucket: "+getDefaultBucket());
-				}
-			}
-		}catch(Exception e){
-			log.error("Failed checking for bucket: "+getDefaultBucket());
-		}
+		};
+		lookupAmazonBucketThread.setPriority(Thread.MIN_PRIORITY);
+		lookupAmazonBucketThread.start();
+
 	}
 
 }

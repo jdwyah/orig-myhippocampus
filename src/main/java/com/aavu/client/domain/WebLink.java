@@ -42,6 +42,10 @@ public class WebLink extends URI implements Serializable, IsSerializable, Really
 		return "New Weblink";
 	}
 
+	public boolean mustHaveUniqueName() {
+		return false;
+	}
+
 	// @Override
 	public String getWindowTheme() {
 		return "alphacube-green";

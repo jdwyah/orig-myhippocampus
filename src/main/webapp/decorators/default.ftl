@@ -27,32 +27,35 @@
 
 	<div id="main">
        
-    	<div id="sidebar">
-    	
-    	<a href="<@spring.url "/site/index.html"/>"><@common.pngImage src="/img/sideSeaHorse.png" width="129" height="225"/></a>
-	      <p>
-	      <#--<@spring.message "default.welcome.pre"/> <#if user?exists>${user.username}</#if> <@spring.message "default.welcome.post"/>-->
-	      
-	       <ul>
-	       <#if user?exists>
-				<li><a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a></li>
-<#--				<li><a href="<@spring.url "/site/secure/account.html"/>"><@spring.message "sidebar.account"/></a></li>-->
-				<li><a href="<@spring.url "/site/j_acegi_logout"/>">Logout</a></li>
-			<#else>
-				<li><a href="<@spring.url "/site/index.html"/>"><@spring.message "sidebar.frontPage"/></a></li>
-				<li><a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a></li>
-			</#if>	       	
-  			<li><a href="<@spring.url "/site/tour.html"/>"><@spring.message "sidebar.tour"/></a></li>
-			<li><a href="<@spring.url "/site/screencasts.html"/>"><@spring.message "sidebar.screencasts"/></a></li>			
-  			<li><a href="<@spring.url "/site/manifesto.html"/>"><@spring.message "sidebar.manifestos"/></a></li>
-			<li><a href="<@spring.url "/site/manifesto2.html"/>"><@spring.message "sidebar.manifesto2"/></a></li>
-			
-		   </ul>
-	      
-		</div>
      
 	    <div id="header">
-    		<@common.pngImage src="/img/myhippocampusLogo.png" width="552" height="82"/>			
+	    
+	    	<div id="header_logo">	    	
+	    		<a href="<@spring.url "/site/index.html"/>"><@common.pngImage src="/img/sideSeaHorse120px.png" width="67" height="120"/>
+	    		</a>
+    		</div>
+    		    	
+    		
+    		<div id="header_account">
+    		  <#if user?exists>
+    		  	 <div id="loginBox" class="boxStyle">
+    		  	  <a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a>
+    		  	  <br>
+    		  	  <a href="<@spring.url "/site/j_acegi_logout"/>">Logout</a>
+    		  	 </div>
+    		  <#else>
+    			 <div id="loginBox" class="boxStyle">
+			 		<@common.loginForm/>
+		 		 </div>		 	
+		 	  </#if>
+    		</div>
+    		
+    		
+    		<div id="header_logoTitle" >
+    			<@common.pngImage src="/img/myhippocampusLogo.png" width="552" height="82"/>
+    		</div>
+    			
+    		<div class="clearRdiv"/>
 	    </div>
 
 
@@ -81,10 +84,6 @@ _uacct = "UA-1880676-1";
 urchinTracker();
 </script>
 
-
-<#--<!--Preloader.-->
-<#--<iframe src="<@spring.url "/com.aavu.HippoTest/HippoPreLoad.html"/>" style="visibility: hidden;"><\/iframe>
--->
 
 </body>
 </html>

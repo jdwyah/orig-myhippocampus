@@ -42,6 +42,7 @@ import com.aavu.client.domain.dto.DatedTopicIdentifier;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
+import com.aavu.server.dao.EditDAO;
 import com.aavu.server.service.TopicService;
 import com.aavu.server.service.UserService;
 import com.aavu.server.service.gwt.BaseTestNoTransaction;
@@ -84,12 +85,21 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 	private static final String people = "People";
 	private static final String xmen = "X-Men";
 
+	private static final String W1 = "Weblink1";
+	private static final String W2 = "Weblink2";
+
 	private TopicService topicService;
 
 	private User u;
 
 	private UserService userService;
 
+	private EditDAO editDAO;
+
+
+	public void setEditDAO(EditDAO editDAO) {
+		this.editDAO = editDAO;
+	}
 
 
 	public void __testSaveComplexMetas() throws HippoBusinessException {
@@ -273,6 +283,7 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 			// delete using the DAO so we don't run into protections put in place when deleting the
 			// root
 			if (t != null) {
+				// editDAO.deleteWithChildren(t);
 				topicService.delete(t);
 			}
 
@@ -1366,6 +1377,55 @@ public class TopicServiceImplTest extends BaseTestNoTransaction {
 		assertEquals(0, savedTag2.getOccurences().size());
 		assertEquals(1, savedTag2.getInstances().size());
 
+
+	}
+
+	public void testSaveOccurrenceCommand2() throws HippoException {
+		clean();
+
+		Topic tag = topicService.createNewIfNonExistent(C);
+
+		Topic topic = topicService.createNewIfNonExistent(D, tag);
+
+		WebLink w = new WebLink(u, W1, D, E);
+
+		List<Topic> l = new LinkedList<Topic>();
+		l.add(tag);
+		l.add(topic);
+
+		SaveOccurrenceCommand command = new SaveOccurrenceCommand(w, l);
+
+		topicService.executeAndSaveCommand(command);
+
+		Topic savedTag2 = topicService.getForID(tag.getId());
+		assertEquals(1, savedTag2.getOccurences().size());
+
+		WebLink www = (WebLink) savedTag2.getOccurenceObjs().iterator().next();
+		assertEquals(W1, www.getDescription());
+
+		Topic savedTopic = topicService.getForID(topic.getId());
+		assertEquals(1, savedTopic.getOccurences().size());
+
+
+
+		WebLink webLink2 = new WebLink(u, W2, D, E);
+
+		// important this was breaking an old SaveOccurrenceCommand, AddLinkContent does something
+		// like this
+		tag.addOccurence(webLink2);
+
+		List<Topic> list2 = new LinkedList<Topic>();
+		list2.add(tag);
+
+		SaveOccurrenceCommand command2 = new SaveOccurrenceCommand(webLink2, list2);
+
+		topicService.executeAndSaveCommand(command2);
+
+		savedTag2 = topicService.getForID(tag.getId());
+		assertEquals(2, savedTag2.getOccurences().size());
+
+		savedTopic = topicService.getForID(topic.getId());
+		assertEquals(1, savedTopic.getOccurences().size());
 
 	}
 	/*

@@ -15,10 +15,9 @@
 	</bean>
 
 	<bean id="indexController" class="com.aavu.server.web.controllers.IndexController">
-		<property name="view" value="index"/>
-		<property name="loggedInView" value="redirect:/site/secure/userPage.html"/>
+		<property name="view" value="index"/>		
 		<property name="userService" ref="userService"/>
-		<property name="topicService" ref="topicService"/>
+		<property name="browseService" ref="browseService"/>
 	</bean>	
 	<bean id="tourController" class="com.aavu.server.web.controllers.BasicController">
 		<property name="view" value="tour" />
