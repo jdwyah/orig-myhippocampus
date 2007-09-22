@@ -50,4 +50,9 @@ public class WebLink extends URI implements Serializable, IsSerializable, Really
 	public String getWindowTheme() {
 		return "alphacube-green";
 	}
+
+	// @Override
+	public String getTitlePromptText() {
+		return "Link:";
+	}
 }

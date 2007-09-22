@@ -58,6 +58,7 @@ public class TitleGadget extends Gadget {
 	private Image sharedB;
 	private Label titleLabel;
 	private Label dateLabel;
+	private Label titlePromptLabel;
 
 	// private static SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -123,7 +124,8 @@ public class TitleGadget extends Gadget {
 
 
 		CellPanel titleP = new HorizontalPanel();
-		titleP.add(new Label(ConstHolder.myConstants.title()));
+		titlePromptLabel = new Label(ConstHolder.myConstants.title());
+		titleP.add(titlePromptLabel);
 
 		if (manager.isEdittable()) {
 			titleP.add(titleBox);
@@ -216,7 +218,7 @@ public class TitleGadget extends Gadget {
 						VerticalPanel vp = new VerticalPanel();
 						Grid insidePanel = new Grid(topics.size(), 2);
 
-						vp.add(new Label("Make These Topics " + makePublicString + ":"));
+						vp.add(new Label("Select topics to change:"));
 
 						final Map checkBoxes = new HashMap();
 						int row = 0;
@@ -239,35 +241,22 @@ public class TitleGadget extends Gadget {
 							checkBoxes.put(cb, topic);
 							row++;
 						}
-						Button confirmMakePublicB = new Button("Yes, make the checked topics "
-								+ makePublicString);
-						confirmMakePublicB.addClickListener(new ClickListener() {
 
-							public void onClick(Widget sender) {
+						HorizontalPanel confirmP = new HorizontalPanel();
+						Label confirmMessage = new Label("Yes, make the checked topics");
 
-								List tisToSend = new ArrayList();
-								for (Iterator iterator2 = checkBoxes.keySet().iterator(); iterator2
-										.hasNext();) {
-									CheckBox cb = (CheckBox) iterator2.next();
-									TopicIdentifier ti = (TopicIdentifier) checkBoxes.get(cb);
-									if (cb.isChecked()) {
-										tisToSend.add(ti);
-									}
-								}
+						Button confirmMakePublicB = new Button("public");
+						Button confirmMakePrivateB = new Button("private");
 
-								manager.getTopicCache().editVisibility(tisToSend, newVisibility,
-										new StdAsyncCallback("Edit Visibility") {
+						confirmP.add(confirmMessage);
+						confirmP.add(confirmMakePublicB);
+						confirmP.add(confirmMakePrivateB);
 
-											// @Override
-											public void onSuccess(Object result) {
-												super.onSuccess(result);
-												topic.setPublicVisible(newVisibility);
-												load(topic);
-												editVisWindow.close();
-											}
-										});
-							}
-						});
+						confirmMakePublicB.addClickListener(new ConfirmSharedClickListener(true,
+								editVisWindow, checkBoxes));
+						confirmMakePrivateB.addClickListener(new ConfirmSharedClickListener(false,
+								editVisWindow, checkBoxes));
+
 						ScrollPanel scrollP = new ScrollPanel(insidePanel);
 						scrollP.setHeight("300px");
 						vp.add(scrollP);
@@ -312,6 +301,51 @@ public class TitleGadget extends Gadget {
 		return ConstHolder.myConstants.options();
 	}
 
+	/**
+	 * handle clicks on "make them 'public'" or "make them 'private'" buttons
+	 * 
+	 * @author Jeff Dwyer
+	 * 
+	 */
+	private class ConfirmSharedClickListener implements ClickListener {
+
+		private boolean newVisibility;
+		private Map checkBoxes;
+		private PopupWindow editVisWindow;
+
+		public ConfirmSharedClickListener(boolean newVisibility, PopupWindow editVisWindow,
+				Map checkBoxes) {
+			this.newVisibility = newVisibility;
+			this.checkBoxes = checkBoxes;
+			this.editVisWindow = editVisWindow;
+		}
+
+		public void onClick(Widget sender) {
+
+			List tisToSend = new ArrayList();
+			for (Iterator iterator2 = checkBoxes.keySet().iterator(); iterator2.hasNext();) {
+				CheckBox cb = (CheckBox) iterator2.next();
+				TopicIdentifier ti = (TopicIdentifier) checkBoxes.get(cb);
+				if (cb.isChecked()) {
+					tisToSend.add(ti);
+				}
+			}
+
+			manager.getTopicCache().editVisibility(tisToSend, newVisibility,
+					new StdAsyncCallback("Edit Visibility") {
+
+						// @Override
+						public void onSuccess(Object result) {
+							super.onSuccess(result);
+							topic.setPublicVisible(newVisibility);
+							load(topic);
+							editVisWindow.close();
+						}
+					});
+		}
+
+	}
+
 	// @Override
 	public int load(Topic topic) {
 		super.load(topic);
@@ -349,6 +383,8 @@ public class TitleGadget extends Gadget {
 			uriPanel.add(new Label(ConstHolder.myConstants.goThere()));
 			uriPanel.add(urlGoB);
 		}
+
+		titlePromptLabel.setText(topic.getTitlePromptText());
 
 		// datePicker.setText(df.format(mv.getStartDate()));
 

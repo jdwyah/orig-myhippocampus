@@ -1,7 +1,16 @@
 
-
 <#macro regError>
 	<span class="error"><@spring.showErrors"<br>"/></span>
+</#macro>
+
+<#macro box class id title>
+	<div class="${class}">	  
+	<h2>${title}</h2>
+	  <div class="right"></div>
+	  <div id="${id}" class="boxContent">		
+		<#nested>		
+	  </div>	  
+	</div>
 </#macro>
 
 <#macro loginForm>
@@ -38,7 +47,7 @@
 
 	 <form id="upForm" action="<@spring.url "/j_acegi_security_check"/>" method="POST" style="display: none">
 		<fieldset>
-			<legend><@spring.message "login.1.header"/> <a class="link" onclick="javascript:doOpenID();">Use OpenID</a></legend>
+			<legend><@spring.message "login.1.header"/></legend>
 		 <p>
 			 <label for="j_username"><input type='text' name='j_username' id = 'j_username'><@spring.message "login.1.user"/>
 			 </label>
@@ -49,17 +58,17 @@
 		 	 <label id="remember_me" for="_acegi_security_remember_me"><input type="checkbox" name="_acegi_security_remember_me"><@spring.message "login.1.dontask"/>
 			 </label>
 		 <p>
-		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
+		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit"> <a class="link" onclick="javascript:doOpenID();">Use OpenID</a>
 		</fieldset>
 	 </form>	
 	 <form id="openIDForm" action="<@spring.url "/site/j_acegi_openid_start"/>" method="POST" style="display: block" onSubmit="javascript:formvalidation();return false;" >
 		<fieldset>
-			<legend><@spring.message "login.1.header"/> <a class="link" onclick="javascript:doUsernamePassword();">Use username / password</a></legend>
+			<legend><@spring.message "login.1.header"/></legend>
 			 <label for="j_username2"><input type='text' name='openid_url' id = 'j_username2' class="openid-identifier">OpenID
 			 </label>		 		 
 		 <p>
 		 <input type="hidden" name="password"/>
-		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit">
+		 <input name="login" value="<@spring.message "login.1.button"/>" type="submit"><a class="link" onclick="javascript:doUsernamePassword();">Use username / password</a>
 		  <br>Already created an account? Sign in here.
 		</fieldset>
 	 </form>	

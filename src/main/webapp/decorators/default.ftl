@@ -35,24 +35,27 @@
 	    		</a>
     		</div>
     		    	
-    		
+    		    	
+    		<#if "true" == page.properties["meta.sm.showAccount"]?default("true")>
     		<div id="header_account">
     		  <#if user?exists>
-    		  	 <div id="loginBox" class="boxStyle">
+    		  	<@common.box "boxStyleSm", "loginBox", "Welcome">  	
     		  	  <a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a>
     		  	  <br>
     		  	  <a href="<@spring.url "/site/j_acegi_logout"/>">Logout</a>
-    		  	 </div>
+    		  	 </@common.box>
     		  <#else>
-    			 <div id="loginBox" class="boxStyle">
+    		  	 <@common.box "boxStyleSm", "loginBox", "Login">  	    			     			 
 			 		<@common.loginForm/>
-		 		 </div>		 	
+		 		 </@common.box>
 		 	  </#if>
     		</div>
+    		</#if>
     		
     		
     		<div id="header_logoTitle" >
-    			<@common.pngImage src="/img/myhippocampusLogo.png" width="552" height="82"/>
+    			<a href="<@spring.url "/site/index.html"/>"><@common.pngImage src="/img/myhippocampusLogo.png" width="552" height="82"/></a>
+    			<p>Knowledge Reimagined<p>
     		</div>
     			
     		<div class="clearRdiv"/>

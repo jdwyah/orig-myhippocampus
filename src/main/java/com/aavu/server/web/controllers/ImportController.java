@@ -34,8 +34,10 @@ public class ImportController extends SimpleFormController {
 		setValidator(new ImportCommandValidator());
 	}
 
-	private Map<String, Object> getModelForMessage(String message) {
-		Map<String, Object> rtn = new HashMap<String, Object>();
+
+
+	private Map<String, Object> getModelForMessage(HttpServletRequest req, String message) {
+		Map<String, Object> rtn = BasicController.getDefaultModel(req, userService);
 		rtn.put("command", new ImportCommand());
 		rtn.put("message", message);
 		rtn.put("googleRequestURL", googleService.getAuthorizationURL(googleAuthReturnURL));
@@ -69,8 +71,8 @@ public class ImportController extends SimpleFormController {
 				return new ModelAndView(getSuccessView(), "message", successStr);
 			} catch (HippoException e) {
 
-				return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
-						+ e.getMessage()));
+				return new ModelAndView(getFormView(), getModelForMessage(request,
+						"Problem Logging In " + e.getMessage()));
 			}
 		} else if (type.equals("google")) {
 
@@ -92,8 +94,8 @@ public class ImportController extends SimpleFormController {
 				return new ModelAndView(getSuccessView(), "message", successStr);
 			} catch (AuthenticationException e) {
 
-				return new ModelAndView(getFormView(), getModelForMessage("Problem Logging In "
-						+ e.getMessage()));
+				return new ModelAndView(getFormView(), getModelForMessage(request,
+						"Problem Logging In " + e.getMessage()));
 			}
 		} else {
 			throw new RuntimeException("No Import Type Specified");

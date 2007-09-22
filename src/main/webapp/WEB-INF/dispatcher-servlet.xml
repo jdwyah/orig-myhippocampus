@@ -199,7 +199,7 @@
 		<property name="userService" ref="userService" />
 	</bean>
 	
-	<bean id="browseController" class="com.aavu.server.web.controllers.BrowseController">
+	<bean id="mvcBrowseController" class="com.aavu.server.web.controllers.MVCBrowseController">
 		<property name="view" value="browseShow" />
 		<property name="notFoundView" value="browseNotFound"/>
 		<property name="userStartView" value="browseUser"/>
@@ -305,7 +305,7 @@
 								
 				<prop key="/site/j_acegi_openid_start">openIDLoginStartController</prop>					
 
-				<prop key="/site/**/*">browseController</prop>
+				<prop key="/site/**/*">mvcBrowseController</prop>
 
 				<!-- 
 				<prop key="/css/**/*">myServletForwardingController</prop>

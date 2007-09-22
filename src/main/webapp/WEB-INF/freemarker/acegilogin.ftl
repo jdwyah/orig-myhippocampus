@@ -3,6 +3,7 @@
 <html>
   <head>
     <title>Login</title>
+    <meta name="sm.showAccount" content="false">
   </head>
 
   <body>

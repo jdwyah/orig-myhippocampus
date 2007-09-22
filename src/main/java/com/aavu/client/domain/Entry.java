@@ -119,5 +119,9 @@ public class Entry extends Occurrence implements Serializable, IsSerializable, R
 		return "alphacube-blue";
 	}
 
+	// @Override
+	public String getTitlePromptText() {
+		return "Entry:";
+	}
 
 }
