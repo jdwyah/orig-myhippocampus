@@ -12,6 +12,6 @@ public interface GadgetHolder {
 
 	void fireSizeChanged();
 
-	void setTheme(String string);
+	void setTheme(String string, String display);
 
 }

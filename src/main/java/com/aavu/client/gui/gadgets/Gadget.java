@@ -82,7 +82,7 @@ public abstract class Gadget extends Composite {
 	}
 
 	private void setTheme(Topic topic) {
-		getGadgetHolder().setTheme(topic.getWindowTheme());
+		getGadgetHolder().setTheme(topic.getWindowTheme(), topic.getTitlePromptText());
 	}
 
 

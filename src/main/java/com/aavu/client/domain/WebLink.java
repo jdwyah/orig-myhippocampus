@@ -53,6 +53,7 @@ public class WebLink extends URI implements Serializable, IsSerializable, Really
 
 	// @Override
 	public String getTitlePromptText() {
-		return "Link:";
+		return "Link";
 	}
+
 }

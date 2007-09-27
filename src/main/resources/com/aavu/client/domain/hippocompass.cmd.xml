@@ -15,6 +15,12 @@
 			<name>text</name>
 		</meta-data>
 		
+		<meta-data id="publicVisible" displayName="PublicVisible">
+			<description>Publicly Visible Status</description>
+			<uri>http://myhippocampus/hippo/publicVisible</uri>
+			<name>publicVisible</name>
+		</meta-data>
+		
 		<meta-data id="username" displayName="Username">
 			<description>User Alias</description>
 			<uri>http://myhippocampus/hippo/username</uri>

@@ -51,8 +51,8 @@
 		<property name="userDAO" ref="userDAO" />		
 		<property name="userCache" ref="userCache"/>
 		<property name="messageSource" ref="messageSource" />
-		<property name="maxUsers" value="200" />
-		<property name="startingInvitations" value="2" />	
+		<property name="maxUsers" value="${users.maxUsers}" />
+		<property name="startingInvitations" value="${users.startInvitations}" />	
 		<property name="saltSource" ref="userSaltSource"/>
 		<property name="passwordEncoder" ref="passwordEncoder"/>	
 	</bean>

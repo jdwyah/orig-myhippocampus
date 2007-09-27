@@ -260,7 +260,7 @@ public class TitleGadget extends Gadget {
 						ScrollPanel scrollP = new ScrollPanel(insidePanel);
 						scrollP.setHeight("300px");
 						vp.add(scrollP);
-						vp.add(confirmMakePublicB);
+						vp.add(confirmP);
 						editVisWindow = manager.displayInfo(vp);
 					}
 				});
@@ -384,7 +384,7 @@ public class TitleGadget extends Gadget {
 			uriPanel.add(urlGoB);
 		}
 
-		titlePromptLabel.setText(topic.getTitlePromptText());
+		titlePromptLabel.setText(topic.getTitlePromptText() + ":");
 
 		// datePicker.setText(df.format(mv.getStartDate()));
 

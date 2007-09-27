@@ -25,14 +25,18 @@
 	</contract>
 
 	<contract alias="entity">
-		<id name="id" />
+		<id name="id" />	
 	</contract>
 
 	<class name="RealTopic" alias="RealTopic" extends="entity,userSecured">
 
 		<property name="title">
 			<meta-data>${hippo.text}</meta-data>
-		</property><!--
+		</property>
+		<property name="publicVisible">
+			<meta-data>${hippo.publicVisible}</meta-data>
+		</property>
+		<!--
 
 		 <reference name="user" ref-alias="User"/>
 		 <component name="user" ref-alias="User"/>  
@@ -43,9 +47,15 @@
 		<property name="title">
 			<meta-data>${hippo.text}</meta-data>
 		</property>
+		<property name="publicVisible">
+			<meta-data>${hippo.publicVisible}</meta-data>
+		</property>
 	</class>
 	
 	<class name="Entry" alias="Entry" extends="entity,userSecured">
+		<property name="publicVisible">
+			<meta-data>${hippo.publicVisible}</meta-data>
+		</property>
 		<!-- Highlighter performance -> position_offsets -->
 		<!-- http://forums.opensymphony.com/thread.jspa?messageID=93583&#93583 -->
 		<property name="data" managed-id="false"><!-- converter="html" -->
@@ -59,6 +69,9 @@
 	<class name="URI" alias="URI" extends="entity,userSecured">
 		<property name="title">
 			<meta-data>${hippo.text}</meta-data>
+		</property>
+		<property name="publicVisible">
+			<meta-data>${hippo.publicVisible}</meta-data>
 		</property>
 		<property name="data">
 			<meta-data>${hippo.text}</meta-data>

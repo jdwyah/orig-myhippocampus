@@ -121,7 +121,7 @@ public class Entry extends Occurrence implements Serializable, IsSerializable, R
 
 	// @Override
 	public String getTitlePromptText() {
-		return "Entry:";
+		return "Entry";
 	}
 
 }

@@ -15,7 +15,9 @@
 		<body onunload="GUnload()">
 		<script language="JavaScript">
 			var Vars = {
-				page: "HippocampusBrowser"
+				page: "HippocampusBrowser",
+				userID: "${foruser.id?c}",
+				topicID: "${topic.id?c}"
 			};
 		</script>
 		

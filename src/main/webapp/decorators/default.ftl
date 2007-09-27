@@ -39,10 +39,17 @@
     		<#if "true" == page.properties["meta.sm.showAccount"]?default("true")>
     		<div id="header_account">
     		  <#if user?exists>
-    		  	<@common.box "boxStyleSm", "loginBox", "Welcome">  	
-    		  	  <a href="<@spring.url "/site/secure/userPage.html"/>"><@spring.message "sidebar.userPage"/></a>
-    		  	  <br>
+    		  	<@common.box "boxStyleSm", "userBox", "Welcome ${user.username}">  	
+    		  	<ul>
+    		  	  <li><strong>
+    		  	  <a href="<@spring.url "/site/secure/mindscape.html"/>">My Mindscape</a></strong>
+    		  	  </li>    		  	  
+    		  	  |<li>
+    		  	  <a href="<@spring.url "/site/secure/userPage.html"/>">Settings</a>
+    		  	  </li>    		  	 
+    		  	  |<li>
     		  	  <a href="<@spring.url "/site/j_acegi_logout"/>">Logout</a>
+    		  	  </li>
     		  	 </@common.box>
     		  <#else>
     		  	 <@common.box "boxStyleSm", "loginBox", "Login">  	    			     			 

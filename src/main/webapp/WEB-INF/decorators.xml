@@ -9,6 +9,7 @@
 	  <pattern>/site/browser.html</pattern><!-- todo change to minimal decorator -->
 	  <pattern>/site/secure/addLink.html*</pattern><!-- todo change to minimal decorator -->
       <pattern>/site/secure/getTopics.html</pattern><!-- Ajax Straight HTML <UL> -->
+      <pattern>/site/browse/*</pattern><!-- /user/topic_title <UL> -->
 	</excludes>
     
    <!-- notes -->

@@ -1,26 +1,36 @@
 package com.aavu.client.domain.dto;
 
+import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SearchResult implements IsSerializable {
 
-	private long topicID;
+	private long id;
 	private String title;
 	private String text;
 	private float score;
 	private boolean publicVisible;
+	private User user;
 
 	public SearchResult() {
 	}
 
-	public SearchResult(long topicID, float score, String title, String text, boolean publicVisible) {
-		super();
-		this.topicID = topicID;
-		this.score = score;
-		this.title = title;
-		this.text = text;
-		this.publicVisible = publicVisible;
+	public SearchResult(Topic topic, TopicIdentifier parent, float score, final String highlightText) {
+		this(topic, score, highlightText);
+		setId(parent.getTopicID());
 	}
+
+	public SearchResult(Topic topic, float score, final String highlightText) {
+		this.id = topic.getId();
+		this.score = score;
+		this.title = topic.getTitle();
+		this.text = highlightText;
+		this.publicVisible = topic.isPublicVisible();
+		this.user = topic.getUser();
+	}
+
+
 
 	public String getText() {
 		return text;
@@ -38,12 +48,12 @@ public class SearchResult implements IsSerializable {
 		this.title = title;
 	}
 
-	public long getTopicID() {
-		return topicID;
+	public long getId() {
+		return id;
 	}
 
-	public void setTopicID(long topicID) {
-		this.topicID = topicID;
+	public void setId(long topicID) {
+		this.id = topicID;
 	}
 
 	public float getScore() {
@@ -54,12 +64,32 @@ public class SearchResult implements IsSerializable {
 		this.score = score;
 	}
 
+	public boolean isPublicVisible() {
+		return publicVisible;
+	}
+
+
+	public void setPublicVisible(boolean publicVisible) {
+		this.publicVisible = publicVisible;
+	}
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
 	public String toString() {
-		return getTopicID() + " " + getScore() + " " + getTitle() + " " + getText();
+		return getId() + " " + getScore() + " " + getTitle() + " " + getText();
 	}
 
 	public TopicIdentifier getTopicIdentifier() {
-		return new TopicIdentifier(topicID, title, publicVisible);
+		return new TopicIdentifier(id, title, publicVisible);
 	}
 
 }

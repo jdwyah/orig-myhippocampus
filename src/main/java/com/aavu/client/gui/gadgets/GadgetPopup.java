@@ -1,10 +1,50 @@
 package com.aavu.client.gui.gadgets;
 
+import org.gwm.client.Caption;
 import org.gwm.client.impl.DefaultGInternalFrame;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.gui.GadgetDisplayer;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Widget;
+
+
+/**
+ * note GadgetCaption extends HorizontalPanel -> all kinds of problems with the Window DnD system.
+ * 
+ * @author Jeff Dwyer
+ * 
+ */
+class GadgetCaptionHTML extends HTML implements Caption {
+
+	private String postfix = "";
+
+	public GadgetCaptionHTML(String title) {
+		super(title);
+	}
+
+	/**
+	 * PEND MED don't like setHTML()
+	 */
+	public void setText(String text) {
+		super.setHTML(text + postfix);
+	}
+
+	public Widget getWidget() {
+		return this;
+	}
+
+	public void setPostFix(String display) {
+		this.postfix = "<span class=\"H-GadgetPopupType\">" + display + "</span>";
+
+		// PEND MED ugly
+		if (display.equals("Title")) {
+			this.postfix = "";
+		}
+	}
+}
+
 
 public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
 
@@ -12,8 +52,12 @@ public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
 	private GadgetDisplayer displayer;
 	public static final int POPUPWIDTH = 240;
 
+	private GadgetCaptionHTML caption;
+
 	public GadgetPopup(Gadget gadget, GadgetDisplayer displayer) {
-		super(gadget.getDisplayName());
+		super(new GadgetCaptionHTML(gadget.getDisplayName()));
+		caption = (GadgetCaptionHTML) getCaption();
+
 		this.displayer = displayer;
 		this.gadget = gadget;
 		width = POPUPWIDTH;
@@ -58,6 +102,15 @@ public class GadgetPopup extends DefaultGInternalFrame implements GadgetHolder {
 	public void nowShowTopic(Topic topic) {
 		resetSize();
 		setCaption(gadget.getDisplayName(topic));
+	}
+
+
+
+	// @Override
+	public void setTheme(String theme, String display) {
+		super.setTheme(theme);
+		caption.setPostFix(display);
+
 	}
 
 	public boolean showForIsCurrent(boolean isCurrent) {

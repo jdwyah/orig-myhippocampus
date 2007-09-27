@@ -1,7 +1,6 @@
 package com.aavu.server.web.controllers;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +11,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.dto.DatedTopicIdentifier;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.User;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.server.service.TopicService;
 
@@ -23,7 +21,6 @@ public class MVCBrowseController extends BasicController {
 	private String notFoundView;
 
 	private TopicService topicService;
-	private String userStartView;
 
 
 
@@ -31,9 +28,6 @@ public class MVCBrowseController extends BasicController {
 		return notFoundView;
 	}
 
-	public String getUserStartView() {
-		return userStartView;
-	}
 
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest req, HttpServletResponse arg1)
@@ -50,18 +44,18 @@ public class MVCBrowseController extends BasicController {
 
 
 		// "/user/topic" splits to [,user,topic]
-		if (pathParts.length < 2) {
+		if (pathParts.length < 3) {
 			return new ModelAndView(getNotFoundView());
 		}
 
-		if (2 == pathParts.length) {
-			String userString = pathParts[1];
+		if (3 == pathParts.length) {
+			String userString = pathParts[2];
 
 			return userOnly(model, userString);
 		} else {
 
-			String userString = pathParts[1];
-			String topicString = pathParts[2];
+			String userString = pathParts[2];
+			String topicString = pathParts[3];
 			return userAndTopic(model, userString, topicString);
 		}
 
@@ -80,27 +74,17 @@ public class MVCBrowseController extends BasicController {
 		this.topicService = topicService;
 	}
 
-	@Required
-	public void setUserStartView(String userStartView) {
-		this.userStartView = userStartView;
-	}
-
-
 
 	private ModelAndView userAndTopic(Map<String, Object> model, String userString,
 			String topicString) {
 		try {
 			Topic result = topicService.getPublicTopic(userString, topicString);
 
-			List<FullTopicIdentifier> onThisIsland = topicService.getPublicTopicIdsWithTag(result
-					.getId());
-
-
 			model.put("topic", result);
-			model.put("onThisIsland", onThisIsland);
-			model.put("username", userString);
 
-			// model.put("command",new SearchCommand());
+			model.put("foruser", result.getUser());
+
+			log.info("User: " + result.getUser() + " Topic " + result);
 
 			return new ModelAndView(getView(), model);
 		} catch (HippoBusinessException e) {
@@ -113,16 +97,16 @@ public class MVCBrowseController extends BasicController {
 
 	private ModelAndView userOnly(Map<String, Object> model, String userString) {
 		try {
-			List<DatedTopicIdentifier> topics = topicService.getAllPublicTopicIdentifiers(
-					userString, 0, 10, null);
+			User u = userService.getUserWithNormalization(userString);
 
-			model.put("topics", topics);
+			Topic root = topicService.getRootTopic(u);
 
-			model.put("username", userString);
+			model.put("topic", root);
+			model.put("foruser", u);
 
-			// model.put("command",new SearchCommand());
+			log.info("User: " + u + " Root " + root);
 
-			return new ModelAndView(getUserStartView(), model);
+			return new ModelAndView(getView(), model);
 
 		} catch (Exception e) {
 			log.debug(e.getMessage());

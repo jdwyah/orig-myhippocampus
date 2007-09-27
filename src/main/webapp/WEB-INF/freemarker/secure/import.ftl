@@ -35,7 +35,8 @@
 		</fieldset>
 	</form>
 	
-	<div class="middle-column-box-title-green">Google Docs & Spreadsheets</div>				
+	<div class="middle-column-box-title-green">Google Docs & Spreadsheets</div>		
+	<#--<h3>This Google service is down for the time being. See <a href="http://groups.google.com/group/Google-Docs-Data-APIs/browse_thread/thread/83bf5b9650af7ae8">this thread</a> for the status of the fix<h3>-->		
 	<table>
 	<tr>
 	<th>

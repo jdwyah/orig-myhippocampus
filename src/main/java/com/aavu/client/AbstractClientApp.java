@@ -35,19 +35,22 @@ public abstract class AbstractClientApp {
 
 
 		} catch (Exception e) {
-			Logger.log("e: " + e);
-
-			e.printStackTrace();
-
-			VerticalPanel panel = new VerticalPanel();
-
-			panel.add(new Label("Error"));
-			panel.add(new Label(e.getMessage()));
-
-			RootPanel.get("loading").setVisible(false);
-			RootPanel.get("slot1").add(panel);
-
+			error(e);
 		}
+	}
+
+	protected void error(Exception e) {
+		Logger.log("e: " + e);
+
+		e.printStackTrace();
+
+		VerticalPanel panel = new VerticalPanel();
+
+		panel.add(new Label("Error"));
+		panel.add(new Label(e.getMessage()));
+
+		RootPanel.get("loading").setVisible(false);
+		RootPanel.get("slot1").add(panel);
 	}
 
 	protected abstract void setMeUp();

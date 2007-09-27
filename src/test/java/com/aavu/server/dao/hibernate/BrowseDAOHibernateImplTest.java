@@ -1,6 +1,7 @@
 package com.aavu.server.dao.hibernate;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.RealTopic;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.client.exception.HippoBusinessException;
@@ -86,6 +88,17 @@ public class BrowseDAOHibernateImplTest extends HibernateTransactionalTest {
 		}
 
 		assertEquals(BrowseDAOHibernateImpl.MAX_TOPICS, topics.size());
+
+		for (RealTopic topic : topics) {
+			assertTrue(topic.getInstances().size() > 2);
+			for (Iterator iterator = topic.getInstances().iterator(); iterator.hasNext();) {
+				TopicTypeConnector ttc = (TopicTypeConnector) iterator.next();
+				assertNotNull(ttc.getTopic());
+				assertNotNull(ttc.getTopic().getTitle());
+				System.out.println(ttc.getTopic().getTitle());
+			}
+		}
+
 	}
 
 	public void testGetTopWeblinks() throws HippoBusinessException {

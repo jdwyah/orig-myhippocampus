@@ -153,7 +153,11 @@ a:visited {
 	border: 1px solid #D8E3FD;
 	border-style: ridge;
 }
-
+.H-GadgetPopupType {
+	font-size: .9em;
+	color: gray;
+	margin-left: 3em;		
+}
 .H-TitleGadgetOptions {
 	padding: 2px;
 }
@@ -368,6 +372,8 @@ a:visited {
 }
 
 .H-StatusLabels {
+	width: 5px;
+	height: 20px;
 	filter: alpha(opacity =                 40);
 	-moz-opacity: .40;
 	opacity: .40;
@@ -700,8 +706,10 @@ a:visited {
 	background-color: #669999;
 }
 
-.H-External-Hyperlink a {
+.H-External-Hyperlink {
 	font-size: .6em;
+	color:darkblue;
+	text-decoration: underline;
 }
 
 .H-EditLink-Button {

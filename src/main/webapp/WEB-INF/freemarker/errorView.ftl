@@ -19,7 +19,7 @@
 	 </#if>
 
 	We're sorry you received an error. Do us a favor and let us know! email <a href="mailto:help@myhippocampus.com">help@myhippocampus.com</a> with the error message and a description of what you were doing. Thanks!
-
+<p>
 	<#if exception?exists>
 
 					${exception}
@@ -32,6 +32,7 @@
 					No Error Message found !!!
 
 	</#if>
+	</p>
 
 	</div>
 	

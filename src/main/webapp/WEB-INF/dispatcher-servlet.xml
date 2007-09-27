@@ -50,6 +50,10 @@
 		<property name="view" value="acknowledgments" />
 		<property name="userService" ref="userService" />
 	</bean>
+	<bean id="seahorseController" class="com.aavu.server.web.controllers.BasicController">
+		<property name="view" value="seahorse" />
+		<property name="userService" ref="userService" />
+	</bean>
 	<bean id="termsController" class="com.aavu.server.web.controllers.BasicController">
 		<property name="view" value="terms" />
 		<property name="userService" ref="userService" />
@@ -193,16 +197,20 @@
 		<property name="searchService" ref="searchService"/>
 		<property name="userService" ref="userService" />
 	</bean>
+	<bean id="publicSearchController" class="com.aavu.server.web.controllers.SearchController">
+		<property name="successView" value="publicSearch" />
+		<property name="searchService" ref="searchService"/>
+		<property name="userService" ref="userService" />
+	</bean>
 	<bean id="showTopicController" class="com.aavu.server.web.controllers.ShowTopicController">
 		<property name="view" value="secure/showTopic" />
 		<property name="topicService" ref="topicService"/>
 		<property name="userService" ref="userService" />
 	</bean>
 	
-	<bean id="mvcBrowseController" class="com.aavu.server.web.controllers.MVCBrowseController">
-		<property name="view" value="browseShow" />
+	<bean id="mvcBrowseController" class="com.aavu.server.web.controllers.MVCBrowseController">		
 		<property name="notFoundView" value="browseNotFound"/>
-		<property name="userStartView" value="browseUser"/>
+		<property name="view" value="browser"/>
 		<property name="topicService" ref="topicService"/>
 		<property name="userService" ref="userService" />
 	</bean>
@@ -281,10 +289,13 @@
 				<prop key="/site/manifesto2.html">manifestoController2</prop>
 				<prop key="/site/contact.html">contactController</prop>		
 				<prop key="/site/acknowledgments.html">acknowledgmentsController</prop>						
+				<prop key="/site/seahorse.html">seahorseController</prop>
 				<prop key="/site/terms.html">termsController</prop>
 
 				<prop key="/site/accessDenied.html">errorController</prop>
 				<prop key="/site/servletErrorView.html">errorController</prop>						
+
+				<prop key="/site/publicSearch.html">publicSearchController</prop>
 
 				<prop key="/site/secure/search.html">searchController</prop>
 				<prop key="/site/secure/userPage.html">userPageController</prop>
@@ -305,7 +316,7 @@
 								
 				<prop key="/site/j_acegi_openid_start">openIDLoginStartController</prop>					
 
-				<prop key="/site/**/*">mvcBrowseController</prop>
+				<prop key="/site/browse/**/*">mvcBrowseController</prop>
 
 				<!-- 
 				<prop key="/css/**/*">myServletForwardingController</prop>

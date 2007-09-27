@@ -53,6 +53,9 @@ public class GoogleImportController extends BasicController {
 
 			return new ModelAndView(formView, getModelForMessage("Problem Logging In "
 					+ e.getMessage()));
+		} catch (Exception e) {
+			return new ModelAndView(formView, getModelForMessage("Problem Connecting to Google "
+					+ e.getMessage()));
 		}
 
 

@@ -1,10 +1,5 @@
 package com.aavu.client;
 
-import java.util.Iterator;
-
-import org.gwtwidgets.client.util.Location;
-import org.gwtwidgets.client.util.WindowUtils;
-
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaDate;
 import com.aavu.client.service.BrowserManager;
@@ -21,9 +16,33 @@ public class BrowserClientApp extends AbstractClientApp implements HistoryListen
 
 	private Manager manager;
 
-	public BrowserClientApp() {
-		super();
+
+	private String userIDStr;
+
+
+	private String topicIDStr;
+
+
+
+	public BrowserClientApp(String userIDStr, String topicIDStr) {
+		try {
+
+			System.out.println("new Browser " + userIDStr + " " + topicIDStr);
+
+			this.userIDStr = userIDStr;
+			this.topicIDStr = topicIDStr;
+
+			initServices();
+
+			setMeUp();
+
+
+		} catch (Exception e) {
+			error(e);
+		}
+
 	}
+
 
 
 	// @Override
@@ -39,31 +58,35 @@ public class BrowserClientApp extends AbstractClientApp implements HistoryListen
 		manager.setup("Original");
 
 
-		Location loc = WindowUtils.getLocation();
-
-		System.out.println("Query " + loc.getQueryString());
-		System.out.println("href " + loc.getHref());
-
-		for (Iterator iterator = loc.getParameterMap().keySet().iterator(); iterator.hasNext();) {
-			String key = (String) iterator.next();
-			System.out.println("Key " + key + " Value " + loc.getParameterMap().get(key));
-		}
+		// Location loc = WindowUtils.getLocation();
+		//
+		// System.out.println("Query " + loc.getQueryString());
+		// System.out.println("href " + loc.getHref());
+		//
+		// for (Iterator iterator = loc.getParameterMap().keySet().iterator(); iterator.hasNext();)
+		// {
+		// String key = (String) iterator.next();
+		// System.out.println("Key " + key + " Value " + loc.getParameterMap().get(key));
+		// }
 
 
 
 		String initToken = History.getToken();
+
 		System.out.println("Browser Startup token: " + initToken);
 
+		if (initToken != null) {
+			System.out.println("Len " + initToken.length());
+		}
+		System.out.println("TopicID " + topicIDStr);
+
+
 		if (initToken.length() > 0) {
+			System.out.println("Do history change");
 			onHistoryChanged(initToken);
 		} else {
-			String topicID = loc.getParameter("topicID");
-
-			if (null != topicID) {
-				manager.gotoTopic(topicID);
-			} else {
-				manager.displayInfo("No Topic Selected");
-			}
+			System.out.println("goto " + topicIDStr);
+			manager.gotoTopic(topicIDStr);
 		}
 
 

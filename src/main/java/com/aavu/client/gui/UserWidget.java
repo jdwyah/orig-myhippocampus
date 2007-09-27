@@ -6,6 +6,7 @@ import com.aavu.client.gui.hierarchy.BorderThemedPanel;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.ExternalLink;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -19,6 +20,7 @@ public class UserWidget extends Composite {
 	private Manager manager;
 	private HorizontalPanel userPanel;
 	private HorizontalPanel noUserPanel;
+	private HorizontalPanel topPanel;
 
 	public UserWidget(final Manager manager) {
 		this.manager = manager;
@@ -26,10 +28,18 @@ public class UserWidget extends Composite {
 
 		usernameLabel = new Label(ConstHolder.myConstants.userw_none());
 
-		HorizontalPanel h1 = new HorizontalPanel();
-		h1.add(new Label(ConstHolder.myConstants.userw_usename()));
-		h1.add(usernameLabel);
-		mainP.add(h1);
+		Button rootB = new Button("Desktop");
+		rootB.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				// manager.gotoRoot();
+			}
+		});
+
+		topPanel = new HorizontalPanel();
+		topPanel.add(rootB);
+		topPanel.add(new Label(ConstHolder.myConstants.userw_usename()));
+		topPanel.add(usernameLabel);
+		mainP.add(topPanel);
 
 		userPanel = new HorizontalPanel();
 
@@ -47,7 +57,7 @@ public class UserWidget extends Composite {
 				.getRelativeURL(ConstHolder.myConstants.userw_logout_url())));
 
 		Label loginLabel = new Label("Login");
-		loginLabel.addStyleName("a");
+		loginLabel.addStyleName("H-External-Hyperlink");
 		loginLabel.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				manager.doLogin();

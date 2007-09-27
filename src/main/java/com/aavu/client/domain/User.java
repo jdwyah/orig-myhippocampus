@@ -52,6 +52,18 @@ public class User extends AbstractUser implements IsSerializable {
 		return getId() + " " + getUsername();
 	}
 
+	/**
+	 * TODO PEND HIGH
+	 */
+	public String getNickname() {
+		if (isOpenID()) {
+			return getUsername().substring(6);// http://
+		}
+		return getUsername();
+	}
 
+	private boolean isOpenID() {
+		return getPassword() == null;
+	}
 
 }

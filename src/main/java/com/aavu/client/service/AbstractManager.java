@@ -383,6 +383,7 @@ public abstract class AbstractManager implements Manager {
 	public PopupWindow showProgressBar(ProgressBar progressBar) {
 		ProgressPopup win = new ProgressPopup(newFrame(progressBar.getTitle()), progressBar
 				.getTitle(), progressBar);
+
 		return win;
 	}
 

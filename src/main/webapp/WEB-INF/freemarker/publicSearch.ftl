@@ -1,6 +1,6 @@
 <html>
 <#import "/spring.ftl" as spring/>
-<#import "../common.ftl" as common/>
+<#import "common.ftl" as common/>
 <head>
   <title><@spring.message "searchResults.title"/></title>
 </head>
@@ -19,7 +19,7 @@
 	 </#if>
 
 
-	<form action="<@spring.url "/site/secure/search.html"/>" method="POST">
+	<form action="<@spring.url "/site/publicSearch.html"/>" method="POST">
 		<fieldset>
 			<legend><@spring.message "userPage.search.legend"/></legend>				
 								
@@ -37,13 +37,14 @@
 		<div class="searchRes">
 			<p class="searchTitle subheading">
 			${result_index + 1})  <@spring.message "userPage.search.score"/>${result.score}
-				<a href="<@spring.url "/site/secure/showTopic.html?id=${result.topicID?c}"/>">${result.title?default("undefined")}</a>
+				<@common.browseLink result/>				
+				User: <@common.userLink result.user/>
 			</p>
 		   ${result.text?default("")} 
 		</div>	
 	</#list>
 	</#if>	
-		
+
 	
 	
   </div>

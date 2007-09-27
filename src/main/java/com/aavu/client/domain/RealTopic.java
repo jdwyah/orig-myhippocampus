@@ -53,4 +53,6 @@ public class RealTopic extends Topic implements HasDate {
 	public void setEndDate(Date newD) {
 		// no-op
 	}
+
+
 }

@@ -1014,7 +1014,8 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	}
 
 	public String getTitlePromptText() {
-		return "Title:";
+		return "Title";
 	}
+
 
 }

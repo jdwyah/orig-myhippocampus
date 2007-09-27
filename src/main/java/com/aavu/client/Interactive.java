@@ -64,9 +64,9 @@ public class Interactive implements EntryPoint {
 		try {
 			GWT.setUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
 
-			Dictionary theme = Dictionary.getDictionary("Vars");
+			Dictionary dictionary = Dictionary.getDictionary("Vars");
 
-			String page = theme.get("page");
+			String page = dictionary.get("page");
 
 			if (page.equals("MyMindscape")) {
 				UserClientApp m = new UserClientApp();
@@ -74,7 +74,10 @@ public class Interactive implements EntryPoint {
 				AddLink addLink = new AddLink();
 
 			} else if (page.equals("HippocampusBrowser")) {
-				BrowserClientApp browser = new BrowserClientApp();
+
+				String userIDStr = dictionary.get("userID");
+				String topicIDStr = dictionary.get("topicID");
+				BrowserClientApp browser = new BrowserClientApp(userIDStr, topicIDStr);
 
 			} else {
 				throw new Exception("Vars['page'] not set.");

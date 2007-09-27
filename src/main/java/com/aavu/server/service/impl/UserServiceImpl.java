@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 	 */
 	public static final String ANONYMOUS = "anonymousUser";
 
+	public static final String SAMPLE_TAG_TITLE = "Sample Movies";
+
 	private UserDAO userDAO;
 
 	private UserCache userCache;
@@ -292,7 +294,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			Root root = new Root(createdU);
 			topicService.save(root);
 
-			Topic movies = topicService.createNewIfNonExistent("Movies");
+			Topic movies = topicService.createNewIfNonExistent(SAMPLE_TAG_TITLE);
 
 			Calendar c = Calendar.getInstance();
 

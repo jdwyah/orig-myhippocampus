@@ -16,6 +16,7 @@ import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.server.dao.BrowseDAO;
+import com.aavu.server.service.impl.UserServiceImpl;
 
 /**
  * 
@@ -48,6 +49,7 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 		return getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session session) throws HibernateException {
 				Query queryObject = session.createQuery(hql);
+
 
 				// // WARN : org.hibernate.hql.ast.QueryTranslatorImpl#list : firstResult/maxResults
 				// // specified with collection fetch; applying in memory!
@@ -123,13 +125,14 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 		// List<RealTopic> ll = getHibernateTemplate().findByCriteria(
 		// SelectDAOHibernateImpl.loadEmAll(crit), 0, MAX_TOPICS);
 
+		// TODO ugly sql injection-ish vulnerable query gen
 		final String hql = "from RealTopic top " + " join fetch top.user "
-				+ " join fetch top.types ttc " + " join fetch ttc.type "
-				+ " where top.publicVisible = true " + " order by size(top.instances) desc ";
+				+ " join fetch top.instances ttc " + " join fetch ttc.topic "
+				+ " where top.publicVisible = true and top.title !=  '"
+				+ UserServiceImpl.SAMPLE_TAG_TITLE + "' order by size(top.instances) desc ";
 
 
 		List<RealTopic> ll = (List<RealTopic>) getLimittedResults(hql, MAX_TOPICS);
-
 
 		return ll;
 	}

@@ -98,7 +98,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 	private List<SearchResult> search(final String searchString, final User user, final int start,
 			final int max_num_hits) {
 
-		log.debug("-----" + searchString + "--------" + user.getUsername() + "-----");
+		log.debug("-----" + searchString + "--------" + user + "-----");
 
 		// search for "" -> bad things
 		// org.compass.core.engine.SearchEngineQueryParseException: Failed to parse query [];
@@ -132,7 +132,13 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 
 
 				Map<String, Object> mustEqualMap = new HashMap<String, Object>();
-				mustEqualMap.put("userID", user.getId());
+				if (null != user) {
+					log.debug("Do User Secured Search");
+					mustEqualMap.put("userID", user.getId());
+				} else {
+					log.debug("Do Public Search");
+					mustEqualMap.put("publicVisible", true);
+				}
 
 				// create compass query with free text query that the user typed in.
 				CompassQueryBuilder queryBuilder = session.queryBuilder();
@@ -176,7 +182,7 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 						// fragment
 					} catch (SearchEngineException see) {
 						log.warn("Search Engine Exception: " + see + " search term " + searchString
-								+ " username " + user.getUsername());
+								+ " username " + user);
 					}
 				}
 				return hits.detach(start, max_num_hits);
@@ -206,12 +212,12 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 			SearchResult res = null;
 
 			Object obj = defaultCompassHit.getData();
-			System.out.println("DATA: " + defaultCompassHit.getData());
+			log.debug("DATA: " + defaultCompassHit.getData());
 
 			if (obj instanceof Entry) {
 				Entry entry = (Entry) obj;
 
-				System.out.println("id: " + entry.getId());
+				log.debug("id: " + entry.getId());
 
 				List<TopicIdentifier> topicIDList = selectDAO.getTopicForOccurrence(entry.getId(),
 						user);
@@ -225,12 +231,13 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 					// PEND take this out == null only when we do the search for a term that is a
 					// username...
 					if (text == null) {
-						res = new SearchResult(topicID.getTopicID(), defaultCompassHit.getScore(),
-								topicID.getTopicTitle(), null, topicID.isPublicVisible());
+
+						res = new SearchResult(entry, topicID, defaultCompassHit.getScore(), null);
+
 					} else {
-						res = new SearchResult(topicID.getTopicID(), defaultCompassHit.getScore(),
-								topicID.getTopicTitle(), text.getHighlightedText("text"), topicID
-										.isPublicVisible());
+						res = new SearchResult(entry, topicID, defaultCompassHit.getScore(), text
+								.getHighlightedText("text"));
+
 					}
 				}
 			} else if (obj instanceof URI) {
@@ -242,14 +249,14 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 				if (topicIDList.size() > 0) {
 					// TODO what if it has multiple refs?
 					TopicIdentifier topicID = topicIDList.get(0);
-					res = new SearchResult(topicID.getTopicID(), defaultCompassHit.getScore(), uri
-							.getTitle(), uri.getData(), topicID.isPublicVisible());
+					res = new SearchResult(uri, topicID, defaultCompassHit.getScore(), uri
+							.getData());
 				}
+
 			} else if (obj instanceof RealTopic) {
 				RealTopic top = (RealTopic) obj;
 
-				res = new SearchResult(top.getId(), defaultCompassHit.getScore(), top.getTitle(),
-						null, top.isPublicVisible());
+				res = new SearchResult(top, defaultCompassHit.getScore(), null);
 
 				// // TODO doesn't work!! need to exclude in cpm. Returning as a Topic.class
 				// // TODO messy. Maybe we need TopLevelTopic.class?
