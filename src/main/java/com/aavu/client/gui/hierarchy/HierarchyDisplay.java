@@ -441,6 +441,7 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 		if (iterator.hasNext()) {
 			timer.schedule(100);
 		} else {
+			System.out.println("\n\nHierarchyDisplay.Hiding Progress Bar");
 			progressWindow.hide();
 
 			if (loadFinished != null) {

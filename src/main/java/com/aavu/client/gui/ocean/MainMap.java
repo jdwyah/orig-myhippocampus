@@ -159,8 +159,13 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 		timeline = new TimeLineWrapper(manager, explorerWindow.getWidth(), explorerWindow
 				.getHeight(), explorerWindow);
 		glossary = new Glossary(manager, explorerWindow.getHeight());
-		bigMap = new BigMap(manager, null, explorerWindow.getWidth(), explorerWindow.getHeight(),
-				explorerWindow);
+
+		try {
+			bigMap = new BigMap(manager, null, explorerWindow.getWidth(), explorerWindow
+					.getHeight(), explorerWindow);
+		} catch (RuntimeException e) {
+			bigMap = null;
+		}
 		connectionExplorer = new ConnectionExplorer(manager);
 
 
@@ -391,8 +396,12 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	}
 
 	public void showGoogleMap() {
-		explorerWindow.loadGoogleMap(bigMap, curTopic);
-		explorerWindow.show();
+		if (bigMap != null) {
+			explorerWindow.loadGoogleMap(bigMap, curTopic);
+			explorerWindow.show();
+		} else {
+			manager.displayInfo("Unable to load the Map");
+		}
 	}
 
 	public void showConnections() {

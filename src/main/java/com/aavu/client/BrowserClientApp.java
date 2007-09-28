@@ -5,6 +5,7 @@ import com.aavu.client.domain.MetaDate;
 import com.aavu.client.domain.User;
 import com.aavu.client.service.BrowserManager;
 import com.aavu.client.service.Manager;
+import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -30,7 +31,7 @@ public class BrowserClientApp extends AbstractClientApp implements HistoryListen
 	public BrowserClientApp(String userIDStr, String username, String topicIDStr) {
 		try {
 
-			System.out.println("new Browser " + userIDStr + " " + username + " " + topicIDStr);
+			Logger.log("New Browser " + userIDStr + " " + username + " " + topicIDStr);
 
 			this.userIDStr = userIDStr;
 			this.username = username;
@@ -82,12 +83,12 @@ public class BrowserClientApp extends AbstractClientApp implements HistoryListen
 
 		String initToken = History.getToken();
 
-		System.out.println("Browser Startup token: " + initToken);
+		Logger.log("Browser Startup token: " + initToken);
 
 		if (initToken != null) {
-			System.out.println("Len " + initToken.length());
+			Logger.log("Len " + initToken.length());
 		}
-		System.out.println("TopicID " + topicIDStr);
+		Logger.log("TopicID " + topicIDStr);
 
 
 		if (initToken.length() > 0) {

@@ -2,7 +2,7 @@ package com.aavu.client.gui.gadgets;
 
 import java.util.Date;
 
-import com.aavu.client.domain.HippoDate;
+import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
@@ -14,10 +14,10 @@ import com.google.gwt.user.client.ui.Image;
  * @author Jeff Dwyer
  * 
  */
-public class CreateHippoDateGadget extends CreateTopicGadget {
+public class CreateHippoLocationGadget extends CreateTopicGadget {
 
 
-	public CreateHippoDateGadget(Manager _manager) {
+	public CreateHippoLocationGadget(Manager _manager) {
 
 		super(_manager);
 
@@ -29,14 +29,15 @@ public class CreateHippoDateGadget extends CreateTopicGadget {
 	}
 
 	// @Override
-	public boolean isOnTimelineContextMenu() {
+	public boolean isOnMapContextMenu() {
 		return true;
 	}
 
-
 	// @Override
 	public Image getPickerButton() {
-		Image b = ConstHolder.images.hourglassbase().createImage();
+		Image b = ConstHolder.images.gadgetMap().createImage();
+
+		// b.addMouseListener(new TooltipListener(0, 40, getDisplayName()));
 		return b;
 	}
 
@@ -48,14 +49,13 @@ public class CreateHippoDateGadget extends CreateTopicGadget {
 
 	// @Override
 	public void createInstance(Manager manager, int[] lngLat, Date dateCreated) {
-		HippoDate hippoDate = new HippoDate();
-		manager.createNew(hippoDate, lngLat, dateCreated, false, true);
-
+		HippoLocation hippoLocation = new HippoLocation();
+		manager.createNew(hippoLocation, lngLat, dateCreated, false, true);
 	}
 
 	// @Override
 	public String getDisplayName() {
-		return ConstHolder.myConstants.hippodate_new();
+		return ConstHolder.myConstants.hippolocation_new();
 	}
 
 

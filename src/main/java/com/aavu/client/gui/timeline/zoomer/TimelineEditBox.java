@@ -4,7 +4,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
-import com.aavu.client.domain.commands.SaveTitleCommand;
+import com.aavu.client.domain.commands.SaveTopicBasicCommand;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ocean.dhtmlIslands.TimelineRemembersPosition;
@@ -53,7 +53,7 @@ public class TimelineEditBox extends Composite {
 				fauxTopic.setTitle(tlo.getHasDate().getTitle());
 
 				manager.getTopicCache().executeCommand(fauxTopic,
-						new SaveTitleCommand(fauxTopic, editBox.getText()),
+						new SaveTopicBasicCommand(fauxTopic, editBox.getText()),
 						new StdAsyncCallback(ConstHolder.myConstants.save()) {
 							// @Override
 							public void onSuccess(Object result) {

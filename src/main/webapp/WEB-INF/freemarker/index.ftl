@@ -24,14 +24,10 @@
 		<#else>
 		<#assign subset=topic.topics/>
 	</#if>
-	<#list subset as subTopic>
-		<#if instanceNotType>		
-				<li><@common.browseLink subTopic.topic/></li>
-			<#else>
-				<li><@common.browseLink subTopic.topic/></li>
-		</#if>
+	<#list subset as subTopic>		
+		<li><@common.browseLink subTopic.topic/></li>
 		<#if subTopic_index gt 10>| ...<#break></#if>
-		<#if subTopic_has_next>|</#if>
+		<#if subTopic_has_next>|</#if>		
 	</#list>
 	</ul>
 	</div>

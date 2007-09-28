@@ -11,25 +11,23 @@ import java.util.Set;
 import org.gwm.client.event.GFrameAdapter;
 import org.gwm.client.event.GFrameEvent;
 
-import com.aavu.client.async.EZCallback;
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.IntPair;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.commands.SaveTopicBasicCommand;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.gui.explorer.ExplorerPanel;
 import com.aavu.client.gui.ext.PopupWindow;
-import com.aavu.client.gui.glossary.SimpleTopicDisplay;
-import com.aavu.client.gui.maps.ext.GWTInfoWidget;
 import com.aavu.client.gui.timeline.CloseListener;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.core.client.JavaScriptException;
+import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.mapitz.gwt.googleMaps.client.GLatLng;
-import com.mapitz.gwt.googleMaps.client.GMarker;
 
 /**
  * Show all selected tag's map meta info.
@@ -68,7 +66,9 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		try {
 			mapWidget = new HippoMapWidget(this, width, height, DEFAULT_ZOOM);
 		} catch (JavaScriptException e) {
-			Logger.error("Couldn't Load Map. Connection to Google Maps may have failed.");
+			e.printStackTrace();
+			Logger.error("Couldn't Load Map. Connection to Google Maps may have failed. " + e);
+			throw new RuntimeException(e);
 		}
 		extraPanel.add(mapWidget);
 
@@ -135,9 +135,24 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 	}
 
 	/**
-	 * no add, so return null here
+	 * 
 	 */
-	public LocationDTO getNewLocationForPoint(GLatLng point) {
+	public LocationDTO getNewLocationForPoint(LatLng point) {
+
+
+		//
+		// HippoLocation newLoc = new HippoLocation();
+		// newLoc.setLocation(point);
+		//
+		//
+		// manager.createNew(realT, lngLat, dateCreated, true, false);
+		//
+		// saveLocation(newLoc);
+		//
+		// LocationDTO locObj = new LocationDTO(myTopic.getIdentifier(), newLoc, selectedMeta);
+		//
+		// return locObj;
+
 		return null;
 	}
 
@@ -195,21 +210,13 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 
 
 	public void update(LocationDTO dragged) {
-		manager.displayInfo("Dragging not supported here yet. Use the MapGadget to edit locations");
-		// System.out.println("Update "+dragged+" selectedMeta "+selectedMeta);
-		// Set locations = myTopic.getMetaValuesFor(selectedMeta);
-		// locations.add(dragged.getLocation());
 
-		// System.out.println("Updating locations size "+locations.size());
-		// for (Iterator iter = locations.iterator(); iter.hasNext();) {
-		// HippoLocation hl = (HippoLocation) iter.next();
-		// System.out.println("hl "+hl);
-		// }
-
-
-		// manager.getTopicCache().executeCommand(myTopic,new
-		// SaveMetaLocationCommand(dragged.getTopic(),dragged.getMeta(),dragged.getLocation()),
-		// new StdAsyncCallback(ConstHolder.myConstants.save()){});
+		manager.getTopicCache().executeCommand(
+				dragged.getLocation(),
+				new SaveTopicBasicCommand(dragged.getLocation(), dragged.getLocation()
+						.getLatitude(), dragged.getLocation().getLongitude()),
+				new StdAsyncCallback(ConstHolder.myConstants.save()) {
+				});
 
 	}
 
@@ -221,21 +228,10 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		manager.bringUpChart(selected.getTopic());
 	}
 
-	public void userSelected(LocationDTO selected, final GMarker marker) {
+	public void userSelected(LocationDTO selected, final Marker marker) {
 
-		// manager.getGui().showHover(selected.getTopic());
+		manager.getGui().showHover(selected.getTopic());
 
-		SimpleTopicDisplay std = new SimpleTopicDisplay(selected.getTopic(), manager, closeable,
-				BLURB_WIDTH, BLURB_HEIGHT, new EZCallback() {
-					public void onSuccess(Object result) {
-
-						SimpleTopicDisplay wi = (SimpleTopicDisplay) result;
-
-						GWTInfoWidget gwtInfoWidg = new GWTInfoWidget(wi);
-
-						marker.openInfoWindow(gwtInfoWidg);
-					}
-				});
 	}
 
 	// @Override
@@ -253,6 +249,10 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 
 	private void resize(GFrameEvent evt) {
 		mapWidget.setSize(evt.getGFrame().getWidth(), evt.getGFrame().getHeight());
+	}
+
+	public Manager getManager() {
+		return manager;
 	}
 
 }

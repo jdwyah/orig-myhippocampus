@@ -347,6 +347,9 @@ a:visited {
 .H-TagBoard {
 	
 }
+.H-TagBoard .H-TopicLink {
+	padding-right: 4em;
+}
 
 .H-Dashboard {
 	bottom: 0px;

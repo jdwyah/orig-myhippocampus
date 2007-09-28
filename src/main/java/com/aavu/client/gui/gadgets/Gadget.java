@@ -166,6 +166,9 @@ public abstract class Gadget extends Composite {
 		return false;
 	}
 
+	public boolean isOnMapContextMenu() {
+		return false;
+	}
 
 	public String getDisplayName(Topic topic) {
 		return topic.getTitle() + " " + getDisplayName();

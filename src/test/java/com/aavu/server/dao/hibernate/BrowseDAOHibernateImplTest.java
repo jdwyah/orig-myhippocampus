@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.aavu.client.domain.RealTopic;
+import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
@@ -95,6 +96,7 @@ public class BrowseDAOHibernateImplTest extends HibernateTransactionalTest {
 				TopicTypeConnector ttc = (TopicTypeConnector) iterator.next();
 				assertNotNull(ttc.getTopic());
 				assertNotNull(ttc.getTopic().getTitle());
+				assertTrue(ttc.getTopic().isPublicVisible());
 				System.out.println(ttc.getTopic().getTitle());
 			}
 		}
@@ -111,7 +113,16 @@ public class BrowseDAOHibernateImplTest extends HibernateTransactionalTest {
 			System.out.println("Weblink " + link + " ");
 
 			assertFalse(ids.contains(link.getId()));
+
+			assertTrue(link.isPublicVisible());
+
 			ids.add(link.getId());
+
+			for (Iterator iterator = link.getTopics().iterator(); iterator.hasNext();) {
+				TopicOccurrenceConnector toc = (TopicOccurrenceConnector) iterator.next();
+				assertTrue(toc.getTopic().isPublicVisible());
+			}
+
 		}
 
 		assertEquals(BrowseDAOHibernateImpl.MAX_WEBLINKS, links.size());

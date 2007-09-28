@@ -126,9 +126,11 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 		// SelectDAOHibernateImpl.loadEmAll(crit), 0, MAX_TOPICS);
 
 		// TODO ugly sql injection-ish vulnerable query gen
-		final String hql = "from RealTopic top " + " join fetch top.user "
-				+ " join fetch top.instances ttc " + " join fetch ttc.topic "
-				+ " where top.publicVisible = true and top.title !=  '"
+		final String hql = "from RealTopic top "
+				+ " join fetch top.user "
+				+ " join fetch top.instances ttc "
+				+ " join fetch ttc.topic as child "
+				+ " where top.publicVisible = true and child.publicVisible=true and top.title !=  '"
 				+ UserServiceImpl.SAMPLE_TAG_TITLE + "' order by size(top.instances) desc ";
 
 
@@ -143,8 +145,8 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 	public List<WebLink> getTopWeblinks() {
 
 		final String hql = "from WebLink occ " + " join fetch occ.user "
-				+ " join fetch occ.topics toc " + " join fetch toc.topic " + "  "
-				+ " order by size(occ.topics) desc ";
+				+ " join fetch occ.topics toc " + " join fetch toc.topic as top "
+				+ " where top.publicVisible = true  " + " order by size(occ.topics) desc ";
 
 		List<WebLink> ll = (List<WebLink>) getLimittedResults(hql, MAX_WEBLINKS);
 

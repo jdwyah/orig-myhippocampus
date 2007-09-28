@@ -12,7 +12,7 @@ import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.URI;
 import com.aavu.client.domain.commands.SaveDatesCommand;
-import com.aavu.client.domain.commands.SaveTitleCommand;
+import com.aavu.client.domain.commands.SaveTopicBasicCommand;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.EditableLabelExtension;
 import com.aavu.client.gui.ext.PopupWindow;
@@ -71,7 +71,7 @@ public class TitleGadget extends Gadget {
 		titleBox = new EditableLabelExtension("", new ChangeListener() {
 			public void onChange(Widget sender) {
 				manager.getTopicCache().executeCommand(topic,
-						new SaveTitleCommand(topic, titleBox.getText()),
+						new SaveTopicBasicCommand(topic, titleBox.getText()),
 						new StdAsyncCallback(ConstHolder.myConstants.save()) {
 
 							// @Override

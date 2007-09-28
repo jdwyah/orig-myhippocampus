@@ -16,14 +16,14 @@ import com.aavu.client.gui.maps.MapController;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.widget.DeleteButton;
+import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.mapitz.gwt.googleMaps.client.GLatLng;
-import com.mapitz.gwt.googleMaps.client.GMarker;
 
 /**
  * Google Map Gadget.
@@ -158,7 +158,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 	}
 
 
-	public LocationDTO getNewLocationForPoint(GLatLng point) {
+	public LocationDTO getNewLocationForPoint(LatLng point) {
 
 		if (selectedMeta != null) {
 
@@ -294,7 +294,7 @@ public class MapGadget extends MetaGadget implements TopicLoader, MapController 
 
 
 
-	public void userSelected(LocationDTO selected, GMarker marker) {
+	public void userSelected(LocationDTO selected, Marker marker) {
 		// TODO Auto-generated method stub
 
 	}

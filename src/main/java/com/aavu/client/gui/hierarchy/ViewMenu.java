@@ -54,13 +54,14 @@ public class ViewMenu extends PopupPanel {
 		// }
 		// }));
 
-		// mainPanel.add(addView(ConstHolder.images.gadgetMap().createImage(), "Maps",
-		// new ClickListener() {
-		// public void onClick(Widget sender) {
-		// manager.getGui().showGoogleMap();
-		// hide();
-		// }
-		// }));
+
+		mainPanel.add(addView(ConstHolder.images.gadgetMap().createImage(), "Maps",
+				new ClickListener() {
+					public void onClick(Widget sender) {
+						manager.getGui().showGoogleMap();
+						hide();
+					}
+				}));
 
 
 		add(mainPanel);

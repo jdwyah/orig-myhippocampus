@@ -20,6 +20,7 @@ public class GadgetManager {
 	// private TypeGadget typeGadget;
 	private CreateTopicGadget createTopicGadget;
 	private CreateHippoDateGadget createHippoDateGadget;
+	private CreateHippoLocationGadget createHippoLocationGadget;
 
 
 	private TagBoard tagBoard;
@@ -57,6 +58,7 @@ public class GadgetManager {
 			linkDisplayW = new LinkDisplayGadget(manager);
 			createTopicGadget = new CreateTopicGadget(manager);
 			createHippoDateGadget = new CreateHippoDateGadget(manager);
+			createHippoLocationGadget = new CreateHippoLocationGadget(manager);
 
 			childGadget = new ChildrenGadget(manager);
 			// typeGadget = new TypeGadget(manager);
@@ -81,6 +83,7 @@ public class GadgetManager {
 
 			allGadgets.add(createTopicGadget);
 			allGadgets.add(createHippoDateGadget);
+			allGadgets.add(createHippoLocationGadget);
 
 			// allGadgets.add(typeGadget);
 

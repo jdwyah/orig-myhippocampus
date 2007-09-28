@@ -475,4 +475,6 @@ public interface Consts extends Messages {
 
 	String userw_index_url();
 
+	String hippolocation_new();
+
 }

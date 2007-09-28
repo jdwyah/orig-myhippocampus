@@ -3,13 +3,11 @@ package com.aavu.client.gui;
 import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
-import com.aavu.client.gui.ext.ExternalPopup;
 import com.aavu.client.gui.hierarchy.HierarchyContextMenu;
 import com.aavu.client.gui.hierarchy.ViewMenu;
 import com.aavu.client.gui.ocean.SpatialDisplay;
 import com.aavu.client.service.Manager;
 import com.aavu.client.strings.ConstHolder;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -82,15 +80,17 @@ public class Dashboard extends SimplePanel {
 		// }});
 		// timeLine.addMouseListener(new TooltipListener(0,-20,ConstHolder.myConstants.timeline()));
 
-		Button facebookB = new Button("FaceBook");
-		facebookB.addClickListener(new ClickListener() {
-			// http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222&popup=true
-			// http://www.myhippocampus.com/site/facebook.html?auth_token=5db53300a9cebdc59ead9ea882cb57df
-			public void onClick(Widget sender) {
-				String login = "http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222&popup=true";
-				ExternalPopup ex = new ExternalPopup("Facebook", login, 626, 436);
-			}
-		});
+		// Button facebookB = new Button("FaceBook");
+		// facebookB.addClickListener(new ClickListener() {
+		// // http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222&popup=true
+		// //
+		// http://www.myhippocampus.com/site/facebook.html?auth_token=5db53300a9cebdc59ead9ea882cb57df
+		// public void onClick(Widget sender) {
+		// String login =
+		// "http://api.facebook.com/login.php?api_key=d1144ae411b79109d46c6d752cd4d222&popup=true";
+		// ExternalPopup ex = new ExternalPopup("Facebook", login, 626, 436);
+		// }
+		// });
 
 		userW = new UserWidget(manager);
 

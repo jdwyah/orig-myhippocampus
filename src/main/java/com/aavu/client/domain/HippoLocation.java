@@ -4,8 +4,8 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 
+import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.mapitz.gwt.googleMaps.client.GLatLng;
 
 /**
  * 
@@ -15,6 +15,7 @@ public class HippoLocation extends MetaValue implements IsSerializable, Serializ
 
 	private static final int SIGNIFICANT_DIGITS = 100000;
 	private static final int FILTER = 20;
+	private static final int SIG_DIG = 6;
 
 	public HippoLocation() {
 		setPublicVisible(false);
@@ -25,17 +26,17 @@ public class HippoLocation extends MetaValue implements IsSerializable, Serializ
 				/ (SIGNIFICANT_DIGITS * FILTER));
 	}
 
-	public GLatLng getLocation() {
-		return new GLatLng((double) getLatitude() / SIGNIFICANT_DIGITS, (double) getLongitude()
+	public LatLng getLocation() {
+		return new LatLng((double) getLatitude() / SIGNIFICANT_DIGITS, (double) getLongitude()
 				/ SIGNIFICANT_DIGITS);
 	}
 
-	public void setLocation(GLatLng point) {
+	public void setLocation(LatLng point) {
 		if (getTitle() == null) {
-			setTitle(point.toUrlValue());
+			setTitle(point.toUrlValue(SIG_DIG));
 		}
-		setLatitude((int) (point.lat() * SIGNIFICANT_DIGITS));
-		setLongitude((int) (point.lng() * SIGNIFICANT_DIGITS));
+		setLatitude((int) (point.getLatitude() * SIGNIFICANT_DIGITS));
+		setLongitude((int) (point.getLongitude() * SIGNIFICANT_DIGITS));
 	}
 
 	public boolean mustHaveUniqueName() {
