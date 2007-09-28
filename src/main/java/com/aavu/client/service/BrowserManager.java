@@ -6,20 +6,28 @@ import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
+import com.aavu.client.gui.LoadFinishedListener;
 import com.aavu.client.gui.ocean.MainMap;
 import com.aavu.client.service.cache.HippoCache;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class BrowserManager extends AbstractManager {
-	public BrowserManager(HippoCache cache) {
-		super(cache);
+public class BrowserManager extends AbstractManager implements LoadFinishedListener {
 
+	private User user;
+
+
+	public BrowserManager(HippoCache cache, User user) {
+		super(cache);
+		this.user = user;
 
 		setMap(new MainMap(this));
 	}
 
 
 	public void setup(String caller) {
+
+
+		getMap().onLoginComplete(this);
 
 
 		// getTopicCache().getRootTopic(getUser(),
@@ -70,13 +78,18 @@ public class BrowserManager extends AbstractManager {
 
 	// @Override
 	public User getUser() {
-		// TODO Auto-generated method stub
-		return null;
+		return user;
 	}
 
 
 	public boolean isEdittable() {
 		return false;
+	}
+
+
+	public void loadFinished() {
+		// TODO Auto-generated method stub
+
 	}
 
 

@@ -14,6 +14,7 @@ import com.aavu.client.domain.Entry;
 import com.aavu.client.domain.GoogleData;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.S3File;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
@@ -265,7 +266,25 @@ public abstract class AbstractManager implements Manager {
 		return getHippoCache().getTopicCache();
 	}
 
+	/**
+	 * either the logged in user or the user we're currently browsing
+	 */
 	public abstract User getUser();
+
+
+	public void gotoRoot() {
+		getTopicCache().getRootTopic(getUser(),
+				new StdAsyncCallback(ConstHolder.myConstants.getRoot_async()) {
+					// @Override
+					public void onSuccess(Object result) {
+						super.onSuccess(result);
+
+						Root root = (Root) result;
+
+						bringUpChart(root);
+					}
+				});
+	}
 
 	/**
 	 * we can goto a topic linked by either Name, or ID. Parse the history token, ie

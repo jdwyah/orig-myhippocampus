@@ -471,4 +471,8 @@ public interface Consts extends Messages {
 
 	String share();
 
+	String userw_index();
+
+	String userw_index_url();
+
 }

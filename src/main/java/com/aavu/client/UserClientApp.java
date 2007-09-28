@@ -44,8 +44,16 @@ public class UserClientApp extends AbstractClientApp implements HistoryListener 
 	 * 
 	 */
 	public UserClientApp() {
-		super();
+		try {
 
+			initServices();
+
+			setMeUp();
+
+
+		} catch (Exception e) {
+			error(e);
+		}
 	}
 
 	// @Override

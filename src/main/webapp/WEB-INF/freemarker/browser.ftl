@@ -17,6 +17,7 @@
 			var Vars = {
 				page: "HippocampusBrowser",
 				userID: "${foruser.id?c}",
+				username: "${foruser.username}",
 				topicID: "${topic.id?c}"
 			};
 		</script>

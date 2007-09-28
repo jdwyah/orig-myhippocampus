@@ -266,6 +266,11 @@ public class AddLinkManager implements Manager, CloseListener {
 		return false;
 	}
 
+	public void gotoRoot() {
+		// TODO Auto-generated method stub
+
+	}
+
 
 
 }

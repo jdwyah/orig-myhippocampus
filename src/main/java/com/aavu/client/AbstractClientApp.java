@@ -26,18 +26,7 @@ public abstract class AbstractClientApp {
 
 	private HippoCache hippoCache;
 
-	public AbstractClientApp() {
-		try {
 
-			initServices();
-
-			setMeUp();
-
-
-		} catch (Exception e) {
-			error(e);
-		}
-	}
 
 	protected void error(Exception e) {
 		Logger.log("e: " + e);

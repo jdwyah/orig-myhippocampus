@@ -2,6 +2,7 @@ package com.aavu.client;
 
 import com.aavu.client.async.StdAsyncCallback;
 import com.aavu.client.domain.MetaDate;
+import com.aavu.client.domain.User;
 import com.aavu.client.service.BrowserManager;
 import com.aavu.client.service.Manager;
 import com.google.gwt.user.client.History;
@@ -19,17 +20,20 @@ public class BrowserClientApp extends AbstractClientApp implements HistoryListen
 
 	private String userIDStr;
 
-
 	private String topicIDStr;
 
 
+	private String username;
 
-	public BrowserClientApp(String userIDStr, String topicIDStr) {
+
+
+	public BrowserClientApp(String userIDStr, String username, String topicIDStr) {
 		try {
 
-			System.out.println("new Browser " + userIDStr + " " + topicIDStr);
+			System.out.println("new Browser " + userIDStr + " " + username + " " + topicIDStr);
 
 			this.userIDStr = userIDStr;
+			this.username = username;
 			this.topicIDStr = topicIDStr;
 
 			initServices();
@@ -48,7 +52,12 @@ public class BrowserClientApp extends AbstractClientApp implements HistoryListen
 	// @Override
 	protected void setMeUp() {
 
-		manager = new BrowserManager(getHippoCache());
+
+		User u = new User();
+		u.setId(Long.parseLong(userIDStr));
+		u.setUsername(username);
+
+		manager = new BrowserManager(getHippoCache(), u);
 
 		MetaDate.setTopicService(getHippoCache().getTopicCache());
 		StdAsyncCallback.setManager(manager);

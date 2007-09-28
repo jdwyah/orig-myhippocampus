@@ -76,8 +76,9 @@ public class Interactive implements EntryPoint {
 			} else if (page.equals("HippocampusBrowser")) {
 
 				String userIDStr = dictionary.get("userID");
+				String username = dictionary.get("username");
 				String topicIDStr = dictionary.get("topicID");
-				BrowserClientApp browser = new BrowserClientApp(userIDStr, topicIDStr);
+				BrowserClientApp browser = new BrowserClientApp(userIDStr, username, topicIDStr);
 
 			} else {
 				throw new Exception("Vars['page'] not set.");

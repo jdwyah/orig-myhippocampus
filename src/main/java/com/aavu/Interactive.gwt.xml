@@ -4,7 +4,10 @@
 	<inherits name='com.google.gwt.user.User' />
 
 	<inherits name='org.gwtwidgets.WidgetLibrary' />
-	<inherits name='com.mapitz.gwt.googleMaps.GoogleMaps' />
+	<inherits name="com.google.gwt.maps.GoogleMaps" />
+	
+	
+	
 	<inherits name='org.gwm.GwtWindowManager' />
 	<inherits name='com.allen_sauer.gwt.dragdrop.DragAndDrop' />
 

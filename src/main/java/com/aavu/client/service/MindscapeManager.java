@@ -10,7 +10,6 @@ import com.aavu.client.domain.HippoDate;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.RealTopic;
-import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
@@ -302,18 +301,7 @@ public class MindscapeManager extends AbstractManager implements Manager, TopicS
 	private void loadGUI() {
 		getMap().onLoginComplete(this);
 
-		getTopicCache().getRootTopic(getUser(),
-				new StdAsyncCallback(ConstHolder.myConstants.getRoot_async()) {
-					// @Override
-					public void onSuccess(Object result) {
-						super.onSuccess(result);
-
-						Root root = (Root) result;
-
-						bringUpChart(root);
-					}
-				});
-
+		gotoRoot();
 	}
 
 	/**

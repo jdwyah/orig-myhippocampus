@@ -3,6 +3,7 @@ package com.aavu.server.service.gwt;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 
+import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
 
 public class GWTDebugAdvice {
@@ -24,6 +25,9 @@ public class GWTDebugAdvice {
 
 			return retVal;
 
+		} catch (HippoBusinessException e) {
+			log.error("FAILURE: " + e + " " + e.getMessage());
+			throw new HippoException(e);
 		} catch (Exception e) {
 			log.error("FAILURE: " + e + " " + e.getMessage());
 			if (log.isDebugEnabled()) {

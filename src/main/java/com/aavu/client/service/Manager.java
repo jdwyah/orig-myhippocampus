@@ -93,6 +93,8 @@ public interface Manager {
 
 	boolean isEdittable();
 
+	void gotoRoot();
+
 	// void explore(Topic myTag, List topics);
 
 }
