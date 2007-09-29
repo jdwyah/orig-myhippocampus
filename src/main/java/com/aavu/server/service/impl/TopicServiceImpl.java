@@ -391,8 +391,12 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 			throws HippoBusinessException {
 		for (TopicIdentifier topicIdentifier : topics) {
 			Topic t = getForID(topicIdentifier.getTopicID());
-			t.setPublicVisible(visible);
-			save(t);
+			if (t != null) {
+				t.setPublicVisible(visible);
+				save(t);
+			} else {
+				log.error("Edit Vis null " + topicIdentifier.getTopicID());
+			}
 		}
 	}
 
