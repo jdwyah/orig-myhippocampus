@@ -79,6 +79,7 @@ public class ExplorerWindow extends PopupWindow {
 		bigMap.load(curTopic);
 		bigMap.setVisible(true);
 		frame.setContent(bigMap);
+		frame.setWidth(WIDTH);
 	}
 
 

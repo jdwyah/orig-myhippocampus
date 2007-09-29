@@ -1,5 +1,6 @@
 package com.aavu.server.dao.hibernate;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -8,6 +9,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
@@ -16,8 +19,10 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinFragment;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.HippoDate;
@@ -237,18 +242,20 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 	}
 
-	public List<TopicIdentifier> getLinksTo(Topic topic, User user) {
-		Object[] params = { topic.getId(), user };
+	public List<TopicIdentifier> getLinksTo(Topic topic, User currentUser) {
+		Object[] params = { topic.getId(), currentUser };
 		log.debug("----------getLinksTo-----------");
 		log.debug("------------" + topic + "-------");
 
 		/*
 		 * Get Associations that mention this Topic
 		 */
-		List<Object[]> associationsToThis = getHibernateTemplate()
-				.find("" + "select title, id, publicVisible from Topic top " +
-				// "join top.associations "+
-						"where ? in elements(top.associations.members) " + "and user is ? ", params);
+		List<Object[]> associationsToThis = getHibernateTemplate().find(
+				"" + "select title, id, publicVisible from Topic top "
+						+
+						// "join top.associations "+
+						"where ? in elements(top.associations.members) "
+						+ "and (user is ? or publicVisible = true)", params);
 
 
 		// associationsToThis.addAll(instancesOfThisTopicSlashTag);
@@ -263,35 +270,60 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	/**
 	 * Pretty much the same code as getTimelines. Could refactor out common functionality.
 	 * 
+	 * TODO re-examine security
 	 */
-	public List<LocationDTO> getLocations(long tagID, User user) {
+	public List<LocationDTO> getLocations(final long tagID, final User currentUser) {
+
 		List<LocationDTO> rtn = new ArrayList<LocationDTO>();
 
-		// "where typeConn.type.class = MetaDate
+		// do in hibernate, bc DetachedCriteria doesn't have createAlias(String associationPath,
+		// String alias, int joinType)
+		List<Object[]> ll = (List<Object[]>) getHibernateTemplate().execute(
+				new HibernateCallback() {
+					public Object doInHibernate(Session session) throws HibernateException,
+							SQLException {
 
-		// NOTE, aliases are INNER_JOINS so don't accidentally limt ourselves to only topics w/ tags
-		DetachedCriteria crit = DetachedCriteria.forClass(Topic.class).add(
-				Expression.eq("user", user)).createAlias("associations", "assoc").createAlias(
-				"assoc.members", "metaValue").createAlias("assoc.types", "assocTypeConn")
-				.createAlias("assocTypeConn.type", "assocType").add(
-						Expression.eq("assocType.class", "metalocation"));
+						// NOTE, aliases are INNER_JOINS so don't accidentally limt ourselves to
+						// only topics w/ tags
+						// Use LEFT JOIN association types here for metavalues w/o meta
+						Criteria crit = session.createCriteria(Topic.class).createAlias(
+								"associations", "assoc").createAlias("assoc.members", "metaValue")
+								.createAlias("assoc.types", "assocTypeConn",
+										JoinFragment.LEFT_OUTER_JOIN).createAlias(
+										"assocTypeConn.type", "assocType",
+										JoinFragment.LEFT_OUTER_JOIN).add(
+										Expression.eq("metaValue.class", "location"));
 
-		if (tagID != -1) {
-			DetachedCriteria tags = DetachedCriteria.forClass(TopicTypeConnector.class).add(
-					Expression.eq("type.id", tagID)).setProjection(Property.forName("topic.id"));
+						if (tagID == -1) {
+							crit.add(Expression.eq("user", currentUser));
+						} else {
+							crit.add(Expression.eq("metaValue.publicVisible", true));
 
-			log.debug("Using tag subquery");
-			crit.add(Subqueries.propertyIn("id", tags));
-		}
+							DetachedCriteria tags = DetachedCriteria.forClass(
+									TopicTypeConnector.class).add(Expression.eq("type.id", tagID))
+									.setProjection(Property.forName("topic.id"));
 
-		crit.setProjection(Projections.projectionList().add(Property.forName("id")).add(
-				Property.forName("title")).add(Property.forName("publicVisible")).add(
-				Property.forName("metaValue.id")).add(Property.forName("metaValue.title")).add(
-				Property.forName("metaValue.latitude"))
-				.add(Property.forName("metaValue.longitude")).add(Property.forName("assocType.id"))
-				.add(Property.forName("assocType.title")));
+							log.debug("Using tag subquery");
+							crit.add(Subqueries.propertyIn("id", tags));
+						}
 
-		List<Object[]> ll = getHibernateTemplate().findByCriteria(crit);
+						crit.setProjection(Projections.projectionList().add(Property.forName("id"))
+								.add(Property.forName("title")).add(
+										Property.forName("publicVisible")).add(
+										Property.forName("metaValue.id")).add(
+										Property.forName("metaValue.title")).add(
+										Property.forName("metaValue.latitude")).add(
+										Property.forName("metaValue.longitude")).add(
+										Property.forName("assocType.id")).add(
+										Property.forName("assocType.title")));
+
+
+						return crit.list();
+					}
+				});
+
+
+		// List<Object[]> ll = getHibernateTemplate().findByCriteria(crit);
 
 		for (Object result : ll) {
 			Object[] oa = (Object[]) result;
@@ -316,9 +348,12 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 			location.setLatitude((Integer) oa[5]);
 			location.setLongitude((Integer) oa[6]);
 
-			MetaLocation meta = new MetaLocation();
-			meta.setId((Long) oa[7]);
-			meta.setTitle((String) oa[8]);
+			MetaLocation meta = null;
+			if (oa[7] != null) {
+				meta = new MetaLocation();
+				meta.setId((Long) oa[7]);
+				meta.setTitle((String) oa[8]);
+			}
 
 			LocationDTO locDTO = new LocationDTO(topic, location, meta);
 
@@ -466,7 +501,7 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	 * 
 	 * 
 	 */
-	public List<TimeLineObj> getTimeline(long tagID, User user) {
+	public List<TimeLineObj> getTimeline(long tagID, User currentUser) {
 
 
 		// }
@@ -479,8 +514,9 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 		// NOTE, READ the notes next time. When switching to MetaValues, not needing metas, the meta
 		// alias's -> us screening out things on the inner join
 		DetachedCriteria crit = DetachedCriteria.forClass(Topic.class).add(
-				Expression.eq("user", user)).createAlias("associations", "assoc").createAlias(
-				"assoc.members", "metaValue").add(Expression.eq("metaValue.class", "date"));
+				Expression.or(Expression.eq("user", currentUser), Expression.eq("publicVisible",
+						true))).createAlias("associations", "assoc").createAlias("assoc.members",
+				"metaValue").add(Expression.eq("metaValue.class", "date"));
 
 		// Expression.eq("assocType.class", "metadate"));
 

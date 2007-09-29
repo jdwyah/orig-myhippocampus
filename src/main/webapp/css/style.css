@@ -129,7 +129,7 @@ fieldset {
 }
 
 #signupForm legend {
-	color: white;
+	
 }
 
 #openIDSignup {
@@ -432,7 +432,7 @@ input.openid-identifier {
 	opacity: .50;
 	-khtml-opacity: .5;*/
 	background: #B6C022;
-	color: white;
+	
 	padding: 5px;
 }
 

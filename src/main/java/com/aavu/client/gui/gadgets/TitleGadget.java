@@ -252,16 +252,16 @@ public class TitleGadget extends Gadget {
 						confirmP.add(confirmMakePublicB);
 						confirmP.add(confirmMakePrivateB);
 
-						confirmMakePublicB.addClickListener(new ConfirmSharedClickListener(true,
-								editVisWindow, checkBoxes));
-						confirmMakePrivateB.addClickListener(new ConfirmSharedClickListener(false,
-								editVisWindow, checkBoxes));
-
 						ScrollPanel scrollP = new ScrollPanel(insidePanel);
 						scrollP.setHeight("300px");
 						vp.add(scrollP);
 						vp.add(confirmP);
 						editVisWindow = manager.displayInfo(vp);
+
+						confirmMakePublicB.addClickListener(new ConfirmSharedClickListener(true,
+								editVisWindow, checkBoxes));
+						confirmMakePrivateB.addClickListener(new ConfirmSharedClickListener(false,
+								editVisWindow, checkBoxes));
 					}
 				});
 			}

@@ -640,6 +640,8 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 	public void testGetTimelineAll_1() throws HippoBusinessException {
 
+
+
 		Topic t1 = new RealTopic(u, C);
 
 
@@ -870,9 +872,29 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		for (LocationDTO sloc : list) {
 			System.out.println("LocationDTO " + sloc);
+			assertEquals(400, sloc.getLocation().getLatitude());
+			assertEquals(350, sloc.getLocation().getLongitude());
 		}
 
 		System.out.println("list " + list.size());
+
+
+
+		Topic t2 = new RealTopic(u, D);
+
+		HippoLocation loc2 = new HippoLocation();
+		loc2.setLatitude(450);
+		loc2.setLongitude(450);
+
+		t2.addMetaValue(null, loc2);
+
+		t2 = editDAO.save(t2);
+
+		list = selectDAO.getLocations(u);
+
+		assertEquals(2, list.size());
+
+
 	}
 
 	/**

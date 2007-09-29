@@ -13,12 +13,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class HippoText extends MetaValue implements IsSerializable, Serializable {
 
 	public HippoText() {
-		setPublicVisible(false);
+		setPublicVisible(true);
 	}
 
 	public HippoText(User u, String string) {
 		super(u, string);
-		setPublicVisible(false);
+		setPublicVisible(true);
 		setValue(string);
 	}
 

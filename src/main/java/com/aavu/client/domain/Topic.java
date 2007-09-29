@@ -208,7 +208,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 				}
 			}
 		}
-		System.out.println("Contains: " + contains + " if true adding association.");
+		System.out.println("Contains: " + contains + " if false adding association.");
 
 		// redundant if we've already created, which would be ok except for the fact that
 		// set.add(assoc) will add it even if it loop, set.eq() says it contains it
@@ -217,6 +217,9 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		}
 
 		System.out.println("Topic.addMetaValue after assoc " + getAssociations().size());
+
+		Association ass = (Association) getAssociations().iterator().next();
+		System.out.println("ass.id " + ass.getId() + " m.s() " + ass.getMembers().size());
 
 		// System.out.println(topic+"size "+topic.getMetaValues());
 	}

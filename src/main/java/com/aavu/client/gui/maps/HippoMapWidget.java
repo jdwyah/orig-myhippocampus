@@ -9,6 +9,7 @@ import java.util.Set;
 import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.gui.ContextMenu;
+import com.aavu.client.gui.maps.ext.HippoMarkerManager;
 import com.aavu.client.gui.timeline.zoomer.BigMapContextMenu;
 import com.aavu.client.strings.ConstHolder;
 import com.google.gwt.maps.client.InfoWindow;
@@ -18,9 +19,11 @@ import com.google.gwt.maps.client.event.MapClickListener;
 import com.google.gwt.maps.client.event.MarkerClickListener;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
-import com.google.gwt.maps.client.overlay.MarkerManager;
+import com.google.gwt.maps.client.overlay.MarkerManagerOptions;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.Overlay;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 
 
@@ -44,7 +47,7 @@ public class HippoMapWidget extends Composite {
 
 	private Marker selectedMarker;
 
-	private MarkerManager markerManager;
+	private HippoMarkerManager markerManager;
 
 
 	public HippoMapWidget(MapController gadget, int width, int height, int zoom) {
@@ -58,13 +61,21 @@ public class HippoMapWidget extends Composite {
 		mapWidget.setScrollWheelZoomEnabled(true);
 		mapWidget.setSize(width + "px", height + "px");
 
-		markerManager = new MarkerManager(mapWidget);
-
+		MarkerManagerOptions options = new MarkerManagerOptions();
+		options.setTrackMarkers(true);
+		try {
+			markerManager = new HippoMarkerManager(mapWidget, options);
+		} catch (Exception e) {
+			// f-d up on ie
+			// markerManager = new MarkerManager(mapWidget, options);
+		}
 
 
 		mapWidget.addClickListener(new MapClickListener() {
 
 			public void onClick(MapWidget sender, Overlay overlay, LatLng point) {
+
+				System.out.println("on click pt" + point + " sender " + sender);
 
 				// null if clicking on marker
 				// but we catch marker using the markerEventManager
@@ -72,20 +83,26 @@ public class HippoMapWidget extends Composite {
 					System.out.println("HippoMapWidget.Clicked on " + point.toString());
 					newPoint(point);
 
-
 					if (controller.getManager().isEdittable()) {
 
-						HippoLocation hl = new HippoLocation();
-						hl.setLocation(point);
+						Event e = DOM.eventGetCurrentEvent();
 
-						ContextMenu p = new BigMapContextMenu(controller.getManager(),
-								HippoMapWidget.this, hl);
+						System.out.println("ctrl " + DOM.eventGetCtrlKey(e));
 
-						// Event e = DOM.eventGetCurrentEvent();
-						// int x = DOM.eventGetClientX(e);
-						// int y = DOM.eventGetClientY(e);
+						if (DOM.eventGetCtrlKey(e)) {
+							HippoLocation hl = new HippoLocation();
+							hl.setLocation(point);
 
-						p.show(300, 300);
+							ContextMenu p = new BigMapContextMenu(controller.getManager(),
+									HippoMapWidget.this, hl);
+
+
+
+							// int x = DOM.eventGetClientX(e);
+							// int y = DOM.eventGetClientY(e);
+
+							p.show(300, 300);
+						}
 					}
 
 				}
@@ -164,21 +181,71 @@ public class HippoMapWidget extends Composite {
 
 	public void clear() {
 		System.out.println("HippoMapWidget.clear()");
-		mapWidget.clearOverlays();
 
+		mapWidget.clearOverlays();
 
 		// weird. no markerManager.clear() sounds like google spaced this functionality.
 		// http://groups.google.com/group/Google-Maps-API/browse_thread/thread/8f21c0763d4d3283/848f91821bb6b2c6
 		// http://googlemapsapi.blogspot.com/2007/03/new-open-source-utility-library-for.html
 
-		// fixed by wrapping the new MarkerManager (not GMarkerManager) API
+		if (markerManager != null) {
+			markerManager.clearMarkers();
+		}
 
-		// TODO
-		// markerManager.clearMarkers();
+		markerToLocationSet.clear();
+
+
+		// fixed by wrapping the new MarkerManager (not GMarkerManager) API
 
 
 	}
 
+
+	// /**
+	// * http://www.barklund.org/blog/2007/03/27/google-maps-is-great-but-some-hacks-are-needed/ It
+	// is
+	// * “hardcoded” to version 2.76 and
+	// */
+	// public native void clearMarkers()/*-{
+	// try{
+	// //alert("A");
+	//																																					
+	// alert("doc.gmap "+$doc.GMarkerManager);
+	// alert("wnd.gmap "+$wnd.GMarkerManager);
+	//																																					
+	//																																					
+	// // hack GMarkerManager
+	// // to contain a method
+	// // for clearing all
+	// // markers
+	// $wnd.GMarkerManager.prototype.clearMarkers = function() {
+	// var me = this;
+	// //
+	// // clear currently
+	// // shown
+	// if (me.Wd > 0) {
+	// me.Id(me.K, me.Kd);
+	// }
+	// //
+	// // reset arrays
+	// var maxZoom = me.df;
+	// var maxWidth = 256;
+	// for (var zoom = 0; zoom < maxZoom; ++zoom){
+	// me.ed[zoom] = [];
+	// me.oc[zoom] = 0;
+	// me.gc[zoom] = Math.ceil(maxWidth/me.Ec);
+	// maxWidth <<= 1;
+	// }
+	// me.refresh();
+	// }
+	//																						
+	// $wnd.GMarkerManager.prototype.clearMarkers();
+	//																						 
+	// }catch(err){
+	// alert(err);
+	// }
+	//																																												
+	// }-*/;
 
 	private Marker createPoint(LocationDTO locObj) {
 		return createPoint(locObj, false);
@@ -215,10 +282,14 @@ public class HippoMapWidget extends Composite {
 
 		Marker marker = new Marker(point, moveableMarkerOps);
 
-		if (reallyDraggable) {
+
+
+		// !reallyDraggable, since that would not add for manager.isEdittable() = false
+		if (draggable) {
 			System.out.println("Make draggable " + marker + " " + ref.iterator().next());
 			markerToLocationSet.put(marker, ref.iterator().next());
 		}
+
 
 		marker.addDragListener(new DragListener() {
 
@@ -266,8 +337,14 @@ public class HippoMapWidget extends Composite {
 		System.out.println("Marker manager add " + minZoom + " " + maxZoom + "  "
 				+ point.getLatitude() + " " + point.getLongitude());
 
-		markerManager.addMarker(marker, minZoom, maxZoom);
-		markerManager.refresh();
+		if (markerManager != null) {
+			markerManager.addMarker(marker, minZoom, maxZoom);
+			markerManager.refresh();
+		} else {
+			if (draggable) {
+				mapWidget.addOverlay(marker);
+			}
+		}
 
 
 

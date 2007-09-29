@@ -105,7 +105,9 @@ public class Dashboard extends SimplePanel {
 
 
 
-		mainPanel.add(addNewButton);
+		if (manager.isEdittable()) {
+			mainPanel.add(addNewButton);
+		}
 		mainPanel.add(eyeButton);
 		// mainPanel.add(explorerButton);
 		mainPanel.add(userW);

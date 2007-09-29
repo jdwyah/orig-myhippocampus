@@ -18,7 +18,7 @@ public class HippoLocation extends MetaValue implements IsSerializable, Serializ
 	private static final int SIG_DIG = 6;
 
 	public HippoLocation() {
-		setPublicVisible(false);
+		setPublicVisible(true);
 	}
 
 	public IntPair getFilteredLocation() {

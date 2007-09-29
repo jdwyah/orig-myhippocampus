@@ -160,12 +160,7 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 				.getHeight(), explorerWindow);
 		glossary = new Glossary(manager, explorerWindow.getHeight());
 
-		try {
-			bigMap = new BigMap(manager, null, explorerWindow.getWidth(), explorerWindow
-					.getHeight(), explorerWindow);
-		} catch (RuntimeException e) {
-			bigMap = null;
-		}
+
 		connectionExplorer = new ConnectionExplorer(manager);
 
 
@@ -396,6 +391,16 @@ public class MainMap extends HippoDesktopPane implements GUIManager {
 	}
 
 	public void showGoogleMap() {
+		if (bigMap == null) {
+			try {
+				bigMap = new BigMap(manager, null, explorerWindow.getWidth(), explorerWindow
+						.getHeight(), explorerWindow);
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				bigMap = null;
+			}
+		}
+
 		if (bigMap != null) {
 			explorerWindow.loadGoogleMap(bigMap, curTopic);
 			explorerWindow.show();

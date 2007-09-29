@@ -182,8 +182,9 @@ public class HierarchyDisplay extends ViewPanel implements SpatialDisplay, Windo
 
 		bubble.addMouseWheelListener(this);
 
-		dragController.makeDraggable(bubble.getWidget());
-
+		if (manager.isEdittable()) {
+			dragController.makeDraggable(bubble.getWidget());
+		}
 
 		if (bubble.getDropController() != null) {
 

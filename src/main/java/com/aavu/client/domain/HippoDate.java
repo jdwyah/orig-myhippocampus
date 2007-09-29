@@ -23,7 +23,7 @@ public class HippoDate extends MetaValue implements IsSerializable, Serializable
 
 
 	public HippoDate() {
-		setPublicVisible(false);
+		setPublicVisible(true);
 	}
 
 

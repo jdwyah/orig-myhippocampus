@@ -16,7 +16,6 @@ import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.WebLink;
 import com.aavu.server.dao.BrowseDAO;
-import com.aavu.server.service.impl.UserServiceImpl;
 
 /**
  * 
@@ -27,7 +26,7 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 
 	private static final Logger log = Logger.getLogger(BrowseDAOHibernateImpl.class);
 
-	public static final int MAX_TOPICS = 10;
+	public static final int MAX_TOPICS = 7;
 	public static final int MAX_WEBLINKS = 7;
 
 	protected static final int PAGE_SIZE = 20;
@@ -125,13 +124,10 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 		// List<RealTopic> ll = getHibernateTemplate().findByCriteria(
 		// SelectDAOHibernateImpl.loadEmAll(crit), 0, MAX_TOPICS);
 
-		// TODO ugly sql injection-ish vulnerable query gen
-		final String hql = "from RealTopic top "
-				+ " join fetch top.user "
-				+ " join fetch top.instances ttc "
-				+ " join fetch ttc.topic as child "
-				+ " where top.publicVisible = true and child.publicVisible=true and top.title !=  '"
-				+ UserServiceImpl.SAMPLE_TAG_TITLE + "' order by size(top.instances) desc ";
+		final String hql = "from RealTopic top " + " join fetch top.user "
+				+ " join fetch top.instances ttc " + " join fetch ttc.topic as child "
+				+ " where top.publicVisible = true and child.publicVisible=true "
+				+ " order by size(top.instances) desc ";
 
 
 		List<RealTopic> ll = (List<RealTopic>) getLimittedResults(hql, MAX_TOPICS);
