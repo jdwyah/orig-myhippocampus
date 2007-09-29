@@ -484,6 +484,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		Topic t = selectDAO.getPublicForName(userString, topicString);
 		if (t != null) {
 			return t;
+
 		} else {
 			if (userService.exists(userString)) {
 				throw new HippoBusinessException("No Topic Found");

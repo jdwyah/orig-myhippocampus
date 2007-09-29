@@ -18,7 +18,7 @@
 <#--	<a href="<@spring.url "/site/browser.html#${topic.id?c}"/>">${topic.title?default("Untitled")}</a>-->
 </#macro>
 <#macro userLink user>
-<a href="<@spring.url "/site/browse/${user.nickname}"/>">${user.username}</a>
+<a href="<@spring.url "/site/browse/${user.nickname}"/>">${user.nickname}</a>
 	<#--<a href="<@spring.url "/site/browser.html?user=${user.id?c}"/>">${user.username}</a>-->
 </#macro>
 

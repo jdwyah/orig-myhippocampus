@@ -78,7 +78,15 @@ public class MVCBrowseController extends BasicController {
 	private ModelAndView userAndTopic(Map<String, Object> model, String userString,
 			String topicString) {
 		try {
-			Topic result = topicService.getPublicTopic(userString, topicString);
+
+			User u = userService.getUserWithNormalization(userString);
+
+			if (u == null) {
+				return new ModelAndView(getNotFoundView(), "message", "User " + userString
+						+ " not found.");
+			}
+
+			Topic result = topicService.getPublicTopic(u.getUsername(), topicString);
 
 			model.put("topic", result);
 
