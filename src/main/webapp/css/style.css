@@ -102,7 +102,12 @@ h2 {
 }
 
 #searchSection {
-	
+ 	
+}
+.searchRes li {
+	display: inline;
+	list-style-position: outside;
+	list-style-type: none;
 }
 
 #topWeblinksSection {
@@ -113,7 +118,9 @@ h2 {
 	
 }
 #seahorseSection {
-	padding-left: 50px;
+	margin-left: 50px;
+	
+	list-style-position: inside;
 }
 #remember_me {
 	height: 20px;

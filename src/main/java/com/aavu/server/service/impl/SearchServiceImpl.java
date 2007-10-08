@@ -232,13 +232,16 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 					// username...
 					if (text == null) {
 
-						res = new SearchResult(entry, topicID, defaultCompassHit.getScore(), null);
+						res = new SearchResult(entry, topicIDList, defaultCompassHit.getScore(),
+								null);
 
 					} else {
-						res = new SearchResult(entry, topicID, defaultCompassHit.getScore(), text
-								.getHighlightedText("text"));
+						res = new SearchResult(entry, topicIDList, defaultCompassHit.getScore(),
+								text.getHighlightedText("text"));
 
 					}
+				} else {
+					log.warn("Occurrence w/o topic " + entry);
 				}
 			} else if (obj instanceof URI) {
 				URI uri = (URI) obj;
@@ -247,16 +250,16 @@ public class SearchServiceImpl implements SearchService, InitializingBean {
 
 				// PEND errored when we searched for a username... ie "test"
 				if (topicIDList.size() > 0) {
-					// TODO what if it has multiple refs?
-					TopicIdentifier topicID = topicIDList.get(0);
-					res = new SearchResult(uri, topicID, defaultCompassHit.getScore(), uri
+					res = new SearchResult(uri, topicIDList, defaultCompassHit.getScore(), uri
 							.getData());
+				} else {
+					log.warn("Occurrence w/o topic " + uri);
 				}
 
 			} else if (obj instanceof RealTopic) {
 				RealTopic top = (RealTopic) obj;
 
-				res = new SearchResult(top, defaultCompassHit.getScore(), null);
+				res = new SearchResult(top, null, defaultCompassHit.getScore(), null);
 
 				// // TODO doesn't work!! need to exclude in cpm. Returning as a Topic.class
 				// // TODO messy. Maybe we need TopLevelTopic.class?

@@ -116,7 +116,7 @@ public class Entry extends Occurrence implements Serializable, IsSerializable, R
 
 	// @Override
 	public String getWindowTheme() {
-		return "alphacube-blue";
+		return "alphacube";
 	}
 
 	// @Override

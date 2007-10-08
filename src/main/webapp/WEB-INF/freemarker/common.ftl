@@ -13,13 +13,22 @@
 	</div>
 </#macro>
 
+<#macro urlLink topic>
+	<a href="${topic.url}">${topic.title?default("Untitled")}</a>
+</#macro>
+<#macro browseSearchRes res>
+	<ul>
+	<#list res.clickLinks as link>	
+		<li><a href="<@spring.url "/site/browse/${res.user.nickname}/${link.topicTitle?url}"/>">${link.topicTitle?default("Untitled")}</a>
+		</li>
+	</#list>
+	</ul>	
+</#macro>
 <#macro browseLink topic>
 	<a href="<@spring.url "/site/browse/${topic.user.nickname}/${topic.title?url}"/>">${topic.title?default("Untitled")}</a>
-<#--	<a href="<@spring.url "/site/browser.html#${topic.id?c}"/>">${topic.title?default("Untitled")}</a>-->
 </#macro>
 <#macro userLink user>
 <a href="<@spring.url "/site/browse/${user.nickname}"/>">${user.nickname}</a>
-	<#--<a href="<@spring.url "/site/browser.html?user=${user.id?c}"/>">${user.username}</a>-->
 </#macro>
 
 <#macro loginForm>

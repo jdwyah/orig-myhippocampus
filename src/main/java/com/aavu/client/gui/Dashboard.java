@@ -3,6 +3,7 @@ package com.aavu.client.gui;
 import java.util.Map;
 
 import com.aavu.client.collections.GWTSortedMap;
+import com.aavu.client.gui.ext.TooltipListener;
 import com.aavu.client.gui.hierarchy.HierarchyContextMenu;
 import com.aavu.client.gui.hierarchy.ViewMenu;
 import com.aavu.client.gui.ocean.SpatialDisplay;
@@ -66,6 +67,7 @@ public class Dashboard extends SimplePanel {
 			}
 		});
 
+		eyeButton.addMouseListener(new TooltipListener(0, -20, "View"));
 
 		// addNewButton.addMouseListener(new TooltipListener(0, -20, ConstHolder.myConstants
 		// .topic_new()));

@@ -36,10 +36,24 @@
 	<#list results as result>
 		<div class="searchRes">
 			<p class="searchTitle subheading">
-			${result_index + 1})  <@spring.message "userPage.search.score"/>${result.score}
-				<@common.browseLink result/>				
-				User: <@common.userLink result.user/>
+			${result_index + 1})  
+			<#if result.selfLink>
+				<@common.browseLink result.result/>
+			<#else>
+				 ${result.result.title?default("Untitled")}
+			</#if> 
+			
+			
+				<em>					
+				User: <@common.userLink result.user/>				
+				<@spring.message "userPage.search.score"/>${result.score}
+				</em>
 			</p>
+			
+			<#if !result.selfLink>
+				<em><@common.browseSearchRes result/></em>
+			</#if>
+			
 		   ${result.text?default("")} 
 		</div>	
 	</#list>

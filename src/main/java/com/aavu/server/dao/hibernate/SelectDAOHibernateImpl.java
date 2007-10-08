@@ -602,9 +602,13 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 
 		Object[] pm = { new Long(id), currentUser };
 
-		List<TopicOccurrenceConnector> conns = getHibernateTemplate().find(
-				"from TopicOccurrenceConnector conn "
-						+ "where conn.occurrence.id = ? and conn.topic.user = ?", pm);
+		DetachedCriteria crit = DetachedCriteria.forClass(TopicOccurrenceConnector.class).add(
+				Expression.or(Expression.eq("top.user", currentUser), Expression.eq(
+						"top.publicVisible", true))).createAlias("occurrence", "occ").createAlias(
+				"topic", "top").add(Expression.eq("occ.id", id));
+
+
+		List<TopicOccurrenceConnector> conns = getHibernateTemplate().findByCriteria(crit);
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(conns.size());
 

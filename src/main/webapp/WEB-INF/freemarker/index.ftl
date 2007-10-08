@@ -13,7 +13,8 @@
 	<h3><@common.browseLink topic/>			
 	</h3>
 	<div class="info">
-			<span class="type">User:</span> <@common.userLink topic.user/> <span class="type">Updated: ${topic.lastUpdated}</span>
+			<span class="type">User:</span> <@common.userLink topic.user/><br>
+			<span class="type">Updated: ${topic.lastUpdated}</span>
 		</div>
 	
 	<div class="subTopics">

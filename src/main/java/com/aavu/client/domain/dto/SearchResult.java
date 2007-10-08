@@ -1,33 +1,45 @@
 package com.aavu.client.domain.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SearchResult implements IsSerializable {
 
-	private long id;
-	private String title;
+
 	private String text;
+
 	private float score;
 	private boolean publicVisible;
+
+	private Topic result;
+	private List clickLinks;
 	private User user;
+
+	private boolean selfLink = false;
+
 
 	public SearchResult() {
 	}
 
-	public SearchResult(Topic topic, TopicIdentifier parent, float score, final String highlightText) {
-		this(topic, score, highlightText);
-		setId(parent.getTopicID());
-	}
+	public SearchResult(Topic result, final List _clickLinks, float score,
+			final String highlightText) {
 
-	public SearchResult(Topic topic, float score, final String highlightText) {
-		this.id = topic.getId();
+		this.result = result;
+		this.clickLinks = _clickLinks;
 		this.score = score;
-		this.title = topic.getTitle();
 		this.text = highlightText;
-		this.publicVisible = topic.isPublicVisible();
-		this.user = topic.getUser();
+		this.publicVisible = result.isPublicVisible();
+		this.user = result.getUser();
+
+		if (null == clickLinks) {
+			selfLink = true;
+			clickLinks = new ArrayList();
+			clickLinks.add(result.getIdentifier());
+		}
 	}
 
 
@@ -40,21 +52,7 @@ public class SearchResult implements IsSerializable {
 		this.text = text;
 	}
 
-	public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long topicID) {
-		this.id = topicID;
-	}
 
 	public float getScore() {
 		return score;
@@ -74,6 +72,10 @@ public class SearchResult implements IsSerializable {
 	}
 
 
+	public boolean isSelfLink() {
+		return selfLink;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -84,12 +86,27 @@ public class SearchResult implements IsSerializable {
 	}
 
 
-	public String toString() {
-		return getId() + " " + getScore() + " " + getTitle() + " " + getText();
+	public Topic getResult() {
+		return result;
 	}
 
-	public TopicIdentifier getTopicIdentifier() {
-		return new TopicIdentifier(id, title, publicVisible);
+	public void setResult(Topic result) {
+		this.result = result;
 	}
+
+	public List getClickLinks() {
+		return clickLinks;
+	}
+
+	public void setClickLinks(List clickLinks) {
+		this.clickLinks = clickLinks;
+	}
+
+
+	public String toString() {
+		return getResult() + " " + getScore() + " " + " " + getText();
+	}
+
+
 
 }

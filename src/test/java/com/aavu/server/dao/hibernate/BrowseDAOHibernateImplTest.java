@@ -110,7 +110,7 @@ public class BrowseDAOHibernateImplTest extends HibernateTransactionalTest {
 		Set<Long> ids = new HashSet<Long>();
 
 		for (WebLink link : links) {
-			System.out.println("Weblink " + link + " ");
+			System.out.println("Weblink " + link + " " + " Topics:" + link.getTopics().size());
 
 			assertFalse(ids.contains(link.getId()));
 

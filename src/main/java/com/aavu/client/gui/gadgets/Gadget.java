@@ -71,8 +71,14 @@ public abstract class Gadget extends Composite {
 
 	}
 
+	/**
+	 * Wrap the widget, so that DefaultGFrame applyTheme() doesn't setTheme("alphacube-content") on
+	 * the Gadget and blow away addStyleName("H-TagBoard") or equivalent. hmm didnt' work
+	 */
 	// @Override
 	protected void initWidget(Widget widget) {
+		// SimplePanel p = new SimplePanel();
+		// p.add(widget);
 		super.initWidget(widget);
 	}
 

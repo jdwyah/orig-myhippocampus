@@ -142,7 +142,8 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 
 		final String hql = "from WebLink occ " + " join fetch occ.user "
 				+ " join fetch occ.topics toc " + " join fetch toc.topic as top "
-				+ " where top.publicVisible = true  " + " order by size(occ.topics) desc ";
+				+ " where top.publicVisible = true and occ.publicVisible = true "
+				+ " order by size(occ.topics) desc ";
 
 		List<WebLink> ll = (List<WebLink>) getLimittedResults(hql, MAX_WEBLINKS);
 

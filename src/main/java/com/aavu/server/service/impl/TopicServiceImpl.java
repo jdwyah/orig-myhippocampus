@@ -408,7 +408,12 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 */
 	public void executeAndSaveCommand(AbstractCommand command) throws HippoException {
 
-		log.info(command + " " + userService.getCurrentUser().getUsername());
+		User u = userService.getCurrentUser();
+		if (u != null) {
+			log.info(command + " " + userService.getCurrentUser().getUsername());
+		} else {
+			log.warn(command + " attempted by anonymous ");
+		}
 
 		hydrateCommand(command);
 		command.executeCommand();
