@@ -14,6 +14,8 @@ public interface DeliciousService {
 
 	int newLinksForUser(String username, String password) throws HippoException;
 
+	int newLinksFromXML(String xmlString) throws HippoException;
+
 	Queue<DeliciousPost> getPostsFromXML(Document doc);
 
 	List<DeliciousBundle> getBundlesFromXML(Document bundleDoc);

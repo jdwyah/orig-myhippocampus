@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CacheControlFilter implements Filter {
 
+	// remember, don't match 'foo.nocache.js'
 	private static final String CACHE = ".cache.";
 	private static final String IMAGE_JPG = ".jpg";
 	private static final String IMAGE_PNG = ".png";

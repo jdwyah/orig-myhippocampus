@@ -21,7 +21,7 @@
 				topicID: "${topic.id?c}"
 			};
 		</script>
-		
+	
 		
 		<script language='javascript' src='<@gwt.gwtURL "com.aavu.Interactive.nocache.js"/>'></script>
 
@@ -30,6 +30,11 @@
 		<div id="loading" class="loading"><p>Loading...</p></div>
 		<div id="preload"></div>
 	
+		
+			
+		<div style="display: none;">
+			${topic.title}			
+		</div>
 		
 <#--TODO move to decorator-->	
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">

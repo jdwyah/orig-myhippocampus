@@ -70,6 +70,20 @@ public class ImportController extends BasicFormController {
 				return new ModelAndView(getFormView(), getModelForMessage(request,
 						"Problem Logging In " + e.getMessage()));
 			}
+		} else if (type.equals("deliciousXML")) {
+			try {
+				int found = deliciousService.newLinksFromXML(comm.getDeliciousXMLString());
+
+				String successStr = "Found "
+						+ found
+						+ " bookmarks. Importing in the background, it may take a bit before they are all available.";
+
+				return new ModelAndView(getSuccessView(), "message", successStr);
+			} catch (HippoException e) {
+
+				return new ModelAndView(getFormView(), getModelForMessage(request,
+						"Problem Logging In " + e.getMessage()));
+			}
 		} else if (type.equals("google")) {
 
 			// return new ModelAndView("redirect:"

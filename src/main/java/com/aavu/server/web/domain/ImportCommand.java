@@ -4,6 +4,7 @@ public class ImportCommand {
 
 	private String deliciousName;
 	private String deliciousPass;
+	private String deliciousXMLString;
 
 	private String googlePass;
 	private String googleName;
@@ -19,6 +20,14 @@ public class ImportCommand {
 
 	public String getDeliciousPass() {
 		return deliciousPass;
+	}
+
+	public String getDeliciousXMLString() {
+		return deliciousXMLString;
+	}
+
+	public void setDeliciousXMLString(String deliciousXMLString) {
+		this.deliciousXMLString = deliciousXMLString;
 	}
 
 	public void setDeliciousPass(String deliciousPass) {

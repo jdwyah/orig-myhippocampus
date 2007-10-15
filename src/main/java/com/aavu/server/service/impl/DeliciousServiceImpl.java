@@ -16,6 +16,7 @@ import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.annotation.Transactional;
@@ -171,20 +172,17 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		log.info("user: " + username);
 
-		final Topic deliciousRoot = topicService.createNewIfNonExistent(DELICIOUS_STR);
+		Topic deliciousRoot = topicService.createNewIfNonExistent(DELICIOUS_STR);
 
 		List<DeliciousBundle> bundles = getBundles(username, password);
 
 		log.info("Found " + bundles.size() + " Bundles.");
-
 
 		addBundles(deliciousRoot, bundles);
 
 		User u = userService.getCurrentUser();
 
 		Queue<DeliciousPost> posts = null;
-
-
 
 		if (null == u.getLastDeliciousDate() || u.getLastDeliciousDate().getYear() == -900) {
 			log.info("GetAllPosts Last del.icio.us date: " + u.getLastDeliciousDate());
@@ -196,10 +194,34 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		log.info("Found " + posts.size() + " Posts.");
 
+		return posts.size();
 
+	}
+
+
+	public int newLinksFromXML(String xmlString) throws HippoException {
+
+		final Topic deliciousRoot = topicService.createNewIfNonExistent(DELICIOUS_STR);
+
+		Queue<DeliciousPost> posts;
+
+		try {
+			posts = getPostsFromXML(getDocumentFromString(xmlString));
+		} catch (DocumentException e) {
+			log.warn(e);
+			throw new HippoException(e);
+		}
+
+		doPosts(posts, deliciousRoot);
+
+		return posts.size();
+	}
+
+
+
+	private void doPosts(Queue<DeliciousPost> posts, final Topic deliciousRoot) {
 
 		final Queue<DeliciousPost> postsf = posts;
-
 
 		final Authentication authentication = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -224,9 +246,6 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		addTagThread.start();
 
 		log.info("Returning to caller.");
-
-		return posts.size();
-
 	}
 
 

@@ -2,6 +2,7 @@ package com.aavu.server.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Vector;
 
 import org.apache.commons.httpclient.Credentials;
@@ -97,8 +98,11 @@ public class AbstractRestService {
 			// Release the connection.
 			method.releaseConnection();
 		}
+	}
 
-
+	protected Document getDocumentFromString(String xmlString) throws DocumentException {
+		SAXReader reader = new SAXReader();
+		return reader.read(new StringReader(xmlString));
 	}
 
 }
