@@ -396,13 +396,18 @@ public class SelectDAOHibernateImpl extends HibernateDaoSupport implements Selec
 	 * 
 	 */
 	public Root getRoot(User user, User currentUser) {
-		DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Root.class).add(
-				Expression.or(Expression.eq("user", currentUser), Expression.and(Expression.eq(
-						"user", user), Expression.eq("publicVisible", true)))));
+		try {
+			DetachedCriteria crit = loadEmAll(DetachedCriteria.forClass(Root.class).add(
+					Expression.or(Expression.eq("user", currentUser), Expression.and(Expression.eq(
+							"user", user), Expression.eq("publicVisible", true)))));
 
-		Root userRoot = (Root) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(
-				crit));
-		return userRoot;
+			Root userRoot = (Root) DataAccessUtils.uniqueResult(getHibernateTemplate()
+					.findByCriteria(crit));
+			return userRoot;
+		} catch (RuntimeException e) {
+			log.error(user + " " + currentUser);
+			throw e;
+		}
 	}
 
 	public List<TopicTypeConnector> getRootTopics(User forUser, User currentUser) {

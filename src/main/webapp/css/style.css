@@ -226,7 +226,7 @@ fieldset {
 	list-style-type: none;
 }
 .boxStyle h3 {
-	width: 35em;
+	width: 66%;
 }
 #topTopicsSection li {
 	margin-bottom: 10px;	
@@ -234,7 +234,7 @@ fieldset {
 
 
 h3 a {
-	font-size: 1.5em;
+	font-size: 14pt;
 	text-decoration: none;
 }
 

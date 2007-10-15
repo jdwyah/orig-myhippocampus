@@ -1,6 +1,5 @@
 package com.aavu.server.web.controllers;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import com.aavu.client.exception.HippoException;
 import com.aavu.server.service.DeliciousService;
@@ -20,7 +18,7 @@ import com.aavu.server.web.domain.ImportCommand;
 import com.aavu.server.web.domain.validation.ImportCommandValidator;
 import com.google.gdata.util.AuthenticationException;
 
-public class ImportController extends SimpleFormController {
+public class ImportController extends BasicFormController {
 	private static final Logger log = Logger.getLogger(ImportController.class);
 
 	private UserService userService;
@@ -37,7 +35,7 @@ public class ImportController extends SimpleFormController {
 
 
 	private Map<String, Object> getModelForMessage(HttpServletRequest req, String message) {
-		Map<String, Object> rtn = BasicController.getDefaultModel(req, userService);
+		Map<String, Object> rtn = getDefaultModel(req);
 		rtn.put("command", new ImportCommand());
 		rtn.put("message", message);
 		rtn.put("googleRequestURL", googleService.getAuthorizationURL(googleAuthReturnURL));
@@ -46,7 +44,7 @@ public class ImportController extends SimpleFormController {
 
 	@Override
 	protected Map referenceData(HttpServletRequest request) throws Exception {
-		Map<String, Object> rtn = new HashMap<String, Object>();
+		Map<String, Object> rtn = getDefaultModel(request);
 		rtn.put("googleRequestURL", googleService.getAuthorizationURL(googleAuthReturnURL));
 		return rtn;
 	}

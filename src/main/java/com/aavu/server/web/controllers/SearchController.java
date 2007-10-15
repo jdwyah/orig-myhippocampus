@@ -3,7 +3,11 @@ package com.aavu.server.web.controllers;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.aavu.client.domain.dto.SearchResult;
@@ -20,13 +24,15 @@ public class SearchController extends BasicFormController {
 	}
 
 
+
 	@Override
-	protected ModelAndView onSubmit(Object arg0) throws Exception {
+	protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
+			Object command, BindException errors) throws Exception {
 
-		SearchCommand searchCommand = (SearchCommand) arg0;
+		SearchCommand searchCommand = (SearchCommand) command;
 
 
-		Map<String, Object> model = getDefaultModel();
+		Map<String, Object> model = getDefaultModel(request);
 
 		List<SearchResult> results = searchService.search(searchCommand.getSearchTerm());
 		model.put("results", results);

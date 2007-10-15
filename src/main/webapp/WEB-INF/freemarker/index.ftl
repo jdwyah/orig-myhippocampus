@@ -10,7 +10,12 @@
 <#macro showTopic topic instanceNotType >
 <li>
 	<div>
-	<h3><@common.browseLink topic/>			
+	<h3>
+	<#if instanceNotType>
+		<@common.browseLink topic/>
+		<#else>
+		<@common.urlLink topic/>
+	</#if>			
 	</h3>
 	<div class="info">
 			<span class="type">User:</span> <@common.userLink topic.user/><br>
@@ -102,11 +107,36 @@
 			</ul>
 			</h3>
   		</@common.box>  
-  		<@common.box "boxStyleSm", "Intrigued", "Want your own?">  		
-  			<h2>
-	    	<a href="<@spring.url "/site/signupIfPossible.html"/>"><@spring.message "login.signup"/></a>
-	    	</h2>		    				
-		</@common.box>
+  		  <#if user?exists>
+    		  	<@common.box "boxStyleSm", "userBox", "Welcome ${user.username}">  	
+    		  	<h3>
+    		  	<ul>
+    		  	  <li><strong>
+    		  	  <a href="<@spring.url "/site/secure/mindscape.html"/>">My Mindscape</a></strong>
+    		  	  </li>    		  	  
+    		  	  <li>
+    		  	  <a href="<@spring.url "/site/secure/userPage.html"/>">Settings</a>
+    		  	  </li>    		  	 
+    		  	  <li>
+    		  	  <a href="<@spring.url "/site/secure/import.html"/>">Import Del.icio.us</a>
+    		  	  </li>
+    		  	  <li>
+    		  	  <a href="<@spring.url "/site/secure/import.html"/>">Import Google Docs</a>
+    		  	  </li>
+    		  	  <li>
+    		  	  <a href="<@spring.url "/site/secure/userPage.html"/>">Browser Plugins</a>
+    		  	  </li>
+    		  	  </ul>
+    		  	  </h3>
+    		  	 </@common.box>
+    	   <#else>
+    		  <@common.box "boxStyleSm", "Intrigued", "Want your own?">  		
+  					<h2>
+	    			<a href="<@spring.url "/site/signupIfPossible.html"/>"><@spring.message "login.signup"/></a>
+	    			</h2>		    				
+				</@common.box>
+    		</#if>
+  		
 			
 	
   	</div>

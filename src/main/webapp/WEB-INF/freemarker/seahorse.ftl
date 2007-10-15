@@ -14,8 +14,11 @@
 	
 		<@common.box "boxStyle", "seahorseSection", "So why the Seahorse?">
 			<p>
-			 The hippocampus is a part of the brain that is essential to the creation of new memories. 
-				</p>			  			 	 			  
+			 The hippocampus is a part of the brain that is essential to the creation of new memories.			 
+			</p>			  			 	 			  
+			<p>
+			The hippocampus takes its name from the genus for <a href="http://en.wikipedia.org/wiki/Seahorse">seahorse</a>, which comes from the hippos = horse, (kampos = sea monster & kampi = curve, there seems to be a bit of disagreement.)
+			</p>
 			 <p>
 			 At this point the MyHippocampus staff does not include anyone remotely qualified to really explain the intricacies of the human hippocampus. We are not doctors and have not even played them on TV.
 			 </p>
@@ -26,11 +29,6 @@
 			<li>Wikipedia's thoughts on the <a href="http://en.wikipedia.org/wiki/Hippocampus">Hippocampus</a></li>
 			  <li>A version <a href="http://faculty.washington.edu/chudler/hippo.html">for kids</a></li>
 			  </ul>
-			  
-			 
-			 And here's the kicker, the hippocampus takes its name from the genus for <a href="http://en.wikipedia.org/wiki/Seahorse">seahorse</a>, which comes from the hippos = horse, (kampos = sea monster & kampi = curve, there seems to be a bit of disagreement.)
-
-
 			</p>
 		</@common.box>	
 	

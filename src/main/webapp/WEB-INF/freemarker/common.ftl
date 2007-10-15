@@ -14,7 +14,7 @@
 </#macro>
 
 <#macro urlLink topic>
-	<a href="${topic.url}">${topic.title?default("Untitled")}</a>
+	<a href="${topic.uri?default("Untitled")}">${topic.title?default("Untitled")}</a>
 </#macro>
 <#macro browseSearchRes res>
 	<ul>

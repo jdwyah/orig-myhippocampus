@@ -77,6 +77,9 @@ public class HippoMapWidget extends Composite {
 
 				System.out.println("on click pt" + point + " sender " + sender);
 
+				fromLatLngToDivPixel(point);
+
+
 				// null if clicking on marker
 				// but we catch marker using the markerEventManager
 				if (point != null) {
@@ -197,8 +200,59 @@ public class HippoMapWidget extends Composite {
 
 		// fixed by wrapping the new MarkerManager (not GMarkerManager) API
 
+	}
+
+	/**
+	 * pain in but to return int[], so cheat. Will only work for resolutions < 10000
+	 * 
+	 * @param latLng
+	 * @return
+	 */
+	public int[] fromLatLngToDivPixel(LatLng latLng) {
+		int js = fromLatLngToDivPixelN(latLng);
+		int[] rtn = new int[2];
+		rtn[0] = js % 10000;
+		rtn[1] = js / 10000;
+		System.out.println("rtn " + rtn[0] + " " + rtn[1]);
+		return rtn;
 
 	}
+
+	public native int fromLatLngToDivPixelN(LatLng latLng)/*-{
+												try{
+												//alert("A");
+																																																																						
+												alert("doc.ll "+latLng);
+												
+												alert("doc.gll "+latLng.getLatitude());
+												
+												alert("wnd.gmap "+$wnd.GMap2);																																							
+												alert("wnd.gmap.p "+$wnd.GMap2.prototype);																												
+											var panePixel = $wnd.GMap2.fromLatLngToDivPixel(latlng); 
+																																				
+											alert("p "+panePixel);
+																																				
+										return panePixel.x + 10000 * panePixel.y;
+																																				
+										}catch(err){
+										alert(err);
+										}									
+										
+										try{
+								var pp2 = $wnd.GMap2.prototype.fromLatLngToDivPixel(latlng); 
+																																				
+											alert("p "+panePixel);
+																																				
+										return panePixel.x + 10000 * panePixel.y;
+																																				
+										}catch(err){
+										alert(err);
+										}																																																	
+																																															
+																	
+			return 10001;																																																																											
+																																																																													
+										}-*/;
 
 
 	// /**
@@ -336,6 +390,8 @@ public class HippoMapWidget extends Composite {
 
 		System.out.println("Marker manager add " + minZoom + " " + maxZoom + "  "
 				+ point.getLatitude() + " " + point.getLongitude());
+
+		fromLatLngToDivPixel(point);
 
 		if (markerManager != null) {
 			markerManager.addMarker(marker, minZoom, maxZoom);

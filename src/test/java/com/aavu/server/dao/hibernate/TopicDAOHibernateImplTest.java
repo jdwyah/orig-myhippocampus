@@ -1707,6 +1707,11 @@ public class TopicDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Root rr = selectDAO.getRoot(u, u);
 
+		assertNotNull(rr);
+
+		rr = selectDAO.getRoot(u, null);
+
+		assertNotNull(rr);
 
 	}
 
