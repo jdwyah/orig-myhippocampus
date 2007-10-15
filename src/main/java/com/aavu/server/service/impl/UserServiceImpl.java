@@ -346,7 +346,7 @@ public class UserServiceImpl implements UserService, ApplicationContextAware {
 			throws HippoException {
 		proto.set(year, month, day);
 		Topic topic = topicService.createNewIfNonExistent(name, RealTopic.class, parent, null,
-				proto.getTime());
+				proto.getTime(), false);
 		topicService.executeAndSaveCommand(new SaveDatesCommand(topic, proto.getTime()));
 	}
 

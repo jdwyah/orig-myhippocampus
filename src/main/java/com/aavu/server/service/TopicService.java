@@ -38,15 +38,15 @@ public interface TopicService {
 	 */
 	void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException;
 
-	void addLinkToTags(WebLink link, String[] tags, Topic parent, Map<String, Topic> cachedTopics)
-			throws HippoBusinessException;
+	void addLinkToTags(WebLink link, String[] tags, Topic parent, Map<String, Topic> cachedTopics,
+			boolean makeNewTagsPublicVisible) throws HippoBusinessException;
 
 	void changeState(long topicID, boolean toIsland) throws HippoPermissionException;
 
 	<T> T createNew(String title, Class<T> type, Topic parent) throws HippoBusinessException;
 
-	<T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat, Date dateCreated)
-			throws HippoBusinessException;
+	<T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat, Date dateCreated,
+			boolean publicVisible) throws HippoBusinessException;
 
 	Topic createNewIfNonExistent(String tagName) throws HippoBusinessException;
 
@@ -55,13 +55,18 @@ public interface TopicService {
 
 
 	<T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
-			Topic parent, int[] lnglat, Date dateCreated) throws HippoBusinessException;
+			Topic parent, int[] lnglat, Date dateCreated, boolean publicVisible)
+			throws HippoBusinessException;
 
 	Topic createNewIfNonExistent(String tagName, Topic parent) throws HippoBusinessException;
 
 
 	<T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
 			String title, Date date, String data) throws HippoBusinessException;
+
+	<T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
+			String title, Date date, String data, boolean shared) throws HippoBusinessException;
+
 
 	void delete(long id) throws HippoBusinessException;
 

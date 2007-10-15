@@ -72,7 +72,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 
 	public void addLinkToTags(WebLink link, String[] tags) throws HippoBusinessException {
-		addLinkToTags(link, tags, null, new HashMap<String, Topic>());
+		addLinkToTags(link, tags, null, new HashMap<String, Topic>(), false);
 	}
 
 	/**
@@ -87,7 +87,8 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	// addLinkToTags(link, tags, parent, new HashMap<String, Topic>());
 	// }
 	public void addLinkToTags(WebLink link, String[] tags, Topic parent,
-			Map<String, Topic> cachedTopics) throws HippoBusinessException {
+			Map<String, Topic> cachedTopics, boolean makeNewTagsPublicVisible)
+			throws HippoBusinessException {
 
 		User user = userService.getCurrentUser();
 
@@ -105,11 +106,12 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 				if (t == null) {
 					if (parent != null) {
-						t = createNewIfNonExistent(clipped, parent);
+						t = createNewIfNonExistent(clipped, RealTopic.class, parent, null, null,
+								makeNewTagsPublicVisible);
 					} else {
-						t = createNewIfNonExistent(clipped);
+						t = createNewIfNonExistent(clipped, RealTopic.class, new Root(), null,
+								null, makeNewTagsPublicVisible);
 					}
-
 
 					t.addOccurence(linkM);
 					t = save(t, true, user);
@@ -161,7 +163,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 
 	public <T> T createNew(String title, Class<T> type, Topic parent) throws HippoBusinessException {
-		return createNew(title, type, parent, null, null);
+		return createNew(title, type, parent, null, null, false);
 	}
 
 	/**
@@ -173,10 +175,12 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 * we tried to duplicate the Collections.
 	 * 
 	 * If prototype is an occurrence, use addOccurrence()
+	 * 
+	 * @param publicVisible
 	 */
 
-	public <T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat, Date dateCreated)
-			throws HippoBusinessException {
+	public <T> T createNew(String title, Class<T> type, Topic parent, int[] lnglat,
+			Date dateCreated, boolean publicVisible) throws HippoBusinessException {
 
 		Topic prototype;
 		try {
@@ -199,6 +203,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 		if (dateCreated != null) {
 			prototype.setCreated(dateCreated);
 		}
+		prototype.setPublicVisible(publicVisible);
 
 		prototype = save(prototype);
 
@@ -277,7 +282,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 */
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
 			Topic parent) throws HippoBusinessException {
-		return (T) createNewIfNonExistent(title, type, parent, null, null);
+		return (T) createNewIfNonExistent(title, type, parent, null, null, false);
 	}
 
 	/**
@@ -286,13 +291,14 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 	 *            topic
 	 */
 	public <T extends Topic> T createNewIfNonExistent(String title, Class<? extends Topic> type,
-			Topic parent, int[] lnglat, Date dateCreated) throws HippoBusinessException {
+			Topic parent, int[] lnglat, Date dateCreated, boolean publicVisible)
+			throws HippoBusinessException {
 		Topic cur = getForNameCaseInsensitive(title);
 
 		if (cur == null) {
 
 			try {
-				cur = createNew(title, type, parent, lnglat, dateCreated);
+				cur = createNew(title, type, parent, lnglat, dateCreated, publicVisible);
 			} catch (Exception e) {
 				throw new HippoBusinessException(e);
 			}
@@ -306,6 +312,12 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 
 	public <T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
 			String title, Date date, String data) throws HippoBusinessException {
+		return (T) createNewIfURINonexistant(clazz, uri, title, date, data, false);
+	}
+
+	public <T extends URI> T createNewIfURINonexistant(Class<? extends URI> clazz, String uri,
+			String title, Date date, String data, boolean isPublicVisible)
+			throws HippoBusinessException {
 		User u = userService.getCurrentUser();
 
 		URI cur = selectDAO.getForURI(uri, u, u);
@@ -324,6 +336,7 @@ public class TopicServiceImpl implements TopicService, ApplicationContextAware {
 			cur.setData(data);
 			cur.setUri(uri);
 			cur.setCreated(date);
+			cur.setPublicVisible(isPublicVisible);
 
 			cur = (URI) save(cur);
 		}

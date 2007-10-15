@@ -133,7 +133,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			Date dateCreated) throws HippoBusinessException {
 
 		prototype = (Topic) topicService.createNew(title, prototype.getClass(), parent, lnglat,
-				dateCreated);
+				dateCreated, false);
 
 		return prototype.getIdentifier();
 	}
@@ -149,7 +149,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 			int[] lnglat, Date dateCreated) throws HippoBusinessException {
 
 		prototype = topicService.createNewIfNonExistent(title, prototype.getClass(), parent,
-				lnglat, dateCreated);
+				lnglat, dateCreated, false);
 
 		return prototype.getIdentifier();
 	}
@@ -203,6 +203,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	public List getMakePublicList(long id) throws HippoException {
 		return convertTopicToTIArray(topicService.getMakePublicList(id));
 	}
+
 	// public C test(C c) {
 	// return c;
 	// }

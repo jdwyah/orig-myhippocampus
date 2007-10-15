@@ -21,6 +21,8 @@ import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.aavu.client.domain.RealTopic;
+import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
@@ -147,11 +149,13 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 		while (i < numToDo && null != (post = posts.poll())) {
 
 			WebLink ww = topicService.createNewIfURINonexistant(WebLink.class, post.getHref(), post
-					.getDescription(), post.getDate(), post.getExtended());
+					.getDescription(), post.getDate(), post.getExtended(), post.isShared());
+
+			ww.setPublicVisible(post.isShared());
 
 			String[] tags = post.getTags();
 
-			topicService.addLinkToTags(ww, tags, parent, cache);
+			topicService.addLinkToTags(ww, tags, parent, cache, ww.isPublicVisible());
 
 			log.debug("Added " + ww);
 			i++;
@@ -172,7 +176,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		log.info("user: " + username);
 
-		Topic deliciousRoot = topicService.createNewIfNonExistent(DELICIOUS_STR);
+		Topic deliciousRoot = createRoot();
 
 		List<DeliciousBundle> bundles = getBundles(username, password);
 
@@ -194,14 +198,21 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 
 		log.info("Found " + posts.size() + " Posts.");
 
+		doPosts(posts, deliciousRoot);
+
 		return posts.size();
 
 	}
 
 
+	private Topic createRoot() throws HippoBusinessException {
+		return topicService.createNewIfNonExistent(DELICIOUS_STR, RealTopic.class, new Root(),
+				null, null, true);
+	}
+
 	public int newLinksFromXML(String xmlString) throws HippoException {
 
-		final Topic deliciousRoot = topicService.createNewIfNonExistent(DELICIOUS_STR);
+		final Topic deliciousRoot = createRoot();
 
 		Queue<DeliciousPost> posts;
 
@@ -346,7 +357,7 @@ public class DeliciousServiceImpl extends AbstractRestService implements Delicio
 			Date date = getDateFromDeliciousString(post.attributeValue("time"));
 			posts.add(new DeliciousPost(post.attributeValue("description"), post
 					.attributeValue("href"), post.attributeValue("tag"), post
-					.attributeValue("extended"), date));
+					.attributeValue("extended"), post.attributeValue("shared"), date));
 		}
 
 		return posts;
