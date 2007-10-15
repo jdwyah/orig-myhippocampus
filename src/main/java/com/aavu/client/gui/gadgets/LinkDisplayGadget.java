@@ -90,7 +90,9 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 		for (Iterator iter = topic.getWebLinks().iterator(); iter.hasNext();) {
 			WebLink occ = (WebLink) iter.next();
 
-			if (!occ.isPublicVisible()) {
+
+			// skip non-viewables
+			if (!manager.isEdittable() && !occ.isPublicVisible()) {
 				continue;
 			}
 
@@ -104,8 +106,10 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 
 
 			table.setWidget(size, 0, new ExternalLink(occ, getPopupString(occ), true));
-			table.setWidget(size, 1, editB);
 
+			if (manager.isEdittable()) {
+				table.setWidget(size, 1, editB);
+			}
 
 			if (size % 2 == 0) {
 				// lP.addStyleName("H-LinkWidget");
@@ -114,6 +118,7 @@ public class LinkDisplayGadget extends Gadget implements TopicLoader {
 				// lP.addStyleName("H-LinkWidget-Odd");
 				table.getFlexCellFormatter().addStyleName(size, 0, "H-LinkWidget-Odd");
 			}
+
 
 			// linkPanel.add(lP);
 
