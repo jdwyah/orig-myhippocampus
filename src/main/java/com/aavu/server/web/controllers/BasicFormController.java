@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import com.aavu.server.service.UserService;
@@ -19,6 +20,7 @@ public abstract class BasicFormController extends SimpleFormController {
 		return BasicController.getDefaultModel(req, userService);
 	}
 
+	@Required
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}

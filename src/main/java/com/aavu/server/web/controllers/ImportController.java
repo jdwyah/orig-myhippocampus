@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.aavu.client.exception.HippoException;
 import com.aavu.server.service.DeliciousService;
 import com.aavu.server.service.TheGoogleService;
-import com.aavu.server.service.UserService;
 import com.aavu.server.web.domain.ImportCommand;
 import com.aavu.server.web.domain.validation.ImportCommandValidator;
 import com.google.gdata.util.AuthenticationException;
@@ -21,7 +20,6 @@ import com.google.gdata.util.AuthenticationException;
 public class ImportController extends BasicFormController {
 	private static final Logger log = Logger.getLogger(ImportController.class);
 
-	private UserService userService;
 	private DeliciousService deliciousService;
 	private TheGoogleService googleService;
 
@@ -101,10 +99,6 @@ public class ImportController extends BasicFormController {
 
 	}
 
-	@Required
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 
 	@Required
 	public void setDeliciousService(DeliciousService deliciousService) {
