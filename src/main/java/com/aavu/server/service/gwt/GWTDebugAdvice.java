@@ -20,6 +20,30 @@ public class GWTDebugAdvice {
 	public Object wrapGWT(ProceedingJoinPoint pjp) throws Throwable {
 
 		try {
+			System.out.println("wrapGWT");
+			// start stopwatch
+			Object retVal = pjp.proceed();
+
+			return retVal;
+
+		} catch (HippoBusinessException e) {
+			log.error("FAILURE: " + e + " " + e.getMessage());
+			throw new HippoException(e);
+		} catch (Exception e) {
+			log.error("FAILURE: " + e + " " + e.getMessage());
+			if (log.isDebugEnabled()) {
+				e.printStackTrace();
+			}
+			throw new HippoException(e);
+		}
+
+	}
+
+	public Object wrapGWTInternal(ProceedingJoinPoint pjp) throws Throwable {
+
+		try {
+			System.out.println("wrapGWTInternal");
+
 			// start stopwatch
 			Object retVal = pjp.proceed();
 

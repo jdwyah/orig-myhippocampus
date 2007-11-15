@@ -1,405 +1,405 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
+     xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+     xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
 
-	<!-- Turn on @Required -->
-	<!-- not precisely sure why this is neccessary, since we do it in appContext too.. -->
-	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
-	<bean id="propertyConfigurer2" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:config.properties" />
-	</bean>
+     <!-- Turn on @Required -->
+     <!-- not precisely sure why this is neccessary, since we do it in appContext too.. -->
+     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
+     <bean id="propertyConfigurer2" class="com.aavu.server.util.HostPrecedingPropertyPlaceholderConfigurer">
+          <property name="location" value="classpath:config.properties" />
+     </bean>
 
-	<bean id="indexController" class="com.aavu.server.web.controllers.IndexController">
-		<property name="view" value="index"/>		
-		<property name="userService" ref="userService"/>
-		<property name="browseService" ref="browseService"/>
-	</bean>	
-	<bean id="tourController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="tour" />
-		<property name="userService" ref="userService" />
-	</bean>	
-	<bean id="screencastsController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="screencasts" />
-		<property name="userService" ref="userService" />
-	</bean>	
-	<bean id="manifestoController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="manifesto" />
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="manifestoController2" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="manifesto2" />
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="signupIfPossibleController" class="com.aavu.server.web.controllers.SignupIfPossibleController">
-		<property name="mailingListView" value="redirect:/site/mailinglist.html"/>
-		<property name="signupView" value="signup"></property>
-		<property name="userService" ref="userService" />
-	</bean>
-
-
-	<bean id="contactController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="contact" />
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="acknowledgmentsController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="acknowledgments" />
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="seahorseController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="seahorse" />
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="termsController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="terms" />
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="addLinkController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="secure/addLink" />		
-		<property name="userService" ref="userService" />		
-	</bean>
+     <bean id="indexController" class="com.aavu.server.web.controllers.IndexController">
+          <property name="view" value="index" />
+          <property name="userService" ref="userService" />
+          <property name="browseService" ref="browseService" />
+     </bean>
+     <bean id="tourController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="tour" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="screencastsController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="screencasts" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="manifestoController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="manifesto" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="manifestoController2" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="manifesto2" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="signupIfPossibleController" class="com.aavu.server.web.controllers.SignupIfPossibleController">
+          <property name="mailingListView" value="redirect:/site/mailinglist.html" />
+          <property name="signupView" value="signup"></property>
+          <property name="userService" ref="userService" />
+     </bean>
 
 
-	<bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
-		<property name="view" value="acegilogin" />
-	</bean>
-	
-	<bean id="errorController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="servletErrorView" />
-		<property name="userService" ref="userService" />		
-	</bean>
-	
-	<bean id="mailingListController" class="com.aavu.server.web.controllers.MailingListController">
-		<property name="formView" value="mailinglist" />
-		<property name="successView" value="index" />
-		<property name="invitationService" ref="invitationService"/>
-	</bean>
+     <bean id="contactController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="contact" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="acknowledgmentsController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="acknowledgments" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="seahorseController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="seahorse" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="termsController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="terms" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="addLinkController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="secure/addLink" />
+          <property name="userService" ref="userService" />
+     </bean>
 
 
-	<bean id="createUserValidator" class="com.aavu.server.web.domain.validation.CreateUserRequestValidator">
-		<property name="userService" ref="userService"/>
-		<property name="invitationService" ref="invitationService"/>
-	</bean>
+     <bean id="loginController" class="com.aavu.server.web.controllers.LoginController">
+          <property name="view" value="acegilogin" />
+     </bean>
 
-	<bean id="createUserController" class="com.aavu.server.web.controllers.CreateUserController">
-		<property name="formView" value="signup" />
-		<property name="successView" value="redirect:/site/index.html" /><!-- redirect index needs command in model -->
-		<property name="validator" ref="createUserValidator" />
-		<property name="userService" ref="userService" />
-		<property name="invitationService" ref="invitationService"/>
-	</bean>
+     <bean id="errorController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="servletErrorView" />
+          <property name="userService" ref="userService" />
+     </bean>
 
-	<bean id="importController" class="com.aavu.server.web.controllers.ImportController">
-		<property name="formView" value="secure/import" />
-		<property name="successView" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->		
-		<property name="googleAuthReturnURL" value="http://www.myhippocampus.com/site/google/RetrieveToken"/>
-		
-		<property name="userService" ref="userService" />
-		<property name="deliciousService" ref="deliciousService"/>		
-		<property name="googleService" ref="googleService"/>
-	</bean>
-	
-	<bean id="googleImportController" class="com.aavu.server.web.controllers.GoogleImportController">
-		<property name="view" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->
-		<property name="formView" value="redirect:/site/secure/import.html" />
-		<property name="googleService" ref="googleService"/>
-		<property name="userService" ref="userService"/>		
-	</bean>
-
-	<bean id="manageMailingListController" class="com.aavu.server.web.controllers.secure.extreme.ManageMailingListController">
-		<property name="invitationService" ref="invitationService"/>
-		<property name="view" value="secure/extreme/mailingList" />
-		<property name="methodNameResolver" ref="userManagerResolver" />
-	</bean>
-
-	<bean id="userManagerController" class="com.aavu.server.web.controllers.secure.extreme.UserManagerController">
-		<property name="userService" ref="userService" />
-		<property name="viewUserList" value="secure/extreme/userList" />
-		<property name="methodNameResolver" ref="userManagerResolver" />
-	</bean>
-	<bean id="scriptsController" class="com.aavu.server.web.controllers.secure.extreme.ScriptsController">
-		<property name="userService" ref="userService" />
-		<property name="view" value="secure/extreme/scripts" />
-		<property name="initDAO" ref="initDAO" />
-		<property name="methodNameResolver" ref="userManagerResolver" />
-	</bean>
-
-	<bean id="userManagerResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
-		<property name="paramName" value="action" />
-	</bean>
-
-	<bean id="ajaxController" class="com.aavu.server.web.controllers.AjaxController">
-		<property name="topicService" ref="topicService" />
-		<property name="methodNameResolver" ref="ajaxControllerResolver" />
-	</bean>
-	<bean id="ajaxControllerResolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
-		<property name="alwaysUseFullPath" value="true" />
-		<property name="mappings">
-			<props>
-				<prop key="/site/secure/getTopics.html">topicSearch</prop>
-			</props>
-		</property>
-	</bean>
-	<bean id="fileUploadController" class="com.aavu.server.web.controllers.FileUploadController">
-		<property name="successView" value="simpleString"/>
-		<property name="commandClass" value="com.aavu.server.web.domain.FileUploadBean"/>
-		<property name="fileService" ref="fileService"/>
-		<property name="userService" ref="userService"/>
-	</bean>
-	<bean id="showFileController" class="com.aavu.server.web.controllers.S3Controller">
-		<property name="fileService" ref="fileService"/>
-		<property name="userService" ref="userService"/>	
-	</bean>
-
-	<bean name="hessianMessageService" class="org.springframework.remoting.caucho.HessianServiceExporter">
-		<property name="service" ref="messageService" />
-		<property name="serviceInterface" value="com.aavu.server.service.MessageService" />
-	</bean>
+     <bean id="mailingListController" class="com.aavu.server.web.controllers.MailingListController">
+          <property name="formView" value="mailinglist" />
+          <property name="successView" value="index" />
+          <property name="invitationService" ref="invitationService" />
+     </bean>
 
 
-	<bean id="userPageController" class="com.aavu.server.web.controllers.UserPageController">
-		<property name="view" value="secure/userPage" />
-		<property name="topicService" ref="topicService"/>
-		<property name="userService" ref="userService" />
-	</bean>
+     <bean id="createUserValidator" class="com.aavu.server.web.domain.validation.CreateUserRequestValidator">
+          <property name="userService" ref="userService" />
+          <property name="invitationService" ref="invitationService" />
+     </bean>
+
+     <bean id="createUserController" class="com.aavu.server.web.controllers.CreateUserController">
+          <property name="formView" value="signup" />
+          <property name="successView" value="redirect:/site/index.html" /><!-- redirect index needs command in model -->
+          <property name="validator" ref="createUserValidator" />
+          <property name="userService" ref="userService" />
+          <property name="invitationService" ref="invitationService" />
+     </bean>
+
+     <bean id="importController" class="com.aavu.server.web.controllers.ImportController">
+          <property name="formView" value="secure/import" />
+          <property name="successView" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->
+          <property name="googleAuthReturnURL" value="http://www.myhippocampus.com/site/google/RetrieveToken" />
+
+          <property name="userService" ref="userService" />
+          <property name="deliciousService" ref="deliciousService" />
+          <property name="googleService" ref="googleService" />
+     </bean>
+
+     <bean id="googleImportController" class="com.aavu.server.web.controllers.GoogleImportController">
+          <property name="view" value="redirect:/site/secure/userPage.html" /><!-- redirect index needs command in model -->
+          <property name="formView" value="redirect:/site/secure/import.html" />
+          <property name="googleService" ref="googleService" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+     <bean id="manageMailingListController" class="com.aavu.server.web.controllers.secure.extreme.ManageMailingListController">
+          <property name="invitationService" ref="invitationService" />
+          <property name="view" value="secure/extreme/mailingList" />
+          <property name="methodNameResolver" ref="userManagerResolver" />
+     </bean>
+
+     <bean id="userManagerController" class="com.aavu.server.web.controllers.secure.extreme.UserManagerController">
+          <property name="userService" ref="userService" />
+          <property name="viewUserList" value="secure/extreme/userList" />
+          <property name="methodNameResolver" ref="userManagerResolver" />
+     </bean>
+     <bean id="scriptsController" class="com.aavu.server.web.controllers.secure.extreme.ScriptsController">
+          <property name="userService" ref="userService" />
+          <property name="view" value="secure/extreme/scripts" />
+          <property name="initDAO" ref="initDAO" />
+          <property name="methodNameResolver" ref="userManagerResolver" />
+     </bean>
+
+     <bean id="userManagerResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+          <property name="paramName" value="action" />
+     </bean>
+
+     <bean id="ajaxController" class="com.aavu.server.web.controllers.AjaxController">
+          <property name="topicService" ref="topicService" />
+          <property name="methodNameResolver" ref="ajaxControllerResolver" />
+     </bean>
+     <bean id="ajaxControllerResolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+          <property name="alwaysUseFullPath" value="true" />
+          <property name="mappings">
+               <props>
+                    <prop key="/site/secure/getTopics.html">topicSearch</prop>
+               </props>
+          </property>
+     </bean>
+     <bean id="fileUploadController" class="com.aavu.server.web.controllers.FileUploadController">
+          <property name="successView" value="simpleString" />
+          <property name="commandClass" value="com.aavu.server.web.domain.FileUploadBean" />
+          <property name="fileService" ref="fileService" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="showFileController" class="com.aavu.server.web.controllers.S3Controller">
+          <property name="fileService" ref="fileService" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+     <bean name="hessianMessageService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+          <property name="service" ref="messageService" />
+          <property name="serviceInterface" value="com.aavu.server.service.MessageService" />
+     </bean>
 
 
-
-	<!-- GWT Controllers -->
-	<bean id="browserController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="browser" />
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="mindscapeController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="secure/mindscape" />
-		<property name="userService" ref="userService" />
-	</bean>	
-	<!-- PEND MED blech. GWT loads the image bundles from the right spot, but
-		 goes looking for this clear.cache.gif from where the .js was called.  -->
-	<bean id="forwardClearCacheController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="redirect:/com.aavu.Interactive/clear.cache.gif" />
-		<property name="userService" ref="userService" />
-	</bean>
-	
-	
-	<bean id="invitationController" class="com.aavu.server.web.controllers.InvitationController">
-		<property name="view" value="redirect:/site/secure/userPage.html" />
-		<property name="invitationService" ref="invitationService"/>
-		<property name="userService" ref="userService" />
-	</bean>
-	
-	<bean id="searchController" class="com.aavu.server.web.controllers.SearchController">
-		<property name="successView" value="secure/search" />
-		<property name="searchService" ref="searchService"/>
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="publicSearchController" class="com.aavu.server.web.controllers.SearchController">
-		<property name="successView" value="publicSearch" />
-		<property name="searchService" ref="searchService"/>
-		<property name="userService" ref="userService" />
-	</bean>
-	<bean id="showTopicController" class="com.aavu.server.web.controllers.ShowTopicController">
-		<property name="view" value="secure/showTopic" />
-		<property name="topicService" ref="topicService"/>
-		<property name="userService" ref="userService" />
-	</bean>
-	
-	<bean id="mvcBrowseController" class="com.aavu.server.web.controllers.MVCBrowseController">		
-		<property name="notFoundView" value="browseNotFound"/>
-		<property name="view" value="browser"/>
-		<property name="topicService" ref="topicService"/>
-		<property name="userService" ref="userService" />
-	</bean>
-	
-
-	<!-- ?? why doesn't ${paypal.endpoint} work?? -->
-	<bean id="paypalController" class="com.aavu.server.web.controllers.PaypalIPNController">
-		<!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr" />-->
-		<property name="paypalEndpoint" value="https://www.paypal.com/cgi-bin/webscr"/>
-		<property name="userService" ref="userService" />
-		<property name="view" value="ipn/ipn" />
-	</bean>
-
-	<bean id="paypalTestController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="ipn/test" />
-		<property name="userService" ref="userService" />
-	</bean>
-
-	<bean id="paypalOkController" class="com.aavu.server.web.controllers.BasicController">
-		<property name="view" value="ipn/signupOk" />
-		<property name="userService" ref="userService" />
-	</bean>
-	
-	<!-- ?? why doesn't ${paypal.endpoint} work?? -->
-	<bean id="accountController" class="com.aavu.server.web.controllers.AccountController">
-		<!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
-		<property name="paypalEmail" value="sandboxjdwyah@myhippocampus.com"/>-->
-		<property name="paypalEndpoint" value="https://www.paypal.com/cgi-bin/webscr"/>
-		<property name="paypalEmail" value="subscriptions@myhippocampus.com"/>
-		<property name="view" value="secure/account" />
-		<property name="userService" ref="userService" />
-	</bean>
-
-	<bean id="openIDLoginStartController" class="com.aavu.server.web.controllers.OpenIDLoginController">
-		<property name="consumer" ref="openIDConsumer"/>
-		<property name="trustRoot" value="${HOST.openID.trustRoot}"/>
-		<property name="identityField" value="openid_url"/>			
-	</bean>
-	
-
-	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="alwaysUseFullPath" value="true" />
-		<property name="mappings">
-			<props>
-				<prop key="/service/topicService">GWTTopicService</prop>
-				<prop key="/service/userService">GWTUserService</prop>
-				<prop key="/service/subjectService">GWTSubjectService</prop>
-				<prop key="/service/messageService">hessianMessageService</prop>
-
-				<prop key="/site/ipn">paypalController</prop>						
-				<prop key="/site/ipn/test.html">paypalTestController</prop>	
-				<prop key="/site/account/signupOk.html">paypalOkController</prop>					
-					
-
-				<prop key="/site/acegilogin.html">loginController</prop>
-				<prop key="/site/signupIfPossible.html">signupIfPossibleController</prop>
-				<prop key="/site/mailinglist.html">mailingListController</prop>
-				<prop key="/site/signup.html">createUserController</prop>
-
-				<prop key="/site/secure/extreme/scripts.html">scriptsController</prop>
-				<prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
-				<prop key="/site/secure/extreme/mailingList.html">manageMailingListController</prop>
-
-
-				<prop key="/site/screencasts.html">screencastsController</prop>				
-				<prop key="/site/secure/addLink.html">addLinkController</prop>
-				<prop key="/site/secure/getTopics.html">ajaxController</prop>				
-				
-				<!-- change, but hosted gwt login difficult w/ /site/secure/ -->
-				<prop key="/service/upload.html">fileUploadController</prop>
-				<prop key="/service/showFile.html">showFileController</prop>
-
-				<prop key="/site/index.html">indexController</prop>
-				<prop key="/site/tour.html">tourController</prop>
-				<prop key="/site/manifesto.html">manifestoController</prop>
-				<prop key="/site/manifesto2.html">manifestoController2</prop>
-				<prop key="/site/contact.html">contactController</prop>		
-				<prop key="/site/acknowledgments.html">acknowledgmentsController</prop>						
-				<prop key="/site/seahorse.html">seahorseController</prop>
-				<prop key="/site/terms.html">termsController</prop>
-
-				<prop key="/site/accessDenied.html">errorController</prop>
-				<prop key="/site/servletErrorView.html">errorController</prop>						
-
-				<prop key="/site/publicSearch.html">publicSearchController</prop>
-
-				<prop key="/site/secure/search.html">searchController</prop>
-				<prop key="/site/secure/userPage.html">userPageController</prop>
-				<prop key="/site/secure/showTopic.html">showTopicController</prop>						
-				
-				
-				<prop key="/site/secure/import.html">importController</prop>
-				<prop key="/site/google/RetrieveToken">googleImportController</prop>
-
-
-				<prop key="/site/browser.html">browserController</prop>
-				<prop key="/site/secure/mindscape.html">mindscapeController</prop>
-				<prop key="/site/clear.cache.gif">forwardClearCacheController</prop>
-				<prop key="/site/secure/clear.cache.gif">forwardClearCacheController</prop>
-
-				<prop key="/site/secure/invite.html">invitationController</prop>						
-				<prop key="/site/secure/account.html">accountController</prop>	
-								
-				<prop key="/site/j_acegi_openid_start">openIDLoginStartController</prop>					
-
-				<prop key="/site/browse/**/*">mvcBrowseController</prop>
-
-				<!-- 
-				<prop key="/css/**/*">myServletForwardingController</prop>
-				<prop key="/decorators/**/*">myServletForwardingController</prop>
-				<prop key="/img/**/*">myServletForwardingController</prop>
-				<prop key="/com.aavu.HippoTest/**/*">myServletForwardingController</prop>
-				<prop key="/com.aavu.AddLink/**/*">myServletForwardingController</prop>
-				<prop key="/resources/**/*">myServletForwardingController</prop>
-				<prop key="/screencasts/**/*">myServletForwardingController</prop>
- 				-->
-				
-				
-			</props>
-		</property>
-
-	</bean>
-	<!-- All other resources are served up plain -->
-	<!-- 
-	<bean name="/css/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-		<property name="servletName" value="default"/>
-	</bean>
-	<bean name="/decorators/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-		<property name="servletName" value="default"/>
-	</bean>
-	<bean name="/img/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-		<property name="servletName" value="default"/>
-	</bean>
-	<bean name="/com.aavu.HippoTest/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-		<property name="servletName" value="default"/>
-	</bean>
-	<bean name="/com.aavu.AddLink/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-		<property name="servletName" value="default"/>
-	</bean>
-	<bean name="/resources/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-		<property name="servletName" value="default"/>
-	</bean>
-	<bean name="/screencasts/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-		<property name="servletName" value="default"/>
-	</bean>
-	<bean id="myServletForwardingController" class="org.springframework.web.servlet.mvc.ServletForwardingController">
-   		<property name="servletName" value="default"/>
- 	</bean> -->
-	
-
-
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="10485760"/><!-- 10MB -->
-	</bean>
+     <bean id="userPageController" class="com.aavu.server.web.controllers.UserPageController">
+          <property name="view" value="secure/userPage" />
+          <property name="topicService" ref="topicService" />
+          <property name="userService" ref="userService" />
+     </bean>
 
 
 
-	<!-- <bean id="internalViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="com.aavu.HippoTest/" />
-		<property name="suffix" value=".html" />
-		</bean>-->
+     <!-- GWT Controllers -->
+     <bean id="browserController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="browser" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="mindscapeController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="secure/mindscape" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <!-- PEND MED blech. GWT loads the image bundles from the right spot, but
+          goes looking for this clear.cache.gif from where the .js was called.  -->
+     <bean id="forwardClearCacheController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="redirect:/com.aavu.Interactive/clear.cache.gif" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+
+     <bean id="invitationController" class="com.aavu.server.web.controllers.InvitationController">
+          <property name="view" value="redirect:/site/secure/userPage.html" />
+          <property name="invitationService" ref="invitationService" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+     <bean id="searchController" class="com.aavu.server.web.controllers.SearchController">
+          <property name="successView" value="secure/search" />
+          <property name="searchService" ref="searchService" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="publicSearchController" class="com.aavu.server.web.controllers.SearchController">
+          <property name="successView" value="publicSearch" />
+          <property name="searchService" ref="searchService" />
+          <property name="userService" ref="userService" />
+     </bean>
+     <bean id="showTopicController" class="com.aavu.server.web.controllers.ShowTopicController">
+          <property name="view" value="secure/showTopic" />
+          <property name="topicService" ref="topicService" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+     <bean id="mvcBrowseController" class="com.aavu.server.web.controllers.MVCBrowseController">
+          <property name="notFoundView" value="browseNotFound" />
+          <property name="view" value="browser" />
+          <property name="topicService" ref="topicService" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+
+     <!-- ?? why doesn't ${paypal.endpoint} work?? -->
+     <bean id="paypalController" class="com.aavu.server.web.controllers.PaypalIPNController">
+          <!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr" />-->
+          <property name="paypalEndpoint" value="https://www.paypal.com/cgi-bin/webscr" />
+          <property name="userService" ref="userService" />
+          <property name="view" value="ipn/ipn" />
+     </bean>
+
+     <bean id="paypalTestController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="ipn/test" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+     <bean id="paypalOkController" class="com.aavu.server.web.controllers.BasicController">
+          <property name="view" value="ipn/signupOk" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+     <!-- ?? why doesn't ${paypal.endpoint} work?? -->
+     <bean id="accountController" class="com.aavu.server.web.controllers.AccountController">
+          <!--<property name="paypalEndpoint" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
+               <property name="paypalEmail" value="sandboxjdwyah@myhippocampus.com"/>-->
+          <property name="paypalEndpoint" value="https://www.paypal.com/cgi-bin/webscr" />
+          <property name="paypalEmail" value="subscriptions@myhippocampus.com" />
+          <property name="view" value="secure/account" />
+          <property name="userService" ref="userService" />
+     </bean>
+
+     <bean id="openIDLoginStartController" class="com.aavu.server.web.controllers.OpenIDLoginController">
+          <property name="consumer" ref="openIDConsumer" />
+          <property name="trustRoot" value="${HOST.openID.trustRoot}" />
+          <property name="identityField" value="openid_url" />
+     </bean>
+
+
+     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+          <property name="alwaysUseFullPath" value="true" />
+          <property name="mappings">
+               <props>
+                    <prop key="/service/topicService">GWTTopicService</prop>
+                    <prop key="/service/userService">GWTUserService</prop>
+                    <prop key="/service/subjectService">GWTSubjectService</prop>
+                    <prop key="/service/messageService">hessianMessageService</prop>
+
+                    <prop key="/site/ipn">paypalController</prop>
+                    <prop key="/site/ipn/test.html">paypalTestController</prop>
+                    <prop key="/site/account/signupOk.html">paypalOkController</prop>
+
+
+                    <prop key="/site/acegilogin.html">loginController</prop>
+                    <prop key="/site/signupIfPossible.html">signupIfPossibleController</prop>
+                    <prop key="/site/mailinglist.html">mailingListController</prop>
+                    <prop key="/site/signup.html">createUserController</prop>
+
+                    <prop key="/site/secure/extreme/scripts.html">scriptsController</prop>
+                    <prop key="/site/secure/extreme/userManager.html">userManagerController</prop>
+                    <prop key="/site/secure/extreme/mailingList.html">manageMailingListController</prop>
+
+
+                    <prop key="/site/screencasts.html">screencastsController</prop>
+                    <prop key="/site/secure/addLink.html">addLinkController</prop>
+                    <prop key="/site/secure/getTopics.html">ajaxController</prop>
+
+                    <!-- change, but hosted gwt login difficult w/ /site/secure/ -->
+                    <prop key="/service/upload.html">fileUploadController</prop>
+                    <prop key="/service/showFile.html">showFileController</prop>
+
+                    <prop key="/site/index.html">indexController</prop>
+                    <prop key="/site/tour.html">tourController</prop>
+                    <prop key="/site/manifesto.html">manifestoController</prop>
+                    <prop key="/site/manifesto2.html">manifestoController2</prop>
+                    <prop key="/site/contact.html">contactController</prop>
+                    <prop key="/site/acknowledgments.html">acknowledgmentsController</prop>
+                    <prop key="/site/seahorse.html">seahorseController</prop>
+                    <prop key="/site/terms.html">termsController</prop>
+
+                    <prop key="/site/accessDenied.html">errorController</prop>
+                    <prop key="/site/servletErrorView.html">errorController</prop>
+
+                    <prop key="/site/publicSearch.html">publicSearchController</prop>
+
+                    <prop key="/site/secure/search.html">searchController</prop>
+                    <prop key="/site/secure/userPage.html">userPageController</prop>
+                    <prop key="/site/secure/showTopic.html">showTopicController</prop>
+
+
+                    <prop key="/site/secure/import.html">importController</prop>
+                    <prop key="/site/google/RetrieveToken">googleImportController</prop>
+
+
+                    <prop key="/site/browser.html">browserController</prop>
+                    <prop key="/site/secure/mindscape.html">mindscapeController</prop>
+                    <prop key="/site/clear.cache.gif">forwardClearCacheController</prop>
+                    <prop key="/site/secure/clear.cache.gif">forwardClearCacheController</prop>
+
+                    <prop key="/site/secure/invite.html">invitationController</prop>
+                    <prop key="/site/secure/account.html">accountController</prop>
+
+                    <prop key="/site/j_acegi_openid_start">openIDLoginStartController</prop>
+
+                    <prop key="/site/browse/**/*">mvcBrowseController</prop>
+
+                    <!-- 
+                         <prop key="/css/**/*">myServletForwardingController</prop>
+                         <prop key="/decorators/**/*">myServletForwardingController</prop>
+                         <prop key="/img/**/*">myServletForwardingController</prop>
+                         <prop key="/com.aavu.HippoTest/**/*">myServletForwardingController</prop>
+                         <prop key="/com.aavu.AddLink/**/*">myServletForwardingController</prop>
+                         <prop key="/resources/**/*">myServletForwardingController</prop>
+                         <prop key="/screencasts/**/*">myServletForwardingController</prop>
+                    -->
+
+
+               </props>
+          </property>
+
+     </bean>
+     <!-- All other resources are served up plain -->
+     <!-- 
+          <bean name="/css/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean>
+          <bean name="/decorators/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean>
+          <bean name="/img/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean>
+          <bean name="/com.aavu.HippoTest/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean>
+          <bean name="/com.aavu.AddLink/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean>
+          <bean name="/resources/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean>
+          <bean name="/screencasts/*" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean>
+          <bean id="myServletForwardingController" class="org.springframework.web.servlet.mvc.ServletForwardingController">
+          <property name="servletName" value="default"/>
+          </bean> -->
 
 
 
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" abstract="false"
-		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
-		<property name="requestContextAttribute">
-			<value>rc</value>
-		</property>
-		<property name="cache">
-			<value>true</value>
-		</property>
-		<property name="prefix">
-			<value>/WEB-INF/freemarker/</value>
-		</property>
-		<property name="suffix">
-			<value>.ftl</value>
-		</property>
-		<property name="exposeSpringMacroHelpers" value="true" />
-	</bean>
+     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+          <property name="maxUploadSize" value="10485760" /><!-- 10MB -->
+     </bean>
 
-	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" abstract="false"
-		scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
-		<property name="exceptionMappings">
-			<props>
-				<prop key="java.lang.Exception">errorView</prop>
-			</props>
-		</property>
-	</bean>
+
+
+     <!-- <bean id="internalViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+          <property name="prefix" value="com.aavu.HippoTest/" />
+          <property name="suffix" value=".html" />
+          </bean>-->
+
+
+
+     <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver" abstract="false"
+          scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
+          <property name="requestContextAttribute">
+               <value>rc</value>
+          </property>
+          <property name="cache">
+               <value>true</value>
+          </property>
+          <property name="prefix">
+               <value>/WEB-INF/freemarker/</value>
+          </property>
+          <property name="suffix">
+               <value>.ftl</value>
+          </property>
+          <property name="exposeSpringMacroHelpers" value="true" />
+     </bean>
+
+     <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" abstract="false"
+          scope="singleton" lazy-init="default" autowire="default" dependency-check="default">
+          <property name="exceptionMappings">
+               <props>
+                    <prop key="java.lang.Exception">errorView</prop>
+               </props>
+          </property>
+     </bean>
 
 
 </beans>

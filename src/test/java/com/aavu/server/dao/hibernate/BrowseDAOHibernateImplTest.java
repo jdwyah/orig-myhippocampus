@@ -109,6 +109,8 @@ public class BrowseDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		Set<Long> ids = new HashSet<Long>();
 
+		Set<Long> userids = new HashSet<Long>();
+
 		for (WebLink link : links) {
 			System.out.println("Weblink " + link + " " + " Topics:" + link.getTopics().size());
 
@@ -116,7 +118,10 @@ public class BrowseDAOHibernateImplTest extends HibernateTransactionalTest {
 
 			assertTrue(link.isPublicVisible());
 
+			assertFalse(userids.contains(link.getUser().getId()));
+
 			ids.add(link.getId());
+			userids.add(link.getUser().getId());
 
 			for (Iterator iterator = link.getTopics().iterator(); iterator.hasNext();) {
 				TopicOccurrenceConnector toc = (TopicOccurrenceConnector) iterator.next();
@@ -125,7 +130,7 @@ public class BrowseDAOHibernateImplTest extends HibernateTransactionalTest {
 
 		}
 
-		assertEquals(BrowseDAOHibernateImpl.MAX_WEBLINKS, links.size());
+		assertTrue(BrowseDAOHibernateImpl.MAX_WEBLINKS >= links.size());
 
 
 	}

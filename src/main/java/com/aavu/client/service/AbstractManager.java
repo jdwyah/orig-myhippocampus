@@ -286,6 +286,21 @@ public abstract class AbstractManager implements Manager {
 				});
 	}
 
+
+	public void recordPageHit(String pageName) {
+		User u = getUser();
+		if (u != null) {
+			tickleUrchin("/gwt/browse/" + u.getUsername() + "/" + pageName);
+		} else {
+			tickleUrchin("/gwt/browse/" + pageName);
+		}
+	}
+
+	private native void tickleUrchin(String pageName) /*-{
+	  $wnd.urchinTracker(pageName);
+	}-*/;
+
+
 	/**
 	 * we can goto a topic linked by either Name, or ID. Parse the history token, ie
 	 * HippoTest.html#453 or HippoTest.html#MyTopicName
@@ -300,6 +315,8 @@ public abstract class AbstractManager implements Manager {
 		} catch (NumberFormatException e) {
 
 		}
+		tickleUrchin(historyToken);
+
 		System.out.println("AbstractManager.gotoTopic |" + historyToken + "|" + parsedID);
 		if (parsedID == -2 && historyToken != null && historyToken.length() > 0) {
 			getHippoCache().getTopicCache().getTopicForNameA(historyToken,

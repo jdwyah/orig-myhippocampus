@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -14,6 +16,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.User;
 import com.aavu.client.domain.WebLink;
 import com.aavu.server.dao.BrowseDAO;
 
@@ -30,6 +33,26 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 	public static final int MAX_WEBLINKS = 7;
 
 	protected static final int PAGE_SIZE = 20;
+
+	private static ArrayList<WebLink> topWeblinks;
+
+
+	/**
+	 * simple caching w/ timer
+	 */
+	public BrowseDAOHibernateImpl() {
+		Timer timer = new Timer();
+		long twoHours = 1000 * 60 * 60 * 2;
+		// delay 2 hours bc we can't run before our setters are called
+		timer.scheduleAtFixedRate(new TimerTask() {
+
+			@Override
+			public void run() {
+				createTopWeblinks();
+			}
+		}, twoHours, twoHours);
+
+	}
 
 	/**
 	 * PEND take another look at the efficiency of these guys.
@@ -136,18 +159,53 @@ public class BrowseDAOHibernateImpl extends HibernateDaoSupport implements Brows
 	}
 
 	/**
-	 * PEND why does this need to be a left join to return results?
+	 * 
 	 */
 	public List<WebLink> getTopWeblinks() {
+		if (topWeblinks != null) {
+			return topWeblinks;
+		} else {
+			return createTopWeblinks();
+		}
+	}
+
+
+	/**
+	 * Only run when necessary as this is a little slow
+	 * 
+	 * PEND why does this need to be a left join to return results?
+	 * 
+	 * @return
+	 */
+	private List<WebLink> createTopWeblinks() {
+
+		log.info("Updating Top Weblinks");
 
 		final String hql = "from WebLink occ " + " join fetch occ.user "
 				+ " join fetch occ.topics toc " + " join fetch toc.topic as top "
 				+ " where top.publicVisible = true and occ.publicVisible = true "
-				+ " order by size(occ.topics) desc ";
+				+ " order by occ.created desc ";
 
-		List<WebLink> ll = (List<WebLink>) getLimittedResults(hql, MAX_WEBLINKS);
 
-		return ll;
+		List<WebLink> ll = (List<WebLink>) getHibernateTemplate().find(hql);
+
+		topWeblinks = new ArrayList<WebLink>(MAX_WEBLINKS);
+
+		// Limit results to 1 per user
+		Set<User> userIDs = new HashSet<User>();
+		int i = 0;
+		for (WebLink link : ll) {
+			if (!userIDs.contains(link.getUser())) {
+				topWeblinks.add(link);
+				userIDs.add(link.getUser());
+				i++;
+			}
+			if (i > MAX_WEBLINKS) {
+				break;
+			}
+		}
+
+		return topWeblinks;
 	}
 
 
