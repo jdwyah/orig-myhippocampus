@@ -1,5 +1,8 @@
 package com.aavu.server.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,13 +31,22 @@ public class LoginController extends AbstractController {
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest req, HttpServletResponse arg1)
 			throws Exception {
+
+
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
 		if (req.getParameter("login_error") != null) {
 			String message = ((AuthenticationException) req.getSession().getAttribute(
 					AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY)).getMessage();
 			log.info("Login Error " + message + " uname: " + req.getParameter("j_username"));
-			return new ModelAndView(getView(), "login_error", message);
+			model.put("login_error", message);
 		}
-		return new ModelAndView(getView());
+
+		model.put("openid_identifier", req.getParameter("openid_identifier"));
+
+
+		return new ModelAndView(getView(), model);
 	}
 
 	// private UserDAO userDAO;

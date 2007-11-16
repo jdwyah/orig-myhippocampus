@@ -20,7 +20,7 @@ public class GWTDebugAdvice {
 	public Object wrapGWT(ProceedingJoinPoint pjp) throws Throwable {
 
 		try {
-			System.out.println("wrapGWT");
+			log.debug("wrapGWT");
 			// start stopwatch
 			Object retVal = pjp.proceed();
 
@@ -42,7 +42,7 @@ public class GWTDebugAdvice {
 	public Object wrapGWTInternal(ProceedingJoinPoint pjp) throws Throwable {
 
 		try {
-			System.out.println("wrapGWTInternal");
+			log.debug("wrapGWTInternal");
 
 			// start stopwatch
 			Object retVal = pjp.proceed();
