@@ -14,7 +14,7 @@ public class Root extends RealTopic implements Serializable {
 	}
 
 	public Root(User user) {
-		setPublicVisible(false);
+		setPublicVisible(true);
 		setUser(user);
 		setTitle("Desktop");
 	}
