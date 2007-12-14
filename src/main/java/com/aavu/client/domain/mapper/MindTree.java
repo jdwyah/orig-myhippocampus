@@ -2,7 +2,6 @@ package com.aavu.client.domain.mapper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -13,16 +12,7 @@ import com.aavu.client.domain.mapper.generated.AbstractMindTree;
 
 public class MindTree extends AbstractMindTree implements Serializable {
 
-	/**
-	 * lft comaparator
-	 */
-	private static Comparator lftComparator = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			MindTreeElement o = (MindTreeElement) o1;
-			MindTreeElement oo = (MindTreeElement) o2;
-			return o.getLft() - oo.getLft();
-		}
-	};
+
 
 
 	public MindTree() {
@@ -44,14 +34,14 @@ public class MindTree extends AbstractMindTree implements Serializable {
 
 		NavigableMindTree tm = new NavigableMindTree(root);
 
-		GWTSortedMap leftMap = new GWTSortedMap(lftComparator);
-		for (Iterator iter = getLeftSide().iterator(); iter.hasNext();) {
-			MindTreeElement element = (MindTreeElement) iter.next();
+		GWTSortedMap<MindTreeElement, Object> leftMap = new GWTSortedMap<MindTreeElement, Object>();
+		for (Iterator<MindTreeElement> iter = getLeftSide().iterator(); iter.hasNext();) {
+			MindTreeElement element = iter.next();
 			leftMap.put(element, null);
 		}
-		GWTSortedMap rightMap = new GWTSortedMap(lftComparator);
-		for (Iterator iter = getRightSide().iterator(); iter.hasNext();) {
-			MindTreeElement element = (MindTreeElement) iter.next();
+		GWTSortedMap<MindTreeElement, Object> rightMap = new GWTSortedMap<MindTreeElement, Object>();
+		for (Iterator<MindTreeElement> iter = getRightSide().iterator(); iter.hasNext();) {
+			MindTreeElement element = iter.next();
 			rightMap.put(element, null);
 		}
 
