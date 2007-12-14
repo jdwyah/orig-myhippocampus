@@ -4,9 +4,9 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
-       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
  		<property name="driverClass" value="${jdbc.driverClass}" />
@@ -17,7 +17,7 @@
 	</bean>
 	
 
-	<bean id="mySessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="mappingResources">
 			<list>
@@ -90,33 +90,33 @@
 	</bean>
 
 	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 	<bean id="selectDAO" class="com.aavu.server.dao.hibernate.SelectDAOHibernateImpl">
-		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<bean id="browseDAO" class="com.aavu.server.dao.hibernate.BrowseDAOHibernateImpl">
-		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<bean id="editDAO" class="com.aavu.server.dao.hibernate.EditDAOHibernateImpl">
-		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
 	<bean id="userDAO" class="com.aavu.server.dao.hibernate.UserDAOHibernateImpl">
-		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory" />
 		<property name="initDAO" ref="initDAO"/>
 		<property name="init" value="false"/>
 	</bean>
 	<bean id="initDAO" class="com.aavu.server.dao.hibernate.InitDAOHibernateImpl">
-		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory" />
 		<property name="userService" ref="userService"/>
 		<property name="editDAO" ref="editDAO" />
 		<property name="selectDAO" ref="selectDAO" />
 	</bean>
 	
 	<bean id="mailingListDAO" class="com.aavu.server.dao.hibernate.MailingListDAOHibernateImpl">
-		<property name="sessionFactory" ref="mySessionFactory"/>	
+		<property name="sessionFactory" ref="sessionFactory"/>	
 	</bean>	
 
 	<!--  COMPASS START -->
@@ -164,7 +164,7 @@
 			<value>hibernateDevice</value>
 		</property>
 		<property name="sessionFactory">
-			<ref local="mySessionFactory" />
+			<ref local="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="compassGPS" class="org.compass.gps.impl.SingleCompassGps" init-method="start" destroy-method="stop" abstract="false"
