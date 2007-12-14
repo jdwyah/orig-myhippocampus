@@ -9,7 +9,7 @@ public interface ExplorerPanel {
 
 	Widget getWidget();
 
-	void load(List tags);
+	void load(List<Topic> tags);
 
 	void load(Topic topic);
 

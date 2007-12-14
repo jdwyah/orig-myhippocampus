@@ -2,7 +2,6 @@ package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
@@ -11,7 +10,7 @@ import com.aavu.client.service.Manager;
 public class GadgetManager {
 	private Manager manager;
 
-	private List allGadgets;
+	private List<Gadget> allGadgets;
 
 	private LinkDisplayGadget linkDisplayW;
 	private ConnectionBoard connectionBoard;
@@ -36,7 +35,7 @@ public class GadgetManager {
 	// private TagPropertyPanel tagProperties;
 
 	private boolean initted = false;
-	private List listeners = new ArrayList();
+	private List<GadgetClickListener> listeners = new ArrayList<GadgetClickListener>();
 
 
 	public GadgetManager(Manager manager) {
@@ -48,7 +47,7 @@ public class GadgetManager {
 	 */
 	public void init() {
 		if (!initted) {
-			allGadgets = new ArrayList();
+			allGadgets = new ArrayList<Gadget>();
 
 
 
@@ -100,7 +99,7 @@ public class GadgetManager {
 		}
 	}
 
-	public List getFullGadgetList() {
+	public List<Gadget> getFullGadgetList() {
 		init();
 		return allGadgets;
 	}
@@ -114,8 +113,7 @@ public class GadgetManager {
 	 * @param dateCreated
 	 */
 	public void fireGadgetClick(Gadget gadget, int[] lngLat, Date dateCreated) {
-		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
-			GadgetClickListener listener = (GadgetClickListener) iterator.next();
+		for (GadgetClickListener listener : listeners) {
 			listener.gadgetClicked(gadget, lngLat, dateCreated);
 		}
 
@@ -129,8 +127,7 @@ public class GadgetManager {
 	public void load(Topic topic) {
 		init();
 
-		for (Iterator iter = allGadgets.iterator(); iter.hasNext();) {
-			Gadget gadget = (Gadget) iter.next();
+		for (Gadget gadget : allGadgets) {
 
 			int lastLoadSize = gadget.load(topic);
 			gadget.setLastLoadSize(lastLoadSize);

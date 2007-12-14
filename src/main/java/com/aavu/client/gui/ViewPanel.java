@@ -57,7 +57,7 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 	private EventBackdrop focusBackdrop;
 
 
-	protected List objects = new ArrayList();
+	protected List<RemembersPosition> objects = new ArrayList<RemembersPosition>();
 
 	private ClientMouseImpl clientMouseImpl;
 
@@ -147,8 +147,10 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 	 */
 	public void clear() {
 		// System.out.println("calling our clear()");
-		for (Iterator iter = objects.iterator(); iter.hasNext();) {
-			Widget w = (Widget) iter.next();
+
+		for (Iterator<RemembersPosition> iter = objects.iterator(); iter.hasNext();) {
+			RemembersPosition rp = iter.next();
+			Widget w = rp.getWidget();
 			remove(w);
 			iter.remove();
 		}
@@ -362,9 +364,8 @@ public abstract class ViewPanel extends AbsolutePanel implements MouseListener,
 
 		// System.out.println("ViewPanel.moveByDelta dx " + dx + " dy " + dy);
 
-		for (Iterator iter = objects.iterator(); iter.hasNext();) {
-			Object o = iter.next();
-			RemembersPosition rp = (RemembersPosition) o;
+		for (Iterator<RemembersPosition> iter = objects.iterator(); iter.hasNext();) {
+			RemembersPosition rp = iter.next();
 
 			redrawObj(rp, rd);
 		}

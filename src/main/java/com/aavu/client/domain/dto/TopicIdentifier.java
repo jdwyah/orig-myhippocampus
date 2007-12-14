@@ -1,9 +1,9 @@
 package com.aavu.client.domain.dto;
 
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class TopicIdentifier implements HippoIdentifier, IsSerializable, Comparable {
+public class TopicIdentifier implements HippoIdentifier, Serializable, Comparable<TopicIdentifier> {
 
 	private long topicID;
 	private String topicTitle;
@@ -80,15 +80,11 @@ public class TopicIdentifier implements HippoIdentifier, IsSerializable, Compara
 	/**
 	 * no compartToIgnoreCase in GWT String impl
 	 */
-	public int compareTo(Object o) {
-		if (o instanceof TopicIdentifier) {
-			TopicIdentifier other = (TopicIdentifier) o;
-			return getTopicTitle().toLowerCase().compareTo(other.getTopicTitle().toLowerCase());
+	public int compareTo(TopicIdentifier o) {
+		if (o == null) {
+			return 1;
 		}
-		if (o instanceof String) {
-			return getTopicTitle().toLowerCase().compareTo(((String) o).toLowerCase());
-		} else {
-			throw new UnsupportedOperationException();
-		}
+		return getTopicTitle().toLowerCase().compareTo(o.getTopicTitle().toLowerCase());
+
 	}
 }

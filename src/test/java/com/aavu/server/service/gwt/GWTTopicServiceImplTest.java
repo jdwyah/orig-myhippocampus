@@ -10,7 +10,7 @@ import com.aavu.client.domain.MetaTopic;
 import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
-import com.aavu.client.domain.dto.FullTopicIdentifier;
+import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.exception.HippoBusinessException;
 import com.aavu.client.exception.HippoException;
@@ -227,10 +227,10 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 		shoppingList.add(new TopicIdentifier(35, "foo", false));
 
 
-		List<List<FullTopicIdentifier>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);
+		List<List<TimeLineObj>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);
 
-		for (List<FullTopicIdentifier> ftis : rtn) {
-			for (FullTopicIdentifier identifier : ftis) {
+		for (List<TimeLineObj> ftis : rtn) {
+			for (TimeLineObj identifier : ftis) {
 				log.debug(identifier);
 			}
 		}
@@ -244,10 +244,10 @@ public class GWTTopicServiceImplTest extends BaseTestNoTransaction {
 		shoppingList.add(new TopicIdentifier(35, "foo", false));
 
 
-		List<List<FullTopicIdentifier>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);
+		List<List<TimeLineObj>> rtn = gwtTopicService.getTimelineWithTags(shoppingList);
 
-		for (List<FullTopicIdentifier> ftis : rtn) {
-			for (FullTopicIdentifier identifier : ftis) {
+		for (List<TimeLineObj> ftis : rtn) {
+			for (TimeLineObj identifier : ftis) {
 				log.debug(identifier);
 			}
 		}

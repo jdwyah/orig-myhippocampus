@@ -36,8 +36,8 @@ public class BlogView extends Composite implements ExplorerPanel {
 	/**
 	 * NOTE the - we want them in reverse chronological order.
 	 */
-	private static final Comparator dateComparator = new Comparator() {
-		public int compare(Object o1, Object o2) {
+	private static final Comparator<DatedTopicIdentifier> dateComparator = new Comparator<DatedTopicIdentifier>() {
+		public int compare(DatedTopicIdentifier o1, DatedTopicIdentifier o2) {
 			DatedTopicIdentifier o = (DatedTopicIdentifier) o1;
 			DatedTopicIdentifier oo = (DatedTopicIdentifier) o2;
 			return -o.getLastUpdated().compareTo(oo.getLastUpdated());
@@ -130,7 +130,7 @@ public class BlogView extends Composite implements ExplorerPanel {
 	}
 
 	public void load(Topic topic) {
-		List l = new ArrayList();
+		List<Topic> l = new ArrayList<Topic>();
 		l.add(topic);
 		load(l);
 	}

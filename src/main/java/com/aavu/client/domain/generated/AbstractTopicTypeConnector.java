@@ -3,9 +3,8 @@ package com.aavu.client.domain.generated;
 import java.io.Serializable;
 
 import com.aavu.client.domain.Topic;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class AbstractTopicTypeConnector implements Serializable, IsSerializable {
+public class AbstractTopicTypeConnector implements Serializable {
 
 	private long id;
 	private Topic topic;

@@ -199,8 +199,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 			Association cur1 = (Association) getAssociations().iterator().next();
 			System.out.println("Topic.addMetaValue CMP " + cur1.compare(assoc));
 
-			for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-				Association cur = (Association) iter.next();
+			for (Association cur : getAssociations()) {
 
 				System.out.println("Topic.addMetaValue cmp 2 " + cur.compare(assoc));
 				if (cur.equals(assoc)) {
@@ -278,11 +277,10 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		return CollectionUtils.removeFromCollectionById(getAssociations(), assoc.getId());
 	}
 
-	public Set getEntries() {
-		Set rtn = new HashSet();
+	public Set<Entry> getEntries() {
+		Set<Entry> rtn = new HashSet<Entry>();
 
-		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
-			Occurrence occur = (Occurrence) iter.next();
+		for (Occurrence occur : getOccurenceObjs()) {
 			if (occur instanceof Entry) {
 				rtn.add((Entry) occur);
 			}
@@ -297,10 +295,10 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * @return
 	 */
-	public Set getOccurenceObjs() {
-		Set rtn = new HashSet();
-		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
-			TopicOccurrenceConnector twl = (TopicOccurrenceConnector) iter.next();
+	public Set<Occurrence> getOccurenceObjs() {
+		Set<Occurrence> rtn = new HashSet<Occurrence>();
+
+		for (TopicOccurrenceConnector twl : getOccurences()) {
 			rtn.add(twl.getOccurrence());
 		}
 		return rtn;
@@ -308,8 +306,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 
 	public Entry getLatestEntry() {
 
-		for (Iterator iterator = getOccurenceObjs().iterator(); iterator.hasNext();) {
-			Occurrence occ = (Occurrence) iterator.next();
+		for (Occurrence occ : getOccurenceObjs()) {
 			if (occ instanceof Entry) {
 				return (Entry) occ;
 			}
@@ -335,7 +332,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 */
 	public MindTreeOcc getMyMindTree() {
 		MindTreeOcc rtn = null;
-		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
+		for (Iterator<Occurrence> iter = getOccurenceObjs().iterator(); iter.hasNext();) {
 			Occurrence occur = (Occurrence) iter.next();
 			if (occur instanceof MindTreeOcc) {
 				rtn = (MindTreeOcc) occur;
@@ -370,7 +367,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		return getTitle();
 	}
 
-	public Set getTags() {
+	public Set<Topic> getTags() {
 		return getTypesAsTopics();
 	}
 
@@ -391,12 +388,10 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 
 		try {
 			tagsStr.append(indent + "Types: \n" + indent);
-			for (Iterator iter = getTypesAsTopics().iterator(); iter.hasNext();) {
-				Topic element = (Topic) iter.next();
+			for (Topic element : getTypesAsTopics()) {
 				tagsStr.append(element.getId() + " " + element.getTitle());
 				tagsStr.append("\n");
-				for (Iterator iterator = element.getTagProperties().iterator(); iterator.hasNext();) {
-					Meta meta = (Meta) iterator.next();
+				for (Meta meta : element.getTagProperties()) {
 					tagsStr.append(indent + "Meta: " + meta.getId() + " " + meta.getName());
 					tagsStr.append("\n");
 				}
@@ -413,18 +408,15 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		}
 		try {
 			metaVStr.append(indent + "Associations:\n" + indent);
-			for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-				Association assoc = (Association) iter.next();
+			for (Association assoc : getAssociations()) {
 
 				metaVStr.append("ASS: " + assoc.getTitle() + " " + assoc.getId() + "\n" + indent);
 				metaVStr.append("Types:\n" + indent);
-				for (Iterator iterator = assoc.getTypesAsTopics().iterator(); iterator.hasNext();) {
-					Topic type = (Topic) iterator.next();
+				for (Topic type : assoc.getTypesAsTopics()) {
 					metaVStr.append("T: " + type.getTitle() + " " + type.getId() + "\n" + indent);
 				}
 				metaVStr.append("Members:\n" + indent);
-				for (Iterator iterator = assoc.getMembers().iterator(); iterator.hasNext();) {
-					Topic member = (Topic) iterator.next();
+				for (Topic member : assoc.getMembers()) {
 					metaVStr.append("M: " + member.getTitle() + " " + member.getId() + "\n"
 							+ indent);
 				}
@@ -447,8 +439,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		// }
 		try {
 			occurencesStr.append(indent + "Occurrences:\n" + indent);
-			for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
-				Occurrence occurence = (Occurrence) iter.next();
+			for (Occurrence occurence : getOccurenceObjs()) {
 
 				occurencesStr.append("Occurrence: " + occurence.getTitle() + " "
 						+ occurence.getId() + " " + occurence.getData() + "\n" + indent);
@@ -479,7 +470,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 
 	private Association getSeeAlsoAssociation(MetaSeeAlso seeAlsoSingleton) {
 
-		final Set found = new HashSet();
+		final Set<MetaSeeAlso> found = new HashSet<MetaSeeAlso>();
 
 		TopicVisitor visitor = new TopicVisitorAdapter() {
 			public void visit(MetaSeeAlso meta) {
@@ -487,11 +478,8 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 			}
 		};
 
-		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-			Association association = (Association) iter.next();
-			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
-
-				Topic possibleSee = (Topic) iterator.next();
+		for (Association association : getAssociations()) {
+			for (Topic possibleSee : association.getTypesAsTopics()) {
 
 				possibleSee.accept(visitor);
 
@@ -526,13 +514,12 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * @return
 	 */
-	public Set getTagProperties() {
-		Set metas = new HashSet();
+	public Set<Meta> getTagProperties() {
+		Set<Meta> metas = new HashSet<Meta>();
 
 		Association association = getTagPropertyAssociation();
 
-		for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
-			Topic possibleMeta = (Topic) iterator.next();
+		for (Topic possibleMeta : association.getMembers()) {
 
 			// System.out.println("Topic.getTagProperties CHECKING "+possibleMeta);
 
@@ -540,7 +527,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 			// Metas.
 			//
 			if (possibleMeta instanceof Meta) {
-				metas.add(possibleMeta);
+				metas.add((Meta) possibleMeta);
 			}
 		}
 
@@ -553,14 +540,13 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * @return
 	 */
 	public Association getTagPropertyAssociation() {
-		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-			Association association = (Association) iter.next();
+		for (Association association : getAssociations()) {
 
 			// System.out.println("Topic.getTagPropertyAssociation: "+association+" Member size:
 			// "+association.getMembers().size());
 
-			for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
-				Topic possibleMeta = (Topic) iterator.next();
+
+			for (Topic possibleMeta : association.getMembers()) {
 
 				// System.out.println("Checking: "+possibleMeta);
 				if (possibleMeta instanceof Meta) {
@@ -580,18 +566,15 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * @return
 	 */
-	public Set getPropertiesDueToTags() {
-		Set metas = new HashSet();
-		for (Iterator tagIter = getTypesAsTopics().iterator(); tagIter.hasNext();) {
-			Topic myTag = (Topic) tagIter.next();
-			for (Iterator iter = myTag.getAssociations().iterator(); iter.hasNext();) {
-				Association association = (Association) iter.next();
+	public Set<Meta> getPropertiesDueToTags() {
+		Set<Meta> metas = new HashSet<Meta>();
+		for (Topic myTag : getTypesAsTopics()) {
+			for (Association association : myTag.getAssociations()) {
 
-				for (Iterator iterator = association.getMembers().iterator(); iterator.hasNext();) {
-					Topic possibleMeta = (Topic) iterator.next();
+				for (Topic possibleMeta : association.getMembers()) {
 
 					if (possibleMeta instanceof Meta) {
-						metas.add(possibleMeta);
+						metas.add((Meta) possibleMeta);
 					}
 				}
 			}
@@ -609,8 +592,8 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * @return
 	 */
-	public Set getMetas() {
-		final Set metas = new HashSet();
+	public Set<Meta> getMetas() {
+		final Set<Meta> metas = new HashSet<Meta>();
 
 		TopicVisitor visitor = new TopicVisitorAdapter() {
 			// @Override
@@ -625,13 +608,11 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		};
 
 		// System.out.println("Topic.getMetas() assoc size"+getAssociations().size());
-		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-			Association association = (Association) iter.next();
+		for (Association association : getAssociations()) {
 
 			// System.out.println("Topic.getMetas() assoc "+association);
 
-			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
-				Topic possibleMeta = (Topic) iterator.next();
+			for (Topic possibleMeta : association.getTypesAsTopics()) {
 
 				// carefull, these break GWT bc of .getClass
 				// System.out.println("getMetas() possible meta "+possibleMeta+" "+(possibleMeta
@@ -648,13 +629,11 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	private Association getAssociationForMetaOrNull(Meta meta) {
 
 		// System.out.println("Topic.NUM assoc "+getAssociations().size());
-		for (Iterator iter = getAssociations().iterator(); iter.hasNext();) {
-			Association association = (Association) iter.next();
+		for (Association association : getAssociations()) {
 
 			// System.out.println("Topic.association.members.size()
 			// "+association.getMembers().size());
-			for (Iterator iterator = association.getTypesAsTopics().iterator(); iterator.hasNext();) {
-				Topic possible = (Topic) iterator.next();
+			for (Topic possible : association.getTypesAsTopics()) {
 
 				// System.out.println("Topic.getAssociationForMetaOrNull "+possible.getId()+"
 				// "+meta.getId());
@@ -667,12 +646,12 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		return null;
 	}
 
-	public Set getMetaValuesFor(Meta meta) {
+	public Set<Topic> getMetaValuesFor(Meta meta) {
 		Association assoc = getAssociationForMetaOrNull(meta);
 		if (assoc != null) {
 			return assoc.getMembers();
 		} else {
-			return new HashSet();
+			return new HashSet<Topic>();
 		}
 	}
 
@@ -683,9 +662,9 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * @return
 	 */
 	public Topic getSingleMetaValueFor(Meta meta) {
-		Set s = getMetaValuesFor(meta);
+		Set<Topic> s = getMetaValuesFor(meta);
 		if (s.size() > 0)
-			return (Topic) s.iterator().next();
+			return s.iterator().next();
 		else
 			return null;
 	}
@@ -776,8 +755,8 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		// type.getInstances().add(conn);
 
 		boolean exists = false;
-		for (Iterator iterator = getTypes().iterator(); iterator.hasNext();) {
-			TopicTypeConnector ttc = (TopicTypeConnector) iterator.next();
+
+		for (TopicTypeConnector ttc : getTypes()) {
 			if (ttc.getType().equals(type)) {
 				exists = true;
 			}
@@ -803,9 +782,9 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 
 		boolean found = false;
 
-		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
+		for (Iterator<TopicTypeConnector> iter = getTypes().iterator(); iter.hasNext();) {
 
-			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
+			TopicTypeConnector twl = iter.next();
 
 			if (twl.getType().equals(topic)) {
 				iter.remove();
@@ -819,9 +798,9 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		boolean found = false;
 
 		System.out.println("remove occ from size" + getOccurences().size());
-		for (Iterator iter = getOccurences().iterator(); iter.hasNext();) {
+		for (Iterator<TopicOccurrenceConnector> iter = getOccurences().iterator(); iter.hasNext();) {
 
-			TopicOccurrenceConnector toc = (TopicOccurrenceConnector) iter.next();
+			TopicOccurrenceConnector toc = iter.next();
 
 			System.out.println("toc " + toc);
 			if (toc.getOccurrence().equals(theOcc)) {
@@ -833,11 +812,9 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		return found;
 	}
 
-	public Set getTypesAsTopics() {
-
-		Set rtn = new HashSet();
-		for (Iterator iter = getTypes().iterator(); iter.hasNext();) {
-			TopicTypeConnector twl = (TopicTypeConnector) iter.next();
+	public Set<Topic> getTypesAsTopics() {
+		Set<Topic> rtn = new HashSet<Topic>();
+		for (TopicTypeConnector twl : getTypes()) {
 			rtn.add(twl.getType());
 		}
 		return rtn;
@@ -854,23 +831,21 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 		return true;
 	}
 
-	public Set getWebLinks() {
-		Set rtn = new HashSet();
-		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
-			Occurrence occ = (Occurrence) iter.next();
+	public Set<WebLink> getWebLinks() {
+		Set<WebLink> rtn = new HashSet<WebLink>();
+		for (Occurrence occ : getOccurenceObjs()) {
 			if (occ instanceof WebLink) {
-				rtn.add(occ);
+				rtn.add((WebLink) occ);
 			}
 		}
 		return rtn;
 	}
 
-	public Set getFiles() {
-		Set rtn = new HashSet();
-		for (Iterator iter = getOccurenceObjs().iterator(); iter.hasNext();) {
-			Occurrence occ = (Occurrence) iter.next();
+	public Set<S3File> getFiles() {
+		Set<S3File> rtn = new HashSet<S3File>();
+		for (Occurrence occ : getOccurenceObjs()) {
 			if (occ instanceof S3File) {
-				rtn.add(occ);
+				rtn.add((S3File) occ);
 			}
 		}
 		return rtn;
@@ -882,12 +857,11 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * @return
 	 */
-	public Set getTagPropertyDates() {
-		Set rtn = new HashSet();
-		for (Iterator iter = getTagProperties().iterator(); iter.hasNext();) {
-			Meta meta = (Meta) iter.next();
+	public Set<MetaDate> getTagPropertyDates() {
+		Set<MetaDate> rtn = new HashSet<MetaDate>();
+		for (Meta meta : getTagProperties()) {
 			if (meta instanceof MetaDate) {
-				rtn.add(meta);
+				rtn.add((MetaDate) meta);
 			}
 		}
 		return rtn;
@@ -902,8 +876,8 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * @return
 	 */
-	public Set getAllMetas(Meta type) {
-		Set s = getOnlyMetaOfType(getMetas(), type);
+	public Set<Meta> getAllMetas(Meta type) {
+		Set<Meta> s = getOnlyMetaOfType(getMetas(), type);
 		s.addAll(getOnlyMetaOfType(getPropertiesDueToTags(), type));
 		return s;
 	}
@@ -914,7 +888,7 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * 
 	 * @return
 	 */
-	public Set getTagPropertyBasedMetas(Meta type) {
+	public Set<Meta> getTagPropertyBasedMetas(Meta type) {
 		return getOnlyMetaOfType(getPropertiesDueToTags(), type);
 	}
 
@@ -931,10 +905,10 @@ public abstract class Topic extends AbstractTopic implements Serializable, Reall
 	 * @param date
 	 * @return
 	 */
-	public Set getOnlyMetaOfType(Set fromSet, Meta type) {
-		Set rtn = new HashSet();
-		for (Iterator iter = fromSet.iterator(); iter.hasNext();) {
-			Meta meta = (Meta) iter.next();
+	public Set<Meta> getOnlyMetaOfType(Set<Meta> fromSet, Meta type) {
+		Set<Meta> rtn = new HashSet<Meta>();
+		for (Iterator<Meta> iter = fromSet.iterator(); iter.hasNext();) {
+			Meta meta = iter.next();
 
 			if (meta.getType().equals(type.getType())) {
 				rtn.add(meta);

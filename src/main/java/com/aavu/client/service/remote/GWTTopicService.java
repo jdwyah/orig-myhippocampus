@@ -3,13 +3,19 @@ package com.aavu.client.service.remote;
 import java.util.Date;
 import java.util.List;
 
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LinkAndUser;
+import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.SearchResult;
 import com.aavu.client.domain.dto.TagStat;
+import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
@@ -30,122 +36,77 @@ public interface GWTTopicService extends RemoteService {
 
 	void delete(long id) throws HippoException;
 
-	/**
-	 * @gwt.typeArgs topics <com.aavu.client.domain.dto.TopicIdentifier>
-	 */
-	void editVisibility(List topics, boolean visible) throws HippoException;
 
-	// List <LocationDTO>
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.LocationDTO>
-	 */
-	List getAllLocations() throws HippoException;
+	void editVisibility(List<TopicIdentifier> topics, boolean visible) throws HippoException;
 
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.Meta>
-	 */
-	List getAllMetas() throws HippoException;
 
-	// List<DatedTopicIdentifier>
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.DatedTopicIdentifier>
-	 */
-	List getAllTopicIdentifiers(int start, int max, String startStr) throws HippoException;
+	List<LocationDTO> getAllLocations() throws HippoException;
 
-	/**
-	 * @throws HippoException
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
-	 */
-	List getDeleteList(long id) throws HippoException;
 
-	/**
-	 * @throws HippoException
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
-	 */
-	List getMakePublicList(long id) throws HippoException;
+	List<Meta> getAllMetas() throws HippoException;
+
+
+	List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr)
+			throws HippoException;
+
+
+	List<TopicIdentifier> getDeleteList(long id) throws HippoException;
+
+
+	List<TopicIdentifier> getLinksTo(Topic topic) throws HippoException;
 
 
 
-	// List<TimeLineObj>
-	// List getTimelineObjs(long tag_id) throws HippoException;
 
-	// List<TopicIdentifier>
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
-	 */
-	List getLinksTo(Topic topic) throws HippoException;
+	List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList)
+			throws HippoException;
 
-	// List<List <LocationDTO>>
-	/**
-	 * @gwt.typeArgs shoppingList <com.aavu.client.domain.dto.TopicIdentifier>
-	 * @gwt.typeArgs <java.util.List<com.aavu.client.domain.dto.LocationDTO>>
-	 */
-	List getLocationsForTags(List shoppingList) throws HippoException;
 
-	// List<TimeLineObj>
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.TimeLineObj>
-	 */
-	List getTimeline() throws HippoException;
-
-	// List<List<TimeLineObj>>
-	/**
-	 * @gwt.typeArgs shoppingList <com.aavu.client.domain.dto.TopicIdentifier>
-	 * @gwt.typeArgs <java.util.List<com.aavu.client.domain.dto.TimeLineObj>>
-	 */
-	List getTimelineWithTags(List shoppingList) throws HippoException;
-
-	// void save(Topic topic, String[] seeAlsos);
-	Topic getTopicByID(long topicID) throws HippoException;
-
-	Topic getTopicForName(String topicName);
-
-	// List<FullTopicIdentifier>
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.FullTopicIdentifier>
-	 */
-	List getTopicIdsWithTag(long id) throws HippoException;
-
-	TagStat[] getTagStats() throws HippoException;
+	List<TopicIdentifier> getMakePublicList(long id) throws HippoException;
 
 	/**
 	 * 
 	 */
 	Root getRootTopic(User forUser) throws HippoException;
 
-	// List<TopicIdentifier>
-	// List<List<FullTopicIdentifier>>
-	/**
-	 * @gwt.typeArgs shoppingList <com.aavu.client.domain.dto.TopicIdentifier>
-	 * @gwt.typeArgs <java.util.List<com.aavu.client.domain.dto.TopicIdentifier>>
-	 */
-	List getTopicsWithTags(List shoppingList) throws HippoException;
+
+	TagStat[] getTagStats() throws HippoException;
+
+	List<TimeLineObj> getTimeline() throws HippoException;
+
+	List<List<TimeLineObj>> getTimelineWithTags(List<TopicIdentifier> shoppingList)
+			throws HippoException;
+
+
+	// void save(Topic topic, String[] seeAlsos);
+	Topic getTopicByID(long topicID) throws HippoException;
+
+	Topic getTopicForName(String topicName);
+
+	List<FullTopicIdentifier> getTopicIdsWithTag(long id) throws HippoException;
+
+
+	List<List<FullTopicIdentifier>> getTopicsWithTags(List<TopicIdentifier> shoppingList)
+			throws HippoException;
 
 	MindTree getTree(MindTreeOcc occ) throws HippoException;
 
 	LinkAndUser getWebLinkForURLAndUser(String url) throws HippoException;
 
-	// List<TopicIdentifier>
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.TopicIdentifier>
-	 */
-	List match(String match);// List<String>
+	List<TopicIdentifier> match(String match);// List<String>
 
 	void saveCommand(AbstractCommand command) throws HippoBusinessException, HippoException;
 
-	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
-
 	void saveOccurrenceLocation(long topicID, long occurrenceID, int lat, int lng)
 			throws HippoException;
+
+	void saveTopicLocation(long tagId, long topicId, int lat, int lng) throws HippoException;
 
 	MindTree saveTree(MindTree tree) throws HippoException;
 
 
 	// C test(C a);
 
-	// List<SearchResult>
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.dto.SearchResult>
-	 */
-	List search(String searchString) throws HippoException;
+
+	List<SearchResult> search(String searchString) throws HippoException;
 }

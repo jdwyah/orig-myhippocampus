@@ -4,13 +4,11 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
 /**
  * Each user should have 1 'root' node.
  */
 
-public class Root extends RealTopic implements IsSerializable, Serializable {
+public class Root extends RealTopic implements Serializable {
 
 	public Root() {
 	}

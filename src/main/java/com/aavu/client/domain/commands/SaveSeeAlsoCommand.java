@@ -1,12 +1,12 @@
 package com.aavu.client.domain.commands;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.aavu.client.domain.MetaSeeAlso;
 import com.aavu.client.domain.Topic;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveSeeAlsoCommand extends AbstractCommand implements IsSerializable {
+public class SaveSeeAlsoCommand extends AbstractCommand implements Serializable {
 
 	public SaveSeeAlsoCommand() {
 	}

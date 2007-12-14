@@ -1,14 +1,13 @@
 package com.aavu.client.domain.commands;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoBusinessException;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 
@@ -19,7 +18,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * NOTE, this stores the topics in the topics list, but because there may or may not be a removeTag
  * in there and bc the list may be of any length, be carefull when assuming which topic is which
  */
-public class AddToTopicCommand extends AbstractCommand implements IsSerializable {
+public class AddToTopicCommand extends AbstractCommand implements Serializable {
 
 	private boolean useRemove;
 
@@ -29,14 +28,14 @@ public class AddToTopicCommand extends AbstractCommand implements IsSerializable
 	public AddToTopicCommand(Topic topic, Topic tagToAddThingsTo) {
 		useRemove = false;
 
-		List topics = new ArrayList();
+		List<Topic> topics = new ArrayList<Topic>();
 		topics.add(tagToAddThingsTo);
 		topics.add(topic);
 
 		init(topics);
 	}
 
-	public AddToTopicCommand(List _topics, Topic tagToAddThingsTo, Topic removeFromTag) {
+	public AddToTopicCommand(List<Topic> _topics, Topic tagToAddThingsTo, Topic removeFromTag) {
 
 		_topics.add(0, tagToAddThingsTo);
 
@@ -56,12 +55,12 @@ public class AddToTopicCommand extends AbstractCommand implements IsSerializable
 	 * @param tagToAddThingsTo
 	 * @param removeFromTag
 	 */
-	public AddToTopicCommand(Set selectedTopics, Topic tagToAddThingsTo, Topic removeFromTag) {
+	public AddToTopicCommand(Set<Topic> selectedTopics, Topic tagToAddThingsTo, Topic removeFromTag) {
 
-		this(new ArrayList(selectedTopics), tagToAddThingsTo, removeFromTag);
+		this(new ArrayList<Topic>(selectedTopics), tagToAddThingsTo, removeFromTag);
 	}
 
-	private List getTopicsToProcess() {
+	private List<Topic> getTopicsToProcess() {
 		if (useRemove) {
 			return subList(getTopics(), 2, getTopics().size());
 		} else {
@@ -91,7 +90,7 @@ public class AddToTopicCommand extends AbstractCommand implements IsSerializable
 	// @Override
 	public void executeCommand() throws HippoBusinessException {
 
-		List topicsToProcess = getTopicsToProcess();
+		List<Topic> topicsToProcess = getTopicsToProcess();
 
 		Topic tag = getTagToAddThingsTo();
 		Topic removeFromThis = getRemoveFromThis();
@@ -99,9 +98,8 @@ public class AddToTopicCommand extends AbstractCommand implements IsSerializable
 
 		System.out.println(toString());
 
+		for (Topic toProcess : topicsToProcess) {
 
-		for (Iterator iterator = topicsToProcess.iterator(); iterator.hasNext();) {
-			Topic toProcess = (Topic) iterator.next();
 
 			// System.out.println("AddToTagCommand to process " + toProcess + " occ "
 			// + (toProcess instanceof Occurrence));
@@ -141,8 +139,8 @@ public class AddToTopicCommand extends AbstractCommand implements IsSerializable
 
 
 	// @Override
-	public Set getAffectedTopics() {
-		Set s = super.getAffectedTopics();
+	public Set<Topic> getAffectedTopics() {
+		Set<Topic> s = super.getAffectedTopics();
 		s.add(getTagToAddThingsTo());
 		if (getRemoveFromThis() != null) {
 			s.add(getRemoveFromThis());

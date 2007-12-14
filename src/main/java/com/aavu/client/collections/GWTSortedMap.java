@@ -8,97 +8,75 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class GWTSortedMap implements Map {
+/**
+ * Implement a SortedMap for GWT using existing collection classes.
+ * 
+ * @author Jeff Dwyer
+ * 
+ * @param <X>
+ * @param <V>
+ */
+public class GWTSortedMap<X extends Comparable<? super X>, V> implements Map<X, V> {
 
-	private ListImplementingASet keys = new ListImplementingASet();
-	private Map map = new HashMap();
+	private ListImplementingASet<X> keys = new ListImplementingASet<X>();
+	private Map<X, V> map = new HashMap<X, V>();
 
 	private boolean dirty = false;
 
-	private Comparator compare = null;
-	
+	private Comparator<? super X> compare = null;
+
 	/**
 	 * use default comparator
-	 *
+	 * 
 	 */
-	public GWTSortedMap(){
-		
+	public GWTSortedMap() {
+
 	}
+
 	/**
-	 * specify key comparator 
+	 * specify key comparator
 	 * 
 	 * @param comp
 	 */
-	public GWTSortedMap(Comparator comp){
+	public GWTSortedMap(Comparator<? super X> comp) {
 		this.compare = comp;
 	}
-	
-	public List getKeyList() {
-		if(dirty){
-			System.out.println("GWTSortedMap.SORT ");
-			if(compare == null){
-				Collections.sort(keys.getList());
-			}else{
-				Collections.sort(keys.getList(),compare);
-			}
-			dirty = false;
-		}
+
+	public List<X> getKeyList() {
+		keySet();
 		return keys.getList();
-	}
-	
-	public Set keySet() {
-		if(dirty){
-			System.out.println("SORT ");
-			if(compare == null){
-				Collections.sort(keys.getList());
-			}else{
-				Collections.sort(keys.getList(),compare);
-			}
-			dirty = false;
-		}
-		return keys;
 	}
 
 	/**
-	 * Carefull. This class manages this itself, but if you want to prevent
-	 * a sort you can... 
+	 * Carefull. This class manages this itself, but if you want to prevent a sort you can...
 	 */
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
-	}
-	/**
-	 * Unimplemented. Call keySet() instead
-	 */
-	public Set entrySet() {
-		throw new UnsupportedOperationException();
-	}
-	/**
-	 * Unimplemented. Call keySet() instead
-	 */
-	public Collection values() {
-		throw new UnsupportedOperationException();
-	}
-
-	public Object put(Object key, Object value) {
-		dirty  = true;
-		keys.add(key);
-		return map.put(key, value);		
-	}
-
-	public void putAll(Map t) {
-		dirty = true;
-		keys.addAll(t.keySet());
-		map.putAll(t);
-	}
-
-	public Object remove(Object key) {
-		keys.remove(key);
-		return map.remove(key);
 	}
 
 	public void clear() {
 		keys.clear();
 		map.clear();
+	}
+
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	public int size() {
+		return map.size();
+	}
+
+	public V put(X key, V value) {
+		dirty = true;
+		keys.add(key);
+		return map.put(key, value);
+	}
+
+	public void putAll(Map<? extends X, ? extends V> t) {
+		dirty = true;
+		keys.addAll(t.keySet());
+		map.putAll(t);
 	}
 
 	public boolean containsKey(Object key) {
@@ -109,16 +87,40 @@ public class GWTSortedMap implements Map {
 		return map.containsValue(value);
 	}
 
-	public Object get(Object key) {
+	/**
+	 * Unimplemented. Call keySet() instead
+	 */
+	public Set<java.util.Map.Entry<X, V>> entrySet() {
+		throw new UnsupportedOperationException();
+	}
+
+	public V get(Object key) {
 		return map.get(key);
 	}
 
-	public boolean isEmpty() {
-		return map.isEmpty();
+	public Set<X> keySet() {
+		if (dirty) {
+			System.out.println("SORT ");
+			if (compare == null) {
+				Collections.sort(keys.getList());
+			} else {
+				Collections.sort(keys.getList(), compare);
+			}
+			dirty = false;
+		}
+		return keys;
 	}
 
-	public int size() {
-		return map.size();
+	public V remove(Object key) {
+		keys.remove(key);
+		return map.remove(key);
+	}
+
+	/**
+	 * Unimplemented. Call keySet() instead
+	 */
+	public Collection<V> values() {
+		throw new UnsupportedOperationException();
 	}
 
 }

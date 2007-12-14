@@ -2,8 +2,6 @@ package com.aavu.client.gui.glossary;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +30,10 @@ public class Glossary extends FocusPanel {
 	/**
 	 * case insensitve comparator for topic names
 	 */
-	private static Comparator caseInsensitive = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			String o = (String) o1;
-			String oo = (String) o2;
-			return o.toLowerCase().compareTo(o.toLowerCase());
+	private static Comparator<String> caseInsensitive = new Comparator<String>() {
+		public int compare(String o1, String o2) {
+			String o = o1;
+			return o.toLowerCase().compareTo(o2.toLowerCase());
 		}
 	};
 
@@ -46,7 +43,7 @@ public class Glossary extends FocusPanel {
 	private boolean dirty = true;
 
 
-	private Map keyToGlossaryPage = new HashMap();
+	// private Map keyToGlossaryPage = new HashMap();
 	private boolean adHocMode;
 
 	private VerticalPanel mainPanel;
@@ -81,7 +78,7 @@ public class Glossary extends FocusPanel {
 
 		adHocMode = true;
 
-		innerLoad(new ArrayList());
+		innerLoad(new ArrayList<TopicIdentifier>());
 
 		// manager.getTopicCache().getAllTopicIdentifiers(new
 		// StdAsyncCallback(ConstHolder.myConstants.topic_getAllAsync()){
@@ -96,11 +93,11 @@ public class Glossary extends FocusPanel {
 
 	public void load(Topic toLoad) {
 		manager.getTopicCache().getTopicsWithTag(toLoad.getId(),
-				new StdAsyncCallback("Glossary Fetch") {
+				new StdAsyncCallback<List<TopicIdentifier>>("Glossary Fetch") {
 					// @Override
-					public void onSuccess(Object result) {
+					public void onSuccess(List<TopicIdentifier> result) {
 						super.onSuccess(result);
-						loadIdents((List) result);
+						loadIdents(result);
 					}
 				});
 	}
@@ -110,44 +107,44 @@ public class Glossary extends FocusPanel {
 	 * 
 	 * @param topicIdents
 	 */
-	private void loadIdents(List topicIdents) {
+	private void loadIdents(List<TopicIdentifier> topicIdents) {
 
 		adHocMode = false;
 
 		innerLoad(topicIdents);
 	}
 
-	private void innerLoad(List arrayList) {
+	private void innerLoad(List<TopicIdentifier> arrayList) {
 
 		alphabetizeTopics(arrayList);
 		dirty = false;
 	}
 
 
-	protected void alphabetizeTopics(List topics) {
-		// <String,Map<String,TopicIdentifier>>
-		Map allEntries = new GWTSortedMap();
+	protected void alphabetizeTopics(List<TopicIdentifier> topics) {
+		// 
+		Map<String, GWTSortedMap<String, TopicIdentifier>> allEntries = new GWTSortedMap<String, GWTSortedMap<String, TopicIdentifier>>();
 
 		System.out.println("topics! " + topics.size());
 
 
 		for (char lett = 'A'; lett <= 'Z'; lett++) {
-			Map thisLetter = new GWTSortedMap(caseInsensitive);
+			GWTSortedMap<String, TopicIdentifier> thisLetter = new GWTSortedMap<String, TopicIdentifier>(
+					caseInsensitive);
 			allEntries.put(lett + "", thisLetter);
 		}
-		Map othersMap = new GWTSortedMap();
+		GWTSortedMap<String, TopicIdentifier> othersMap = new GWTSortedMap<String, TopicIdentifier>();
 		allEntries.put(OTHER, othersMap);
 
-		TopicIdentifier topicIdent = null;
-		for (Iterator ident = topics.iterator(); ident.hasNext();) {
 
-			topicIdent = (TopicIdentifier) ident.next();
+		for (TopicIdentifier topicIdent : topics) {
 
 			char firstLetter = topicIdent.getTopicTitle().charAt(0);
 
-			Map map = (Map) allEntries.get("" + Character.toUpperCase(firstLetter));
+			Map<String, TopicIdentifier> map = allEntries.get(""
+					+ Character.toUpperCase(firstLetter));
 			if (map == null) {
-				map = (Map) allEntries.get(OTHER);
+				map = allEntries.get(OTHER);
 			}
 			map.put(topicIdent.getTopicTitle(), topicIdent);
 		}
@@ -156,14 +153,13 @@ public class Glossary extends FocusPanel {
 	}
 
 
-	private void addAsLabels(Map sidebarEntries) {
+	private void addAsLabels(Map<String, GWTSortedMap<String, TopicIdentifier>> sidebarEntries) {
 		mainPanel.clear();
-		keyToGlossaryPage.clear();
+		// keyToGlossaryPage.clear();
 
-		for (Iterator iter = sidebarEntries.keySet().iterator(); iter.hasNext();) {
-			String key = (String) iter.next();
+		for (String key : sidebarEntries.keySet()) {
 
-			GWTSortedMap topics = (GWTSortedMap) sidebarEntries.get(key);
+			GWTSortedMap<String, TopicIdentifier> topics = sidebarEntries.get(key);
 
 			/*
 			 * NOTE this. We're claiming it's not dirty. Need to have Service/DAO return sorted &
@@ -182,8 +178,7 @@ public class Glossary extends FocusPanel {
 			letter.addStyleName("H-GlossaryLetter");
 			letterPage.add(letter);
 
-			for (Iterator iterator = topics.keySet().iterator(); iterator.hasNext();) {
-				String title = (String) iterator.next();
+			for (String title : topics.keySet()) {
 				final TopicIdentifier topic = (TopicIdentifier) topics.get(title);
 
 				letterPage.add(new TopicLink(topic));

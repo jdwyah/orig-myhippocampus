@@ -257,7 +257,7 @@ public class SubjectBoard extends Composite {
 		}
 	}
 
-	private class SubjectServicePicker extends ObjectListBox {
+	private class SubjectServicePicker extends ObjectListBox<Subject> {
 
 		public SubjectServicePicker() {
 			super();
@@ -273,7 +273,7 @@ public class SubjectBoard extends Composite {
 		}
 
 		public Subject getSelectedService() {
-			return (Subject) getSelectedObject();
+			return getSelectedObject();
 		}
 	}
 

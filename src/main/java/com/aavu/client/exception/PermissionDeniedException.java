@@ -1,11 +1,12 @@
 package com.aavu.client.exception;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class PermissionDeniedException extends Exception implements IsSerializable {
+public class PermissionDeniedException extends Exception implements Serializable {
 
-	public PermissionDeniedException(){}
-	
+	public PermissionDeniedException() {
+	}
+
 	public PermissionDeniedException(String string) {
 		super(string);
 	}

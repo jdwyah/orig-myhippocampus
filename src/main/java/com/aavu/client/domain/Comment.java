@@ -2,12 +2,10 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+public class Comment extends Entry implements Serializable, ReallyCloneable {
 
-public class Comment extends Entry implements Serializable,IsSerializable, ReallyCloneable {
-
-	//@Override
-	public Object clone() {				   		
+	// @Override
+	public Object clone() {
 		return copyPropsIntoParam(new Comment());
 	}
 

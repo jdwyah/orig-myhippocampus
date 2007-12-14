@@ -11,12 +11,17 @@ import org.apache.log4j.Logger;
 import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.MindTreeOcc;
 import com.aavu.client.domain.Root;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.DatedTopicIdentifier;
+import com.aavu.client.domain.dto.FullTopicIdentifier;
 import com.aavu.client.domain.dto.LinkAndUser;
+import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.SearchResult;
 import com.aavu.client.domain.dto.TagStat;
 import com.aavu.client.domain.dto.TimeLineObj;
 import com.aavu.client.domain.dto.TopicIdentifier;
@@ -110,8 +115,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	private List<TopicIdentifier> convertTopicToTIArray(List<Topic> list) {
 
 		List<TopicIdentifier> rtn = new ArrayList<TopicIdentifier>(list.size());
-		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-			Topic topic = (Topic) iterator.next();
+		for (Topic topic : list) {
 			rtn.add(topic.getIdentifier());
 		}
 		return rtn;
@@ -160,15 +164,15 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		topicService.delete(id);
 	}
 
-	public void editVisibility(List topics, boolean visible) throws HippoException {
+	public void editVisibility(List<TopicIdentifier> topics, boolean visible) throws HippoException {
 		topicService.editVisibility(topics, visible);
 	}
 
-	public List getAllLocations() throws HippoException {
+	public List<LocationDTO> getAllLocations() throws HippoException {
 		return topicService.getAllLocations();
 	}
 
-	public List getAllMetas() throws HippoException {
+	public List<Meta> getAllMetas() throws HippoException {
 		return topicService.getAllMetas();
 	}
 
@@ -178,29 +182,31 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * @throws HippoException
 	 * 
 	 */
-	public List getAllTopicIdentifiers(int start, int max, String startStr) throws HippoException {
+	public List<DatedTopicIdentifier> getAllTopicIdentifiers(int start, int max, String startStr)
+			throws HippoException {
 		return topicService.getAllTopicIdentifiers(start, max, startStr);
 	}
 
 	/**
 	 * had a problem with CGLIB if we return topics
 	 */
-	public List getDeleteList(long id) throws HippoException {
+	public List<TopicIdentifier> getDeleteList(long id) throws HippoException {
 		return convertTopicToTIArray(topicService.getDeleteList(id));
 	}
 
-	public List getLinksTo(Topic topic) throws HippoException {
+	public List<TopicIdentifier> getLinksTo(Topic topic) throws HippoException {
 		return topicService.getLinksTo(topic);
 	}
 
-	public List getLocationsForTags(List shoppingList) throws HippoException {
+	public List<List<LocationDTO>> getLocationsForTags(List<TopicIdentifier> shoppingList)
+			throws HippoException {
 		return topicService.getLocationsForTags(shoppingList);
 	}
 
 	/**
 	 * had a problem with CGLIB if we return topics
 	 */
-	public List getMakePublicList(long id) throws HippoException {
+	public List<TopicIdentifier> getMakePublicList(long id) throws HippoException {
 		return convertTopicToTIArray(topicService.getMakePublicList(id));
 	}
 
@@ -226,7 +232,8 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		return topicService.getTimeline();
 	}
 
-	public List<List<TimeLineObj>> getTimelineWithTags(List shoppingList) throws HippoException {
+	public List<List<TimeLineObj>> getTimelineWithTags(List<TopicIdentifier> shoppingList)
+			throws HippoException {
 		return topicService.getTimelineWithTags(shoppingList);
 	}
 
@@ -260,13 +267,14 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 	 * @throws HippoException
 	 * 
 	 */
-	public List getTopicIdsWithTag(long id) throws HippoException {
+	public List<FullTopicIdentifier> getTopicIdsWithTag(long id) throws HippoException {
 
 		return topicService.getTopicIdsWithTag(id);
 
 	}
 
-	public List getTopicsWithTags(List shoppingList) throws HippoException {
+	public List<List<FullTopicIdentifier>> getTopicsWithTags(List<TopicIdentifier> shoppingList)
+			throws HippoException {
 		return topicService.getTopicIdsWithTags(shoppingList);
 	}
 
@@ -280,11 +288,11 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 		return topicService.getWebLinkForURLAndUser(url);
 	}
 
-	public List match(String match) {
+	public List<TopicIdentifier> match(String match) {
 
 
 
-		List l = topicService.getTopicsStarting(match);
+		List<TopicIdentifier> l = topicService.getTopicsStarting(match);
 		log.debug("match " + match + " " + l.size());
 		return l;
 
@@ -310,7 +318,7 @@ public class GWTTopicServiceImpl extends GWTSpringControllerReplacement implemen
 
 	}
 
-	public List search(String searchString) throws HippoException {
+	public List<SearchResult> search(String searchString) throws HippoException {
 		return searchService.search(searchString);
 	}
 

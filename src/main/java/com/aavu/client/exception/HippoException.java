@@ -1,17 +1,15 @@
 package com.aavu.client.exception;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class HippoException extends Exception implements IsSerializable {
+public class HippoException extends Exception implements Serializable {
 
-	private String savedMessage; 
-	
-	public HippoException(){}
-	
+	private String savedMessage;
+
+	public HippoException() {
+	}
+
 	/**
-	 * We need to save the message string ourselves since Exception is not IsSerializable
-	 * I really wonder what Google's impetus for IsSerializable vs Serializable was. bit of
-	 * a pain...
 	 * 
 	 * @param string
 	 */
@@ -25,10 +23,10 @@ public class HippoException extends Exception implements IsSerializable {
 		savedMessage = e.getMessage();
 	}
 
-	//@Override
-	public String getMessage() {		
+	// @Override
+	public String getMessage() {
 		return savedMessage;
 	}
-	
-	
+
+
 }

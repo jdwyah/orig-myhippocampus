@@ -6,30 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class ListImplementingASet implements Set {
+public class ListImplementingASet<T> implements Set<T> {
 
-	private List implementingList = new ArrayList();
-	
-	public List getList(){
+	private List<T> implementingList = new ArrayList<T>();
+
+	public List<T> getList() {
 		return implementingList;
 	}
-	
-	public boolean add(Object o) {
-		if(!implementingList.contains(o)){
+
+	public boolean add(T o) {
+		if (!implementingList.contains(o)) {
 			return implementingList.add(o);
 		}
-		return false;		
-	}
-
-	public boolean addAll(Collection c) {
-		boolean rtn = false;
-		for (Iterator iter = c.iterator(); iter.hasNext();) {
-			Object element = iter.next();
-			if(add(element)){
-				rtn = true;			
-			}
-		}
-		return implementingList.addAll(c);
+		return false;
 	}
 
 	public void clear() {
@@ -40,15 +29,12 @@ public class ListImplementingASet implements Set {
 		return implementingList.contains(o);
 	}
 
-	public boolean containsAll(Collection c) {
-		return implementingList.containsAll(c);
-	}
 
 	public boolean isEmpty() {
 		return implementingList.isEmpty();
 	}
 
-	public Iterator iterator() {
+	public Iterator<T> iterator() {
 		return implementingList.iterator();
 	}
 
@@ -56,13 +42,6 @@ public class ListImplementingASet implements Set {
 		return implementingList.remove(o);
 	}
 
-	public boolean removeAll(Collection c) {
-		return implementingList.removeAll(c);
-	}
-
-	public boolean retainAll(Collection c) {
-		return implementingList.retainAll(c);
-	}
 
 	public int size() {
 		return implementingList.size();
@@ -75,9 +54,28 @@ public class ListImplementingASet implements Set {
 	/**
 	 * Not applicable? List interface doesn't seem to have this in GWT land.
 	 */
-	public Object[] toArray(Object[] a) {
+	public <T> T[] toArray(T[] a) {
 		throw new UnsupportedOperationException();
-		//return implementingList.toArray(a);
+		// return implementingList.toArray(a);
 	}
+
+
+	public boolean addAll(Collection<? extends T> c) {
+		return implementingList.addAll(c);
+	}
+
+	public boolean containsAll(Collection<?> c) {
+		return implementingList.containsAll(c);
+	}
+
+	public boolean removeAll(Collection<?> c) {
+		return implementingList.removeAll(c);
+	}
+
+	public boolean retainAll(Collection<?> c) {
+		return implementingList.retainAll(c);
+	}
+
+
 
 }

@@ -218,11 +218,7 @@ public class TagBoard extends Gadget implements CompleteListener, RemoveListener
 
 		// incommand tagsToSave.add(tag);
 		manager.getTopicCache().executeCommand(cur_topic, new AddToTopicCommand(cur_topic, tag),
-				new StdAsyncCallback(ConstHolder.myConstants.save()) {
-					// @Override
-					public void onSuccess(Object result) {
-						super.onSuccess(result);
-					}
+				new StdAsyncCallback<Void>(ConstHolder.myConstants.save()) {
 				});
 
 	}

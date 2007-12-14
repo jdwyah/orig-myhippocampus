@@ -2,9 +2,7 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-public class S3File extends URI implements Serializable, IsSerializable, ReallyCloneable {
+public class S3File extends URI implements Serializable, ReallyCloneable {
 
 	public S3File() {
 	}

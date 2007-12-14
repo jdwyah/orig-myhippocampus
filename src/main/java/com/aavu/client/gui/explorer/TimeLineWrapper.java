@@ -15,12 +15,12 @@ import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.dto.TimeLineObj;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.timeline.HippoTimeline;
 import com.aavu.client.gui.timeline.zoomer.ZoomableTimeline;
 import com.aavu.client.service.Manager;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -74,17 +74,17 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 	}
 
 	public void load(Topic topic) {
-		List l = new ArrayList();
+		List<Topic> l = new ArrayList<Topic>();
 		l.add(topic);
 		load(l);
 	}
 
-	public void load(List topics) {
+	public void load(List<Topic> topics) {
 
 
 		timeline.clear();
 
-		Topic curTopic = (Topic) topics.get(0);
+		Topic curTopic = topics.get(0);
 
 		loadOccs(curTopic);
 
@@ -98,20 +98,18 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 	}
 
 	private void loadMetas(Topic firstTopic) {
-		List shoppingList = new ArrayList();
+		List<TopicIdentifier> shoppingList = new ArrayList<TopicIdentifier>();
 		shoppingList.add(firstTopic.getIdentifier());
 		System.out.println("TimeLineWrapper.Getting Shopping list " + firstTopic.getIdentifier());
-		AsyncCallback callback = new TimeLineLookupWMerge();
+		TimeLineLookupWMerge callback = new TimeLineLookupWMerge();
 		manager.getTopicCache().getTimelineObjs(shoppingList, callback);
 	}
 
 	private void loadMyMetas(Topic firstTopic) {
 		System.out.println("TimeLineWrapper.getMyMetas");
-		List l = new ArrayList();
-		for (Iterator iterator = firstTopic.getAssociations().iterator(); iterator.hasNext();) {
-			Association assoc = (Association) iterator.next();
-			for (Iterator iterator2 = assoc.getMembers().iterator(); iterator2.hasNext();) {
-				Topic t = (Topic) iterator2.next();
+		List<TimeLineObj> l = new ArrayList<TimeLineObj>();
+		for (Association assoc : firstTopic.getAssociations()) {
+			for (Topic t : assoc.getMembers()) {
 				if (t instanceof HippoDate) {
 					HippoDate hippoDate = (HippoDate) t;
 					l.add(new TimeLineObj(firstTopic.getIdentifier(), hippoDate));
@@ -125,10 +123,8 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 
 	private void loadChildren(Topic firstTopic) {
 		System.out.println("TimeLineWrapper.getChildren");
-		List l = new ArrayList();
-		for (Iterator iterator = firstTopic.getInstances().iterator(); iterator.hasNext();) {
-			TopicTypeConnector toc = (TopicTypeConnector) iterator.next();
-
+		List<TimeLineObj> l = new ArrayList<TimeLineObj>();
+		for (TopicTypeConnector toc : firstTopic.getInstances()) {
 			RealTopic childTopic = (RealTopic) toc.getTopic();
 			l.add(new TimeLineObj(childTopic.getIdentifier(), childTopic));
 		}
@@ -138,16 +134,14 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 	}
 
 	private void loadOccs(Topic firstTopic) {
-		List l = new ArrayList();
-		for (Iterator iterator = firstTopic.getOccurenceObjs().iterator(); iterator.hasNext();) {
-			Occurrence occ = (Occurrence) iterator.next();
+		List<TimeLineObj> l = new ArrayList<TimeLineObj>();
+		for (Occurrence occ : firstTopic.getOccurenceObjs()) {
 			System.out.println("TimeLineWrapper new TimeLineObj " + GWT.getTypeName(occ) + " "
 					+ occ);
 			l.add(new TimeLineObj(occ.getIdentifier(), occ));
 		}
 		timeline.add(l);
 	}
-
 
 
 	// /**
@@ -182,18 +176,20 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 	 * 
 	 * @author Jeff Dwyer
 	 */
-	private class TimeLineLookupWMerge extends StdAsyncCallback {
+	private class TimeLineLookupWMerge extends StdAsyncCallback<List<List<TimeLineObj>>> {
 		public TimeLineLookupWMerge() {
 			super("Timeline Lookup WMerge");
 		}
 
 		// @Override
-		public void onSuccess(Object result) {
-			super.onSuccess(result);
-			List listOfListOfTimelines = (List) result;
-			List all = new ArrayList();
-			for (Iterator iter = listOfListOfTimelines.iterator(); iter.hasNext();) {
-				List ftis = (List) iter.next();
+		public void onSuccess(List<List<TimeLineObj>> listOfListOfTimelines) {
+			super.onSuccess(listOfListOfTimelines);
+
+			List<TimeLineObj> all = new ArrayList<TimeLineObj>();
+
+			for (Iterator<List<TimeLineObj>> iter = listOfListOfTimelines.iterator(); iter
+					.hasNext();) {
+				List<TimeLineObj> ftis = iter.next();
 				all.addAll(ftis);
 			}
 			timeline.add(all);
@@ -205,7 +201,7 @@ public class TimeLineWrapper extends Composite implements ExplorerPanel {
 	}
 
 	public void addSingle(TimeLineObj tlo) {
-		List l = new ArrayList();
+		List<TimeLineObj> l = new ArrayList<TimeLineObj>();
 		l.add(tlo);
 		timeline.add(l);
 	}

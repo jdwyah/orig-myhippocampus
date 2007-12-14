@@ -1,13 +1,13 @@
 package com.aavu.client.domain.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SearchResult implements IsSerializable {
+public class SearchResult implements Serializable {
 
 
 	private String text;
@@ -16,7 +16,7 @@ public class SearchResult implements IsSerializable {
 	private boolean publicVisible;
 
 	private Topic result;
-	private List clickLinks;
+	private List<TopicIdentifier> clickLinks;
 	private User user;
 
 	private boolean selfLink = false;
@@ -25,7 +25,7 @@ public class SearchResult implements IsSerializable {
 	public SearchResult() {
 	}
 
-	public SearchResult(Topic result, final List _clickLinks, float score,
+	public SearchResult(Topic result, final List<TopicIdentifier> _clickLinks, float score,
 			final String highlightText) {
 
 		this.result = result;
@@ -37,7 +37,7 @@ public class SearchResult implements IsSerializable {
 
 		if (null == clickLinks) {
 			selfLink = true;
-			clickLinks = new ArrayList();
+			clickLinks = new ArrayList<TopicIdentifier>();
 			clickLinks.add(result.getIdentifier());
 		}
 	}
@@ -94,11 +94,11 @@ public class SearchResult implements IsSerializable {
 		this.result = result;
 	}
 
-	public List getClickLinks() {
+	public List<TopicIdentifier> getClickLinks() {
 		return clickLinks;
 	}
 
-	public void setClickLinks(List clickLinks) {
+	public void setClickLinks(List<TopicIdentifier> clickLinks) {
 		this.clickLinks = clickLinks;
 	}
 

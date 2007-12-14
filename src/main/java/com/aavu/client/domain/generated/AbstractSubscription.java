@@ -2,18 +2,17 @@ package com.aavu.client.domain.generated;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-public class AbstractSubscription implements Serializable, IsSerializable {
+public class AbstractSubscription implements Serializable {
 
 	private String description;
 	private long id;
 	private int maxTopics;
 	private double price;
-	
-	public AbstractSubscription(){}
 
-	public AbstractSubscription(long id, int maxTopics, String description,double price) {
+	public AbstractSubscription() {
+	}
+
+	public AbstractSubscription(long id, int maxTopics, String description, double price) {
 		super();
 		this.id = id;
 		this.maxTopics = maxTopics;
@@ -21,14 +20,15 @@ public class AbstractSubscription implements Serializable, IsSerializable {
 		this.price = price;
 	}
 
-	//@Override
+	// @Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-		if ( !(obj instanceof AbstractSubscription) ) return false;
-		
+		if (!(obj instanceof AbstractSubscription))
+			return false;
+
 		final AbstractSubscription other = (AbstractSubscription) obj;
 		if (description == null) {
 			if (other.description != null)
@@ -41,13 +41,15 @@ public class AbstractSubscription implements Serializable, IsSerializable {
 			return false;
 		return true;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
+
 	public long getId() {
 		return id;
 	}
+
 	public int getMaxTopics() {
 		return maxTopics;
 	}
@@ -55,7 +57,8 @@ public class AbstractSubscription implements Serializable, IsSerializable {
 	public double getPrice() {
 		return price;
 	}
-	//@Override
+
+	// @Override
 	public int hashCode() {
 		final int PRIME = 31;
 		long result = 1;
@@ -80,6 +83,6 @@ public class AbstractSubscription implements Serializable, IsSerializable {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
-	
+
+
 }

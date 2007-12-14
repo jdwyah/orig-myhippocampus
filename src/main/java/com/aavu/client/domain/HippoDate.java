@@ -10,14 +10,13 @@ import org.gwtwidgets.client.util.SimpleDateFormat;
 import com.aavu.client.domain.commands.AbstractCommand;
 import com.aavu.client.domain.commands.SaveDatesCommand;
 import com.aavu.client.gui.timeline.HasDate;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 
 /**
  * NOTE: HippoDate stores startDate as Created & endDate as lastUpdated.
  */
-public class HippoDate extends MetaValue implements IsSerializable, Serializable, HasDate {
+public class HippoDate extends MetaValue implements Serializable, HasDate {
 
 	private transient static SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
 

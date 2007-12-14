@@ -1,13 +1,13 @@
 package com.aavu.client.exception;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class CouldntFixCGLIBException extends RuntimeException implements IsSerializable {
-	
-	public CouldntFixCGLIBException(){}
-	
+public class CouldntFixCGLIBException extends RuntimeException implements Serializable {
+
+	public CouldntFixCGLIBException() {
+	}
+
 	public CouldntFixCGLIBException(String string) {
 		super(string);
 	}
 }
-

@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public class DblClickListenerCollection extends ArrayList {
+public class DblClickListenerCollection extends ArrayList<DblClickListener> {
 
 
 	/**
@@ -15,7 +15,7 @@ public class DblClickListenerCollection extends ArrayList {
 	 *            the widget sending the event.
 	 */
 	public void fireDoubleClick(Widget sender) {
-		for (Iterator it = iterator(); it.hasNext();) {
+		for (Iterator<DblClickListener> it = iterator(); it.hasNext();) {
 			DblClickListener listener = (DblClickListener) it.next();
 			listener.onDblClick(sender);
 		}

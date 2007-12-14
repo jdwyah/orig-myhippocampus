@@ -322,7 +322,7 @@ public class TitleGadget extends Gadget {
 
 		public void onClick(Widget sender) {
 
-			List tisToSend = new ArrayList();
+			List<TopicIdentifier> tisToSend = new ArrayList<TopicIdentifier>();
 			for (Iterator iterator2 = checkBoxes.keySet().iterator(); iterator2.hasNext();) {
 				CheckBox cb = (CheckBox) iterator2.next();
 				TopicIdentifier ti = (TopicIdentifier) checkBoxes.get(cb);
@@ -332,10 +332,10 @@ public class TitleGadget extends Gadget {
 			}
 
 			manager.getTopicCache().editVisibility(tisToSend, newVisibility,
-					new StdAsyncCallback("Edit Visibility") {
+					new StdAsyncCallback<Void>("Edit Visibility") {
 
 						// @Override
-						public void onSuccess(Object result) {
+						public void onSuccess(Void result) {
 							super.onSuccess(result);
 							topic.setPublicVisible(newVisibility);
 							load(topic);
@@ -343,7 +343,6 @@ public class TitleGadget extends Gadget {
 						}
 					});
 		}
-
 	}
 
 	// @Override

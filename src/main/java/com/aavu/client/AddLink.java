@@ -167,10 +167,10 @@ public class AddLink {
 	 */
 	private void init() {
 		System.out.println("init()");
-		addL.getExistingLinkAndCreatePanel(new AsyncCallback() {
-			public void onSuccess(Object result) {
+		addL.getExistingLinkAndCreatePanel(new AsyncCallback<Widget>() {
+			public void onSuccess(Widget result) {
 				System.out.println("init success -> loadGUI");
-				loadGUI((Widget) result);
+				loadGUI(result);
 			}
 
 			public void onFailure(Throwable caught) {

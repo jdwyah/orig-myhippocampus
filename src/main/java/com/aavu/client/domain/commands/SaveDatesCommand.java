@@ -1,11 +1,11 @@
 package com.aavu.client.domain.commands;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.aavu.client.domain.Topic;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveDatesCommand extends AbstractCommand implements IsSerializable {
+public class SaveDatesCommand extends AbstractCommand implements Serializable {
 
 	private Date startDate;
 	private Date endDate;

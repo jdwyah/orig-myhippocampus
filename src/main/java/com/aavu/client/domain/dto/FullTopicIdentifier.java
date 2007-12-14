@@ -1,10 +1,11 @@
 package com.aavu.client.domain.dto;
 
+import java.io.Serializable;
+
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicTypeConnector;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class FullTopicIdentifier extends DatedTopicIdentifier implements IsSerializable {
+public class FullTopicIdentifier extends DatedTopicIdentifier implements Serializable {
 
 	private int latitudeOnIsland;
 	private int longitudeOnIsland;

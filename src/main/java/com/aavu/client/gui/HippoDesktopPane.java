@@ -26,7 +26,7 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 	// private FlexTable desktopWidget;
 	// private IconBar buttonBar;
 
-	private List frames;
+	private List<GFrame> frames;
 
 	private GInternalFrame activeFrame;
 
@@ -41,7 +41,7 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 	}
 
 	private void initialize() {
-		this.frames = new ArrayList();
+		this.frames = new ArrayList<GFrame>();
 	}
 
 	private void setupListeners() {
@@ -119,11 +119,11 @@ public abstract class HippoDesktopPane extends Composite implements WindowResize
 	 */
 	public void closeAllFrames() {
 		for (int i = 0; i < frames.size(); i++) {
-			((GFrame) frames.get(i)).attemptClose();
+			frames.get(i).attemptClose();
 		}
 	}
 
-	public List getAllFrames() {
+	public List<GFrame> getAllFrames() {
 		return frames;
 	}
 

@@ -29,16 +29,16 @@ import com.google.gwt.user.client.ui.Widget;
 public class LinksTagsBoard extends Composite implements RemoveListener {
 
 	private VerticalPanel mainPanel;
-	private Map topicM;
-	private List topics;
+	private Map<TopicIdentifier, Widget> topicM;
+	private List<Topic> topics;
 	private HorizontalPanel onPanel;
 	private TopicCompleter topicCompleter;
 
 
 	public LinksTagsBoard(final CompleteListener completer, TopicCache topicCache) {
 
-		topicM = new HashMap();
-		topics = new ArrayList();
+		topicM = new HashMap<TopicIdentifier, Widget>();
+		topics = new ArrayList<Topic>();
 
 		onPanel = new HorizontalPanel();
 		mainPanel = new VerticalPanel();

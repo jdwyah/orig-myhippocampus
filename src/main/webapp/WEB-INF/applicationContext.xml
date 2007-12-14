@@ -30,7 +30,7 @@
      <aop:config>
       <aop:aspect ref="GWTDebugAdvice">
          <aop:pointcut id="gwtInternalCalls"
-                    expression="execution(* com.aavu.server.util.gwt.RPCWithHibernateSupport.invokeAndEncodeResponse(..))"/>
+                    expression="execution(* com.aavu.server.util.gwt.RPCWithHibernateSupport1529.invokeAndEncodeResponse(..))"/>
          <aop:around pointcut-ref="gwtInternalCalls"
                   method="wrapGWTInternal"/>
       </aop:aspect>

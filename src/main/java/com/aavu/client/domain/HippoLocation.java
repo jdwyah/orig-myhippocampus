@@ -5,13 +5,12 @@ package com.aavu.client.domain;
 import java.io.Serializable;
 
 import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * 
  */
 
-public class HippoLocation extends MetaValue implements IsSerializable, Serializable {
+public class HippoLocation extends MetaValue implements Serializable {
 
 	private static final int SIGNIFICANT_DIGITS = 100000;
 	private static final int FILTER = 20;

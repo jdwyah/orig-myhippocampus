@@ -1,5 +1,6 @@
 package com.aavu.client.domain.commands;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +11,6 @@ import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.TopicOccurrenceConnector;
 import com.aavu.client.domain.URI;
 import com.aavu.client.exception.HippoException;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 /**
@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Jeff Dwyer
  * 
  */
-public class SaveOccurrenceCommand extends AbstractCommand implements IsSerializable {
+public class SaveOccurrenceCommand extends AbstractCommand implements Serializable {
 
 	protected Occurrence occurrence;
 

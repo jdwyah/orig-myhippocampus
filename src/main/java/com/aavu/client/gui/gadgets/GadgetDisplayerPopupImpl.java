@@ -2,7 +2,6 @@ package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.gwm.client.impl.DefaultGInternalFrame;
@@ -18,16 +17,15 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 
 	private GadgetManager gadgetManager;
-	private List popups;
+	private List<GadgetPopup> popups;
 	private int normalLeft = -1;
 
 	public GadgetDisplayerPopupImpl(Manager manager) {
 		this.gadgetManager = manager.getGadgetManager();
 
-		popups = new ArrayList();
+		popups = new ArrayList<GadgetPopup>();
 
-		for (Iterator iterator = gadgetManager.getFullGadgetList().iterator(); iterator.hasNext();) {
-			Gadget gadget = (Gadget) iterator.next();
+		for (Gadget gadget : gadgetManager.getFullGadgetList()) {
 
 			if (!gadget.isDisplayer()) {
 				continue;
@@ -50,8 +48,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 
 		int cTop = 0;
 
-		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
-			GadgetPopup popup = (GadgetPopup) iterator.next();
+		for (GadgetPopup popup : popups) {
 
 			// only normalize on first run ( < 0)
 			// or if the user hasn't moved the gadget themselves
@@ -81,8 +78,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 		System.out.println("gadgetPopuDisplayer load current: " + isCurrent);
 		gadgetManager.load(topic);
 
-		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
-			GadgetPopup popup = (GadgetPopup) iterator.next();
+		for (GadgetPopup popup : popups) {
 
 
 			// System.out.println("popup " + popup.getGadget().getDisplayName() + " "
@@ -122,8 +118,7 @@ public class GadgetDisplayerPopupImpl extends DefaultGInternalFrame implements G
 	public void unload() {
 		// System.out.println("-----------GadgetDisplayPopup Unload");
 
-		for (Iterator iterator = popups.iterator(); iterator.hasNext();) {
-			GadgetPopup popup = (GadgetPopup) iterator.next();
+		for (GadgetPopup popup : popups) {
 
 			popup.setVisible(false);
 

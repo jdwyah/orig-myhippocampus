@@ -1,10 +1,11 @@
 package com.aavu.client.domain.dto;
 
+import java.io.Serializable;
+
 import com.aavu.client.domain.TagInfo;
 import com.aavu.client.domain.Topic;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TagStat implements IsSerializable, TagInfo {
+public class TagStat implements Serializable, TagInfo {
 
 	private long tagId;
 	private int numberOfTopics;

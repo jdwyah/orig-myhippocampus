@@ -1,14 +1,13 @@
 package com.aavu.client.domain.commands;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import com.aavu.client.domain.Topic;
 import com.aavu.client.exception.HippoException;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Ok, here's how this works. We don't want to serialize the whole topic, send it to the server and
@@ -32,13 +31,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @param command
  * @param callback
  */
-public abstract class AbstractCommand implements IsSerializable {
+public abstract class AbstractCommand implements Serializable {
 
-	/**
-	 * @gwt.typeArgs <java.lang.Long>
-	 */
-	private List topicIDs = new ArrayList();
-	private transient List topics = new ArrayList();
+
+	private List<Long> topicIDs = new ArrayList<Long>();
+	private transient List<Topic> topics = new ArrayList<Topic>();
 
 	private String data;
 
@@ -55,7 +52,7 @@ public abstract class AbstractCommand implements IsSerializable {
 
 
 	public AbstractCommand(Topic topic, Topic topic1, Topic topic2) {
-		Integer i = new Integer(3);
+
 		if (topic != null) {
 			topicIDs.add(new Long(topic.getId()));
 			topics.add(topic);
@@ -70,18 +67,17 @@ public abstract class AbstractCommand implements IsSerializable {
 		}
 	}
 
-	public AbstractCommand(List _topics) {
+	public AbstractCommand(List<Topic> _topics) {
 		init(_topics);
 	}
 
-	protected void init(List _topics) {
+	protected void init(List<Topic> _topics) {
 		this.topics = _topics;
 		setTopicIDsFromTopics(_topics);
 	}
 
-	protected void setTopicIDsFromTopics(List _topics) {
-		for (Iterator iter = _topics.iterator(); iter.hasNext();) {
-			Topic topic = (Topic) iter.next();
+	protected void setTopicIDsFromTopics(List<Topic> _topics) {
+		for (Topic topic : _topics) {
 			topicIDs.add(new Long(topic.getId()));
 			topics = _topics;
 		}
@@ -127,19 +123,19 @@ public abstract class AbstractCommand implements IsSerializable {
 
 
 
-	public List getTopicIDs() {
+	public List<Long> getTopicIDs() {
 		return topicIDs;
 	}
 
-	public List getTopics() {
+	public List<Topic> getTopics() {
 		return topics;
 	}
 
-	public Set getDeleteSet() {
-		return new HashSet();
+	public Set<Topic> getDeleteSet() {
+		return new HashSet<Topic>();
 	}
 
-	public void setTopics(List topics) {
+	public void setTopics(List<Topic> topics) {
 		this.topics = topics;
 	}
 
@@ -147,21 +143,20 @@ public abstract class AbstractCommand implements IsSerializable {
 		return false;
 	}
 
-	public Set getAffectedTopics() {
-		return new HashSet();
+	public Set<Topic> getAffectedTopics() {
+		return new HashSet<Topic>();
 	}
 
 
 	/**
 	 * s -> e inclusive s, exclusive e TODO java 1.5 makes this unec
 	 */
-	protected List subList(List l, int s, int e) {
-		List rtn = new ArrayList();
+	protected List<Topic> subList(List<Topic> l, int s, int e) {
+		List<Topic> rtn = new ArrayList<Topic>();
 		for (int i = s; i < e; i++) {
 			rtn.add(l.get(i));
 		}
 		return rtn;
 	}
-
 
 }

@@ -1,8 +1,8 @@
 package com.aavu.client.exception;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class HippoBusinessException extends HippoException implements IsSerializable {
+public class HippoBusinessException extends HippoException implements Serializable {
 
 	public HippoBusinessException() {
 	}

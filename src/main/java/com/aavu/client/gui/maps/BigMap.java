@@ -3,7 +3,6 @@ package com.aavu.client.gui.maps;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +15,7 @@ import com.aavu.client.domain.IntPair;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.commands.SaveTopicBasicCommand;
 import com.aavu.client.domain.dto.LocationDTO;
+import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.gui.explorer.ExplorerPanel;
 import com.aavu.client.gui.ext.PopupWindow;
 import com.aavu.client.gui.timeline.CloseListener;
@@ -83,19 +83,18 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		initWidget(extraPanel);
 	}
 
-	private void addToMap(List allLocations) {
+	private void addToMap(List<LocationDTO> allLocations) {
 		mapWidget.clear();
 
-		// <IntPair,Set<LocationDTO>>
-		Map lowPassFilter = new HashMap();
 
-		for (Iterator iter = allLocations.iterator(); iter.hasNext();) {
-			LocationDTO locdto = (LocationDTO) iter.next();
+		Map<IntPair, Set<LocationDTO>> lowPassFilter = new HashMap<IntPair, Set<LocationDTO>>();
+
+		for (LocationDTO locdto : allLocations) {
 
 			IntPair key = locdto.getLocation().getFilteredLocation();
-			Set locations = (Set) lowPassFilter.get(key);
+			Set<LocationDTO> locations = lowPassFilter.get(key);
 			if (locations == null) {
-				locations = new HashSet();
+				locations = new HashSet<LocationDTO>();
 			} else {
 				System.out.println("match");
 			}
@@ -106,10 +105,9 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 
 		}
 		System.out.println("--fin--");
-		for (Iterator iter = lowPassFilter.keySet().iterator(); iter.hasNext();) {
-			IntPair key = (IntPair) iter.next();
+		for (IntPair key : lowPassFilter.keySet()) {
 
-			Set locations = (Set) lowPassFilter.get(key);
+			Set<LocationDTO> locations = lowPassFilter.get(key);
 
 			System.out.println("key " + key.getX() + " " + key.getY());
 
@@ -120,8 +118,7 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 				mapWidget.addAmalgam(locations);
 			}
 
-			for (Iterator iterator = locations.iterator(); iterator.hasNext();) {
-				LocationDTO locDTO = (LocationDTO) iterator.next();
+			for (LocationDTO locDTO : locations) {
 				System.out.println("add regul " + locDTO.getOnMapTitle() + " " + partOfAmalgam);
 				mapWidget.add(locDTO, partOfAmalgam);
 			}
@@ -160,33 +157,33 @@ public class BigMap extends Composite implements ExplorerPanel, MapController {
 		return this;
 	}
 
-	private List converTopicToTI(List topics) {
-		List ll = new ArrayList();
-		for (Iterator iterator = topics.iterator(); iterator.hasNext();) {
-			Topic t = (Topic) iterator.next();
+	private List<TopicIdentifier> converTopicToTI(List<Topic> topics) {
+		List<TopicIdentifier> ll = new ArrayList<TopicIdentifier>();
+		for (Topic t : topics) {
 			ll.add(t.getIdentifier());
 		}
 		return ll;
 	}
 
 	public void load(Topic topic) {
-		List l = new ArrayList();
+		List<Topic> l = new ArrayList<Topic>();
 		l.add(topic);
 		load(l);
 	}
 
-	public void load(List tags) {
+	public void load(List<Topic> tags) {
 
 
-		manager.getTopicCache().getLocationsFor(converTopicToTI(tags),
-				new StdAsyncCallback(ConstHolder.myConstants.bigmap_getall_async()) {
+		manager.getTopicCache().getLocationsFor(
+				converTopicToTI(tags),
+				new StdAsyncCallback<List<List<LocationDTO>>>(ConstHolder.myConstants
+						.bigmap_getall_async()) {
 					// @Override
-					public void onSuccess(Object result) {
-						super.onSuccess(result);
-						List locationsByTag = (List) result;
-						List allLocations = new ArrayList();
-						for (Iterator iter = locationsByTag.iterator(); iter.hasNext();) {
-							List locs = (List) iter.next();
+					public void onSuccess(List<List<LocationDTO>> locationsByTag) {
+						super.onSuccess(locationsByTag);
+
+						List<LocationDTO> allLocations = new ArrayList<LocationDTO>();
+						for (List<LocationDTO> locs : locationsByTag) {
 							allLocations.addAll(locs);
 						}
 						addToMap(allLocations);

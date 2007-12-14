@@ -7,7 +7,8 @@ import com.aavu.client.exception.HippoException;
 
 public interface ExternalServicesService {
 
-	List<? extends Subject> lookup(Class type, String matchString) throws HippoException;
+	List<? extends Subject> lookup(Class<? extends Subject> type, String matchString)
+			throws HippoException;
 
 
 }

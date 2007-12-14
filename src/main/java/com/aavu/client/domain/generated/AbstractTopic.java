@@ -8,6 +8,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.aavu.client.domain.Association;
+import com.aavu.client.domain.Topic;
+import com.aavu.client.domain.TopicOccurrenceConnector;
+import com.aavu.client.domain.TopicTypeConnector;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.subjects.Subject;
 
@@ -48,32 +52,17 @@ public abstract class AbstractTopic implements Serializable {
 	 * Shared?
 	 */
 	private boolean publicVisible;
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.Topic>
-	 */
-	private Set scopes = new HashSet();
 
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.TopicTypeConnector>
-	 */
-	private Set instances = new HashSet();
+	private Set<Topic> scopes = new HashSet<Topic>();
 
-	// /**
-	// * @gwt.typeArgs <com.aavu.client.domain.Topic>
-	// */
-	// private Set types = new HashSet();
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.TopicTypeConnector>
-	 */
-	private Set types = new HashSet();
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.TopicOccurrenceConnector>
-	 */
-	private Set occurences = new HashSet();
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.Topic>
-	 */
-	private Set associations = new HashSet();
+	private Set<TopicTypeConnector> instances = new HashSet<TopicTypeConnector>();
+
+
+	private Set<TopicTypeConnector> types = new HashSet<TopicTypeConnector>();
+
+	private Set<TopicOccurrenceConnector> occurences = new HashSet<TopicOccurrenceConnector>();
+
+	private Set<Association> associations = new HashSet<Association>();
 
 	private Subject subject;
 
@@ -174,56 +163,56 @@ public abstract class AbstractTopic implements Serializable {
 		this.publicVisible = publicVisible;
 	}
 
-	public Set getScopes() {
-		return this.scopes;
+
+
+	public Set<Topic> getScopes() {
+		return scopes;
 	}
 
-	public void setScopes(Set scopes) {
+	public void setScopes(Set<Topic> scopes) {
 		this.scopes = scopes;
 	}
 
+	@Deprecated
+	public Set<TopicTypeConnector> getInstances() {
+		return instances;
+	}
+
+	public void setInstances(Set<TopicTypeConnector> instances) {
+		this.instances = instances;
+	}
+
+	public Set<TopicTypeConnector> getTypes() {
+		return types;
+	}
+
+	public void setTypes(Set<TopicTypeConnector> types) {
+		this.types = types;
+	}
+
+	public Set<TopicOccurrenceConnector> getOccurences() {
+		return occurences;
+	}
+
+	public void setOccurences(Set<TopicOccurrenceConnector> occurences) {
+		this.occurences = occurences;
+	}
+
+	public Set<Association> getAssociations() {
+		return associations;
+	}
+
+	public void setAssociations(Set<Association> associations) {
+		this.associations = associations;
+	}
+
 	public Subject getSubject() {
-		return this.subject;
+		return subject;
 	}
 
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
-
-	// <TopicTypeConnector>
-	// @Deprecated
-	public Set getInstances() {
-		return this.instances;
-	}
-
-	public void setInstances(Set instances) {
-		this.instances = instances;
-	}
-
-	public Set getTypes() {
-		return types;
-	}
-
-	public void setTypes(Set types) {
-		this.types = types;
-	}
-
-	public Set getOccurences() {
-		return this.occurences;
-	}
-
-	public void setOccurences(Set occurences) {
-		this.occurences = occurences;
-	}
-
-	public Set getAssociations() {
-		return this.associations;
-	}
-
-	public void setAssociations(Set associations) {
-		this.associations = associations;
-	}
-
 
 	public boolean equals(Object other) {
 		if ((this == other))

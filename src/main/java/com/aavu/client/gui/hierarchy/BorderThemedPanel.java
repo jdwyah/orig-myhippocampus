@@ -1,7 +1,6 @@
 package com.aavu.client.gui.hierarchy;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
@@ -40,7 +39,7 @@ public class BorderThemedPanel extends Composite {
 	private int width;
 	private BorderThemedPanelResizeImage resizeImage;
 
-	private ArrayList resizeListeners = null;
+	private ArrayList<ResizeHandler> resizeListeners = null;
 	private Widget dragHandle;
 
 	public BorderThemedPanel() {
@@ -240,8 +239,7 @@ public class BorderThemedPanel extends Composite {
 
 	private void fireResizeEvent() {
 		if (resizeListeners != null) {
-			for (Iterator it = resizeListeners.iterator(); it.hasNext();) {
-				ResizeHandler handler = (ResizeHandler) it.next();
+			for (ResizeHandler handler : resizeListeners) {
 				handler.resize(width, height);
 			}
 		}
@@ -307,7 +305,7 @@ public class BorderThemedPanel extends Composite {
 
 	public final void addResizeHandler(ResizeHandler handler) {
 		if (resizeListeners == null) {
-			resizeListeners = new ArrayList();
+			resizeListeners = new ArrayList<ResizeHandler>();
 		}
 		resizeListeners.add(handler);
 	}

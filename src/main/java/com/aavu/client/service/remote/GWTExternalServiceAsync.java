@@ -1,5 +1,7 @@
 package com.aavu.client.service.remote;
 
+import java.util.List;
+
 import com.aavu.client.domain.subjects.Subject;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -11,9 +13,8 @@ public interface GWTExternalServiceAsync {
 	/**
 	 * Would like to pass Class, but it's not IsSerializable
 	 * 
-	 * rtn List<Subject>
 	 */
-	void lookup(Subject type, String matchString, AsyncCallback callback);
+	void lookup(Subject type, String matchString, AsyncCallback<List<Subject>> callback);
 
-	void addDeliciousTags(String username, String password, AsyncCallback callback);
+	void addDeliciousTags(String username, String password, AsyncCallback<Void> callback);
 }

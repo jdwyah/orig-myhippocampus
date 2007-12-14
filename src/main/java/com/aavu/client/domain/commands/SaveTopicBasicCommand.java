@@ -1,11 +1,11 @@
 package com.aavu.client.domain.commands;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import com.aavu.client.domain.Topic;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SaveTopicBasicCommand extends AbstractCommand implements IsSerializable {
+public class SaveTopicBasicCommand extends AbstractCommand implements Serializable {
 
 	private int latitude = -1;
 	private int longitude = -1;

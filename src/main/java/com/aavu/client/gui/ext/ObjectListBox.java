@@ -9,67 +9,71 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
 
 /**
- * Because who ever wanted a ListBox with strings in it? Store the associated
- * object so we can retrieve it.
+ * Because who ever wanted a ListBox with strings in it? Store the associated object so we can
+ * retrieve it.
  * 
  * @author Jeff Dwyer
- *
+ * 
  */
-public class ObjectListBox extends Composite {
-	
+public class ObjectListBox<T> extends Composite {
+
 	private ListBox listBox = new ListBox();
-	private Vector vec = new Vector();
-		
-	public ObjectListBox(){		
+	private Vector<T> vec = new Vector<T>();
+
+	public ObjectListBox() {
 		initWidget(listBox);
 	}
 
-	public void addItem(String string, Object object) {
+	public void addItem(String string, T object) {
 		listBox.addItem(string);
-		vec.add(object);		
+		vec.add(object);
 	}
-	public Object getSelectedObject(){
+
+	public T getSelectedObject() {
 		return vec.get(listBox.getSelectedIndex());
 	}
-	public void setSelectedObject(Object toSelect){
+
+	public void setSelectedObject(T toSelect) {
 		int i = 0;
-		for (Iterator iter = vec.iterator(); iter.hasNext();) {
-			Object obj = iter.next();
-			if(toSelect == obj){
+		for (Iterator<T> iter = vec.iterator(); iter.hasNext();) {
+			T obj = iter.next();
+			if (toSelect == obj) {
 				listBox.setSelectedIndex(i);
-			}		
+			}
 			i++;
 		}
 	}
+
 	/**
 	 * Just compare the type of the objects in the list
 	 * 
-	 * 	no .getClass() in GWT makes this a little uglier to avoid nulls 
+	 * no .getClass() in GWT makes this a little uglier to avoid nulls
+	 * 
 	 * @param toSelect
 	 */
-	public void setSelectedObjectToType(Object toSelect){
+	public void setSelectedObjectToType(Object toSelect) {
 		int i = 0;
 		String toSelString = GWT.getTypeName(toSelect);
-		for (Iterator iter = vec.iterator(); iter.hasNext();) {
+		for (Iterator<T> iter = vec.iterator(); iter.hasNext();) {
 			Object obj = iter.next();
-					
+
 			String thisString = GWT.getTypeName(obj);
-			if(toSelString == null){
-				if(thisString == null){
+			if (toSelString == null) {
+				if (thisString == null) {
 					listBox.setSelectedIndex(i);
 					return;
-				}else{
+				} else {
 					continue;
 				}
 			}
-			if(toSelString.equals(thisString)){
+			if (toSelString.equals(thisString)) {
 				listBox.setSelectedIndex(i);
-			}			
+			}
 			i++;
 		}
 	}
 
 	public void addChangeListener(ChangeListener listener) {
-		listBox.addChangeListener(listener);	
+		listBox.addChangeListener(listener);
 	}
 }

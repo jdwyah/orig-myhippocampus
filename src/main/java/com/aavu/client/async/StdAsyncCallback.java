@@ -8,7 +8,7 @@ import com.aavu.client.strings.ConstHolder;
 import com.aavu.client.util.Logger;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class StdAsyncCallback implements AsyncCallback {
+public class StdAsyncCallback<T> implements AsyncCallback<T> {
 
 	private static Manager manager;
 
@@ -65,7 +65,7 @@ public class StdAsyncCallback implements AsyncCallback {
 		}
 	}
 
-	public void onSuccess(Object result) {
+	public void onSuccess(T result) {
 		if (manager != null)
 			manager.updateStatus(myNum, call, StatusCode.SUCCESS);
 	}

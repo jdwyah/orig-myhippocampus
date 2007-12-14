@@ -17,7 +17,7 @@ public class QuickAddEntryCommand extends SaveOccurrenceCommand {
 		e.setData(entryString);
 		this.occurrence = e;
 
-		List topicsToLoad = new ArrayList();
+		List<Topic> topicsToLoad = new ArrayList<Topic>();
 		topicsToLoad.add(e);
 		topicsToLoad.add(topic);
 

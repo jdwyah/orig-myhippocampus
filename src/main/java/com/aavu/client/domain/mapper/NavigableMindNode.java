@@ -1,7 +1,6 @@
 package com.aavu.client.domain.mapper;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.gui.mapper.EditBox;
@@ -9,39 +8,37 @@ import com.aavu.client.gui.mapper.EditBox;
 public class NavigableMindNode {
 
 	private NavigableMindNode parent;
-	private List children = new ArrayList();
-	
+	private List<NavigableMindNode> children = new ArrayList<NavigableMindNode>();
+
 	private String data;
 	private int width = 0;
 	private transient EditBox box;
-	
+
 	public NavigableMindNode(String data) {
-		super();		
+		super();
 		this.data = data;
-		
+
 	}
 
-	public void addChild(NavigableMindNode node){
+	public void addChild(NavigableMindNode node) {
 		node.setParent(this);
 		children.add(node);
 	}
-	
-	public int getWidthOfTree(){
-		if(children.size() == 0){
-			width = 1;			
-		}
-		else {
+
+	public int getWidthOfTree() {
+		if (children.size() == 0) {
+			width = 1;
+		} else {
 			int rtn = 0;
-			for (Iterator iter = children.iterator(); iter.hasNext();) {
-				NavigableMindNode child = (NavigableMindNode) iter.next();
+			for (NavigableMindNode child : children) {
 				rtn += child.getWidthOfTree();
 			}
 			width = rtn;
 		}
-		return width ;
+		return width;
 	}
 
-	
+
 	public String getData() {
 		return data;
 	}
@@ -58,34 +55,35 @@ public class NavigableMindNode {
 		this.parent = parent;
 	}
 
-	public List getChildren() {
+	public List<NavigableMindNode> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List children) {
+	public void setChildren(List<NavigableMindNode> children) {
 		this.children = children;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		return toString(sb,"");
+		return toString(sb, "");
 	}
-	public String toString(StringBuffer sb,String space){
+
+	public String toString(StringBuffer sb, String space) {
 		sb.append(space);
 		sb.append(getData());
 		sb.append("\n");
-		for (Iterator iter = children.iterator(); iter.hasNext();) {
-			NavigableMindNode child = (NavigableMindNode) iter.next();
-			child.toString(sb, space+"    ");
-		}		
+		for (NavigableMindNode child : children) {
+			child.toString(sb, space + "    ");
+		}
 		return sb.toString();
 	}
 
 	public void setBox(EditBox box) {
 		this.box = box;
-	}	
-	public EditBox getBox(){
+	}
+
+	public EditBox getBox() {
 		return box;
 	}
-	
+
 }

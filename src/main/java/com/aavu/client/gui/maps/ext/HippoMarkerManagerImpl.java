@@ -17,9 +17,9 @@ public interface HippoMarkerManagerImpl extends JSFlyweightWrapper {
 
 	public void addMarker(JavaScriptObject jsoPeer, Marker marker, int minZoom, int maxZoom);
 
-	public void addMarkers(JavaScriptObject jsoPeer, JSList /* Marker[] */markers, int minZoom);
+	public void addMarkers(JavaScriptObject jsoPeer, JSList<Marker[]> markers, int minZoom);
 
-	public void addMarkers(JavaScriptObject jsoPeer, JSList /* Marker[] */markers, int minZoom,
+	public void addMarkers(JavaScriptObject jsoPeer, JSList<Marker[]> markers, int minZoom,
 			int maxZoom);
 
 	/**

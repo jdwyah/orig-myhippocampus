@@ -1,7 +1,6 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.EZCallback;
@@ -24,7 +23,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class TagPropertyPanel extends Gadget {
 
 	private VerticalPanel metaListPanel = new VerticalPanel();
-	private List metas = new ArrayList(); // list of meta chooser objects of current tag
+	private List<Meta> metas = new ArrayList<Meta>(); // list of meta chooser objects of current
+	// tag
 
 
 	private Topic myTopic;
@@ -106,8 +106,7 @@ public class TagPropertyPanel extends Gadget {
 			if (myTopic.getTagProperties().size() > 0) {
 				saveB.setVisible(true);
 			}
-			for (Iterator iter = myTopic.getTagProperties().iterator(); iter.hasNext();) {
-				Meta element = (Meta) iter.next();
+			for (Meta element : myTopic.getTagProperties()) {
 				addMWidg(element);
 			}
 		}
@@ -122,8 +121,7 @@ public class TagPropertyPanel extends Gadget {
 		Meta[] toSave = new Meta[metas.size()];
 		myTopic.getTagProperties().clear();
 		int i = 0;
-		for (Iterator iter = metas.iterator(); iter.hasNext();) {
-			Meta meta = (Meta) iter.next();
+		for (Meta meta : metas) {
 
 			// in command tag.addMeta(meta);
 			toSave[i] = meta;
@@ -133,15 +131,14 @@ public class TagPropertyPanel extends Gadget {
 
 		System.out.println("Tag: " + myTopic.getTitle());
 		System.out.println("metas: " + myTopic.getTagProperties().size());
-		for (Iterator iter = myTopic.getTagProperties().iterator(); iter.hasNext();) {
-			Meta element = (Meta) iter.next();
+		for (Meta element : myTopic.getTagProperties()) {
 			System.out.println(element.getName());
 		}
 
 
 		manager.getTopicCache().executeCommand(myTopic,
 				new SaveTagPropertiesCommand(myTopic, toSave),
-				new StdAsyncCallback("tagService saveTag") {
+				new StdAsyncCallback<Void>("tagService saveTag") {
 				});
 	}
 

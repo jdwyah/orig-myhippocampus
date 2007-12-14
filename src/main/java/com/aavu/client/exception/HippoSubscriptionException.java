@@ -1,10 +1,11 @@
 package com.aavu.client.exception;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class HippoSubscriptionException extends HippoBusinessException implements IsSerializable {
+public class HippoSubscriptionException extends HippoBusinessException implements Serializable {
 
-	public HippoSubscriptionException(){}
+	public HippoSubscriptionException() {
+	}
 
 	public HippoSubscriptionException(String string) {
 		super(string);

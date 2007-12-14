@@ -1,7 +1,6 @@
 package com.aavu.client.gui.gadgets;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.aavu.client.async.StdAsyncCallback;
@@ -48,7 +47,7 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 
 	private HorizontalPanel adderP;
 
-	private List allTopics = new ArrayList();
+	private List<Topic> allTopics = new ArrayList<Topic>();
 
 
 
@@ -155,16 +154,7 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 		cur_topic = occ;
 
 		int rtnSize = 0;
-		for (Iterator iter = occ.getTopicsAsTopics().iterator(); iter.hasNext();) {
-
-			// TODO o will not be a Tag when we are a topic that is another
-			// topic's MetaTopic value. capiche?
-			// TODO make getTags deal with that.
-
-			// TODO TAG
-			Object o = iter.next();
-
-			Topic tag = (Topic) o;
+		for (Topic tag : occ.getTopicsAsTopics()) {
 			if (manager.isEdittable() || tag.isPublicVisible()) {
 				allTopics.add(tag);
 			}
@@ -217,8 +207,7 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 
 		System.out.println("all topics " + allTopics.size() + " comm " + comm.getTopics().size());
 
-		for (Iterator iterator = allTopics.iterator(); iterator.hasNext();) {
-			Topic t = (Topic) iterator.next();
+		for (Topic t : allTopics) {
 			System.out.println("t " + t);
 		}
 
@@ -233,8 +222,8 @@ public class OccurrenceTopicsBoard extends Gadget implements CompleteListener, R
 
 
 		manager.getTopicCache().executeCommand(cur_topic, comm,
-				new StdAsyncCallback(ConstHolder.myConstants.save()) {
-					public void onSuccess(Object result) {
+				new StdAsyncCallback<Void>(ConstHolder.myConstants.save()) {
+					public void onSuccess(Void result) {
 						super.onSuccess(result);
 
 						if (widgetToRemoveOnSuccess != null) {

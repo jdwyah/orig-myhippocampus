@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 import com.aavu.client.domain.Occurrence;
 import com.aavu.client.domain.Topic;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class AbstractTopicOccurrenceConnector implements Serializable, IsSerializable {
+public class AbstractTopicOccurrenceConnector implements Serializable {
 
 	private long id;
 	private Topic topic;

@@ -2,9 +2,7 @@ package com.aavu.client.domain;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-public class Entry extends Occurrence implements Serializable, IsSerializable, ReallyCloneable {
+public class Entry extends Occurrence implements Serializable, ReallyCloneable {
 
 
 	private static final String INIT_STR = "<BODY contentEditable=true>";

@@ -1,11 +1,11 @@
 package com.aavu.client.domain.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.aavu.client.gui.timeline.HasDate;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TimeLineObj implements IsSerializable, Comparable {
+public class TimeLineObj implements Serializable, Comparable {
 
 
 	private static final long DIV = 60000;

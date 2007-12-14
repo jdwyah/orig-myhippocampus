@@ -16,6 +16,7 @@ import com.aavu.client.domain.RealTopic;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.User;
 import com.aavu.client.domain.commands.AbstractCommand;
+import com.aavu.client.domain.dto.LocationDTO;
 import com.aavu.client.domain.dto.TopicIdentifier;
 import com.aavu.client.domain.mapper.MindTree;
 import com.aavu.client.exception.HippoBusinessException;
@@ -33,12 +34,13 @@ public class TopicCache {
 	 * @author Jeff Dwyer
 	 * 
 	 */
-	private class SaveCallbackWrapper implements AsyncCallback {
-		private AsyncCallback callback;
+	private class SaveCallbackWrapper implements AsyncCallback<Void> {
+		private AsyncCallback<Void> callback;
 		private AbstractCommand command;
 		private Topic topic;
 
-		public SaveCallbackWrapper(Topic topic, AbstractCommand command, AsyncCallback callback) {
+		public SaveCallbackWrapper(Topic topic, AbstractCommand command,
+				AsyncCallback<Void> callback) {
 			this.topic = topic;
 			this.command = command;
 			this.callback = callback;
@@ -49,11 +51,10 @@ public class TopicCache {
 			callback.onFailure(caught);
 		}
 
-		public void onSuccess(Object result) {
+		public void onSuccess(Void result) {
 			Logger.log("Save callback rtn " + result);
 
-			for (Iterator iter = saveListeners.iterator(); iter.hasNext();) {
-				TopicSaveListener listener = (TopicSaveListener) iter.next();
+			for (TopicSaveListener listener : saveListeners) {
 				listener.topicSaved(topic, command);
 			}
 
@@ -134,7 +135,7 @@ public class TopicCache {
 	public static final ReturnTypeConstant TOPIC = new ReturnTypeConstant(1);
 	public static final ReturnTypeConstant TOPIC_LIST = new ReturnTypeConstant(2);
 
-	private List saveListeners = new ArrayList();
+	private List<TopicSaveListener> saveListeners = new ArrayList<TopicSaveListener>();
 
 	private Map topicByID = new HashMap();
 	private Map topicByName = new HashMap();
@@ -190,7 +191,8 @@ public class TopicCache {
 		// TODO update after delete
 	}
 
-	public void editVisibility(List topicIDs, boolean visibility, AsyncCallback callback) {
+	public void editVisibility(List<TopicIdentifier> topicIDs, boolean visibility,
+			AsyncCallback<Void> callback) {
 		topicService.editVisibility(topicIDs, visibility, callback);
 	}
 
@@ -209,7 +211,7 @@ public class TopicCache {
 	 * @param command
 	 * @param callback
 	 */
-	public void executeCommand(Topic topic, AbstractCommand command, AsyncCallback callback) {
+	public void executeCommand(Topic topic, AbstractCommand command, AsyncCallback<Void> callback) {
 
 		try {
 			command.executeCommand();
@@ -254,7 +256,8 @@ public class TopicCache {
 		topicService.getLinksTo(topic2, callback);
 	}
 
-	public void getLocationsFor(List shoppingList, AsyncCallback callback) {
+	public void getLocationsFor(List<TopicIdentifier> shoppingList,
+			AsyncCallback<List<List<LocationDTO>>> callback) {
 		topicService.getLocationsForTags(shoppingList, callback);
 	}
 

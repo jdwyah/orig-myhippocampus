@@ -2,8 +2,9 @@ package com.aavu.client.domain;
 
 //Generated Jul 18, 2006 12:44:47 PM by Hibernate Tools 3.1.0.beta4
 
+import java.io.Serializable;
+
 import com.aavu.client.domain.generated.AbstractUser;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 /**
@@ -16,7 +17,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * acegisecurity jar into client side land was a no go.
  * 
  */
-public class User extends AbstractUser implements IsSerializable {
+public class User extends AbstractUser implements Serializable {
 
 	public static final int PREMIUM_CUTOFF = 75;
 

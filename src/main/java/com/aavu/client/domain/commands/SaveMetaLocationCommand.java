@@ -1,8 +1,8 @@
 package com.aavu.client.domain.commands;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +10,6 @@ import com.aavu.client.domain.HippoLocation;
 import com.aavu.client.domain.Meta;
 import com.aavu.client.domain.Topic;
 import com.aavu.client.domain.util.CollectionUtils;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Save a List of HippoLocations. Must pass all locations for the given Meta.
@@ -23,21 +22,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Jeff Dwyer
  * 
  */
-public class SaveMetaLocationCommand extends AbstractCommand implements IsSerializable {
+public class SaveMetaLocationCommand extends AbstractCommand implements Serializable {
 
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.Topic>
-	 */
-	private Set values;
-	/**
-	 * @gwt.typeArgs <com.aavu.client.domain.Topic>
-	 */
-	private Set toDelete = new HashSet();
+
+	private Set<HippoLocation> values;
+
+	private Set<Topic> toDelete = new HashSet<Topic>();
 
 	public SaveMetaLocationCommand() {
 	};
 
-	public SaveMetaLocationCommand(Topic topic, Meta meta, Set values) {
+	public SaveMetaLocationCommand(Topic topic, Meta meta, Set<HippoLocation> values) {
 		super(topic, meta);
 		this.values = values;
 	}
@@ -48,15 +43,14 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 		System.out.println("\nSaveMetaLocationCommand EXECUTE SAVE META");
 		System.out.println("SaveMetaLocationCommand values " + values.size());
 
-		Set curLocations = getTopic(0).getMetaValuesFor((Meta) getTopic(1));
+		Set<Topic> curLocations = getTopic(0).getMetaValuesFor((Meta) getTopic(1));
 
 		// assume that we'll delete everything, than remove what we won't delete
 		toDelete.addAll(curLocations);
 
 		System.out.println("SaveMetaLocationCommand CurLocations.size " + curLocations.size());
 
-		for (Iterator iter = values.iterator(); iter.hasNext();) {
-			HippoLocation location = (HippoLocation) iter.next();
+		for (HippoLocation location : values) {
 
 			System.out.println("SaveMetaLocationCommand Processing " + location);
 
@@ -101,10 +95,10 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 	}
 
 	// @Override
-	public List getTopics() {
+	public List<Topic> getTopics() {
 		System.out.println("\n\n\nRETURN SMALL SUBLIST");
 
-		List rtn = new ArrayList();
+		List<Topic> rtn = new ArrayList<Topic>();
 		rtn.add(getTopic(0));
 
 		return rtn;
@@ -112,7 +106,7 @@ public class SaveMetaLocationCommand extends AbstractCommand implements IsSerial
 	}
 
 	// @Override
-	public Set getDeleteSet() {
+	public Set<Topic> getDeleteSet() {
 		return toDelete;
 	}
 
